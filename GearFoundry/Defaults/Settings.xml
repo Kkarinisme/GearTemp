@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+  <Setting>
+    <QuickSlotsvEnabled>false</QuickSlotsvEnabled>
+    <QuickSlotshEnabled>false</QuickSlotshEnabled>
+    <VpointX>200</VpointX>
+    <VpointY>200</VpointY>
+    <HpointX>250</HpointX>
+    <HpointX>400</HpointX>
+    <QuickiesVTheme></QuickiesVTheme>
+    <QuickiesHTheme></QuickiesHTheme>
+    <AllKillsEnabled>false</AllKillsEnabled>
+    <ToonKillsEnabled>false</ToonKillsEnabled>
+    <ToonCorpsesEnabled>false</ToonCorpsesEnabled>
+    <VulnedIconsEnabled>false</VulnedIconsEnabled>
+    <PortalsEnabled>false</PortalsEnabled>
+    <InventoryEnabled>false</InventoryEnabled>
+    <InventoryBurdenEnabled>false</InventoryBurdenEnabled>
+    <InventoryCompleteEnabled>false</InventoryCompleteEnabled>
+    <SalvageCombEnabled>false</SalvageCombEnabled>
+    <ToonStatsEnabled>false</ToonStatsEnabled>
+    <ToonArmorEnabled>false</ToonArmorEnabled>
+    <MuteEnabled>false</MuteEnabled>
+    <FullScreenEnabled>false</FullScreenEnabled>
+    <Scrolls7Enabled>false</Scrolls7Enabled>
+    <Scrolls7TndEnabled>false</Scrolls7TndEnabled>
+    <AllScrollsEnabled>false</AllScrollsEnabled>
+    <AllPlayersEnabled>false</AllPlayersEnabled>
+    <AllegEnabled>false</AllegEnabled>
+    <FellowEnabled>false</FellowEnabled>
+    <SelectedMobsEnabled>false</SelectedMobsEnabled>
+    <TellsEnabled>false</TellsEnabled>
+    <EvadesEnabled>false</EvadesEnabled>
+    <ResistsEnabled>false</ResistsEnabled>
+    <SpellCastingEnabled>false</SpellCastingEnabled>
+    <SpellsExpireEnabled>false</SpellsExpireEnabled>
+    <VendorTellsEnabled>false</VendorTellsEnabled>
+    <StackingEnabled>false</StackingEnabled>
+    <PickupEnabled>false</PickupEnabled>
+    <UstEnabled>false</UstEnabled>
+  </Setting>
+</Settings>

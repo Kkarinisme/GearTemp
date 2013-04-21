@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{70389EC2-7A91-4DE4-8EA5-5C1454270E8E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AlincoVVS</RootNamespace>
+    <AssemblyName>GearFoundry</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SourceAnalysisOverrideSettingsFile>C:\Users\Paul\AppData\Roaming\ICSharpCode/SharpDevelop4\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <RunCodeAnalysis>False</RunCodeAnalysis>
+    <RunSourceAnalysis>False</RunSourceAnalysis>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;VVS_REFERENCED;DECAL_INTEROP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;VVS_REFERENCED;DECAL_INTEROP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Decal.Adapter">
+      <HintPath>Repositories\Decal\Decal.Adapter.dll</HintPath>
+    </Reference>
+    <Reference Include="Decal.FileService">
+      <HintPath>Repositories\Decal\Decal.FileService.dll</HintPath>
+    </Reference>
+    <Reference Include="Decal.Interop.Core">
+      <HintPath>Repositories\Decal\.NET 2.0 PIA\Decal.Interop.Core.DLL</HintPath>
+    </Reference>
+    <Reference Include="Decal.Interop.Filters">
+      <HintPath>Repositories\Decal\.NET 2.0 PIA\Decal.Interop.Filters.DLL</HintPath>
+    </Reference>
+    <Reference Include="Decal.Interop.Inject">
+      <HintPath>Repositories\Decal\.NET 2.0 PIA\Decal.Interop.Inject.dll</HintPath>
+    </Reference>
+    <Reference Include="Decal.Interop.Net">
+      <HintPath>Repositories\Decal\.NET 2.0 PIA\Decal.Interop.Net.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="VirindiHUDs">
+      <HintPath>Repositories\Virindi\VirindiHUDs.dll</HintPath>
+    </Reference>
+    <Reference Include="VirindiViewService">
+      <HintPath>Repositories\Virindi\VirindiViewService.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Defaults\Rules.xml">
+      <LogicalName>Rules.xml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Defaults\Settings.xml">
+      <LogicalName>Settings.xml</LogicalName>
+    </EmbeddedResource>
+    <None Include="Documents\Files Karin is using.txt" />
+    <None Include="Documents\GuidetoVariablesandFunctions.txt" />
+    <None Include="Documents\IrquksStatusList" />
+    <Compile Include="HudModules\CorpseTracker.cs" />
+    <Compile Include="HudModules\ItemTracker.cs" />
+    <Compile Include="HudModules\LandscapeTracker.cs" />
+    <Compile Include="PluginCore.cs" />
+    <Compile Include="Views\MainView.cs" />
+    <Compile Include="VTInterop\Plugin.Public.cs" />
+    <Compile Include="WrapperClass\IdentifiedObject.cs" />
+    <Compile Include="HudModules\QuickSlotsHud.cs" />
+    <Compile Include="Initializers\Definitions.cs" />
+    <Compile Include="Initializers\Globals.cs" />
+    <Compile Include="Initializers\InitializingFunctions.cs" />
+    <Compile Include="Initializers\SetupUserInterface.cs" />
+    <Compile Include="CompareFunctions.cs" />
+    <Compile Include="Inventory\Inventory.cs" />
+    <Compile Include="Inventory\InventoryUtil.cs" />
+    <Compile Include="Inventory\toonStats.cs" />
+    <Compile Include="SalvageFunctions.cs" />
+    <Compile Include="Persistent\Build.cs" />
+    <Compile Include="TextFunctions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Snippets\Util.cs" />
+    <Compile Include="Views\RuleEditor.cs" />
+    <Compile Include="VVSWrappers\ViewSystemSelector.cs" />
+    <Compile Include="VVSWrappers\Wrapper.cs" />
+    <Compile Include="VVSWrappers\Wrapper_Decal.cs" />
+    <Compile Include="VVSWrappers\Wrapper_MyHuds.cs" />
+    <Compile Include="VVSWrappers\Wrapper_WireupHelper.cs" />
+    <EmbeddedResource Include="Views\MainView.xml">
+      <LogicalName>MainView.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Defaults\Mobs.xml">
+      <LogicalName>Mobs.xml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Defaults\RulesBak.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Defaults\Salvage.xml">
+      <LogicalName>Salvage.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Defaults\Trophies.xml">
+      <LogicalName>Trophies.xml</LogicalName>
+    </EmbeddedResource>
+    <Content Include="Documents\GuidetoVariablesandFunctions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Documents" />
+    <Folder Include="Initializers" />
+    <Folder Include="Inventory" />
+    <Folder Include="VTInterop" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

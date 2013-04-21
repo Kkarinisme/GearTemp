@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GameItems>
+  <item>
+    <key>Gold Shallows Shredder</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gold Remoran</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Lady Tairla Mhoire</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Corrupted Pyre Oak</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Aun Ralirea</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Intense Aggregate Crystalline Wisp</key>
+    <checked>false</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Aggregate Crystalline Wisp</key>
+    <checked>false</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Hea Temenua</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Diamond Golem</key>
+    <checked>false</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>fallen</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Titanium Armoredillo</key>
+    <checked>false</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Tch'Keryk the Emissary</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Black Coral Golem</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Giant Jungle Phyntos Wasp</key>
+    <checked>false</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Brood Mother</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Blight-encrusted Black Coral</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+</GameItems>
