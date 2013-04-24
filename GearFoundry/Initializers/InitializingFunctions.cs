@@ -57,6 +57,7 @@ namespace GearFoundry
             {
                 toonSettingsFilename = toonDir + @"\Settings.xml";
                 genSettingsFilename = GearDir + @"\Settings.xml";
+                switchGearSettingsFilename = GearDir + @"\SwitchGearSettings.xml";
                 mobsFilename = GearDir + @"\Mobs.xml";
                 trophiesFilename = GearDir + @"\Trophies.xml";
                 rulesFilename = GearDir + @"\Rules.xml";
@@ -156,6 +157,18 @@ namespace GearFoundry
                     catch (Exception ex) { LogError(ex); }
                 }
 
+                if (!File.Exists(switchGearSettingsFilename))
+                {
+                    try
+                    {                    
+                        xdocSwitchGearSettings = new XDocument(new XElement("Settings"));
+                        xdocSwitchGearSettings.Element("Settings").Add(new XElement("Setting",
+                        new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
+                        new XElement("QuickSlotshEnabled", bquickSlotshEnabled)));
+                      
+                    }
+                    catch (Exception ex) { LogError(ex); }
+                }
 
 
 
@@ -195,6 +208,7 @@ namespace GearFoundry
             xdocSalvage = XDocument.Load(salvageFilename);
             xdocRules = XDocument.Load(rulesFilename);
             xdocGenSettings = XDocument.Load(genSettingsFilename);
+            xdocSwitchGearSettings = XDocument.Load(switchGearSettingsFilename);
         }
 
         public void loadLists()
@@ -220,12 +234,24 @@ namespace GearFoundry
           //  if (xdocGenSettings != null)
             try
             {
+                WriteToChat("I am in the function to setupsettingslists");
+ 
                 IEnumerable<XElement> elements = xdocGenSettings.Element("Settings").Elements("Setting");
                 foreach (XElement el in elements.Descendants())
                 {
                     mGenSettingsList.Add(el);
                 }
+
+                IEnumerable<XElement> sgelements = xdocSwitchGearSettings.Element("Settings").Elements("Setting");
+                foreach (XElement el in sgelements.Descendants())
+                {
+                    mSwitchGearSettingsList.Add(el);
+                }
+                WriteToChat("I am in the function to setupsettingslists: mSwitchGearSettingsList has count of " + mSwitchGearSettingsList.Count.ToString());
+ 
+
                 fillSettingsVariables();
+                
             }
 
             catch (Exception ex) { LogError(ex); }
@@ -374,9 +400,9 @@ namespace GearFoundry
 
                 foreach (XElement el in mGenSettingsList)
                 {
-                    if (el.Name == "QuickSlotsvEnabled") { bquickSlotsvEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "QuickSlotshEnabled") { bquickSlotshEnabled = Convert.ToBoolean(el.Value); }
-//                    if (el.Name == "VpointX"){vpt.X = Convert.ToInt32(el.Value);}
+//                    if (el.Name == "QuickSlotsvEnabled") { bquickSlotsvEnabled = Convert.ToBoolean(el.Value); }
+//                    if (el.Name == "QuickSlotshEnabled") { bquickSlotshEnabled = Convert.ToBoolean(el.Value); }
+////                    if (el.Name == "VpointX"){vpt.X = Convert.ToInt32(el.Value);}
 //                    if (el.Name == "VpointY") { vpt.Y = Convert.ToInt32(el.Value); }
 //                    if (el.Name == "HpointX") { hpt.X = Convert.ToInt32(el.Value);  }
 //                    if (el.Name == "HpointY") { hpt.Y = Convert.ToInt32(el.Value); }
@@ -413,6 +439,15 @@ namespace GearFoundry
                     if (el.Name == "UstEnabled") { bustEnabled = Convert.ToBoolean(el.Value); }
 
                 }
+
+                foreach (XElement el in mSwitchGearSettingsList)
+                {
+                    if (el.Name == "QuickSlotsvEnabled") { bquickSlotsvEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "QuickSlotshEnabled") { bquickSlotshEnabled = Convert.ToBoolean(el.Value); }
+                }
+                WriteToChat("I have filled settings variables: bquickslotsvEnabled = " + bquickSlotsvEnabled.ToString());
+ 
+
                     chkQuickSlotsv.Checked = bquickSlotsvEnabled;
                     chkQuickSlotsh.Checked = bquickSlotshEnabled;
                     
@@ -463,7 +498,6 @@ namespace GearFoundry
                     chkStacking.Checked = bstackingEnabled;
                     chkPickup.Checked = bpickupEnabled;
                     chkUst.Checked = bustEnabled;
-                    startRoutines();
                 
                 }
             catch (Exception ex) { LogError(ex); }
@@ -494,31 +528,14 @@ namespace GearFoundry
 
             if (bquickSlotsvEnabled)
             {
-                if (!File.Exists(quickSlotsvFilename))
-                {
-                    XDocument tempDoc = new XDocument(new XElement("Objs"));
-                    tempDoc.Save(quickSlotsvFilename);
-                    tempDoc = null;
-                }
 
-                xdocQuickSlotsv = XDocument.Load(quickSlotsvFilename);
-
-                createQuickies(quickiesvHud); 
+                RenderVerticalQuickSlots(); 
             }
             //GearFoundry.PluginCore.WriteToChat("In initializing functions: created quickslots");
 
             if (bquickSlotshEnabled)
             {
-                if (!File.Exists(quickSlotshFilename))
-                {
-                    XDocument tempDoc = new XDocument(new XElement("Objs"));
-                    tempDoc.Save(quickSlotshFilename);
-                    tempDoc = null;
-                }
-
-                xdocQuickSlotsh = XDocument.Load(quickSlotshFilename);
-
-                createQuickies(quickieshHud);
+                RenderHorizontalQuickSlots(); 
             }
            // GearFoundry.PluginCore.WriteToChat("In initializing functions: created quickslots");
 
@@ -665,7 +682,9 @@ namespace GearFoundry
             {
                 bquickSlotsvEnabled = e.Checked;
 
-                SaveSettings();
+
+                SaveSwitchGearSettings();
+
                 if (bquickSlotsvEnabled)
                 {
                 	RenderVerticalQuickSlots();
@@ -688,15 +707,15 @@ namespace GearFoundry
             {
                 bquickSlotshEnabled = e.Checked;
 
-                SaveSettings();
+                SaveSwitchGearSettings();
 
                 if (bquickSlotshEnabled)
                 {
-                    quickSlotshEnabled();
+                    RenderHorizontalQuickSlots();
                 }
                 else if (!bquickSlotshEnabled)
                 {
-                    quickSlotshNotEnabled();
+                    DisposeHorizontalQuickSlots();
                 }
 
             }
@@ -704,53 +723,6 @@ namespace GearFoundry
 
         }
 
-        private void quickSlotsvEnabled()
-        {
-
-            quickSlotsvFilename = currDir + @"\QuickSlotsv.xml";
-            if (!File.Exists(quickSlotsvFilename)) { xdocQuickSlotsv = new XDocument(new XElement("Objs")); }
-            else { xdocQuickSlotsv = XDocument.Load(quickSlotsvFilename); }
-            quickiesvHud = new HudView();
-
-            createQuickies(quickiesvHud);
-
-        }
-
-        private void quickSlotsvNotEnabled()
-        {
-            if (quickiesvHud != null)
-            {
-                doClearHud(quickiesvHud, xdocQuickSlotsv, quickSlotsvFilename);
-                quickiesvHud.Dispose();
-                quickiesvHud = null;
-
-            }
-
-        }
-
-        private void quickSlotshEnabled()
-        {
-
-            quickSlotshFilename = currDir + @"\QuickSlotsh.xml";
-            if (!File.Exists(quickSlotshFilename)) { xdocQuickSlotsh = new XDocument(new XElement("Objs")); }
-            else { xdocQuickSlotsh = XDocument.Load(quickSlotshFilename); }
-            quickieshHud = new HudView();
-
-            createQuickies(quickieshHud);
-
-        }
-
-        private void quickSlotshNotEnabled()
-        {
-            if (quickieshHud != null)
-            {
-                doClearHud(quickieshHud, xdocQuickSlotsh, quickSlotshFilename);
-                quickieshHud.Dispose();
-                quickieshHud = null;
-
-            }
-
-        }
 
 		//Gear Hound Contols	
 		void chkGearHoundEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
@@ -1152,6 +1124,18 @@ namespace GearFoundry
 
         }
 
+        private void SaveSwitchGearSettings()
+        {
+            try
+            {
+                xdoc = new XDocument(new XElement("Settings"));
+                xdoc.Element("Settings").Add(new XElement("Setting",
+                         new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
+                         new XElement("QuickSlotshEnabled", bquickSlotshEnabled)));
+                xdoc.Save(switchGearSettingsFilename);
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
 
 
         private void SaveSettings()

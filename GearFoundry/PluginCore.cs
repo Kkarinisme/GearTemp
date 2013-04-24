@@ -165,6 +165,10 @@ namespace GearFoundry
                 loadLists();
                 populateRulesListBox();
                 populateRuleSpellEnabledListBox();
+                startRoutines();
+
+                Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
+
                 WriteToChat("Plugin now online. Server population: " + Core.CharacterFilter.ServerPopulation);
                 if(CloakSpellList != null)
                     WriteToChat("CloakSpellList count: " + CloakSpellList.Count);

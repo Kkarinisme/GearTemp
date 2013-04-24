@@ -65,6 +65,7 @@ namespace GearFoundry
         XDocument xdoc = null;
         XDocument xdocToonSettings = null;
         XDocument xdocGenSettings = null;
+        XDocument xdocSwitchGearSettings = null;
         XDocument xdocMobs = null;
         XDocument xdocTrophies = null;
         XDocument xdocSalvage = null;
@@ -86,6 +87,7 @@ namespace GearFoundry
         private string rulesFilename = null;
         private string tempFilename = null;
         private string spellsFilename = null;
+        private string switchGearSettingsFilename = null;
         private string genSettingsFilename = null;
         private string toonSettingsFilename = null;
         private string inventoryFilename = null;

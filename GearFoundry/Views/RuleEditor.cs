@@ -31,6 +31,7 @@ namespace GearFoundry
         private List<XElement> mPrioritizedRulesList = new List<XElement>();
         private List<XElement> mPrioritizedRulesListEnabled = new List<XElement>();
         private List<XElement> mGenSettingsList = new List<XElement>();
+        private List<XElement> mSwitchGearSettingsList = new List<XElement>();
 
         //From: Karin.  Lists for use with cboboxes using IDNameLoadable class
         private static List<IDNameLoadable> ClassInvList= new List<IDNameLoadable>();
