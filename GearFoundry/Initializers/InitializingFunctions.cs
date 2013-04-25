@@ -234,7 +234,6 @@ namespace GearFoundry
           //  if (xdocGenSettings != null)
             try
             {
-                WriteToChat("I am in the function to setupsettingslists");
  
                 IEnumerable<XElement> elements = xdocGenSettings.Element("Settings").Elements("Setting");
                 foreach (XElement el in elements.Descendants())
