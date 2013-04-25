@@ -72,19 +72,13 @@ namespace GearFoundry
             	DisposeOnShutdown();
                 if (quickiesvHud != null)
                 {
-                    doClearHud(quickiesvHud, xdocQuickSlotsv, quickSlotsvFilename);
-                    quickiesvHud.Dispose();
-                    quickiesvHud = null;
-
+                    DisposeVerticalQuickSlots();
                 }
 
 
                 if (quickieshHud != null)
                 {
-                    doClearHud(quickieshHud, xdocQuickSlotsh, quickSlotshFilename);
-                    quickieshHud.Dispose();
-                    quickieshHud = null;
-
+                    DisposeHorizontalQuickSlots();
                 }
                 
                 if(CorpseHudView != null) {DisposeCorpseHud();}

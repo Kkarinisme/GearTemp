@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Linq;
 using System.IO;
+using VirindiViewService.Themes;
 
 namespace GearFoundry
 {
@@ -135,9 +136,9 @@ namespace GearFoundry
         int nQuickieIDh9 = 0;
         int nQuickieIDh10 = 0;
         int nQuickieIDh11 = 0;
-        int nQuickieIDh12 = 12;
-        int nQuickieIDh13 = 13;
-        int nQuickieIDh14 = 14;
+        int nQuickieIDh12 = 0;
+        int nQuickieIDh13 = 0;
+        int nQuickieIDh14 = 0;
 
 
 
@@ -151,6 +152,11 @@ namespace GearFoundry
         int nquickiev = 0;
         int nquickieh = 0;
         QuickSlotData thisQuickie = null;
+        Point vpt;
+        Point hpt;
+        VirindiViewService.HudViewDrawStyle mvtheme = null;
+        VirindiViewService.HudViewDrawStyle mhtheme = null;
+       
 
         List<HudCheckBox> vchk = new List<HudCheckBox>();
         List<HudCheckBox> hchk = new List<HudCheckBox>();
@@ -193,16 +199,20 @@ namespace GearFoundry
 
             xdocQuickSlotsv = XDocument.Load(quickSlotsvFilename);
 
+            if (vpt.X == 0) { vpt.X = 200; }
+            if (vpt.Y == 0) { vpt.Y = 200; }
 
-            quickiesvHud = new VirindiViewService.HudView("", 30, 300, new ACImage(Color.Transparent));
+            quickiesvHud = new VirindiViewService.HudView("", 30, 340, new ACImage(Color.Transparent));
             quickiesvHud.ShowInBar = false;
             quickiesvHud.UserAlphaChangeable = false;
             quickiesvHud.Visible = true;
             quickiesvHud.UserGhostable = true;
             quickiesvHud.UserMinimizable = false;
             quickiesvHud.UserResizeable = false;
-          //  quickiesvHud.Theme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
-
+            quickiesvHud.Location = vpt;
+            //if (mvtheme == null)
+            //    mvtheme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+            //quickieshHud.Theme = mvtheme;
             quickiesvHud_Head = new HudFixedLayout();
             quickiesvHud.Controls.HeadControl = quickiesvHud_Head;
 
@@ -314,10 +324,11 @@ namespace GearFoundry
             quickiesvHud_Head.AddControl(chkQuickiev13, new Rectangle(0, 275, 10, 20));
             quickiesvHud_Head.AddControl(chkQuickiev14, new Rectangle(0, 295, 10, 20));
 
+            quickiesvHud.ThemeChanged += (sender, obj) => quickiesvHud_ThemeChanged(sender, obj);
             quickiesvHud.Moved += (sender, obj) => quickiesvHud_Moved(sender, obj);
             btnQuickiesvAdd.Hit += (sender, obj) => btnQuickiesvAdd_Hit(sender, obj);
             btnQuickiesvRemove.Hit += (sender, obj) => btnQuickiesvRemove_Hit(sender, obj);
-            chkQuickiev0.Change += (sender, obj) => chkQuickiev0_Change(sender, obj);
+           chkQuickiev0.Change += (sender, obj) => chkQuickiev0_Change(sender, obj);
             chkQuickiev1.Change += (sender, obj) => chkQuickiev1_Change(sender, obj);
             chkQuickiev2.Change += (sender, obj) => chkQuickiev2_Change(sender, obj);
             chkQuickiev3.Change += (sender, obj) => chkQuickiev3_Change(sender, obj);
@@ -329,9 +340,11 @@ namespace GearFoundry
             chkQuickiev9.Change += (sender, obj) => chkQuickiev9_Change(sender, obj);
             chkQuickiev10.Change += (sender, obj) => chkQuickiev10_Change(sender, obj);
             chkQuickiev11.Change += (sender, obj) => chkQuickiev11_Change(sender, obj);
-            chkQuickiev9.Change += (sender, obj) => chkQuickiev12_Change(sender, obj);
-            chkQuickiev10.Change += (sender, obj) => chkQuickiev13_Change(sender, obj);
-            chkQuickiev11.Change += (sender, obj) => chkQuickiev14_Change(sender, obj);
+            chkQuickiev12.Change += (sender, obj) => chkQuickiev12_Change(sender, obj);
+            chkQuickiev13.Change += (sender, obj) => chkQuickiev13_Change(sender, obj);
+            chkQuickiev14.Change += (sender, obj) => chkQuickiev14_Change(sender, obj);
+            mQuickStackv0.Hit += (sender, obj) => mQuickStackv0_Hit(sender, obj);
+
 
             if (xdocQuickSlotsv.Root.HasElements)
             {
@@ -342,6 +355,7 @@ namespace GearFoundry
 
         private void DisposeVerticalQuickSlots()
         {
+            quickiesvHud.ThemeChanged -= (sender, obj) => quickiesvHud_ThemeChanged(sender, obj);
             quickiesvHud.Moved -= (sender, obj) => quickiesvHud_Moved(sender, obj);
             btnQuickiesvAdd.Hit -= (sender, obj) => btnQuickiesvAdd_Hit(sender, obj);
             btnQuickiesvRemove.Hit -= (sender, obj) => btnQuickiesvRemove_Hit(sender, obj);
@@ -377,21 +391,6 @@ namespace GearFoundry
             chkQuickiev13.Dispose();
             chkQuickiev14.Dispose();
 
-            chkQuickiev0.Dispose();
-            chkQuickiev1.Dispose();
-            chkQuickiev2.Dispose();
-            chkQuickiev3.Dispose();
-            chkQuickiev4.Dispose();
-            chkQuickiev5.Dispose();
-            chkQuickiev6.Dispose();
-            chkQuickiev7.Dispose();
-            chkQuickiev8.Dispose();
-            chkQuickiev9.Dispose();
-            chkQuickiev10.Dispose();
-            chkQuickiev11.Dispose();
-            chkQuickiev12.Dispose();
-            chkQuickiev13.Dispose();
-            chkQuickiev14.Dispose();
 
             mQuickStackv0.Dispose();
             mQuickStackv1.Dispose();
@@ -413,6 +412,27 @@ namespace GearFoundry
             btnQuickiesvRemove.Dispose();
             quickiesvHud_Head.Dispose();
             quickiesvHud.Dispose();
+            nquickiev = 0;
+            try
+            {
+
+                for (int i = 0; i < 15; i++)
+                { vst[i] = null; }
+            }
+            catch (Exception ex) { LogError(ex); }
+
+            try
+            {
+
+                for (int i = 0; i < 15; i++)
+                { vID[i] = 0; }
+            }
+            catch (Exception ex) { LogError(ex); }
+
+
+            for (int i = 0; i < 15; i++)
+            { vchk[i] = null; }
+
 
         }
 
@@ -434,14 +454,23 @@ namespace GearFoundry
 
                 xdocQuickSlotsh = XDocument.Load(quickSlotshFilename);
 
+                if (hpt.X == 0) { hpt.X = 200; }
+                if (hpt.Y == 0) { hpt.Y = 200; }
 
-            quickieshHud = new VirindiViewService.HudView("", 330, 30, new ACImage(Color.Transparent));
+
+            quickieshHud = new VirindiViewService.HudView("", 340, 30, new ACImage(Color.Transparent));
             quickieshHud.ShowInBar = false;
             quickieshHud.UserAlphaChangeable = false;
             quickieshHud.Visible = true;
             quickieshHud.UserGhostable = true;
             quickieshHud.UserMinimizable = false;
             quickieshHud.UserResizeable = false;
+            quickieshHud.Location = hpt;
+            //if (mhtheme == null)
+            //    mhtheme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+            //quickieshHud.Theme = mhtheme;
+ 
+
             //  quickieshHud.Theme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
 
             quickieshHud_Head = new HudFixedLayout();
@@ -556,6 +585,7 @@ namespace GearFoundry
             quickieshHud_Head.AddControl(chkQuickieh13, new Rectangle(290, 20, 20, 10));
             quickieshHud_Head.AddControl(chkQuickieh14, new Rectangle(310, 20, 20, 10));
 
+            quickieshHud.ThemeChanged += (sender, obj) => quickieshHud_ThemeChanged(sender, obj);
             quickieshHud.Moved += (sender, obj) => quickieshHud_Moved(sender, obj);
             btnQuickieshAdd.Hit += (sender, obj) => btnQuickieshAdd_Hit(sender, obj);
             btnQuickieshRemove.Hit += (sender, obj) => btnQuickieshRemove_Hit(sender, obj);
@@ -584,6 +614,8 @@ namespace GearFoundry
 
         private void DisposeHorizontalQuickSlots()
         {
+
+            quickieshHud.ThemeChanged -= (sender, obj) => quickieshHud_ThemeChanged(sender, obj);
             quickieshHud.Moved -= (sender, obj) => quickieshHud_Moved(sender, obj);
             btnQuickieshAdd.Hit -= (sender, obj) => btnQuickieshAdd_Hit(sender, obj);
             btnQuickieshRemove.Hit -= (sender, obj) => btnQuickieshRemove_Hit(sender, obj);
@@ -603,21 +635,6 @@ namespace GearFoundry
             chkQuickieh13.Change -= (sender, obj) => chkQuickieh13_Change(sender, obj);
             chkQuickieh14.Change -= (sender, obj) => chkQuickieh14_Change(sender, obj);
 
-            chkQuickieh0.Dispose();
-            chkQuickieh1.Dispose();
-            chkQuickieh2.Dispose();
-            chkQuickieh3.Dispose();
-            chkQuickieh4.Dispose();
-            chkQuickieh5.Dispose();
-            chkQuickieh6.Dispose();
-            chkQuickieh7.Dispose();
-            chkQuickieh8.Dispose();
-            chkQuickieh9.Dispose();
-            chkQuickieh10.Dispose();
-            chkQuickieh11.Dispose();
-            chkQuickieh12.Dispose();
-            chkQuickieh13.Dispose();
-            chkQuickieh14.Dispose();
 
             chkQuickieh0.Dispose();
             chkQuickieh1.Dispose();
@@ -655,334 +672,34 @@ namespace GearFoundry
             btnQuickieshRemove.Dispose();
             quickieshHud_Head.Dispose();
             quickieshHud.Dispose();
-        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private void createQuickies(VirindiViewService.HudView hudview)
-        {
-            try
-            {
-
-                if (hudview == quickiesvHud)
-                {
-
-                    //                 quickiesvHud = new VirindiViewService.HudView("", 30, 300, null);
-                    //                 
-                    //                 
-                    //                 
-                    //                 quickiesvHud_Head = new HudFixedLayout();
-                    //                 btnQuickiesvAdd = new HudButton();
-                    //                 btnQuickiesvRemove = new HudButton();
-                    //                 if (vpt.X == 0) { vpt.X = 200; }
-                    //                 if (vpt.Y == 0) { vpt.Y = 200; }
-                    //
-                    //                 doCreateHud(quickiesvHud, vpt, quickiesvHud_Head, btnQuickiesvAdd, btnQuickiesvRemove);
-                    //
-                    //
-                    //                 vst.Add(mQuickStackv0);
-                    //                 vst.Add(mQuickStackv1);
-                    //                 vst.Add(mQuickStackv2);
-                    //                 vst.Add(mQuickStackv3);
-                    //                 vst.Add(mQuickStackv4);
-                    //                 vst.Add(mQuickStackv5);
-                    //                 vst.Add(mQuickStackv6);
-                    //                 vst.Add(mQuickStackv7);
-                    //                 vst.Add(mQuickStackv8);
-                    //                 vst.Add(mQuickStackv9);
-                    //                 vst.Add(mQuickStackv10);
-                    //                 vst.Add(mQuickStackv11);
-                    //
-                    //                 vID.Add(nQuickieIDv0);
-                    //                 vID.Add(nQuickieIDv1);
-                    //                 vID.Add(nQuickieIDv2);
-                    //                 vID.Add(nQuickieIDv3);
-                    //                 vID.Add(nQuickieIDv4);
-                    //                 vID.Add(nQuickieIDv5);
-                    //                 vID.Add(nQuickieIDv6);
-                    //                 vID.Add(nQuickieIDv7);
-                    //                 vID.Add(nQuickieIDv8);
-                    //                 vID.Add(nQuickieIDv9);
-                    //                 vID.Add(nQuickieIDv10);
-                    //                 vID.Add(nQuickieIDv11);
-                    //
-                    //                 chkQuickiev0 = new HudCheckBox(); vchk.Add(chkQuickiev0);
-                    //                 chkQuickiev1 = new HudCheckBox(); vchk.Add(chkQuickiev1);
-                    //                 chkQuickiev2 = new HudCheckBox(); vchk.Add(chkQuickiev2);
-                    //                 chkQuickiev3 = new HudCheckBox(); vchk.Add(chkQuickiev3);
-                    //                 chkQuickiev4 = new HudCheckBox(); vchk.Add(chkQuickiev4);
-                    //                 chkQuickiev5 = new HudCheckBox(); vchk.Add(chkQuickiev5);
-                    //                 chkQuickiev6 = new HudCheckBox(); vchk.Add(chkQuickiev6);
-                    //                 chkQuickiev7 = new HudCheckBox(); vchk.Add(chkQuickiev7);
-                    //                 chkQuickiev8 = new HudCheckBox(); vchk.Add(chkQuickiev8);
-                    //                 chkQuickiev9 = new HudCheckBox(); vchk.Add(chkQuickiev9);
-                    //                 chkQuickiev10 = new HudCheckBox(); vchk.Add(chkQuickiev10);
-                    //                 chkQuickiev11 = new HudCheckBox(); vchk.Add(chkQuickiev11);
-                    //
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev0, new Rectangle(0, 15, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev1, new Rectangle(0, 35, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev2, new Rectangle(0, 55, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev3, new Rectangle(0, 75, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev4, new Rectangle(0, 95, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev5, new Rectangle(0, 115, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev6, new Rectangle(0, 135, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev7, new Rectangle(0, 150, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev8, new Rectangle(0, 175, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev9, new Rectangle(0, 195, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev10, new Rectangle(0, 215, 10, 20));
-                    //                 quickiesvHud_Head.AddControl(chkQuickiev11, new Rectangle(0, 235, 10, 20));
-                    //
-                    //                 quickiesvHud.Moved += (sender, obj) => quickiesvHud_Moved(sender, obj);
-                    //                 btnQuickiesvAdd.Hit += (sender, obj) => btnQuickiesvAdd_Hit(sender, obj);
-                    //                 btnQuickiesvRemove.Hit += (sender, obj) => btnQuickiesvRemove_Hit(sender, obj);
-                    //                 chkQuickiev0.Change += (sender, obj) => chkQuickiev0_Change(sender, obj);
-                    //                 chkQuickiev1.Change += (sender, obj) => chkQuickiev1_Change(sender, obj);
-                    //                 chkQuickiev2.Change += (sender, obj) => chkQuickiev2_Change(sender, obj);
-                    //                 chkQuickiev3.Change += (sender, obj) => chkQuickiev3_Change(sender, obj);
-                    //                 chkQuickiev4.Change += (sender, obj) => chkQuickiev4_Change(sender, obj);
-                    //                 chkQuickiev5.Change += (sender, obj) => chkQuickiev5_Change(sender, obj);
-                    //                 chkQuickiev6.Change += (sender, obj) => chkQuickiev6_Change(sender, obj);
-                    //                 chkQuickiev7.Change += (sender, obj) => chkQuickiev7_Change(sender, obj);
-                    //                 chkQuickiev8.Change += (sender, obj) => chkQuickiev8_Change(sender, obj);
-                    //                 chkQuickiev9.Change += (sender, obj) => chkQuickiev9_Change(sender, obj);
-                    //                 chkQuickiev10.Change += (sender, obj) => chkQuickiev10_Change(sender, obj);
-                    //                 chkQuickiev11.Change += (sender, obj) => chkQuickiev11_Change(sender, obj);
-                    //
-                    //                 if (xdocQuickSlotsv.Root.HasElements)
-                    //                 {
-                    //                     doGetData(xdocQuickSlotsv, quickSlotsvFilename);
-                    //                 }
-                    // 
-                    //             }
-                    //             else if (hudview == quickieshHud)
-                    //             {
-                    //                 quickieshHud = new VirindiViewService.HudView("", 300, 30, new ACImage(Color.Transparent));
-                    //                 quickieshHud_Head = new HudFixedLayout();
-                    //                 btnQuickieshAdd = new HudButton();
-                    //                 btnQuickieshRemove = new HudButton();
-                    //                 if (hpt.X == 0) { hpt.X = 240; }
-                    //                 if (hpt.Y == 0) { hpt.Y = 300; }
-                    //
-                    //                 doCreateHud(quickieshHud, hpt, quickieshHud_Head, btnQuickieshAdd, btnQuickieshRemove);
-                    //
-                    //                 hst.Add(mQuickStackh0);
-                    //                 hst.Add(mQuickStackh1);
-                    //                 hst.Add(mQuickStackh2);
-                    //                 hst.Add(mQuickStackh3);
-                    //                 hst.Add(mQuickStackh4);
-                    //                 hst.Add(mQuickStackh5);
-                    //                 hst.Add(mQuickStackh6);
-                    //                 hst.Add(mQuickStackh7);
-                    //                 hst.Add(mQuickStackh8);
-                    //                 hst.Add(mQuickStackh9);
-                    //                 hst.Add(mQuickStackh10);
-                    //                 hst.Add(mQuickStackh11);
-                    //
-                    //                 hID.Add(nQuickieIDh0);
-                    //                 hID.Add(nQuickieIDh1);
-                    //                 hID.Add(nQuickieIDh2);
-                    //                 hID.Add(nQuickieIDh3);
-                    //                 hID.Add(nQuickieIDh4);
-                    //                 hID.Add(nQuickieIDh5);
-                    //                 hID.Add(nQuickieIDh6);
-                    //                 hID.Add(nQuickieIDh7);
-                    //                 hID.Add(nQuickieIDh8);
-                    //                 hID.Add(nQuickieIDh9);
-                    //                 hID.Add(nQuickieIDh10);
-                    //                 hID.Add(nQuickieIDh11);
-                    //
-                    //                 chkQuickieh0 = new HudCheckBox(); hchk.Add(chkQuickieh0);
-                    //                 chkQuickieh1 = new HudCheckBox(); hchk.Add(chkQuickieh1);
-                    //                 chkQuickieh2 = new HudCheckBox(); hchk.Add(chkQuickieh2);
-                    //                 chkQuickieh3 = new HudCheckBox(); hchk.Add(chkQuickieh3);
-                    //                 chkQuickieh4 = new HudCheckBox(); hchk.Add(chkQuickieh4);
-                    //                 chkQuickieh5 = new HudCheckBox(); hchk.Add(chkQuickieh5);
-                    //                 chkQuickieh6 = new HudCheckBox(); hchk.Add(chkQuickieh6);
-                    //                 chkQuickieh7 = new HudCheckBox(); hchk.Add(chkQuickieh7);
-                    //                 chkQuickieh8 = new HudCheckBox(); hchk.Add(chkQuickieh8);
-                    //                 chkQuickieh9 = new HudCheckBox(); hchk.Add(chkQuickieh9);
-                    //                 chkQuickieh10 = new HudCheckBox(); hchk.Add(chkQuickieh10);
-                    //                 chkQuickieh11 = new HudCheckBox(); hchk.Add(chkQuickieh11);
-                    //
-                    //                 quickieshHud_Head.AddControl(chkQuickieh0, new Rectangle(30, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh1, new Rectangle(50, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh2, new Rectangle(70, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh3, new Rectangle(90, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh4, new Rectangle(110, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh5, new Rectangle(130, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh6, new Rectangle(150, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh7, new Rectangle(170, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh8, new Rectangle(190, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh9, new Rectangle(210, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh10, new Rectangle(230, 20, 20, 10));
-                    //                 quickieshHud_Head.AddControl(chkQuickieh11, new Rectangle(250, 20, 20, 10));
-                    //
-                    //                 quickieshHud.Moved += (sender, obj) => quickieshHud_Moved(sender, obj);
-                    //                 btnQuickieshAdd.Hit += (sender, obj) => btnQuickieshAdd_Hit(sender, obj);
-                    //                 btnQuickieshRemove.Hit += (sender, obj) => btnQuickieshRemove_Hit(sender, obj);
-                    //                 chkQuickieh0.Change += (sender, obj) => chkQuickieh0_Change(sender, obj);
-                    //                 chkQuickieh1.Change += (sender, obj) => chkQuickieh1_Change(sender, obj);
-                    //                 chkQuickieh2.Change += (sender, obj) => chkQuickieh2_Change(sender, obj);
-                    //                 chkQuickieh3.Change += (sender, obj) => chkQuickieh3_Change(sender, obj);
-                    //                 chkQuickieh4.Change += (sender, obj) => chkQuickieh4_Change(sender, obj);
-                    //                 chkQuickieh5.Change += (sender, obj) => chkQuickieh5_Change(sender, obj);
-                    //                 chkQuickieh6.Change += (sender, obj) => chkQuickieh6_Change(sender, obj);
-                    //                 chkQuickieh7.Change += (sender, obj) => chkQuickieh7_Change(sender, obj);
-                    //                 chkQuickieh8.Change += (sender, obj) => chkQuickieh8_Change(sender, obj);
-                    //                 chkQuickieh9.Change += (sender, obj) => chkQuickieh9_Change(sender, obj);
-                    //                 chkQuickieh10.Change += (sender, obj) => chkQuickieh10_Change(sender, obj);
-                    //                 chkQuickieh11.Change += (sender, obj) => chkQuickieh11_Change(sender, obj);
-                    //
-                    //                 if (xdocQuickSlotsh.Root.HasElements)
-                    //                 {
-                    //                     doGetData(xdocQuickSlotsh, quickSlotshFilename);
-                    //                 }
-                    //
-                    //
-                    //
-                    //                 Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
-                    // CoreManager.Current.RenderFrame += new EventHandler<EventArgs>(Current_RenderFrame);
-                }
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
-
-        //        private void doCreateHud(VirindiViewService.HudView hud, Point p, HudFixedLayout head, HudButton badd, HudButton bremove )
-        //        {
-        //            try
-        //            {
-        //            	
-        //                hud.ShowInBar = false;
-        //                hud.SpookyTabs = false;
-        //                hud.Visible = true;
-        //                hud.UserGhostable = false;
-        //                //Do not know what this does;
-        //                hud.Ghosted = false;
-        //                hud.UserMinimizable = false;
-        //                // ??--Don't know what useralphachangeable does
-        //                hud.UserAlphaChangeable = false;
-        //                hud.ShowIcon = false;
-        //                //  hud.ClickThrough = true;
-        //                hud.Theme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
-        //                hud.Location = p;
-        //                hud.Controls.HeadControl = head;
-        //
-        //                badd.Text = "+";
-        //                badd.Visible = true;
-        //                Rectangle recAdd = new Rectangle(0, 0, 12, 12);
-        //                head.AddControl(badd, recAdd);
-        //
-        //                bremove.Text = "-";
-        //                bremove.Visible = true;
-        //                Rectangle recRemove = new Rectangle(15, 0, 12, 12);
-        //                head.AddControl(bremove, recRemove);
-        //                
-        //            }
-        //            catch (Exception ex) { LogError(ex); }
-        //        }
-
-
-        private void doClearHud(VirindiViewService.HudView hud, XDocument xdoc, string filename)
-        {
-            //btnQuickiesAdd = null;
-            //btnQuickiesRemove = null;
-            try
-            {
-                if (hud == quickiesvHud)
-                {
-                    nquickiev = 0;
-                    try
-                    {
-
-                        for (int i = 0; i < 12; i++)
-                        { vst[i] = null; }
-                    }
-                    catch (Exception ex) { LogError(ex); }
-
-                    try
-                    {
-
-                        for (int i = 0; i < 12; i++)
-                        { vID[i] = 0; }
-                    }
-                    catch (Exception ex) { LogError(ex); }
-
-                    // btnQuickiesvAdd.Hit -= (sender, obj) => btnQuickiesvAdd_Hit(sender, obj);  
-                    // btnQuickiesvRemove.Hit -= (sender, obj) => btnQuickiesvRemove_Hit(sender, obj);
-
-                    chkQuickiev0.Change -= (sender, obj) => chkQuickiev0_Change(sender, obj);
-                    chkQuickiev1.Change -= (sender, obj) => chkQuickiev1_Change(sender, obj);
-                    chkQuickiev2.Change -= (sender, obj) => chkQuickiev2_Change(sender, obj);
-                    chkQuickiev3.Change -= (sender, obj) => chkQuickiev3_Change(sender, obj);
-                    chkQuickiev4.Change -= (sender, obj) => chkQuickiev4_Change(sender, obj);
-                    chkQuickiev5.Change -= (sender, obj) => chkQuickiev5_Change(sender, obj);
-                    chkQuickiev6.Change -= (sender, obj) => chkQuickiev6_Change(sender, obj);
-                    chkQuickiev7.Change -= (sender, obj) => chkQuickiev7_Change(sender, obj);
-                    chkQuickiev8.Change -= (sender, obj) => chkQuickiev8_Change(sender, obj);
-                    chkQuickiev9.Change -= (sender, obj) => chkQuickiev9_Change(sender, obj);
-                    chkQuickiev10.Change -= (sender, obj) => chkQuickiev10_Change(sender, obj);
-                    chkQuickiev11.Change -= (sender, obj) => chkQuickiev11_Change(sender, obj);
-                    btnQuickiesvAdd = null;
-                    btnQuickiesvRemove = null;
-
-                    for (int i = 0; i < 12; i++)
-                    { vchk[i] = null; }
-
-                }
-
-                else if (hud == quickieshHud)
-                {
-                    nquickieh = 0;
-                    try
+             nquickieh = 0;
+              try
                     {
                         for (int i = 0; i < 15; i++)
                         { hst[i] = null; }
                     }
-                    catch (Exception ex) { LogError(ex); }
+               catch (Exception ex) { LogError(ex); }
 
-                    try
+               try
                     {
                         for (int i = 0; i < 15; i++)
                         { hID[i] = 0; }
                     }
-                    catch (Exception ex) { LogError(ex); }
+               catch (Exception ex) { LogError(ex); }
 
-                    // btnhQuickiesAdd.Hit -= (sender, obj) => btnhQuickiesAdd_Hit(sender, obj);  
-                    // btnQuickieshRemove.Hit -= (sender, obj) => btnQuickieshRemove_Hit(sender, obj);
-                    chkQuickieh0.Change -= (sender, obj) => chkQuickieh0_Change(sender, obj);
-                    chkQuickieh1.Change -= (sender, obj) => chkQuickieh1_Change(sender, obj);
-                    chkQuickieh2.Change -= (sender, obj) => chkQuickieh2_Change(sender, obj);
-                    chkQuickieh3.Change -= (sender, obj) => chkQuickieh3_Change(sender, obj);
-                    chkQuickieh4.Change -= (sender, obj) => chkQuickieh4_Change(sender, obj);
-                    chkQuickieh5.Change -= (sender, obj) => chkQuickieh5_Change(sender, obj);
-                    chkQuickieh6.Change -= (sender, obj) => chkQuickieh6_Change(sender, obj);
-                    chkQuickieh7.Change -= (sender, obj) => chkQuickieh7_Change(sender, obj);
-                    chkQuickieh8.Change -= (sender, obj) => chkQuickieh8_Change(sender, obj);
-                    chkQuickieh9.Change -= (sender, obj) => chkQuickieh9_Change(sender, obj);
-                    chkQuickieh10.Change -= (sender, obj) => chkQuickieh10_Change(sender, obj);
-                    chkQuickieh11.Change -= (sender, obj) => chkQuickieh11_Change(sender, obj);
-                    btnQuickieshAdd = null;
-                    btnQuickieshRemove = null;
-
+              try{
                     for (int i = 0; i < 12; i++)
                     { hchk[i] = null; }
                     nquickieh = 0;
                 }
-            }
+            
             catch (Exception ex) { LogError(ex); }
         }
 
+        
+
+ 
 
         private void doGetData(XDocument xdoc, string filename)
         {
@@ -1128,23 +845,6 @@ namespace GearFoundry
                     DisposeHorizontalQuickSlots();
                     RenderHorizontalQuickSlots();
                 }
-            //    doClearHud(hud, xdoc, filename);
-            //    hud.Dispose();
-            //    hud = null;
-            //    if (xdoc == xdocQuickSlotsv)
-            //    {
-            //        quickiesvHud = new HudView();
-            //        hud = quickiesvHud;
-            //    }
-            //    else if (xdoc == xdocQuickSlotsh)
-            //    {
-            //        quickieshHud = new HudView();
-            //        hud = quickieshHud;
-            //    }
-
-            //    createQuickies(hud);
-            //    if (xdoc == xdocQuickSlotsv) { doGetData(xdocQuickSlotsv, quickSlotsvFilename); }
-            //    else if (xdoc == xdocQuickSlotsh) { doGetData(xdocQuickSlotsh, quickSlotshFilename); }
             }
             else if (!bremoveItem)
             {
@@ -1162,6 +862,10 @@ namespace GearFoundry
                 doQuickieChkWork(nQuickieIDv0, xdocQuickSlotsv, quickSlotsvFilename, nquickiev, quickiesvHud);
                 chkQuickiev0.Checked = false;
             }
+        }
+        private void mQuickStackv0_Hit(object sender, System.EventArgs e)
+        {
+                doQuickieChkWork(nQuickieIDv0, xdocQuickSlotsv, quickSlotsvFilename, nquickiev, quickiesvHud);
         }
 
         private void chkQuickiev1_Change(object sender, System.EventArgs e)
@@ -1407,27 +1111,27 @@ namespace GearFoundry
 
         private void chkQuickieh12_Change(object sender, System.EventArgs e)
         {
-            if (chkQuickieh12.Checked && nQuickieIDv12 != 0)
+            if (chkQuickieh12.Checked && nQuickieIDh12 != 0)
             {
-                doQuickieChkWork(nQuickieIDv12, xdocQuickSlotsv, quickSlotsvFilename, nquickieh, quickiesvHud);
+                doQuickieChkWork(nQuickieIDh12, xdocQuickSlotsh, quickSlotshFilename, nquickieh, quickieshHud);
                 chkQuickieh12.Checked = false;
             }
 
         }
         private void chkQuickieh13_Change(object sender, System.EventArgs e)
         {
-            if (chkQuickieh13.Checked && nQuickieIDv13 != 0)
+            if (chkQuickieh13.Checked && nQuickieIDh13 != 0)
             {
-                doQuickieChkWork(nQuickieIDv13, xdocQuickSlotsv, quickSlotsvFilename, nquickieh, quickiesvHud);
+                doQuickieChkWork(nQuickieIDh13, xdocQuickSlotsh, quickSlotshFilename, nquickieh, quickieshHud);
                 chkQuickieh13.Checked = false;
             }
 
         }
         private void chkQuickieh14_Change(object sender, System.EventArgs e)
         {
-            if (chkQuickieh14.Checked && nQuickieIDv14 != 0)
+            if (chkQuickieh14.Checked && nQuickieIDh14 != 0)
             {
-                doQuickieChkWork(nQuickieIDv14, xdocQuickSlotsv, quickSlotsvFilename, nquickieh, quickiesvHud);
+                doQuickieChkWork(nQuickieIDh14, xdocQuickSlotsh, quickSlotshFilename, nquickieh, quickieshHud);
                 chkQuickieh14.Checked = false;
             }
 
@@ -1468,6 +1172,7 @@ namespace GearFoundry
                         quickiesvHud_Head.AddControl(mQuickStackv0, new Rectangle(10, 15, 20, 20));
                         nQuickieIDv0 = thisQuickie.Guid;
                         nquickiev++;
+                        
                         break;
                     case 1:
                         mQuickStackv1 = mQuickStacks;
@@ -1681,245 +1386,59 @@ namespace GearFoundry
         }
 
 
-        //private void Current_RenderFrame(object sender, System.EventArgs e)
-        //{
-        //    try
-        //    {
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
 
         private void quickiesvHud_Moved(object sender, System.EventArgs e)
         {
             try
             {
 
-                //                vpt = quickiesvHud.Location; SaveSettings();
+                vpt = quickiesvHud.Location;
+                SaveSwitchGearSettings();
+
             }
             catch (Exception ex) { LogError(ex); }
 
 
         }
 
+        private void quickiesvHud_ThemeChanged(object sender, System.EventArgs e)
+        {
+            try
+            {
+
+                mvtheme = quickiesvHud.Theme;
+                SaveSwitchGearSettings();
+            }
+            catch (Exception ex) { LogError(ex); }
+
+
+        }
         private void quickieshHud_Moved(object sender, System.EventArgs e)
         {
             try
             {
-                //                hpt = quickieshHud.Location; SaveSettings();
+                hpt = quickieshHud.Location;
+                SaveSwitchGearSettings();
             }
             catch (Exception ex) { LogError(ex); }
 
 
         }
 
+        private void quickieshHud_ThemeChanged(object sender, System.EventArgs e)
+        {
+            try
+            {
 
+                mhtheme = quickieshHud.Theme;
+                SaveSwitchGearSettings();
+            }
+            catch (Exception ex) { LogError(ex); }
+
+
+        }
+ 
     }
 }//end of namespace
 
 
-
-
-
-
-
-
-
-
-
-
-//Need to add properties to the horizontal hud
-//quickieshHud.Visible = true;
-
-//quickieshHud.UserGhostable = true;
-//quickieshHud.Ghosted = false;
-//quickieshHud.UserMinimizable = false;
-////Don't know what useralphachangeable does
-//quickieshHud.UserAlphaChangeable = true;
-//////quickieshHud.ShowIcon = false;
-//////quickieshHud.ClickThrough = true;
-//quickieshHud.Theme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
-//quickieshHud.Location = hpt;
-
-//// Need to add the hud head to the hud
-//quickieshHud.Controls.HeadControl = quickieshHud_Head;
-
-////Need to create the add button
-//btnQuickieshAdd.Text = "+";
-//btnQuickieshAdd.Visible = true;
-//Rectangle rechAdd = new Rectangle(0, 0, 10, 10);
-//quickieshHud_Head.AddControl(btnQuickieshAdd, rechAdd);
-
-////Creating the remove button
-//btnQuickieshRemove.Text = "-";
-//btnQuickieshRemove.Visible = true;
-//Rectangle rechRemove = new Rectangle(0, 15, 10, 10);
-//quickieshHud_Head.AddControl(btnQuickieshRemove, recRemove);
-
-
-//private void mQuickStack0_GotFocus(object sender, System.EventArgs e)
-//{
-
-//    if (nQuickieID0 != 0)
-//    {
-//        GearFoundry.PluginCore.WriteToChat("In the wielding function.  ObjID = " + nQuickieID0);
-
-//        CoreManager.Current.Actions.UseItem(nQuickieID0, 0);
-//    }
-
-//}
-
-
-//CoreManager.Current.WorldFilter.CreateObject += new EventHandler<Decal.Adapter.Wrappers.CreateObjectEventArgs>(WorldFilter_CreateObject);
-//CoreManager.Current.WorldFilter.ChangeObject += new EventHandler<Decal.Adapter.Wrappers.ChangeObjectEventArgs>(WorldFilter_ChangeObjectHud);
-//CoreManager.Current.WorldFilter.ReleaseObject += new EventHandler<Decal.Adapter.Wrappers.ReleaseObjectEventArgs>(WorldFilter_ReleaseObject);
-
-
-//private void WorldFilter_CreateObject(object Sender, CreateObjectEventArgs e)
-//{
-//    try
-//    {
-//       // GearFoundry.PluginCore.WriteToChat("At Createobject");
-
-//       // quickiesHud.DirectRenderDraw = true;
-//    }
-//    catch (Exception ex) { LogError(ex); }
-
-
-//}
-//private void WorldFilter_ChangeObjectHud(object Sender, ChangeObjectEventArgs e)
-//{
-//    try
-//    {
-//      //  GearFoundry.PluginCore.WriteToChat("At Changeobject");
-
-//      //  quickiesHud.DirectRenderDraw = true;
-//    }
-//    catch (Exception ex) { LogError(ex); }
-
-
-//}
-//private void WorldFilter_ReleaseObject(object Sender, ReleaseObjectEventArgs e)
-//{
-//    try
-//    {
-//      //  GearFoundry.PluginCore.WriteToChat("At releaseobject");
-
-//      //  quickiesHud.DirectRenderDraw = true;
-//    }
-//    catch (Exception ex) { LogError(ex); }
-
-
-
-//nQuickieIDh0 = 0;
-//nQuickieIDh1 = 0;
-//nQuickieIDh2 = 0;
-//nQuickieIDh3 = 0;
-//nQuickieIDh4 = 0;
-//nQuickieIDh5 = 0;
-//nQuickieIDh6 = 0;
-//nQuickieIDh7 = 0;
-//nQuickieIDh8 = 0;
-//nQuickieIDh9 = 0;
-//nQuickieIDh10 = 0;
-//nQuickieIDh11 = 0;
-
-
-//VirindiViewService.Controls.HudFixedLayout quickiesvHud_Head = new VirindiViewService.Controls.HudFixedLayout();
-
-
-//public class QuickSlotHud
-//{
-//    public bool Visible;
-//    public bool UserGhostable;
-//    public bool Ghosted;
-//    public bool UserMinimizable;
-//    //Don't know what useralphachangeable does
-//    public bool UserAlphaChangeable;
-//    public bool ShowIcon;
-//    public bool ClickThrough;
-//    public HudViewDrawStyle Theme;
-//    public int Location;
-//}
-
-
-//mQuickStackh0 = null;
-//mQuickStackh1 = null;
-//mQuickStackh2 = null;
-//mQuickStackh3 = null;
-//mQuickStackh4 = null;
-//mQuickStackh5 = null;
-//mQuickStackh6 = null;
-//mQuickStackh7 = null;
-//mQuickStackh8 = null;
-//mQuickStackh9 = null;
-//mQuickStackh10 = null;
-//mQuickStackh11 = null;
-
-//mQuickSlotsvList = new List<XElement>();
-//mQuickSlotshList = new List<XElement>();
-
-//if (xdocQuickSlotsv.Root.HasElements) { loadListQuick(xdocQuickSlotsv, mQuickSlotsvList); }
-//if (xdocQuickSlotsh.Root.HasElements) { loadListQuick(xdocQuickSlotsh, mQuickSlotshList); }
-
-//nQuickieIDv0 = 0;
-//nQuickieIDv1 = 0;
-//nQuickieIDv2 = 0;
-//nQuickieIDv3 = 0;
-//nQuickieIDv4 = 0;
-//nQuickieIDv5 = 0;
-//nQuickieIDv6 = 0;
-//nQuickieIDv7 = 0;
-//nQuickieIDv8 = 0;
-//nQuickieIDv9 = 0;
-//nQuickieIDv10 = 0;
-//nQuickieIDv11 = 0;
-
-
-//mQuickStackv0 = null;
-//mQuickStackv1 = null;
-//mQuickStackv2 = null;
-//mQuickStackv3 = null;
-//mQuickStackv4 = null;
-//mQuickStackv5 = null;
-//mQuickStackv6 = null;
-//mQuickStackv7 = null;
-//mQuickStackv8 = null;
-//mQuickStackv9 = null;
-//mQuickStackv10 = null;
-//mQuickStackv11 = null;
-
-//Need to add properties to the vertical hud
-//quickiesvHud.Visible = true;
-//quickiesvHud.UserGhostable = true;
-//quickiesvHud.Ghosted = false;
-//quickiesvHud.UserMinimizable = false;
-////Don't know what useralphachangeable does
-//quickiesvHud.UserAlphaChangeable = true;
-//////quickiesvHud.ShowIcon = false;
-//////quickiesvHud.ClickThrough = true;
-//quickiesvHud.Theme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
-//quickiesvHud.Location = vpt;
-
-//// Need to add the hud head to the hud
-//quickiesvHud.Controls.HeadControl = quickiesvHud_Head;
-
-////Need to create the add button   
-
-//btnQuickiesvAdd.Text = "+";
-//btnQuickiesvAdd.Visible = true;
-//Rectangle recAdd = new Rectangle(0, 0, 10, 10);
-//quickiesvHud_Head.AddControl(btnQuickiesvAdd, recAdd);
-
-////Creating the remove button
-//btnQuickiesvRemove.Text = "-";
-//btnQuickiesvRemove.Visible = true;
-//Rectangle recRemove = new Rectangle(15, 0, 10, 10);
-//quickiesvHud_Head.AddControl(btnQuickiesvRemove, recRemove);
-
-//Can't make following work ??
-//int y = 15;
-//for (int i = 0; i<12; i++)
-//{ 
-//    quickiesvHud_Head.AddControl(vchk[i],new Rectangle(0,y,12,12));
-//    y = y+15;
-//}

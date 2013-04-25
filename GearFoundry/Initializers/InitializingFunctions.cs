@@ -159,8 +159,10 @@ namespace GearFoundry
                         xdocSwitchGearSettings.Element("Settings").Add(new XElement("Setting",
                         new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
                         new XElement("QuickSlotshEnabled", bquickSlotshEnabled)));
+                        xdocSwitchGearSettings.Save(switchGearSettingsFilename);
                       
                     }
+                        
                     catch (Exception ex) { LogError(ex); }
                 }
 
@@ -437,6 +439,13 @@ namespace GearFoundry
                 {
                     if (el.Name == "QuickSlotsvEnabled") { bquickSlotsvEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "QuickSlotshEnabled") { bquickSlotshEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "VpointX"){vpt.X = Convert.ToInt32(el.Value);}
+                    if (el.Name == "VpointY") { vpt.Y = Convert.ToInt32(el.Value); }
+                    if (el.Name == "HpointX") { hpt.X = Convert.ToInt32(el.Value);  }
+                    if (el.Name == "HpointY") { hpt.Y = Convert.ToInt32(el.Value); }
+                    if (el.Name == "QuickiesVTheme") { mvtheme = VirindiViewService.HudViewDrawStyle.GetThemeByName(el.Value);}
+                    if (el.Name == "QuickiesHTheme") { mhtheme = VirindiViewService.HudViewDrawStyle.GetThemeByName(el.Value); }
+
                 }
                 WriteToChat("I have filled settings variables: bquickslotsvEnabled = " + bquickSlotsvEnabled.ToString());
  
@@ -1124,7 +1133,13 @@ namespace GearFoundry
                 xdoc = new XDocument(new XElement("Settings"));
                 xdoc.Element("Settings").Add(new XElement("Setting",
                          new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
-                         new XElement("QuickSlotshEnabled", bquickSlotshEnabled)));
+                         new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
+                         new XElement("VpointX", vpt.X),
+                         new XElement("VpointY", vpt.Y),
+                         new XElement("HpointX", hpt.X),
+                         new XElement("HpointX", hpt.Y),
+                         new XElement("QuickiesVTheme",mvtheme),
+                         new XElement("QuickiesHTheme",mhtheme)));
                 xdoc.Save(switchGearSettingsFilename);
             }
             catch (Exception ex) { LogError(ex); }
@@ -1137,8 +1152,8 @@ namespace GearFoundry
             {
                 xdoc = new XDocument(new XElement("Settings"));
                 xdoc.Element("Settings").Add(new XElement("Setting",
-                         new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
-                         new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
+                       //  new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
+                       //  new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
 //                         new XElement("VpointX", vpt.X),
 //                         new XElement("VpointY", vpt.Y),
 //                         new XElement("HpointX", hpt.X),
