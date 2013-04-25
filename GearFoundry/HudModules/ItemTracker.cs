@@ -457,14 +457,14 @@ namespace GearFoundry
 						if(levelcheck > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
 					}
 //					//WieldRequiredAttribute
-					if(rule.RuleWieldAttribute > 0)
-					{
-						WriteToChat("RuleWRA: " + rule.RuleWieldAttribute.ToString());
-						WriteToChat("ItemWRA: " + IOItemWithID.WieldReqAttribute.ToString());
-						WriteToChat("ItemWRA2: " + IOItemWithID.WieldReqAttribute2.ToString());
-						if(IOItemWithID.WieldReqType != 7) {if(IOItemWithID.WieldReqAttribute !=  rule.RuleWieldAttribute){RuleName = String.Empty; goto Next;}}
-						if(IOItemWithID.WieldReqType2 != 7 && IOItemWithID.WieldReqAttribute2 > 0) {if(IOItemWithID.WieldReqAttribute2 != rule.RuleWieldAttribute){RuleName = String.Empty; goto Next;}}
-					}
+//					if(rule.RuleWieldAttribute > 0)
+//					{
+//						WriteToChat("RuleWRA: " + rule.RuleWieldAttribute.ToString());
+//						WriteToChat("ItemWRA: " + IOItemWithID.WieldReqAttribute.ToString());
+//						WriteToChat("ItemWRA2: " + IOItemWithID.WieldReqAttribute2.ToString());
+//						if(IOItemWithID.WieldReqType != 7) {if(IOItemWithID.WieldReqAttribute !=  rule.RuleWieldAttribute){RuleName = String.Empty; goto Next;}}
+//						if(IOItemWithID.WieldReqType2 != 7 && IOItemWithID.WieldReqAttribute2 > 0) {if(IOItemWithID.WieldReqAttribute2 != rule.RuleWieldAttribute){RuleName = String.Empty; goto Next;}}
+//					}
 //					//WeaponMastery
 //					if(rule.RuleMastery > 0)
 //					{
@@ -755,6 +755,8 @@ namespace GearFoundry
     			ItemHudList.Click -= (sender, row, col) => ItemHudList_Click(sender, row, col);		
     			ItemHudList.Dispose();
     			ItemHudLayout.Dispose();
+    			ItemHudTabLayout.Dispose();
+    			ItemHudTabView.Dispose();
     			ItemHudView.Dispose();		
     		}	
     		catch{}

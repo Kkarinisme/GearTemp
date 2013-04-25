@@ -83,6 +83,7 @@ namespace GearFoundry
 			public bool addtoloot;
 			public bool notify;
 			public string rulename;
+			public double DistanceAway;
 //			public rule matched_rule;
 			
 			public string IORString()
@@ -130,6 +131,11 @@ namespace GearFoundry
 				}
 					
             
+			}
+			
+			public string DistanceString()
+			{
+				return " <" + (DistanceAway * 100).ToString("0") + ">";
 			}
 		
 			//not in worldfilter set by OnIdentObject:

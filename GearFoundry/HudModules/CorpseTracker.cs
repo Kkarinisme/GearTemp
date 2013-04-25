@@ -19,6 +19,7 @@ namespace GearFoundry
 
 	public partial class PluginCore
 	{
+		//UNDONE:  Need to complete logging and verify functionality of DEADME and Permitted corpses.
 		private List<string> FellowMemberTrackingList = new List<string>();
 		private List<int> CorpseExclusionList = new List<int>();
 		private List<IdentifiedObject> CorpseTrackingList = new List<IdentifiedObject>();
@@ -34,7 +35,7 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(OnWorldFilterDeleteCorpse);
                 Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(OnCorpseDestroyed);
                 Core.CharacterFilter.ChangePortalMode += new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeCorpses);
-                Core.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxFellow);
+                Core.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxCorpse);
                 Core.ContainerOpened += new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
 			}
 			catch(Exception ex){LogError(ex);}
@@ -50,7 +51,7 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(OnWorldFilterDeleteCorpse);
                 Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(OnCorpseDestroyed);
                 Core.CharacterFilter.ChangePortalMode -= new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeCorpses);
-                Core.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxFellow);
+                Core.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxCorpse);
                 Core.ContainerOpened -= new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
 			}
 			catch(Exception ex){LogError(ex);}
@@ -77,6 +78,10 @@ namespace GearFoundry
         	int iEvent = 0;
             try
             {
+            	if(e.Message.Type == AC_PLAYER_KILLED)
+            	{
+            		AddDeadMe();
+            	}
             	if(e.Message.Type == AC_GAME_EVENT)
             	{
             		try
@@ -87,8 +92,7 @@ namespace GearFoundry
                     if(iEvent == GE_IDENTIFY_OBJECT)
                     {
                     	 OnIdentCorpse(e.Message);
-                    }
-                    
+                    }    
             	}
             }
             catch (Exception ex)
@@ -270,7 +274,7 @@ namespace GearFoundry
 
 		}
 		
-        private void ChatBoxFellow(object sender, Decal.Adapter.ChatTextInterceptEventArgs e)
+        private void ChatBoxCorpse(object sender, Decal.Adapter.ChatTextInterceptEventArgs e)
         {
             try 
             {
@@ -350,6 +354,11 @@ namespace GearFoundry
 	     	}
 	     	catch{}
     	}
+	    
+	    private void AddDeadMe()
+	    {
+	    	
+	    }
 				
 	    private HudView CorpseHudView = null;
 		private HudFixedLayout CorpseHudLayout = null;
@@ -364,7 +373,6 @@ namespace GearFoundry
 			
     	private void RenderCorpseHud()
     	{
-    		WriteToChat("Corpse Hud Rendered");
     		try{
     			    			
     			if(CorpseHudView != null)
@@ -390,7 +398,7 @@ namespace GearFoundry
     			CorpseHudLayout.AddControl(CorpseHudTabView, new Rectangle(0,0,300,220));
     		
     			CorpseHudTabLayout = new HudFixedLayout();
-    			CorpseHudTabView.AddTab(CorpseHudTabLayout, "Corpses");
+    			CorpseHudTabView.AddTab(CorpseHudTabLayout, "GearHound");
     			
     			CorpseHudList = new HudList();
     			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0,300,220));
@@ -413,6 +421,8 @@ namespace GearFoundry
     		{
     			CorpseHudList.Click -= (sender, row, col) => CorpseHudList_Click(sender, row, col);		
     			CorpseHudList.Dispose();
+    			CorpseHudTabLayout.Dispose();
+    			CorpseHudTabView.Dispose();
     			CorpseHudLayout.Dispose();
     			CorpseHudView.Dispose();		
     		}	

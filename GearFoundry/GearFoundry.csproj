@@ -105,6 +105,7 @@
     <None Include="Documents\GuidetoVariablesandFunctions.txt" />
     <None Include="Documents\IrquksStatusList" />
     <Compile Include="HudModules\CorpseTracker.cs" />
+    <Compile Include="HudModules\GearButler.cs" />
     <Compile Include="HudModules\ItemTracker.cs" />
     <Compile Include="HudModules\LandscapeTracker.cs" />
     <Compile Include="PluginCore.cs" />

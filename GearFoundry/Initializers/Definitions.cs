@@ -60,8 +60,14 @@ namespace GearFoundry
         private const int GE_READY_PREV_ACTION_COMPLETE = 0x1C7;
         private const int GE_ENTER_TRADE = 0x1FD;
         private const int GE_EXIT_TRADE = 0x1FF;
-        private const int GE_CREATE_FELLOW = 0x2BE;
         
+        //Fellowship Packets
+        private const int GE_ADD_FELLOWMEMBER = 0x2C0;
+        private const int GE_FELLOWSHIP_MEMBER_QUIT = 0x00A3;
+        private const int GE_FELLOWSHIP_MEMBER_DISMISSED = 0x00A4;
+		private const int GE_CREATE_FELLOWSHIP = 0x02BE;
+		private const int GE_DISBAND_FELLOWSHIP = 0x02BF;
+		        
         XDocument xdoc = null;
         XDocument xdocToonSettings = null;
         XDocument xdocGenSettings = null;

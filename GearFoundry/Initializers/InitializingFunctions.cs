@@ -31,7 +31,6 @@ namespace GearFoundry
         {
             try
             {
-
                 toonName = Core.CharacterFilter.Name;
                 world = Core.CharacterFilter.Server;
 
@@ -45,8 +44,6 @@ namespace GearFoundry
                 //information -- just putting  here but perhaps should be in another function for readability
                 System.Version AppVersion = asm.GetName().Version;
                 dllversion = AppVersion.ToString();
-
-
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -74,9 +71,6 @@ namespace GearFoundry
                 quickSlotshFilename = toonDir + @"\" + "QuickSlotsh.xml";
 
 
-
-
- 
                 if (!File.Exists(rulesFilename))
                 {
                     try
