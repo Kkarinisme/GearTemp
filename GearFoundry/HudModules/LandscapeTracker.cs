@@ -18,12 +18,13 @@ namespace GearFoundry
 {
 	public partial class PluginCore
 	{
+		//UNDONE:  Fellowship members who join fellow but were already in tracking list will not update to be green until portal or out of range.
 		private List<int> LandscapeExclusionList = new List<int>();
 		private List<IdentifiedObject> LandscapeTrackingList = new List<IdentifiedObject>();
-		private List<string> LandscapeFellowNames = new List<string>();
+		private List<string> LandscapeFellowMemberTrackingList = new List<string>();
 		private bool mLandscapeInPortalSpace = true;
 		
-		void SubscribeLandscapeEvents()
+		private void SubscribeLandscapeEvents()
 		{
 			try
 			{
@@ -34,10 +35,11 @@ namespace GearFoundry
                 Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(OnLandscapeDestroyed);
                 Core.CharacterFilter.ChangePortalMode += new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeLandscape);
 			}
-			catch{}
+			catch(Exception ex) {LogError(ex);}
+			return;
 		}
 		
-		void UnsubscribeLandscapeEvents()
+		private void UnsubscribeLandscapeEvents()
 		{
 			try
 			{
@@ -46,8 +48,10 @@ namespace GearFoundry
              	Core.EchoFilter.ServerDispatch -= new EventHandler<NetworkMessageEventArgs>(ServerDispatchLandscape);
                 Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(OnWorldFilterDeleteLandscape);
                 Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(OnLandscapeDestroyed);
-                Core.CharacterFilter.ChangePortalMode -= new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeLandscape);
-			}catch{}
+                Core.CharacterFilter.ChangePortalMode -= new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeLandscape);               
+			
+			}catch(Exception ex) {LogError(ex);}
+			return;
 		}
 		
 		private void OnWorldFilterCreateLandscape(object sender, Decal.Adapter.Wrappers.CreateObjectEventArgs e)
@@ -61,9 +65,8 @@ namespace GearFoundry
 					CheckLandscape(new IdentifiedObject(e.New));
 				}
 			} catch (Exception ex){LogError(ex);}
+			return;
 		}
-		
-	
 
         private void ServerDispatchLandscape(object sender, Decal.Adapter.NetworkMessageEventArgs e)
         {
@@ -77,9 +80,21 @@ namespace GearFoundry
                     	iEvent = Convert.ToInt32(e.Message["event"]);
                     }
                     catch{}
-                    if(iEvent == GE_CREATE_FELLOW)
+                    if(iEvent == GE_ADD_FELLOWMEMBER)
                     {
-                    	CreateFellowshipLandscape(e.Message);
+                    	AddFellowLandscape(e);
+                    }
+                    if(iEvent == GE_FELLOWSHIP_MEMBER_QUIT || iEvent == GE_FELLOWSHIP_MEMBER_DISMISSED)
+                    {
+                    	RemoveFellowLandscape(e);
+                    }
+                    if(iEvent == GE_DISBAND_FELLOWSHIP)
+                    {
+                    	ClearFellowLandscape(e);
+                    }
+                    if(iEvent == GE_CREATE_FELLOWSHIP)
+                    {
+                    	CreateorJoinFellowLandscape(e);
                     }
                     if(iEvent == GE_IDENTIFY_OBJECT)
                     {
@@ -88,10 +103,7 @@ namespace GearFoundry
                     
             	}
             }
-            catch (Exception ex)
-            {
-                LogError(ex);
-            }
+            catch (Exception ex){LogError(ex);}
         }  
         
         private void OnIdentLandscape(Decal.Adapter.Message pMsg)
@@ -108,7 +120,7 @@ namespace GearFoundry
 			catch (Exception ex) {LogError(ex);}
 		}
         
-        void CheckLandscape(IdentifiedObject IOLandscape)
+        private void CheckLandscape(IdentifiedObject IOLandscape)
 		{
 			try
 			{
@@ -126,7 +138,7 @@ namespace GearFoundry
 						if(IOLandscape.Id == Core.CharacterFilter.Id) {return;}
 						if(bfellowEnabled)
 						{
-							if(LandscapeFellowNames.Contains(IOLandscape.Name))
+							if(LandscapeFellowMemberTrackingList.Contains(IOLandscape.Name))
 							{
 								IOLandscape.IOR = IOResult.fellowplayer;
 								goto default;									
@@ -204,16 +216,14 @@ namespace GearFoundry
 				LandscapeExclusionList.Add(IOLandscape.Id);
 				return;
 			}
-			
 			catch (Exception ex){LogError(ex);}
+			return;
 		}
 			
 		private void MonsterListCheckLandscape(ref IdentifiedObject IOLandscape)
 		{
-	
 			try 
-			{
-				
+			{		
 				string namecheck = IOLandscape.Name;
 				var matches = from XMobs in mSortedMobsListChecked
 					where (namecheck.ToLower().Contains((string)XMobs.Element("key").Value.ToLower()) && !Convert.ToBoolean(XMobs.Element("isexact").Value)) ||
@@ -228,9 +238,7 @@ namespace GearFoundry
 				{
 					IOLandscape.IOR = IOResult.nomatch;
 				}
-
 			} catch (Exception ex) {LogError(ex);} 
-			
 			return;
 		}
 		
@@ -238,7 +246,6 @@ namespace GearFoundry
 		{	
 			try
 			{
-				
 				string namecheck = IOLandscape.Name;
 				var matches = from XTrophies in mSortedTrophiesListChecked
 					where (namecheck.ToLower().Contains((string)XTrophies.Element("key").Value.ToLower()) && !Convert.ToBoolean(XTrophies.Element("isexact").Value)) ||
@@ -261,72 +268,75 @@ namespace GearFoundry
 					IOLandscape.IOR = IOResult.nomatch;
 				}
 				
-				} catch (Exception ex) {LogError(ex);}
-				
-				return;
-	
-			}
+			} catch (Exception ex) {LogError(ex);}	
+			return;
+		}
         
-
-			private void OnWorldFilterDeleteLandscape(object sender, Decal.Adapter.Wrappers.ReleaseObjectEventArgs e)
+		private void OnWorldFilterDeleteLandscape(object sender, Decal.Adapter.Wrappers.ReleaseObjectEventArgs e)
+		{
+			try 
 			{
-				try 
-				{
-					LandscapeTrackingList.RemoveAll(x => x.Id == e.Released.Id);
-					LandscapeExclusionList.RemoveAll(x => x == e.Released.Id);
-					UpdateLandscapeHud();
-	
-				} 
-				catch (Exception ex) {LogError(ex);}
-			}
-			
-			private void OnLandscapeDestroyed(object sender, ItemDestroyedEventArgs e)
+				LandscapeTrackingList.RemoveAll(x => x.Id == e.Released.Id);
+				LandscapeExclusionList.RemoveAll(x => x == e.Released.Id);
+				UpdateLandscapeHud();
+			} 
+			catch (Exception ex) {LogError(ex);}
+		}
+		
+		private void OnLandscapeDestroyed(object sender, ItemDestroyedEventArgs e)
+		{
+			try
 			{
-				try
-				{
-					LandscapeTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
-					LandscapeExclusionList.RemoveAll(x => x == e.ItemGuid);
-					UpdateLandscapeHud();
-				} catch {}
-			}
-			
-			private void ChangePortalModeLandscape(object sender, Decal.Adapter.Wrappers.ChangePortalModeEventArgs e)
+				LandscapeTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
+				LandscapeExclusionList.RemoveAll(x => x == e.ItemGuid);
+				UpdateLandscapeHud();
+			} catch(Exception ex) {LogError(ex);}
+			return;
+		}
+		
+		private void ChangePortalModeLandscape(object sender, Decal.Adapter.Wrappers.ChangePortalModeEventArgs e)
+		{
+			try
 			{
-				try
+				if(!mCharacterLoginComplete) {return;}
+				else
 				{
-					if(!mCharacterLoginComplete) {return;}
-					else
+					if(mLandscapeInPortalSpace) {mLandscapeInPortalSpace = false;}
+					else{mLandscapeInPortalSpace = true;}
+					
+					if(mLandscapeInPortalSpace)
 					{
-						if(mLandscapeInPortalSpace) {mLandscapeInPortalSpace = false;}
-						else{mLandscapeInPortalSpace = true;}
-						
-						if(mLandscapeInPortalSpace)
-						{
-							LandscapeTrackingList.Clear();					
-							LandscapeExclusionList.Clear();
-							UpdateLandscapeHud();
-						}
+						LandscapeTrackingList.Clear();					
+						LandscapeExclusionList.Clear();
+						UpdateLandscapeHud();
 					}
 				}
-				catch{}
-	
-			}
+			}catch(Exception ex) {LogError(ex);}
+			return;
+		}
 			
-	        int LandscapeTimer = 0;
-	        void LandscapeTimerTick(object sender, EventArgs e)
-	        {
-	        	try
-	        	{
-		        	if(LandscapeTimer == 4)
-		        	{	        		
-		        		DistanceCheckLandscape();
-		        		LandscapeTimer = 0;
-		        	}
-		        	LandscapeTimer++;
+        private int LandscapeTimer = 0;
+        private void LandscapeTimerTick(object sender, EventArgs e)
+        {
+        	try
+        	{
+	        	if(LandscapeTimer == 4)
+	        	{	        		
+	        		DistanceCheckLandscape();
+	        		LandscapeTimer = 0;
+	        		if(LandscapeFellowMemberTrackingList.Count() > 0)
+	        		{
+	        			foreach(string name in LandscapeFellowMemberTrackingList)
+		        		{
+		        			WriteToChat(name);
+		        		}
+	        		}
 	        	}
-	        	catch{}
-	        }
-			
+	        	LandscapeTimer++;
+        	}catch(Exception ex) {LogError(ex);}
+        	return;
+        }
+	        			
 	    private void DistanceCheckLandscape()
 	    {
      		try
@@ -339,49 +349,96 @@ namespace GearFoundry
 	     		{
 	     			LandscapeTrackingList.RemoveAll(x => x.Id == item);
 	     		}
-	     		UpdateLandscapeHud();
-	     	}
-	     	catch{}
+	     		SortByDistanceLandscape();
+	     	}catch(Exception ex) {LogError(ex);}
+     		return;
     	}
 	    
-	    private void CreateFellowshipLandscape(Decal.Adapter.Message pMsg)
+	    private void SortByDistanceLandscape()
 	    {
 	    	try
 	    	{
-	    		
-	    	
-		    	LandscapeFellowNames.Clear();
-		    	
-		    	int FellowshipCount;
-		    	
-		    	FellowshipCount = Convert.ToInt32(pMsg.Value<string>("fellowCount"));
-	 	
-		    	Decal.Adapter.MessageStruct FellowshipData = pMsg.Struct("fellows");
-		        	
-		    	for(int i = 0; i < FellowshipCount; i++)
+		    	foreach(var spawn in LandscapeTrackingList)
 		    	{
-		    		LandscapeFellowNames.Add(pMsg.Struct(i).Struct("fellow").Value<string>("name"));
+		    		spawn.DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, spawn.Id);
 		    	}
-	    	} catch{}
-//            Set vec = pMsg.Struct("fellows")
-//            With pMsg
-//               FCount = .value("fellowCount")
-//               FLeaderID = .value("leader")
-//               FName = .value("name")
-//               FState = .value("open")
-//               FXpShare = .value("shareXP")
-//            End With
-//            For i = 0 To FCount - 1
-//               With vec.Struct(i).Struct("fellow")
-//                  FMember(i).GUID = .value("fellow")
-//                  FMember(i).Name = .value("name")
-//                  FMember(i).Level = .value("level")
-//                  FMember(i).Health = .value("maxHealth")
-//                  FMember(i).Stam = .value("maxStam")
-//                  FMember(i).Mana = .value("maxMana")
-//               End With
-//            Next
+		    	LandscapeTrackingList = LandscapeTrackingList.OrderBy(x => x.DistanceAway).ToList();		        
+		        UpdateLandscapeHud(); 
+	    	}catch(Exception ex) {LogError(ex);}
+	    	return;
+	       	
 	    }
+	    
+	    private void AddFellowLandscape(NetworkMessageEventArgs e)
+	    {
+	    	try
+	    	{
+	    		int fellow = (int)e.Message.Struct("fellow")["fellow"];
+	    		if(fellow != Core.CharacterFilter.Id)
+	    		{
+	    			if(!LandscapeFellowMemberTrackingList.Contains((string)e.Message.Struct("fellow")["name"]))
+	    			{
+	    				LandscapeFellowMemberTrackingList.Add((string)e.Message.Struct("fellow")["name"]);
+	    			}
+	    		}    
+	    	}catch(Exception ex) {LogError(ex);}
+	    	return;
+	    }
+	    
+	   	private void RemoveFellowLandscape(NetworkMessageEventArgs e)
+	    {
+	    	try
+	    	{
+	    		int fellow = (int)e.Message.Value<int>("fellow");
+	    		
+	    		if(fellow == Core.CharacterFilter.Id)
+	    		{
+	    			LandscapeFellowMemberTrackingList.Clear();
+	    		}
+	    		else
+	    		{
+	    			LandscapeFellowMemberTrackingList.RemoveAll(x => x == Core.WorldFilter[fellow].Name);
+	    		}	    
+	    	} catch(Exception ex){LogError(ex);}
+	    	return;
+
+	    }
+	   	
+	   	private void ClearFellowLandscape(NetworkMessageEventArgs e)
+	    {
+	    	try
+	    	{
+	   			LandscapeFellowMemberTrackingList.Clear();	    
+	    	} catch(Exception ex) {LogError(ex);}
+	    	return;
+	    }
+	   	
+	   	private void CreateorJoinFellowLandscape(NetworkMessageEventArgs e)
+	   	{
+	   		try
+	   		{
+	   			LandscapeFellowMemberTrackingList.Clear();
+	   			var fellowmembers = e.Message.Struct("fellows");
+	   			int fellowcount = (int)e.Message.Value<int>("fellowCount");
+	   			for(int i = 0; i < fellowcount; i++)
+	   			{
+	   				var fellow = fellowmembers.Struct(i).Struct("fellow");
+	   				LandscapeFellowMemberTrackingList.Add((string)fellow.Value<string>("name"));
+	   			}
+	   			
+	   		}catch(Exception ex) {LogError(ex);}
+	   		return;
+	   	}
+//	   	            case 0x02BE: // Create Or Join Fellowship
+//               mFellowship.Clear();
+//               fellowMembers = pMsg.get_Struct("fellows");
+//               int fellowCount = (int)pMsg.get_Value("fellowCount");
+//               for (int i = 0; i < fellowCount; i++) {
+//                  fellow = fellowMembers.get_Struct(i).get_Struct("fellow");
+//                  mFellowship[(int)fellow.get_Value("fellow")] = (string)fellow.get_Value("name");
+//               }
+//               break;
+	    
 				
 	    private HudView LandscapeHudView = null;
 		private HudFixedLayout LandscapeHudLayout = null;
@@ -389,14 +446,12 @@ namespace GearFoundry
 		private HudFixedLayout LandscapeHudTabLayout = null;
 		private HudList LandscapeHudList = null;
 		private HudList.HudListRowAccessor LandscapeHudListRow = null;
-		
-		//Assembly tests
-		
 		private const int LandscapeRemoveCircle = 0x60011F8;
 			
     	private void RenderLandscapeHud()
     	{
-    		try{
+    		try
+    		{
     			    			
     			if(LandscapeHudView != null)
     			{
@@ -412,6 +467,7 @@ namespace GearFoundry
     			LandscapeHudView.Ghosted = false;
                 LandscapeHudView.UserMinimizable = false;
                 LandscapeHudView.UserClickThroughable = true;
+             
     			
     			LandscapeHudLayout = new HudFixedLayout();
     			LandscapeHudView.Controls.HeadControl = LandscapeHudLayout;
@@ -420,10 +476,11 @@ namespace GearFoundry
     			LandscapeHudLayout.AddControl(LandscapeHudTabView, new Rectangle(0,0,300,220));
     		
     			LandscapeHudTabLayout = new HudFixedLayout();
-    			LandscapeHudTabView.AddTab(LandscapeHudTabLayout, "Landscape");
+    			LandscapeHudTabView.AddTab(LandscapeHudTabLayout, "GearSense");
     			
     			LandscapeHudList = new HudList();
     			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0,300,220));
+
 				LandscapeHudList.ControlHeight = 16;	
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				LandscapeHudList.AddColumn(typeof(HudStaticText), 230, null);
@@ -431,11 +488,11 @@ namespace GearFoundry
 				
 				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col);				
 			  							
-    		}catch(Exception ex) {WriteToChat(ex.ToString());}
-    		
+    		}catch(Exception ex) {LogError(ex);}
+    		return;
     	}
     	
-    	void DisposeLandscapeHud()
+    	private void DisposeLandscapeHud()
     	{
     			
     		try
@@ -443,12 +500,14 @@ namespace GearFoundry
     			LandscapeHudList.Click -= (sender, row, col) => LandscapeHudList_Click(sender, row, col);		
     			LandscapeHudList.Dispose();
     			LandscapeHudLayout.Dispose();
+    			LandscapeHudTabLayout.Dispose();
+    			LandscapeHudTabView.Dispose();
     			LandscapeHudView.Dispose();		
-    		}	
-    		catch{}
+    		}catch(Exception ex) {LogError(ex);}
+    		return;
     	}
     		
-    	void LandscapeHudList_Click(object sender, int row, int col)
+    	private void LandscapeHudList_Click(object sender, int row, int col)
     	{
     		try
 			{
@@ -487,21 +546,21 @@ namespace GearFoundry
     			}
 				UpdateLandscapeHud();
 			}
-			catch (Exception ex) { LogError(ex); }	
+			catch (Exception ex) { LogError(ex); }
+			return;			
     	}
     		
 	    private void UpdateLandscapeHud()
 	    {  	
 	    	try
 	    	{    		
-	    		LandscapeHudList.ClearRows();
-	    		   	    		
+	    		LandscapeHudList.ClearRows();	    		   	    		
 	    	    foreach(IdentifiedObject spawn in LandscapeTrackingList)
 	    	    {
 	    	    	LandscapeHudListRow = LandscapeHudList.AddRow();
 	    	    	
 	    	    	((HudPictureBox)LandscapeHudListRow[0]).Image = spawn.Icon + 0x6000000;
-	    	    	((HudStaticText)LandscapeHudListRow[1]).Text = spawn.IORString() + spawn.Name;
+	    	    	((HudStaticText)LandscapeHudListRow[1]).Text = spawn.IORString() + spawn.Name + spawn.DistanceString();
 	    	    	if(spawn.IOR == IOResult.trophy) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.SlateGray;}
 	    	    	if(spawn.IOR == IOResult.lifestone) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Blue;}
 	    	    	if(spawn.IOR == IOResult.monster) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Orange;}
@@ -512,30 +571,11 @@ namespace GearFoundry
 	    	    	if(spawn.IOR == IOResult.allegplayers)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.DarkSlateBlue;}
 					((HudPictureBox)LandscapeHudListRow[2]).Image = LandscapeRemoveCircle;
 	    	    }
-	       	}catch(Exception ex){WriteToChat(ex.ToString());}
-	    	
+	    	}catch(Exception ex){LogError(ex);}
+	    	return;	    	
 	    }
 	}
 }
 
         
-//            Case Fellow_Create '&H2BE&
-//            Set vec = pMsg.Struct("fellows")
-//            With pMsg
-//               FCount = .value("fellowCount")
-//               FLeaderID = .value("leader")
-//               FName = .value("name")
-//               FState = .value("open")
-//               FXpShare = .value("shareXP")
-//            End With
-//            For i = 0 To FCount - 1
-//               With vec.Struct(i).Struct("fellow")
-//                  FMember(i).GUID = .value("fellow")
-//                  FMember(i).Name = .value("name")
-//                  FMember(i).Level = .value("level")
-//                  FMember(i).Health = .value("maxHealth")
-//                  FMember(i).Stam = .value("maxStam")
-//                  FMember(i).Mana = .value("maxMana")
-//               End With
-//            Next
 

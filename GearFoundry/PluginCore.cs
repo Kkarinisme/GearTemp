@@ -55,16 +55,11 @@ namespace GearFoundry
         {
             try
             {
-                // This initializes our static Globals class with references to the key objects your plugin will use, Host and Core.
-                // The OOP way would be to pass Host and Core to your objects, but this is easier.
                 Globals.Init("GearFoundry", Host, Core);
                 ViewInit();
                 Instance = this;
                 host = Host;
-                //The initPats and initfilenames has to be in the onlogincomplete section -- not sure about render loothuds
-                //The ViewInit and InitCtrlEvents must be here in the startup folder
                 InitEvents();
-                
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -73,6 +68,8 @@ namespace GearFoundry
         {
             try
             {
+            	
+            	DisposeOnShutdown();
                 if (quickiesvHud != null)
                 {
                     doClearHud(quickiesvHud, xdocQuickSlotsv, quickSlotsvFilename);
@@ -90,9 +87,9 @@ namespace GearFoundry
 
                 }
                 
-                DisposeCorpseHud();
-                DisposeLandscapeHud();
-                DisposeItemHud();
+                if(CorpseHudView != null) {DisposeCorpseHud();}
+                if(LandscapeHudView != null) {DisposeLandscapeHud();}
+                if(ItemHudView != null) {DisposeItemHud();}
 
                 //Destroy the view.
                 MVWireupHelper.WireupEnd(this);
@@ -103,23 +100,29 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
         }
         
+        private void DisposeOnShutdown()
+        {
+       		if(CorpseHudView != null) {DisposeCorpseHud();}
+            if(LandscapeHudView != null) {DisposeLandscapeHud();}
+            if(ItemHudView != null) {DisposeItemHud();}
+            if(ButlerHudView != null){DisposeButlerHud();}
+        }
+        
         
         public void InitEvents()
 		{
 
 			try 
 			{
-				FileService = Core.Filter<FileService>();
-								
+				FileService = Core.Filter<FileService>();				
 				Core.CharacterFilter.LoginComplete += new EventHandler(OnCharacterFilterLoginCompleted);			
-				MasterTimer = new System.Windows.Forms.Timer();
-
-				SubscribeLootEvents();
-                RenderItemHud();
+				MasterTimer = new System.Windows.Forms.Timer();	
+				
+				RenderItemHud();
+                SubscribeLootEvents();
                 
-
-				
-				
+                RenderButlerHud();
+                SubscribeButlerEvents();
 				
 			} catch (Exception ex) {
 				LogError(ex);
@@ -158,8 +161,11 @@ namespace GearFoundry
             WriteToChat("Plugin now online. Server population: " + Core.CharacterFilter.ServerPopulation);
             try
             {
+            	InitPaths();
+            	LoadSettingsFiles();
+            	
 				InitListBuilder();
-                InitPaths();
+               
                 InitFilenames();
                 loadFiles();
                 loadLists();
@@ -176,15 +182,29 @@ namespace GearFoundry
                     WriteToChat("CloakSpellList does not exist." );
 
                 //ToMish:  I am. 
-                MasterTimer.Interval = 500;
+                MasterTimer.Interval = 1000;
                 MasterTimer.Start();
+                
+               
+
                 mCharacterLoginComplete = true;
+                
+                
   
 
             }
             catch (Exception ex) { LogError(ex); }
         }
 
+        private void LoadSettingsFiles()
+        {
+        	try
+        	{
+        		
+        	}
+        	catch(Exception ex){LogError(ex);}
+        }
+        
         
 
         

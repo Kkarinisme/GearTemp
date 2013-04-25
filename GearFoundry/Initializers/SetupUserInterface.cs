@@ -1036,6 +1036,7 @@ namespace GearFoundry
 
                 setUpRulesLists(xdocRules, mPrioritizedRulesList, mPrioritizedRulesListEnabled);
                 populateLst(lstRules, mPrioritizedRulesList, mList);
+                FillItemRules();
 
             }
 
