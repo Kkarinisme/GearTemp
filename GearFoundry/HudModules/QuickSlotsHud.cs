@@ -210,9 +210,9 @@ namespace GearFoundry
             quickiesvHud.UserMinimizable = false;
             quickiesvHud.UserResizeable = false;
             quickiesvHud.Location = vpt;
-            //if (mvtheme == null)
-            //    mvtheme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
-            //quickieshHud.Theme = mvtheme;
+            if (mvtheme == null)
+                {mvtheme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent");}
+            quickiesvHud.Theme = mvtheme;
             quickiesvHud_Head = new HudFixedLayout();
             quickiesvHud.Controls.HeadControl = quickiesvHud_Head;
 

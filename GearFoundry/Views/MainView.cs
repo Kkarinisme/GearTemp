@@ -67,7 +67,7 @@ namespace GearFoundry
         	
        
         
-        MyClasses.MetaViewWrappers.ICheckBox chkVulnedIcons;
+      //  MyClasses.MetaViewWrappers.ICheckBox chkVulnedIcons;
         
         
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryWaiting;
@@ -83,8 +83,8 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkScrolls7;
         MyClasses.MetaViewWrappers.ICheckBox chkScrolls7Tnd;
         MyClasses.MetaViewWrappers.ICheckBox chkAllScrolls;
-        MyClasses.MetaViewWrappers.ICheckBox chkAlleg;
-        MyClasses.MetaViewWrappers.ICheckBox chkTells;
+      //  MyClasses.MetaViewWrappers.ICheckBox chkAllegPlayers;
+      //  MyClasses.MetaViewWrappers.ICheckBox chkTells;
         MyClasses.MetaViewWrappers.ICheckBox chkEvades;
         MyClasses.MetaViewWrappers.ICheckBox chkResists;
         MyClasses.MetaViewWrappers.ICheckBox chkSpellCasting;
@@ -322,7 +322,7 @@ namespace GearFoundry
         			chkLifestones = (MyClasses.MetaViewWrappers.ICheckBox)View["chkLifestones"];
      
 
-                    //chkVulnedIcons = (MyClasses.MetaViewWrappers.ICheckBox)View["chkVulnedIcons"];
+                  //  chkVulnedIcons = (MyClasses.MetaViewWrappers.ICheckBox)View["chkVulnedIcons"];
                      chkInventory = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventory"];
                     chkInventoryBurden = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryBurden"];
                    chkInventoryComplete = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryComplete"];
@@ -388,7 +388,7 @@ namespace GearFoundry
                     //chkScrolls7Tnd.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkScrolls7Tnd_Change);
                     //chkAllScrolls.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkAllScrolls_Change);
                     chkAllPlayers.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkAllPlayers_Change);
-                    chkAlleg.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkAlleg_Change);
+                   // chkAllegPlayers.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkAllegPlayers_Change);
                     //chkFellow.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkFellow_Change);
                     //chkTells.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTells_Change);
                     chkEvades.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkEvades_Change);

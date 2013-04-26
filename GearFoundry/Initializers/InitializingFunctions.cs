@@ -404,6 +404,8 @@ namespace GearFoundry
                  //   if (el.Name == "QuickiesVTheme") { mvtheme = el.Value.ToString(); }
                  //   if (el.Name == "QuickiesHTheme") { mhtheme = el.Value.ToString(); }
                     //if (el.Name == "AllKillsEnabled") { ballKillsEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "CorpseHudEnabled") { bCorpseHudEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "LandscapeHudEnabled") { bLandscapeHudEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ToonKillsEnabled") { btoonKillsEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ToonCorpsesEnabled") { btoonCorpsesEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "VulnedIconsEnabled") { bvulnedIconsEnabled = Convert.ToBoolean(el.Value); }
@@ -455,6 +457,7 @@ namespace GearFoundry
                     
                     //GearHound Section                   
                     chkGearHoundEnabled.Checked = bCorpseHudEnabled;
+
                     chkToonKills.Checked = btoonKillsEnabled;
                     chkFellowKills.Checked = bFellowKillsEnabled;
                     chkToonCorpses.Checked = btoonCorpsesEnabled;
@@ -473,7 +476,7 @@ namespace GearFoundry
 			        chkLifestones.Checked = bLandscapeLifestonesEnabled;
                     
                     
-                    chkVulnedIcons.Checked = bvulnedIconsEnabled;
+                  //  chkVulnedIcons.Checked = bvulnedIconsEnabled;
                     chkSelectedMobs.Checked = bselectedMobsEnabled;
                     chkPortals.Checked = bportalsEnabled;
                     chkInventory.Checked = binventoryEnabled;
@@ -485,13 +488,13 @@ namespace GearFoundry
                     //chk3DArrow.Checked = b3DArrowEnabled;
                     chkMute.Checked = bmuteEnabled;
                     chkFullScreen.Checked = bfullScreenEnabled;
-                    chkScrolls7.Checked = bscrolls7Enabled;
-                    chkScrolls7Tnd.Checked = bscrolls7TndEnabled;
-                    chkAllScrolls.Checked = ballScrollsEnabled;
+                   // chkScrolls7.Checked = bscrolls7Enabled;
+                   // chkScrolls7Tnd.Checked = bscrolls7TndEnabled;
+                   // chkAllScrolls.Checked = ballScrollsEnabled;
                     chkAllPlayers.Checked = ballPlayersEnabled;
-                    chkAlleg.Checked = ballegEnabled;
+                    chkAllegPlayers.Checked = ballegEnabled;
                     chkFellow.Checked = bfellowEnabled;
-                    chkTells.Checked = btellsEnabled;
+                   // chkTells.Checked = btellsEnabled;
                     chkEvades.Checked = bevadesEnabled;
                     chkResists.Checked = bresistsEnabled;
                     chkSpellCasting.Checked = bspellCastingEnabled;
@@ -508,6 +511,18 @@ namespace GearFoundry
 
         private void startRoutines()
         {
+            if (bLandscapeHudEnabled)
+            {
+                SubscribeLandscapeEvents();
+                RenderLandscapeHud();
+            }
+
+            if (bCorpseHudEnabled)
+            {
+                SubscribeCorpseEvents();
+                RenderCorpseHud();
+            }
+
             if (binventoryCompleteEnabled)
             {
                 binventoryBurdenEnabled = false;
@@ -1012,17 +1027,17 @@ namespace GearFoundry
         }
 
 
-        void chkAlleg_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-            try
-            {
-                ballegEnabled = e.Checked;
+        //void chkAllegPlayers_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        //{
+        //    try
+        //    {
+        //        ballegEnabled = e.Checked;
 
-                SaveSettings();
-            }
-            catch (Exception ex) { LogError(ex); }
+        //        SaveSettings();
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
 
-        }
+       // }
 
         void chkTells_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
@@ -1138,8 +1153,8 @@ namespace GearFoundry
                          new XElement("VpointY", vpt.Y),
                          new XElement("HpointX", hpt.X),
                          new XElement("HpointX", hpt.Y),
-                         new XElement("QuickiesVTheme",mvtheme),
-                         new XElement("QuickiesHTheme",mhtheme)));
+                         new XElement("QuickiesVTheme",mvtheme.Name),
+                         new XElement("QuickiesHTheme",mhtheme.Name)));
                 xdoc.Save(switchGearSettingsFilename);
             }
             catch (Exception ex) { LogError(ex); }
@@ -1161,6 +1176,8 @@ namespace GearFoundry
                     //     new XElement("QuickiesVTheme",mvtheme),
                     //     new XElement("QuickiesHTheme",mhtheme),
                     //     new XElement("AllKillsEnabled", ballKillsEnabled),
+                          new XElement("CorpseHudEnabled", bCorpseHudEnabled),
+                         new XElement("LandscapeHudEnabled", bLandscapeHudEnabled),
                          new XElement("ToonKillsEnabled", btoonKillsEnabled),
                          new XElement("ToonCorpsesEnabled", btoonCorpsesEnabled),
                          new XElement("VulnedIconsEnabled", bvulnedIconsEnabled),
