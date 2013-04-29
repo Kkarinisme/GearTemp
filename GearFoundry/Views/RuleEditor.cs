@@ -63,13 +63,15 @@ namespace GearFoundry
         {
            try 
             {
+                WriteToChat("I have clicked button to add a new rule");
+
                 sRuleAppliesTo = mFindList(lstRuleApplies, AppliesToList);
                 sRuleArmorSet = mFindList(lstRuleSets, ArmorSetsList);
                 sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);
                 sRuleArmorCoverage = mFindList(lstRuleArmorCoverages, ArmorCoverageList);
                 sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
                // sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
-                sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
+               // sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
                 mMakeStrings();
                 writeToXdocRules(xdocRules);
                 xdocRules.Save(rulesFilename);

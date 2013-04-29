@@ -335,6 +335,13 @@ namespace GearFoundry
         private static bool bCorpseHudEnabled;
         private static bool bFellowKillsEnabled;  //Enables tracking of fellowship kills.
         private static bool bPermittedCorpses;
+
+        //Loot Flags
+        private static bool bGearInspectorEnabled;
+
+        //Butler Flags
+        private static bool bGearButlerEnabled;
+
         private List<string> PermittedCorpsesList = new List<string>();  //List of people how have let you loot their corpses, does not need to be saved.
 		private List<MyCorpses> DeadMeCoordinatesList = new List<MyCorpses>(); //List of dead me(s). Needs to be saved.  
 		
@@ -374,6 +381,7 @@ namespace GearFoundry
         
         //ToMish:  Added these flag types to ItemTracker.  They are set to true only to get the working unless they  should have a default value.
 		//ToMish:  The boolean ones need to be slaved to a checkbox.
+        //ToPaul: I donot understand the following two items:  I have bGearInspector turning item hud on and off did I not figure that out right?
         //ToMish:  *****bItemHudEnabled Enables and Disables the corpse hud.  Needs to be saved.  Needs to be slaved to a click box.*******
         //ToMish:  *****bItemHudEnabled, When clicked "on" needs to call "RenderItemHud();"  When clicked off, needs to call "DisposeItemHud();"
        

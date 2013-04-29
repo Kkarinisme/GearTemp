@@ -242,8 +242,7 @@ namespace GearFoundry
                 {
                     mSwitchGearSettingsList.Add(el);
                 }
-                WriteToChat("I am in the function to setupsettingslists: mSwitchGearSettingsList has count of " + mSwitchGearSettingsList.Count.ToString());
- 
+
 
                 fillSettingsVariables();
                 
@@ -406,6 +405,8 @@ namespace GearFoundry
                     //if (el.Name == "AllKillsEnabled") { ballKillsEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "CorpseHudEnabled") { bCorpseHudEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "LandscapeHudEnabled") { bLandscapeHudEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "InspectorHudEnabled") { bGearInspectorEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "ButlerHudEnabled") { bGearButlerEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ToonKillsEnabled") { btoonKillsEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ToonCorpsesEnabled") { btoonCorpsesEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "VulnedIconsEnabled") { bvulnedIconsEnabled = Convert.ToBoolean(el.Value); }
@@ -449,8 +450,6 @@ namespace GearFoundry
                     if (el.Name == "QuickiesHTheme") { mhtheme = VirindiViewService.HudViewDrawStyle.GetThemeByName(el.Value); }
 
                 }
-                WriteToChat("I have filled settings variables: bquickslotsvEnabled = " + bquickSlotsvEnabled.ToString());
- 
 
                     chkQuickSlotsv.Checked = bquickSlotsvEnabled;
                     chkQuickSlotsh.Checked = bquickSlotshEnabled;
@@ -474,8 +473,14 @@ namespace GearFoundry
 			        chkFellow.Checked = bfellowEnabled;
 			        chkPortals.Checked = bportalsEnabled;
 			        chkLifestones.Checked = bLandscapeLifestonesEnabled;
+
+                    //GearInspector Section
+                    chkGearInspectorEnabled.Checked = bGearInspectorEnabled;
                     
-                    
+                   //GearButler Section
+                     chkGearButlerEnabled.Checked = bGearButlerEnabled;
+
+
                   //  chkVulnedIcons.Checked = bvulnedIconsEnabled;
                     chkSelectedMobs.Checked = bselectedMobsEnabled;
                     chkPortals.Checked = bportalsEnabled;
@@ -523,6 +528,18 @@ namespace GearFoundry
                 RenderCorpseHud();
             }
 
+            if (bGearInspectorEnabled)
+            {
+                SubscribeLootEvents();
+                RenderItemHud();
+            }
+
+            if (bGearButlerEnabled)
+            {
+                SubscribeButlerEvents();
+                RenderButlerHud();
+            }
+
             if (binventoryCompleteEnabled)
             {
                 binventoryBurdenEnabled = false;
@@ -548,13 +565,11 @@ namespace GearFoundry
 
                 RenderVerticalQuickSlots(); 
             }
-            //GearFoundry.PluginCore.WriteToChat("In initializing functions: created quickslots");
 
             if (bquickSlotshEnabled)
             {
                 RenderHorizontalQuickSlots(); 
             }
-           // GearFoundry.PluginCore.WriteToChat("In initializing functions: created quickslots");
 
             
 
@@ -910,8 +925,49 @@ namespace GearFoundry
         		SaveSettings();
         	}catch{}
         }
-        
-        
+
+
+        void chkGearInspectorEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bGearInspectorEnabled = e.Checked;
+                SaveSettings();
+                if (e.Checked)
+                {
+                    SubscribeLootEvents();
+                    RenderItemHud();
+                }
+                else
+                {
+                    UnsubscribeLootEvents();
+                    DisposeItemHud();
+                }
+            }
+            catch { }
+        }
+
+        void chkGearButlerEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bGearButlerEnabled = e.Checked;
+                SaveSettings();
+                if (e.Checked)
+                {
+                    SubscribeButlerEvents();
+                    RenderButlerHud();
+                }
+                else
+                {
+                    UnsubscribeButlerEvents();
+                    DisposeButlerHud();
+                }
+            }
+            catch { }
+        }
+
+
 
         void chkVulnedIcons_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
@@ -1178,6 +1234,8 @@ namespace GearFoundry
                     //     new XElement("AllKillsEnabled", ballKillsEnabled),
                           new XElement("CorpseHudEnabled", bCorpseHudEnabled),
                          new XElement("LandscapeHudEnabled", bLandscapeHudEnabled),
+                         new XElement("InspectorHudEnabled", bGearInspectorEnabled),
+                         new XElement("ButlerHudEnabled", bGearButlerEnabled),
                          new XElement("ToonKillsEnabled", btoonKillsEnabled),
                          new XElement("ToonCorpsesEnabled", btoonCorpsesEnabled),
                          new XElement("VulnedIconsEnabled", bvulnedIconsEnabled),

@@ -41,7 +41,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IView View;
         MyClasses.MetaViewWrappers.INotebook nbSetupsetup;
         // Controls on Setup Page
-        // WormGears controls
+        // SwitchGears controls
         MyClasses.MetaViewWrappers.ICheckBox chkQuickSlotsv;
         MyClasses.MetaViewWrappers.ICheckBox chkQuickSlotsh;
         
@@ -63,10 +63,13 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkFellow;
         MyClasses.MetaViewWrappers.ICheckBox chkPortals;
         MyClasses.MetaViewWrappers.ICheckBox chkLifestones;
-        
-        	
+
+        //GearInspector Controls
+        MyClasses.MetaViewWrappers.ICheckBox chkGearInspectorEnabled;	
        
-        
+        //GearButler Controls
+        MyClasses.MetaViewWrappers.ICheckBox chkGearButlerEnabled;	
+
       //  MyClasses.MetaViewWrappers.ICheckBox chkVulnedIcons;
         
         
@@ -261,7 +264,7 @@ namespace GearFoundry
         // Variable name lblSettings001 was lblsettings001  
         MyClasses.MetaViewWrappers.IStaticText lblSettings001;
 
-        //Controls on Inventory Page
+        //Gear Controls
         MyClasses.MetaViewWrappers.IButton btnGetInventory;
         MyClasses.MetaViewWrappers.IButton btnUpdateInventory;
         MyClasses.MetaViewWrappers.IButton btnGetBurden;
@@ -298,7 +301,7 @@ namespace GearFoundry
                 //Controls on Setup Page
                 try
                 {
-                    //WormGears Controls
+                    //SwitchGears Controls
                 	chkQuickSlotsv = (MyClasses.MetaViewWrappers.ICheckBox)View["chkQuickSlotsv"];
                     chkQuickSlotsh = (MyClasses.MetaViewWrappers.ICheckBox)View["chkQuickSlotsh"];
                     
@@ -320,13 +323,22 @@ namespace GearFoundry
                     chkFellow = (MyClasses.MetaViewWrappers.ICheckBox)View["chkFellow"];
         			chkPortals = (MyClasses.MetaViewWrappers.ICheckBox)View["chkPortals"];
         			chkLifestones = (MyClasses.MetaViewWrappers.ICheckBox)View["chkLifestones"];
+
+                    //GearInspector Controls
+                    chkGearInspectorEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkGearInspectorEnabled"];
+                    //GearButler Controls
+                    chkGearButlerEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkGearButlerEnabled"];
      
 
                   //  chkVulnedIcons = (MyClasses.MetaViewWrappers.ICheckBox)View["chkVulnedIcons"];
+
+                    //Gear Controls
                      chkInventory = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventory"];
                     chkInventoryBurden = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryBurden"];
                    chkInventoryComplete = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryComplete"];
                     chkInventoryWaiting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryWaiting"];
+
+                    //Misc Controls
                    chkSalvageComb = (MyClasses.MetaViewWrappers.ICheckBox)View["chkSalvageComb"];
                     chkToonStats = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonStats"];
                     chkToonArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonArmor"];
@@ -347,7 +359,7 @@ namespace GearFoundry
                     chkPickup = (MyClasses.MetaViewWrappers.ICheckBox)View["chkPickup"];
                     chkUst = (MyClasses.MetaViewWrappers.ICheckBox)View["chkUst"];
                     
-                    //WormGears Control Events
+                    //StringGears Control Events
                     chkQuickSlotsv.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkQuickSlotsv_Change);
                     chkQuickSlotsh.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkQuickSlotsh_Change);
                     //GearHound Control Events
@@ -367,7 +379,10 @@ namespace GearFoundry
 			        chkFellow.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkFellow_Change);
 			        chkPortals.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkPortals_Change);
 			        chkLifestones.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkLifestones_Change);
-                    
+                    //GearInspector Control Events
+                    chkGearInspectorEnabled.Change += new EventHandler<MVCheckBoxChangeEventArgs>(chkGearInspectorEnabled_Change);
+                    //GearButler Control Events
+                    chkGearButlerEnabled.Change += new EventHandler<MVCheckBoxChangeEventArgs>(chkGearButlerEnabled_Change);
                     
                     //Next Control Section
                     

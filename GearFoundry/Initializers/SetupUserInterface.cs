@@ -286,16 +286,6 @@ namespace GearFoundry
                             populateRulesListBox();
                             clearRule();
                         }
-                        //else
-                        //{  
-                        // //Need to load controls with values  
-                        // var myelem = from p in myelements 
-                        //                 where p.Element("Name").Value.ToString().Trim().Equals(rowname.Trim())
-                        //       select p;
-                        //  el = (XElement)myelem;
-                        // loadControls(el);
-                        //}
-
                     }
                     catch (Exception ex) { LogError(ex); }
 
