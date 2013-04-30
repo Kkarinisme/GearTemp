@@ -92,74 +92,22 @@ namespace GearFoundry
 
 		private void ScanInventoryForSalvageBags()
 		{
-			InventorySalvage.Clear();
-			WorldObjectCollection AllInventory = Core.WorldFilter.GetInventory();
-	 		var SalvageBags = from inventory in AllInventory
-							where inventory.Name.Contains("Salvage")
-							orderby inventory.Values(LongValueKey.Material)
-							select inventory; 
-	 		
-	 		foreach(WorldObject wo in SalvageBags)
-	 		{
-	 			InventorySalvage.Add(wo);
-	 		}	
-		}
-		
-		WorldObject[] tradelist;
-		void TradeSalvageBags(int bagtype)
-		{
 			try
 			{
-				if(TradeOpen)
-				{
-					ScanInventoryForSalvageBags();
-					
-					
-					if(bagtype == 0)
-					{
-						tradelist = (from sb in InventorySalvage
-									where sb.Values(LongValueKey.UsesRemaining) == 100
-									select sb).ToArray();
-					}
-					if(bagtype == 1)
-					{
-						tradelist = InventorySalvage.ToArray();
-					}
-					if(bagtype == 2)
-					{
-						tradelist = (from sb in InventorySalvage
-									where sb.Values(LongValueKey.UsesRemaining) < 100
-									select sb).ToArray();
-					}
-					
-					foreach(WorldObject bags in tradelist)
-					{
-							Core.Actions.TradeAdd(bags.Id);
-					}
-				}
-				else
-				{
-					WriteToChat("Open a Trade Window First");
-				}
+				InventorySalvage.Clear();
+				WorldObjectCollection AllInventory = Core.WorldFilter.GetInventory();
+		 		var SalvageBags = from inventory in AllInventory
+								where inventory.Name.Contains("Salvage")
+								orderby inventory.Values(LongValueKey.Material)
+								select inventory; 
+		 		
+		 		InventorySalvage = SalvageBags.ToList();		
 			}catch{}
 		}
 		
-		void SellSalvageBags()
-		{
-			try
-			{
-
-				ScanInventoryForSalvageBags();
-				foreach(WorldObject sb in InventorySalvage)
-				{
-					Core.Actions.VendorAddSellList(sb.Id);
-				}
-				
-			}
-			catch
-			{
-			}
-		}
+		
+		
+		
 		
 		private void SalvageItems()
 		{
@@ -275,10 +223,6 @@ namespace GearFoundry
 			
 		}
 		
-		//Irquk:  TODO:  Feature
-		private void AutoRingKeys()
-		{
-			
-		}
+
 	}
 }

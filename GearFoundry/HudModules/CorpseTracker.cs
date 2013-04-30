@@ -373,7 +373,8 @@ namespace GearFoundry
 			
     	private void RenderCorpseHud()
     	{
-    		try{
+    		try
+    		{
     			    			
     			if(CorpseHudView != null)
     			{
@@ -407,7 +408,9 @@ namespace GearFoundry
 				CorpseHudList.AddColumn(typeof(HudStaticText), 230, null);
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
-				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);				
+				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);		
+
+				SubscribeLandscapeEvents();
 			  							
     		}
     		catch(Exception ex){LogError(ex);}
@@ -419,6 +422,8 @@ namespace GearFoundry
     			
     		try
     		{
+    			UnsubscribeLandscapeEvents();
+    			
     			CorpseHudList.Click -= (sender, row, col) => CorpseHudList_Click(sender, row, col);		
     			CorpseHudList.Dispose();
     			CorpseHudTabLayout.Dispose();

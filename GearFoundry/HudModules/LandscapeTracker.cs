@@ -29,11 +29,11 @@ namespace GearFoundry
 			try
 			{
 				MasterTimer.Tick += LandscapeTimerTick;
-				Core.WorldFilter.CreateObject += new EventHandler<CreateObjectEventArgs>(OnWorldFilterCreateLandscape);
-             	Core.EchoFilter.ServerDispatch += new EventHandler<NetworkMessageEventArgs>(ServerDispatchLandscape);
-                Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(OnWorldFilterDeleteLandscape);
-                Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(OnLandscapeDestroyed);
-                Core.CharacterFilter.ChangePortalMode += new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeLandscape);
+				Core.WorldFilter.CreateObject += OnWorldFilterCreateLandscape;
+             	Core.EchoFilter.ServerDispatch += ServerDispatchLandscape;
+                Core.WorldFilter.ReleaseObject += OnWorldFilterDeleteLandscape;
+                Core.ItemDestroyed +=OnLandscapeDestroyed;
+                Core.CharacterFilter.ChangePortalMode += ChangePortalModeLandscape;
 			}
 			catch(Exception ex) {LogError(ex);}
 			return;
@@ -44,11 +44,11 @@ namespace GearFoundry
 			try
 			{
 				MasterTimer.Tick -= LandscapeTimerTick;
-				Core.WorldFilter.CreateObject -= new EventHandler<CreateObjectEventArgs>(OnWorldFilterCreateLandscape);
-             	Core.EchoFilter.ServerDispatch -= new EventHandler<NetworkMessageEventArgs>(ServerDispatchLandscape);
-                Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(OnWorldFilterDeleteLandscape);
-                Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(OnLandscapeDestroyed);
-                Core.CharacterFilter.ChangePortalMode -= new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeLandscape);               
+				Core.WorldFilter.CreateObject -= OnWorldFilterCreateLandscape;
+             	Core.EchoFilter.ServerDispatch -= ServerDispatchLandscape;
+                Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteLandscape;
+                Core.ItemDestroyed -= OnLandscapeDestroyed;
+                Core.CharacterFilter.ChangePortalMode -= ChangePortalModeLandscape;               
 			
 			}catch(Exception ex) {LogError(ex);}
 			return;
@@ -447,7 +447,7 @@ namespace GearFoundry
 		private HudList LandscapeHudList = null;
 		private HudList.HudListRowAccessor LandscapeHudListRow = null;
 		private const int LandscapeRemoveCircle = 0x60011F8;
-			
+		
     	private void RenderLandscapeHud()
     	{
     		try
@@ -466,7 +466,7 @@ namespace GearFoundry
     			LandscapeHudView.Visible = true;
     			LandscapeHudView.Ghosted = false;
                 LandscapeHudView.UserMinimizable = false;
-                LandscapeHudView.UserClickThroughable = true;
+                LandscapeHudView.UserClickThroughable = false;
              
     			
     			LandscapeHudLayout = new HudFixedLayout();
@@ -486,7 +486,9 @@ namespace GearFoundry
 				LandscapeHudList.AddColumn(typeof(HudStaticText), 230, null);
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
-				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col);				
+				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col);
+
+				SubscribeLandscapeEvents();
 			  							
     		}catch(Exception ex) {LogError(ex);}
     		return;
@@ -497,6 +499,8 @@ namespace GearFoundry
     			
     		try
     		{
+    			UnsubscribeLandscapeEvents();
+    			
     			LandscapeHudList.Click -= (sender, row, col) => LandscapeHudList_Click(sender, row, col);		
     			LandscapeHudList.Dispose();
     			LandscapeHudLayout.Dispose();
