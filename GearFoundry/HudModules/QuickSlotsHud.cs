@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -163,10 +163,11 @@ namespace GearFoundry
             if (vpt.X == 0) { vpt.X = 200; }
             if (vpt.Y == 0) { vpt.Y = 200; }
 
-            quickiesvHud = new VirindiViewService.HudView("", 30, 340, new ACImage(Color.Transparent));
+            quickiesvHud = new VirindiViewService.HudView("", 30, 360, new ACImage(Color.Transparent));
             quickiesvHud.ShowInBar = false;
             quickiesvHud.UserAlphaChangeable = false;
             quickiesvHud.Visible = true;
+            quickiesvHud.UserClickThroughable = false;
             quickiesvHud.UserGhostable = true;
             quickiesvHud.UserMinimizable = false;
             quickiesvHud.UserResizeable = false;
@@ -174,14 +175,14 @@ namespace GearFoundry
             if (mvtheme == null)
             { mvtheme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent"); }
             quickiesvHud.Theme = mvtheme;
+            //quickiesvHud.LoadUserSettings();
             quickiesvHud_Head = new HudFixedLayout();
             quickiesvHud.Controls.HeadControl = quickiesvHud_Head;
-                 quickiesvTabView = new HudTabView();
-                quickiesvTabFixedLayout = new HudFixedLayout();
+            quickiesvTabView = new HudTabView();
+            quickiesvTabFixedLayout = new HudFixedLayout();
 
-                quickiesvHud_Head.AddControl(quickiesvTabView, new Rectangle(0, 0, 29, 330));
-                quickiesvTabView.AddTab(quickiesvTabFixedLayout, "SG");
-
+            quickiesvHud_Head.AddControl(quickiesvTabView, new Rectangle(0, 0, 29, 359));
+            quickiesvTabView.AddTab(quickiesvTabFixedLayout, "SG");
 
                 btnQuickiesvAdd = new VirindiViewService.Controls.HudButton();
                 btnQuickiesvAdd.Text = "+";
@@ -324,29 +325,30 @@ namespace GearFoundry
                 if (hpt.Y == 0) { hpt.Y = 200; }
 
 
-            quickieshHud = new VirindiViewService.HudView("", 385, 30, new ACImage(Color.Transparent));
-            quickieshHud.ShowInBar = false;
-            quickieshHud.UserAlphaChangeable = false;
-            quickieshHud.Visible = true;
-            quickieshHud.UserGhostable = true;
-            quickieshHud.UserMinimizable = false;
-            quickieshHud.UserResizeable = false;
-            quickieshHud.Location = hpt;
-            if (mhtheme == null)
-            { mhtheme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent"); }
-            quickieshHud.Theme = mhtheme;
+                quickieshHud = new VirindiViewService.HudView("", 385, 40, new ACImage(Color.Transparent));
+                quickieshHud.ShowInBar = false;
+                quickieshHud.UserAlphaChangeable = false;
+                quickieshHud.Visible = true;
+                quickieshHud.UserGhostable = true;
+                quickieshHud.UserMinimizable = false;
+                 quickieshHud.UserClickThroughable = false;
+                quickieshHud.UserResizeable = false;
+                quickieshHud.Location = hpt;
+                if (mhtheme == null)
+                { mhtheme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent"); }
+                quickieshHud.Theme = mhtheme;
+                quickieshHud.LoadUserSettings();
 
-            quickieshHud_Head = new HudFixedLayout();
-            quickieshHud.Controls.HeadControl = quickieshHud_Head;
+                quickieshHud_Head = new HudFixedLayout();
+                quickieshHud.Controls.HeadControl = quickieshHud_Head;
 
-            quickieshTabView = new HudTabView();
-            quickieshTabFixedLayout = new HudFixedLayout();
+                quickieshTabView = new HudTabView();
+                quickieshTabFixedLayout = new HudFixedLayout();
 
-            quickieshHud_Head.AddControl(quickieshTabView, new Rectangle(0, 0, 385, 29));
-            quickieshTabView.AddTab(quickieshTabFixedLayout, "SG");
+                quickieshHud_Head.AddControl(quickieshTabView, new Rectangle(0, 0, 385, 40));
+                quickieshTabView.AddTab(quickieshTabFixedLayout, "Horizontal Switchgear");
 
-
-            btnQuickieshAdd = new VirindiViewService.Controls.HudButton();
+                btnQuickieshAdd = new VirindiViewService.Controls.HudButton();
             btnQuickieshAdd.Text = "+";
             btnQuickieshAdd.Visible = true;
 
@@ -932,70 +934,70 @@ namespace GearFoundry
                 {
                     case 0:
                         mQuickStackv0 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv0, new Rectangle(0,15, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv0, new Rectangle(2, 15, 25, 25));
                         nQuickieIDv0 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv0.Hit += (sender, obj) => mQuickStackv0_Hit(sender, obj);
                         break;
                     case 1:
                         mQuickStackv1 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv1, new Rectangle(0, 35, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv1, new Rectangle(2, 37, 25, 25));
                         nQuickieIDv1 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv1.Hit += (sender, obj) => mQuickStackv1_Hit(sender, obj);
-                       break;
+                        break;
                     case 2:
                         mQuickStackv2 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv2, new Rectangle(0, 55, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv2, new Rectangle(2, 59, 25, 25));
                         nQuickieIDv2 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv2.Hit += (sender, obj) => mQuickStackv2_Hit(sender, obj);
-                       break;
+                        break;
                     case 3:
                         mQuickStackv3 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv3, new Rectangle(0, 75, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv3, new Rectangle(2, 81, 25, 25));
                         nQuickieIDv3 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv3.Hit += (sender, obj) => mQuickStackv3_Hit(sender, obj);
                         break;
                     case 4:
                         mQuickStackv4 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv4, new Rectangle(0, 95, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv4, new Rectangle(2, 103, 25, 25));
                         nQuickieIDv4 = thisQuickie.Guid;
                         mQuickStackv4.Hit += (sender, obj) => mQuickStackv4_Hit(sender, obj);
                         nquickiev++;
                         break;
                     case 5:
                         mQuickStackv5 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv5, new Rectangle(0, 115, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv5, new Rectangle(2, 125, 25, 25));
                         nQuickieIDv5 = thisQuickie.Guid;
                         mQuickStackv5.Hit += (sender, obj) => mQuickStackv5_Hit(sender, obj);
                         nquickiev++;
                         break;
                     case 6:
                         mQuickStackv6 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv6, new Rectangle(0, 135, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv6, new Rectangle(2, 147, 25, 25));
                         nQuickieIDv6 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv6.Hit += (sender, obj) => mQuickStackv6_Hit(sender, obj);
-                       break;
+                        break;
                     case 7:
                         mQuickStackv7 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv7, new Rectangle(0, 155, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv7, new Rectangle(2, 169, 25, 25));
                         nQuickieIDv7 = thisQuickie.Guid;
                         nquickiev++;
-                         mQuickStackv7.Hit += (sender, obj) => mQuickStackv7_Hit(sender, obj);
-                       break;
+                        mQuickStackv7.Hit += (sender, obj) => mQuickStackv7_Hit(sender, obj);
+                        break;
                     case 8:
                         mQuickStackv8 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv8, new Rectangle(0, 175, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv8, new Rectangle(2, 191, 25, 25));
                         nQuickieIDv8 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv8.Hit += (sender, obj) => mQuickStackv8_Hit(sender, obj);
                         break;
                     case 9:
                         mQuickStackv9 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv9, new Rectangle(0, 195, 25, 20));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv9, new Rectangle(2, 213, 25, 25));
                         nQuickieIDv9 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv9.Hit += (sender, obj) => mQuickStackv9_Hit(sender, obj);
@@ -1003,42 +1005,42 @@ namespace GearFoundry
 
                     case 10:
                         mQuickStackv10 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv10, new Rectangle(0, 215, 25, 25));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv10, new Rectangle(2, 234, 25, 25));
                         nQuickieIDv10 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv10.Hit += (sender, obj) => mQuickStackv10_Hit(sender, obj);
                         break;
                     case 11:
                         mQuickStackv11 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv11, new Rectangle(0, 240, 25, 25));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv11, new Rectangle(5, 256, 25, 25));
                         nQuickieIDv11 = thisQuickie.Guid;
                         nquickiev++;
-                         mQuickStackv11.Hit += (sender, obj) => mQuickStackv11_Hit(sender, obj);
-                       break;
+                        mQuickStackv11.Hit += (sender, obj) => mQuickStackv11_Hit(sender, obj);
+                        break;
                     case 12:
                         mQuickStackv12 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv12, new Rectangle(0, 265, 25, 25));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv12, new Rectangle(2, 278, 25, 25));
                         nQuickieIDv12 = thisQuickie.Guid;
                         nquickiev++;
-                         mQuickStackv12.Hit += (sender, obj) => mQuickStackv12_Hit(sender, obj);
-                       break;
+                        mQuickStackv12.Hit += (sender, obj) => mQuickStackv12_Hit(sender, obj);
+                        break;
 
                     case 13:
                         mQuickStackv13 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv13, new Rectangle(0, 290, 25, 25));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv13, new Rectangle(2, 300, 25, 25));
                         nQuickieIDv13 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv13.Hit += (sender, obj) => mQuickStackv13_Hit(sender, obj);
                         break;
                     case 14:
                         mQuickStackv14 = mQuickStacks;
-                        quickiesvTabFixedLayout.AddControl(mQuickStackv14, new Rectangle(0, 315, 25, 25));
+                        quickiesvTabFixedLayout.AddControl(mQuickStackv14, new Rectangle(2, 322, 25, 25));
                         nQuickieIDv14 = thisQuickie.Guid;
                         nquickiev++;
                         mQuickStackv14.Hit += (sender, obj) => mQuickStackv14_Hit(sender, obj);
                         break;
                     default:
-                        GearFoundry.PluginCore.WriteToChat("There are no more slots available.");
+                            GearFoundry.PluginCore.WriteToChat("There are no more slots available.");
                         break;
 
                 }
@@ -1051,70 +1053,70 @@ namespace GearFoundry
                     {
                         case 0:
                             mQuickStackh0 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh0, new Rectangle(30, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh0, new Rectangle(30, 0, 25, 30));
                             nQuickieIDh0 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh0.Hit += (sender, obj) => mQuickStackh0_Hit(sender, obj);
                             break;
                         case 1:
                             mQuickStackh1 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh1, new Rectangle(55, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh1, new Rectangle(52, 0, 25, 30));
                             nQuickieIDh1 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh1.Hit += (sender, obj) => mQuickStackh1_Hit(sender, obj);
                             break;
                         case 2:
                             mQuickStackh2 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh2, new Rectangle(80, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh2, new Rectangle(74, 0, 25, 25));
                             nQuickieIDh2 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh2.Hit += (sender, obj) => mQuickStackh2_Hit(sender, obj);
                             break;
                         case 3:
                             mQuickStackh3 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh3, new Rectangle(105, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh3, new Rectangle(96, 0, 25, 25));
                             nQuickieIDh3 = thisQuickie.Guid;
                             mQuickStackh3.Hit += (sender, obj) => mQuickStackh3_Hit(sender, obj);
                             nquickieh++;
                             break;
                         case 4:
                             mQuickStackh4 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh4, new Rectangle(130, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh4, new Rectangle(118, 0, 25, 25));
                             nQuickieIDh4 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh4.Hit += (sender, obj) => mQuickStackh4_Hit(sender, obj);
                             break;
                         case 5:
                             mQuickStackh5 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh5, new Rectangle(155, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh5, new Rectangle(140, 0, 25, 25));
                             nQuickieIDh5 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh5.Hit += (sender, obj) => mQuickStackh5_Hit(sender, obj);
                             break;
                         case 6:
                             mQuickStackh6 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh6, new Rectangle(180, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh6, new Rectangle(162, 0, 25, 25));
                             nQuickieIDh6 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh6.Hit += (sender, obj) => mQuickStackh6_Hit(sender, obj);
                             break;
                         case 7:
                             mQuickStackh7 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh7, new Rectangle(205, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh7, new Rectangle(184, 0, 25, 25));
                             nQuickieIDh7 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh7.Hit += (sender, obj) => mQuickStackh7_Hit(sender, obj);
                             break;
                         case 8:
                             mQuickStackh8 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh8, new Rectangle(230, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh8, new Rectangle(206, 0, 25, 25));
                             nQuickieIDh8 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh8.Hit += (sender, obj) => mQuickStackh8_Hit(sender, obj);
                             break;
                         case 9:
                             mQuickStackh9 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh9, new Rectangle(255, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh9, new Rectangle(228, 0, 25, 25));
                             nQuickieIDh9 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh9.Hit += (sender, obj) => mQuickStackh9_Hit(sender, obj);
@@ -1122,21 +1124,21 @@ namespace GearFoundry
 
                         case 10:
                             mQuickStackh10 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh10, new Rectangle(280, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh10, new Rectangle(250, 0, 25, 25));
                             nQuickieIDh10 = thisQuickie.Guid;
                             mQuickStackh10.Hit += (sender, obj) => mQuickStackh10_Hit(sender, obj);
                             nquickieh++;
                             break;
                         case 11:
                             mQuickStackh11 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh11, new Rectangle(305, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh11, new Rectangle(272, 0, 25, 25));
                             nQuickieIDh11 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh11.Hit += (sender, obj) => mQuickStackh11_Hit(sender, obj);
                             break;
                         case 12:
-                            mQuickStackh9 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh12, new Rectangle(330, 0, 25, 25));
+                            mQuickStackh12 = mQuickStacks;
+                            quickieshTabFixedLayout.AddControl(mQuickStackh12, new Rectangle(294, 0, 25, 25));
                             nQuickieIDh12 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh12.Hit += (sender, obj) => mQuickStackh12_Hit(sender, obj);
@@ -1144,18 +1146,19 @@ namespace GearFoundry
 
                         case 13:
                             mQuickStackh13 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh13, new Rectangle(355, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh13, new Rectangle(316, 0, 25, 25));
                             nQuickieIDh13 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh13.Hit += (sender, obj) => mQuickStackh13_Hit(sender, obj);
                             break;
                         case 14:
                             mQuickStackh14 = mQuickStacks;
-                            quickieshTabFixedLayout.AddControl(mQuickStackh14, new Rectangle(380, 0, 25, 25));
+                            quickieshTabFixedLayout.AddControl(mQuickStackh14, new Rectangle(338, 0, 25, 25));
                             nQuickieIDh14 = thisQuickie.Guid;
                             nquickieh++;
                             mQuickStackh14.Hit += (sender, obj) => mQuickStackh14_Hit(sender, obj);
                             break;
+
                         default:
                             GearFoundry.PluginCore.WriteToChat("There are no more slots available.");
                             break;
