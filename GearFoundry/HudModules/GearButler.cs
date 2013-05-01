@@ -54,6 +54,11 @@ namespace GearFoundry
 		private HudStaticText ButlerHudCurrentSelectionLabel = null;
 		private HudStaticText ButlerHudCurrentSelectionText = null;
 		private HudPictureBox ButlerHudCurrentSelectionIcon = null;
+		private HudButton ButlerHudPickCurrentSelection = null;
+		private HudButton ButlerHudGiveCurrentSelection = null;
+		private HudButton ButlerHudUseCurrentSelection = null;
+		private HudButton ButlerHudDestoryCurrenSelection = null;
+		
 		private HudStaticText ButlerHudSelectedLabel = null;
 		private HudStaticText ButlerHudSelectedCount = null;
 			
@@ -85,6 +90,8 @@ namespace GearFoundry
 		private HudButton MaidTradeParialSalvage = null;
 		private HudButton MaidTradeFilledSalvage = null;
 		private HudButton MaidSalvageCombine = null;
+		
+		private HudFixedLayout ValetLayout = null;
 		
 		
 		
@@ -192,121 +199,49 @@ namespace GearFoundry
     			ButlerHudLayout.AddControl(ButlerHudTabView, new Rectangle(0,0,300,600));
     		
     			ButlerHudTabLayout = new HudFixedLayout();
-    			ButlerHudTabView.AddTab(ButlerHudTabLayout, "GearButler");
+    			ButlerHudTabView.AddTab(ButlerHudTabLayout, "Butler");
+    			
+    			MaidTabLayout = new HudFixedLayout();
+    			ButlerHudTabView.AddTab(MaidTabLayout, "Maid");
+    			
+    			ValetLayout = new HudFixedLayout();
+    			ButlerHudTabView.AddTab(ValetLayout, "Valet");
+    			
+    			
     					
-    			ButlerHudCurrentSelectionLabel = new HudStaticText();
-    			ButlerHudCurrentSelectionLabel.Text = "[Current Selection]";
-    			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionLabel, new Rectangle(0,0,200,16));
-    			    			    			
-    			ButlerHudCurrentSelectionIcon = new HudPictureBox();
-    			ButlerHudCurrentSelectionIcon.Image = null;
-    			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionIcon, new Rectangle(0,20,25,25));
-    			
-    			ButlerHudCurrentSelectionText = new HudStaticText();
-    			ButlerHudCurrentSelectionText.Text = null;
-    			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionText, new Rectangle(0,50,150,16));
-    			  			
-    			ButlerHudSearchBox = new HudTextBox();
-    			ButlerHudSearchBox.Text = "";
-    			ButlerHudTabLayout.AddControl(ButlerHudSearchBox, new Rectangle(0,80,200,20));
-    			
-    			ButlerHudSearchButton = new HudButton();
-    			ButlerHudSearchButton.Text = "Search";
-    			ButlerHudTabLayout.AddControl(ButlerHudSearchButton, new Rectangle(205,80,40,20));
-    			
-    			ButlerHudClearSearchButton = new HudButton();
-    			ButlerHudClearSearchButton.Text = "Reset";
-    			ButlerHudTabLayout.AddControl(ButlerHudClearSearchButton, new Rectangle(250,80,40,20));
-    			
-    			//Start at 120
-    			ButlerQuickSortLabel = new HudStaticText();
-    			ButlerQuickSortLabel.Text = "QuickSort: ";
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortLabel, new Rectangle(0,110,50,16));
-    			
-    			ButlerQuickSortEquipped = new HudImageButton();
-    			ButlerQuickSortEquipped.Image_Up = GB_EQUIPPED_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortEquipped, new Rectangle(60,110,16,16));
-    			
-    			ButlerQuickSortUnequipped = new HudImageButton();
-    			ButlerQuickSortUnequipped.Image_Up = GB_UNEQUIPPED_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortUnequipped, new Rectangle(80,110,16,16));
-    			
-    			ButlerQuickSortMelee = new HudImageButton();
-    			ButlerQuickSortMelee.Image_Up = GB_MELEE_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortMelee, new Rectangle(100,110,16,16));
-    			
-    			ButlerQuickSortMissile = new HudImageButton();
-    			ButlerQuickSortMissile.Image_Up = GB_MISSILE_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortMissile, new Rectangle(120,110,16,16));
-    			
-    			ButlerQuickSortCaster = new HudImageButton();
-    			ButlerQuickSortCaster.Image_Up = GB_CASTER_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortCaster, new Rectangle(140,110,16,16));
-    			
-    			ButlerQuickSortArmor = new HudImageButton();
-    			ButlerQuickSortArmor.Image_Up = GB_ARMOR_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortArmor, new Rectangle(160,110,16,16));
-    			
-    			ButlerQuickSortKeys = new HudImageButton();
-    			ButlerQuickSortKeys.Image_Up = GB_KEY_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortKeys, new Rectangle(180,110,16,16));
-    			
-    			ButlerQuickSortKeyrings = new HudImageButton();
-    			ButlerQuickSortKeyrings.Image_Up = GB_KEYRING_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortKeyrings, new Rectangle(200,110,16,16));
-    			
-    			ButlerQuickSortLockpicks = new HudImageButton();
-    			ButlerQuickSortLockpicks.Image_Up = GB_LOCKPICK_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortLockpicks, new Rectangle(220,110,16,16));
-    			
-    			ButlerQuickSortManastones = new HudImageButton();
-    			ButlerQuickSortManastones.Image_Up = GB_MANASTONE_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortManastones, new Rectangle(240,110,16,16));
-    			
-    			ButlerQuickSortHealKit = new HudImageButton();
-    			ButlerQuickSortHealKit.Image_Up = GB_HEALKIT_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortHealKit, new Rectangle(260,110,16,16));
-    			
-    			ButlerQuickSortPotion = new HudImageButton();
-    			ButlerQuickSortPotion.Image_Up = GB_POTION_ICON;
-    			ButlerHudTabLayout.AddControl(ButlerQuickSortPotion, new Rectangle(280,110,16,16));
-								
-				ButlerHudSelectedLabel = new HudStaticText();
-				ButlerHudSelectedLabel.Text = "Items Selected: ";
-				ButlerHudSelectedCount = new HudStaticText();
-				ButlerHudSelectedCount.Text = "0";
-				ButlerHudTabLayout.AddControl(ButlerHudSelectedLabel, new Rectangle(0,520,100,16));
-				ButlerHudTabLayout.AddControl(ButlerHudSelectedCount, new Rectangle(110,520,150,16));
-				
-				ButlerPackSpacesAvailable = new HudStaticText();
-				ButlerPackSpacesAvailable.Text = "0";
-				ButlerPackSpaceAvailableLabel = new HudStaticText();
-				ButlerPackSpaceAvailableLabel.Text = "Inventory status: ";
-				ButlerHudTabLayout.AddControl(ButlerPackSpaceAvailableLabel, new Rectangle(0,540,100,16));
-				ButlerHudTabLayout.AddControl(ButlerPackSpacesAvailable, new Rectangle(110,540,150,16));
-				
-				ButlerBurdenLabel = new HudStaticText();
-				ButlerBurdenLabel.Text = "Current Burden: ";
-				ButlerBurden = new HudStaticText();
-				ButlerBurden.Text = "0";
-				ButlerHudTabLayout.AddControl(ButlerBurdenLabel, new Rectangle(0,560,100,16));
-				ButlerHudTabLayout.AddControl(ButlerBurden, new Rectangle(110,560, 150, 16));
-				
-				ButlerHudList = new HudList();
-				ButlerHudList.ControlHeight = 16;	
-				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
-				ButlerHudList.AddColumn(typeof(HudStaticText), 175, null);
-				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
-				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
-				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
-				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);	
-				
-				ButlerHudLayout.AddControl(ButlerHudList, new Rectangle(0,150,300,375));
-				
-												
-				MaidTabLayout = new HudFixedLayout();
-    			ButlerHudTabView.AddTab(MaidTabLayout, "GearMaid");
-				
+ 				ButlerHudTabView.OpenTabChange += ButlerHudTabView_OpenTabChange;
+ 				
+ 				RenderButlerHudButlerLayout();
+			  							
+    		}catch(Exception ex) {LogError(ex);}
+    		return;
+    	}
+    	
+    	private void ButlerHudTabView_OpenTabChange(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			switch(ButlerHudTabView.CurrentTab)
+    			{
+    				case 0:
+    					DisposeButlerHudMaidLayout();
+    					RenderButlerHudButlerLayout();
+    					return;
+    				case 1:
+    					DisposeButlerHudButlerLayout();
+    					RenderButlerHudMaidLayout();
+    					return;
+    				case 2:
+    					return;
+    			}
+    		
+    		}catch{}
+    	}
+    	
+    	private void RenderButlerHudMaidLayout()
+    	{
+    		try
+    		{	
     			MaidStackInventory = new HudButton();
     			MaidStackInventory.Text = "Stack Inventory";
     			MaidTabLayout.AddControl(MaidStackInventory, new Rectangle(0,0,150,20));
@@ -331,41 +266,42 @@ namespace GearFoundry
     			MaidSalvageCombine.Text = "Combine Salvage Bags";
     			MaidTabLayout.AddControl(MaidSalvageCombine, new Rectangle(0,150,150,20));
     			
-    			
-    			ButlerQuickSortEquipped.Hit += (sender, e) => ButlerQuickSortEquipped_Hit(sender, e);
-    			ButlerQuickSortUnequipped.Hit += (sender, e) => ButlerQuickSortUnequipped_Hit(sender, e);
-    			ButlerQuickSortMelee.Hit += (sender, e) => ButlerQuickSortMelee_Hit(sender, e);
-    			ButlerQuickSortMissile.Hit += (sender, e) => ButlerQuickSortMissile_Hit(sender, e);
-    			ButlerQuickSortCaster.Hit += (sender, e) => ButlerQuickSortCaster_Hit(sender, e);
-    			ButlerQuickSortArmor.Hit += (sender, e) => ButlerQuickSortArmor_Hit(sender, e);
-    			ButlerQuickSortKeys.Hit += (sender, e) => ButlerQuickSortKeys_Hit(sender, e);
-    			ButlerQuickSortKeyrings.Hit += (sender, e) => ButlerQuickSortKeyrings_Hit(sender, e);
-    			ButlerQuickSortLockpicks.Hit += (sender, e) => ButlerQuickSortLockpicks_Hit(sender, e);
-    			ButlerQuickSortManastones.Hit += (sender, e) => ButlerQuickSortManastones_Hit(sender, e);
-    			ButlerQuickSortHealKit.Hit += (sender, e) => ButlerQuickSortHealKit_Hit(sender, e);
-    			ButlerQuickSortPotion.Hit += (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
-    			
-    			ButlerHudList.Click += (sender, row, col) => ButlerHudList_Click(sender, row, col);
-				ButlerHudSearchButton.Hit += (sender, e) => ButlerHudSearchButton_Click(sender, e);
-				ButlerHudClearSearchButton.Hit += (sender, e) => ButlerHudClearSearchButton_Click(sender, e);	
-    				
-				ButlerHudSearchBox.LostFocus += ButlerHudSearchBox_Lostfocus;    			
-				MaidStackInventory.Hit += MaidStackInventory_Hit;
+    			MaidStackInventory.Hit += MaidStackInventory_Hit;
     			MaidRingKeys.Hit += MaidRingKeys_Hit;
     			MaidTradeAllSalvage.Hit += MaidTradeAllSalvage_Hit;
     			MaidTradeFilledSalvage.Hit += MaidTradeFilledSalvage_Hit;
     			MaidTradeParialSalvage.Hit += MaidTradeParialSalvage_Hit;
     			MaidSalvageCombine.Hit += MaidSalvageCombine_Hit;
-				
-			  							
-    		}catch(Exception ex) {LogError(ex);}
-    		return;
+    			
+    		}catch{}
+    	}
+    	
+    	private void DisposeButlerHudMaidLayout()
+    	{
+    		try
+    		{
+    			MaidStackInventory.Hit -= MaidStackInventory_Hit;
+    			MaidRingKeys.Hit -= MaidRingKeys_Hit;
+    			MaidTradeAllSalvage.Hit -= MaidTradeAllSalvage_Hit;
+    			MaidTradeFilledSalvage.Hit -= MaidTradeFilledSalvage_Hit;
+    			MaidTradeParialSalvage.Hit -= MaidTradeParialSalvage_Hit;
+    			MaidSalvageCombine.Hit -= MaidSalvageCombine_Hit;
+    			
+    			MaidSalvageCombine.Dispose();
+    			MaidTradeParialSalvage.Dispose();
+    			MaidTradeFilledSalvage.Dispose();
+    			MaidTradeAllSalvage.Dispose();
+    			MaidRingKeys.Dispose();
+    			MaidStackInventory.Dispose();	
+    		}catch{}
     	}
     	
     	private void DisposeButlerHud()
     	{	
     		try
     		{
+    			ButlerHudTabLayout.GotFocus -= ButlerHudTabLayout_GotFocus;
+				ButlerHudTabLayout.LostFocus -= ButlerHudTabLayout_LostFocus;
     			
     			ButlerQuickSortPotion.Hit -= (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
     			ButlerQuickSortHealKit.Hit -= (sender, e) => ButlerQuickSortHealKit_Hit(sender, e);
@@ -417,6 +353,240 @@ namespace GearFoundry
     		}catch(Exception ex) {LogError(ex);}
     		return;
     	}
+    	
+    	
+    	
+    	
+    	private void RenderButlerHudButlerLayout()
+    	{
+    		try
+    		{
+    			
+    			
+    			
+    			ButlerHudCurrentSelectionLabel = new HudStaticText();
+    			ButlerHudCurrentSelectionLabel.Text = "Current Selection";
+    			ButlerHudCurrentSelectionLabel.TextAlignment = VirindiViewService.WriteTextFormats.Center;
+    			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionLabel, new Rectangle(75,0,150,16));
+    			
+    			ButlerHudPickCurrentSelection = new HudButton();
+    			ButlerHudPickCurrentSelection.Text = "Pick";
+//    			if(Core.CharacterFilter.Skills.Select(x => x.Base > 0))
+//    			{
+    				ButlerHudTabLayout.AddControl(ButlerHudPickCurrentSelection, new Rectangle(5,5,50,20));
+//    			}
+    			
+//				private HudButton ButlerHudGiveCurrentSelection = null;
+//				private HudButton ButlerHudUseCurrentSelection = null;
+//				private HudButton ButlerHudDestoryCurrenSelection = null;
+    			    			    			
+    			ButlerHudCurrentSelectionIcon = new HudPictureBox();
+    			ButlerHudCurrentSelectionIcon.Image = null;
+    			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionIcon, new Rectangle(136,20,25,25));
+    			
+    			ButlerHudCurrentSelectionText = new HudStaticText();
+    			ButlerHudCurrentSelectionText.Text = null;
+    			ButlerHudCurrentSelectionText.TextAlignment = VirindiViewService.WriteTextFormats.Center;
+    			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionText, new Rectangle(75,50,150,16));
+    			  			
+    			ButlerHudSearchBox = new HudTextBox();
+    			ButlerHudSearchBox.Text = "";
+    			ButlerHudTabLayout.AddControl(ButlerHudSearchBox, new Rectangle(0,80,200,20));
+    			
+    			ButlerHudSearchButton = new HudButton();
+    			ButlerHudSearchButton.Text = "Search";
+    			ButlerHudTabLayout.AddControl(ButlerHudSearchButton, new Rectangle(205,80,40,20));
+    			
+    			ButlerHudClearSearchButton = new HudButton();
+    			ButlerHudClearSearchButton.Text = "Reset";
+    			ButlerHudTabLayout.AddControl(ButlerHudClearSearchButton, new Rectangle(250,80,40,20));
+    			
+    			ButlerQuickSortLabel = new HudStaticText();
+    			ButlerQuickSortLabel.Text = "QuickSort: ";
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortLabel, new Rectangle(0,110,50,16));
+    			
+    			ButlerQuickSortEquipped = new HudImageButton();
+    			ButlerQuickSortEquipped.Image_Up = GB_EQUIPPED_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortEquipped, new Rectangle(60,110,16,16));
+    			
+    			ButlerQuickSortUnequipped = new HudImageButton();
+    			ButlerQuickSortUnequipped.Image_Up = GB_UNEQUIPPED_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortUnequipped, new Rectangle(80,110,16,16));
+    			
+    			ButlerQuickSortMelee = new HudImageButton();
+    			ButlerQuickSortMelee.Image_Up = GB_MELEE_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortMelee, new Rectangle(100,110,16,16));
+    			
+    			ButlerQuickSortMissile = new HudImageButton();
+    			ButlerQuickSortMissile.Image_Up = GB_MISSILE_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortMissile, new Rectangle(120,110,16,16));
+    			
+    			ButlerQuickSortCaster = new HudImageButton();
+    			ButlerQuickSortCaster.Image_Up = GB_CASTER_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortCaster, new Rectangle(140,110,16,16));
+    			
+    			ButlerQuickSortArmor = new HudImageButton();
+    			ButlerQuickSortArmor.Image_Up = GB_ARMOR_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortArmor, new Rectangle(160,110,16,16));
+    			
+    			ButlerQuickSortKeys = new HudImageButton();
+    			ButlerQuickSortKeys.Image_Up = GB_KEY_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortKeys, new Rectangle(180,110,16,16));
+    			
+    			ButlerQuickSortKeyrings = new HudImageButton();
+    			ButlerQuickSortKeyrings.Image_Up = GB_KEYRING_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortKeyrings, new Rectangle(200,110,16,16));
+    			
+    			ButlerQuickSortLockpicks = new HudImageButton();
+    			ButlerQuickSortLockpicks.Image_Up = GB_LOCKPICK_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortLockpicks, new Rectangle(220,110,16,16));
+    			
+    			ButlerQuickSortManastones = new HudImageButton();
+    			ButlerQuickSortManastones.Image_Up = GB_MANASTONE_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortManastones, new Rectangle(240,110,16,16));
+    			
+    			ButlerQuickSortHealKit = new HudImageButton();
+    			ButlerQuickSortHealKit.Image_Up = GB_HEALKIT_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortHealKit, new Rectangle(260,110,16,16));
+    			
+    			ButlerQuickSortPotion = new HudImageButton();
+    			ButlerQuickSortPotion.Image_Up = GB_POTION_ICON;
+    			ButlerHudTabLayout.AddControl(ButlerQuickSortPotion, new Rectangle(280,110,16,16));
+    			
+    			ButlerHudList = new HudList();
+				ButlerHudList.ControlHeight = 16;	
+				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
+				ButlerHudList.AddColumn(typeof(HudStaticText), 175, null);
+				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
+				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
+				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
+				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);		
+				ButlerHudLayout.AddControl(ButlerHudList, new Rectangle(0,150,300,375));
+								
+				ButlerHudSelectedLabel = new HudStaticText();
+				ButlerHudSelectedLabel.Text = "Items Selected: ";
+				ButlerHudSelectedCount = new HudStaticText();
+				ButlerHudSelectedCount.Text = "0";
+				ButlerHudTabLayout.AddControl(ButlerHudSelectedLabel, new Rectangle(0,520,100,16));
+				ButlerHudTabLayout.AddControl(ButlerHudSelectedCount, new Rectangle(110,520,150,16));
+				
+				ButlerPackSpacesAvailable = new HudStaticText();
+				ButlerPackSpacesAvailable.Text = "0";
+				ButlerPackSpaceAvailableLabel = new HudStaticText();
+				ButlerPackSpaceAvailableLabel.Text = "Inventory status: ";
+				ButlerHudTabLayout.AddControl(ButlerPackSpaceAvailableLabel, new Rectangle(0,540,100,16));
+				ButlerHudTabLayout.AddControl(ButlerPackSpacesAvailable, new Rectangle(110,540,150,16));
+				
+				ButlerBurdenLabel = new HudStaticText();
+				ButlerBurdenLabel.Text = "Current Burden: ";
+				ButlerBurden = new HudStaticText();
+				ButlerBurden.Text = "0";
+				ButlerHudTabLayout.AddControl(ButlerBurdenLabel, new Rectangle(0,560,100,16));
+				ButlerHudTabLayout.AddControl(ButlerBurden, new Rectangle(110,560, 150, 16));
+				
+				ButlerHudPickCurrentSelection.Hit += ButlerHudPickCurrentSelection_Hit;
+				
+				ButlerQuickSortEquipped.Hit += (sender, e) => ButlerQuickSortEquipped_Hit(sender, e);
+    			ButlerQuickSortUnequipped.Hit += (sender, e) => ButlerQuickSortUnequipped_Hit(sender, e);
+    			ButlerQuickSortMelee.Hit += (sender, e) => ButlerQuickSortMelee_Hit(sender, e);
+    			ButlerQuickSortMissile.Hit += (sender, e) => ButlerQuickSortMissile_Hit(sender, e);
+    			ButlerQuickSortCaster.Hit += (sender, e) => ButlerQuickSortCaster_Hit(sender, e);
+    			ButlerQuickSortArmor.Hit += (sender, e) => ButlerQuickSortArmor_Hit(sender, e);
+    			ButlerQuickSortKeys.Hit += (sender, e) => ButlerQuickSortKeys_Hit(sender, e);
+    			ButlerQuickSortKeyrings.Hit += (sender, e) => ButlerQuickSortKeyrings_Hit(sender, e);
+    			ButlerQuickSortLockpicks.Hit += (sender, e) => ButlerQuickSortLockpicks_Hit(sender, e);
+    			ButlerQuickSortManastones.Hit += (sender, e) => ButlerQuickSortManastones_Hit(sender, e);
+    			ButlerQuickSortHealKit.Hit += (sender, e) => ButlerQuickSortHealKit_Hit(sender, e);
+    			ButlerQuickSortPotion.Hit += (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
+    			
+    			ButlerHudList.Click += (sender, row, col) => ButlerHudList_Click(sender, row, col);
+				ButlerHudSearchButton.Hit += (sender, e) => ButlerHudSearchButton_Click(sender, e);
+				ButlerHudClearSearchButton.Hit += (sender, e) => ButlerHudClearSearchButton_Click(sender, e);	
+				ButlerHudTabLayout.GotFocus += ButlerHudTabLayout_GotFocus;
+				ButlerHudTabLayout.LostFocus += ButlerHudTabLayout_LostFocus;
+				
+				UpdateButlerHudList();
+				  			
+    		}catch{}
+    	}
+    	
+    	private void  ButlerHudPickCurrentSelection_Hit(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			WriteToChat("Pick Click");
+    		}catch{}
+    	}
+    	
+    	private void ButlerHudTabLayout_GotFocus(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			UpdateButlerHudList();
+    		}catch{}
+    	}
+    	
+    	private void ButlerHudTabLayout_LostFocus(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			UpdateButlerHudList();
+    		}catch{}
+    	}
+    	
+    	private void DisposeButlerHudButlerLayout()
+    	{
+    		try
+    		{
+    			ButlerHudList.Click -= (sender, row, col) => ButlerHudList_Click(sender, row, col);
+				ButlerHudSearchButton.Hit -= (sender, e) => ButlerHudSearchButton_Click(sender, e);
+				ButlerHudClearSearchButton.Hit -= (sender, e) => ButlerHudClearSearchButton_Click(sender, e);
+    			
+    			ButlerQuickSortEquipped.Hit -= (sender, e) => ButlerQuickSortEquipped_Hit(sender, e);
+    			ButlerQuickSortUnequipped.Hit -= (sender, e) => ButlerQuickSortUnequipped_Hit(sender, e);
+    			ButlerQuickSortMelee.Hit -= (sender, e) => ButlerQuickSortMelee_Hit(sender, e);
+    			ButlerQuickSortMissile.Hit -= (sender, e) => ButlerQuickSortMissile_Hit(sender, e);
+    			ButlerQuickSortCaster.Hit -= (sender, e) => ButlerQuickSortCaster_Hit(sender, e);
+    			ButlerQuickSortArmor.Hit -= (sender, e) => ButlerQuickSortArmor_Hit(sender, e);
+    			ButlerQuickSortKeys.Hit -= (sender, e) => ButlerQuickSortKeys_Hit(sender, e);
+    			ButlerQuickSortKeyrings.Hit -= (sender, e) => ButlerQuickSortKeyrings_Hit(sender, e);
+    			ButlerQuickSortLockpicks.Hit -= (sender, e) => ButlerQuickSortLockpicks_Hit(sender, e);
+    			ButlerQuickSortManastones.Hit -= (sender, e) => ButlerQuickSortManastones_Hit(sender, e);
+    			ButlerQuickSortHealKit.Hit -= (sender, e) => ButlerQuickSortHealKit_Hit(sender, e);
+    			ButlerQuickSortPotion.Hit -= (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
+    			
+    			ButlerHudPickCurrentSelection.Hit -= ButlerHudPickCurrentSelection_Hit;
+    			
+    			ButlerBurdenLabel.Dispose();
+    			ButlerPackSpacesAvailable.Dispose();
+    			ButlerHudSelectedLabel.Dispose();
+    			ButlerHudList.Dispose();
+    			ButlerQuickSortPotion.Dispose();
+    			ButlerQuickSortHealKit.Dispose();
+    			ButlerQuickSortManastones.Dispose();
+    			ButlerQuickSortLockpicks.Dispose();
+    			ButlerQuickSortKeyrings.Dispose();
+    			ButlerQuickSortKeys.Dispose();
+    			ButlerQuickSortArmor.Dispose();
+    			ButlerQuickSortCaster.Dispose();
+    			ButlerQuickSortMissile.Dispose();
+    			ButlerQuickSortMelee.Dispose();
+    			ButlerQuickSortUnequipped.Dispose();
+    			ButlerQuickSortEquipped.Dispose();
+    			ButlerQuickSortLabel.Dispose();
+    			ButlerHudClearSearchButton.Dispose();
+    			ButlerHudSearchButton.Dispose();
+    			ButlerHudSearchBox.Dispose();
+    			//NewButtonsHere
+    			ButlerHudPickCurrentSelection.Dispose();
+    			ButlerHudCurrentSelectionText.Dispose();
+    			ButlerHudCurrentSelectionIcon.Dispose();
+    			ButlerHudCurrentSelectionLabel.Dispose();
+    			
+    		}catch{}
+    	}
+    	
+
     	
     	private void ButlerHudSearchBox_Lostfocus(object sender, System.EventArgs e)
     	{
@@ -563,13 +733,9 @@ namespace GearFoundry
 	    	{    	
 	    		if(ButlerHudTabView.CurrentTab != 0) 
 	    		{
-		    	    ButlerHudList.ClearRows();
 	    			return;
 	    		}
-	    		else 
-		    	{
-	    			ButlerHudList.ClearRows();
-	    		}
+	    		
 	    		    		
     	    	ButlerHudSelectedCount.Text = ButlerInventory.Count().ToString();
 	    	    ButlerBurden.Text = Core.CharacterFilter.Burden.ToString() + "%";
@@ -578,8 +744,9 @@ namespace GearFoundry
 	    	    if(Core.CharacterFilter.Burden >= 200){ButlerBurden.TextColor = Color.Red;}
 	    	    ButlerPackSpacesAvailable.Text = CalculateAvailableSpace();
 	    		
-	    			  	    		
-
+	    			
+	    	    
+	    	    ButlerHudList.ClearRows();
 	    	    foreach(WorldObject wo in ButlerInventory)
 	    	    {
 	    	    	ButlerHudListRow = ButlerHudList.AddRow();

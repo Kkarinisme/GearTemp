@@ -24,29 +24,6 @@ namespace GearFoundry
 	    private List<SalvageRule> SalvageRulesList = new List<SalvageRule>();
         private List<WorldObject> InventorySalvage = new List<WorldObject>();
 		private Queue<IdentifiedObject> SalvageObjectQueue = new Queue<IdentifiedObject>();  
-		private bool TradeOpen = false;
-
-		void SubscribeSalvageEvents()
-		{
-			Core.WorldFilter.EnterTrade += new EventHandler<EnterTradeEventArgs>(OnTradeOpened);
-			Core.WorldFilter.EndTrade += new EventHandler<EndTradeEventArgs>(OnTradeClosed);
-		}
-		
-		void UnsubscribeSalvageEvents()
-		{
-			Core.WorldFilter.EnterTrade -= new EventHandler<EnterTradeEventArgs>(OnTradeOpened);
-			Core.WorldFilter.EndTrade -= new EventHandler<EndTradeEventArgs>(OnTradeClosed);
-		}
-		
-		void OnTradeOpened(object sender, EnterTradeEventArgs e)
-		{
-			TradeOpen = true;
-		}
-		
-		void OnTradeClosed(object sener, EndTradeEventArgs e)
-		{
-			TradeOpen = false;
-		}
 			
 		private void FillSalvageRules()
 		{
