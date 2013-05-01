@@ -38,8 +38,8 @@ namespace GearFoundry
 		{
 			try
 			{
-				CoreManager.Current.ContainerOpened += new EventHandler<ContainerOpenedEventArgs>(LootContainerOpened);
-             	Core.EchoFilter.ServerDispatch += new EventHandler<NetworkMessageEventArgs>(ServerDispatchItem);
+				CoreManager.Current.ContainerOpened += LootContainerOpened;
+             	Core.EchoFilter.ServerDispatch += ServerDispatchItem;
 			}
 			catch{}
 		}
@@ -48,8 +48,8 @@ namespace GearFoundry
 		{
 			try
 			{
-				CoreManager.Current.ContainerOpened -= new EventHandler<ContainerOpenedEventArgs>(LootContainerOpened);
-             	Core.EchoFilter.ServerDispatch -= new EventHandler<NetworkMessageEventArgs>(ServerDispatchItem);
+				CoreManager.Current.ContainerOpened -= LootContainerOpened;
+             	Core.EchoFilter.ServerDispatch -= ServerDispatchItem;
 			}catch{}
 		}
 		
@@ -141,27 +141,30 @@ namespace GearFoundry
 		
 		private void CheckContainer(WorldObject container)
 		{
-			mOpenContainer.ContainerIsLooting = true;
-			mOpenContainer.ContainerGUID = container.Id;
-			WorldObject[] ContainerContents = Core.WorldFilter.GetByContainer(container.Id).ToArray();
-			foreach(WorldObject wo in ContainerContents)
+			try
 			{
-				if(ItemExclusionList.FindIndex(x => x == wo.Id) < 0)
+				mOpenContainer.ContainerIsLooting = true;
+				mOpenContainer.ContainerGUID = container.Id;
+				WorldObject[] ContainerContents = Core.WorldFilter.GetByContainer(container.Id).ToArray();
+				foreach(WorldObject wo in ContainerContents)
 				{
-					mOpenContainer.ContainerIOs.Add(new IdentifiedObject(wo));
+					if(ItemExclusionList.FindIndex(x => x == wo.Id) < 0)
+					{
+						mOpenContainer.ContainerIOs.Add(new IdentifiedObject(wo));
+					}
 				}
-			}
-			if(mOpenContainer.ContainerIOs.Count() == 0)
-			{
-				mOpenContainer.ContainerIsLooting = false;
-			}
-			else
-			{
-				foreach(IdentifiedObject IOItem in mOpenContainer.ContainerIOs)
+				if(mOpenContainer.ContainerIOs.Count() == 0)
 				{
-					SeparateItemsToID(IOItem);
+					mOpenContainer.ContainerIsLooting = false;
 				}
-			}
+				else
+				{
+					foreach(IdentifiedObject IOItem in mOpenContainer.ContainerIOs)
+					{
+						SeparateItemsToID(IOItem);
+					}
+				}
+			}catch{}
 		}
 		
 
@@ -252,31 +255,33 @@ namespace GearFoundry
 		
 		void CheckItemForMatches(IdentifiedObject IOItem)
 		{
-			if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
-			if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {CheckSalvageItem(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
-			
-			
-			
-			
+			try
+			{
+				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
+				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckSalvageItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
+			}catch{}		
 		}	
 		
 		
 		void ManualCheckItemForMatches(IdentifiedObject IOItem)
 		{
-			if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
-			if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {CheckSalvageItem(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
-			if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
-			
-			ReportStringToChat(IOItem.LinkString());
+			try
+			{
+				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
+				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckSalvageItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
+				
+				ReportStringToChat(IOItem.LinkString());
+			}catch{}
 		}
 		
 
@@ -386,10 +391,12 @@ namespace GearFoundry
 		//Irq:  This code is untested and only partially complete
 		private void CheckRulesItem(ref IdentifiedObject IOItemWithIDReference)
 		{
-			IdentifiedObject IOItemWithID = IOItemWithIDReference;
+			
 			//Irq:  Note to self:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
 			try
 			{
+				
+				IdentifiedObject IOItemWithID = IOItemWithIDReference;
 				//Only pull active rules that "ApplyTo" the category of object hitting the rules comparison
 				//Irquk:  Confirmed Functional
 				var AppliesToListMatches = from rules in ItemRulesList
@@ -604,7 +611,8 @@ namespace GearFoundry
 		//Irq:  It also has the advantage of only sifting out particular IDs which means that lifestones and such can't somehow sneak into the items page.
 		private void EvaluateItemMatches(IdentifiedObject IOItem)
 		{
-			try{
+			try
+			{
 				switch(IOItem.IOR)
 				{
 					case IOResult.unknown:
@@ -741,7 +749,9 @@ namespace GearFoundry
 				ItemHudList.AddColumn(typeof(HudStaticText), 230, null);
 				ItemHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
-				ItemHudList.Click += (sender, row, col) => ItemHudList_Click(sender, row, col);				
+				ItemHudList.Click += (sender, row, col) => ItemHudList_Click(sender, row, col);		
+
+				SubscribeLootEvents();
 			  							
     		}catch(Exception ex) {WriteToChat(ex.ToString());}
     		
@@ -752,6 +762,8 @@ namespace GearFoundry
     			
     		try
     		{
+    			UnsubscribeLootEvents();
+    			
     			ItemHudList.Click -= (sender, row, col) => ItemHudList_Click(sender, row, col);		
     			ItemHudList.Dispose();
     			ItemHudLayout.Dispose();

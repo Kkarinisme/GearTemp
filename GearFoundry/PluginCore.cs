@@ -68,8 +68,25 @@ namespace GearFoundry
         {
             try
             {
-            	//Dispose various huds that are still open
+            	
             	DisposeOnShutdown();
+                if (quickiesvHud != null)
+                {
+                    //doClearHud(quickiesvHud, xdocQuickSlotsv, quickSlotsvFilename);
+                    quickiesvHud.Dispose();
+                    quickiesvHud = null;
+
+                }
+
+
+                if (quickieshHud != null)
+                {
+                    //doClearHud(quickieshHud, xdocQuickSlotsh, quickSlotshFilename);
+                    quickieshHud.Dispose();
+                    quickieshHud = null;
+
+                }
+
                 //Destroy the view.
                 MVWireupHelper.WireupEnd(this);
                 View.Dispose();
@@ -84,10 +101,7 @@ namespace GearFoundry
        		if(CorpseHudView != null) {DisposeCorpseHud();}
             if(LandscapeHudView != null) {DisposeLandscapeHud();}
             if(ItemHudView != null) {DisposeItemHud();}
-            if(ButlerHudView != null){DisposeButlerHud();}
-            if (quickieshHud != null){DisposeHorizontalQuickSlots();}
-            if (quickiesvHud != null) { DisposeVerticalQuickSlots(); }
-
+            if(ButlerHudView != null){UnsubscribeButlerEvents();}
         }
         
         
@@ -100,11 +114,10 @@ namespace GearFoundry
 				Core.CharacterFilter.LoginComplete += new EventHandler(OnCharacterFilterLoginCompleted);			
 				MasterTimer = new System.Windows.Forms.Timer();	
 				
-                //RenderItemHud();
-                //SubscribeLootEvents();
+				RenderItemHud();
                 
-                //RenderButlerHud();
-                //SubscribeButlerEvents();
+            	SubscribeButlerEvents();
+
 				
 			} catch (Exception ex) {
 				LogError(ex);
@@ -122,7 +135,6 @@ namespace GearFoundry
 					MasterTimer.Tick -= CorpseCheckerTick;
 				}
 				
-				UnsubscribeLootEvents();
 				
 				DisposeItemHud();
 
@@ -150,13 +162,7 @@ namespace GearFoundry
                
                 InitFilenames();
                 loadFiles();
-
                 loadLists();
-                if (xdocRules != null)
-                    WriteToChat("mPrioritizedRulesList: " + mPrioritizedRulesList.Count.ToString());
-                else
-                    WriteToChat("mPrioritizedRulesList does not exist.");
-
                 populateRulesListBox();
                 populateRuleSpellEnabledListBox();
                 startRoutines();
@@ -176,7 +182,6 @@ namespace GearFoundry
                
 
                 mCharacterLoginComplete = true;
-                
                 
   
 

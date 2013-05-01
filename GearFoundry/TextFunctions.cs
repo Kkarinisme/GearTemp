@@ -170,21 +170,21 @@ namespace GearFoundry
 					string cmd = e.Text.Substring(7).ToLower();
 					//WriteToChat(cmd);
 					
-					if(cmd.Contains("combine") && cmd.Contains("salvage"))
-					{	
-						CombineSalvageBags();
-					}
-					if(cmd.Contains("trade") && cmd.Contains("salvage"))
-					{
-						//TradeSalvage States:  "1" = all bags, "2" = only partial bags, default to full bags
-						if(cmd.Contains("all")){TradeSalvageBags(1);}
-						else if(cmd.Contains("partial")){TradeSalvageBags(2);}
-						else {TradeSalvageBags(0);}
-					}
-					if(cmd.Contains("sell") && cmd.Contains("salvage"))
-					{
-						SellSalvageBags();
-					}
+//					if(cmd.Contains("combine") && cmd.Contains("salvage"))
+//					{	
+//						CombineSalvageBags();
+//					}
+//					if(cmd.Contains("trade") && cmd.Contains("salvage"))
+//					{
+//						//TradeSalvage States:  "1" = all bags, "2" = only partial bags, default to full bags
+//						if(cmd.Contains("all")){TradeSalvageBags(1);}
+//						else if(cmd.Contains("partial")){TradeSalvageBags(2);}
+//						else {TradeSalvageBags(0);}
+//					}
+//					if(cmd.Contains("sell") && cmd.Contains("salvage"))
+//					{
+//						SellSalvageBags();
+//					}
 					
 				}
 

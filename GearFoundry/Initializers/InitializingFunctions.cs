@@ -519,25 +519,21 @@ namespace GearFoundry
             if (bLandscapeHudEnabled)
             {
                 SubscribeLandscapeEvents();
-                RenderLandscapeHud();
             }
 
             if (bCorpseHudEnabled)
             {
                 SubscribeCorpseEvents();
-                RenderCorpseHud();
             }
 
             if (bGearInspectorEnabled)
             {
                 SubscribeLootEvents();
-                RenderItemHud();
             }
 
             if (bGearButlerEnabled)
             {
                 SubscribeButlerEvents();
-                RenderButlerHud();
             }
 
             if (binventoryCompleteEnabled)
@@ -765,12 +761,10 @@ namespace GearFoundry
 				SaveSettings();
 				if(e.Checked)
 				{
-					SubscribeCorpseEvents();
 					RenderCorpseHud();
 				}
 				else
 				{
-					UnsubscribeCorpseEvents();
 					DisposeCorpseHud();
 				}
 			}
@@ -834,12 +828,10 @@ namespace GearFoundry
 				SaveSettings();
 				if(e.Checked)
 				{
-					SubscribeLandscapeEvents();
 					RenderLandscapeHud();
 				}
 				else
 				{
-					UnsubscribeLandscapeEvents();
 					DisposeLandscapeHud();
 				}	
         	}catch{}
@@ -925,6 +917,26 @@ namespace GearFoundry
         		SaveSettings();
         	}catch{}
         }
+        
+        //GearButler Settings
+        void chkGearButlerEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+        	try
+        	{
+        		bGearButlerEnabled = e.Checked;
+        		SaveSettings();
+        	}catch{}
+        }
+     
+		void chkAutoRingKeys_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+        	try
+        	{
+        		bAutoRingKeys = e.Checked;
+        		SaveSettings();
+        	}catch{}
+        }
+        
 
 
         void chkGearInspectorEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
@@ -946,28 +958,6 @@ namespace GearFoundry
             }
             catch { }
         }
-
-        void chkGearButlerEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-            try
-            {
-                bGearButlerEnabled = e.Checked;
-                SaveSettings();
-                if (e.Checked)
-                {
-                    SubscribeButlerEvents();
-                    RenderButlerHud();
-                }
-                else
-                {
-                    UnsubscribeButlerEvents();
-                    DisposeButlerHud();
-                }
-            }
-            catch { }
-        }
-
-
 
         void chkVulnedIcons_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {

@@ -372,6 +372,9 @@ namespace GearFoundry
         private static bool bShowAllMobs;
         private static bool bShowAllNPCs;
         
+        //GearButler Flags
+        private static bool bAutoRingKeys;
+        
         
         
         //ItemTrackerFlags

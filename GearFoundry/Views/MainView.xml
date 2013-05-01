@@ -628,7 +628,7 @@
     <page label="Settings">
       <control progid="DecalControls.FixedLayout" clipped="">
         <control progid="DecalControls.FixedLayout" clipped="" left="0" top="0" width="500" height="500">
-          <Control progid="DecalControls.StaticText" name="lblhuds" left ="5" top="5" width="150" height="16" text="StringGears Settings:"/>
+          <Control progid="DecalControls.StaticText" name="lblhuds" left ="5" top="5" width="150" height="16" text="WormGears Settings:"/>
           <control progid="DecalControls.Checkbox" name="chkQuickSlotsv" left="5" top="20" width="150" height="16" text="Vertical Enabled"/>
           <control progid="DecalControls.Checkbox" name="chkQuickSlotsh" left="5" top="40" width="150" height="16" text="Horizontal Enabled"/>
         	
@@ -651,15 +651,24 @@
           <control progid="DecalControls.Checkbox" name="chkPortals" left="175" top="180" width="150" height="16" textcolor="16777215" text="Display Portals"/>
           <control progid="DecalControls.Checkbox" name="chkLifestones" left="175" top="200" width="150" height="16" textcolor="16777215" text="Display Lifestone"/>
         	
-          <Control progid="DecalControls.StaticText" name="lblGearInspector" left ="350" top="5" width="150" height="16" text="GearInspector Settings:"/>
-          <control progid="DecalControls.Checkbox" name="chkGearInspectorEnabled" left="350" top="25" width="150" height="16" textcolor="16777215" text="Enabled"/>
-          <Control progid="DecalControls.StaticText" name="lblGearButler" left ="350" top="100" width="150" height="16" text="GearButler Settings:"/>
-          <control progid="DecalControls.Checkbox" name="chkGearButlerEnabled" left="350" top="120" width="150" height="16" textcolor="16777215" text="Enabled"/>
-
-
+          <Control progid="DecalControls.StaticText" name="lblGearButler" left ="350" top="5" width="150" height="16" text="GearButler Settings:"/>	
+          <control progid="DecalControls.Checkbox" name="chkGearButlerEnabled" left="350" top="20" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <control progid="DecalControls.Checkbox" name="chkAutoRingKeys" left="175" top="40" width="150" height="16" textcolor="16777215" text="AutoRing Keys"/>
+        	
+          <Control progid="DecalControls.StaticText" name="lblGearInspector" left ="350" top="120" width="150" height="16" text="GearInspector Settings:"/>
+          <control progid="DecalControls.Checkbox" name="chkGearInspectorEnabled" left="350" top="140" width="150" height="16" textcolor="16777215" text="Enabled"/>
+        	
+        	
+          
+        	
+        	
+        	
+        	
+          
+          
           <!--control progid="DecalControls.Checkbox" name="chkVulnedIcons" left="5" top="120" width="225" height="24" textcolor="16777215" text="Display Vulned Icons"/-->
          
-          <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="210" width="225" height="24" text="Gear"/>
+          <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="210" width="225" height="24" text="Inventory"/>
           <control progid="DecalControls.Checkbox" name="chkInventory" left="5" top="230" width="225" height="24" text="Inventory on Startup"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="5" top="250" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="5" top="270" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
@@ -671,6 +680,10 @@
           <control progid="DecalControls.Checkbox" name="chk3DArrow" left="5" top="400" width="225" height="24" textcolor="16777215" text="Show 3D arrow"/>
           <control progid="DecalControls.Checkbox" name="chkMute" left="5" top="420" width="225" height="24" textcolor="16777215" text="Mute Notifies"/>
           <control progid="DecalControls.Checkbox" name="chkFullScreen" left="5" top="440" width="225" height="24" textcolor="16777215" text="Windowed Full Screen"/>
+        	
+
+        	
+        	
         	
 
           <!--control progid="DecalControls.Checkbox" name="chkScrolls7" left="250" top="20" width="225" height="24" text="Unknown Scrolls Lvl 7"/-->
