@@ -13,6 +13,21 @@ using MyClasses.MetaViewWrappers;
 using VirindiViewService.Controls;
 using VirindiHUDs;
 using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
+using System.Xml.Serialization;
+using System.Xml;
+
+//using System;
+//using System.IO;
+//using System.Collections.Generic;
+//using Decal.Adapter;
+//using Decal.Adapter.Wrappers;
+//using Decal.Interop.Core;
+//using MyClasses.MetaViewWrappers;
+//using VirindiViewService;
+//using System.Windows.Forms;
+//using System.Xml;
+//using System.Xml.Serialization;
+//using System.Linq;
 
 namespace GearFoundry
 {
@@ -24,6 +39,78 @@ namespace GearFoundry
 		private List<string> LandscapeFellowMemberTrackingList = new List<string>();
 		private bool mLandscapeInPortalSpace = true;
 		
+		public GearSenseSettings gsSettings = new GearSenseSettings();
+		
+		public class GearSenseSettings
+		{			
+			public bool bShowAllMobs = true;
+			public bool bShowSelectedMobs = true;
+			public bool bShowAllPlayers = true;
+			public bool bShowAllegancePlayers = true;
+			public bool bShowFellowPlayers = true;
+			public bool bShowTrophies = true;
+			public bool bShowLifeStones = true;
+			public bool bShowAllPortals = true;
+			public bool bShowAllNPCs = true;
+		}
+		
+		
+		private void GearSenseReadWriteSettings(bool read)
+		{
+			try
+			{
+				FileInfo GearSenseSettingsFile = new FileInfo(toonDir + "\\GearSense.xml");
+								
+				if (read)
+				{
+					
+					try
+					{
+						if (!GearSenseSettingsFile.Exists)
+		                {
+		                    try
+		                    {
+		                    	string filedefaults = GetResourceTextFile("GearSense.xml");
+		                    	using (StreamWriter writedefaults = new StreamWriter(filedefaults, true))
+								{
+									writedefaults.Write(filedefaults);
+									writedefaults.Close();
+								}
+		                    }
+		                    catch (Exception ex) { LogError(ex); }
+		                }
+						
+						using (XmlReader reader = XmlReader.Create(GearSenseSettingsFile.ToString()))
+						{	
+							XmlSerializer serializer = new XmlSerializer(typeof(GearSenseSettings));
+							gsSettings = (GearSenseSettings)serializer.Deserialize(reader);
+							reader.Close();
+						}
+					}
+					catch
+					{
+						gsSettings = new GearSenseSettings();
+					}
+				}
+				
+				
+				if(!read)
+				{
+					if(GearSenseSettingsFile.Exists)
+					{
+						GearSenseSettingsFile.Delete();
+					}
+					
+					using (XmlWriter writer = XmlWriter.Create(GearSenseSettingsFile.ToString()))
+					{
+			   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearSenseSettings));
+			   			serializer2.Serialize(writer, gsSettings);
+			   			writer.Close();
+					}
+				}
+			}catch(Exception ex){WriteToChat(ex.ToString());}
+		}
+				
 		private void SubscribeLandscapeEvents()
 		{
 			try
@@ -130,13 +217,13 @@ namespace GearFoundry
 						return;						
 						
 					case ObjectClass.Monster:
-						if(bselectedMobsEnabled){MonsterListCheckLandscape(ref IOLandscape);}
-						if(bShowAllMobs && IOLandscape.IOR != IOResult.monster){IOLandscape.IOR = IOResult.allmonster;}
+						if(gsSettings.bShowSelectedMobs){MonsterListCheckLandscape(ref IOLandscape);}
+						if(gsSettings.bShowAllMobs && IOLandscape.IOR != IOResult.monster){IOLandscape.IOR = IOResult.allmonster;}
 						goto default;
 						
 					case ObjectClass.Player:
 						if(IOLandscape.Id == Core.CharacterFilter.Id) {return;}
-						if(bfellowEnabled)
+						if(gsSettings.bShowFellowPlayers)
 						{
 							if(LandscapeFellowMemberTrackingList.Contains(IOLandscape.Name))
 							{
@@ -144,7 +231,7 @@ namespace GearFoundry
 								goto default;									
 							}
 						}
-						if (ballegEnabled && Core.CharacterFilter.Monarch != null && Core.CharacterFilter.Monarch.Id != 0) 
+						if (gsSettings.bShowAllegancePlayers && Core.CharacterFilter.Monarch != null && Core.CharacterFilter.Monarch.Id != 0) 
 						{
 							if (Core.CharacterFilter.Monarch.Id == IOLandscape.IntValues(LongValueKey.Monarch)) 
 							{
@@ -152,7 +239,7 @@ namespace GearFoundry
 								goto default;
 							}
 						}
-						if (ballPlayersEnabled && IOLandscape.Id != Core.CharacterFilter.Id) 
+						if (gsSettings.bShowAllPlayers && IOLandscape.Id != Core.CharacterFilter.Id) 
 						{
 							IOLandscape.IOR = IOResult.players;
 							goto default;
@@ -161,7 +248,7 @@ namespace GearFoundry
 						goto default;
 	
 					case ObjectClass.Portal: 
-						if (bportalsEnabled) 
+						if (gsSettings.bShowAllPortals) 
 						{						
 							if(IOLandscape.Name.Contains("House Portal"))
 							{
@@ -178,7 +265,7 @@ namespace GearFoundry
 						goto default;
 						
 					case ObjectClass.Lifestone:
-						if(bLandscapeLifestonesEnabled)
+						if(gsSettings.bShowLifeStones)
 						{
 							IOLandscape.IOR = IOResult.lifestone;
 							goto default;
@@ -187,7 +274,7 @@ namespace GearFoundry
 						goto default;
 						
 					case ObjectClass.Npc:
-						if(bLandscapeTrophiesEnabled)
+						if(gsSettings.bShowTrophies)
 						{
 							TrophyListCheckLandscape(ref IOLandscape);
 							if(IOLandscape.IOR == IOResult.npc)
@@ -195,7 +282,7 @@ namespace GearFoundry
 								goto default;
 							}
 						}
-						if(bShowAllNPCs)
+						if(gsSettings.bShowAllNPCs)
 						{
 							IOLandscape.IOR = IOResult.allnpcs;
 							goto default;
@@ -203,7 +290,7 @@ namespace GearFoundry
 						IOLandscape.IOR = IOResult.nomatch;
 						goto default; 						
 					default:
-						if(bLandscapeTrophiesEnabled && IOLandscape.IOR == IOResult.unknown){TrophyListCheckLandscape(ref IOLandscape);}
+						if(gsSettings.bShowTrophies && IOLandscape.IOR == IOResult.unknown){TrophyListCheckLandscape(ref IOLandscape);}
 						if(IOLandscape.IOR ==IOResult.nomatch || IOLandscape.IOR == IOResult.unknown) {return;}
 						break;
 				}
@@ -213,7 +300,7 @@ namespace GearFoundry
 					LandscapeTrackingList.Add(IOLandscape);
 					UpdateLandscapeHud();
 				}
-				LandscapeExclusionList.Add(IOLandscape.Id);
+				if(!LandscapeExclusionList.Contains(IOLandscape.Id)){LandscapeExclusionList.Add(IOLandscape.Id);}
 				return;
 			}
 			catch (Exception ex){LogError(ex);}
@@ -324,13 +411,13 @@ namespace GearFoundry
 	        	{	        		
 	        		DistanceCheckLandscape();
 	        		LandscapeTimer = 0;
-	        		if(LandscapeFellowMemberTrackingList.Count() > 0)
-	        		{
-	        			foreach(string name in LandscapeFellowMemberTrackingList)
-		        		{
-		        			WriteToChat(name);
-		        		}
-	        		}
+//	        		if(LandscapeFellowMemberTrackingList.Count() > 0)
+//	        		{
+//	        			foreach(string name in LandscapeFellowMemberTrackingList)
+//		        		{
+//		        			WriteToChat(name);
+//		        		}
+//	        		}
 	        	}
 	        	LandscapeTimer++;
         	}catch(Exception ex) {LogError(ex);}
@@ -448,8 +535,28 @@ namespace GearFoundry
 		private HudList.HudListRowAccessor LandscapeHudListRow = null;
 		private const int LandscapeRemoveCircle = 0x60011F8;
 		
+		private HudFixedLayout LandscapeHudSettings;
+		private HudCheckBox ShowAllMobs;
+		private HudCheckBox ShowSelectedMobs;
+		private HudCheckBox ShowAllPlayers;
+		private HudCheckBox ShowAllegancePlayers;
+		private HudCheckBox ShowFellowPlayers;
+		private HudCheckBox ShowTrophies;
+		private HudCheckBox ShowLifeStones;
+		private HudCheckBox ShowAllPortals;
+		private HudCheckBox ShowAllNPCs;
+		
+		private HudStaticText txtLSS1;
+		private HudStaticText txtLSS2;
+					
     	private void RenderLandscapeHud()
     	{
+    		try
+    		{
+    			GearSenseReadWriteSettings(true);
+    	
+    		}catch{}
+    		
     		try
     		{
     			    			
@@ -467,6 +574,7 @@ namespace GearFoundry
     			LandscapeHudView.Ghosted = false;
                 LandscapeHudView.UserMinimizable = false;
                 LandscapeHudView.UserClickThroughable = false;
+                LandscapeHudView.LoadUserSettings();
              
     			
     			LandscapeHudLayout = new HudFixedLayout();
@@ -478,6 +586,46 @@ namespace GearFoundry
     			LandscapeHudTabLayout = new HudFixedLayout();
     			LandscapeHudTabView.AddTab(LandscapeHudTabLayout, "GearSense");
     			
+    			LandscapeHudSettings = new HudFixedLayout();
+    			LandscapeHudTabView.AddTab(LandscapeHudSettings, "Settings");
+    			
+    			LandscapeHudTabView.OpenTabChange += LandscapeHudTabView_OpenTabChange;
+    			
+    			RenderLandscapeTabLayout();
+    			
+    			SubscribeLandscapeEvents();
+  							
+    		}catch(Exception ex) {LogError(ex);}
+    		return;
+    	}
+    	
+    	
+    	private void LandscapeHudTabView_OpenTabChange(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			switch(LandscapeHudTabView.CurrentTab)
+    			{
+    				case 0:
+    					DisposeLandscapeSettingsLayout();
+    					RenderLandscapeTabLayout();
+    					GearSenseReadWriteSettings(false);
+    					return;
+    				case 1:
+    					DisposeLandscapeTabLayout();
+    					RenderLandscapeSettingsTabLayout();
+    					break;
+    			}
+    			    			
+    		}catch{}
+    		
+    	}
+    	
+    	   	
+    	private void RenderLandscapeTabLayout()
+    	{
+    		try
+    		{
     			LandscapeHudList = new HudList();
     			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0,300,220));
 
@@ -486,23 +634,202 @@ namespace GearFoundry
 				LandscapeHudList.AddColumn(typeof(HudStaticText), 230, null);
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
-				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col);
+				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col); 
 
-				SubscribeLandscapeEvents();
-			  							
-    		}catch(Exception ex) {LogError(ex);}
-    		return;
+				UpdateLandscapeHud();
+    			
+    		}catch{}
     	}
     	
+    	private void DisposeLandscapeTabLayout()
+    	{
+    		try
+    		{	
+    			LandscapeHudList.Click -= (sender, row, col) => LandscapeHudList_Click(sender, row, col);   
+    			LandscapeHudList.Dispose();
+    						
+    		}catch{}
+    	}
+    	
+    	private void RenderLandscapeSettingsTabLayout()
+    	{
+    		try
+    		{
+    			ShowAllMobs = new HudCheckBox();
+    			ShowAllMobs.Text = "Track All Mobs";
+    			LandscapeHudSettings.AddControl(ShowAllMobs, new Rectangle(0,0,150,16));
+    			ShowAllMobs.Checked = gsSettings.bShowAllMobs;
+    			
+    			ShowSelectedMobs = new HudCheckBox();
+    			ShowSelectedMobs.Text = "Track Selected Mobs";
+    			LandscapeHudSettings.AddControl(ShowSelectedMobs, new Rectangle(0,18,150,16));
+    			ShowSelectedMobs.Checked = gsSettings.bShowSelectedMobs;
+    			
+    			ShowAllPlayers = new HudCheckBox();
+    			ShowAllPlayers.Text = "Track All Players";
+    			LandscapeHudSettings.AddControl(ShowAllPlayers, new Rectangle(0,36,150,16));
+    			ShowAllPlayers.Checked = gsSettings.bShowAllPlayers;
+    			
+    			ShowAllegancePlayers = new HudCheckBox();
+    			ShowAllegancePlayers.Text = "Track Allegiance Players";
+    			LandscapeHudSettings.AddControl(ShowAllegancePlayers, new Rectangle(0,54,150,16));
+    			ShowAllegancePlayers.Checked = gsSettings.bShowAllegancePlayers;
+    			
+    			ShowFellowPlayers = new HudCheckBox();
+    			ShowFellowPlayers.Text = "Track Fellowship Players";
+    			LandscapeHudSettings.AddControl(ShowFellowPlayers, new Rectangle(0,72,150,16));
+    			ShowFellowPlayers.Checked = gsSettings.bShowFellowPlayers;
+    			    			
+    			ShowAllNPCs= new HudCheckBox();
+    			ShowAllNPCs.Text = "Track All NPCs";
+    			LandscapeHudSettings.AddControl(ShowAllNPCs, new Rectangle(0,90,150,16));
+    			ShowAllNPCs.Checked = gsSettings.bShowAllNPCs;
+    			
+    			ShowTrophies = new HudCheckBox();
+    			ShowTrophies.Text = "Track Selected NPCs and Trophies";
+    			LandscapeHudSettings.AddControl(ShowTrophies, new Rectangle(0,108,150,16));
+    			ShowTrophies.Checked = gsSettings.bShowTrophies;
+    				
+    			ShowLifeStones = new HudCheckBox();
+    			ShowLifeStones.Text = "Track Lifestones";
+    			LandscapeHudSettings.AddControl(ShowLifeStones, new Rectangle(0,126,150,16));
+    			ShowLifeStones.Checked = gsSettings.bShowLifeStones;
+    			
+    			ShowAllPortals= new HudCheckBox();
+    			ShowAllPortals.Text = "Track Portals";
+    			LandscapeHudSettings.AddControl(ShowAllPortals, new Rectangle(0,144,150,16));
+    			ShowAllPortals.Checked = gsSettings.bShowAllPortals;
+    			
+    			txtLSS1 = new HudStaticText();
+    			txtLSS1.Text = "Player tracking funtions do not request player IDs.";
+    			txtLSS2 = new HudStaticText();
+    			txtLSS2.Text = "Players will not track until ID'd another way.";		
+    			LandscapeHudSettings.AddControl(txtLSS1, new Rectangle(0,162,300,16));
+    			LandscapeHudSettings.AddControl(txtLSS2, new Rectangle(0,180,300,16));
+    			
+    			ShowAllMobs.Change += ShowAllMobs_Change;
+    			ShowSelectedMobs.Change += ShowSelectedMobs_Change;
+    			ShowAllPlayers.Change += ShowAllPlayers_Change;
+    			ShowFellowPlayers.Change += ShowFellowPlayers_Change;
+    			ShowAllegancePlayers.Change += ShowAllegancePlayers_Change;
+    			ShowAllNPCs.Change += ShowAllNPCs_Change;
+    			ShowTrophies.Change += ShowTrophies_Change;
+    			ShowLifeStones.Change += ShowLifeStones_Change;
+    			ShowAllPortals.Change += ShowAllPortals_Change;
+    		}catch{}
+    	}
+    	
+    	
+    	private void DisposeLandscapeSettingsLayout()
+    	{
+    		try
+    		{
+    			
+    			ShowAllMobs.Change -= ShowAllMobs_Change;
+    			ShowSelectedMobs.Change -= ShowSelectedMobs_Change;
+    			ShowAllPlayers.Change -= ShowAllPlayers_Change;
+    			ShowFellowPlayers.Change -= ShowFellowPlayers_Change;
+    			ShowAllegancePlayers.Change -= ShowAllegancePlayers_Change;
+    			ShowAllNPCs.Change -= ShowAllNPCs_Change;
+    			ShowTrophies.Change -= ShowTrophies_Change;
+    			ShowLifeStones.Change -= ShowLifeStones_Change;
+    			ShowAllPortals.Change -= ShowAllPortals_Change;
+    			
+    			txtLSS2.Dispose();
+    			txtLSS1.Dispose();
+    			ShowAllPortals.Dispose();
+    			ShowLifeStones.Dispose();
+    			ShowTrophies.Dispose();
+    			ShowAllNPCs.Dispose();
+    			ShowFellowPlayers.Dispose();
+    			ShowAllegancePlayers.Dispose();
+    			ShowAllPlayers.Dispose();
+    			ShowSelectedMobs.Dispose();
+    			ShowAllMobs.Dispose();			
+    		}catch{}
+    	}
+    
+    	private void ShowAllMobs_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bShowAllMobs = ShowAllMobs.Checked;
+    		}catch{}
+    	}
+
+    	private void ShowSelectedMobs_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bShowSelectedMobs = ShowSelectedMobs.Checked;
+    		}catch{}
+    	}
+    	
+    	private void ShowAllPlayers_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bShowAllPlayers = ShowAllPlayers.Checked;
+    		}catch{}
+    	}
+    	
+    	private void ShowFellowPlayers_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bShowFellowPlayers = ShowFellowPlayers.Checked;
+    		}catch{}
+    	}
+    	private void ShowAllNPCs_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bShowAllNPCs = ShowAllNPCs.Checked;	
+    		}catch{}
+    	}
+    	
+    	private void ShowAllegancePlayers_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bShowAllegancePlayers = ShowAllegancePlayers.Checked;		
+    		}catch{}
+    	}
+    	
+    	private void ShowTrophies_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bShowTrophies = ShowTrophies.Checked;
+    		}catch{}
+    	}
+    	    	
+    	private void ShowLifeStones_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bShowLifeStones = ShowLifeStones.Checked;
+    		}catch{}
+    	}
+    	    	    	
+    	private void ShowAllPortals_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bShowAllPortals = ShowAllPortals.Checked;
+    		}catch{}
+    	}
+   
     	private void DisposeLandscapeHud()
     	{
     			
     		try
     		{
     			UnsubscribeLandscapeEvents();
+    			try{DisposeLandscapeTabLayout();}catch{}
+    			try{DisposeLandscapeSettingsLayout();}catch{}
     			
-    			LandscapeHudList.Click -= (sender, row, col) => LandscapeHudList_Click(sender, row, col);		
-    			LandscapeHudList.Dispose();
+    			LandscapeHudSettings.Dispose();
     			LandscapeHudLayout.Dispose();
     			LandscapeHudTabLayout.Dispose();
     			LandscapeHudTabView.Dispose();
@@ -557,7 +884,9 @@ namespace GearFoundry
 	    private void UpdateLandscapeHud()
 	    {  	
 	    	try
-	    	{    		
+	    	{   
+	    		if(LandscapeHudTabView.CurrentTab != 0) {return;}
+	    		
 	    		LandscapeHudList.ClearRows();	    		   	    		
 	    	    foreach(IdentifiedObject spawn in LandscapeTrackingList)
 	    	    {

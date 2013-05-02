@@ -704,9 +704,7 @@ namespace GearFoundry
         	}
         	catch{}
         }
-		
-		//Irq:  Begin Item hud....
-		
+			
 		private HudView ItemHudView = null;
 		private HudFixedLayout ItemHudLayout = null;
 		private HudTabView ItemHudTabView = null;
@@ -728,10 +726,12 @@ namespace GearFoundry
     			}			
     			
     			ItemHudView = new HudView("Item", 300, 220, new ACImage(0x107E));
-    			ItemHudView.UserAlphaChangeable = false;
-    			ItemHudView.ShowInBar = true;
-    			ItemHudView.UserResizeable = false;
     			ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+    			ItemHudView.UserAlphaChangeable = false;
+    			ItemHudView.ShowInBar = false;
+    			ItemHudView.Visible = true;
+    			ItemHudView.UserResizeable = false;
+    			ItemHudView.LoadUserSettings();
     			
     			ItemHudLayout = new HudFixedLayout();
     			ItemHudView.Controls.HeadControl = ItemHudLayout;
@@ -751,7 +751,7 @@ namespace GearFoundry
 				
 				ItemHudList.Click += (sender, row, col) => ItemHudList_Click(sender, row, col);		
 
-				SubscribeLootEvents();
+				//SubscribeLootEvents();
 			  							
     		}catch(Exception ex) {WriteToChat(ex.ToString());}
     		

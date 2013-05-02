@@ -113,10 +113,7 @@ namespace GearFoundry
 				FileService = Core.Filter<FileService>();				
 				Core.CharacterFilter.LoginComplete += new EventHandler(OnCharacterFilterLoginCompleted);			
 				MasterTimer = new System.Windows.Forms.Timer();	
-				
-				RenderItemHud();
-                
-            	SubscribeButlerEvents();
+          
 
 				
 			} catch (Exception ex) {

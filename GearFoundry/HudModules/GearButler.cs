@@ -105,8 +105,6 @@ namespace GearFoundry
 				Core.WorldFilter.EnterTrade += ButlerTradeOpened;
 				Core.WorldFilter.EndTrade += ButlerTradeEnd;
 				MasterTimer.Tick += ButlerTimerDo;
-				
-				RenderButlerHud();
 			}
 			catch(Exception ex){LogError(ex);}
 		}
@@ -114,9 +112,7 @@ namespace GearFoundry
 		private void UnsubscribeButlerEvents()
 		{
 			try
-			{
-				DisposeButlerHud();
-				
+			{	
 				Core.CharacterFilter.LoginComplete -= ButlerLoginComplete;
 				Core.ItemSelected -= ButlerItemSelected;
 				Core.WorldFilter.EnterTrade -= ButlerTradeOpened;
@@ -191,6 +187,7 @@ namespace GearFoundry
     			ButlerHudView.Visible = true;
                 ButlerHudView.UserClickThroughable = false;
                 ButlerHudView.UserMinimizable = false;
+                ButlerHudView.LoadUserSettings();
     			
     			ButlerHudLayout = new HudFixedLayout();
     			ButlerHudView.Controls.HeadControl = ButlerHudLayout;
@@ -212,6 +209,8 @@ namespace GearFoundry
  				ButlerHudTabView.OpenTabChange += ButlerHudTabView_OpenTabChange;
  				
  				RenderButlerHudButlerLayout();
+ 				
+ 				SubscribeButlerEvents();
 			  							
     		}catch(Exception ex) {LogError(ex);}
     		return;
@@ -280,6 +279,7 @@ namespace GearFoundry
     	{
     		try
     		{
+    			
     			MaidStackInventory.Hit -= MaidStackInventory_Hit;
     			MaidRingKeys.Hit -= MaidRingKeys_Hit;
     			MaidTradeAllSalvage.Hit -= MaidTradeAllSalvage_Hit;
@@ -300,6 +300,8 @@ namespace GearFoundry
     	{	
     		try
     		{
+    			UnsubscribeButlerEvents();
+    			
     			ButlerHudTabLayout.GotFocus -= ButlerHudTabLayout_GotFocus;
 				ButlerHudTabLayout.LostFocus -= ButlerHudTabLayout_LostFocus;
     			
@@ -737,7 +739,7 @@ namespace GearFoundry
 	    		}
 	    		
 	    		    		
-    	    	ButlerHudSelectedCount.Text = ButlerInventory.Count().ToString();
+	    		if(ButlerInventory == null) {return;}
 	    	    ButlerBurden.Text = Core.CharacterFilter.Burden.ToString() + "%";
 	    	    if(Core.CharacterFilter.Burden < 100){ButlerBurden.TextColor = Color.Green;}
 	    	    if(Core.CharacterFilter.Burden >= 100){ButlerBurden.TextColor = Color.Yellow;}

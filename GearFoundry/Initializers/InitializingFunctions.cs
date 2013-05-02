@@ -287,6 +287,7 @@ namespace GearFoundry
                 enabled.Clear();
 
                 
+                //TODO:  Null reference?  Why?
                 IEnumerable<XElement> myelements = xdocRules.Element("Rules").Descendants("Rule");
                 int n = myelements.Count();
                  foreach (XElement el in myelements)
@@ -518,22 +519,22 @@ namespace GearFoundry
         {
             if (bLandscapeHudEnabled)
             {
-                SubscribeLandscapeEvents();
+                RenderLandscapeHud();
             }
 
             if (bCorpseHudEnabled)
             {
-                SubscribeCorpseEvents();
+                RenderCorpseHud();
             }
 
             if (bGearInspectorEnabled)
             {
-                SubscribeLootEvents();
+                RenderItemHud();
             }
 
             if (bGearButlerEnabled)
             {
-                SubscribeButlerEvents();
+                RenderButlerHud();
             }
 
             if (binventoryCompleteEnabled)
@@ -841,8 +842,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		bShowAllMobs = e.Checked;
-        		SaveSettings();
+
         	}catch{}
         }
         
@@ -850,8 +850,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		bselectedMobsEnabled = e.Checked;
-        		SaveSettings();	
+	
         	}catch{}
         }
         
@@ -859,8 +858,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		bShowAllNPCs  = e.Checked;
-        		SaveSettings();
+
         	}catch{}
         }
         
@@ -868,8 +866,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		bLandscapeTrophiesEnabled  = e.Checked;
-        		SaveSettings();
+
         	}catch{}
         }
         
@@ -877,8 +874,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		ballPlayersEnabled  = e.Checked;
-        		SaveSettings();
+
         	}catch{}
         }
         
@@ -886,8 +882,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		ballegEnabled = e.Checked;
-        		SaveSettings();
+
         	}catch{}
         }
         
@@ -895,8 +890,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		bfellowEnabled = e.Checked;
-        		SaveSettings();	
+	
         	}catch{}
         }
         
@@ -904,8 +898,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		bportalsEnabled  = e.Checked;
-        		SaveSettings();
+
         	}catch{}
         }
         
@@ -913,8 +906,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		bLandscapeLifestonesEnabled = e.Checked;
-        		SaveSettings();
+
         	}catch{}
         }
         
@@ -925,6 +917,15 @@ namespace GearFoundry
         	{
         		bGearButlerEnabled = e.Checked;
         		SaveSettings();
+        		if(bGearButlerEnabled)
+        		{
+        			RenderButlerHud();
+        		}
+        		else
+        		{
+        			DisposeButlerHud();
+        		}
+
         	}catch{}
         }
      
@@ -932,8 +933,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		bAutoRingKeys = e.Checked;
-        		SaveSettings();
+
         	}catch{}
         }
         
@@ -947,12 +947,10 @@ namespace GearFoundry
                 SaveSettings();
                 if (e.Checked)
                 {
-                    SubscribeLootEvents();
                     RenderItemHud();
                 }
                 else
                 {
-                    UnsubscribeLootEvents();
                     DisposeItemHud();
                 }
             }
@@ -963,9 +961,7 @@ namespace GearFoundry
         {
             try
             {
-                bvulnedIconsEnabled = e.Checked;
 
-                SaveSettings();
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -976,9 +972,7 @@ namespace GearFoundry
         {
             try
             {
-                bsalvageCombEnabled = e.Checked;
 
-                SaveSettings();
             }
             catch (Exception ex) { LogError(ex); }
 

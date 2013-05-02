@@ -24,6 +24,16 @@ namespace GearFoundry
 		private List<int> CorpseExclusionList = new List<int>();
 		private List<IdentifiedObject> CorpseTrackingList = new List<IdentifiedObject>();
 		private bool mCorpseTrackerInPoralSpace = true;
+		private List<string> PermittedCorpsesList = new List<string>();  //List of people how have let you loot their corpses, does not need to be saved.
+		private List<MyCorpses> DeadMeCoordinatesList = new List<MyCorpses>(); //List of dead me(s). Needs to be saved.  
+		
+		private class MyCorpses  //Retention class that holds the deadme(s) info.
+		{
+			public int GUID;
+			public string Name;
+			public string Coordinates;
+			public int IconID;
+		}
 		
 		void SubscribeCorpseEvents()
 		{
@@ -389,7 +399,7 @@ namespace GearFoundry
     			CorpseHudView.Visible = true;
     			CorpseHudView.Ghosted = false;
                 CorpseHudView.UserMinimizable = false;
-                CorpseHudView.UserClickThroughable = true;
+                CorpseHudView.LoadUserSettings();
     			
     			
     			CorpseHudLayout = new HudFixedLayout();
