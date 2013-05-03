@@ -22,7 +22,7 @@ namespace GearFoundry
         {
             try
             {
-                using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Decal Plugins\" + Globals.PluginName + @"\errors.txt", true))
+                using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Decal Plugins\" + Globals.PluginName + @"\" + Globals.PluginName + "errors.txt", true))
                 {
                     writer.WriteLine("============================================================================");
                     writer.WriteLine(DateTime.Now.ToString());

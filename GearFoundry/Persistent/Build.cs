@@ -169,7 +169,7 @@ namespace GearFoundry
 
             if (writelists)
             {
-                FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\AppliesToList.csv");
+                FileInfo logFile = new FileInfo(GearDir + @"\AppliesToList.csv");
                 if (logFile.Exists)
                 {
                     logFile.Delete();
@@ -260,7 +260,7 @@ namespace GearFoundry
 			info = new IDNameLoadable(0x40000000 ,"Red Aetheria");
 			
 			if(writelists){
-				FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\SlotList.csv");	
+				FileInfo logFile = new FileInfo(GearDir + @"\SlotList.csv");	
 				if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -308,7 +308,7 @@ namespace GearFoundry
 			ArmorCoverageList.Add(info);
 			
 			if(writelists){
-				FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\ArmorCoverage.csv");	
+				FileInfo logFile = new FileInfo(GearDir + @"\ArmorCoverage.csv");	
 				if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -341,7 +341,7 @@ namespace GearFoundry
 			}
 			
 			if(writelists){
-				FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\ArmorIndex.csv");
+                FileInfo logFile = new FileInfo(GearDir + @"\ArmorIndex.csv");
 				if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -425,7 +425,7 @@ namespace GearFoundry
 
             if (writelists)
             {
-                FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\WeaponTypesIndex.csv");
+                FileInfo logFile = new FileInfo(GearDir + @"\WeaponTypesIndex.csv");
                 if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -479,7 +479,7 @@ namespace GearFoundry
 			ImbueList.Add(info);
 			
 			if(writelists){
-			FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\ImbueList.csv");	
+                FileInfo logFile = new FileInfo(GearDir + @"\ImbueList.csv");	
 				if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -526,7 +526,7 @@ namespace GearFoundry
 			}
 			
 			if(writelists){
-			FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\SetsIndex.csv");	
+                FileInfo logFile = new FileInfo(GearDir + @"\SetsIndex.csv");	
 							if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -556,7 +556,7 @@ namespace GearFoundry
 			
 			if (writelists)
             {
-                FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\ArmorSetsList.csv");
+                FileInfo logFile = new FileInfo(GearDir + @"\ArmorSetsList.csv");
                 if (logFile.Exists)
                 {
                     logFile.Delete();
@@ -592,7 +592,7 @@ namespace GearFoundry
 
             if (writelists)
             {
-                FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\CloakSetsList.csv");
+                FileInfo logFile = new FileInfo(GearDir + @"\CloakSetsList.csv");
                 if (logFile.Exists)
                 {
                     logFile.Delete();
@@ -627,7 +627,7 @@ namespace GearFoundry
 				SpeciesIndex.Add(info);
 			}
 			if(writelists){
-			FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\SpeciesIndex.csv");	
+                FileInfo logFile = new FileInfo(GearDir + @"\SpeciesIndex.csv");	
 							if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -663,7 +663,7 @@ namespace GearFoundry
 			}
 			
 			if(writelists){
-			FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\MaterialIndex.csv");	
+                FileInfo logFile = new FileInfo(GearDir + @"\MaterialIndex.csv");	
 							if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -699,7 +699,7 @@ namespace GearFoundry
 			}
 			
 			if(writelists){
-			FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\AttribIndex.csv");	
+                FileInfo logFile = new FileInfo(GearDir + @"\AttribIndex.csv");	
 							if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -742,7 +742,7 @@ namespace GearFoundry
 			}
 			
 			if(writelists){
-			FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\SkillIndex.csv");	
+                FileInfo logFile = new FileInfo(GearDir + @"\SkillIndex.csv");	
 							if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -774,7 +774,7 @@ namespace GearFoundry
 			}	
 			
 			if(writelists){
-			FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\MasteryIndex.csv");	
+                FileInfo logFile = new FileInfo(GearDir + @"\MasteryIndex.csv");	
 							if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -821,7 +821,7 @@ namespace GearFoundry
 			ElementalList.Add(info);
   		
 			if(writelists){
-			FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\ElementalList.csv");	
+                FileInfo logFile = new FileInfo(GearDir + @"\ElementalList.csv");	
 							if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -859,7 +859,7 @@ namespace GearFoundry
 				HeritageIndex.Add(info);
 			}
 			if(writelists){
-			FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\HeritageIndex.csv");	
+                FileInfo logFile = new FileInfo(GearDir + @"\HeritageIndex.csv");	
 							if(logFile.Exists)
 				{
 					logFile.Delete();
@@ -934,7 +934,7 @@ namespace GearFoundry
             }
             if (writelists)
             {
-             	FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\SpellIndex.csv");
+                FileInfo logFile = new FileInfo(GearDir + @"\SpellIndex.csv");
 	             if (logFile.Exists)
 	             {
 	                 logFile.Delete();
@@ -984,7 +984,7 @@ namespace GearFoundry
          	    
          	 if(writelists)
          	 {
-		         FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\ItemSpells.csv");
+                 FileInfo logFile = new FileInfo(GearDir + @"\ItemSpells.csv");
 	             
 		         if (logFile.Exists)
 	             {
@@ -1447,7 +1447,7 @@ namespace GearFoundry
         private void doWriteLists(List<IDNameLoadable> lst)
                      	
           {
-               FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\lst.csv");
+              FileInfo logFile = new FileInfo(GearDir + @"\lst.csv");
                 if (logFile.Exists)
                 {
                     logFile.Delete();
@@ -1470,7 +1470,7 @@ namespace GearFoundry
 
          private void doWriteLists(List<spellinfo> index)
          {
-             FileInfo logFile = new FileInfo(pluginPersonalFolder.FullName + @"\" + index + ".csv");
+             FileInfo logFile = new FileInfo(GearDir + @"\" + index + ".csv");
              if (logFile.Exists)
              {
                  logFile.Delete();
