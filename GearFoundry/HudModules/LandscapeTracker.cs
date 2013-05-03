@@ -411,13 +411,6 @@ namespace GearFoundry
 	        	{	        		
 	        		DistanceCheckLandscape();
 	        		LandscapeTimer = 0;
-//	        		if(LandscapeFellowMemberTrackingList.Count() > 0)
-//	        		{
-//	        			foreach(string name in LandscapeFellowMemberTrackingList)
-//		        		{
-//		        			WriteToChat(name);
-//		        		}
-//	        		}
 	        	}
 	        	LandscapeTimer++;
         	}catch(Exception ex) {LogError(ex);}
@@ -428,6 +421,14 @@ namespace GearFoundry
 	    {
      		try
 	   		{	
+     			foreach(IdentifiedObject spawn in LandscapeTrackingList)
+		    	{
+		    		spawn.DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, spawn.Id);
+		    	}
+     			
+     			LandscapeTrackingList = LandscapeTrackingList.OrderBy(x => x.DistanceAway).ToList();
+     			
+     			
 	     		var LTLpurge = from detectedstuff in LandscapeTrackingList
 	     			where Core.WorldFilter.Distance(Core.CharacterFilter.Id, detectedstuff.Id) > 5
 	     			select detectedstuff.Id;
@@ -436,25 +437,12 @@ namespace GearFoundry
 	     		{
 	     			LandscapeTrackingList.RemoveAll(x => x.Id == item);
 	     		}
-	     		SortByDistanceLandscape();
+	     		
+	     		UpdateLandscapeHud();
+	     		
 	     	}catch(Exception ex) {LogError(ex);}
      		return;
     	}
-	    
-	    private void SortByDistanceLandscape()
-	    {
-	    	try
-	    	{
-		    	foreach(var spawn in LandscapeTrackingList)
-		    	{
-		    		spawn.DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, spawn.Id);
-		    	}
-		    	LandscapeTrackingList = LandscapeTrackingList.OrderBy(x => x.DistanceAway).ToList();		        
-		        UpdateLandscapeHud(); 
-	    	}catch(Exception ex) {LogError(ex);}
-	    	return;
-	       	
-	    }
 	    
 	    private void AddFellowLandscape(NetworkMessageEventArgs e)
 	    {

@@ -13,6 +13,8 @@ using VirindiViewService.Controls;
 using VirindiHUDs;
 using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using VirindiViewService.Themes;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace GearFoundry
 {
@@ -25,15 +27,82 @@ namespace GearFoundry
 		private List<IdentifiedObject> CorpseTrackingList = new List<IdentifiedObject>();
 		private bool mCorpseTrackerInPoralSpace = true;
 		private List<string> PermittedCorpsesList = new List<string>();  //List of people how have let you loot their corpses, does not need to be saved.
-		private List<MyCorpses> DeadMeCoordinatesList = new List<MyCorpses>(); //List of dead me(s). Needs to be saved.  
+		private List<MyCorpses> DeadMeCoordinatesList = new List<MyCorpses>(); //List of dead me(s). Needs to be saved. 
+		public GearHoundSettings ghSettings;		
 		
-		private class MyCorpses  //Retention class that holds the deadme(s) info.
+		public class MyCorpses  //Retention class that holds the deadme(s) info.
 		{
 			public int GUID;
 			public string Name;
 			public string Coordinates;
 			public int IconID;
 		}
+
+		public class GearHoundSettings
+    	{
+			public bool bAllCorpses = true;
+			public bool bKillsBySelf = true;
+			public bool bKillsByFellows = true;
+			public bool bDeadMes = true;
+			public bool Permitteds = true;
+			public List<MyCorpses> DeadMeList = new List<PluginCore.MyCorpses>();
+    	}
+		
+		private void GearHoundReadWriteSettings(bool read)
+		{
+			try
+			{
+				FileInfo GearHoundSettingsFile = new FileInfo(toonDir + "\\GearHound.xml");
+								
+				if (read)
+				{
+					
+					try
+					{
+						if (!GearHoundSettingsFile.Exists)
+		                {
+		                    try
+		                    {
+		                    	string filedefaults = GetResourceTextFile("GearHound.xml");
+		                    	using (StreamWriter writedefaults = new StreamWriter(filedefaults, true))
+								{
+									writedefaults.Write(filedefaults);
+									writedefaults.Close();
+								}
+		                    }
+		                    catch (Exception ex) { LogError(ex); }
+		                }
+						
+						using (XmlReader reader = XmlReader.Create(GearHoundSettingsFile.ToString()))
+						{	
+							XmlSerializer serializer = new XmlSerializer(typeof(GearHoundSettings));
+							ghSettings = (GearHoundSettings)serializer.Deserialize(reader);
+							reader.Close();
+						}
+					}
+					catch
+					{
+						ghSettings = new GearHoundSettings();
+					}
+				}
+				
+				if(!read)
+				{
+					if(GearHoundSettingsFile.Exists)
+					{
+						GearHoundSettingsFile.Delete();
+					}
+					
+					using (XmlWriter writer = XmlWriter.Create(GearHoundSettingsFile.ToString()))
+					{
+			   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearHoundSettings));
+			   			serializer2.Serialize(writer, ghSettings);
+			   			writer.Close();
+					}
+				}
+			}catch(Exception ex){WriteToChat(ex.ToString());}
+		}
+		
 		
 		void SubscribeCorpseEvents()
 		{
@@ -131,7 +200,18 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(IOCorpse.Name.Contains(Core.CharacterFilter.Name) && btoonCorpsesEnabled)
+				if(ghSettings.bAllCorpses)
+				{
+					if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
+					{
+						CorpseTrackingList.Add(IOCorpse); 
+						CorpseExclusionList.Add(IOCorpse.Id);
+						UpdateCorpseHud();
+						return;
+					}
+				}
+				
+				if(IOCorpse.Name.Contains(Core.CharacterFilter.Name) && ghSettings.bDeadMes)
 				{
 					IOCorpse.IOR = IOResult.corpseofself;
 					if(DeadMeCoordinatesList.FindIndex(x => x.GUID == IOCorpse.Id) < 0)
@@ -154,7 +234,7 @@ namespace GearFoundry
 				}
 				
 				//Flags corpes for recovery by that player as permitted
-				if(PermittedCorpsesList.Contains(IOCorpse.Name))
+				if(ghSettings.Permitteds && PermittedCorpsesList.Contains(IOCorpse.Name))
 				{
 					IOCorpse.IOR = IOResult.corpsepermitted;
 					if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
@@ -168,7 +248,7 @@ namespace GearFoundry
 							
 				//Corpses with loot on them.
 				//Enables tracking of kills made by the character
-				if(IOCorpse.IntValues(LongValueKey.Burden) > 6000 && btoonKillsEnabled)
+				if(IOCorpse.IntValues(LongValueKey.Burden) > 6000 && ghSettings.bKillsBySelf)
 				{
 					if(!IOCorpse.HasIdData)	{IdqueueAdd(IOCorpse.Id); return;}
 					else if(string.IsNullOrEmpty(IOCorpse.StringValues(StringValueKey.FullDescription))){return;}
@@ -199,7 +279,7 @@ namespace GearFoundry
 								return;
 							}
 						}
-						else if(FellowMemberTrackingList.Count() > 0 && bFellowKillsEnabled)
+						else if(FellowMemberTrackingList.Count() > 0 && ghSettings.bKillsByFellows)
 						{
 							foreach(string fellow in FellowMemberTrackingList)
 							{
@@ -374,15 +454,21 @@ namespace GearFoundry
 		private HudFixedLayout CorpseHudLayout = null;
 		private HudTabView CorpseHudTabView = null;
 		private HudFixedLayout CorpseHudTabLayout = null;
+		private HudFixedLayout CorpseHudSettingsTab = null;
 		private HudList CorpseHudList = null;
 		private HudList.HudListRowAccessor CorpseHudListRow = null;
-		
-		//Assembly tests
 		
 		private const int CorpseRemoveCircle = 0x60011F8;
 			
     	private void RenderCorpseHud()
     	{
+    		try
+    		{
+    			GearHoundReadWriteSettings(true);
+    	
+    		}catch{}
+    		
+    		
     		try
     		{
     			    			
@@ -411,6 +497,47 @@ namespace GearFoundry
     			CorpseHudTabLayout = new HudFixedLayout();
     			CorpseHudTabView.AddTab(CorpseHudTabLayout, "GearHound");
     			
+    			CorpseHudSettingsTab = new HudFixedLayout();
+    			CorpseHudTabView.AddTab(CorpseHudSettingsTab, "Settings");
+    			
+    			CorpseHudTabView.OpenTabChange += CorpseHudTabView_OpenTabChange;
+    			RenderCorpseHudTab();
+    			
+
+				SubscribeCorpseEvents();
+			  							
+    		}
+    		catch(Exception ex){LogError(ex);}
+    		
+    	}
+    	
+    	private void CorpseHudTabView_OpenTabChange(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			switch(CorpseHudTabView.CurrentTab)
+    			{
+    				case 0:
+    					DisposeCorpseHudSettingsTab();
+    					RenderCorpseHudTab();
+    					GearHoundReadWriteSettings(false);
+    					return;
+    				case 1:
+    					DisposeCorpseHudTab();
+    					RenderCorpseHudSettingsTab();
+    					GearHoundReadWriteSettings(false);
+    					return;
+    			}
+    			
+    		}catch{}
+    		
+    	}
+    	
+    	
+    	private void RenderCorpseHudTab()
+    	{
+    		try
+    		{
     			CorpseHudList = new HudList();
     			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0,300,220));
 				CorpseHudList.ControlHeight = 16;	
@@ -418,32 +545,100 @@ namespace GearFoundry
 				CorpseHudList.AddColumn(typeof(HudStaticText), 230, null);
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
-				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);		
-
-				SubscribeLandscapeEvents();
-			  							
-    		}
-    		catch(Exception ex){LogError(ex);}
-    		
+				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);	
+    			
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
-    	void DisposeCorpseHud()
+    	private void DisposeCorpseHudTab()
+    	{
+    		try
+    		{
+    			CorpseHudList.Click -= (sender, row, col) => CorpseHudList_Click(sender, row, col);	
+    			CorpseHudList.Dispose();				
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void DisposeCorpseHud()
     	{
     			
     		try
     		{
-    			UnsubscribeLandscapeEvents();
-    			
-    			CorpseHudList.Click -= (sender, row, col) => CorpseHudList_Click(sender, row, col);		
-    			CorpseHudList.Dispose();
-    			CorpseHudTabLayout.Dispose();
-    			CorpseHudTabView.Dispose();
-    			CorpseHudLayout.Dispose();
-    			CorpseHudView.Dispose();		
+    			UnsubscribeCorpseEvents();
+    			DisposeCorpseHudTab();
+				
     		}	
     		catch(Exception ex){LogError(ex);}
     	}
+    	   	
+    	HudCheckBox AllCorpses;
+    	HudCheckBox KillsBySelf;
+    	HudCheckBox KillsByFellows;
+    	HudCheckBox DeadMes;
+    	HudCheckBox Permitteds;
+    	
+    	private void RenderCorpseHudSettingsTab()
+    	{
+    		try
+    		{
+    			AllCorpses = new HudCheckBox();
+    			AllCorpses.Text = "Track All Corpses";
+    			CorpseHudSettingsTab.AddControl(AllCorpses, new Rectangle(0,0,150,16));
+    			AllCorpses.Checked = ghSettings.bAllCorpses;
+    			
+    			KillsBySelf = new HudCheckBox();
+    			KillsBySelf.Text = "Track Kills by Self";
+    			CorpseHudSettingsTab.AddControl(KillsBySelf, new Rectangle(0,18,150,16));
+    			KillsBySelf.Checked = ghSettings.bKillsBySelf;
+    			
+    			KillsByFellows = new HudCheckBox();
+    			KillsByFellows.Text = "Track Kills by Fellows";
+    			CorpseHudSettingsTab.AddControl(KillsByFellows, new Rectangle(0,36,150,16));
+    			KillsByFellows.Checked = ghSettings.bKillsByFellows;
+    			
+    			DeadMes = new HudCheckBox();
+    			DeadMes.Text = "Track Dead Me(s)";
+    			CorpseHudSettingsTab.AddControl(DeadMes, new Rectangle(0,54,150,16));
+    			DeadMes.Checked = ghSettings.bDeadMes;
+    			
+    			Permitteds = new HudCheckBox();
+    			Permitteds.Text = "Track Permitted Corpses";
+    			CorpseHudSettingsTab.AddControl(Permitteds, new Rectangle(0,72,150,16));
+    			Permitteds.Checked = ghSettings.Permitteds;
+    			    			
+    			AllCorpses.Change += AllCorpses_Change;
+    			KillsBySelf.Change += KillsBySelf_Change;
+    			KillsByFellows.Change += KillsByFellows_Change;
+    			DeadMes.Change += DeadMes_Change;
+    			Permitteds.Change += Permitteds_Change;
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
     		
+    	private void DisposeCorpseHudSettingsTab()
+    	{
+    		try
+    		{
+    			AllCorpses.Change -= AllCorpses_Change;
+    			KillsBySelf.Change -= KillsBySelf_Change;
+    			KillsByFellows.Change -= KillsByFellows_Change;
+    			DeadMes.Change -= DeadMes_Change;
+    			Permitteds.Change -= Permitteds_Change;
+    			
+    			
+    			Permitteds.Dispose();
+    			DeadMes.Dispose();
+    			KillsByFellows.Dispose();
+    			KillsBySelf.Dispose();
+    			AllCorpses.Dispose();
+    		
+    			    			
+
+    			
+    		}catch{}
+    	}
+    	
     	void CorpseHudList_Click(object sender, int row, int col)
     	{
     		try
@@ -465,6 +660,46 @@ namespace GearFoundry
 				UpdateCorpseHud();
 			}
 			catch (Exception ex) { LogError(ex); }	
+    	}
+    	
+    	private void AllCorpses_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			ghSettings.bAllCorpses = AllCorpses.Checked;
+    		}catch{}
+    	}
+    	
+    	private void KillsBySelf_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			ghSettings.bKillsBySelf = KillsBySelf.Checked;
+    		}catch{}
+    	}
+    	
+    	private void KillsByFellows_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			ghSettings.bKillsByFellows = KillsByFellows.Checked;
+    		}catch{}
+    	}
+    	
+    	    	private void DeadMes_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			ghSettings.bDeadMes = DeadMes.Checked;
+    		}catch{}
+    	}
+    	    	
+    	    	private void Permitteds_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			ghSettings.Permitteds = Permitteds.Checked;
+    		}catch{}
     	}
     		
 	    private void UpdateCorpseHud()
