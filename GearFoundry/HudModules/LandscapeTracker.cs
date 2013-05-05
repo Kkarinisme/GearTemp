@@ -16,24 +16,10 @@ using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using System.Xml.Serialization;
 using System.Xml;
 
-//using System;
-//using System.IO;
-//using System.Collections.Generic;
-//using Decal.Adapter;
-//using Decal.Adapter.Wrappers;
-//using Decal.Interop.Core;
-//using MyClasses.MetaViewWrappers;
-//using VirindiViewService;
-//using System.Windows.Forms;
-//using System.Xml;
-//using System.Xml.Serialization;
-//using System.Linq;
-
 namespace GearFoundry
 {
 	public partial class PluginCore
 	{
-		//UNDONE:  Fellowship members who join fellow but were already in tracking list will not update to be green until portal or out of range.
 		private List<int> LandscapeExclusionList = new List<int>();
 		private List<IdentifiedObject> LandscapeTrackingList = new List<IdentifiedObject>();
 		private List<string> LandscapeFellowMemberTrackingList = new List<string>();
@@ -59,7 +45,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				FileInfo GearSenseSettingsFile = new FileInfo(toonDir + "\\GearSense.xml");
+				FileInfo GearSenseSettingsFile = new FileInfo(toonDir + @"\GearSense.xml");
 								
 				if (read)
 				{
@@ -71,7 +57,7 @@ namespace GearFoundry
 		                    try
 		                    {
 		                    	string filedefaults = GetResourceTextFile("GearSense.xml");
-		                    	using (StreamWriter writedefaults = new StreamWriter(filedefaults, true))
+		                    	using (StreamWriter writedefaults = new StreamWriter(GearSenseSettingsFile.ToString(), true))
 								{
 									writedefaults.Write(filedefaults);
 									writedefaults.Close();
@@ -121,6 +107,7 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject += OnWorldFilterDeleteLandscape;
                 Core.ItemDestroyed +=OnLandscapeDestroyed;
                 Core.CharacterFilter.ChangePortalMode += ChangePortalModeLandscape;
+                Core.CharacterFilter.ChangeFellowship += ChangeFellowship_Changed;
 			}
 			catch(Exception ex) {LogError(ex);}
 			return;
@@ -135,11 +122,27 @@ namespace GearFoundry
              	Core.EchoFilter.ServerDispatch -= ServerDispatchLandscape;
                 Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteLandscape;
                 Core.ItemDestroyed -= OnLandscapeDestroyed;
-                Core.CharacterFilter.ChangePortalMode -= ChangePortalModeLandscape;               
+                Core.CharacterFilter.ChangePortalMode -= ChangePortalModeLandscape;  
+ 				Core.CharacterFilter.ChangeFellowship -= ChangeFellowship_Changed;                
 			
 			}catch(Exception ex) {LogError(ex);}
 			return;
 		}
+		
+		private void ChangeFellowship_Changed(object sender, System.EventArgs e)
+		{
+			try
+			{
+				foreach(string name in LandscapeFellowMemberTrackingList)
+				{
+					if(LandscapeTrackingList.FindIndex(x => x.Name == name) < 0)
+					{
+						LandscapeTrackingList.Add(new IdentifiedObject(Core.WorldFilter.GetByName(name).First));
+					}
+				}
+			}catch{}
+		}
+		
 		
 		private void OnWorldFilterCreateLandscape(object sender, Decal.Adapter.Wrappers.CreateObjectEventArgs e)
 		{
@@ -430,14 +433,13 @@ namespace GearFoundry
      			
      			
 	     		var LTLpurge = from detectedstuff in LandscapeTrackingList
-	     			where Core.WorldFilter.Distance(Core.CharacterFilter.Id, detectedstuff.Id) > 5
+	     			where Core.WorldFilter.Distance(Core.CharacterFilter.Id, detectedstuff.Id) > 5 && !LandscapeFellowMemberTrackingList.Contains(detectedstuff.Name)
 	     			select detectedstuff.Id;
 	     		
 	     		foreach(var item in LTLpurge)
 	     		{
 	     			LandscapeTrackingList.RemoveAll(x => x.Id == item);
-	     		}
-	     		
+	     		} 		
 	     		UpdateLandscapeHud();
 	     		
 	     	}catch(Exception ex) {LogError(ex);}
@@ -553,7 +555,7 @@ namespace GearFoundry
     				DisposeLandscapeHud();
     			}			
     			
-    			LandscapeHudView = new HudView("GearSense", 300, 220, new ACImage(0x1F88));
+    			LandscapeHudView = new HudView("GearSense", 300, 220, new ACImage(0x6AA5));
     			LandscapeHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			LandscapeHudView.UserAlphaChangeable = false;
     			LandscapeHudView.ShowInBar = false;
@@ -882,14 +884,14 @@ namespace GearFoundry
 	    	    	
 	    	    	((HudPictureBox)LandscapeHudListRow[0]).Image = spawn.Icon + 0x6000000;
 	    	    	((HudStaticText)LandscapeHudListRow[1]).Text = spawn.IORString() + spawn.Name + spawn.DistanceString();
-	    	    	if(spawn.IOR == IOResult.trophy) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.SlateGray;}
-	    	    	if(spawn.IOR == IOResult.lifestone) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Blue;}
+	    	    	if(spawn.IOR == IOResult.trophy) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Gold;}
+	    	    	if(spawn.IOR == IOResult.lifestone) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.MediumBlue;}
 	    	    	if(spawn.IOR == IOResult.monster) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Orange;}
 	    	    	if(spawn.IOR == IOResult.npc) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Yellow;}
-	    	    	if(spawn.IOR == IOResult.portal)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Purple;}
+	    	    	if(spawn.IOR == IOResult.portal)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.MediumPurple;}
 	    	    	if(spawn.IOR == IOResult.players)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.AntiqueWhite;}
 	    	    	if(spawn.IOR == IOResult.fellowplayer)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Green;}
-	    	    	if(spawn.IOR == IOResult.allegplayers)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.DarkSlateBlue;}
+	    	    	if(spawn.IOR == IOResult.allegplayers)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Tan;}
 					((HudPictureBox)LandscapeHudListRow[2]).Image = LandscapeRemoveCircle;
 	    	    }
 	    	}catch(Exception ex){LogError(ex);}

@@ -36,6 +36,7 @@ namespace GearFoundry
             corpsepermitted,
             corpsewithrare,
             corpseofself,
+            allcorpses,
             val,
             manatank,
             npc,
