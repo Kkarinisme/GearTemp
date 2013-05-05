@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Xml;
 using System.Xml.Linq;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -23,17 +24,20 @@ namespace GearFoundry
     public partial class PluginCore : PluginBase
     {
 
-        [ControlEvent("btnGetToonStats", "Click")]
-        void btnGetToonStats_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        { getStats(); }
 
         void chkStats_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
             try
             {
-                btoonStatsEnabled = e.Checked;
-
+                btoonStatsEnabled = e.Checked; 
                 SaveSettings();
+
+
+                if (btoonStatsEnabled)
+                {
+                    getStats();
+                }
+
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -45,7 +49,11 @@ namespace GearFoundry
         {
             try
             {
-               string account = Core.CharacterFilter.AccountName;
+                holdingStatsFilename = currDir + @"\holdingStats.xml";
+                statsFilename = toonDir + @"\" + toonName + "Stats.xml";
+                allStatsFilename = currDir + @"\" + "AllToonStats.xml";
+
+                string account = Core.CharacterFilter.AccountName;
                 string allegiance = Core.CharacterFilter.Allegiance.Name;
                 string server = Core.CharacterFilter.Server;
                 string monarch = Core.CharacterFilter.Monarch.Name;
@@ -218,20 +226,20 @@ namespace GearFoundry
                 xDocStats.Save(statsFilename);
                 xDocStats = null;
                 // removeToonfromFile();
-                var MyDoc = XDocument.Load(allStatsFilename);
-                MyDoc.Root.Add(XDocument.Load(statsFilename).Root.Elements());
-                MyDoc.Save(holdingStatsFilename);
-                MyDoc = null;
-                xDocAllStats = XDocument.Load(holdingStatsFilename);
+
+                xDocAllStats = XDocument.Load(allStatsFilename);
+
+                xDocAllStats.Descendants("Toon").Where(x => x.Element("Statistics").Element("ToonName").Value == toonName).Remove();
+                GearFoundry.PluginCore.WriteToChat("I have just removed toon from allstats file");
+
+                xDocAllStats.Root.Add(XDocument.Load(statsFilename).Root.Elements());
+                GearFoundry.PluginCore.WriteToChat("I have just added toon to allstats file");
+
                 xDocAllStats.Save(allStatsFilename);
+                xDocAllStats = null;
                 GearFoundry.PluginCore.WriteToChat("General statistics file has been saved. ");
-
-
-
-
-                GearFoundry.PluginCore.WriteToChat("xDocStats saved");
             } //end of try
-
+    
             catch (Exception ex) { LogError(ex); }
         } // end of getstats
 

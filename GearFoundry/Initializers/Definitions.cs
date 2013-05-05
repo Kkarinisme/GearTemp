@@ -27,7 +27,7 @@ namespace GearFoundry
     {
     	static internal FileService FileService;
         
-        //ToMish:  I added these operational flags.  They do not need to be saved
+        //Operational flags.  Not saved across sessions
         private bool mCharacterLoginComplete;
 
         private System.Windows.Forms.Timer MasterTimer;
@@ -109,12 +109,6 @@ namespace GearFoundry
         private string quickSlotshFilename = null;
 
 
-
-        //mitem is used in determining which list is being referred to
-        // mitem = 1 if mobslist
-        // mitem = 2 if trophies list
-        // mitem = 3 if salvage list
-        // mitem = 4 for such lists as damages etc where no addition to the xdoc file or the lists is involved
 
         int mitem;
         Int32 mMaxLoot;
@@ -329,9 +323,6 @@ namespace GearFoundry
         private static bool btoonKillsEnabled;  //Enables tracking of Character's Kills
         private static bool btoonCorpsesEnabled;  //Enables tracking and logging of DeadMe(s)
         
-        //ToMish:  Added these flag types to corpse tracker, they are set to true only to get them working.  They need to be slaved to a click button.
-        //ToMish:  *****bCorpseHudEnabled Enables and Disables the corpse hud.  Needs to be saved.  Needs to be slaved to a click box.*******
-        //ToMish:  *****bCorpseHudEnabled, When clicked "on" needs to call "RenderCorpseHud();"  When clicked off, needs to call "DisposeCorpseHud();"
         private static bool bCorpseHudEnabled;
         private static bool bFellowKillsEnabled;  //Enables tracking of fellowship kills.
         private static bool bPermittedCorpses;

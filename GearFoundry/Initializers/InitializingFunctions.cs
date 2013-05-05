@@ -64,9 +64,6 @@ namespace GearFoundry
                 genInventoryFilename = currDir + @"\inventory.xml";
                 holdingInventoryFilename = currDir + @"\holdingInventory.xml";
                 inventorySelect = currDir + @"\inventorySelected.xml";
-                holdingStatsFilename = currDir + @"\holdingStats.xml";
-                statsFilename = toonDir + @"\" + toonName + "Stats.xml";
-                allStatsFilename = currDir + @"\" + "AllToonStats.xml";
                 quickSlotsvFilename = toonDir + @"\" + "QuickSlotsv.xml";
                 quickSlotshFilename = toonDir + @"\" + "QuickSlotsh.xml";
 
@@ -76,10 +73,6 @@ namespace GearFoundry
                     try
                     {
                     	
-//                    	ToMish:  Replaced your Xdoc default read write solution with a more eleoquent imbedded resource read/write for making new files.                    	
-//                      string rulesFilenameDefault = GearDir + @"\Defaults\Rules.xml";
-//                      xdocRules = XDocument.Load(rulesFilenameDefault);
-//                      xdocRules.Save(rulesFilename);
                     	string filedefaults = GetResourceTextFile("Rules.xml");
                     	using (StreamWriter writedefaults = new StreamWriter(rulesFilename, true))
 						{
@@ -235,12 +228,6 @@ namespace GearFoundry
                 foreach (XElement el in elements.Descendants())
                 {
                     mGenSettingsList.Add(el);
-                }
-
-                IEnumerable<XElement> sgelements = xdocSwitchGearSettings.Element("Settings").Elements("Setting");
-                foreach (XElement el in sgelements.Descendants())
-                {
-                    mSwitchGearSettingsList.Add(el);
                 }
 
 
@@ -403,6 +390,8 @@ namespace GearFoundry
                     if (el.Name == "ToonCorpsesEnabled") { btoonCorpsesEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "VulnedIconsEnabled") { bvulnedIconsEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "PortalsEnabled") { bportalsEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "QuickSlotsvEnabled") { bquickSlotsvEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "QuickSlotshEnabled") { bquickSlotshEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InventoryEnabled") { binventoryEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InventoryBurdenEnabled") { binventoryBurdenEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InventoryCompleteEnabled") { binventoryCompleteEnabled = Convert.ToBoolean(el.Value); }
@@ -430,18 +419,6 @@ namespace GearFoundry
 
                 }
 
-                foreach (XElement el in mSwitchGearSettingsList)
-                {
-                    if (el.Name == "QuickSlotsvEnabled") { bquickSlotsvEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "QuickSlotshEnabled") { bquickSlotshEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "VpointX"){vpt.X = Convert.ToInt32(el.Value);}
-                    if (el.Name == "VpointY") { vpt.Y = Convert.ToInt32(el.Value); }
-                    if (el.Name == "HpointX") { hpt.X = Convert.ToInt32(el.Value);  }
-                    if (el.Name == "HpointY") { hpt.Y = Convert.ToInt32(el.Value); }
-                    if (el.Name == "QuickiesVTheme") { mvtheme = VirindiViewService.HudViewDrawStyle.GetThemeByName(el.Value);}
-                    if (el.Name == "QuickiesHTheme") { mhtheme = VirindiViewService.HudViewDrawStyle.GetThemeByName(el.Value); }
-
-                }
 
                     chkQuickSlotsv.Checked = bquickSlotsvEnabled;
                     chkQuickSlotsh.Checked = bquickSlotshEnabled;
@@ -703,7 +680,7 @@ namespace GearFoundry
                 bquickSlotsvEnabled = e.Checked;
 
 
-                SaveSwitchGearSettings();
+                SaveSettings();
 
                 if (bquickSlotsvEnabled)
                 {
@@ -727,7 +704,7 @@ namespace GearFoundry
             {
                 bquickSlotshEnabled = e.Checked;
 
-                SaveSwitchGearSettings();
+                SaveSettings();
 
                 if (bquickSlotshEnabled)
                 {
@@ -1172,25 +1149,6 @@ namespace GearFoundry
 
         }
 
-        private void SaveSwitchGearSettings()
-        {
-            try
-            {
-                xdoc = new XDocument(new XElement("Settings"));
-                xdoc.Element("Settings").Add(new XElement("Setting",
-                         new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
-                         new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
-                         new XElement("VpointX", vpt.X),
-                         new XElement("VpointY", vpt.Y),
-                         new XElement("HpointX", hpt.X),
-                         new XElement("HpointY", hpt.Y),
-                         new XElement("QuickiesVTheme",mvtheme.Name),
-                         new XElement("QuickiesHTheme",mhtheme.Name)));
-                xdoc.Save(switchGearSettingsFilename);
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
-
 
         private void SaveSettings()
         {
@@ -1198,16 +1156,7 @@ namespace GearFoundry
             {
                 xdoc = new XDocument(new XElement("Settings"));
                 xdoc.Element("Settings").Add(new XElement("Setting",
-                       //  new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
-                       //  new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
-//                         new XElement("VpointX", vpt.X),
-//                         new XElement("VpointY", vpt.Y),
-//                         new XElement("HpointX", hpt.X),
-//                         new XElement("HpointX", hpt.Y),
-                    //     new XElement("QuickiesVTheme",mvtheme),
-                    //     new XElement("QuickiesHTheme",mhtheme),
-                    //     new XElement("AllKillsEnabled", ballKillsEnabled),
-                          new XElement("CorpseHudEnabled", bCorpseHudEnabled),
+                         new XElement("CorpseHudEnabled", bCorpseHudEnabled),
                          new XElement("LandscapeHudEnabled", bLandscapeHudEnabled),
                          new XElement("InspectorHudEnabled", bGearInspectorEnabled),
                          new XElement("ButlerHudEnabled", bGearButlerEnabled),
@@ -1215,6 +1164,8 @@ namespace GearFoundry
                          new XElement("ToonCorpsesEnabled", btoonCorpsesEnabled),
                          new XElement("VulnedIconsEnabled", bvulnedIconsEnabled),
                          new XElement("PortalsEnabled", bportalsEnabled),
+                         new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
+                         new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
                          new XElement("InventoryEnabled", binventoryEnabled),
                          new XElement("InventoryBurdenEnabled", binventoryBurdenEnabled),
                          new XElement("InventoryCompleteEnabled", binventoryCompleteEnabled),

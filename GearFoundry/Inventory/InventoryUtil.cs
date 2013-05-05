@@ -119,7 +119,9 @@ namespace GearFoundry
                             //    xdoc = null;
                                 removeExcessObjsfromFile();
  
-                                removeToonfromFile();
+                               // removeToonfromFile();
+                                xdocGenInventory.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
+
                             //    xdoc = XDocument.Load(genInventoryFilename);
                             xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
 
@@ -501,22 +503,22 @@ namespace GearFoundry
 
 
 
-        public void removeToonfromFile()
-        {
-            try
-            {
+        //public void removeToonfromFile()
+        //{
+        //    try
+        //    {
 
-               // xdoc = XDocument.Load(genInventoryFilename);
+        //       // xdoc = XDocument.Load(genInventoryFilename);
 
-                IEnumerable<XElement> elements = xdocGenInventory.Element("Objs").Descendants("Obj");
-                xdocGenInventory.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
-               // xdocGenInventory.Save(genInventoryFilename);
-               // xdoc = null;
+        //      // IEnumerable<XElement> elements = xdocGenInventory.Element("Objs").Descendants("Obj");
+        //        xdocGenInventory.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
+        //       // xdocGenInventory.Save(genInventoryFilename);
+        //       // xdoc = null;
 
-            }
-            catch (Exception ex) { LogError(ex); }
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
 
-        }
+        //}
     }
 }// end of namespace
 
