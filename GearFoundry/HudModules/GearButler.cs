@@ -22,11 +22,14 @@ namespace GearFoundry
 
 		private List<WorldObject> ButlerInventory;
 		private List<WorldObject> MaidKeyRings;
-		private List<WorldObject> MaidKeys;
 		private List<WorldObject> MaidSalvage;
+		private List<WorldObject> MaidStackList;
+		private List<WorldObject> MaidKeyList;
+		private WorldObject stackbase = null;
+		private WorldObject stackitem = null;
+		private WorldObject keytoring = null;
 		
 		private bool bButlerTradeOpen = false;
-		private bool bButlerDoSometing = false;
 		
 		private static int GB_USE_ICON = 0x6000FB7;
 		private static int GB_GIVE_ICON = 0x60011F7;
@@ -106,6 +109,7 @@ namespace GearFoundry
 				Core.WorldFilter.EndTrade += ButlerTradeEnd;
 				Core.ItemDestroyed += ButlerDestroyed;
 				Core.WorldFilter.ReleaseObject += ButlerReleased;
+//				Core.CharacterFilter.ActionComplete += ActionComplete;
 				MasterTimer.Tick += ButlerTimerDo;
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -118,12 +122,24 @@ namespace GearFoundry
 				Core.ItemSelected -= ButlerItemSelected;
 				Core.WorldFilter.EnterTrade -= ButlerTradeOpened;
 				Core.WorldFilter.EndTrade -= ButlerTradeEnd;
-				Core.ItemDestroyed += ButlerDestroyed;
-				Core.WorldFilter.ReleaseObject += ButlerReleased;
+				Core.ItemDestroyed -= ButlerDestroyed;
+				Core.WorldFilter.ReleaseObject -= ButlerReleased;
+//				Core.CharacterFilter.ActionComplete -= ActionComplete;
 				MasterTimer.Tick -= ButlerTimerDo;
 			}
 			catch(Exception ex){LogError(ex);}
 		}
+		
+//		private void ActionComplete(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				if(MaidStackList.Count() > 0 || MaidKeyList.Count() > 0)
+//				{
+//					MaidProcessQueue();
+//				}
+//			}catch(Exception ex){LogError(ex);}
+//		}
 		
 		
 		private void ButlerLoginComplete(object sender, System.EventArgs e)
@@ -322,10 +338,7 @@ namespace GearFoundry
     		try
     		{
     			UnsubscribeButlerEvents();
-    			
-//    			ButlerHudTabLayout.GotFocus -= ButlerHudTabLayout_GotFocus;
-//				ButlerHudTabLayout.LostFocus -= ButlerHudTabLayout_LostFocus;
-    			
+    			    			
     			ButlerQuickSortPotion.Hit -= (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
     			ButlerQuickSortHealKit.Hit -= (sender, e) => ButlerQuickSortHealKit_Hit(sender, e);
     			ButlerQuickSortManastones.Hit -= (sender, e) => ButlerQuickSortManastones_Hit(sender, e);
@@ -539,29 +552,11 @@ namespace GearFoundry
     			ButlerHudList.Click += (sender, row, col) => ButlerHudList_Click(sender, row, col);
 				ButlerHudSearchButton.Hit += (sender, e) => ButlerHudSearchButton_Click(sender, e);
 				ButlerHudClearSearchButton.Hit += (sender, e) => ButlerHudClearSearchButton_Click(sender, e);	
-//				ButlerHudTabLayout.GotFocus += ButlerHudTabLayout_GotFocus;
-//				ButlerHudTabLayout.LostFocus += ButlerHudTabLayout_LostFocus;
 				
 				UpdateButlerHudList();
 				  			
     		}catch(Exception ex){LogError(ex);}
     	}
-    	
-//    	private void ButlerHudTabLayout_GotFocus(object sender, System.EventArgs e)
-//    	{
-//    		try
-//    		{
-//    			UpdateButlerHudList();
-//    		}catch(Exception ex){LogError(ex);}
-//    	}
-//    	
-//    	private void ButlerHudTabLayout_LostFocus(object sender, System.EventArgs e)
-//    	{
-//    		try
-//    		{
-//    			UpdateButlerHudList();
-//    		}catch(Exception ex){LogError(ex);}
-//    	}
     	
     	private void DisposeButlerHudButlerLayout()
     	{
@@ -1008,6 +1003,7 @@ namespace GearFoundry
     	{
     		try
     		{
+    			MaidProcessQueue();
     			if(ButlerSeconds < 29){return;}
     			else
     			{
@@ -1082,12 +1078,152 @@ namespace GearFoundry
 		
 		private void MaidStackInventory_Hit(object sender, System.EventArgs e)
 		{
-			WriteToChat("works");
+			try
+			{
+				MaidStackList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.StackCount) < x.Values(LongValueKey.StackMax)).OrderBy(x => x.Name).ToList();
+				List<WorldObject> PurgeList = new List<WorldObject>();
+				foreach(WorldObject checkfortwo in MaidStackList)
+				{
+					if(MaidStackList.FindAll(x => x.Name == checkfortwo.Name).Count() == 1)
+					{
+						PurgeList.Add(checkfortwo);
+					}
+				}
+				foreach(WorldObject purgeitems in PurgeList)
+				{
+					MaidStackList.RemoveAll(x => x.Name == purgeitems.Name);
+				}
+				
+				MaidProcessQueue();
+				 
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void MaidProcessQueue()
+		{
+			try
+			{
+				if(MaidStackList.Count() > 0)
+				{
+					if(stackbase == null || stackbase.Values(LongValueKey.StackCount) == stackbase.Values(LongValueKey.StackMax))
+					{
+						stackbase = MaidStackList.First();
+						MaidStackList.RemoveAll(x => x.Id == stackbase.Id);
+					}
+					else
+					{
+						if(MaidStackList.Any(x => x.Name == stackbase.Name))
+						{
+							stackitem = MaidStackList.First(x => x.Name == stackbase.Name);
+							MaidStackList.RemoveAll(x => x.Id == stackitem.Id);
+							Core.Actions.MoveItem(stackitem.Id, Core.CharacterFilter.Id, Core.WorldFilter[stackbase.Id].Values(LongValueKey.Slot), true);
+						}
+						else
+						{
+							stackbase = MaidStackList.First();
+							MaidStackList.RemoveAll(x => x.Id == stackbase.Id);
+						}
+						
+					}
+				}
+				if(MaidKeyList.Count() > 0)
+				{
+					WorldObject matchedkeyring = null;
+					keytoring = MaidKeyList.First();
+					MaidKeyList.RemoveAll(x => x.Id == keytoring.Id);
+					Core.Actions.SelectItem(keytoring.Id);
+					
+					switch(keytoring.Name.ToLower())
+					{
+						case "legendary key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("burning sands"));
+							if(matchedkeyring != null)
+							{
+								Core.Actions.UseItem(matchedkeyring.Id, 1);
+							}
+							return;
+						case "black marrow key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black marrow"));
+							if(matchedkeyring != null)
+							{
+								Core.Actions.UseItem(matchedkeyring.Id, 1);
+							}
+							return;
+						case "directive key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("directive"));
+							if(matchedkeyring != null)
+							{
+								Core.Actions.UseItem(matchedkeyring.Id, 1);
+							}
+							return;
+						case "granite key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("granite"));
+							if(matchedkeyring != null)
+							{
+								Core.Actions.UseItem(matchedkeyring.Id, 1);
+							}
+							return;
+						case "mana forge key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black coral"));
+							if(matchedkeyring != null)
+							{
+								Core.Actions.UseItem(matchedkeyring.Id, 1);
+							}
+							return;
+						case "master key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("master"));
+							if(matchedkeyring != null)
+							{
+								Core.Actions.UseItem(matchedkeyring.Id, 1);
+							}
+							return;
+						case "marble key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("marble"));
+							if(matchedkeyring != null)
+							{
+								Core.Actions.UseItem(matchedkeyring.Id, 1);
+							}
+							return;
+						case "singularity key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("singularity"));
+							if(matchedkeyring != null)
+							{
+								Core.Actions.UseItem(matchedkeyring.Id, 1);
+							}
+							return;
+						case "skeletal falatacot key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("skeletal falatacot"));
+							if(matchedkeyring != null)
+							{
+								Core.Actions.UseItem(matchedkeyring.Id, 1);
+							}
+							return;
+					}
+				
+				}
+				
+			}catch{}
 		}
 		
 		private void MaidRingKeys_Hit(object sender, System.EventArgs e)
 		{
-			WriteToChat("works");
+			try
+			{
+				string[] RingableKeysArray = {"legendary key", "black marrow key", "directive key", "granite key", "mana forge key", "master key", "marble key", "singularity key",	"skeletal falatacot key"};
+				string[] KeyringMatchingArray = {"burning sands", "black marrow", "directive", "granite", "black coral", "master", "marble", "singularity", "skeletal falatacot"};
+							
+				MaidKeyRings = (from keyrings in Core.WorldFilter.GetInventory()
+					where keyrings.Name.ToLower().Contains("keyring") && keyrings.Values(LongValueKey.UsesRemaining) > 0 && keyrings.Values(LongValueKey.KeysHeld) < 24
+					orderby keyrings.Values(LongValueKey.KeysHeld) descending
+					select keyrings).ToList();
+				
+				MaidKeyList = (from items in Core.WorldFilter.GetInventory()
+					where items.ObjectClass == ObjectClass.Key && RingableKeysArray.Contains(items.Name.ToLower())
+					select items).ToList();
+				
+				MaidProcessQueue();
+
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void MaidTradeAllSalvage_Hit(object sender, System.EventArgs e)
