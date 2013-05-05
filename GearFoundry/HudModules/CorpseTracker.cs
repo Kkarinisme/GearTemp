@@ -557,6 +557,10 @@ namespace GearFoundry
     		{
     			UnsubscribeCorpseEvents();
     			DisposeCorpseHudTab();
+                //Mish added the following because corpse hud not disposing
+                CorpseHudTabView.Dispose();
+                CorpseHudLayout.Dispose();
+                CorpseHudView.Dispose();
 				
     		}	
     		catch(Exception ex){LogError(ex);}

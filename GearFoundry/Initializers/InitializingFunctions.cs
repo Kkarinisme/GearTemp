@@ -395,15 +395,6 @@ namespace GearFoundry
 
                 foreach (XElement el in mGenSettingsList)
                 {
-//                    if (el.Name == "QuickSlotsvEnabled") { bquickSlotsvEnabled = Convert.ToBoolean(el.Value); }
-//                    if (el.Name == "QuickSlotshEnabled") { bquickSlotshEnabled = Convert.ToBoolean(el.Value); }
-////                    if (el.Name == "VpointX"){vpt.X = Convert.ToInt32(el.Value);}
-//                    if (el.Name == "VpointY") { vpt.Y = Convert.ToInt32(el.Value); }
-//                    if (el.Name == "HpointX") { hpt.X = Convert.ToInt32(el.Value);  }
-//                    if (el.Name == "HpointY") { hpt.Y = Convert.ToInt32(el.Value); }
-                 //   if (el.Name == "QuickiesVTheme") { mvtheme = el.Value.ToString(); }
-                 //   if (el.Name == "QuickiesHTheme") { mhtheme = el.Value.ToString(); }
-                    //if (el.Name == "AllKillsEnabled") { ballKillsEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "CorpseHudEnabled") { bCorpseHudEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "LandscapeHudEnabled") { bLandscapeHudEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InspectorHudEnabled") { bGearInspectorEnabled = Convert.ToBoolean(el.Value); }
@@ -1192,7 +1183,7 @@ namespace GearFoundry
                          new XElement("VpointX", vpt.X),
                          new XElement("VpointY", vpt.Y),
                          new XElement("HpointX", hpt.X),
-                         new XElement("HpointX", hpt.Y),
+                         new XElement("HpointY", hpt.Y),
                          new XElement("QuickiesVTheme",mvtheme.Name),
                          new XElement("QuickiesHTheme",mhtheme.Name)));
                 xdoc.Save(switchGearSettingsFilename);
