@@ -323,8 +323,8 @@ namespace GearFoundry
     		{
     			UnsubscribeButlerEvents();
     			
-    			ButlerHudTabLayout.GotFocus -= ButlerHudTabLayout_GotFocus;
-				ButlerHudTabLayout.LostFocus -= ButlerHudTabLayout_LostFocus;
+//    			ButlerHudTabLayout.GotFocus -= ButlerHudTabLayout_GotFocus;
+//				ButlerHudTabLayout.LostFocus -= ButlerHudTabLayout_LostFocus;
     			
     			ButlerQuickSortPotion.Hit -= (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
     			ButlerQuickSortHealKit.Hit -= (sender, e) => ButlerQuickSortHealKit_Hit(sender, e);
@@ -539,29 +539,29 @@ namespace GearFoundry
     			ButlerHudList.Click += (sender, row, col) => ButlerHudList_Click(sender, row, col);
 				ButlerHudSearchButton.Hit += (sender, e) => ButlerHudSearchButton_Click(sender, e);
 				ButlerHudClearSearchButton.Hit += (sender, e) => ButlerHudClearSearchButton_Click(sender, e);	
-				ButlerHudTabLayout.GotFocus += ButlerHudTabLayout_GotFocus;
-				ButlerHudTabLayout.LostFocus += ButlerHudTabLayout_LostFocus;
+//				ButlerHudTabLayout.GotFocus += ButlerHudTabLayout_GotFocus;
+//				ButlerHudTabLayout.LostFocus += ButlerHudTabLayout_LostFocus;
 				
 				UpdateButlerHudList();
 				  			
     		}catch(Exception ex){LogError(ex);}
     	}
     	
-    	private void ButlerHudTabLayout_GotFocus(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			UpdateButlerHudList();
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-    	private void ButlerHudTabLayout_LostFocus(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			UpdateButlerHudList();
-    		}catch(Exception ex){LogError(ex);}
-    	}
+//    	private void ButlerHudTabLayout_GotFocus(object sender, System.EventArgs e)
+//    	{
+//    		try
+//    		{
+//    			UpdateButlerHudList();
+//    		}catch(Exception ex){LogError(ex);}
+//    	}
+//    	
+//    	private void ButlerHudTabLayout_LostFocus(object sender, System.EventArgs e)
+//    	{
+//    		try
+//    		{
+//    			UpdateButlerHudList();
+//    		}catch(Exception ex){LogError(ex);}
+//    	}
     	
     	private void DisposeButlerHudButlerLayout()
     	{
