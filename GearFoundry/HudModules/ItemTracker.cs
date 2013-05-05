@@ -74,7 +74,7 @@ namespace GearFoundry
 				{
 					if(container.Name.Contains(Core.CharacterFilter.Name))
 					{
-						DeadMeCoordinatesList.RemoveAll(x => x.GUID == container.Id);
+						ghSettings.DeadMeList.RemoveAll(x => x.GUID == container.Id);
 						return;
 					}
 					//Don't loot out permitted corpses.....

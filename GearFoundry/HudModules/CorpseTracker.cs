@@ -21,16 +21,15 @@ namespace GearFoundry
 
 	public partial class PluginCore
 	{
-		//UNDONE:  Need to complete logging and verify functionality of DEADME and Permitted corpses.
+		//UNDONE:  Need to complete logging and verify functionality of DEADME
 		private List<string> FellowMemberTrackingList = new List<string>();
 		private List<int> CorpseExclusionList = new List<int>();
 		private List<IdentifiedObject> CorpseTrackingList = new List<IdentifiedObject>();
 		private bool mCorpseTrackerInPoralSpace = true;
-		private List<string> PermittedCorpsesList = new List<string>();  //List of people how have let you loot their corpses, does not need to be saved.
-		private List<MyCorpses> DeadMeCoordinatesList = new List<MyCorpses>(); //List of dead me(s). Needs to be saved. 
+		private List<string> PermittedCorpsesList = new List<string>(); 
 		public GearHoundSettings ghSettings;		
 		
-		public class MyCorpses  //Retention class that holds the deadme(s) info.
+		public class MyCorpses  
 		{
 			public int GUID;
 			public string Name;
@@ -52,7 +51,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				FileInfo GearHoundSettingsFile = new FileInfo(toonDir + "\\GearHound.xml");
+				FileInfo GearHoundSettingsFile = new FileInfo(toonDir + @"\GearHound.xml");
 								
 				if (read)
 				{
@@ -64,7 +63,7 @@ namespace GearFoundry
 		                    try
 		                    {
 		                    	string filedefaults = GetResourceTextFile("GearHound.xml");
-		                    	using (StreamWriter writedefaults = new StreamWriter(filedefaults, true))
+		                    	using (StreamWriter writedefaults = new StreamWriter(GearHoundSettingsFile.ToString(), true))
 								{
 									writedefaults.Write(filedefaults);
 									writedefaults.Close();
@@ -100,11 +99,11 @@ namespace GearFoundry
 			   			writer.Close();
 					}
 				}
-			}catch(Exception ex){WriteToChat(ex.ToString());}
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		
-		void SubscribeCorpseEvents()
+		private void SubscribeCorpseEvents()
 		{
 			try
 			{
@@ -120,7 +119,7 @@ namespace GearFoundry
 			catch(Exception ex){LogError(ex);}
 		}
 		
-		void UnsubscribeCorpseEvents()
+		private void UnsubscribeCorpseEvents()
 		{
 			try
 			{
@@ -159,7 +158,7 @@ namespace GearFoundry
             {
             	if(e.Message.Type == AC_PLAYER_KILLED)
             	{
-            		AddDeadMe();
+            		//AddDeadMe();
             	}
             	if(e.Message.Type == AC_GAME_EVENT)
             	{
@@ -174,10 +173,7 @@ namespace GearFoundry
                     }    
             	}
             }
-            catch (Exception ex)
-            {
-                LogError(ex);
-            }
+            catch (Exception ex){LogError(ex);}
         }  
         
         private void OnIdentCorpse(Decal.Adapter.Message pMsg)
@@ -196,25 +192,14 @@ namespace GearFoundry
 			catch (Exception ex) {LogError(ex);}
 		}
         
-        void CheckCorpse(IdentifiedObject IOCorpse)
+        private void CheckCorpse(IdentifiedObject IOCorpse)
 		{
 			try
-			{
-				if(ghSettings.bAllCorpses)
-				{
-					if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
-					{
-						CorpseTrackingList.Add(IOCorpse); 
-						CorpseExclusionList.Add(IOCorpse.Id);
-						UpdateCorpseHud();
-						return;
-					}
-				}
-				
+			{	
 				if(IOCorpse.Name.Contains(Core.CharacterFilter.Name) && ghSettings.bDeadMes)
 				{
 					IOCorpse.IOR = IOResult.corpseofself;
-					if(DeadMeCoordinatesList.FindIndex(x => x.GUID == IOCorpse.Id) < 0)
+					if(ghSettings.DeadMeList.FindIndex(x => x.GUID == IOCorpse.Id) < 0)
 					{
 						MyCorpses DeadMe = new MyCorpses();
 						DeadMe.Name = IOCorpse.Name;
@@ -222,7 +207,7 @@ namespace GearFoundry
 						DeadMe.Coordinates = IOCorpse.Coordinates.ToString();
 						DeadMe.GUID = IOCorpse.Id;
 						
-						DeadMeCoordinatesList.Add(DeadMe);
+						ghSettings.DeadMeList.Add(DeadMe);
 					}
 					if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
 					{
@@ -298,14 +283,21 @@ namespace GearFoundry
 						}
 						
 					}
-					
-
 				}	
+				
+				if(ghSettings.bAllCorpses)
+				{
+					if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
+					{
+						IOCorpse.IOR = IOResult.allcorpses;
+						CorpseTrackingList.Add(IOCorpse); 
+						CorpseExclusionList.Add(IOCorpse.Id);
+						UpdateCorpseHud();
+						return;
+					}
+				}
 			}
-			catch (Exception ex)
-			{
-				LogError(ex);
-			}
+			catch (Exception ex){LogError(ex);}
 		}
         
         
@@ -329,7 +321,7 @@ namespace GearFoundry
 				CorpseTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
 				CorpseExclusionList.RemoveAll(x => x == e.ItemGuid);
 				UpdateCorpseHud();
-			} catch {}
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void ChangePortalModeCorpses(object sender, Decal.Adapter.Wrappers.ChangePortalModeEventArgs e)
@@ -350,17 +342,15 @@ namespace GearFoundry
 		     		
 			     		foreach(var corpseID in CTLpurge)
 			     		{
-			     			if(DeadMeCoordinatesList.FindIndex(x => x.GUID == corpseID) < 0)
+			     			if(ghSettings.DeadMeList.FindIndex(x => x.GUID == corpseID) < 0)
 			     			{
 			     				CorpseTrackingList.RemoveAll(x => x.Id == corpseID);
 			     			}
 			     		}
 			     		UpdateCorpseHud();
 					}
-				}
-				
-			}
-			catch{}
+				}			
+			}catch(Exception ex){LogError(ex);}
 
 		}
 		
@@ -393,25 +383,27 @@ namespace GearFoundry
                 {
                 	string LootMyCorpseName = CBMessage.Substring(0, CBMessage.IndexOf(" has given you permission to loot"));
                 	PermittedCorpsesList.Add("Corpse of " + LootMyCorpseName);
+                	if(CorpseTrackingList.FindIndex(x => x.Name == "Corpse of " + LootMyCorpseName) >= 0)
+                	{
+                		CorpseTrackingList.Find(x => x.Name == "Corpse of " + LootMyCorpseName).IOR = IOResult.corpsepermitted;
+                	}
+                	UpdateCorpseHud();
                 }               
 	
-            } catch (Exception ex) {
-                LogError(ex);
-            }
+            } catch (Exception ex) {LogError(ex);}
         }
         
-        void OnCorpseOpened(object sender, Decal.Adapter.ContainerOpenedEventArgs e)
+        private void OnCorpseOpened(object sender, Decal.Adapter.ContainerOpenedEventArgs e)
         {
         	try
         	{
         		CorpseTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
-		        UpdateCorpseHud();
-	        
-        	}catch{}
+		        UpdateCorpseHud();   
+        	}catch(Exception ex){LogError(ex);}
         }
 		
-        int CorpseTimer = 0;
-        void CorpseCheckerTick(object sender, EventArgs e)
+        private int CorpseTimer = 0;
+        private void CorpseCheckerTick(object sender, EventArgs e)
         {
         	try
         	{
@@ -421,34 +413,33 @@ namespace GearFoundry
 	        		CorpseTimer = 0;
 	        	}
 	        	CorpseTimer++;
-        	}
-        	catch{}
+        	}catch(Exception ex){LogError(ex);}
         }
 		
 	    private void DistanceCheckCorpses()
 	    {
      		try
 	   		{	
-	     		var CTLpurge = from corpses in CorpseTrackingList
-	     			where Core.WorldFilter.Distance(Core.CharacterFilter.Id, corpses.Id) > 5
-	     			select corpses.Id;
+     			foreach(IdentifiedObject corpse in CorpseTrackingList)
+		    	{
+		    		corpse.DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, corpse.Id);
+		    	}
+     			
+     			CorpseTrackingList = CorpseTrackingList.OrderBy(x => x.DistanceAway).ToList();
+     			
+     			
+	     		var CTLpurge = from detectedstuff in CorpseTrackingList
+	     			where detectedstuff.DistanceAway > 5
+	     			select detectedstuff.Id;
 	     		
-	     		foreach(var corpse in CTLpurge)
+	     		foreach(var item in CTLpurge)
 	     		{
-	     			if(DeadMeCoordinatesList.FindIndex(x => x.GUID == corpse) < 0)
-	     			{
-	     				CorpseTrackingList.RemoveAll(x => x.Id == corpse);
-	     			}
+	     			CorpseTrackingList.RemoveAll(x => x.Id == item);
 	     		}
+	     		
 	     		UpdateCorpseHud();
-	     	}
-	     	catch{}
+	     	}catch(Exception ex){LogError(ex);}
     	}
-	    
-	    private void AddDeadMe()
-	    {
-	    	
-	    }
 				
 	    private HudView CorpseHudView = null;
 		private HudFixedLayout CorpseHudLayout = null;
@@ -466,7 +457,7 @@ namespace GearFoundry
     		{
     			GearHoundReadWriteSettings(true);
     	
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     		
     		
     		try
@@ -477,7 +468,7 @@ namespace GearFoundry
     				DisposeCorpseHud();
     			}			
     			
-    			CorpseHudView = new HudView("GearHound", 300, 220, new ACImage(4208));
+    			CorpseHudView = new HudView("GearHound", 300, 220, new ACImage(0x6A70));
     			CorpseHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			CorpseHudView.UserAlphaChangeable = false;
     			CorpseHudView.ShowInBar = false;
@@ -506,8 +497,7 @@ namespace GearFoundry
 
 				SubscribeCorpseEvents();
 			  							
-    		}
-    		catch(Exception ex){LogError(ex);}
+    		}catch(Exception ex){LogError(ex);}
     		
     	}
     	
@@ -529,7 +519,7 @@ namespace GearFoundry
     					return;
     			}
     			
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     		
     	}
     	
@@ -632,11 +622,8 @@ namespace GearFoundry
     			KillsByFellows.Dispose();
     			KillsBySelf.Dispose();
     			AllCorpses.Dispose();
-    		
-    			    			
-
     			
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	void CorpseHudList_Click(object sender, int row, int col)
@@ -667,7 +654,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.bAllCorpses = AllCorpses.Checked;
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void KillsBySelf_Change(object sender, System.EventArgs e)
@@ -675,7 +662,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.bKillsBySelf = KillsBySelf.Checked;
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void KillsByFellows_Change(object sender, System.EventArgs e)
@@ -683,7 +670,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.bKillsByFellows = KillsByFellows.Checked;
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	    	private void DeadMes_Change(object sender, System.EventArgs e)
@@ -691,7 +678,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.bDeadMes = DeadMes.Checked;
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	    	
     	    	private void Permitteds_Change(object sender, System.EventArgs e)
@@ -699,7 +686,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.Permitteds = Permitteds.Checked;
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     		
 	    private void UpdateCorpseHud()
@@ -719,6 +706,7 @@ namespace GearFoundry
 	    	    	if(corpse.IOR == IOResult.corpseofself) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Yellow;}
 	    	    	if(corpse.IOR == IOResult.corpsewithrare) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Magenta;}
 	    	    	if(corpse.IOR == IOResult.corpsefellowkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Green;}
+	    	    	if(corpse.IOR == IOResult.allcorpses) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.SlateGray;}
 					((HudPictureBox)CorpseHudListRow[2]).Image = CorpseRemoveCircle;
 	    	    }
 	       	}catch(Exception ex){WriteToChat(ex.ToString());}

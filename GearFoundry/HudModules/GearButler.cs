@@ -55,9 +55,9 @@ namespace GearFoundry
 		private HudStaticText ButlerHudCurrentSelectionText = null;
 		private HudPictureBox ButlerHudCurrentSelectionIcon = null;
 		private HudButton ButlerHudPickCurrentSelection = null;
-		private HudButton ButlerHudGiveCurrentSelection = null;
+		private HudButton ButlerHudSalvageCurrentSelection = null;
 		private HudButton ButlerHudUseCurrentSelection = null;
-		private HudButton ButlerHudDestoryCurrenSelection = null;
+		private HudButton ButlerHudDestoryCurrentSelection = null;
 		
 		private HudStaticText ButlerHudSelectedLabel = null;
 		private HudStaticText ButlerHudSelectedCount = null;
@@ -104,9 +104,10 @@ namespace GearFoundry
 				Core.ItemSelected += ButlerItemSelected;
 				Core.WorldFilter.EnterTrade += ButlerTradeOpened;
 				Core.WorldFilter.EndTrade += ButlerTradeEnd;
+				Core.ItemDestroyed += ButlerDestroyed;
+				Core.WorldFilter.ReleaseObject += ButlerReleased;
 				MasterTimer.Tick += ButlerTimerDo;
-			}
-			catch(Exception ex){LogError(ex);}
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void UnsubscribeButlerEvents()
@@ -117,6 +118,8 @@ namespace GearFoundry
 				Core.ItemSelected -= ButlerItemSelected;
 				Core.WorldFilter.EnterTrade -= ButlerTradeOpened;
 				Core.WorldFilter.EndTrade -= ButlerTradeEnd;
+				Core.ItemDestroyed += ButlerDestroyed;
+				Core.WorldFilter.ReleaseObject += ButlerReleased;
 				MasterTimer.Tick -= ButlerTimerDo;
 			}
 			catch(Exception ex){LogError(ex);}
@@ -131,6 +134,24 @@ namespace GearFoundry
 	    		UpdateButlerHudList();
     		}
 			catch(Exception ex){LogError(ex);}
+		}
+		
+		private void ButlerDestroyed(object sender, ItemDestroyedEventArgs e)
+		{
+			try
+			{
+				ButlerInventory.RemoveAll(x => x.Id == e.ItemGuid);
+				UpdateButlerHudList();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void  ButlerReleased(object sender, ReleaseObjectEventArgs e)
+		{
+			try
+			{
+				ButlerInventory.RemoveAll(x => x.Id == e.Released.Id);
+				UpdateButlerHudList();
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void ButlerItemSelected(object sender, ItemSelectedEventArgs e)
@@ -148,7 +169,7 @@ namespace GearFoundry
 					ButlerHudCurrentSelectionText.Text = "Nothing Selected";
 				}
 				UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void ButlerTradeOpened(object sender, EnterTradeEventArgs e)
@@ -156,7 +177,7 @@ namespace GearFoundry
 			try
 			{
 				bButlerTradeOpen = true;		
-			}catch{}
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void ButlerTradeEnd(object sender, EndTradeEventArgs e)
@@ -166,7 +187,7 @@ namespace GearFoundry
 				bButlerTradeOpen = false;
 				ButlerInventory = Core.WorldFilter.GetInventory().ToList();
 				UpdateButlerHudList();
-			}catch{}
+			}catch(Exception ex){LogError(ex);}
 
 		}
 				
@@ -180,7 +201,7 @@ namespace GearFoundry
     				DisposeButlerHud();
     			}			
     			
-    			ButlerHudView = new HudView("GearButler", 300, 600, new ACImage(0x2D13));
+    			ButlerHudView = new HudView("GearButler", 300, 600, new ACImage(0x2B6A));
     			ButlerHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ButlerHudView.UserAlphaChangeable = false;
     			ButlerHudView.ShowInBar = false;
@@ -234,7 +255,7 @@ namespace GearFoundry
     					return;
     			}
     		
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void RenderButlerHudMaidLayout()
@@ -272,7 +293,7 @@ namespace GearFoundry
     			MaidTradeParialSalvage.Hit += MaidTradeParialSalvage_Hit;
     			MaidSalvageCombine.Hit += MaidSalvageCombine_Hit;
     			
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void DisposeButlerHudMaidLayout()
@@ -293,7 +314,7 @@ namespace GearFoundry
     			MaidTradeAllSalvage.Dispose();
     			MaidRingKeys.Dispose();
     			MaidStackInventory.Dispose();	
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void DisposeButlerHud()
@@ -364,23 +385,34 @@ namespace GearFoundry
     		try
     		{
     			
-    			
-    			
     			ButlerHudCurrentSelectionLabel = new HudStaticText();
     			ButlerHudCurrentSelectionLabel.Text = "Current Selection";
     			ButlerHudCurrentSelectionLabel.TextAlignment = VirindiViewService.WriteTextFormats.Center;
     			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionLabel, new Rectangle(75,0,150,16));
+				
+    			ButlerHudUseCurrentSelection = new HudButton();
+    			ButlerHudUseCurrentSelection.Text = "Use";
+    			ButlerHudTabLayout.AddControl(ButlerHudUseCurrentSelection, new Rectangle(5,5,50,20));
+    				
+    			ButlerHudDestoryCurrentSelection = new HudButton();
+    			ButlerHudDestoryCurrentSelection.Text = "Destroy";
+    			ButlerHudTabLayout.AddControl(ButlerHudDestoryCurrentSelection, new Rectangle(245,5,50,20));
     			
-    			ButlerHudPickCurrentSelection = new HudButton();
-    			ButlerHudPickCurrentSelection.Text = "Pick";
-//    			if(Core.CharacterFilter.Skills.Select(x => x.Base > 0))
-//    			{
-    				ButlerHudTabLayout.AddControl(ButlerHudPickCurrentSelection, new Rectangle(5,5,50,20));
-//    			}
+    			ButlerHudSalvageCurrentSelection = new HudButton();
+    			ButlerHudSalvageCurrentSelection.Text = "Salvage";
+    			ButlerHudTabLayout.AddControl(ButlerHudSalvageCurrentSelection, new Rectangle(245,30,50,20));
+    			    			
+    			try
+    			{
+    				Decal.Interop.Filters.SkillInfo lockpickinfo = Core.CharacterFilter.Underlying.get_Skill((Decal.Interop.Filters.eSkillID)0x17);
     			
-//				private HudButton ButlerHudGiveCurrentSelection = null;
-//				private HudButton ButlerHudUseCurrentSelection = null;
-//				private HudButton ButlerHudDestoryCurrenSelection = null;
+	    			if(lockpickinfo.Training.ToString() == "eTrainSpecialized" || lockpickinfo.Training.ToString() == "eTrainTrained")
+	    			{
+	    				ButlerHudPickCurrentSelection = new HudButton();
+	    				ButlerHudPickCurrentSelection.Text = "Pick";
+	    				ButlerHudTabLayout.AddControl(ButlerHudPickCurrentSelection, new Rectangle(5,30,50,20));
+	    			}
+    			}catch(Exception ex){LogError(ex);}
     			    			    			
     			ButlerHudCurrentSelectionIcon = new HudPictureBox();
     			ButlerHudCurrentSelectionIcon.Image = null;
@@ -389,7 +421,7 @@ namespace GearFoundry
     			ButlerHudCurrentSelectionText = new HudStaticText();
     			ButlerHudCurrentSelectionText.Text = null;
     			ButlerHudCurrentSelectionText.TextAlignment = VirindiViewService.WriteTextFormats.Center;
-    			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionText, new Rectangle(75,50,150,16));
+    			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionText, new Rectangle(0,50,300,16));
     			  			
     			ButlerHudSearchBox = new HudTextBox();
     			ButlerHudSearchBox.Text = "";
@@ -486,7 +518,10 @@ namespace GearFoundry
 				ButlerHudTabLayout.AddControl(ButlerBurdenLabel, new Rectangle(0,560,100,16));
 				ButlerHudTabLayout.AddControl(ButlerBurden, new Rectangle(110,560, 150, 16));
 				
-				ButlerHudPickCurrentSelection.Hit += ButlerHudPickCurrentSelection_Hit;
+				if(ButlerHudPickCurrentSelection != null) {ButlerHudPickCurrentSelection.Hit += ButlerHudPickCurrentSelection_Hit;}
+				ButlerHudUseCurrentSelection.Hit += ButlerHudUseCurrentSelection_Hit;
+				ButlerHudDestoryCurrentSelection.Hit += ButlerHudDestoryCurrenSelection_Hit;
+				ButlerHudSalvageCurrentSelection.Hit += ButlerHudSalvageCurrentSelection_Hit;
 				
 				ButlerQuickSortEquipped.Hit += (sender, e) => ButlerQuickSortEquipped_Hit(sender, e);
     			ButlerQuickSortUnequipped.Hit += (sender, e) => ButlerQuickSortUnequipped_Hit(sender, e);
@@ -509,15 +544,7 @@ namespace GearFoundry
 				
 				UpdateButlerHudList();
 				  			
-    		}catch{}
-    	}
-    	
-    	private void  ButlerHudPickCurrentSelection_Hit(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			WriteToChat("Pick Click");
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void ButlerHudTabLayout_GotFocus(object sender, System.EventArgs e)
@@ -525,7 +552,7 @@ namespace GearFoundry
     		try
     		{
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void ButlerHudTabLayout_LostFocus(object sender, System.EventArgs e)
@@ -533,7 +560,7 @@ namespace GearFoundry
     		try
     		{
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void DisposeButlerHudButlerLayout()
@@ -558,6 +585,9 @@ namespace GearFoundry
     			ButlerQuickSortPotion.Hit -= (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
     			
     			ButlerHudPickCurrentSelection.Hit -= ButlerHudPickCurrentSelection_Hit;
+				ButlerHudUseCurrentSelection.Hit -= ButlerHudUseCurrentSelection_Hit;
+				ButlerHudDestoryCurrentSelection.Hit -= ButlerHudDestoryCurrenSelection_Hit;
+				ButlerHudSalvageCurrentSelection.Hit -= ButlerHudSalvageCurrentSelection_Hit;
     			
     			ButlerBurdenLabel.Dispose();
     			ButlerPackSpacesAvailable.Dispose();
@@ -585,17 +615,125 @@ namespace GearFoundry
     			ButlerHudCurrentSelectionIcon.Dispose();
     			ButlerHudCurrentSelectionLabel.Dispose();
     			
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
-
+    	private void ButlerHudPickCurrentSelection_Hit(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			if(Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.Door || Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.Container)
+    			{
+    				WorldObject[] lockpicks = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Lockpick).OrderByDescending(x => x.Values(LongValueKey.LockpickSkillBonus)).ToArray();
+    			
+	    			if(lockpicks.Count() > 0)
+	    			{
+	    				Core.Actions.UseItem(lockpicks[0].Id, 1);
+	    			}
+	    			else
+	    			{	
+	    				WriteToChat("You are out of lockpicks!");
+	    			}
+    			}
+    			if(Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.Misc)
+    			{
+    				WorldObject carvetool = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "intricate carving tool").FirstOrDefault();
+    				if(carvetool != null)
+    				{
+    					Core.Actions.UseItem(carvetool.Id, 1);
+    				}
+    				else
+    				{
+    					WriteToChat("No intricate carving tool!");
+    				}
+    				
+    			}
+    			UpdateButlerHudList();
+    		}catch(Exception ex){LogError(ex);}
+    	}   	
+    	
+    	private void ButlerHudUseCurrentSelection_Hit(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			if(Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.Unknown10) == 8)
+    			{
+    				Host.Actions.UseItem(Core.WorldFilter[Core.Actions.CurrentSelection].Id, 1);
+    			}
+    			else
+    			{
+					Host.Actions.UseItem(Core.WorldFilter[Core.Actions.CurrentSelection].Id, 0);
+    			}
+    			UpdateButlerHudList();
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void ButlerHudDestoryCurrenSelection_Hit(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			if(Core.WorldFilter[Core.Actions.CurrentSelection].Name.ToLower().Contains("aetheria"))
+    			{
+    				WorldObject[] dessicants = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "aetheria desiccant").ToArray();
+    				if(dessicants.Count() > 0)
+    				{
+    					Core.Actions.UseItem(dessicants[0].Id, 1);
+    				}
+    				else
+    				{
+    					WriteToChat("Buy more aetheria dessicant!");
+    				}
+    			}
+    			if(Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.CurrentMana) > 0)
+    			{
+    				WorldObject[] unchargedstones = (from stuff in Core.WorldFilter.GetInventory()
+    				                                 where stuff.ObjectClass == ObjectClass.ManaStone && stuff.Values(LongValueKey.CurrentMana) == 0
+    				                                 orderby stuff.Values(DoubleValueKey.ManaTransferEfficiency) descending
+    				                                 select stuff).ToArray();
+    				if(unchargedstones.Count() > 0)
+    				{
+    					Core.Actions.UseItem(unchargedstones[0].Id,1);
+    				}
+    				else
+    				{
+    					WriteToChat("No uncharged mana stones available!");
+    				}
+    				
+    			}
+    			UpdateButlerHudList();
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void ButlerHudSalvageCurrentSelection_Hit(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			if(Core.WorldFilter[Core.Actions.CurrentSelection].Values(DoubleValueKey.SalvageWorkmanship) > 0)
+    			{
+    				if(Core.WorldFilter.GetInventory().Any(x => x.Name.ToLower() == "ust"))
+    				{
+	    				Core.Actions.SalvagePanelAdd(Core.WorldFilter[Core.Actions.CurrentSelection].Id);
+	    				Core.Actions.SalvagePanelSalvage();
+    				}
+    				else
+    				{
+    					WriteToChat("Character has no ust!");
+    				}
+    			}
+    	
+    			UpdateButlerHudList();
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
     	
     	private void ButlerHudSearchBox_Lostfocus(object sender, System.EventArgs e)
     	{
     		try
     		{
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void  ButlerHudSearchButton_Click(object sender, System.EventArgs e)
@@ -604,7 +742,7 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains(ButlerHudSearchBox.Text.ToLower())).OrderBy(x => x.Name).ToList();
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void ButlerHudClearSearchButton_Click(object sender, System.EventArgs e)
@@ -614,7 +752,7 @@ namespace GearFoundry
     			ButlerHudSearchBox.Text = "";
     			ButlerInventory = Core.WorldFilter.GetInventory().OrderBy(x => x.Name).ToList();
     			UpdateButlerHudList();
-    		}catch{}	
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void ButlerQuickSortEquipped_Hit(object sender, System.EventArgs e)
@@ -624,7 +762,7 @@ namespace GearFoundry
     			ButlerInventory = Core.WorldFilter.GetInventory().OrderBy(x => x.Name).ToList();
     			ButlerInventory.RemoveAll(x => x.Values(LongValueKey.EquippedSlots) ==  0);               			
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void ButlerQuickSortUnequipped_Hit(object sender, System.EventArgs e)
@@ -635,7 +773,7 @@ namespace GearFoundry
     			ButlerInventory.RemoveAll(x => x.Values(LongValueKey.EquippedSlots) !=  0);
 				ButlerInventory.RemoveAll(x => x.Values(LongValueKey.Unknown10) ==  56);                 			
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void ButlerQuickSortMelee_Hit(object sender, System.EventArgs e)
@@ -644,7 +782,7 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.MeleeWeapon).OrderBy(x => x.Name).ToList();               			
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	private void ButlerQuickSortMissile_Hit(object sender, System.EventArgs e)
@@ -653,7 +791,7 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.MissileWeapon).OrderBy(x => x.Name).ToList();               			
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	    	
   		private void ButlerQuickSortCaster_Hit(object sender, System.EventArgs e)
@@ -662,7 +800,7 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb).OrderBy(x => x.Name).ToList();               			
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
   		
   		private void ButlerQuickSortArmor_Hit(object sender, System.EventArgs e)
@@ -671,7 +809,7 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor).OrderBy(x => x.Name).ToList();               			
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
   			
   		private void  ButlerQuickSortKeys_Hit(object sender, System.EventArgs e)
@@ -680,7 +818,7 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Key).OrderBy(x => x.Name).ToList();
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
   		
   		private void ButlerQuickSortKeyrings_Hit(object sender, System.EventArgs e)
@@ -689,16 +827,16 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains("keyring")).OrderBy(x => x.Name).ToList();
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
   		
   		private void ButlerQuickSortLockpicks_Hit(object sender, System.EventArgs e)
     	{
     		try
     		{
-    			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains("lockpick")).OrderBy(x => x.Values(LongValueKey.LockpickSkillBonus)).ToList();
+    			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Lockpick).OrderBy(x => x.Values(LongValueKey.LockpickSkillBonus)).ToList();
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
   		
   		private void ButlerQuickSortManastones_Hit(object sender, System.EventArgs e)
@@ -707,7 +845,7 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone).OrderBy(x => x.Values(LongValueKey.CurrentMana)).ToList();
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
   		
   		private void ButlerQuickSortHealKit_Hit(object sender, System.EventArgs e)
@@ -716,7 +854,7 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.HealingKit).OrderBy(x => x.Values(LongValueKey.HealKitSkillBonus)).ToList();
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
   		
   		private void ButlerQuickSortPotion_Hit(object sender, System.EventArgs e)
@@ -725,7 +863,7 @@ namespace GearFoundry
     		{
     			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Food).OrderBy(x => x.Name).ToList();
     			UpdateButlerHudList();
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
   		
     	
@@ -938,8 +1076,7 @@ namespace GearFoundry
 
 				
 				
-			}catch{}
-
+			}catch(Exception ex){LogError(ex);}
 			
 		}
 		
@@ -971,7 +1108,7 @@ namespace GearFoundry
 				{
 					WriteToChat("Open a trade or vendor window.");
 				}
-			}catch{}
+			}catch(Exception ex){LogError(ex);}
 		}
 		private void MaidTradeFilledSalvage_Hit(object sender, System.EventArgs e)
 		{
@@ -991,7 +1128,7 @@ namespace GearFoundry
 				{
 					WriteToChat("Open a trade or vendor window.");
 				}
-			}catch{}
+			}catch(Exception ex){LogError(ex);}
 		}
 		private void MaidTradeParialSalvage_Hit(object sender, System.EventArgs e)
 		{
@@ -1011,7 +1148,7 @@ namespace GearFoundry
 				{
 					WriteToChat("Open a trade or vendor window.");
 				}
-			}catch{}
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void MaidSalvageCombine_Hit(object sender, System.EventArgs e)
@@ -1051,10 +1188,7 @@ namespace GearFoundry
 					Core.Actions.VendorAddSellList(sb.Id);
 				}
 				
-			}
-			catch
-			{
-			}
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void TradeSalvageBags(int bagtype)
@@ -1089,7 +1223,7 @@ namespace GearFoundry
 				}
 				
 
-			}catch{}
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		
@@ -1098,7 +1232,7 @@ namespace GearFoundry
 			try
 			{
 				MaidSalvage = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains("salvage")).ToList();
-			}catch{}
+			}catch(Exception ex){LogError(ex);}
 		}
     		
 	}
