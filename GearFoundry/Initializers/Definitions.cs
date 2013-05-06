@@ -299,33 +299,33 @@ namespace GearFoundry
         private static bool binventoryBurdenEnabled;
         private static bool binventoryCompleteEnabled;
         private static bool binventoryWaitingEnabled;
-        private static bool bsalvageCombEnabled;
+        //private static bool bsalvageCombEnabled;
         private static bool btoonStatsEnabled;
-        private static bool btoonArmorEnabled;
-        private static bool b3DArrowEnabled;
-        private static bool bfullScreenEnabled;
-        private static bool bmuteEnabled;
+    //    private static bool btoonArmorEnabled;
+        //private static bool b3DArrowEnabled;
+        //private static bool bfullScreenEnabled;
+        //private static bool bmuteEnabled;
 
         
         
         
-        private static bool btellsEnabled;
-        private static bool bevadesEnabled;
-        private static bool bresistsEnabled;
-        private static bool bspellCastingEnabled;
-        private static bool bspellsExpireEnabled;
-        private static bool bvendorTellsEnabled;
-        private static bool bstackingEnabled;
-        private static bool bpickupEnabled;
-        private static bool bustEnabled;
+        //private static bool btellsEnabled;
+        //private static bool bevadesEnabled;
+        //private static bool bresistsEnabled;
+        //private static bool bspellCastingEnabled;
+        //private static bool bspellsExpireEnabled;
+        //private static bool bvendorTellsEnabled;
+        //private static bool bstackingEnabled;
+        //private static bool bpickupEnabled;
+        //private static bool bustEnabled;
         
         //CorpseTrackerFlags
-        private static bool btoonKillsEnabled;  //Enables tracking of Character's Kills
-        private static bool btoonCorpsesEnabled;  //Enables tracking and logging of DeadMe(s)
+        //private static bool btoonKillsEnabled;  //Enables tracking of Character's Kills
+        //private static bool btoonCorpsesEnabled;  //Enables tracking and logging of DeadMe(s)
         
         private static bool bCorpseHudEnabled;
-        private static bool bFellowKillsEnabled;  //Enables tracking of fellowship kills.
-        private static bool bPermittedCorpses;
+        //private static bool bFellowKillsEnabled;  //Enables tracking of fellowship kills.
+        //private static bool bPermittedCorpses;
 
         //Loot Flags
         private static bool bGearInspectorEnabled;

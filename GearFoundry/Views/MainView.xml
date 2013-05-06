@@ -354,20 +354,20 @@
     <page label="Settings">
       <control progid="DecalControls.FixedLayout" clipped="">
         <control progid="DecalControls.FixedLayout" clipped="" left="0" top="0" width="500" height="500">
-          <Control progid="DecalControls.StaticText" name="lblhuds" left ="5" top="5" width="150" height="16" text="WormGears Settings:"/>
-          <control progid="DecalControls.Checkbox" name="chkQuickSlotsv" left="5" top="20" width="150" height="16" text="Vertical Enabled"/>
-          <control progid="DecalControls.Checkbox" name="chkQuickSlotsh" left="5" top="40" width="150" height="16" text="Horizontal Enabled"/>
+          <Control progid="DecalControls.StaticText" name="lblhuds" left ="5" top="5" width="150" height="16" text="SwitchGear Settings:"/>
+          <control progid="DecalControls.Checkbox" name="chkQuickSlotsv" left="10" top="20" width="150" height="16" text="Vertical Enabled"/>
+          <control progid="DecalControls.Checkbox" name="chkQuickSlotsh" left="10" top="40" width="150" height="16" text="Horizontal Enabled"/>
         	
-          <Control progid="DecalControls.StaticText" name="lblGearHound" left ="5" top="60" width="150" height="16" text="GearHound Settings:"/>
-          <control progid="DecalControls.Checkbox" name="chkGearHoundEnabled" left="5" top="80" width="150" height="16" textcolor="16777215" text="Enabled"/>
-          <control progid="DecalControls.Checkbox" name="chkToonKills" left="5" top="100" width="150" height="16" textcolor="16777215" text="Self Kills"/>
+          <Control progid="DecalControls.StaticText" name="lblGearHound" left ="250" top="5" width="150" height="16" text="GearHound Settings:"/>
+          <control progid="DecalControls.Checkbox" name="chkGearHoundEnabled" left="255" top="20" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <!--<control progid="DecalControls.Checkbox" name="chkToonKills" left="5" top="100" width="150" height="16" textcolor="16777215" text="Self Kills"/>
           <control progid="DecalControls.Checkbox" name="chkFellowKills" left="5" top="120" width="150" height="16" textcolor="16777215" text="Fellowship Kills"/>
           <control progid="DecalControls.Checkbox" name="chkToonCorpses" left="5" top="140" width="150" height="16" textcolor="16777215" text="Track Dead Me(s)"/>
-          <control progid="DecalControls.Checkbox" name="chkPermittedCorpses" left="5" top="160" width="150" height="16" textcolor="16777215" text="Permitted(s)"/>
+          <control progid="DecalControls.Checkbox" name="chkPermittedCorpses" left="5" top="160" width="150" height="16" textcolor="16777215" text="Permitted(s)"/>-->
         	
-          <Control progid="DecalControls.StaticText" name="lblGearSense" left ="175" top="5" width="150" height="16" text="GearSense Settings:"/>	 
-          <control progid="DecalControls.Checkbox" name="chkGearSenseEnabled" left="175" top="20" width="150" height="16" textcolor="16777215" text="Enabled"/>
-          <control progid="DecalControls.Checkbox" name="chkAllMobs" left="175" top="40" width="150" height="16" textcolor="16777215" text="All Mobs"/>
+          <Control progid="DecalControls.StaticText" name="lblGearSense" left ="250" top="50" width="150" height="16" text="GearSense Settings:"/>	 
+          <control progid="DecalControls.Checkbox" name="chkGearSenseEnabled" left="255" top="70" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <!--<control progid="DecalControls.Checkbox" name="chkAllMobs" left="175" top="40" width="150" height="16" textcolor="16777215" text="All Mobs"/>
           <control progid="DecalControls.Checkbox" name="chkSelectedMobs" left="175" top="60" width="150" height="16" textcolor="16777215" text="Mobs List"/>
           <control progid="DecalControls.Checkbox" name="chkAllNPCs" left="175" top="80" width="150" height="16" textcolor="16777215" text="All NPCs"/>
           <control progid="DecalControls.Checkbox" name="chkSelectedTrophies" left="175" top="100" width="150" height="16" textcolor="16777215" text="Trophies/NPCs List"/>
@@ -375,30 +375,30 @@
           <control progid="DecalControls.Checkbox" name="chkAllegPlayers" left="175" top="140" width="150" height="16" textcolor="16777215" text="Allegiance Members"/>
           <control progid="DecalControls.Checkbox" name="chkFellow" left="175" top="160" width="150" height="16" textcolor="16777215" text="Fellow Members"/>
           <control progid="DecalControls.Checkbox" name="chkPortals" left="175" top="180" width="150" height="16" textcolor="16777215" text="Display Portals"/>
-          <control progid="DecalControls.Checkbox" name="chkLifestones" left="175" top="200" width="150" height="16" textcolor="16777215" text="Display Lifestone"/>
+          <control progid="DecalControls.Checkbox" name="chkLifestones" left="175" top="200" width="150" height="16" textcolor="16777215" text="Display Lifestone"/>-->
         	
-          <Control progid="DecalControls.StaticText" name="lblGearButler" left ="350" top="5" width="150" height="16" text="GearButler Settings:"/>	
-          <control progid="DecalControls.Checkbox" name="chkGearButlerEnabled" left="350" top="20" width="150" height="16" textcolor="16777215" text="Enabled"/>
-          <control progid="DecalControls.Checkbox" name="chkAutoRingKeys" left="175" top="40" width="150" height="16" textcolor="16777215" text="AutoRing Keys"/>
+          <Control progid="DecalControls.StaticText" name="lblGearButler" left ="250" top="100" width="150" height="16" text="GearButler Settings:"/>	
+          <control progid="DecalControls.Checkbox" name="chkGearButlerEnabled" left="255" top="120" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <!--<control progid="DecalControls.Checkbox" name="chkAutoRingKeys" left="175" top="40" width="150" height="16" textcolor="16777215" text="AutoRing Keys"/>-->
         	
-          <Control progid="DecalControls.StaticText" name="lblGearInspector" left ="350" top="120" width="150" height="16" text="GearInspector Settings:"/>
-          <control progid="DecalControls.Checkbox" name="chkGearInspectorEnabled" left="350" top="140" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <Control progid="DecalControls.StaticText" name="lblGearInspector" left ="250" top="150" width="150" height="16" text="GearInspector Settings:"/>
+          <control progid="DecalControls.Checkbox" name="chkGearInspectorEnabled" left="255" top="170" width="150" height="16" textcolor="16777215" text="Enabled"/>
         	
            
           <!--control progid="DecalControls.Checkbox" name="chkVulnedIcons" left="5" top="120" width="225" height="24" textcolor="16777215" text="Display Vulned Icons"/-->
          
-          <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="210" width="225" height="24" text="Inventory"/>
-          <control progid="DecalControls.Checkbox" name="chkInventory" left="5" top="230" width="225" height="24" text="Inventory on Startup"/>
-          <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="5" top="250" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>
-          <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="5" top="270" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
-          <control progid="DecalControls.Checkbox" name="chkInventoryWaiting" left="5" top="290" width="225" height="24" textcolor="16777215" text="List inventory waiting to be id'd"/>
-          <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="320" width="225" height="24" text="Misc"/>
-          <control progid="DecalControls.Checkbox" name="chkSalvageComb" left="5" top="340" width="225" height="24" text="Enable Gear Foundry Salvage Combining"/>
-          <control progid="DecalControls.Checkbox" name="chkToonStats" left="5" top="360" width="225" height="24" text="Gather Toon Stats"/>
-          <control progid="DecalControls.Checkbox" name="chkToonArmor" left="5" top="380" width="225" height="24" textcolor="16777215" text="Record Toon Armor"/>
-          <control progid="DecalControls.Checkbox" name="chk3DArrow" left="5" top="400" width="225" height="24" textcolor="16777215" text="Show 3D arrow"/>
+          <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="100" width="225" height="24" text="Gear"/>
+          <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="120" width="225" height="24" text="Inventory on Startup"/>
+          <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="10" top="140" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>
+          <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="10" top="160" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
+          <control progid="DecalControls.Checkbox" name="chkInventoryWaiting" left="10" top="180" width="225" height="24" textcolor="16777215" text="List inventory waiting to be id'd"/>
+          <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="220" width="225" height="24" text="Misc"/>
+          <!--<control progid="DecalControls.Checkbox" name="chkSalvageComb" left="10" top="340" width="225" height="24" text="Enable Gear Foundry Salvage Combining"/>-->
+          <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="240" width="225" height="24" text="Gather Toon Stats"/>
+          <!--<control progid="DecalControls.Checkbox" name="chkToonArmor" left="10" top="380" width="225" height="24" textcolor="16777215" text="Record Toon Armor"/>-->
+          <!--<control progid="DecalControls.Checkbox" name="chk3DArrow" left="5" top="400" width="225" height="24" textcolor="16777215" text="Show 3D arrow"/>
           <control progid="DecalControls.Checkbox" name="chkMute" left="5" top="420" width="225" height="24" textcolor="16777215" text="Mute Notifies"/>
-          <control progid="DecalControls.Checkbox" name="chkFullScreen" left="5" top="440" width="225" height="24" textcolor="16777215" text="Windowed Full Screen"/>
+          <control progid="DecalControls.Checkbox" name="chkFullScreen" left="5" top="440" width="225" height="24" textcolor="16777215" text="Windowed Full Screen"/>-->
         	
 
           <!--control progid="DecalControls.Checkbox" name="chkScrolls7" left="250" top="20" width="225" height="24" text="Unknown Scrolls Lvl 7"/-->
@@ -406,7 +406,7 @@
           <!--control progid="DecalControls.Checkbox" name="chkAllScrolls" left="250" top="60" width="225" height="24" textcolor="16777215" text="All Level of Scrolls"/-->
 
           <!--control progid="DecalControls.Checkbox" name="chkTells" left="250" top="180" width="225" height="24" textcolor="16777215" text="Tells Received"/-->
-          <Control progid="DecalControls.StaticText" name="lblFilterSetup" left ="250" top="210" width="225" height="24" text="Filters"/>
+          <!--<Control progid="DecalControls.StaticText" name="lblFilterSetup" left ="250" top="210" width="225" height="24" text="Filters"/>
           <control progid="DecalControls.Checkbox" name="chkEvades" left="250" top="230" width="225" height="24" text="Evades"/>
           <control progid="DecalControls.Checkbox" name="chkResists" left="250" top="250" width="225" height="24" textcolor="16777215" text="Resists"/>
           <control progid="DecalControls.Checkbox" name="chkSpellCasting" left="250" top="270" width="225" height="24" textcolor="16777215" text="SpellCasting"/>
@@ -415,7 +415,7 @@
           <Control progid="DecalControls.StaticText" name="lblAuto" left ="250" top="340" width="225" height="20" text="Auto"/>
           <control progid="DecalControls.Checkbox" name="chkStacking" left="250" top="360" width="225" height="24" text="Auto Stack"/>
           <control progid="DecalControls.Checkbox" name="chkPickup" left="250" top="380" width="225" height="24" textcolor="16777215" text="Auto Pickup"/>
-          <control progid="DecalControls.Checkbox" name="chkUst" left="250" top="400" width="225" height="24" textcolor="16777215" text="Auto Ust"/>
+          <control progid="DecalControls.Checkbox" name="chkUst" left="250" top="400" width="225" height="24" textcolor="16777215" text="Auto Ust"/>-->
         </control>
       </control>
     </page>
