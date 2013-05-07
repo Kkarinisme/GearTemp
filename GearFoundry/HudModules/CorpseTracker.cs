@@ -27,7 +27,8 @@ namespace GearFoundry
 		private List<IdentifiedObject> CorpseTrackingList = new List<IdentifiedObject>();
 		private bool mCorpseTrackerInPoralSpace = true;
 		private List<string> PermittedCorpsesList = new List<string>(); 
-		public GearHoundSettings ghSettings;		
+		public GearHoundSettings ghSettings;	
+		public DateTime LastCorpseHudUpdate;		
 		
 		public class MyCorpses  
 		{
@@ -697,7 +698,12 @@ namespace GearFoundry
 	    {  	
 	    	try
 	    	{    		
+	    		if((DateTime.Now - LastCorpseHudUpdate).TotalMilliseconds < 1000){return;}
+	    		else{LastCorpseHudUpdate = DateTime.Now;}
+	    		
 	    		CorpseHudList.ClearRows();
+	    		
+	    		
 	    		   	    		
 	    	    foreach(IdentifiedObject corpse in CorpseTrackingList)
 	    	    {

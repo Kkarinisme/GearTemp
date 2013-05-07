@@ -94,7 +94,33 @@ namespace GearFoundry
 		private HudButton MaidTradeFilledSalvage = null;
 		private HudButton MaidSalvageCombine = null;
 		
-		private HudFixedLayout ValetLayout = null;
+		private HudFixedLayout ValetTabLayout = null;
+		private HudButton ValetDisrobe = null;
+		private HudButton ValetSuit1 = null;
+		private HudButton ValetSuit2 = null;
+		private HudButton ValetSuit3 = null;
+		private HudButton ValetSuit4 = null;
+		private HudButton ValetClearSuit1 = null;
+		private HudButton ValetClearSuit2 = null;
+		private HudButton ValetClearSuit3 = null;
+		private HudButton ValetClearSuit4 = null;
+		private HudList ValetSuit1List = null;
+		private HudList ValetSuit2List= null;
+		private HudList ValetSuit3List = null;
+		private HudList ValetSuit4List = null;
+		
+		public class ValetSuit
+		{
+			public List<EquipBySlot> SuitList = new List<EquipBySlot>();
+			
+			public class EquipBySlot
+			{
+				string ItemName = String.Empty;
+				int ItemGUID = 0;
+				int ItemSlot = 0;
+			}	
+		}
+		
 		
 		
 		
@@ -109,7 +135,6 @@ namespace GearFoundry
 				Core.WorldFilter.EndTrade += ButlerTradeEnd;
 				Core.ItemDestroyed += ButlerDestroyed;
 				Core.WorldFilter.ReleaseObject += ButlerReleased;
-//				Core.CharacterFilter.ActionComplete += ActionComplete;
 				MasterTimer.Tick += ButlerTimerDo;
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -124,23 +149,10 @@ namespace GearFoundry
 				Core.WorldFilter.EndTrade -= ButlerTradeEnd;
 				Core.ItemDestroyed -= ButlerDestroyed;
 				Core.WorldFilter.ReleaseObject -= ButlerReleased;
-//				Core.CharacterFilter.ActionComplete -= ActionComplete;
 				MasterTimer.Tick -= ButlerTimerDo;
 			}
 			catch(Exception ex){LogError(ex);}
-		}
-		
-//		private void ActionComplete(object sender, System.EventArgs e)
-//		{
-//			try
-//			{
-//				if(MaidStackList.Count() > 0 || MaidKeyList.Count() > 0)
-//				{
-//					MaidProcessQueue();
-//				}
-//			}catch(Exception ex){LogError(ex);}
-//		}
-		
+		}	
 		
 		private void ButlerLoginComplete(object sender, System.EventArgs e)
 		{
@@ -220,7 +232,7 @@ namespace GearFoundry
     			ButlerHudView = new HudView("GearButler", 300, 600, new ACImage(0x2B6A));
     			ButlerHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ButlerHudView.UserAlphaChangeable = false;
-    			ButlerHudView.ShowInBar = false;
+    			ButlerHudView.ShowInBar = true;
     			ButlerHudView.Visible = true;
                 ButlerHudView.UserClickThroughable = false;
                 ButlerHudView.UserMinimizable = false;
@@ -238,11 +250,9 @@ namespace GearFoundry
     			MaidTabLayout = new HudFixedLayout();
     			ButlerHudTabView.AddTab(MaidTabLayout, "Maid");
     			
-    			ValetLayout = new HudFixedLayout();
-    			ButlerHudTabView.AddTab(ValetLayout, "Valet");
+    			ValetTabLayout = new HudFixedLayout();
+    			ButlerHudTabView.AddTab(ValetTabLayout, "Valet");
     			
-    			
-    					
  				ButlerHudTabView.OpenTabChange += ButlerHudTabView_OpenTabChange;
  				
  				RenderButlerHudButlerLayout();
@@ -261,13 +271,18 @@ namespace GearFoundry
     			{
     				case 0:
     					DisposeButlerHudMaidLayout();
+    					DisposeButlerValetTabLayout();
     					RenderButlerHudButlerLayout();
     					return;
     				case 1:
     					DisposeButlerHudButlerLayout();
+    					DisposeButlerValetTabLayout();
     					RenderButlerHudMaidLayout();
     					return;
     				case 2:
+    					DisposeButlerHudButlerLayout();
+    					DisposeButlerHudMaidLayout();
+    					RenderButlerHudValetTab();
     					return;
     			}
     		
@@ -338,53 +353,18 @@ namespace GearFoundry
     		try
     		{
     			UnsubscribeButlerEvents();
-    			    			
-    			ButlerQuickSortPotion.Hit -= (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
-    			ButlerQuickSortHealKit.Hit -= (sender, e) => ButlerQuickSortHealKit_Hit(sender, e);
-    			ButlerQuickSortManastones.Hit -= (sender, e) => ButlerQuickSortManastones_Hit(sender, e);
-    			ButlerQuickSortLockpicks.Hit -= (sender, e) => ButlerQuickSortLockpicks_Hit(sender, e);
-    			ButlerQuickSortKeyrings.Hit -= (sender, e) => ButlerQuickSortKeyrings_Hit(sender, e);
-    			ButlerQuickSortKeys.Hit -= (sender, e) => ButlerQuickSortKeys_Hit(sender, e);
-    			ButlerQuickSortArmor.Hit -= (sender, e) => ButlerQuickSortArmor_Hit(sender, e);
-    			ButlerQuickSortCaster.Hit -= (sender, e) => ButlerQuickSortCaster_Hit(sender, e);
-    			ButlerQuickSortMissile.Hit -= (sender, e) => ButlerQuickSortMissile_Hit(sender, e);
-    			ButlerQuickSortMelee.Hit -= (sender, e) => ButlerQuickSortMelee_Hit(sender, e);
-    			ButlerQuickSortUnequipped.Hit -= (sender, e) => ButlerQuickSortUnequipped_Hit(sender, e);
-    			ButlerQuickSortEquipped.Hit -= (sender, e) => ButlerQuickSortEquipped_Hit(sender, e);
-    			ButlerHudList.Click -= (sender, row, col) => ButlerHudList_Click(sender, row, col);
-				ButlerHudSearchButton.Hit -= (sender, e) => ButlerHudSearchButton_Click(sender, e);
-				ButlerHudClearSearchButton.Hit -= (sender, e) => ButlerHudClearSearchButton_Click(sender, e);
-								
-				ButlerBurden.Dispose();
-				ButlerBurdenLabel.Dispose();
-				ButlerPackSpaceAvailableLabel.Dispose();
-				ButlerPackSpacesAvailable.Dispose();
-				ButlerHudSelectedCount.Dispose();
-				ButlerHudSelectedLabel.Dispose();
-				ButlerHudList.Dispose();
-				ButlerQuickSortPotion.Dispose();
-				ButlerQuickSortHealKit.Dispose();
-				ButlerQuickSortManastones.Dispose();
-    			ButlerQuickSortLockpicks.Dispose();
-    			ButlerQuickSortKeyrings.Dispose();
-    			ButlerQuickSortKeys.Dispose();
-    			ButlerQuickSortArmor.Dispose();
-    			ButlerQuickSortCaster.Dispose();
-    			ButlerQuickSortMissile.Dispose();
-    			ButlerQuickSortMelee.Dispose();
-    			ButlerQuickSortUnequipped.Dispose();
-    			ButlerQuickSortEquipped.Dispose();
-    			ButlerQuickSortLabel.Dispose();
-    			ButlerHudClearSearchButton.Dispose();
-       			ButlerHudSearchButton.Dispose();
-    			ButlerHudSearchBox.Dispose();
-    			ButlerHudCurrentSelectionText.Dispose();
-    			ButlerHudCurrentSelectionIcon.Dispose();
-    			ButlerHudCurrentSelectionLabel.Dispose();
+    			
+    			DisposeButlerValetTabLayout();
+    			DisposeButlerHudButlerLayout();
+    			DisposeButlerHudMaidLayout();
+    			
+    			ButlerHudTabView.OpenTabChange -= ButlerHudTabView_OpenTabChange;
+    			ValetTabLayout.Dispose();
+    			MaidTabLayout.Dispose();
     			ButlerHudTabLayout.Dispose();
-    			ButlerHudTabView.Dispose(); 		
-				ButlerHudLayout.Dispose();
-    			ButlerHudView.Dispose();	
+    			ButlerHudTabView.Dispose();
+    			ButlerHudLayout.Dispose();
+    			ButlerHudView.Dispose();    									
   			
     		}catch(Exception ex) {LogError(ex);}
     		return;
@@ -513,12 +493,10 @@ namespace GearFoundry
 				ButlerHudSelectedLabel = new HudStaticText();
 				ButlerHudSelectedLabel.Text = "Items Selected: ";
 				ButlerHudSelectedCount = new HudStaticText();
-				ButlerHudSelectedCount.Text = "0";
 				ButlerHudTabLayout.AddControl(ButlerHudSelectedLabel, new Rectangle(0,520,100,16));
 				ButlerHudTabLayout.AddControl(ButlerHudSelectedCount, new Rectangle(110,520,150,16));
 				
 				ButlerPackSpacesAvailable = new HudStaticText();
-				ButlerPackSpacesAvailable.Text = "0";
 				ButlerPackSpaceAvailableLabel = new HudStaticText();
 				ButlerPackSpaceAvailableLabel.Text = "Inventory status: ";
 				ButlerHudTabLayout.AddControl(ButlerPackSpaceAvailableLabel, new Rectangle(0,540,100,16));
@@ -527,7 +505,6 @@ namespace GearFoundry
 				ButlerBurdenLabel = new HudStaticText();
 				ButlerBurdenLabel.Text = "Current Burden: ";
 				ButlerBurden = new HudStaticText();
-				ButlerBurden.Text = "0";
 				ButlerHudTabLayout.AddControl(ButlerBurdenLabel, new Rectangle(0,560,100,16));
 				ButlerHudTabLayout.AddControl(ButlerBurden, new Rectangle(110,560, 150, 16));
 				
@@ -536,22 +513,22 @@ namespace GearFoundry
 				ButlerHudDestoryCurrentSelection.Hit += ButlerHudDestoryCurrenSelection_Hit;
 				ButlerHudSalvageCurrentSelection.Hit += ButlerHudSalvageCurrentSelection_Hit;
 				
-				ButlerQuickSortEquipped.Hit += (sender, e) => ButlerQuickSortEquipped_Hit(sender, e);
-    			ButlerQuickSortUnequipped.Hit += (sender, e) => ButlerQuickSortUnequipped_Hit(sender, e);
-    			ButlerQuickSortMelee.Hit += (sender, e) => ButlerQuickSortMelee_Hit(sender, e);
-    			ButlerQuickSortMissile.Hit += (sender, e) => ButlerQuickSortMissile_Hit(sender, e);
-    			ButlerQuickSortCaster.Hit += (sender, e) => ButlerQuickSortCaster_Hit(sender, e);
-    			ButlerQuickSortArmor.Hit += (sender, e) => ButlerQuickSortArmor_Hit(sender, e);
-    			ButlerQuickSortKeys.Hit += (sender, e) => ButlerQuickSortKeys_Hit(sender, e);
-    			ButlerQuickSortKeyrings.Hit += (sender, e) => ButlerQuickSortKeyrings_Hit(sender, e);
-    			ButlerQuickSortLockpicks.Hit += (sender, e) => ButlerQuickSortLockpicks_Hit(sender, e);
-    			ButlerQuickSortManastones.Hit += (sender, e) => ButlerQuickSortManastones_Hit(sender, e);
-    			ButlerQuickSortHealKit.Hit += (sender, e) => ButlerQuickSortHealKit_Hit(sender, e);
-    			ButlerQuickSortPotion.Hit += (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
+				ButlerQuickSortEquipped.Hit += ButlerQuickSortEquipped_Hit;
+    			ButlerQuickSortUnequipped.Hit += ButlerQuickSortUnequipped_Hit;
+    			ButlerQuickSortMelee.Hit += ButlerQuickSortMelee_Hit;
+    			ButlerQuickSortMissile.Hit += ButlerQuickSortMissile_Hit;
+    			ButlerQuickSortCaster.Hit += ButlerQuickSortCaster_Hit;
+    			ButlerQuickSortArmor.Hit += ButlerQuickSortArmor_Hit;
+    			ButlerQuickSortKeys.Hit += ButlerQuickSortKeys_Hit;
+    			ButlerQuickSortKeyrings.Hit += ButlerQuickSortKeyrings_Hit;
+    			ButlerQuickSortLockpicks.Hit += ButlerQuickSortLockpicks_Hit;
+    			ButlerQuickSortManastones.Hit += ButlerQuickSortManastones_Hit;
+    			ButlerQuickSortHealKit.Hit += ButlerQuickSortHealKit_Hit;
+    			ButlerQuickSortPotion.Hit += ButlerQuickSortPotion_Hit;
     			
     			ButlerHudList.Click += (sender, row, col) => ButlerHudList_Click(sender, row, col);
-				ButlerHudSearchButton.Hit += (sender, e) => ButlerHudSearchButton_Click(sender, e);
-				ButlerHudClearSearchButton.Hit += (sender, e) => ButlerHudClearSearchButton_Click(sender, e);	
+				ButlerHudSearchButton.Hit += ButlerHudSearchButton_Click;
+				ButlerHudClearSearchButton.Hit += ButlerHudClearSearchButton_Click;	
 				
 				UpdateButlerHudList();
 				  			
@@ -562,53 +539,58 @@ namespace GearFoundry
     	{
     		try
     		{
-    			ButlerHudList.Click -= (sender, row, col) => ButlerHudList_Click(sender, row, col);
-				ButlerHudSearchButton.Hit -= (sender, e) => ButlerHudSearchButton_Click(sender, e);
-				ButlerHudClearSearchButton.Hit -= (sender, e) => ButlerHudClearSearchButton_Click(sender, e);
     			
-    			ButlerQuickSortEquipped.Hit -= (sender, e) => ButlerQuickSortEquipped_Hit(sender, e);
-    			ButlerQuickSortUnequipped.Hit -= (sender, e) => ButlerQuickSortUnequipped_Hit(sender, e);
-    			ButlerQuickSortMelee.Hit -= (sender, e) => ButlerQuickSortMelee_Hit(sender, e);
-    			ButlerQuickSortMissile.Hit -= (sender, e) => ButlerQuickSortMissile_Hit(sender, e);
-    			ButlerQuickSortCaster.Hit -= (sender, e) => ButlerQuickSortCaster_Hit(sender, e);
-    			ButlerQuickSortArmor.Hit -= (sender, e) => ButlerQuickSortArmor_Hit(sender, e);
-    			ButlerQuickSortKeys.Hit -= (sender, e) => ButlerQuickSortKeys_Hit(sender, e);
-    			ButlerQuickSortKeyrings.Hit -= (sender, e) => ButlerQuickSortKeyrings_Hit(sender, e);
-    			ButlerQuickSortLockpicks.Hit -= (sender, e) => ButlerQuickSortLockpicks_Hit(sender, e);
-    			ButlerQuickSortManastones.Hit -= (sender, e) => ButlerQuickSortManastones_Hit(sender, e);
-    			ButlerQuickSortHealKit.Hit -= (sender, e) => ButlerQuickSortHealKit_Hit(sender, e);
-    			ButlerQuickSortPotion.Hit -= (sender, e) => ButlerQuickSortPotion_Hit(sender, e);
-    			
-    			ButlerHudPickCurrentSelection.Hit -= ButlerHudPickCurrentSelection_Hit;
-				ButlerHudUseCurrentSelection.Hit -= ButlerHudUseCurrentSelection_Hit;
+    			try{ButlerHudPickCurrentSelection.Hit -= ButlerHudPickCurrentSelection_Hit;}catch{}
+    			ButlerHudUseCurrentSelection.Hit -= ButlerHudUseCurrentSelection_Hit;
 				ButlerHudDestoryCurrentSelection.Hit -= ButlerHudDestoryCurrenSelection_Hit;
 				ButlerHudSalvageCurrentSelection.Hit -= ButlerHudSalvageCurrentSelection_Hit;
+				
+				ButlerQuickSortEquipped.Hit -= ButlerQuickSortEquipped_Hit;
+    			ButlerQuickSortUnequipped.Hit -= ButlerQuickSortUnequipped_Hit;
+    			ButlerQuickSortMelee.Hit -= ButlerQuickSortMelee_Hit;
+    			ButlerQuickSortMissile.Hit -= ButlerQuickSortMissile_Hit;
+    			ButlerQuickSortCaster.Hit -= ButlerQuickSortCaster_Hit;
+    			ButlerQuickSortArmor.Hit -= ButlerQuickSortArmor_Hit;
+    			ButlerQuickSortKeys.Hit -= ButlerQuickSortKeys_Hit;
+    			ButlerQuickSortKeyrings.Hit -= ButlerQuickSortKeyrings_Hit;
+    			ButlerQuickSortLockpicks.Hit -= ButlerQuickSortLockpicks_Hit;
+    			ButlerQuickSortManastones.Hit -= ButlerQuickSortManastones_Hit;
+    			ButlerQuickSortHealKit.Hit -= ButlerQuickSortHealKit_Hit;
+    			ButlerQuickSortPotion.Hit -= ButlerQuickSortPotion_Hit;
     			
-    			ButlerBurdenLabel.Dispose();
-    			ButlerPackSpacesAvailable.Dispose();
-    			ButlerHudSelectedLabel.Dispose();
-    			ButlerHudList.Dispose();
-    			ButlerQuickSortPotion.Dispose();
-    			ButlerQuickSortHealKit.Dispose();
-    			ButlerQuickSortManastones.Dispose();
-    			ButlerQuickSortLockpicks.Dispose();
-    			ButlerQuickSortKeyrings.Dispose();
-    			ButlerQuickSortKeys.Dispose();
-    			ButlerQuickSortArmor.Dispose();
-    			ButlerQuickSortCaster.Dispose();
-    			ButlerQuickSortMissile.Dispose();
-    			ButlerQuickSortMelee.Dispose();
-    			ButlerQuickSortUnequipped.Dispose();
-    			ButlerQuickSortEquipped.Dispose();
-    			ButlerQuickSortLabel.Dispose();
-    			ButlerHudClearSearchButton.Dispose();
-    			ButlerHudSearchButton.Dispose();
-    			ButlerHudSearchBox.Dispose();
-    			//NewButtonsHere
-    			ButlerHudPickCurrentSelection.Dispose();
-    			ButlerHudCurrentSelectionText.Dispose();
-    			ButlerHudCurrentSelectionIcon.Dispose();
+    			ButlerHudList.Click -= (sender, row, col) => ButlerHudList_Click(sender, row, col);
+				ButlerHudSearchButton.Hit -= ButlerHudSearchButton_Click;
+				ButlerHudClearSearchButton.Hit -= ButlerHudClearSearchButton_Click;		
+    			
+    			
+    			ButlerHudSalvageCurrentSelection.Dispose();
+    			ButlerHudDestoryCurrentSelection.Dispose();
+    			ButlerHudUseCurrentSelection.Dispose();
     			ButlerHudCurrentSelectionLabel.Dispose();
+    			try{ButlerHudPickCurrentSelection.Dispose();}catch{}
+    			ButlerHudCurrentSelectionIcon.Dispose();
+    			ButlerHudCurrentSelectionText.Dispose();
+    			ButlerHudSearchBox.Dispose();
+    			ButlerHudSearchButton.Dispose();
+    			ButlerHudClearSearchButton.Dispose();
+    			ButlerQuickSortLabel.Dispose();
+    			ButlerQuickSortEquipped.Dispose();
+    			ButlerQuickSortUnequipped.Dispose();
+    			ButlerQuickSortMelee.Dispose();
+    			ButlerQuickSortMissile.Dispose();
+    			ButlerQuickSortCaster.Dispose();
+    			ButlerQuickSortArmor.Dispose();
+    			ButlerQuickSortKeys.Dispose();
+    			ButlerQuickSortKeyrings.Dispose();
+    			ButlerQuickSortLockpicks.Dispose();
+    			ButlerQuickSortManastones.Dispose();
+    			ButlerQuickSortHealKit.Dispose();
+    			ButlerQuickSortPotion.Dispose();
+    			ButlerHudList.Dispose();
+    			ButlerHudList = null;
+    			ButlerHudSelectedLabel.Dispose();
+    			ButlerPackSpacesAvailable.Dispose();
+    			ButlerBurdenLabel.Dispose();
     			
     		}catch(Exception ex){LogError(ex);}
     	}
@@ -873,6 +855,7 @@ namespace GearFoundry
 	    		
 	    		    		
 	    		if(ButlerInventory == null) {return;}
+	    		ButlerHudSelectedCount.Text = ButlerInventory.Count().ToString();
 	    	    ButlerBurden.Text = Core.CharacterFilter.Burden.ToString() + "%";
 	    	    if(Core.CharacterFilter.Burden < 100){ButlerBurden.TextColor = Color.Green;}
 	    	    if(Core.CharacterFilter.Burden >= 100){ButlerBurden.TextColor = Color.Yellow;}
@@ -1010,7 +993,7 @@ namespace GearFoundry
     				ButlerSeconds = 0;	
     				if(bAutoRingKeys){AutoRingKeys();}
     			}
-    		}catch{}
+    		}catch(Exception ex){LogError(ex);}
     	}
     	
     	//Irquk:  TODO:  Feature
@@ -1202,7 +1185,7 @@ namespace GearFoundry
 				
 				}
 				
-			}catch{}
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void MaidRingKeys_Hit(object sender, System.EventArgs e)
@@ -1368,6 +1351,87 @@ namespace GearFoundry
 			try
 			{
 				MaidSalvage = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains("salvage")).ToList();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void RenderButlerHudValetTab()
+		{
+			try
+			{                          
+				ValetSuit1 = new HudButton();
+				ValetSuit1.Text = "Set Suit 1";
+				ValetTabLayout.AddControl(ValetSuit1, new Rectangle(0,0,100,20));
+				
+				ValetClearSuit1 = new HudButton();
+				ValetClearSuit1.Text = "Clear Suit 1";
+				ValetTabLayout.AddControl(ValetClearSuit1, new Rectangle(200,0,100,20));
+				
+				ValetSuit1List = new HudList();
+				ValetTabLayout.AddControl(ValetSuit1List, new Rectangle(0,30,300,60));
+				
+				ValetSuit2 = new HudButton();
+				ValetSuit2.Text = "Set Suit 2";
+				ValetTabLayout.AddControl(ValetSuit2, new Rectangle(0,100,100,20));
+				
+				ValetClearSuit2 = new HudButton();
+				ValetClearSuit2.Text = "Clear Suit 2";
+				ValetTabLayout.AddControl(ValetClearSuit2, new Rectangle(200,100,100,20));
+				
+				ValetSuit2List = new HudList();
+				ValetTabLayout.AddControl(ValetSuit2List, new Rectangle(0,130,300,60));
+				
+				ValetSuit3 = new HudButton();
+				ValetSuit3.Text = "Set Suit 3";
+				ValetTabLayout.AddControl(ValetSuit3, new Rectangle(0,200,100,20));
+				
+				ValetClearSuit3 = new HudButton();
+				ValetClearSuit3.Text = "Clear Suit 3";
+				ValetTabLayout.AddControl(ValetClearSuit3, new Rectangle(200,200,100,20));
+				
+				ValetSuit3List = new HudList();
+				ValetTabLayout.AddControl(ValetSuit3List, new Rectangle(0,230,300,60));
+				
+				ValetSuit4 = new HudButton();
+				ValetSuit4.Text = "Set Suit 4";
+				ValetTabLayout.AddControl(ValetSuit4, new Rectangle(0,300,100,20));
+				
+				ValetClearSuit4 = new HudButton();
+				ValetClearSuit4.Text = "Clear Suit 4";
+				ValetTabLayout.AddControl(ValetClearSuit4, new Rectangle(200,300,100,20));
+				
+				ValetSuit4List = new HudList();
+				ValetTabLayout.AddControl(ValetSuit4List, new Rectangle(0,330,300,60));
+				
+				ValetDisrobe = new HudButton();
+				ValetDisrobe.Text = "Disrobe";
+				ValetTabLayout.AddControl(ValetDisrobe, new Rectangle(100,400,100,20));
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void DisposeButlerValetTabLayout()
+		{
+			try
+			{
+				ValetDisrobe.Dispose();
+				ValetSuit1.Dispose();
+				ValetClearSuit1.Dispose();	
+				ValetSuit1List.Dispose();
+				ValetSuit1List = null;
+				
+				ValetSuit2.Dispose();
+				ValetClearSuit2.Dispose();
+				ValetSuit2List.Dispose();
+				ValetSuit2List = null;
+				
+				ValetSuit3.Dispose();
+				ValetClearSuit3.Dispose();
+				ValetSuit3List.Dispose();
+				ValetSuit3List = null;
+				
+				ValetSuit4.Dispose();
+				ValetClearSuit4.Dispose();
+				ValetSuit4List.Dispose();
+				ValetSuit4List = null;
 			}catch(Exception ex){LogError(ex);}
 		}
     		

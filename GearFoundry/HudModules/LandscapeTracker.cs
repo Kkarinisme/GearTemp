@@ -25,6 +25,8 @@ namespace GearFoundry
 		private List<string> LandscapeFellowMemberTrackingList = new List<string>();
 		private bool mLandscapeInPortalSpace = true;
 		
+		private DateTime LastGearSenseUpdate;
+		
 		public GearSenseSettings gsSettings = new GearSenseSettings();
 		
 		public class GearSenseSettings
@@ -876,8 +878,12 @@ namespace GearFoundry
 	    	try
 	    	{   
 	    		if(LandscapeHudTabView.CurrentTab != 0) {return;}
+	    			    		
+	    		if((DateTime.Now - LastGearSenseUpdate).TotalMilliseconds < 1000){return;}
+	    		else{LastGearSenseUpdate = DateTime.Now;}
 	    		
-	    		LandscapeHudList.ClearRows();	    		   	    		
+	    		LandscapeHudList.ClearRows();
+	    		
 	    	    foreach(IdentifiedObject spawn in LandscapeTrackingList)
 	    	    {
 	    	    	LandscapeHudListRow = LandscapeHudList.AddRow();
