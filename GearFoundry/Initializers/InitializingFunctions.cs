@@ -423,8 +423,8 @@ namespace GearFoundry
                     chkQuickSlotsv.Checked = bquickSlotsvEnabled;
                     chkQuickSlotsh.Checked = bquickSlotshEnabled;
                     
-                    //GearHound Section                   
-                    chkGearHoundEnabled.Checked = bCorpseHudEnabled;
+                    //GearVisection Section                   
+                    chkGearVisectionEnabled.Checked = bCorpseHudEnabled;
 
                     //chkToonKills.Checked = btoonKillsEnabled;
                     //chkFellowKills.Checked = bFellowKillsEnabled;
@@ -722,7 +722,7 @@ namespace GearFoundry
 
 
 		//Gear Hound Contols	
-		void chkGearHoundEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+		void chkGearVisectionEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
 		{
 			try
 			{

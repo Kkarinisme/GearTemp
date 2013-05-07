@@ -601,7 +601,6 @@ namespace GearFoundry
     				case 0:
     					DisposeLandscapeSettingsLayout();
     					RenderLandscapeTabLayout();
-    					GearSenseReadWriteSettings(false);
     					return;
     				case 1:
     					DisposeLandscapeTabLayout();
@@ -746,6 +745,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowAllMobs = ShowAllMobs.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
 
@@ -754,6 +754,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowSelectedMobs = ShowSelectedMobs.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	
@@ -762,6 +763,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowAllPlayers = ShowAllPlayers.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	
@@ -770,6 +772,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowFellowPlayers = ShowFellowPlayers.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	private void ShowAllNPCs_Change(object sender, System.EventArgs e)
@@ -777,6 +780,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowAllNPCs = ShowAllNPCs.Checked;	
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	
@@ -784,7 +788,8 @@ namespace GearFoundry
     	{
     		try
     		{
-    			gsSettings.bShowAllegancePlayers = ShowAllegancePlayers.Checked;		
+    			gsSettings.bShowAllegancePlayers = ShowAllegancePlayers.Checked;
+				GearSenseReadWriteSettings(false);    			
     		}catch{}
     	}
     	
@@ -793,6 +798,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowTrophies = ShowTrophies.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	    	
@@ -801,6 +807,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowLifeStones = ShowLifeStones.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	    	    	
@@ -809,6 +816,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowAllPortals = ShowAllPortals.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
    

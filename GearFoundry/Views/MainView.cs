@@ -45,8 +45,8 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkQuickSlotsv;
         MyClasses.MetaViewWrappers.ICheckBox chkQuickSlotsh;
         
-        //GearHound Controls
-        MyClasses.MetaViewWrappers.ICheckBox chkGearHoundEnabled;
+        //GearVisection Controls
+        MyClasses.MetaViewWrappers.ICheckBox chkGearVisectionEnabled;
         //MyClasses.MetaViewWrappers.ICheckBox chkFellowKills;
         //MyClasses.MetaViewWrappers.ICheckBox chkToonKills;
         //MyClasses.MetaViewWrappers.ICheckBox chkToonCorpses;
@@ -314,8 +314,8 @@ namespace GearFoundry
                 
                 try
                 {
-                    //GearHound Controls
-                    chkGearHoundEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkGearHoundEnabled"];
+                    //GearVisection Controls
+                    chkGearVisectionEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkGearVisectionEnabled"];
                     //chkToonKills = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonKills"];
                     //chkFellowKills = (MyClasses.MetaViewWrappers.ICheckBox)View["chkFellowKills"];
                     //chkToonCorpses = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonCorpses"];
@@ -380,8 +380,8 @@ namespace GearFoundry
 				 }catch(Exception ex){LogError(ex);}
                   try
                   {
-                    //GearHound Control Events
-					chkGearHoundEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkGearHoundEnabled_Change);
+                    //GearVisection Control Events
+					chkGearVisectionEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkGearVisectionEnabled_Change);
                     //chkToonKills.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonKills_Change);
                     //chkFellowKills.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkFellowKills_Change);
                     //chkToonCorpses.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonCorpses_Change);

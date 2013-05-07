@@ -27,7 +27,7 @@ namespace GearFoundry
 		private List<IdentifiedObject> CorpseTrackingList = new List<IdentifiedObject>();
 		private bool mCorpseTrackerInPoralSpace = true;
 		private List<string> PermittedCorpsesList = new List<string>(); 
-		public GearHoundSettings ghSettings;	
+		public GearVisectionSettings ghSettings;	
 		public DateTime LastCorpseHudUpdate;		
 		
 		public class MyCorpses  
@@ -38,7 +38,7 @@ namespace GearFoundry
 			public int IconID;
 		}
 
-		public class GearHoundSettings
+		public class GearVisectionSettings
     	{
 			public bool bAllCorpses = true;
 			public bool bKillsBySelf = true;
@@ -48,23 +48,23 @@ namespace GearFoundry
 			public List<MyCorpses> DeadMeList = new List<PluginCore.MyCorpses>();
     	}
 		
-		private void GearHoundReadWriteSettings(bool read)
+		private void GearVisectionReadWriteSettings(bool read)
 		{
 			try
 			{
-				FileInfo GearHoundSettingsFile = new FileInfo(toonDir + @"\GearHound.xml");
+				FileInfo GearVisectionSettingsFile = new FileInfo(toonDir + @"\GearVisection.xml");
 								
 				if (read)
 				{
 					
 					try
 					{
-						if (!GearHoundSettingsFile.Exists)
+						if (!GearVisectionSettingsFile.Exists)
 		                {
 		                    try
 		                    {
-		                    	string filedefaults = GetResourceTextFile("GearHound.xml");
-		                    	using (StreamWriter writedefaults = new StreamWriter(GearHoundSettingsFile.ToString(), true))
+		                    	string filedefaults = GetResourceTextFile("GearVisection.xml");
+		                    	using (StreamWriter writedefaults = new StreamWriter(GearVisectionSettingsFile.ToString(), true))
 								{
 									writedefaults.Write(filedefaults);
 									writedefaults.Close();
@@ -73,29 +73,29 @@ namespace GearFoundry
 		                    catch (Exception ex) { LogError(ex); }
 		                }
 						
-						using (XmlReader reader = XmlReader.Create(GearHoundSettingsFile.ToString()))
+						using (XmlReader reader = XmlReader.Create(GearVisectionSettingsFile.ToString()))
 						{	
-							XmlSerializer serializer = new XmlSerializer(typeof(GearHoundSettings));
-							ghSettings = (GearHoundSettings)serializer.Deserialize(reader);
+							XmlSerializer serializer = new XmlSerializer(typeof(GearVisectionSettings));
+							ghSettings = (GearVisectionSettings)serializer.Deserialize(reader);
 							reader.Close();
 						}
 					}
 					catch
 					{
-						ghSettings = new GearHoundSettings();
+						ghSettings = new GearVisectionSettings();
 					}
 				}
 				
 				if(!read)
 				{
-					if(GearHoundSettingsFile.Exists)
+					if(GearVisectionSettingsFile.Exists)
 					{
-						GearHoundSettingsFile.Delete();
+						GearVisectionSettingsFile.Delete();
 					}
 					
-					using (XmlWriter writer = XmlWriter.Create(GearHoundSettingsFile.ToString()))
+					using (XmlWriter writer = XmlWriter.Create(GearVisectionSettingsFile.ToString()))
 					{
-			   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearHoundSettings));
+			   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearVisectionSettings));
 			   			serializer2.Serialize(writer, ghSettings);
 			   			writer.Close();
 					}
@@ -455,7 +455,7 @@ namespace GearFoundry
     	{
     		try
     		{
-    			GearHoundReadWriteSettings(true);
+    			GearVisectionReadWriteSettings(true);
     	
     		}catch(Exception ex){LogError(ex);}
     		
@@ -468,7 +468,7 @@ namespace GearFoundry
     				DisposeCorpseHud();
     			}			
     			
-    			CorpseHudView = new HudView("GearHound", 300, 220, new ACImage(0x6A70));
+    			CorpseHudView = new HudView("GearVisection", 300, 220, new ACImage(0x6AA4));
     			CorpseHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			CorpseHudView.UserAlphaChangeable = false;
     			CorpseHudView.ShowInBar = false;
@@ -486,7 +486,7 @@ namespace GearFoundry
     			CorpseHudLayout.AddControl(CorpseHudTabView, new Rectangle(0,0,300,220));
     		
     			CorpseHudTabLayout = new HudFixedLayout();
-    			CorpseHudTabView.AddTab(CorpseHudTabLayout, "GearHound");
+    			CorpseHudTabView.AddTab(CorpseHudTabLayout, "GearVisection");
     			
     			CorpseHudSettingsTab = new HudFixedLayout();
     			CorpseHudTabView.AddTab(CorpseHudSettingsTab, "Settings");
@@ -510,12 +510,10 @@ namespace GearFoundry
     				case 0:
     					DisposeCorpseHudSettingsTab();
     					RenderCorpseHudTab();
-    					GearHoundReadWriteSettings(false);
     					return;
     				case 1:
     					DisposeCorpseHudTab();
     					RenderCorpseHudSettingsTab();
-    					GearHoundReadWriteSettings(false);
     					return;
     			}
     			
@@ -658,6 +656,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.bAllCorpses = AllCorpses.Checked;
+    			GearVisectionReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -666,6 +665,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.bKillsBySelf = KillsBySelf.Checked;
+    			GearVisectionReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -674,6 +674,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.bKillsByFellows = KillsByFellows.Checked;
+    			GearVisectionReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -682,6 +683,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.bDeadMes = DeadMes.Checked;
+    			GearVisectionReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
     	    	
@@ -690,6 +692,7 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.Permitteds = Permitteds.Checked;
+    			GearVisectionReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
     		

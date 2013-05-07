@@ -96,6 +96,10 @@ namespace GearFoundry
 		
 		private HudFixedLayout ValetTabLayout = null;
 		private HudButton ValetDisrobe = null;
+		private HudButton ValetEquipSuit1 = null;
+		private HudButton ValetEquipSuit2 = null;
+		private HudButton ValetEquipSuit3 = null;
+		private HudButton ValetEquipSuit4 = null;
 		private HudButton ValetSuit1 = null;
 		private HudButton ValetSuit2 = null;
 		private HudButton ValetSuit3 = null;
@@ -229,7 +233,7 @@ namespace GearFoundry
     				DisposeButlerHud();
     			}			
     			
-    			ButlerHudView = new HudView("GearButler", 300, 600, new ACImage(0x2B6A));
+    			ButlerHudView = new HudView("GearButler", 300, 600, new ACImage(0x6AA3));
     			ButlerHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ButlerHudView.UserAlphaChangeable = false;
     			ButlerHudView.ShowInBar = true;
@@ -951,9 +955,13 @@ namespace GearFoundry
     				   		Host.Actions.GiveItem(ButlerInventory[row].Id, Host.Actions.CurrentSelection);
     				   }
     				}
+    				else if(Core.Actions.CurrentSelection == Core.CharacterFilter.Id)
+    				{
+    					host.Actions.MoveItem(ButlerInventory[row].Id,Core.CharacterFilter.Id,0,false);	
+    				}
     				else
     				{
-    					WriteToChat("Select an NPC or Player.");
+    					WriteToChat("First select an NPC, Player, or yourself.");
     				}
     				ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains(ButlerHudSearchBox.Text.ToLower())).OrderBy(x => x.Name).ToList();
     				UpdateButlerHudList();
@@ -1357,54 +1365,71 @@ namespace GearFoundry
 		private void RenderButlerHudValetTab()
 		{
 			try
-			{                          
+			{          
+				ValetDisrobe = new HudButton();
+				ValetDisrobe.Text = "Birthday Suit";
+				ValetTabLayout.AddControl(ValetDisrobe, new Rectangle(100,10,100,20));
+				
+				ValetEquipSuit1 = new HudButton();
+				ValetEquipSuit1.Text = "Business Suit";
+				ValetTabLayout.AddControl(ValetEquipSuit1, new Rectangle(10,40,130,20));
+				
+				ValetEquipSuit2 = new HudButton();
+				ValetEquipSuit2.Text = "Leisure Suit";
+				ValetTabLayout.AddControl(ValetEquipSuit2, new Rectangle(160,40,130,20));
+				
+				ValetEquipSuit3 = new HudButton();
+				ValetEquipSuit3.Text = "Jump Suit";
+				ValetTabLayout.AddControl(ValetEquipSuit3, new Rectangle(10,70,130,20));
+				
+				ValetEquipSuit4 = new HudButton();
+				ValetEquipSuit4.Text = "Zoot Suit";
+				ValetTabLayout.AddControl(ValetEquipSuit4, new Rectangle(160,70,130,20));
+							
 				ValetSuit1 = new HudButton();
-				ValetSuit1.Text = "Set Suit 1";
-				ValetTabLayout.AddControl(ValetSuit1, new Rectangle(0,0,100,20));
+				ValetSuit1.Text = "Set Business Suit";
+				ValetTabLayout.AddControl(ValetSuit1, new Rectangle(10,120,130,20));
 				
 				ValetClearSuit1 = new HudButton();
-				ValetClearSuit1.Text = "Clear Suit 1";
-				ValetTabLayout.AddControl(ValetClearSuit1, new Rectangle(200,0,100,20));
+				ValetClearSuit1.Text = "Clear Business 1";
+				ValetTabLayout.AddControl(ValetClearSuit1, new Rectangle(160,120,130,20));
 				
 				ValetSuit1List = new HudList();
-				ValetTabLayout.AddControl(ValetSuit1List, new Rectangle(0,30,300,60));
+				ValetTabLayout.AddControl(ValetSuit1List, new Rectangle(0,150,300,80));
 				
 				ValetSuit2 = new HudButton();
-				ValetSuit2.Text = "Set Suit 2";
-				ValetTabLayout.AddControl(ValetSuit2, new Rectangle(0,100,100,20));
+				ValetSuit2.Text = "Set Leisure Suit";
+				ValetTabLayout.AddControl(ValetSuit2, new Rectangle(10,240,130,20));
 				
 				ValetClearSuit2 = new HudButton();
-				ValetClearSuit2.Text = "Clear Suit 2";
-				ValetTabLayout.AddControl(ValetClearSuit2, new Rectangle(200,100,100,20));
+				ValetClearSuit2.Text = "Clear Leisure Suit";
+				ValetTabLayout.AddControl(ValetClearSuit2, new Rectangle(160,240,130,20));
 				
 				ValetSuit2List = new HudList();
-				ValetTabLayout.AddControl(ValetSuit2List, new Rectangle(0,130,300,60));
+				ValetTabLayout.AddControl(ValetSuit2List, new Rectangle(0,270,300,80));
 				
 				ValetSuit3 = new HudButton();
-				ValetSuit3.Text = "Set Suit 3";
-				ValetTabLayout.AddControl(ValetSuit3, new Rectangle(0,200,100,20));
+				ValetSuit3.Text = "Set Jump Suit";
+				ValetTabLayout.AddControl(ValetSuit3, new Rectangle(10,360,130,20));
 				
 				ValetClearSuit3 = new HudButton();
-				ValetClearSuit3.Text = "Clear Suit 3";
-				ValetTabLayout.AddControl(ValetClearSuit3, new Rectangle(200,200,100,20));
+				ValetClearSuit3.Text = "Clear Jump Suit";
+				ValetTabLayout.AddControl(ValetClearSuit3, new Rectangle(160,360,130,20));
 				
 				ValetSuit3List = new HudList();
-				ValetTabLayout.AddControl(ValetSuit3List, new Rectangle(0,230,300,60));
+				ValetTabLayout.AddControl(ValetSuit3List, new Rectangle(0,390,300,80));
 				
 				ValetSuit4 = new HudButton();
-				ValetSuit4.Text = "Set Suit 4";
-				ValetTabLayout.AddControl(ValetSuit4, new Rectangle(0,300,100,20));
+				ValetSuit4.Text = "Set Zoot Suit";
+				ValetTabLayout.AddControl(ValetSuit4, new Rectangle(10,480,130,20));
 				
 				ValetClearSuit4 = new HudButton();
-				ValetClearSuit4.Text = "Clear Suit 4";
-				ValetTabLayout.AddControl(ValetClearSuit4, new Rectangle(200,300,100,20));
+				ValetClearSuit4.Text = "Clear Zoot Suit";
+				ValetTabLayout.AddControl(ValetClearSuit4, new Rectangle(160,480,130,20));
 				
 				ValetSuit4List = new HudList();
-				ValetTabLayout.AddControl(ValetSuit4List, new Rectangle(0,330,300,60));
+				ValetTabLayout.AddControl(ValetSuit4List, new Rectangle(0,510,300,80));
 				
-				ValetDisrobe = new HudButton();
-				ValetDisrobe.Text = "Disrobe";
-				ValetTabLayout.AddControl(ValetDisrobe, new Rectangle(100,400,100,20));
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -1413,6 +1438,9 @@ namespace GearFoundry
 			try
 			{
 				ValetDisrobe.Dispose();
+				
+				
+				
 				ValetSuit1.Dispose();
 				ValetClearSuit1.Dispose();	
 				ValetSuit1List.Dispose();
