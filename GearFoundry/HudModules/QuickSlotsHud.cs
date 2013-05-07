@@ -160,10 +160,7 @@ namespace GearFoundry
 
             xdocQuickSlotsv = XDocument.Load(quickSlotsvFilename);
 
-            if (vpt.X == 0) { vpt.X = 200; }
-            if (vpt.Y == 0) { vpt.Y = 200; }
-
-            quickiesvHud = new VirindiViewService.HudView("", 30, 360, new ACImage(Color.Transparent));
+            quickiesvHud = new VirindiViewService.HudView("", 30, 360, new ACImage(Color.Transparent),false,"quickiesvhud");
             quickiesvHud.ShowInBar = false;
             quickiesvHud.UserAlphaChangeable = false;
             quickiesvHud.Visible = true;
@@ -171,18 +168,14 @@ namespace GearFoundry
             quickiesvHud.UserGhostable = true;
             quickiesvHud.UserMinimizable = false;
             quickiesvHud.UserResizeable = false;
-            quickiesvHud.Location = vpt;
-            if (mvtheme == null)
-            { mvtheme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent"); }
-            quickiesvHud.Theme = mvtheme;
-            //quickiesvHud.LoadUserSettings();
+            quickiesvHud.LoadUserSettings();
             quickiesvHud_Head = new HudFixedLayout();
             quickiesvHud.Controls.HeadControl = quickiesvHud_Head;
             quickiesvTabView = new HudTabView();
             quickiesvTabFixedLayout = new HudFixedLayout();
 
             quickiesvHud_Head.AddControl(quickiesvTabView, new Rectangle(0, 0, 29, 359));
-            quickiesvTabView.AddTab(quickiesvTabFixedLayout, "SG");
+            quickiesvTabView.AddTab(quickiesvTabFixedLayout, "");       
 
                 btnQuickiesvAdd = new VirindiViewService.Controls.HudButton();
                 btnQuickiesvAdd.Text = "+";
@@ -244,8 +237,6 @@ namespace GearFoundry
             vID.Add(nQuickieIDv13);
             vID.Add(nQuickieIDv14);
 
-            quickiesvHud.ThemeChanged += (sender, obj) => quickiesvHud_ThemeChanged(sender, obj);
-            quickiesvHud.Moved += (sender, obj) => quickiesvHud_Moved(sender, obj);
             btnQuickiesvAdd.Hit += (sender, obj) => btnQuickiesvAdd_Hit(sender, obj);
             btnQuickiesvRemove.Hit += (sender, obj) => btnQuickiesvRemove_Hit(sender, obj);
 
@@ -260,8 +251,6 @@ namespace GearFoundry
         private void DisposeVerticalQuickSlots()
         {
 
-            quickiesvHud.ThemeChanged -= (sender, obj) => quickiesvHud_ThemeChanged(sender, obj);
-            quickiesvHud.Moved -= (sender, obj) => quickiesvHud_Moved(sender, obj);
             if (btnQuickiesvAdd != null) {btnQuickiesvAdd.Hit -= (sender, obj) => btnQuickiesvAdd_Hit(sender, obj);btnQuickiesvAdd.Dispose();}
             if (btnQuickiesvRemove != null) { btnQuickiesvRemove.Hit -= (sender, obj) => btnQuickiesvRemove_Hit(sender, obj); btnQuickiesvRemove.Dispose(); }
 
@@ -321,11 +310,9 @@ namespace GearFoundry
 
                 xdocQuickSlotsh = XDocument.Load(quickSlotshFilename);
 
-                if (hpt.X == 0) { hpt.X = 200; }
-                if (hpt.Y == 0) { hpt.Y = 200; }
+ 
 
-
-                quickieshHud = new VirindiViewService.HudView("", 385, 40, new ACImage(Color.Transparent));
+                quickieshHud = new VirindiViewService.HudView("", 385, 40, new ACImage(Color.Transparent),false,"quickieshhud");
                 quickieshHud.ShowInBar = false;
                 quickieshHud.UserAlphaChangeable = false;
                 quickieshHud.Visible = true;
@@ -333,10 +320,6 @@ namespace GearFoundry
                 quickieshHud.UserMinimizable = false;
                  quickieshHud.UserClickThroughable = false;
                 quickieshHud.UserResizeable = false;
-                quickieshHud.Location = hpt;
-                if (mhtheme == null)
-                { mhtheme = HudViewDrawStyle.GetThemeByName("Minimalist Transparent"); }
-                quickieshHud.Theme = mhtheme;
                 quickieshHud.LoadUserSettings();
 
                 quickieshHud_Head = new HudFixedLayout();
@@ -410,8 +393,6 @@ namespace GearFoundry
             hID.Add(nQuickieIDh14);
 
 
-            quickieshHud.ThemeChanged += (sender, obj) => quickieshHud_ThemeChanged(sender, obj);
-            quickieshHud.Moved += (sender, obj) => quickieshHud_Moved(sender, obj);
             btnQuickieshAdd.Hit += (sender, obj) => btnQuickieshAdd_Hit(sender, obj);
             btnQuickieshRemove.Hit += (sender, obj) => btnQuickieshRemove_Hit(sender, obj);
 
@@ -425,8 +406,6 @@ namespace GearFoundry
         private void DisposeHorizontalQuickSlots()
         {
 
-            quickieshHud.ThemeChanged -= (sender, obj) => quickieshHud_ThemeChanged(sender, obj);
-            quickieshHud.Moved -= (sender, obj) => quickieshHud_Moved(sender, obj);
             if (btnQuickieshAdd != null) { btnQuickieshAdd.Hit -= (sender, obj) => btnQuickieshAdd_Hit(sender, obj); btnQuickieshAdd.Dispose(); }
             if (btnQuickieshRemove != null) { btnQuickieshRemove.Hit -= (sender, obj) => btnQuickieshRemove_Hit(sender, obj); btnQuickieshRemove.Dispose(); }
 
@@ -1182,56 +1161,6 @@ namespace GearFoundry
 
 
 
-        private void quickiesvHud_Moved(object sender, System.EventArgs e)
-        {
-            try
-            {
-
-                vpt = quickiesvHud.Location;
-                SaveSwitchGearSettings();
-
-            }
-            catch (Exception ex) { LogError(ex); }
-
-
-        }
-
-        private void quickiesvHud_ThemeChanged(object sender, System.EventArgs e)
-        {
-            try
-            {
-
-                mvtheme = quickiesvHud.Theme;
-                SaveSwitchGearSettings();
-            }
-            catch (Exception ex) { LogError(ex); }
-
-
-        }
-        private void quickieshHud_Moved(object sender, System.EventArgs e)
-        {
-            try
-            {
-                hpt = quickieshHud.Location;
-                SaveSwitchGearSettings();
-            }
-            catch (Exception ex) { LogError(ex); }
-
-
-        }
-
-        private void quickieshHud_ThemeChanged(object sender, System.EventArgs e)
-        {
-            try
-            {
-
-                mhtheme = quickieshHud.Theme;
-                SaveSwitchGearSettings();
-            }
-            catch (Exception ex) { LogError(ex); }
-
-
-        }
  
     }
 }//end of namespace

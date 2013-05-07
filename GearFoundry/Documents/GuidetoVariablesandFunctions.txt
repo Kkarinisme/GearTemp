@@ -113,9 +113,6 @@ Lists
 		Function                     Element                       game Variable (Should be used to enable functions)
 
 		QuickSlots                   QuickSlotsEnabled             bquickSlotsEnabled
-        AllKills                     AllKillsEnabled               ballKillsEnabled
-        ToonKills                    ToonKillsEnabled              btoonKillsEnabled
-        ToonCorpses                  ToonCorpsesEnabled            btoonCorpsesEnabled
         VulnedIcons                  VulnedIconsEnabled            bvulnedIconsEnabled
         Portals						 PortalsEnabled                bportalsEnabled
         Inventory                    InventoryEnabled              binventoryEnabled

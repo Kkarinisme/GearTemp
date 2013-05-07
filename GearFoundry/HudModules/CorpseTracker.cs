@@ -310,7 +310,6 @@ namespace GearFoundry
 				CorpseTrackingList.RemoveAll(x => x.Id == e.Released.Id);
 				CorpseExclusionList.RemoveAll(x => x == e.Released.Id);
 				UpdateCorpseHud();
-
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}

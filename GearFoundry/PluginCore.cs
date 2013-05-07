@@ -70,23 +70,6 @@ namespace GearFoundry
             {
             	
             	DisposeOnShutdown();
-                if (quickiesvHud != null)
-                {
-                    //doClearHud(quickiesvHud, xdocQuickSlotsv, quickSlotsvFilename);
-                    quickiesvHud.Dispose();
-                    quickiesvHud = null;
-
-                }
-
-
-                if (quickieshHud != null)
-                {
-                    //doClearHud(quickieshHud, xdocQuickSlotsh, quickSlotshFilename);
-                    quickieshHud.Dispose();
-                    quickieshHud = null;
-
-                }
-
                 //Destroy the view.
                 MVWireupHelper.WireupEnd(this);
                 View.Dispose();
@@ -98,6 +81,8 @@ namespace GearFoundry
         
         private void DisposeOnShutdown()
         {
+            if (quickieshHud != null) { DisposeHorizontalQuickSlots(); }
+            if (quickiesvHud != null) { DisposeVerticalQuickSlots(); }
        		if(CorpseHudView != null) {DisposeCorpseHud();}
             if(LandscapeHudView != null) {DisposeLandscapeHud();}
             if(ItemHudView != null) {DisposeItemHud();}
@@ -172,7 +157,7 @@ namespace GearFoundry
                 else
                     WriteToChat("CloakSpellList does not exist." );
 
-                //ToMish:  I am. 
+
                 MasterTimer.Interval = 1000;
                 MasterTimer.Start();
                 
