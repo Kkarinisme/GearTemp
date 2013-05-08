@@ -105,8 +105,8 @@
     <EmbeddedResource Include="Defaults\GearSense.xml">
       <LogicalName>GearSense.xml</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Defaults\GearHound.xml">
-      <LogicalName>GearHound.xml</LogicalName>
+    <EmbeddedResource Include="Defaults\GearVisection.xml">
+      <LogicalName>GearVisection.xml</LogicalName>
     </EmbeddedResource>
     <None Include="Documents\Files Karin is using.txt" />
     <None Include="Documents\GuidetoVariablesandFunctions.txt" />

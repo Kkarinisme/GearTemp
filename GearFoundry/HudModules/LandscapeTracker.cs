@@ -25,6 +25,8 @@ namespace GearFoundry
 		private List<string> LandscapeFellowMemberTrackingList = new List<string>();
 		private bool mLandscapeInPortalSpace = true;
 		
+		private DateTime LastGearSenseUpdate;
+		
 		public GearSenseSettings gsSettings = new GearSenseSettings();
 		
 		public class GearSenseSettings
@@ -599,7 +601,6 @@ namespace GearFoundry
     				case 0:
     					DisposeLandscapeSettingsLayout();
     					RenderLandscapeTabLayout();
-    					GearSenseReadWriteSettings(false);
     					return;
     				case 1:
     					DisposeLandscapeTabLayout();
@@ -744,6 +745,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowAllMobs = ShowAllMobs.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
 
@@ -752,6 +754,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowSelectedMobs = ShowSelectedMobs.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	
@@ -760,6 +763,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowAllPlayers = ShowAllPlayers.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	
@@ -768,6 +772,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowFellowPlayers = ShowFellowPlayers.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	private void ShowAllNPCs_Change(object sender, System.EventArgs e)
@@ -775,6 +780,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowAllNPCs = ShowAllNPCs.Checked;	
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	
@@ -782,7 +788,8 @@ namespace GearFoundry
     	{
     		try
     		{
-    			gsSettings.bShowAllegancePlayers = ShowAllegancePlayers.Checked;		
+    			gsSettings.bShowAllegancePlayers = ShowAllegancePlayers.Checked;
+				GearSenseReadWriteSettings(false);    			
     		}catch{}
     	}
     	
@@ -791,6 +798,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowTrophies = ShowTrophies.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	    	
@@ -799,6 +807,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowLifeStones = ShowLifeStones.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
     	    	    	
@@ -807,6 +816,7 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowAllPortals = ShowAllPortals.Checked;
+    			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
    
@@ -878,8 +888,12 @@ namespace GearFoundry
 	    	try
 	    	{   
 	    		if(LandscapeHudTabView.CurrentTab != 0) {return;}
+	    			    		
+	    		if((DateTime.Now - LastGearSenseUpdate).TotalMilliseconds < 1000){return;}
+	    		else{LastGearSenseUpdate = DateTime.Now;}
 	    		
-	    		LandscapeHudList.ClearRows();	    		   	    		
+	    		LandscapeHudList.ClearRows();
+	    		
 	    	    foreach(IdentifiedObject spawn in LandscapeTrackingList)
 	    	    {
 	    	    	LandscapeHudListRow = LandscapeHudList.AddRow();

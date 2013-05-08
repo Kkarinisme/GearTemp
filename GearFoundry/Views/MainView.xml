@@ -358,8 +358,8 @@
           <control progid="DecalControls.Checkbox" name="chkQuickSlotsv" left="10" top="20" width="150" height="16" text="Vertical Enabled"/>
           <control progid="DecalControls.Checkbox" name="chkQuickSlotsh" left="10" top="40" width="150" height="16" text="Horizontal Enabled"/>
         	
-          <Control progid="DecalControls.StaticText" name="lblGearHound" left ="250" top="5" width="150" height="16" text="GearHound Settings:"/>
-          <control progid="DecalControls.Checkbox" name="chkGearHoundEnabled" left="255" top="20" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <Control progid="DecalControls.StaticText" name="lblGearVisection" left ="250" top="5" width="150" height="16" text="GearVisection Settings:"/>
+          <control progid="DecalControls.Checkbox" name="chkGearVisectionEnabled" left="255" top="20" width="150" height="16" textcolor="16777215" text="Enabled"/>
           <!--<control progid="DecalControls.Checkbox" name="chkToonKills" left="5" top="100" width="150" height="16" textcolor="16777215" text="Self Kills"/>
           <control progid="DecalControls.Checkbox" name="chkFellowKills" left="5" top="120" width="150" height="16" textcolor="16777215" text="Fellowship Kills"/>
           <control progid="DecalControls.Checkbox" name="chkToonCorpses" left="5" top="140" width="150" height="16" textcolor="16777215" text="Track Dead Me(s)"/>

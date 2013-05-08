@@ -29,7 +29,7 @@ namespace GearFoundry
 	public partial class PluginCore
 	{
 		DirectoryInfo pluginPersonalFolder = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Decal Plugins\");
-		bool writelists = true;		
+		bool writelists = false;		
 		
 		//From:  Irquk - to replace old dictionary lookups
         private static List<spellinfo> SpellIndex = new List<spellinfo>();

@@ -725,7 +725,7 @@ namespace GearFoundry
     				DisposeItemHud();
     			}			
     			
-    			ItemHudView = new HudView("Item", 300, 220, new ACImage(0x107E));
+    			ItemHudView = new HudView("Item", 300, 220, new ACImage(0x6AA8));
     			ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ItemHudView.UserAlphaChangeable = false;
     			ItemHudView.ShowInBar = false;
