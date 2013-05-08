@@ -60,6 +60,9 @@ namespace GearFoundry
         private const int GE_READY_PREV_ACTION_COMPLETE = 0x1C7;
         private const int GE_ENTER_TRADE = 0x1FD;
         private const int GE_EXIT_TRADE = 0x1FF;
+        private const int GE_INSERT_INVENTORY_ITEM = 0x22;
+        private const int GE_WEAR_ITEM = 0x23;
+        
         
         //Fellowship Packets
         private const int GE_ADD_FELLOWMEMBER = 0x2C0;
