@@ -839,7 +839,8 @@ namespace GearFoundry
     			if(col == 1)
     			{
     				Host.Actions.SelectItem(LandscapeTrackingList[row].Id);
-    				int textcolor;
+   		    		int textcolor;
+
     				switch(LandscapeTrackingList[row].IOR)
     				{
     					case IOResult.lifestone:
@@ -858,7 +859,8 @@ namespace GearFoundry
     						textcolor = 2;
     						break;
     				}
-					HudToChat(LandscapeTrackingList[row].LinkString(), textcolor);	
+					HudToChat(LandscapeTrackingList[row].LinkString(), textcolor);
+                    useArrow(LandscapeTrackingList[row].Id);
     			}
     			if(col == 2)
     			{    				

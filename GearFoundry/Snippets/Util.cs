@@ -6,6 +6,11 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Diagnostics;
 using System.Net;
+using Decal;
+using Decal.Adapter;
+using Decal.Adapter.Wrappers;
+using Decal.Interop.D3DService;
+using Decal.Interop;
 namespace GearFoundry
 {
 	public partial class PluginCore
@@ -93,7 +98,22 @@ namespace GearFoundry
 		{
 			Core.Actions.RequestId(id);	
 		}
-  
+
+
+        private void useArrow(int nid)
+        {
+            try{
+            WriteToChat("Iam in function to usearrow");
+          //  Decal.Interop.D3DService.ID3DService mD3DService = (ID3DService)Core.Service
+          // Decal.Interop.D3DService.CD3DObj mMarkObject;
+            Decal.Adapter.Wrappers.D3DObj   mMarkObject;
+            //mMarkObject =  mD3DService.MarkObjectWithShape(nid, Decal.Interop.D3DService.eShape.eVArrow, 16776960);
+           //mMarkObject = Core.D3DService.MarkObjectWithShape(nid, D3DShape.VerticalArrow, (unchecked ((int)0xFFBB0000)));
+            mMarkObject = Core.D3DService.PointToObject(nid, (unchecked((int)0xFFBB0000)));
+            }
+            catch (Exception ex) { LogError(ex); }
+ 
+        }
 	
 	}}
 
