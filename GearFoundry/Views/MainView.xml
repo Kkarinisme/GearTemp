@@ -76,7 +76,7 @@
                         <control progid="DecalControls.StaticText" name="lblRuleMeleeD" left="40" top="90" width="110" height="20" text="Melee Def. Bonus" />
 
                         <control progid="DecalControls.Edit" name="txtRuleMagicD" left="10" top="115" width="25" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
-                        <control progid="DecalControls.StaticText" name="lblRuleMagicD" left="40" top="115" width="110" height="20" text="Magic D. Bonus" />
+                        <control progid="DecalControls.StaticText" name="lblRuleMagicD" left="40" top="115" width="110" height="20" text="Mag./Mis. D. Bonus" />
 
                         <control progid="DecalControls.StaticText" name="lblEnabled10025" left="10" top="175" width="40" height="20" text="Enabled" />
                         <control progid="DecalControls.StaticText" name="lblRuleReqSkilla" left="75" top="175" width="75" height="20" text="Req. Skl." />

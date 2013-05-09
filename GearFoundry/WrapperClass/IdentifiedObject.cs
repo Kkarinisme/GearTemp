@@ -409,7 +409,7 @@ namespace GearFoundry
 				{
 					if (wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) > 0)
 					{
-						return Math.Round(((wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) - 1) * 100), 2);
+						return wo.Values(DoubleValueKey.ElementalDamageVersusMonsters);
 					} 
 					else {return 0;}
 				}
@@ -420,7 +420,7 @@ namespace GearFoundry
 				{
 					if (wo.Values(DoubleValueKey.DamageBonus) > 0)
 					{
-						return Math.Round(((wo.Values(DoubleValueKey.DamageBonus) - 1) * 100), 2);
+						return wo.Values(DoubleValueKey.DamageBonus);
 					} 
 					else {return 0;}
 				}
@@ -431,18 +431,31 @@ namespace GearFoundry
 				{
 					if (wo.Values(DoubleValueKey.MagicDBonus) > 0) 
 					{
-						return Math.Round(((wo.Values(DoubleValueKey.MagicDBonus) - 1) * 100), 2);
+						return wo.Values(DoubleValueKey.MagicDBonus);
 					} 
 					else {return 0;}
 				}
 			}	
+			public double WeaponMissileDBonus
+			{
+				get
+				{
+					if (wo.Values(DoubleValueKey.MissileDBonus) > 0) 
+					{
+						return wo.Values(DoubleValueKey.MissileDBonus);
+					} 
+					else {return 0;}
+				}
+			}
+			
+			
 			public double WeaponManaCBonus
 			{
 				get
 				{
 					if (wo.Values(DoubleValueKey.ManaCBonus) > 0) 
 					{
-						return Math.Round((wo.Values(DoubleValueKey.ManaCBonus) * 100), 2);
+						return wo.Values(DoubleValueKey.ManaCBonus);
 					} 
 					else {return 0;}
 				}
@@ -453,7 +466,7 @@ namespace GearFoundry
 				{
 					if (wo.Values(DoubleValueKey.AttackBonus) > 0) 
 					{
-						return Math.Round(((wo.Values(DoubleValueKey.AttackBonus) - 1) * 100), 2);
+						return wo.Values(DoubleValueKey.AttackBonus);
 					} 
 					else {return 0;}
 				}
@@ -464,7 +477,7 @@ namespace GearFoundry
 				{
 					if (wo.Values(DoubleValueKey.MeleeDefenseBonus) > 0) 
 					{
-						return Math.Round(((wo.Values(DoubleValueKey.MeleeDefenseBonus) - 1) * 100), 2);
+						return wo.Values(DoubleValueKey.MeleeDefenseBonus);
 					} 
 					else {return 0;}
 				}
@@ -755,7 +768,10 @@ namespace GearFoundry
 			private string xModString(double x, string suffix)
 			{
 				//missle mods to string
-				if (x > 0) {
+				if (x > 0) 
+				{
+					//TODO:  make this return formatted strings for doubles.
+					//return Math.Round(((wo.Values(DoubleValueKey.MeleeDefenseBonus) - 1) * 100), 2);
 					return ", " + x.ToString("0.") + " " + suffix;
 				}
 				return string.Empty;

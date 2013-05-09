@@ -251,6 +251,7 @@ namespace GearFoundry
                 xdocRules.Save(rulesFilename);
                 GearFoundry.PluginCore.WriteToChat("xdocRules Updated file added.");
                 populateRulesListBox();
+                FillItemRules();
             }
             catch (Exception ex) { LogError(ex); }
 

@@ -397,15 +397,12 @@ namespace GearFoundry
 			{
 				
 				IdentifiedObject IOItemWithID = IOItemWithIDReference;
-				//Only pull active rules that "ApplyTo" the category of object hitting the rules comparison
-				//Irquk:  Confirmed Functional
+
 				var AppliesToListMatches = from rules in ItemRulesList
 					where (rules.RuleAppliesTo & IOItemWithID.IntValues(LongValueKey.Category)) == IOItemWithID.IntValues(LongValueKey.Category)
 					orderby rules.RulePriority
 					select rules;
 				
-				//No matches?  return
-				//Irquk Conrimed Functional
 				if(AppliesToListMatches.Count() == 0) {return;}
 				
 				string RuleName;
@@ -463,46 +460,61 @@ namespace GearFoundry
 						if(IOItemWithID.WieldReqType2 == 7) {levelcheck = IOItemWithID.WieldReqValue2;}	
 						if(levelcheck > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
 					}
-//					//WieldRequiredAttribute
-//					if(rule.RuleWieldAttribute > 0)
-//					{
-//						WriteToChat("RuleWRA: " + rule.RuleWieldAttribute.ToString());
-//						WriteToChat("ItemWRA: " + IOItemWithID.WieldReqAttribute.ToString());
-//						WriteToChat("ItemWRA2: " + IOItemWithID.WieldReqAttribute2.ToString());
-//						if(IOItemWithID.WieldReqType != 7) {if(IOItemWithID.WieldReqAttribute !=  rule.RuleWieldAttribute){RuleName = String.Empty; goto Next;}}
-//						if(IOItemWithID.WieldReqType2 != 7 && IOItemWithID.WieldReqAttribute2 > 0) {if(IOItemWithID.WieldReqAttribute2 != rule.RuleWieldAttribute){RuleName = String.Empty; goto Next;}}
-//					}
-//					//WeaponMastery
-//					if(rule.RuleMastery > 0)
-//					{
-//						if(IOItemWithID.WeaponMasteryCategory != rule.RuleMastery) {RuleName = String.Empty; goto Next;}
-//					}
-//					//Melee Defense
-//					if(rule.RuleMeleeD > 0)
-//					{
-//						if(rule.RuleMeleeD > IOItemWithID.WeaponMeleeBonus) {RuleName = String.Empty; goto Next;}
-//					}
-//					//Mana Conversion, +modifer + attack for weapons
-//					if(rule.RuleMcModAttack > 0)
-//					{
-//						if(IOItemWithID.ObjectClass == ObjectClass.WandStaffOrb)
-//						{
-//							if(rule.RuleMcModAttack > IOItemWithID.WeaponManaCBonus) {RuleName = String.Empty; goto Next;}
-//						}
-//						if(IOItemWithID.ObjectClass == ObjectClass.MissileWeapon)
-//						{
-//							if(rule.RuleMcModAttack > IOItemWithID.WeaponMissileModifier) {RuleName = String.Empty; goto Next;}
-//						}
-//						if(IOItemWithID.ObjectClass == ObjectClass.MeleeWeapon)
-//						{
-//							if(rule.RuleMcModAttack > IOItemWithID.WeaponAttackBonus) {RuleName = String.Empty; goto Next;}
-//						}
-//					}
-//					//Magic Defense (add missile defense bonus as well?)
-//					if(rule.RuleMagicD > 0)
-//					{
-//						if(rule.RuleMagicD > IOItemWithID.WeaponMagicDBonus) {RuleName = String.Empty; goto Next;}
-//					}
+//					//Irquk:  confirmed Functional, basica comparison only to WieldAttribute1
+					if(rule.RuleWieldAttribute > 0)
+					{
+						if(IOItemWithID.WieldReqType != 7) 
+						{
+							if(IOItemWithID.WieldReqAttribute !=  rule.RuleWieldAttribute){	RuleName = String.Empty; goto Next;}
+						}
+					}
+//					//Irquk:  Confirmed Functional
+					if(rule.RuleMastery > 0)
+					{
+						if(IOItemWithID.WeaponMasteryCategory != rule.RuleMastery) {RuleName = String.Empty; goto Next;}
+					}
+//					//Irquk:  Confirmed Functional
+					if(rule.RuleMeleeD > 0)
+					{
+						if(rule.RuleMeleeD > IOItemWithID.WeaponMeleeBonus) {RuleName = String.Empty; goto Next;}
+					}
+//					//Irquk:  Confirmed Functional
+					if(rule.RuleMcModAttack > 0)
+					{
+						if(IOItemWithID.ObjectClass == ObjectClass.WandStaffOrb)
+						{
+							//HACK:  mana C bonus is 0.xxx not 1.xxx  Added +1 below to make it evaluate without needing a new field
+							if(rule.RuleMcModAttack > (IOItemWithID.WeaponManaCBonus + 1)) {RuleName = String.Empty; goto Next;}
+						}
+						if(IOItemWithID.ObjectClass == ObjectClass.MissileWeapon)
+						{
+							if(rule.RuleMcModAttack > IOItemWithID.WeaponMissileModifier) {RuleName = String.Empty; goto Next;}
+						}
+						if(IOItemWithID.ObjectClass == ObjectClass.MeleeWeapon)
+						{
+							if(rule.RuleMcModAttack > IOItemWithID.WeaponAttackBonus) {RuleName = String.Empty; goto Next;}
+						}
+					}
+//					//Irquk:  confirmed functional for Missile D bonus
+					//TODO:  Check magic D bonus
+					if(rule.RuleMagicD > 0)
+					{
+							WriteToChat("Rule.magicD: " + rule.RuleMagicD.ToString());
+							WriteToChat("Item.magicD: " + IOItemWithID.WeaponMagicDBonus.ToString());
+							WriteToChat("Item.MissileD: " + IOItemWithID.WeaponMissileDBonus.ToString());
+							if(IOItemWithID.WeaponMagicDBonus > 0)
+							{
+								if(rule.RuleMagicD > IOItemWithID.WeaponMagicDBonus) {RuleName = String.Empty; goto Next;}
+							}
+							else if(IOItemWithID.WeaponMissileDBonus > 0)
+							{
+								if(rule.RuleMagicD > IOItemWithID.WeaponMissileDBonus) {RuleName = String.Empty; goto Next;}
+							}
+							else
+							{
+								RuleName = String.Empty; goto Next;
+							}	
+					}
 //					
 //					if(rule.RuleWeaponEnabledA || rule.RuleWeaponEnabledB || rule.RuleWeaponEnabledC || rule.RuleWeaponEnabledD)
 //					{
@@ -533,6 +545,7 @@ namespace GearFoundry
 //						}
 //						if(!ruletrue[0] && !ruletrue[1] && !ruletrue[2] && !ruletrue[3]) {RuleName = String.Empty; goto Next;}
 //					}
+					
 //					if(rule.RuleDamageTypes > 0)
 //					{
 //						if(!((rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)) {RuleName = String.Empty; goto Next;}
@@ -705,14 +718,25 @@ namespace GearFoundry
         	catch{}
         }
 			
+		private bool InspectorTab = false;
+		private bool InspectorUstTab = false;
+		private bool InspectorSettingsTab = false;
+		
 		private HudView ItemHudView = null;
 		private HudFixedLayout ItemHudLayout = null;
 		private HudTabView ItemHudTabView = null;
-		private HudFixedLayout ItemHudTabLayout = null;
-		private HudList ItemHudList = null;
+		private HudFixedLayout ItemHudInspectorLayout = null;
+		private HudFixedLayout ItemHudUstLayout = null;
+		private HudFixedLayout ItemHudSettingsLayout = null;
+		
+		
+		
+		private HudList ItemHudInspectorList = null;
 		private HudList.HudListRowAccessor ItemHudListRow = null;
 		
-		//Assembly tests
+		
+		private HudList ItemHudUstList = null;
+		private HudButton ItemHudUstButton = null;
 		
 		private const int ItemRemoveCircle = 0x60011F8;
 			
@@ -725,7 +749,7 @@ namespace GearFoundry
     				DisposeItemHud();
     			}			
     			
-    			ItemHudView = new HudView("Item", 300, 220, new ACImage(0x6AA8));
+    			ItemHudView = new HudView("Inspector", 300, 220, new ACImage(0x6AA8));
     			ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ItemHudView.UserAlphaChangeable = false;
     			ItemHudView.ShowInBar = false;
@@ -739,42 +763,158 @@ namespace GearFoundry
     			ItemHudTabView = new HudTabView();
     			ItemHudLayout.AddControl(ItemHudTabView, new Rectangle(0,0,300,220));
     		
-    			ItemHudTabLayout = new HudFixedLayout();
-    			ItemHudTabView.AddTab(ItemHudTabLayout, "Item");
+    			ItemHudInspectorLayout = new HudFixedLayout();
+    			ItemHudTabView.AddTab(ItemHudInspectorLayout, "Inspector");
     			
-    			ItemHudList = new HudList();
-    			ItemHudTabLayout.AddControl(ItemHudList, new Rectangle(0,0,300,220));
-				ItemHudList.ControlHeight = 16;	
-				ItemHudList.AddColumn(typeof(HudPictureBox), 16, null);
-				ItemHudList.AddColumn(typeof(HudStaticText), 230, null);
-				ItemHudList.AddColumn(typeof(HudPictureBox), 16, null);
-				
-				ItemHudList.Click += (sender, row, col) => ItemHudList_Click(sender, row, col);		
-
-				//SubscribeLootEvents();
+    			ItemHudUstLayout = new HudFixedLayout();
+    			ItemHudTabView.AddTab(ItemHudUstLayout, "Ust");
+    			
+    			ItemHudSettingsLayout = new HudFixedLayout();
+    			ItemHudTabView.AddTab(ItemHudSettingsLayout, "Settings");
+    			
+    			ItemHudTabView.OpenTabChange += ItemHudTabView_OpenTabChange;
+  				
+    			RenderItemHudInspectorTab();
+    			
+				SubscribeLootEvents();
 			  							
     		}catch(Exception ex) {WriteToChat(ex.ToString());}
     		
     	}
     	
-    	void DisposeItemHud()
+    	private void ItemHudTabView_OpenTabChange(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			switch(ItemHudTabView.CurrentTab)
+    			{
+    				case 0:
+    					DisposeItemHudUstTab();
+    					DisposeItemHudSettingsTab();
+    					RenderItemHudInspectorTab();
+    					return;
+    				case 1:
+    					DisposeItemHudInspectorTab();
+    					DisposeItemHudSettingsTab();
+    					RenderItemHudUstTab();
+    					return;
+    				case 2:
+    					DisposeItemHudInspectorTab();
+    					DisposeItemHudUstTab();
+    					RenderItemHudSettingsTab();
+    					return;
+    			}
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void RenderItemHudUstTab()
+    	{
+    		try
+    		{
+    			ItemHudUstButton = new HudButton();
+    			ItemHudUstButton.Text = "Salvage List";
+    			ItemHudUstLayout.AddControl(ItemHudUstButton, new Rectangle(75,0,150,20));
+    			
+    			ItemHudUstList = new HudList();
+    			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
+    			ItemHudUstList.AddColumn(typeof(HudStaticText), 200, null);
+    			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
+    			ItemHudUstLayout.AddControl(ItemHudUstList, new Rectangle(0,30,300,270));
+		
+    			
+    			InspectorUstTab = true;
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void DisposeItemHudUstTab()
+    	{
+    		try
+    		{
+    			if(!InspectorUstTab){return;}
+    			
+    			ItemHudUstList.Dispose();
+    			ItemHudUstButton.Dispose();
+    			
+    			InspectorUstTab = false;
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void RenderItemHudSettingsTab()
+    	{
+    		try
+    		{
+    			
+    			InspectorSettingsTab = true;
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void DisposeItemHudSettingsTab()
+    	{
+    		try
+    		{
+    			if(!InspectorSettingsTab){return;}
+    			
+    			InspectorSettingsTab = false;
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	
+    	
+    	private void RenderItemHudInspectorTab()
+    	{
+    		try
+    		{
+    			ItemHudInspectorList = new HudList();
+    			ItemHudInspectorLayout.AddControl(ItemHudInspectorList, new Rectangle(0,0,300,220));
+				ItemHudInspectorList.ControlHeight = 16;	
+				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
+				ItemHudInspectorList.AddColumn(typeof(HudStaticText), 230, null);
+				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
+				
+				ItemHudInspectorList.Click += (sender, row, col) => ItemHudInspectorList_Click(sender, row, col);	
+
+				InspectorTab = true;				
+
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void DisposeItemHudInspectorTab()
+    	{
+    		try
+    		{
+    			if(!InspectorTab){return;}
+    			
+    			ItemHudInspectorList.Click -= (sender, row, col) => ItemHudInspectorList_Click(sender, row, col);	 			
+    			ItemHudInspectorList.Dispose(); 
+    			
+    			InspectorTab = false;
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	
+    	
+    	
+    	private void DisposeItemHud()
     	{
     			
     		try
     		{
     			UnsubscribeLootEvents();
     			
-    			ItemHudList.Click -= (sender, row, col) => ItemHudList_Click(sender, row, col);		
-    			ItemHudList.Dispose();
-    			ItemHudLayout.Dispose();
-    			ItemHudTabLayout.Dispose();
+    			ItemHudSettingsLayout.Dispose();
+    			ItemHudUstLayout.Dispose();
+    			ItemHudInspectorLayout.Dispose();   			
     			ItemHudTabView.Dispose();
-    			ItemHudView.Dispose();		
+    			ItemHudLayout.Dispose();
+    			ItemHudView.Dispose();
     		}	
     		catch{}
     	}
     		
-    	void ItemHudList_Click(object sender, int row, int col)
+    	private void ItemHudInspectorList_Click(object sender, int row, int col)
     	{
     		try
 			{
@@ -822,11 +962,11 @@ namespace GearFoundry
 	    {  	
 	    	try
 	    	{    		
-	    		ItemHudList.ClearRows();
+	    		ItemHudInspectorList.ClearRows();
 	    		   	    		
 	    	    foreach(IdentifiedObject spawn in ItemTrackingList)
 	    	    {
-	    	    	ItemHudListRow = ItemHudList.AddRow();
+	    	    	ItemHudListRow = ItemHudInspectorList.AddRow();
 	    	    	
 	    	    	((HudPictureBox)ItemHudListRow[0]).Image = spawn.Icon + 0x6000000;
 	    	    	((HudStaticText)ItemHudListRow[1]).Text = spawn.IORString() + spawn.Name;

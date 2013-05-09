@@ -1818,6 +1818,7 @@ namespace GearFoundry
 						}
 						if(ValetEquipList.First().SlotId == 0x200000 && Core.WorldFilter[ValetEquipList.First().ItemId].ObjectClass == ObjectClass.MeleeWeapon)
 						{
+							//Core.Actions.AutoWield(ValetEquipList.First().ItemId,ValetEquipList.First().SlotId,1,0);
 							WriteToChat("Autowield is dysfunctional, item removed.");
 							ValetEquipList.RemoveAt(0);
 //							Core.Actions.SelectItem(ValetEquipList.First().ItemId);
@@ -1831,7 +1832,7 @@ namespace GearFoundry
 					}
 				}catch(Exception ex){LogError(ex);}
 			}
-			
+					
 			private void UpdateValetHud()
 			{
 				try

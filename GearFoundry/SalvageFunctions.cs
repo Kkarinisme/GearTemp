@@ -72,13 +72,7 @@ namespace GearFoundry
 			try
 			{
 				InventorySalvage.Clear();
-				WorldObjectCollection AllInventory = Core.WorldFilter.GetInventory();
-		 		var SalvageBags = from inventory in AllInventory
-								where inventory.Name.Contains("Salvage")
-								orderby inventory.Values(LongValueKey.Material)
-								select inventory; 
-		 		
-		 		InventorySalvage = SalvageBags.ToList();		
+		 		InventorySalvage = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains("salvage")).OrderBy(x => x.Values(LongValueKey.Material)).ToList();
 			}catch{}
 		}
 		
