@@ -650,6 +650,9 @@ namespace GearFoundry
 				
 				ButlerTab = true;
 				
+				ButlerInventory = Core.WorldFilter.GetInventory().OrderBy(x => x.Name).ToList();
+				
+				
 				UpdateButlerHudList();
 				  			
     		}catch(Exception ex){LogError(ex);}
@@ -802,6 +805,7 @@ namespace GearFoundry
     				}
     				
     			}
+
     			UpdateButlerHudList();
     			
     		}catch(Exception ex){LogError(ex);}
@@ -822,8 +826,7 @@ namespace GearFoundry
     				{
     					WriteToChat("Character has no ust!");
     				}
-    			}
-    	
+    			}	
     			UpdateButlerHudList();
     			
     		}catch(Exception ex){LogError(ex);}
@@ -966,18 +969,13 @@ namespace GearFoundry
     			UpdateButlerHudList();
     		}catch(Exception ex){LogError(ex);}
     	}
-  		
-    	
+  		    	
     	private void UpdateButlerHudList()
 	    {  	
 	    	try
 	    	{    	
-	    		if(ButlerHudTabView.CurrentTab != 0) 
-	    		{
-	    			return;
-	    		}
+	    		if(!ButlerTab) {return;}
 	    		
-	    		    		
 	    		if(ButlerInventory == null) {return;}
 	    		ButlerHudSelectedCount.Text = ButlerInventory.Count().ToString();
 	    	    ButlerBurden.Text = Core.CharacterFilter.Burden.ToString() + "%";
@@ -986,8 +984,8 @@ namespace GearFoundry
 	    	    if(Core.CharacterFilter.Burden >= 200){ButlerBurden.TextColor = Color.Red;}
 	    	    ButlerPackSpacesAvailable.Text = CalculateAvailableSpace();
 	    		
-	    			
-	    	    
+	    		
+	    		
 	    	    ButlerHudList.ClearRows();
 	    	    foreach(WorldObject wo in ButlerInventory)
 	    	    {
@@ -995,6 +993,12 @@ namespace GearFoundry
 	    	    	
 	    	    	((HudPictureBox)ButlerHudListRow[0]).Image = wo.Icon + 0x6000000;
 	    	    	((HudStaticText)ButlerHudListRow[1]).Text = wo.Name;
+	    	    	if(wo.Id == Core.Actions.CurrentSelection)
+	    	    	{
+	    	    		((HudPictureBox)ButlerHudListRow[0]).Image = 0x6006119;
+	    	    		((HudStaticText)ButlerHudListRow[1]).TextColor = Color.Red;
+	    	    	}
+	    	    	
 	    	    	if(wo.Values(LongValueKey.EquippedSlots) > 0 || wo.Values(LongValueKey.Unknown10) == 56) {((HudPictureBox)ButlerHudListRow[2]).Image = GB_EQUIPPED_ICON;}
 	    	    	
 	    	    	((HudPictureBox)ButlerHudListRow[3]).Image = GB_USE_ICON;
