@@ -55,7 +55,9 @@ namespace GearFoundry
         private static List<IDNameLoadable> WeaponSubtypeIndex = new List<IDNameLoadable>();
         private static List<IDNameLoadable> AppliesToList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> EnabledSpellsList = new List<IDNameLoadable>();
-        
+        private static List<IDNameLoadable> EssMasteryList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> EssElementsList = new List<IDNameLoadable>();
+ 
         private class IDNameLoadable
 		{
 			public int ID;
@@ -122,6 +124,8 @@ namespace GearFoundry
             CreateWeaponWieldInvList();
             CreateCoverageInvList();
             CreateEmbueInvList();
+            CreateEssMasteryList();
+            CreateEssElementsList();
             populateListBoxes();
 		}
 
@@ -137,6 +141,7 @@ namespace GearFoundry
             populateCloakSetsListBox();
             populateCloakSpellsListBox();
             populateUstListBox();
+            populateEssElementsListBox();
 
         }
 
@@ -791,7 +796,70 @@ namespace GearFoundry
 			}
 			
 		}
-		
+
+        private void CreateEssMasteryList()
+        {
+            string[] loadme = { "None", "Naturalist", "Primalist", "Necromancer" };
+
+            int i = 0;
+            foreach (string load in loadme)
+            {
+                IDNameLoadable info = new IDNameLoadable(i++, load);
+                EssMasteryList.Add(info);
+                cboRuleEssMastery.Add(info.name);
+            }
+
+            //if (writelists)
+            //{
+            //    FileInfo logFile = new FileInfo(GearDir + @"\EssMasteryList.csv");
+            //    if (logFile.Exists)
+            //    {
+            //        logFile.Delete();
+            //    }
+            //    StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
+            //    StringBuilder output = new StringBuilder();
+            //    output.Append("Indexed to Mast.ID\n\nMasteryID, Name\n");
+            //    foreach (var info in EssMasteryList)
+            //    {
+            //        output.Append(info.ID.ToString() + "," + info.name.ToString() + "\n");
+            //    }
+            //    writer0.WriteLine(output);
+            //    writer0.Close();
+            //}
+
+        }
+
+        private void CreateEssElementsList()
+        {
+           
+            string[] loadme = { "None", "Fire", "Cold", "Acid","Lightning" };
+
+            int i = 0;
+            foreach (string load in loadme)
+            {
+                IDNameLoadable info = new IDNameLoadable(i++, load);
+                EssElementsList.Add(info);
+            }
+
+            //if (writelists)
+            //{
+            //    FileInfo logFile = new FileInfo(GearDir + @"\EssMasteryList.csv");
+            //    if (logFile.Exists)
+            //    {
+            //        logFile.Delete();
+            //    }
+            //    StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
+            //    StringBuilder output = new StringBuilder();
+            //    output.Append("Indexed to Mast.ID\n\nMasteryID, Name\n");
+            //    foreach (var info in EssMasteryList)
+            //    {
+            //        output.Append(info.ID.ToString() + "," + info.name.ToString() + "\n");
+            //    }
+            //    writer0.WriteLine(output);
+            //    writer0.Close();
+            //}
+
+        }
 		
 		private void CreateElementalList()
 		{

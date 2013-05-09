@@ -158,6 +158,7 @@ namespace GearFoundry
                     WriteToChat("CloakSpellList does not exist." );
 
 
+
                 MasterTimer.Interval = 1000;
                 MasterTimer.Start();
                 

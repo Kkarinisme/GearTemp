@@ -161,6 +161,15 @@ namespace GearFoundry
                  new XElement("Red", bRuleRed),
                  new XElement("Yellow", bRuleYellow),
                  new XElement("Blue", bRuleBlue),
+                 new XElement("EssMastery", nRuleEssMastery),
+               new XElement("EssElements", sRuleEssElements),
+               new XElement("EssLevel", nRuleEssLevel),
+               new XElement("EssSummLevel", nRuleEssSummLevel),
+               new XElement("EssDamageLevel", nRuleEssDamageLevel),
+               new XElement("EssCDLevel", nRuleEssCDLevel),
+               new XElement("EssCRLevel", nRuleEssCRLevel),
+               new XElement("EssDRLevel", nRuleEssDRLevel),
+               new XElement("EssCritLevel", nRuleEssCritLevel),
                 new XElement("FilterLegend", bRuleFilterLegend),
                 new XElement("FilterEpic", bRuleFilterEpic),
                 new XElement("FilterMajor", bRuleFilterMajor),
@@ -212,8 +221,15 @@ namespace GearFoundry
                 bRuleBlue = Convert.ToBoolean(el.Element("Blue").Value);
                 sRuleCloakSets = (el.Element("CloakSets").Value.ToString());
                 sRuleCloakSpells = (el.Element("CloakSpells").Value.ToString());
-                //bRuleMustBeSet = Convert.ToBoolean(el.Element("MustBeSet").Value);
-                //bRuleAnySet = Convert.ToBoolean(el.Element("AnySet").Value);
+                nRuleEssMastery = Convert.ToInt32(el.Element("EssMastery").Value);
+                sRuleEssElements = el.Element("EssElements").Value.ToString();
+                nRuleEssLevel = Convert.ToInt32(el.Element("EssLevel").Value);
+                nRuleEssSummLevel = Convert.ToInt32(el.Element("EssSummLevel").Value);
+                nRuleEssDamageLevel = Convert.ToInt32(el.Element("EssDamageLevel").Value);
+                nRuleEssCDLevel = Convert.ToInt32(el.Element("EssCDLevel").Value);
+                nRuleEssCRLevel = Convert.ToInt32(el.Element("EssCRLevel").Value);
+                nRuleEssDRLevel = Convert.ToInt32(el.Element("EssDRLevel").Value);
+                nRuleEssCritLevel = Convert.ToInt32(el.Element("EssCritLevel").Value);
                 nRuleMustHaveSpell = Convert.ToInt32(el.Element("MustHaveSpell").Value);
                 sRuleSpells = el.Element("Spells").Value;
                 nRuleNumSpells = Convert.ToInt32(el.Element("NumSpells").Value);
@@ -245,6 +261,7 @@ namespace GearFoundry
                 sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
                 sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
                 sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
+                sRuleEssElements = mFindList(lstRuleEssElements, EssElementsList);
                 mMakeStrings();
 
                 writeToXdocRules(xdocRules);
@@ -458,6 +475,114 @@ namespace GearFoundry
 
             bRuleBlue = e.Checked;
         }
+
+        [ControlEvent("txtRuleEssLevel", "End")]
+        private void txtRuleEssLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  
+        {
+            int result = 0;
+            if (int.TryParse(txtRuleEssLevel.Text, out result))
+            {
+                nRuleEssLevel = result;
+            }
+            else
+            {
+                txtRuleEssLevel.Text = string.Empty;
+                nRuleEssLevel = -1;
+            }
+
+        }
+
+        [ControlEvent("txtRuleEssSummLevel", "End")]
+        private void txtRuleEssSummLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+            int result = 0;
+            if (int.TryParse(txtRuleEssSummLevel.Text, out result))
+            {
+                nRuleEssSummLevel = result;
+            }
+            else
+            {
+                txtRuleEssSummLevel.Text = string.Empty;
+                nRuleEssSummLevel = -1;
+            }
+
+        }
+        [ControlEvent("txtRuleEssDamageLevel", "End")]
+        private void txtRuleEssDamageLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+            int result = 0;
+            if (int.TryParse(txtRuleEssDamageLevel.Text, out result))
+            {
+                nRuleEssDamageLevel = result;
+            }
+            else
+            {
+                txtRuleEssDamageLevel.Text = string.Empty;
+                nRuleEssDamageLevel = -1;
+            }
+
+        }
+        [ControlEvent("txtRuleEssCDLevel", "End")]
+        private void txtRuleEssCDLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+            int result = 0;
+            if (int.TryParse(txtRuleEssCDLevel.Text, out result))
+            {
+                nRuleEssCDLevel = result;
+            }
+            else
+            {
+                txtRuleEssCDLevel.Text = string.Empty;
+                nRuleEssCDLevel = -1;
+            }
+
+        }
+        [ControlEvent("txtRuleEssCRLevel", "End")]
+        private void txtRuleEssCRLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+            int result = 0;
+            if (int.TryParse(txtRuleEssCRLevel.Text, out result))
+            {
+                nRuleEssCRLevel = result;
+            }
+            else
+            {
+                txtRuleEssCRLevel.Text = string.Empty;
+                nRuleEssCRLevel = -1;
+            }
+
+        }
+        [ControlEvent("txtRuleEssDRLevel", "End")]
+        private void txtRuleEssDRLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+            int result = 0;
+            if (int.TryParse(txtRuleEssDRLevel.Text, out result))
+            {
+                nRuleEssDRLevel = result;
+            }
+            else
+            {
+                txtRuleEssDRLevel.Text = string.Empty;
+                nRuleEssDRLevel = -1;
+            }
+
+        }
+        [ControlEvent("txtRuleEssCritLevel", "End")]
+        private void txtRuleEssCritLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+            int result = 0;
+            if (int.TryParse(txtRuleEssCritLevel.Text, out result))
+            {
+                nRuleEssCritLevel = result;
+            }
+            else
+            {
+                txtRuleEssCritLevel.Text = string.Empty;
+                nRuleEssCritLevel = -1;
+            }
+
+        }
+
 
         private void chkRuleFilterLegend_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
@@ -710,6 +835,17 @@ namespace GearFoundry
             { sRuleMSCleaved = "true"; }
 
         }
+
+        [ControlEvent("cboRuleEssMastery", "Change")]
+        private void cboRuleEssMastery_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+            nRuleEssMastery = cboRuleEssMastery.Selected;
+            //GearFoundry.PluginCore.WriteToChat("Index of essence mastery: " + cboruleEssMastery.Selected.ToString());
+            //GearFoundry.PluginCore.WriteToChat("Guid of mastery: " + MasteryIndex[cboMasteryType.Selected].ID.ToString());
+            //GearFoundry.PluginCore.WriteToChat("Name of weaponappliesto: " + MasteryIndex[cboMasteryType.Selected].name);
+
+        }
+
 
 
 
