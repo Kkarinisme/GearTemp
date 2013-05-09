@@ -523,6 +523,8 @@ namespace GearFoundry
 
         private void Current_ItemSelected(object sender, ItemSelectedEventArgs e)
         {
+            
+            int objSelectedID = e.ItemGuid;
 
             if (baddItem)
             {
@@ -530,14 +532,11 @@ namespace GearFoundry
                 {
                     // The following adds the icon of an item selected to the hudview
 
-                    int objSelectedID = e.ItemGuid;
-
                     foreach (Decal.Adapter.Wrappers.WorldObject obj in Core.WorldFilter.GetInventory())
                     {
                         if (obj.Id == objSelectedID)
                         {
                             quickie = obj;
-
                             break;
 
                         }

@@ -6,6 +6,7 @@ using MyClasses.MetaViewWrappers;
 using System.Drawing;
 using Decal.Adapter;
 using Decal.Adapter.Wrappers;
+using Decal.Interop.D3DService;
 using Decal.Filters;
 using System.ComponentModel;
 using System.IO;
@@ -374,6 +375,11 @@ namespace GearFoundry
         //variables used in toon statistics program
         private XDocument xDocStats = new XDocument();
         private XDocument xDocAllStats = new XDocument();
+
+        private static Decal.Interop.D3DService.CD3DObj mMarkObject;
+        private Decal.Interop.D3DService.ID3DService mD3DService;
+
+        private static Decal.Interop.D3DService.eShape mArrow;
         
 
 
