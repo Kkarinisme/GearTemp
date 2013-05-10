@@ -96,129 +96,139 @@ namespace GearFoundry
 						tRule.RuleDamageTypes = sumarray.Sum();
 					}
 					
+					WriteToChat("DamageType Sum = " + tRule.RuleDamageTypes.ToString());
+					
 					if(!Double.TryParse(XRule.Element("McModAttack").Value, out tRule.RuleMcModAttack)){tRule.RuleMcModAttack = 0;}
-					tRule.RuleMcModAttack = (tRule.RuleMcModAttack*0.01) + 1;  //convert for direct comparison
+					
+					if(tRule.RuleMcModAttack > 0) {tRule.RuleMcModAttack += (tRule.RuleMcModAttack*0.01) + 1;}  //convert for direct comparison
+					
 					if(!Double.TryParse(XRule.Element("MeleeDef").Value, out tRule.RuleMeleeD)){tRule.RuleMeleeD = 0;}
-					tRule.RuleMeleeD = (tRule.RuleMeleeD*0.01) + 1;  //convert for direct comparison
+					
+					if(tRule.RuleMeleeD > 0) {tRule.RuleMeleeD = (tRule.RuleMeleeD*0.01) + 1;}  //convert for direct comparison
+					
 					if(!Double.TryParse(XRule.Element("MagicDef").Value, out tRule.RuleMagicD)){tRule.RuleMagicD = 0;}
-					tRule.RuleMagicD = (tRule.RuleMagicD*0.01) + 1;  //convert for direct comparison		
+					
+					if(tRule.RuleMagicD != 0) {tRule.RuleMagicD = (tRule.RuleMagicD*0.01) + 1;}  //convert for direct comparison
 	
 					splitstringEnabled = (XRule.Element("WieldEnabled").Value).Split(',');
 					splitstringWield = (XRule.Element("ReqSkill").Value).Split(',');
 					splitstringDamage = (XRule.Element("MinMax").Value).Split(',');
 					splitstringMSCleave = (XRule.Element("MSCleave").Value).Split(',');
 					
-					if(!Boolean.TryParse(splitstringEnabled[0], out tRule.RuleWeaponEnabledA)) {tRule.RuleWeaponEnabledA = false;}
-					if(tRule.RuleWeaponEnabledA)
-					{
-						if(!Boolean.TryParse(splitstringMSCleave[0], out tRule.MSCleaveA)) {tRule.MSCleaveA = false;}
-						if(!Int32.TryParse(splitstringWield[0], out tRule.WieldReqValueA)) {tRule.WieldReqValueA = 0;}
-						damagesplit = splitstringDamage[0].Split('-');
-						if(damagesplit.Length == 2)
-						{
-							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageA)) {tRule.MaxDamageA = 0;}
-							int tint;
-							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-							if(tRule.MaxDamageA > 0) {tRule.VarianceA = (tRule.MaxDamageA - tint)/tRule.MaxDamageA;}
-							else {tRule.VarianceA = 0;}
-						}
-						else
-						{
-							if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageA)) {tRule.MaxDamageA = 0;}
-							tRule.VarianceA = 0;
-						}
-					}
-					else
-					{
-						tRule.MSCleaveA = false; tRule.MaxDamageA = 0; tRule.VarianceA = 0;
-					}
+					//TODO:  Debug this!
 					
-					if(splitstring.Length > 1)
-					{
-						if(!Boolean.TryParse(splitstringEnabled[1], out tRule.RuleWeaponEnabledB)) {tRule.RuleWeaponEnabledB = false;}
-						if(tRule.RuleWeaponEnabledB)
-						{
-							if(!Boolean.TryParse(splitstringMSCleave[1], out tRule.MSCleaveB)) {tRule.MSCleaveB = false;}
-							if(!Int32.TryParse(splitstringWield[1], out tRule.WieldReqValueB)) {tRule.WieldReqValueB = 0;}
-							damagesplit = splitstringDamage[1].Split('-');
-							if(damagesplit.Length == 2)
-							{
-								if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageB)) {tRule.MaxDamageB = 0;}
-								int tint;
-								if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-								if(tRule.MaxDamageB > 0) {tRule.VarianceB = (tRule.MaxDamageB - tint)/tRule.MaxDamageB;}
-								else {tRule.VarianceB = 0;}
-							
-							}
-							else
-							{
-								if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageB)) {tRule.MaxDamageB = 0;}
-								tRule.VarianceB = 0;
-							}
-						}
-					}
-					else
-					{
-						tRule.MSCleaveB = false; tRule.MaxDamageB = 0; tRule.VarianceB = 0;
-					}
+//					if(!Boolean.TryParse(splitstringEnabled[0], out tRule.RuleWeaponEnabledA)) {tRule.RuleWeaponEnabledA = false;}
+//					if(tRule.RuleWeaponEnabledA)
+//					{
+//						if(!Boolean.TryParse(splitstringMSCleave[0], out tRule.MSCleaveA)) {tRule.MSCleaveA = false;}
+//						if(!Int32.TryParse(splitstringWield[0], out tRule.WieldReqValueA)) {tRule.WieldReqValueA = 0;}
+//						damagesplit = splitstringDamage[0].Split('-');
+//						if(damagesplit.Length == 2)
+//						{
+//							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageA)) {tRule.MaxDamageA = 0;}
+//							int tint;
+//							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
+//							if(tRule.MaxDamageA > 0) {tRule.VarianceA = (tRule.MaxDamageA - tint)/tRule.MaxDamageA;}
+//							else {tRule.VarianceA = 0;}
+//						}
+//						else
+//						{
+//							if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageA)) {tRule.MaxDamageA = 0;}
+//							tRule.VarianceA = 0;
+//						}
+//					}
+//					else
+//					{
+//						tRule.MSCleaveA = false; tRule.MaxDamageA = 0; tRule.VarianceA = 0;
+//					}
+//					
+//					if(splitstring.Length > 1)
+//					{
+//						if(!Boolean.TryParse(splitstringEnabled[1], out tRule.RuleWeaponEnabledB)) {tRule.RuleWeaponEnabledB = false;}
+//						if(tRule.RuleWeaponEnabledB)
+//						{
+//							if(!Boolean.TryParse(splitstringMSCleave[1], out tRule.MSCleaveB)) {tRule.MSCleaveB = false;}
+//							if(!Int32.TryParse(splitstringWield[1], out tRule.WieldReqValueB)) {tRule.WieldReqValueB = 0;}
+//							damagesplit = splitstringDamage[1].Split('-');
+//							if(damagesplit.Length == 2)
+//							{
+//								if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageB)) {tRule.MaxDamageB = 0;}
+//								int tint;
+//								if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
+//								if(tRule.MaxDamageB > 0) {tRule.VarianceB = (tRule.MaxDamageB - tint)/tRule.MaxDamageB;}
+//								else {tRule.VarianceB = 0;}
+//							
+//							}
+//							else
+//							{
+//								if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageB)) {tRule.MaxDamageB = 0;}
+//								tRule.VarianceB = 0;
+//							}
+//						}
+//					}
+//					else
+//					{
+//						tRule.MSCleaveB = false; tRule.MaxDamageB = 0; tRule.VarianceB = 0;
+//					}
+//					
+//					if(splitstring.Length > 2)	
+//					{
+//						if(!Boolean.TryParse(splitstringEnabled[2], out tRule.RuleWeaponEnabledC)) {tRule.RuleWeaponEnabledC = false;}
+//						if(tRule.RuleWeaponEnabledC)
+//						{
+//							if(!Boolean.TryParse(splitstringMSCleave[2], out tRule.MSCleaveC)) {tRule.MSCleaveC = false;}
+//							if(!Int32.TryParse(splitstringWield[2], out tRule.WieldReqValueC)) {tRule.WieldReqValueC = 0;}
+//							damagesplit = splitstringDamage[2].Split('-');
+//							if(damagesplit.Length == 2)
+//							{
+//								if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageC)) {tRule.MaxDamageC = 0;}
+//								int tint;
+//								if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
+//								if(tRule.MaxDamageC > 0) {tRule.VarianceC = (tRule.MaxDamageC - tint)/tRule.MaxDamageC;}
+//								else {tRule.VarianceC = 0;}
+//							
+//							}
+//							else
+//							{
+//								if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageC)) {tRule.MaxDamageC = 0;}
+//								tRule.VarianceC = 0;
+//							}
+//						}
+//					}
+//					else
+//					{
+//						tRule.MSCleaveC = false; tRule.MaxDamageC = 0; tRule.VarianceC = 0;
+//					}
+//					
+//					if(splitstring.Length > 3)	
+//					{
+//						if(!Boolean.TryParse(splitstringEnabled[3], out tRule.RuleWeaponEnabledD)) {tRule.RuleWeaponEnabledD = false;}
+//						if(tRule.RuleWeaponEnabledD)
+//						{
+//							if(!Boolean.TryParse(splitstringMSCleave[3], out tRule.MSCleaveD)) {tRule.MSCleaveD = false;}
+//							if(!Int32.TryParse(splitstringWield[3], out tRule.WieldReqValueD)) {tRule.WieldReqValueD = 0;}
+//							damagesplit = splitstringDamage[3].Split('-');
+//							if(damagesplit.Length == 2)
+//							{
+//								if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageD)) {tRule.MaxDamageD = 0;}
+//								int tint;
+//								if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
+//								if(tRule.MaxDamageD > 0) {tRule.VarianceD = (tRule.MaxDamageD - tint)/tRule.MaxDamageD;}
+//								else {tRule.VarianceD = 0;}
+//							
+//							}
+//							else
+//							{
+//								if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageD)) {tRule.MaxDamageD = 0;}
+//								tRule.VarianceD = 0;
+//							}
+//						}
+//					}
+//					else
+//					{
+//						tRule.MSCleaveD = false; tRule.MaxDamageD = 0; tRule.VarianceD = 0;
+//					}		
 					
-					if(splitstring.Length > 2)	
-					{
-						if(!Boolean.TryParse(splitstringEnabled[2], out tRule.RuleWeaponEnabledC)) {tRule.RuleWeaponEnabledC = false;}
-						if(tRule.RuleWeaponEnabledC)
-						{
-							if(!Boolean.TryParse(splitstringMSCleave[2], out tRule.MSCleaveC)) {tRule.MSCleaveC = false;}
-							if(!Int32.TryParse(splitstringWield[2], out tRule.WieldReqValueC)) {tRule.WieldReqValueC = 0;}
-							damagesplit = splitstringDamage[2].Split('-');
-							if(damagesplit.Length == 2)
-							{
-								if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageC)) {tRule.MaxDamageC = 0;}
-								int tint;
-								if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-								if(tRule.MaxDamageC > 0) {tRule.VarianceC = (tRule.MaxDamageC - tint)/tRule.MaxDamageC;}
-								else {tRule.VarianceC = 0;}
-							
-							}
-							else
-							{
-								if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageC)) {tRule.MaxDamageC = 0;}
-								tRule.VarianceC = 0;
-							}
-						}
-					}
-					else
-					{
-						tRule.MSCleaveC = false; tRule.MaxDamageC = 0; tRule.VarianceC = 0;
-					}
-					
-					if(splitstring.Length > 3)	
-					{
-						if(!Boolean.TryParse(splitstringEnabled[3], out tRule.RuleWeaponEnabledD)) {tRule.RuleWeaponEnabledD = false;}
-						if(tRule.RuleWeaponEnabledD)
-						{
-							if(!Boolean.TryParse(splitstringMSCleave[3], out tRule.MSCleaveD)) {tRule.MSCleaveD = false;}
-							if(!Int32.TryParse(splitstringWield[3], out tRule.WieldReqValueD)) {tRule.WieldReqValueD = 0;}
-							damagesplit = splitstringDamage[3].Split('-');
-							if(damagesplit.Length == 2)
-							{
-								if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageD)) {tRule.MaxDamageD = 0;}
-								int tint;
-								if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-								if(tRule.MaxDamageD > 0) {tRule.VarianceD = (tRule.MaxDamageD - tint)/tRule.MaxDamageD;}
-								else {tRule.VarianceD = 0;}
-							
-							}
-							else
-							{
-								if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageD)) {tRule.MaxDamageD = 0;}
-								tRule.VarianceD = 0;
-							}
-						}
-					}
-					else
-					{
-						tRule.MSCleaveD = false; tRule.MaxDamageD = 0; tRule.VarianceD = 0;
-					}				
 					splitstring = (XRule.Element("ArmorType").Value).Split(',');
 					if(splitstring.Length > 0)
 					{

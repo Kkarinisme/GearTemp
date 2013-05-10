@@ -483,8 +483,8 @@ namespace GearFoundry
 					{
 						if(IOItemWithID.ObjectClass == ObjectClass.WandStaffOrb)
 						{
-							//HACK:  mana C bonus is 0.xxx not 1.xxx  Added +1 below to make it evaluate without needing a new field
-							if(rule.RuleMcModAttack > (IOItemWithID.WeaponManaCBonus + 1)) {RuleName = String.Empty; goto Next;}
+							//NOTE:  Mana C doesn't report as 1.xxxx like all other doubles for weapons.  It has had +1 added in IdentifiedObject get acesssor to correct
+							if(rule.RuleMcModAttack > (IOItemWithID.WeaponManaCBonus)) {RuleName = String.Empty; goto Next;}
 						}
 						if(IOItemWithID.ObjectClass == ObjectClass.MissileWeapon)
 						{
@@ -499,9 +499,6 @@ namespace GearFoundry
 					//TODO:  Check magic D bonus
 					if(rule.RuleMagicD > 0)
 					{
-							WriteToChat("Rule.magicD: " + rule.RuleMagicD.ToString());
-							WriteToChat("Item.magicD: " + IOItemWithID.WeaponMagicDBonus.ToString());
-							WriteToChat("Item.MissileD: " + IOItemWithID.WeaponMissileDBonus.ToString());
 							if(IOItemWithID.WeaponMagicDBonus > 0)
 							{
 								if(rule.RuleMagicD > IOItemWithID.WeaponMagicDBonus) {RuleName = String.Empty; goto Next;}
@@ -545,11 +542,11 @@ namespace GearFoundry
 //						}
 //						if(!ruletrue[0] && !ruletrue[1] && !ruletrue[2] && !ruletrue[3]) {RuleName = String.Empty; goto Next;}
 //					}
-					
-//					if(rule.RuleDamageTypes > 0)
-//					{
-//						if(!((rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)) {RuleName = String.Empty; goto Next;}
-//					}
+					//Irquk:  Confirmed functional
+					if(rule.RuleDamageTypes > 0)
+					{
+						if(!((rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)) {RuleName = String.Empty; goto Next;}
+					}
 //					
 //					//Armor Levels
 //					if(rule.RuleArmorLevel > 0)

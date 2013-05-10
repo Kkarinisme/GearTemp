@@ -1637,6 +1637,7 @@ namespace GearFoundry
 			try
 			{
 				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();	
+				UpdateValetHud();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -1765,7 +1766,7 @@ namespace GearFoundry
 			try
 			{
 				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
-				ValetEquipList = GearButlerSettings.SuitList1;	
+				ValetEquipList = GearButlerSettings.SuitList1.ToList();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -1774,7 +1775,7 @@ namespace GearFoundry
 			try
 			{
 				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
-				ValetEquipList = GearButlerSettings.SuitList2;	
+				ValetEquipList = GearButlerSettings.SuitList2.ToList();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -1783,7 +1784,7 @@ namespace GearFoundry
 			try
 			{
 				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
-				ValetEquipList = GearButlerSettings.SuitList3;	
+				ValetEquipList = GearButlerSettings.SuitList3.ToList();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -1792,7 +1793,7 @@ namespace GearFoundry
 			try
 			{
 				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
-				ValetEquipList = GearButlerSettings.SuitList0;	
+				ValetEquipList = GearButlerSettings.SuitList0.ToList();
 			}catch(Exception ex){LogError(ex);}
 		}
 			
@@ -1802,8 +1803,11 @@ namespace GearFoundry
 				{
 					if(ValetRemoveList.Count > 0)
 					{
+						if(ValetRemoveList.First().Values(LongValueKey.EquippedSlots) == 0)
+						{
+							ValetRemoveList.RemoveAt(0);
+						}
 						Core.Actions.MoveItem(ValetRemoveList.First().Id, Core.CharacterFilter.Id,0, false);
-						ValetRemoveList.RemoveAt(0);
 						return;
 					}
 						
@@ -1815,10 +1819,10 @@ namespace GearFoundry
 				try
 				{
 					if(ValetEquipList.Count > 0)
-					{
+					{	
 						if(Core.WorldFilter[ValetEquipList.First().ItemId].Values(LongValueKey.EquippedSlots) > 0)
 						{
-							ValetEquipList.RemoveAt(0);
+								ValetEquipList.RemoveAt(0);
 						}
 						if(ValetEquipList.First().SlotId == 0x200000 && Core.WorldFilter[ValetEquipList.First().ItemId].ObjectClass == ObjectClass.MeleeWeapon)
 						{
@@ -1831,6 +1835,7 @@ namespace GearFoundry
 						else
 						{
 							Core.Actions.UseItem(ValetEquipList.First().ItemId,0);
+							
 						}
 						return;
 					}
@@ -1877,7 +1882,7 @@ namespace GearFoundry
 				}catch(Exception ex){LogError(ex);}
 			}
 			
-			void ButlerTimerDo(object sender, System.EventArgs e)
+			private void ButlerTimerDo(object sender, System.EventArgs e)
 			{
 				try
 				{
