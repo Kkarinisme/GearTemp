@@ -601,9 +601,9 @@ namespace GearFoundry
             chkRuleRed.Checked = bRuleRed;
             chkRuleYellow.Checked = bRuleYellow;
             chkRuleBlue.Checked = bRuleBlue;
-            
-            //chkRuleAnySet.Checked = bRuleAnySet;
-            //chkRuleMustBeSet.Checked = bRuleMustBeSet;
+
+            cboRuleEssMastery.Selected = nRuleEssMastery;
+
             if (nRuleMustHaveSpell > 0)
             {
                 getSpellName(nRuleMustHaveSpell.ToString());

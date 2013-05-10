@@ -49,11 +49,7 @@
                     <control progid="DecalControls.Edit" name="txtRuleWieldReqValue" left="290" top="220" width="50" height="16"  text=""/>
                     <control progid="DecalControls.StaticText" name="lblRuleWieldLevel" left="200" top="220" width="80" height="16" text="Char Lvl &lt;="/>
                     <control progid="DecalControls.Edit" name="txtRuleWieldLevel" left="290" top="200" width="50" height="16"  text=""/>
-                      <!--<control progid="DecalControls.Checkbox" name="chkRuleTradeBot" left="8" top="230" width="120" height="16" text="Tradebot"/>
-                      <control progid="DecalControls.Checkbox" name="chkRuleTradeBotOnly" left="8" top="250" width="120" height="16" text="Tradebot Only"/>-->
-                    <!--<control progid="DecalControls.StaticText" name="lblRuleAlertName" left="160" top="250" width="100" height="20" text="Alert.wav:" />
-                      <control progid="DecalControls.Choice" left="160" top="265" width="100" height="20" name="cboRuleAlert" />-->
-                    </control>
+                   </control>
  						      	</page> <!--main-->
                     <page label="Weapon">
                       <control progid="DecalControls.FixedLayout" clipped="">
@@ -156,7 +152,37 @@
                       <control progid="DecalControls.Checkbox" name="chkRuleBlue" left="250" top="150" width="150" height="16" text="Blue: " />
                     </control>
                   </page>   <!--Cloaks/Aetheria-->
-                  
+                  <page label="Essences">
+
+                      <control progid="DecalControls.FixedLayout" clipped="">
+                      <control progid="DecalControls.StaticText" name="lblRuleEssMast" left="10" top="30" width="88" height="16" text="Mastery:" />
+                      <control progid="DecalControls.Choice" name="cboRuleEssMastery" left="10" top="50" width="200" height="100"></control>
+                     
+                      <control progid="DecalControls.StaticText" name="lblRuleEssElements" left="10" top="150" width="88" height="16" text="Element:" />
+                      <control progid="DecalControls.List" name="lstRuleEssElements" left="10" top="140" width="200" height="100">
+                        <column progid="DecalControls.CheckColumn" />
+                        <column progid="DecalControls.TextColumn" fixedwidth="175" />
+                        <column progid="DecalControls.TextColumn" />
+                      </control>
+                      <control progid="DecalControls.StaticText" name="lblRuleEssLevel" left="250" top="30" width="120" height="16" text="Essence Lvl: &lt;="/>
+                      <control progid="DecalControls.Edit" name="txtRuleEssLevel" left="355" top="30" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+                      <control progid="DecalControls.StaticText" name="lblRuleEssSummLevel" left="250" top="50" width="120" height="16" text="Summoning Lvl: &lt;="/>
+                      <control progid="DecalControls.Edit" name="txtRuleEssSummLevel" left="355" top="50" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+                      <control progid="DecalControls.StaticText" name="lblRuleEssDamageLevel" left="250" top="70" width="120" height="16" text="Damage Lvl: =&gt;"/>
+                      <control progid="DecalControls.Edit" name="txtRuleEssDamageLevel" left="355" top="70" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+                      <control progid="DecalControls.StaticText" name="lblRuleEssCDLevel" left="250" top="90" width="120" height="16" text="CritDam Lvl: =&gt;"/>
+                      <control progid="DecalControls.Edit" name="txtRuleEssCDLevel" left="355" top="90" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+                      <control progid="DecalControls.StaticText" name="lblRuleEssCRLevel" left="250" top="110" width="120" height="16" text="CritResist Lvl: =&gt;"/>
+                      <control progid="DecalControls.Edit" name="txtRuleEssCRLevel" left="355" top="110" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+                      <control progid="DecalControls.StaticText" name="lblRuleEssDRLevel" left="250" top="130" width="120" height="16" text="Dam Resist Lvl: =&gt;"/>
+                      <control progid="DecalControls.Edit" name="txtRuleEssDRLevel" left="355" top="130" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+                      <control progid="DecalControls.StaticText" name="lblRuleEssCritLevel" left="250" top="150" width="120" height="16" text="EssCrit Lvl: =&gt;"/>
+                      <control progid="DecalControls.Edit" name="txtRuleEssCritLevel" left="355" top="150" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+
+                    </control>
+                  </page>
+                  <!--Essences-->
+
                   <page label="Req. Spells">
 									<control progid="DecalControls.FixedLayout" clipped="">
 										<control progid="DecalControls.StaticText" name="lblRuleMustHaveSpell:" left="10" top="8" width="50" height="16" text="Must have" />
@@ -266,10 +292,6 @@
             <column progid="DecalControls.CheckColumn" />
             <column progid="DecalControls.TextColumn" fixedwidth="130" />
             <column progid="DecalControls.TextColumn" fixedwidth="60" />
-            <!--<column progid="DecalControls.TextColumn" fixedwidth="170" />
-						<column progid="DecalControls.TextColumn" fixedwidth="55" />
-						<column progid="DecalControls.IconColumn" />
-						<column progid="DecalControls.TextColumn" />-->
 					</control>
 					<control progid="DecalControls.PushButton" name="btnUstItems" left="8" top="280" width="50" height="18" text="Load Ust" />
 					<control progid="DecalControls.PushButton" name="btnUstClear" left="70" top="280" width="50" height="18" text="Clear" />
@@ -360,32 +382,16 @@
         	
           <Control progid="DecalControls.StaticText" name="lblGearVisection" left ="250" top="5" width="150" height="16" text="GearVisection Settings:"/>
           <control progid="DecalControls.Checkbox" name="chkGearVisectionEnabled" left="255" top="20" width="150" height="16" textcolor="16777215" text="Enabled"/>
-          <!--<control progid="DecalControls.Checkbox" name="chkToonKills" left="5" top="100" width="150" height="16" textcolor="16777215" text="Self Kills"/>
-          <control progid="DecalControls.Checkbox" name="chkFellowKills" left="5" top="120" width="150" height="16" textcolor="16777215" text="Fellowship Kills"/>
-          <control progid="DecalControls.Checkbox" name="chkToonCorpses" left="5" top="140" width="150" height="16" textcolor="16777215" text="Track Dead Me(s)"/>
-          <control progid="DecalControls.Checkbox" name="chkPermittedCorpses" left="5" top="160" width="150" height="16" textcolor="16777215" text="Permitted(s)"/>-->
         	
           <Control progid="DecalControls.StaticText" name="lblGearSense" left ="250" top="50" width="150" height="16" text="GearSense Settings:"/>	 
           <control progid="DecalControls.Checkbox" name="chkGearSenseEnabled" left="255" top="70" width="150" height="16" textcolor="16777215" text="Enabled"/>
-          <!--<control progid="DecalControls.Checkbox" name="chkAllMobs" left="175" top="40" width="150" height="16" textcolor="16777215" text="All Mobs"/>
-          <control progid="DecalControls.Checkbox" name="chkSelectedMobs" left="175" top="60" width="150" height="16" textcolor="16777215" text="Mobs List"/>
-          <control progid="DecalControls.Checkbox" name="chkAllNPCs" left="175" top="80" width="150" height="16" textcolor="16777215" text="All NPCs"/>
-          <control progid="DecalControls.Checkbox" name="chkSelectedTrophies" left="175" top="100" width="150" height="16" textcolor="16777215" text="Trophies/NPCs List"/>
-          <control progid="DecalControls.Checkbox" name="chkAllPlayers" left="175" top="120" width="150" height="16" textcolor="16777215" text="All Players"/>
-          <control progid="DecalControls.Checkbox" name="chkAllegPlayers" left="175" top="140" width="150" height="16" textcolor="16777215" text="Allegiance Members"/>
-          <control progid="DecalControls.Checkbox" name="chkFellow" left="175" top="160" width="150" height="16" textcolor="16777215" text="Fellow Members"/>
-          <control progid="DecalControls.Checkbox" name="chkPortals" left="175" top="180" width="150" height="16" textcolor="16777215" text="Display Portals"/>
-          <control progid="DecalControls.Checkbox" name="chkLifestones" left="175" top="200" width="150" height="16" textcolor="16777215" text="Display Lifestone"/>-->
-        	
+       	
           <Control progid="DecalControls.StaticText" name="lblGearButler" left ="250" top="100" width="150" height="16" text="GearButler Settings:"/>	
           <control progid="DecalControls.Checkbox" name="chkGearButlerEnabled" left="255" top="120" width="150" height="16" textcolor="16777215" text="Enabled"/>
-          <!--<control progid="DecalControls.Checkbox" name="chkAutoRingKeys" left="175" top="40" width="150" height="16" textcolor="16777215" text="AutoRing Keys"/>-->
         	
           <Control progid="DecalControls.StaticText" name="lblGearInspector" left ="250" top="150" width="150" height="16" text="GearInspector Settings:"/>
           <control progid="DecalControls.Checkbox" name="chkGearInspectorEnabled" left="255" top="170" width="150" height="16" textcolor="16777215" text="Enabled"/>
         	
-           
-          <!--control progid="DecalControls.Checkbox" name="chkVulnedIcons" left="5" top="120" width="225" height="24" textcolor="16777215" text="Display Vulned Icons"/-->
          
           <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="100" width="225" height="24" text="Gear"/>
           <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="120" width="225" height="24" text="Inventory on Startup"/>
@@ -393,29 +399,7 @@
           <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="10" top="160" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryWaiting" left="10" top="180" width="225" height="24" textcolor="16777215" text="List inventory waiting to be id'd"/>
           <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="220" width="225" height="24" text="Misc"/>
-          <!--<control progid="DecalControls.Checkbox" name="chkSalvageComb" left="10" top="340" width="225" height="24" text="Enable Gear Foundry Salvage Combining"/>-->
-          <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="240" width="225" height="24" text="Gather Toon Stats"/>
-          <!--<control progid="DecalControls.Checkbox" name="chkToonArmor" left="10" top="380" width="225" height="24" textcolor="16777215" text="Record Toon Armor"/>-->
-          <!--<control progid="DecalControls.Checkbox" name="chk3DArrow" left="5" top="400" width="225" height="24" textcolor="16777215" text="Show 3D arrow"/>
-          <control progid="DecalControls.Checkbox" name="chkMute" left="5" top="420" width="225" height="24" textcolor="16777215" text="Mute Notifies"/>
-          <control progid="DecalControls.Checkbox" name="chkFullScreen" left="5" top="440" width="225" height="24" textcolor="16777215" text="Windowed Full Screen"/>-->
-        	
-
-          <!--control progid="DecalControls.Checkbox" name="chkScrolls7" left="250" top="20" width="225" height="24" text="Unknown Scrolls Lvl 7"/-->
-          <!--control progid="DecalControls.Checkbox" name="chkScrolls7Tnd" left="250" top="40" width="225" height="24" textcolor="16777215" text="Lv7 - Only Trained Schools"/-->
-          <!--control progid="DecalControls.Checkbox" name="chkAllScrolls" left="250" top="60" width="225" height="24" textcolor="16777215" text="All Level of Scrolls"/-->
-
-          <!--control progid="DecalControls.Checkbox" name="chkTells" left="250" top="180" width="225" height="24" textcolor="16777215" text="Tells Received"/-->
-          <!--<Control progid="DecalControls.StaticText" name="lblFilterSetup" left ="250" top="210" width="225" height="24" text="Filters"/>
-          <control progid="DecalControls.Checkbox" name="chkEvades" left="250" top="230" width="225" height="24" text="Evades"/>
-          <control progid="DecalControls.Checkbox" name="chkResists" left="250" top="250" width="225" height="24" textcolor="16777215" text="Resists"/>
-          <control progid="DecalControls.Checkbox" name="chkSpellCasting" left="250" top="270" width="225" height="24" textcolor="16777215" text="SpellCasting"/>
-          <control progid="DecalControls.Checkbox" name="chkSpellsExpire" left="250" top="290" width="225" height="24" textcolor="16777215" text="Spells Expire"/>
-          <control progid="DecalControls.Checkbox" name="chkVendorTells" left="250" top="310" width="225" height="24" textcolor="16777215" text="Vendor Tells"/>
-          <Control progid="DecalControls.StaticText" name="lblAuto" left ="250" top="340" width="225" height="20" text="Auto"/>
-          <control progid="DecalControls.Checkbox" name="chkStacking" left="250" top="360" width="225" height="24" text="Auto Stack"/>
-          <control progid="DecalControls.Checkbox" name="chkPickup" left="250" top="380" width="225" height="24" textcolor="16777215" text="Auto Pickup"/>
-          <control progid="DecalControls.Checkbox" name="chkUst" left="250" top="400" width="225" height="24" textcolor="16777215" text="Auto Ust"/>-->
+         <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="240" width="225" height="24" text="Gather Toon Stats"/>
         </control>
       </control>
     </page>

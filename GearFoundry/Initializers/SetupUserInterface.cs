@@ -425,6 +425,16 @@ namespace GearFoundry
                     setUpForChecks(n, flag, lst);
                 }
 
+                populateEssElementsListBox();
+                flag = sRuleEssElements;
+                if (flag.Length != 0)
+                {
+                    int n = EssElementsList.Count;
+                    MyClasses.MetaViewWrappers.IList lst = lstRuleEssElements;
+                    setUpForChecks(n, flag, lst);
+                }
+
+
                 int id = 0;
                 flag = sRuleSpells;
                 if (flag.Length != 0)
@@ -979,6 +989,8 @@ namespace GearFoundry
         private void populateLst(MyClasses.MetaViewWrappers.IList lstView, List<IDNameLoadable> lst, int mlist)
         {
             lstView.Clear();
+            
+            WriteToChat("Name of List being populated: " + lstView.Name);
 
 
             foreach (IDNameLoadable element in lst)
@@ -1204,6 +1216,20 @@ namespace GearFoundry
         }
 
 
+        private void populateEssElementsListBox()
+        {
+            try
+            {
+                WriteToChat("I am in function populateEssElementsListBox");
+
+                int mList = 3;
+                populateLst(lstRuleEssElements, EssElementsList, mList);
+
+            }
+
+            catch (Exception ex) { LogError(ex); }
+
+        }
 
 
 
@@ -1252,7 +1278,6 @@ namespace GearFoundry
 
 
 
-
         [ControlEvent("btnUpdateSalvage", "Click")]
         private void btnUpdateSalvage_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
         {
@@ -1296,60 +1321,7 @@ namespace GearFoundry
         {
 
         }
-        private void txtVbratio_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-
-        }
-
-        //   // TODO return after setting up ust page
-
-        //    [ControlEvent("lstUstList", "Selected")]
-        ////    private void OnlstSetupSalvageSelected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)     //Decal.Adapter.ListSelectEventArgs e)
-        //    private void lstUstList_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)
-        //    {
-        //        Decal.Adapter.Wrappers.ListRow lRow = null;
-        //        MyClasses.MetaViewWrappers.IListRow row = null;
-        //        string id = null;
-
-        //        row = lstUstList[e.Row];
-        //        id = Convert.ToString(row[3][0]);
-
-        //        delete
-        //        if (e.Column == 2)
-        //        {
-        //            mUstItems.Remove(Convert.ToInt32(id));
-        //            lstUstList.Delete(e.Row);
-        //        }
-        //        else
-        //        {
-        //            Host.Actions.SelectItem(Convert.ToInt32(id));
-        //        }
-
-        //    }
-
-        //    [ControlEvent("btnUstItems", "Click")]
-        //    private void btnUstItems_Click(object sender,  MyClasses.MetaViewWrappers.MVControlEventArgs e)  // Decal.Adapter.ControlEventArgs e)
-        //    {
-        //        if (mUstItems.Count == 0) {
-        //            scannInventoryForSalvage(Core.CharacterFilter.Id);
-        //        } else {
-        //            loadSalvagePanel();
-        //        }
-        //    }
-
-        //    [ControlEvent("btnUstClear", "Click")]
-        //    private void btnUstClear_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
-        //    {
-        //        lstUstList.Clear();
-        //        mUstItems.Clear();
-        //    }
-
-        //    [ControlEvent("btnUstSalvage", "Click")]
-        //    private void btnUstSalvage_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
-        //    {
-        //        salvage();
-        //    }
-
+ 
         //    #endregion
 
 
