@@ -227,9 +227,19 @@ namespace GearFoundry
 			public int DamageType 
 			{
 				get
-				{			
-					if (wo.Values(LongValueKey.DamageType) > 0) {return wo.Values(LongValueKey.DamageType);}
+				{		
+					if(wo.ObjectClass == ObjectClass.MissileWeapon || wo.ObjectClass == ObjectClass.MeleeWeapon)
+					{
+						if (wo.Values(LongValueKey.DamageType) > 0) {return wo.Values(LongValueKey.DamageType);}
+						else {return 0;}
+					}
+					else if(wo.ObjectClass == ObjectClass.WandStaffOrb)
+					{
+						if (wo.Values(LongValueKey.WandElemDmgType) > 0) {return wo.Values(LongValueKey.WandElemDmgType);}
+						else {return 0;}
+					}
 					else {return 0;}
+					
 				}
 			}
 			public int ElementalDmgBonus 
@@ -455,7 +465,7 @@ namespace GearFoundry
 				{
 					if (wo.Values(DoubleValueKey.ManaCBonus) > 0) 
 					{
-						return wo.Values(DoubleValueKey.ManaCBonus);
+						return wo.Values(DoubleValueKey.ManaCBonus) + 1;
 					} 
 					else {return 0;}
 				}

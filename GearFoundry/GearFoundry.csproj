@@ -8,7 +8,7 @@
     <ProjectGuid>{70389EC2-7A91-4DE4-8EA5-5C1454270E8E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AlincoVVS</RootNamespace>
+    <RootNamespace>GearFoundry</RootNamespace>
     <AssemblyName>GearFoundry</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -22,6 +22,7 @@
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <RunSourceAnalysis>False</RunSourceAnalysis>
     <TargetFrameworkProfile />
+    <NoWin32Manifest>False</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -111,6 +112,7 @@
     <None Include="Documents\Files Karin is using.txt" />
     <None Include="Documents\GuidetoVariablesandFunctions.txt" />
     <None Include="Documents\IrquksStatusList" />
+    <Compile Include="HudModules\CombatHud.cs" />
     <Compile Include="HudModules\CorpseTracker.cs" />
     <Compile Include="HudModules\GearButler.cs" />
     <Compile Include="HudModules\ItemTracker.cs" />
@@ -143,6 +145,36 @@
       <LogicalName>MainView.xml</LogicalName>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\blip.wav">
+      <LogicalName>blip.wav</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\till.wav">
+      <LogicalName>till.wav</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\chime.wav">
+      <LogicalName>chime.wav</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\click.wav">
+      <LogicalName>click1.wav</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\oop.wav">
+      <LogicalName>oop.wav</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\pluck.wav">
+      <LogicalName>pluck.wav</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\splooge.wav">
+      <LogicalName>splooge.wav</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\click2.wav">
+      <LogicalName>click2.wav</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\womp.wav">
+      <LogicalName>womp.wav</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sounds\womp2.wav">
+      <LogicalName>womp2.wav</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Defaults\Mobs.xml">
@@ -171,6 +203,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sounds" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
