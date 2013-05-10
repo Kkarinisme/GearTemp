@@ -70,6 +70,7 @@ namespace GearFoundry
                 sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);
                 sRuleArmorCoverage = mFindList(lstRuleArmorCoverages, ArmorCoverageList);
                 sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
+                sRuleEssElements = mFindList(lstRuleEssElements, EssElementsList);
                // sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
                // sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
                 mMakeStrings();
@@ -905,6 +906,7 @@ namespace GearFoundry
         //Creates a string of integers separated by columns in listviews in which more than one chosen
         private string mFindList(MyClasses.MetaViewWrappers.IList lstvue, List<IDNameLoadable> lst)
         {
+
             int id = 0;
             string var;
             bool @checked = false;
