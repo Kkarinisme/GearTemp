@@ -149,7 +149,6 @@ namespace GearFoundry
         int nRuleMcModAttack = 0;
         int nRuleMeleeD = 0;
         int nRuleMagicD = 0;
-        int nRuleEssMastery = 0;
         string sRuleReqSkill = "";
         string sRuleReqSkilla = "";
         string sRuleReqSkillb = "";
@@ -179,7 +178,6 @@ namespace GearFoundry
         string sRuleArmorCoverage = "";
         string sRuleCloakSets = "";
         string sRuleCloakSpells = "";
-        string sRuleEssElements = "";
         bool bRuleMustBeUnEnchantable = false;
         bool bRuleCloakMustHaveSpell = false;
         bool bRuleRed = false;
@@ -188,6 +186,8 @@ namespace GearFoundry
         int nRuleYellow = 150;
         bool bRuleBlue = false;
         int nRuleBlue = 75;
+        int nRuleEssMastery = 0;
+        string sRuleEssElements = "";
         int nRuleEssLevel = 0;
         int nRuleEssSummLevel = 0;
         int nRuleEssDamageLevel = 0;
