@@ -276,7 +276,7 @@ namespace GearFoundry
             try
             {
 
-                for (int i = 0; i < 15; i++)
+                for (int i = 0; i <vst.Count; i++)
                 { vst[i] = null; }
             }
             catch (Exception ex) { LogError(ex); }
@@ -284,7 +284,7 @@ namespace GearFoundry
             try
             {
 
-                for (int i = 0; i < 15; i++)
+                for (int i = 0; i < vID.Count; i++)
                 { vID[i] = 0; }
             }
             catch (Exception ex) { LogError(ex); }
@@ -430,14 +430,14 @@ namespace GearFoundry
              nquickieh = 0;
               try
                     {
-                        for (int i = 0; i < 15; i++)
+                        for (int i = 0; i < hst.Count; i++)
                         { hst[i] = null; }
                     }
                catch (Exception ex) { LogError(ex); }
 
                try
                     {
-                        for (int i = 0; i < 15; i++)
+                        for (int i = 0; i < hID.Count; i++)
                         { hID[i] = 0; }
                     }
            

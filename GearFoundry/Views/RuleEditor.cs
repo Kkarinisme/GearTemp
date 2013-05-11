@@ -71,8 +71,8 @@ namespace GearFoundry
                 sRuleArmorCoverage = mFindList(lstRuleArmorCoverages, ArmorCoverageList);
                 sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
                 sRuleEssElements = mFindList(lstRuleEssElements, EssElementsList);
-               // sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
-               // sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
+                sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
+                sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
                 mMakeStrings();
                 writeToXdocRules(xdocRules);
                 xdocRules.Save(rulesFilename);
@@ -710,6 +710,14 @@ namespace GearFoundry
 
         }
 
+        [ControlEvent("cboRuleEssMastery", "Change")]
+        private void cboRuleEssMastery_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+            nRuleEssMastery = EssMasteryList[cboRuleEssMastery.Selected].ID;
+            GearFoundry.PluginCore.WriteToChat("Index of mastery: " + cboRuleEssMastery.Selected.ToString());
+
+        }
+
 
         [ControlEvent("txtRuleMcModAttack", "End")]
         private void txtRuleMcModAttack_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
@@ -834,16 +842,6 @@ namespace GearFoundry
             sRuleMSCleaved = "false";
             if (chkRuleMSCleaved.Checked)
             { sRuleMSCleaved = "true"; }
-
-        }
-
-        [ControlEvent("cboRuleEssMastery", "Change")]
-        private void cboRuleEssMastery_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            nRuleEssMastery = cboRuleEssMastery.Selected;
-            //GearFoundry.PluginCore.WriteToChat("Index of essence mastery: " + cboruleEssMastery.Selected.ToString());
-            //GearFoundry.PluginCore.WriteToChat("Guid of mastery: " + MasteryIndex[cboMasteryType.Selected].ID.ToString());
-            //GearFoundry.PluginCore.WriteToChat("Name of weaponappliesto: " + MasteryIndex[cboMasteryType.Selected].name);
 
         }
 

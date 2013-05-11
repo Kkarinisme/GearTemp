@@ -488,15 +488,11 @@ namespace GearFoundry
                 txtRuleMinArmorLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleMinArmorLevel"];
                 chkRuleMustBeUnenchantable = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleMustBeUnenchantable"];
                 lstRuleSets = (MyClasses.MetaViewWrappers.IList)View["lstRuleSets"];
-                //chkRuleMustBeSet = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleMustBeSet"];
-                //chkRuleAnySet = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleAnySet"];
 				}catch(Exception ex){LogError(ex);}
                   try
                   {
                 chkRuleMustBeUnenchantable.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleMustBeUnenchantable_Change);
                 txtRuleMinArmorLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleMinArmorLevel_End);
-                //chkRuleMustBeSet.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleMustBeSet_Change);
-                //chkRuleAnySet.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleAnySet_Change);
 				}catch(Exception ex){LogError(ex);}
                   try
                   {
@@ -532,6 +528,7 @@ namespace GearFoundry
                       txtRuleEssDRLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssDRLevel"];
                       txtRuleEssCritLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssCritLevel"];
 
+                      cboRuleEssMastery.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cboRuleEssMastery_Change);
                       txtRuleEssLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssLevel_End);
                       txtRuleEssSummLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssSummLevel_End);
                       txtRuleEssDamageLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssDamageLevel_End);
