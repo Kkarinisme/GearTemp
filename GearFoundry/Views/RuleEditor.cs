@@ -780,6 +780,8 @@ namespace GearFoundry
             sRuleWeaponsa = "false";
             if (chkRuleWeaponsa.Checked)
             { sRuleWeaponsa = "true"; }
+            else
+            { sRuleWeaponsa = "false"; }
         }
 
 
@@ -789,6 +791,8 @@ namespace GearFoundry
             sRuleWeaponsb = "false";
             if (chkRuleWeaponsb.Checked)
             { sRuleWeaponsb = "true"; }
+            else
+            { sRuleWeaponsb = "false"; }
         }
 
         [ControlEvent("chkRuleWeaponsc", "Change")]
@@ -797,6 +801,8 @@ namespace GearFoundry
             sRuleWeaponsc = "false";
             if (chkRuleWeaponsc.Checked)
             { sRuleWeaponsc = "true"; }
+            else
+            { sRuleWeaponsc = "false"; }
         }
 
         [ControlEvent("chkRuleWeaponsd", "Change")]
@@ -805,6 +811,8 @@ namespace GearFoundry
             sRuleWeaponsd = "false";
             if (chkRuleWeaponsa.Checked)
             { sRuleWeaponsd = "true"; }
+            else
+            { sRuleWeaponsd = "false"; }
         }
 
         [ControlEvent("chkRuleMSCleavea", "Change")]

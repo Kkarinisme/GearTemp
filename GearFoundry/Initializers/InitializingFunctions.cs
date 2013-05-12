@@ -285,8 +285,6 @@ namespace GearFoundry
                     int num = Convert.ToInt32(el.Element("Priority").Value);
                     if (num == 0)
                         el.Element("Priority").Value = "999";
-                    GearFoundry.PluginCore.WriteToChat("int num in initializingfunctions.cs: = " + num.ToString());
-
  
                 }
 
