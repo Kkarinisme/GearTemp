@@ -13,7 +13,70 @@ namespace GearFoundry
 	public partial class PluginCore
 	{
 	
-		// COMING SOON!
+		private void SubscribeCombatEvents()
+		{
+			try
+			{
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void UnsubscribeCombatEvents()
+		{
+			try
+			{
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void RenderCombatHud()
+		{
+			try
+			{
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void DisposeCombatHud()
+		{
+			try
+			{
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void RenderCombatHudMainTab()
+		{
+			try
+			{
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void DisposeCombatHudMainTab()
+		{
+			try
+			{
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void RenderCombatHudSettingsTab()
+		{
+			try
+			{
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void DisposeCombatHudSettingsTab()
+		{
+			try
+			{
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		
 		
 		

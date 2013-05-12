@@ -197,6 +197,7 @@ namespace GearFoundry
 		{
 			try
 			{	
+				if(!IOCorpse.isvalid){return;}
 				if(IOCorpse.Name.Contains(Core.CharacterFilter.Name) && ghSettings.bDeadMes)
 				{
 					IOCorpse.IOR = IOResult.corpseofself;
@@ -307,9 +308,13 @@ namespace GearFoundry
 		{
 			try 
 			{
-				CorpseTrackingList.RemoveAll(x => x.Id == e.Released.Id);
-				CorpseExclusionList.RemoveAll(x => x == e.Released.Id);
-				UpdateCorpseHud();
+				CorpseTrackingList.RemoveAll(x => !x.isvalid);
+				if (CorpseTrackingList.Any(x => x.Id == e.Released.Id))
+				{
+					CorpseTrackingList.RemoveAll(x => x.Id == e.Released.Id);
+					CorpseExclusionList.RemoveAll(x => x == e.Released.Id);
+					UpdateCorpseHud();
+				}
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
@@ -318,9 +323,13 @@ namespace GearFoundry
 		{
 			try
 			{
-				CorpseTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
-				CorpseExclusionList.RemoveAll(x => x == e.ItemGuid);
-				UpdateCorpseHud();
+				CorpseTrackingList.RemoveAll(x => !x.isvalid);
+				if(CorpseTrackingList.Any(x => x.Id == e.ItemGuid))
+				{
+					CorpseTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
+					CorpseExclusionList.RemoveAll(x => x == e.ItemGuid);
+					UpdateCorpseHud();
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -420,23 +429,19 @@ namespace GearFoundry
 	    {
      		try
 	   		{	
-     			foreach(IdentifiedObject corpse in CorpseTrackingList)
+     			for(int i = CorpseTrackingList.Count - 1; i >= 0 ; i--)
 		    	{
-		    		corpse.DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, corpse.Id);
+     				if(CorpseTrackingList[i].isvalid)
+     				{
+     					CorpseTrackingList[i].DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, CorpseTrackingList[i].Id);
+	     				if(CorpseTrackingList[i].DistanceAway > 5) {CorpseTrackingList.RemoveAt(i);}
+     				}
+     				else
+     				{
+	     				CorpseTrackingList.RemoveAt(i);
+     				}
 		    	}
-     			
      			CorpseTrackingList = CorpseTrackingList.OrderBy(x => x.DistanceAway).ToList();
-     			
-     			
-	     		var CTLpurge = from detectedstuff in CorpseTrackingList
-	     			where detectedstuff.DistanceAway > 5
-	     			select detectedstuff.Id;
-	     		
-	     		foreach(var item in CTLpurge)
-	     		{
-	     			CorpseTrackingList.RemoveAll(x => x.Id == item);
-	     		}
-	     		
 	     		UpdateCorpseHud();
 	     	}catch(Exception ex){LogError(ex);}
     	}
@@ -448,6 +453,9 @@ namespace GearFoundry
 		private HudFixedLayout CorpseHudSettingsTab = null;
 		private HudList CorpseHudList = null;
 		private HudList.HudListRowAccessor CorpseHudListRow = null;
+		
+		private bool CorpseMainTab;
+		private bool CorpseSettingsTab;
 		
 		private const int CorpseRemoveCircle = 0x60011F8;
 			
@@ -534,6 +542,8 @@ namespace GearFoundry
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
 				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);	
+				
+				CorpseMainTab = true;
     			
     		}catch(Exception ex){LogError(ex);}
     	}
@@ -542,8 +552,10 @@ namespace GearFoundry
     	{
     		try
     		{
+    			if(!CorpseMainTab) { return;}
     			CorpseHudList.Click -= (sender, row, col) => CorpseHudList_Click(sender, row, col);	
-    			CorpseHudList.Dispose();				
+    			CorpseHudList.Dispose();	
+				CorpseMainTab = false;    			
     			
     		}catch(Exception ex){LogError(ex);}
     	}
@@ -555,7 +567,10 @@ namespace GearFoundry
     		{
     			UnsubscribeCorpseEvents();
     			DisposeCorpseHudTab();
-                //Mish added the following because corpse hud not disposing
+    			DisposeCorpseHudSettingsTab();
+
+    			CorpseHudSettingsTab.Dispose();
+    			CorpseHudTabLayout.Dispose();
                 CorpseHudTabView.Dispose();
                 CorpseHudLayout.Dispose();
                 CorpseHudView.Dispose();
@@ -605,6 +620,8 @@ namespace GearFoundry
     			DeadMes.Change += DeadMes_Change;
     			Permitteds.Change += Permitteds_Change;
     			
+    			CorpseSettingsTab = true;
+    			
     		}catch(Exception ex){LogError(ex);}
     	}
     		
@@ -612,6 +629,7 @@ namespace GearFoundry
     	{
     		try
     		{
+    			if(!CorpseSettingsTab) { return;}
     			AllCorpses.Change -= AllCorpses_Change;
     			KillsBySelf.Change -= KillsBySelf_Change;
     			KillsByFellows.Change -= KillsByFellows_Change;
@@ -624,6 +642,8 @@ namespace GearFoundry
     			KillsByFellows.Dispose();
     			KillsBySelf.Dispose();
     			AllCorpses.Dispose();
+    			
+    			CorpseSettingsTab = false;
     			
     		}catch(Exception ex){LogError(ex);}
     	}
