@@ -70,8 +70,9 @@ namespace GearFoundry
                 sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);
                 sRuleArmorCoverage = mFindList(lstRuleArmorCoverages, ArmorCoverageList);
                 sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
-               // sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
-               // sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
+                sRuleEssElements = mFindList(lstRuleEssElements, EssElementsList);
+                sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
+                sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
                 mMakeStrings();
                 writeToXdocRules(xdocRules);
                 xdocRules.Save(rulesFilename);
@@ -709,6 +710,14 @@ namespace GearFoundry
 
         }
 
+        [ControlEvent("cboRuleEssMastery", "Change")]
+        private void cboRuleEssMastery_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+            nRuleEssMastery = EssMasteryList[cboRuleEssMastery.Selected].ID;
+            GearFoundry.PluginCore.WriteToChat("Index of mastery: " + cboRuleEssMastery.Selected.ToString());
+
+        }
+
 
         [ControlEvent("txtRuleMcModAttack", "End")]
         private void txtRuleMcModAttack_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
@@ -771,6 +780,8 @@ namespace GearFoundry
             sRuleWeaponsa = "false";
             if (chkRuleWeaponsa.Checked)
             { sRuleWeaponsa = "true"; }
+            else
+            { sRuleWeaponsa = "false"; }
         }
 
 
@@ -780,6 +791,8 @@ namespace GearFoundry
             sRuleWeaponsb = "false";
             if (chkRuleWeaponsb.Checked)
             { sRuleWeaponsb = "true"; }
+            else
+            { sRuleWeaponsb = "false"; }
         }
 
         [ControlEvent("chkRuleWeaponsc", "Change")]
@@ -788,6 +801,8 @@ namespace GearFoundry
             sRuleWeaponsc = "false";
             if (chkRuleWeaponsc.Checked)
             { sRuleWeaponsc = "true"; }
+            else
+            { sRuleWeaponsc = "false"; }
         }
 
         [ControlEvent("chkRuleWeaponsd", "Change")]
@@ -796,6 +811,8 @@ namespace GearFoundry
             sRuleWeaponsd = "false";
             if (chkRuleWeaponsa.Checked)
             { sRuleWeaponsd = "true"; }
+            else
+            { sRuleWeaponsd = "false"; }
         }
 
         [ControlEvent("chkRuleMSCleavea", "Change")]
@@ -833,16 +850,6 @@ namespace GearFoundry
             sRuleMSCleaved = "false";
             if (chkRuleMSCleaved.Checked)
             { sRuleMSCleaved = "true"; }
-
-        }
-
-        [ControlEvent("cboRuleEssMastery", "Change")]
-        private void cboRuleEssMastery_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            nRuleEssMastery = cboRuleEssMastery.Selected;
-            //GearFoundry.PluginCore.WriteToChat("Index of essence mastery: " + cboruleEssMastery.Selected.ToString());
-            //GearFoundry.PluginCore.WriteToChat("Guid of mastery: " + MasteryIndex[cboMasteryType.Selected].ID.ToString());
-            //GearFoundry.PluginCore.WriteToChat("Name of weaponappliesto: " + MasteryIndex[cboMasteryType.Selected].name);
 
         }
 
@@ -905,6 +912,7 @@ namespace GearFoundry
         //Creates a string of integers separated by columns in listviews in which more than one chosen
         private string mFindList(MyClasses.MetaViewWrappers.IList lstvue, List<IDNameLoadable> lst)
         {
+
             int id = 0;
             string var;
             bool @checked = false;

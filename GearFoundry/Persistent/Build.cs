@@ -872,9 +872,6 @@ namespace GearFoundry
 			ElementalList.Add(info);
             info = new IDNameLoadable(2, "Piercing");
 			ElementalList.Add(info);
-//            info = new IDNameLoadable(3, "Slashing:Piercing");
-//            cmbDamageType.Add(info.name);
-////			ElementalList.Add(info);
 			info = new IDNameLoadable(4, "Bludgeoning");
 			ElementalList.Add(info);
 			info = new IDNameLoadable(8, "Cold");

@@ -990,8 +990,6 @@ namespace GearFoundry
         {
             lstView.Clear();
             
-            WriteToChat("Name of List being populated: " + lstView.Name);
-
 
             foreach (IDNameLoadable element in lst)
             {
