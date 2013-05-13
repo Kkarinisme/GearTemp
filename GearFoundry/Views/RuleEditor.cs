@@ -85,6 +85,8 @@ namespace GearFoundry
         {
             try
             {
+                WriteToChat("I am ready to create string for Weapons");
+
                 sRuleMinMaxa = txtRuleMinMaxa.Text.ToString().Trim();
                 sRuleReqSkilla = txtRuleReqSkilla.Text.ToString().Trim();
                 if (sRuleReqSkilla != "")
@@ -92,8 +94,25 @@ namespace GearFoundry
                     sRuleMinMax = sRuleMinMaxa;
                     sRuleReqSkill = sRuleReqSkilla;
                     sRuleMSCleave = sRuleMSCleavea;
-                    sRuleWeapons = sRuleWeaponsa;
+                    sRuleWeapons = sRuleWeaponsa;                    
                 }
+
+                else if (sRuleReqSkilla == "")
+                {
+
+                    try
+                    {
+                        sRuleMinMax = "";
+                        sRuleReqSkill = "";
+                        sRuleMSCleave = "false";
+                        sRuleWeapons = "false";
+
+                    }
+                    catch (Exception ex) { LogError(ex); }
+                }
+
+
+
                 if (sRuleReqSkillb != "")
                 {
                     sRuleMinMax = sRuleMinMax + "," + sRuleMinMaxb;
@@ -101,6 +120,11 @@ namespace GearFoundry
                     sRuleMSCleave = sRuleMSCleave + "," + sRuleMSCleaveb;
                     sRuleWeapons = sRuleWeapons + "," + sRuleWeaponsb;
                 }
+                else if (sRuleReqSkillb == "")
+                {
+                    setDefaultReqSkill();
+                }
+
                 if (sRuleReqSkillc != "")
                 {
                     sRuleMinMax = sRuleMinMax + "," + sRuleMinMaxc;
@@ -109,6 +133,10 @@ namespace GearFoundry
                     sRuleWeapons = sRuleWeapons + "," + sRuleWeaponsc;
                 }
 
+                else if (sRuleReqSkillc == "")
+                {
+                    setDefaultReqSkill();
+                }
                 if (sRuleReqSkilld != "")
                 {
                     sRuleMinMax = sRuleMinMax + "," + sRuleMinMaxd;
@@ -116,12 +144,34 @@ namespace GearFoundry
                     sRuleMSCleave = sRuleMSCleave + "," + sRuleMSCleaved;
                     sRuleWeapons = sRuleWeapons + "," + sRuleWeaponsd;
                 }
+                else if (sRuleReqSkilld == "")
+                {
+                    setDefaultReqSkill();
+                }
+                WriteToChat("String for weapons = " + sRuleReqSkill);
+
+
 
             }
             catch (Exception ex) { LogError(ex); }
 
 
         }
+
+        private void setDefaultReqSkill()
+        {
+            try
+            {
+
+                sRuleMinMax = sRuleMinMax + "," + "";
+                sRuleReqSkill = sRuleReqSkill + "," + "";
+                sRuleMSCleave = sRuleMSCleave + "," + "false";
+                sRuleWeapons = sRuleWeapons + "," + "false";
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
 
         private void writeToXdocRules(XDocument xdoc)
         {
@@ -912,6 +962,7 @@ namespace GearFoundry
         //Creates a string of integers separated by columns in listviews in which more than one chosen
         private string mFindList(MyClasses.MetaViewWrappers.IList lstvue, List<IDNameLoadable> lst)
         {
+            WriteToChat("I am in the function MFindList with list " + lstvue.Name + "; the count of the lst is " + lst.Count.ToString());
 
             int id = 0;
             string var;
