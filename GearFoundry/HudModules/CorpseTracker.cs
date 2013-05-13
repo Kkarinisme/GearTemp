@@ -28,7 +28,7 @@ namespace GearFoundry
 		private bool mCorpseTrackerInPoralSpace = true;
 		private List<string> PermittedCorpsesList = new List<string>(); 
 		public GearVisectionSettings ghSettings;	
-		public DateTime LastCorpseHudUpdate;		
+		public DateTime LastCorpseHudUpdate;			
 		
 		public class MyCorpses  
 		{
@@ -723,16 +723,16 @@ namespace GearFoundry
 	    		if((DateTime.Now - LastCorpseHudUpdate).TotalMilliseconds < 1000){return;}
 	    		else{LastCorpseHudUpdate = DateTime.Now;}
 	    		
+	    		if(!CorpseMainTab) {return;}
+	    		
 	    		CorpseHudList.ClearRows();
-	    		
-	    		
-	    		   	    		
+  	    		
 	    	    foreach(IdentifiedObject corpse in CorpseTrackingList)
 	    	    {
 	    	    	CorpseHudListRow = CorpseHudList.AddRow();
 	    	    	
 	    	    	((HudPictureBox)CorpseHudListRow[0]).Image = corpse.Icon + 0x6000000;
-	    	    	((HudStaticText)CorpseHudListRow[1]).Text = corpse.Name;
+	    	    	((HudStaticText)CorpseHudListRow[1]).Text = corpse.Name + corpse.DistanceString();
 	    	    	if(corpse.IOR == IOResult.corpseselfkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.AntiqueWhite;}
 	    	    	if(corpse.IOR == IOResult.corpsepermitted) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Cyan;}
 	    	    	if(corpse.IOR == IOResult.corpseofself) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Yellow;}

@@ -909,11 +909,11 @@ namespace GearFoundry
 	    private void UpdateLandscapeHud()
 	    {  	
 	    	try
-	    	{   
-	    		if(LandscapeHudTabView.CurrentTab != 0) {return;}
-	    			    		
+	    	{       			    		
 	    		if((DateTime.Now - LastGearSenseUpdate).TotalMilliseconds < 1000){return;}
 	    		else{LastGearSenseUpdate = DateTime.Now;}
+	    		
+	    		if(!LandscapeMainTab) {return;}
 	    		
 	    		LandscapeHudList.ClearRows();
 	    		
