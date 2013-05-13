@@ -110,6 +110,8 @@ namespace GearFoundry
                 Core.ItemDestroyed +=OnLandscapeDestroyed;
                 Core.CharacterFilter.ChangePortalMode += ChangePortalModeLandscape;
                 Core.CharacterFilter.ChangeFellowship += ChangeFellowship_Changed;
+                
+                LandscapeExclusionList.Add(Core.CharacterFilter.Id);
 			}
 			catch(Exception ex) {LogError(ex);}
 			return;
@@ -216,6 +218,7 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(!IOLandscape.isvalid){return;}
 				switch(IOLandscape.ObjectClass)
 				{
 					case ObjectClass.Corpse:
@@ -303,6 +306,7 @@ namespace GearFoundry
 				if(LandscapeTrackingList.FindIndex(x => x.Id == IOLandscape.Id) < 1)
 				{
 					LandscapeTrackingList.Add(IOLandscape);
+					playSoundFromResource(1);
 					UpdateLandscapeHud();
 				}
 				if(!LandscapeExclusionList.Contains(IOLandscape.Id)){LandscapeExclusionList.Add(IOLandscape.Id);}
@@ -368,9 +372,13 @@ namespace GearFoundry
 		{
 			try 
 			{
-				LandscapeTrackingList.RemoveAll(x => x.Id == e.Released.Id);
-				LandscapeExclusionList.RemoveAll(x => x == e.Released.Id);
-				UpdateLandscapeHud();
+				LandscapeTrackingList.RemoveAll(x => !x.isvalid);
+				if(LandscapeTrackingList.Any(x => x.Id == e.Released.Id))
+				{
+					LandscapeTrackingList.RemoveAll(x => x.Id == e.Released.Id);
+					LandscapeExclusionList.RemoveAll(x => x == e.Released.Id);
+					UpdateLandscapeHud();
+				}
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
@@ -379,9 +387,13 @@ namespace GearFoundry
 		{
 			try
 			{
-				LandscapeTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
-				LandscapeExclusionList.RemoveAll(x => x == e.ItemGuid);
-				UpdateLandscapeHud();
+				LandscapeTrackingList.RemoveAll(x => !x.isvalid);
+				if(LandscapeTrackingList.Any(x => x.Id == e.ItemGuid))
+				{
+					LandscapeTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
+					LandscapeExclusionList.RemoveAll(x => x == e.ItemGuid);
+					UpdateLandscapeHud();
+				}
 			} catch(Exception ex) {LogError(ex);}
 			return;
 		}
@@ -421,33 +433,28 @@ namespace GearFoundry
         	}catch(Exception ex) {LogError(ex);}
         	return;
         }
-	        			
-	    private void DistanceCheckLandscape()
+		
+        private void DistanceCheckLandscape()
 	    {
      		try
 	   		{	
-     			foreach(IdentifiedObject spawn in LandscapeTrackingList)
+     			for(int i = LandscapeTrackingList.Count - 1; i >= 0 ; i--)
 		    	{
-		    		spawn.DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, spawn.Id);
+     				if(LandscapeTrackingList[i].isvalid)
+     				{
+	     				LandscapeTrackingList[i].DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, LandscapeTrackingList[i].Id);
+	     				if(LandscapeTrackingList[i].DistanceAway > 5) {LandscapeTrackingList.RemoveAt(i);}
+     				}
+     				else
+     				{
+     					LandscapeTrackingList.RemoveAt(i);
+     				}
 		    	}
-     			
      			LandscapeTrackingList = LandscapeTrackingList.OrderBy(x => x.DistanceAway).ToList();
-     			
-     			
-	     		var LTLpurge = from detectedstuff in LandscapeTrackingList
-	     			where Core.WorldFilter.Distance(Core.CharacterFilter.Id, detectedstuff.Id) > 5 && !LandscapeFellowMemberTrackingList.Contains(detectedstuff.Name)
-	     			select detectedstuff.Id;
-	     		
-	     		foreach(var item in LTLpurge)
-	     		{
-	     			LandscapeTrackingList.RemoveAll(x => x.Id == item);
-	     		} 		
 	     		UpdateLandscapeHud();
-	     		
-	     	}catch(Exception ex) {LogError(ex);}
-     		return;
+	     	}catch(Exception ex){LogError(ex);}
     	}
-	    
+        
 	    private void AddFellowLandscape(NetworkMessageEventArgs e)
 	    {
 	    	try
@@ -502,7 +509,10 @@ namespace GearFoundry
 	   			for(int i = 0; i < fellowcount; i++)
 	   			{
 	   				var fellow = fellowmembers.Struct(i).Struct("fellow");
-	   				LandscapeFellowMemberTrackingList.Add((string)fellow.Value<string>("name"));
+	   				if((string)fellow.Value<string>("name") != Core.CharacterFilter.Name)
+	   				{
+	   					LandscapeFellowMemberTrackingList.Add((string)fellow.Value<string>("name"));
+	   				}
 	   			}
 	   			
 	   		}catch(Exception ex) {LogError(ex);}
@@ -540,6 +550,9 @@ namespace GearFoundry
 		
 		private HudStaticText txtLSS1;
 		private HudStaticText txtLSS2;
+		
+		private bool LandscapeMainTab;
+		private bool LandscapeSettingsTab;
 					
     	private void RenderLandscapeHud()
     	{
@@ -617,6 +630,7 @@ namespace GearFoundry
     	{
     		try
     		{
+    			
     			LandscapeHudList = new HudList();
     			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0,300,220));
 
@@ -628,6 +642,8 @@ namespace GearFoundry
 				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col); 
 
 				UpdateLandscapeHud();
+				
+				LandscapeMainTab = true;
     			
     		}catch{}
     	}
@@ -636,8 +652,12 @@ namespace GearFoundry
     	{
     		try
     		{	
+    			if(!LandscapeMainTab) {return;}
+    			
     			LandscapeHudList.Click -= (sender, row, col) => LandscapeHudList_Click(sender, row, col);   
     			LandscapeHudList.Dispose();
+    			
+    			LandscapeMainTab = false;
     						
     		}catch{}
     	}
@@ -707,6 +727,8 @@ namespace GearFoundry
     			ShowTrophies.Change += ShowTrophies_Change;
     			ShowLifeStones.Change += ShowLifeStones_Change;
     			ShowAllPortals.Change += ShowAllPortals_Change;
+    			
+    			LandscapeSettingsTab = true;
     		}catch{}
     	}
     	
@@ -715,7 +737,7 @@ namespace GearFoundry
     	{
     		try
     		{
-    			
+    			if(!LandscapeSettingsTab) {return;}
     			ShowAllMobs.Change -= ShowAllMobs_Change;
     			ShowSelectedMobs.Change -= ShowSelectedMobs_Change;
     			ShowAllPlayers.Change -= ShowAllPlayers_Change;
@@ -737,6 +759,8 @@ namespace GearFoundry
     			ShowAllPlayers.Dispose();
     			ShowSelectedMobs.Dispose();
     			ShowAllMobs.Dispose();			
+    			
+    			LandscapeSettingsTab = false;
     		}catch{}
     	}
     
@@ -886,11 +910,11 @@ namespace GearFoundry
 	    private void UpdateLandscapeHud()
 	    {  	
 	    	try
-	    	{   
-	    		if(LandscapeHudTabView.CurrentTab != 0) {return;}
-	    			    		
+	    	{       			    		
 	    		if((DateTime.Now - LastGearSenseUpdate).TotalMilliseconds < 1000){return;}
 	    		else{LastGearSenseUpdate = DateTime.Now;}
+	    		
+	    		if(!LandscapeMainTab) {return;}
 	    		
 	    		LandscapeHudList.ClearRows();
 	    		
@@ -901,12 +925,12 @@ namespace GearFoundry
 	    	    	((HudPictureBox)LandscapeHudListRow[0]).Image = spawn.Icon + 0x6000000;
 	    	    	((HudStaticText)LandscapeHudListRow[1]).Text = spawn.IORString() + spawn.Name + spawn.DistanceString();
 	    	    	if(spawn.IOR == IOResult.trophy) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Gold;}
-	    	    	if(spawn.IOR == IOResult.lifestone) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.MediumBlue;}
+	    	    	if(spawn.IOR == IOResult.lifestone) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.SkyBlue;}
 	    	    	if(spawn.IOR == IOResult.monster) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Orange;}
 	    	    	if(spawn.IOR == IOResult.npc) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Yellow;}
 	    	    	if(spawn.IOR == IOResult.portal)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.MediumPurple;}
 	    	    	if(spawn.IOR == IOResult.players)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.AntiqueWhite;}
-	    	    	if(spawn.IOR == IOResult.fellowplayer)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Green;}
+	    	    	if(spawn.IOR == IOResult.fellowplayer)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.LightGreen;}
 	    	    	if(spawn.IOR == IOResult.allegplayers)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Tan;}
 					((HudPictureBox)LandscapeHudListRow[2]).Image = LandscapeRemoveCircle;
 	    	    }

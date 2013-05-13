@@ -33,9 +33,10 @@ namespace GearFoundry
 			
 		private WorldObject stackbase = null;
 		private WorldObject stackitem = null;
-		private WorldObject keytoring = null;
 		
 		private bool bButlerTradeOpen = false;
+		private int MaidKeyToRing = 0;
+		private int MatchedKeyRingId = 0;
 		
 		private static int GB_USE_ICON = 0x6000FB7;
 		private static int GB_GIVE_ICON = 0x60011F7;
@@ -245,8 +246,15 @@ namespace GearFoundry
                     if(iEvent == GE_READY_PREV_ACTION_COMPLETE)
                     {
                     	if(MaidKeyList != null)
-                    	{
-                    		if(MaidKeyList.Count > 0) {MaidProcessRingKeys();}
+                    	{	
+                    		if(MaidKeyList.Count > 0) 
+                    		{
+                    			if(MaidKeyToRing == MaidKeyList.First().Id)
+                    			{
+                    				MaidKeyList.RemoveAt(0);
+                    			}
+                    			MaidProcessRingKeys();
+                    		}
                     	}
                     }
             	}
@@ -1228,84 +1236,94 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		
+		
+		private int MaidMatchKey(string keyname)
+		{
+			try
+			{
+					WorldObject matchedkeyring = null;
+					switch(keyname.ToLower())
+					{
+						case "legendary key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("burning sands"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "black marrow key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black marrow"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "directive key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("directive"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "granite key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("granite"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "mana forge key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black coral"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "master key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("master"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "marble key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("marble"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "singularity key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("singularity"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "skeletal falatacot key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("skeletal falatacot"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "sturdy iron key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy iron"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "sturdy steel key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy steel"));
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						default:
+							return 0;
+					}		
+			}catch(Exception ex)
+			{
+				LogError(ex);
+				return 0;
+			}
+		}
+		
+		//TODO:  This still seems buggy.  Convert it back to using the timer to do it.
 		private void MaidProcessRingKeys()
 		{
 			try
 			{
 				if(MaidKeyList.Count() > 0)
 				{
-					WorldObject matchedkeyring = null;
-					keytoring = MaidKeyList.First();
-					MaidKeyList.RemoveAll(x => x.Id == keytoring.Id);
-					Core.Actions.SelectItem(keytoring.Id);
+					MaidKeyToRing = MaidKeyList.First().Id;
+					MatchedKeyRingId = MaidMatchKey(Core.WorldFilter[MaidKeyToRing].Name);
 					
-					switch(keytoring.Name.ToLower())
+					if(MatchedKeyRingId != 0)
 					{
-						case "legendary key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("burning sands"));
-							if(matchedkeyring != null)
-							{
-								Core.Actions.UseItem(matchedkeyring.Id, 1);
-							}
-							return;
-						case "black marrow key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black marrow"));
-							if(matchedkeyring != null)
-							{
-								Core.Actions.UseItem(matchedkeyring.Id, 1);
-							}
-							return;
-						case "directive key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("directive"));
-							if(matchedkeyring != null)
-							{
-								Core.Actions.UseItem(matchedkeyring.Id, 1);
-							}
-							return;
-						case "granite key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("granite"));
-							if(matchedkeyring != null)
-							{
-								Core.Actions.UseItem(matchedkeyring.Id, 1);
-							}
-							return;
-						case "mana forge key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black coral"));
-							if(matchedkeyring != null)
-							{
-								Core.Actions.UseItem(matchedkeyring.Id, 1);
-							}
-							return;
-						case "master key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("master"));
-							if(matchedkeyring != null)
-							{
-								Core.Actions.UseItem(matchedkeyring.Id, 1);
-							}
-							return;
-						case "marble key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("marble"));
-							if(matchedkeyring != null)
-							{
-								Core.Actions.UseItem(matchedkeyring.Id, 1);
-							}
-							return;
-						case "singularity key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("singularity"));
-							if(matchedkeyring != null)
-							{
-								Core.Actions.UseItem(matchedkeyring.Id, 1);
-							}
-							return;
-						case "skeletal falatacot key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("skeletal falatacot"));
-							if(matchedkeyring != null)
-							{
-								Core.Actions.UseItem(matchedkeyring.Id, 1);
-							}
-							return;
+						Core.Actions.SelectItem(MaidKeyToRing);
+						Core.Actions.UseItem(MatchedKeyRingId,1);
+						if(Core.WorldFilter[MatchedKeyRingId].Values(LongValueKey.KeysHeld) == 24 || Core.WorldFilter[MatchedKeyRingId].Values(LongValueKey.UsesRemaining) == 0)
+						{
+							MaidKeyRings.RemoveAll(x => x.Id == MatchedKeyRingId);
+						}
+						return;
 					}
-				
+					else
+					{
+						MaidKeyList.RemoveAll(x => x.Name == Core.WorldFilter[MaidKeyToRing].Name);
+						MaidProcessRingKeys();
+					}
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -1315,8 +1333,8 @@ namespace GearFoundry
 		{
 			try
 			{
-				string[] RingableKeysArray = {"legendary key", "black marrow key", "directive key", "granite key", "mana forge key", "master key", "marble key", "singularity key",	"skeletal falatacot key"};
-				string[] KeyringMatchingArray = {"burning sands", "black marrow", "directive", "granite", "black coral", "master", "marble", "singularity", "skeletal falatacot"};
+				string[] RingableKeysArray = {"legendary key", "black marrow key", "directive key", "granite key", "mana forge key", "master key", "marble key", "singularity key",	"skeletal falatacot key", "sturdy iron key", "sturdy steel key"};
+				string[] KeyringMatchingArray = {"burning sands", "black marrow", "directive", "granite", "black coral", "master", "marble", "singularity", "skeletal falatacot", "sturdy iron", "sturdy steel"};
 							
 				MaidKeyRings = (from keyrings in Core.WorldFilter.GetInventory()
 					where keyrings.Name.ToLower().Contains("keyring") && keyrings.Values(LongValueKey.UsesRemaining) > 0 && keyrings.Values(LongValueKey.KeysHeld) < 24
@@ -1324,7 +1342,7 @@ namespace GearFoundry
 					select keyrings).ToList();
 				
 				MaidKeyList = (from items in Core.WorldFilter.GetInventory()
-					where items.ObjectClass == ObjectClass.Key && RingableKeysArray.Contains(items.Name.ToLower())
+				    where items.ObjectClass == ObjectClass.Key && RingableKeysArray.Contains(items.Name.ToLower())
 					select items).ToList();
 				
 				MaidProcessRingKeys();
@@ -1421,10 +1439,7 @@ namespace GearFoundry
 				else
 				{
 					tradelist = new List<WorldObject>();
-				}
-				
-
-				
+				}	
 				foreach(WorldObject sb in tradelist)
 				{
 					Core.Actions.VendorAddSellList(sb.Id);
@@ -1826,16 +1841,11 @@ namespace GearFoundry
 						}
 						if(ValetEquipList.First().SlotId == 0x200000 && Core.WorldFilter[ValetEquipList.First().ItemId].ObjectClass == ObjectClass.MeleeWeapon)
 						{
-							//Core.Actions.AutoWield(ValetEquipList.First().ItemId,ValetEquipList.First().SlotId,1,0);
-							WriteToChat("Autowield is dysfunctional, item removed.");
-							ValetEquipList.RemoveAt(0);
-//							Core.Actions.SelectItem(ValetEquipList.First().ItemId);
-//							CoreManager.Current.Actions.AutoWield(ValetEquipList.First().ItemId);
+							Core.Actions.AutoWield(ValetEquipList.First().ItemId, 1, 0, 1, 0, 0);
 						}
 						else
 						{
 							Core.Actions.UseItem(ValetEquipList.First().ItemId,0);
-							
 						}
 						return;
 					}
@@ -1906,8 +1916,7 @@ namespace GearFoundry
 							MaidProcessStack();
 							return;
 						}
-					}
-					
+					}		
 				}catch(Exception ex){LogError(ex);}
 			}
     		
