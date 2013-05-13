@@ -306,6 +306,7 @@ namespace GearFoundry
 				if(LandscapeTrackingList.FindIndex(x => x.Id == IOLandscape.Id) < 1)
 				{
 					LandscapeTrackingList.Add(IOLandscape);
+					playSoundFromResource(1);
 					UpdateLandscapeHud();
 				}
 				if(!LandscapeExclusionList.Contains(IOLandscape.Id)){LandscapeExclusionList.Add(IOLandscape.Id);}

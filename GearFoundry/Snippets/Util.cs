@@ -11,6 +11,7 @@ using Decal.Adapter;
 using Decal.Adapter.Wrappers;
 using Decal.Interop.D3DService;
 using Decal.Interop;
+using System.Media;
 namespace GearFoundry
 {
 	public partial class PluginCore
@@ -114,6 +115,20 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
  
         }
+        
+        private void playSoundFromResource(int SoundFileId)
+		{
+		    System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
+		    System.IO.Stream s = a.GetManifestResourceStream("<GearFoundry>.Sounds.blip.wav");
+		    SoundPlayer player = new SoundPlayer(s);
+		    player.Play();
+		}
+        
+//        private void playSimpleSound()
+//		{
+//		    SoundPlayer simpleSound = new SoundPlayer(@"c:\Windows\Media\chimes.wav");
+//		    simpleSound.Play();
+//		}
 	
 	}}
 
