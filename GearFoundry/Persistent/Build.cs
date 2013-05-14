@@ -90,6 +90,7 @@ namespace GearFoundry
 			public bool isuntargeted = false;
 			public bool isfellowship = false;
 			public int spellicon = 0;
+			public double duration = 0;
 		}
 		
 		private void InitListBuilder()
@@ -962,7 +963,8 @@ namespace GearFoundry
 	                 tsinfo.componentIds = tspell.ComponentIDs;
 	                 tsinfo.isuntargeted = tspell.IsUntargetted;
 	                 tsinfo.isfellowship = tspell.IsFellowship;
-	
+	                 tsinfo.duration = tspell.Duration;
+	                 	
 	                 switch (tspell.ComponentIDs[0])
 	                 {
 	                     case 112:  //Platnium Scarab
