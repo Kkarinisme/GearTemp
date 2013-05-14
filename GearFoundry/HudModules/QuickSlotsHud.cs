@@ -145,7 +145,6 @@ namespace GearFoundry
 
         private void RenderVerticalQuickSlots()
         {
-            WriteToChat("I am in the function to render vertical quickslots");
  
             if (quickiesvHud != null)
             {
@@ -294,7 +293,6 @@ namespace GearFoundry
 
         private void RenderHorizontalQuickSlots()
         {
-            WriteToChat("I am in the function to render horizontal quickslots");
  
             if (quickieshHud != null)
             {
