@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0"?>
 <Rules>
-	 <Rule>
-    <Enabled>true</Enabled>
-    <Priority>2</Priority>
+  <Rule>
+    <Enabled>false</Enabled>
+    <Priority>999</Priority>
     <AppliesToFlag>1</AppliesToFlag>
-    <Name>Test Rule</Name>
-    <NameContains>Ken</NameContains>
+    <Name>Test Rule 2</Name>
+    <NameContains></NameContains>
     <NameNotContains></NameNotContains>
     <Descr></Descr>
     <ArcaneLore>0</ArcaneLore>
@@ -14,7 +14,7 @@
     <Work>0</Work>
     <WieldReqValue>0</WieldReqValue>
     <WieldLevel>0</WieldLevel>
-    <ItemLevel>3</ItemLevel>
+    <ItemLevel>0</ItemLevel>
     <MinArmorLevel>0</MinArmorLevel>
     <WieldAttribute>0</WieldAttribute>
     <MasteryType>0</MasteryType>
@@ -22,10 +22,10 @@
     <McModAttack>0</McModAttack>
     <MeleeDef>0</MeleeDef>
     <MagicDef>0</MagicDef>
-    <WieldEnabled></WieldEnabled>
-    <ReqSkill></ReqSkill>
-    <MinMax></MinMax>
-    <MSCleave></MSCleave>
+    <WieldEnabled>true,false,true,true</WieldEnabled>
+    <ReqSkill>1,2,3,4</ReqSkill>
+    <MinMax>1-11,2-22,3-33,4-44</MinMax>
+    <MSCleave>false,true,false,true</MSCleave>
     <Coverage></Coverage>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -36,13 +36,21 @@
     <Red>false</Red>
     <Yellow>false</Yellow>
     <Blue>false</Blue>
-    <FilterLegend>false</FilterLegend>
-    <FilterEpic>false</FilterEpic>
-    <FilterMajor>false</FilterMajor>
-    <FilterLvl8>false</FilterLvl8>
-    <FilterLvl7>false</FilterLvl7>
-    <FilterLvl6>false</FilterLvl6>
+    <EssMastery>0</EssMastery>
+    <EssElements></EssElements>
+    <EssLevel>0</EssLevel>
+    <EssSummLevel>0</EssSummLevel>
+    <EssDamageLevel>0</EssDamageLevel>
+    <EssCDLevel>0</EssCDLevel>
+    <EssCRLevel>0</EssCRLevel>
+    <EssDRLevel>0</EssDRLevel>
+    <EssCritLevel>0</EssCritLevel>
+    <FilterLegend>true</FilterLegend>
+    <FilterEpic>true</FilterEpic>
+    <FilterMajor>true</FilterMajor>
+    <FilterLvl8>true</FilterLvl8>
+    <FilterLvl7>true</FilterLvl7>
+    <FilterLvl6>true</FilterLvl6>
     <Spells></Spells>
     <NumSpells>0</NumSpells>
-  </Rule>
 </Rules>

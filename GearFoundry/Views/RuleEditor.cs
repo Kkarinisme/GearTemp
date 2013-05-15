@@ -43,8 +43,7 @@ namespace GearFoundry
         private static List<IDNameLoadable> SalvageWorkInvList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> WeaponWieldInvList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> CoverageInvList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> EmbueInvList = new List<IDNameLoadable>();
-    	    	
+        private static List<IDNameLoadable> EmbueInvList = new List<IDNameLoadable>();    	    	
 
         [ControlEvent("btnRuleClear", "Click")]
         private void btnRuleClear_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
