@@ -209,9 +209,9 @@ namespace GearFoundry
                 setUpLists(xdocSalvage, mSortedSalvageList, mSortedSalvageListChecked);
                 setUpRulesLists(xdocRules, mPrioritizedRulesList, mPrioritizedRulesListEnabled);
                 //Irq:  Builds class mirror lists of Mish's xdocs at load time.
+                setUpSettingsList();
                 FillSalvageRules();
                 FillItemRules();
-                setUpSettingsList();
                 
             }
             catch (Exception ex) { LogError(ex); }
@@ -801,7 +801,7 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
 
         }
-
+        
     }
 }
 

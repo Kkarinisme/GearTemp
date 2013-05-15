@@ -22,8 +22,13 @@ namespace GearFoundry
 	{
 	
 		private List<DebuffSpell> DebuffSpellList = new List<DebuffSpell>();
+		private SpellCastEventArgs SpellCastBuffer = null;
 		
-		//For now, I am only going to track primary debuffs which are used in PvE combat.
+		public class MobDebuffHolder
+		{
+			public int TargetId = 0;
+			public List<DebuffSpell> CurrentDebuffList = new List<DebuffSpell>();
+		}
 		
 		public class DebuffSpell
 		{
@@ -65,7 +70,12 @@ namespace GearFoundry
 			{
 				if(e.Color == 0x07)
 				{
-					
+					if(e.Text.ToLower().Contains("resisted"))
+					{
+						SpellCastBuffer = null;   	
+					}
+//					else if(e.Text.ToLower())
+//					
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -77,7 +87,11 @@ namespace GearFoundry
 			{
 				if(SpellIndex[e.SpellId].isdebuff)
 				{
-					
+					SpellCastBuffer = e;
+				}
+				else
+				{
+					SpellCastBuffer = null;
 				}
 			}catch(Exception ex){LogError(ex);}
 		}

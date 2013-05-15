@@ -16,425 +16,277 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace GearFoundry
 {
 
 	public partial class PluginCore
 	{
-		//Util iUtil = new Util();
+		
+		//ToMish:  Need to add the following to Settings!
+		//ToMish:  Standard treatment with bEnableTextFiltering.  Call SubscribeChatEvents() on startup if enabled.  Call SubscribeChatEvents when enabled
+		//ToMish:  Call UnsubscribeChatEvents() when disabled.
+		
+		private bool bEnableTextFiltering = false;	//Enable/Disable the module
+		private bool bTextFilterAllStatus = false;  //Removes all red status messages from the display area (overrides Busy and Casting filters)
+		private bool bTextFilterBusyStatus = false;  //Removes only the busy status message from the display area
+		private bool bTextFilterCastingStatus = false;  //Removes the "you cast" red message from the display area	
+		private bool bTextFilterMyDefenseMessages = false;  //You evade, resist, dodge, etc.
+		private bool bTextFilterMobDefenseMessages = false;  //The mob evades, resists, ect.
+		private bool bTextFilterMyKillMessages = false;  //Kill spam for things killed by the player
+		private bool bTextFilterPKFails = false;  //Filter Spell Fails from PK/NPK status errors
+		private bool bTextFilterDirtyFighting = false;  //Dirty Fighting, Sneak Attack, etc.
+		private bool bTextFilterMySpellCasting = false;
+		private bool bTextFilterOthersSpellCasting = false;
+		private bool bTextFilterSpellExpirations = false;
+		private bool bTextFilterManaStoneMessages = false;
+		private bool bTextFilterHealingMessages = false;
+		private bool bTextFilterSalvageMessages = false;
+		private bool bTextFilterBotSpam = false;
+		private bool bTextFilterIdentFailures = false;
+		private bool bTextFilterKillTaskComplete = false;
+		private bool bTextFilterVendorTells = false;
+		private bool bTextFilterMonsterTells = false;
+		private bool bTextFilterNPCChatter = false;
+		
 
-		//works with just "ChatBoxMessage"
-		[BaseEvent("ChatBoxMessage")]
-        private void Plugin_ChatBoxMessage(object sender, Decal.Adapter.ChatTextInterceptEventArgs e)
-        {
-        	//WriteToChat("I am at ChatBoxMessage");
-            try {
-        		//strip /n
-        		string CBMessage = e.Text.Substring(0, e.Text.Length - 1);
-        
-                
-//
-//                switch (e.Color) {
-//                    case 0:
-//                    case 24:
-//
-//                        if (msg.EndsWith("This permission will last one hour.")) {
-////                            pos = msg.IndexOf(" has given you permission to loot");
-////                            if (pos >= 0) {
-////                                string playercorpse = "Corpse of " + msg.Substring(0, pos);
-////
-////                                if (mAVVS.ProtectedCorpsesList.Contains(playercorpse)) {
-////                                    WriteToChat("Alinco added " + playercorpse + " to protected corpses.");
-////                                    mAVVS.ProtectedCorpsesList.Add(playercorpse);
-////                                }
-////
-////                            }
-//                        } else if (msg.EndsWith("DTLN")) {
-//                            msg += "= Air (West)";
-//                            wtcw(msg, e.Color);
-//                            e.Eat = true;
-//                        } else if (msg.EndsWith("DBTNK")) {
-//                            msg += " = Water (South)";
-//                            wtcw(msg, e.Color);
-//                            e.Eat = true;
-//                        } else if (msg.EndsWith("NTLN")) {
-//                            msg += " = Fire (North)";
-//                            wtcw(msg, e.Color);
-//                            e.Eat = true;
-//                        } else if (msg.EndsWith("ZTNK")) {
-//                            msg += " = Earth (East)";
-//                            wtcw(msg, e.Color);
-//                            e.Eat = true;
-//                        }
-//                        break;
-//                    case 7:
-//                        //spellcasting
-//                        if (mPluginConfig.FilterSpellcasting && msg.StartsWith("The spell")) {
-//                            e.Eat = true;
-//                        } else if (mPluginConfig.FilterSpellsExpire && msg.EndsWith("has expired.")) {
-//                            e.Eat = true;
-//                            // resists your spell
-//                        } else if (mPluginConfig.FilterChatResists && msg.StartsWith("You resist the spell")) {
-//                            e.Eat = true;
-//
-//                        }
-//                        break;
-//                    case 17:
-//                        if (msg.IndexOf("Cruath Quareth") >= 0) {
-//                            mSpellwords = "Cruath Quareth";
-//                        } else if (msg.IndexOf("Cruath Quasith") >= 0) {
-//                            mSpellwords = "Cruath Quasith";
-//                        } else if (msg.IndexOf("Equin Opaj") >= 0) {
-//                            mSpellwords = "Equin Opaj";
-//                        } else if (msg.IndexOf("Equin Ozael") >= 0) {
-//                            mSpellwords = "Equin Ozael";
-//                        } else if (msg.IndexOf("Equin Ofeth") >= 0) {
-//                            mSpellwords = "Equin Ofeth";
-//                        } else if (mPluginConfig.FilterSpellcasting) {
-//                            if (msg.StartsWith("The spell")) {
-//                                e.Eat = true;
-//                            } else if (msg.StartsWith("You say, ")) {
-//                                e.Eat = true;
-//                            } else if (msg.IndexOf("says,\"") > 0) {
-//                                e.Eat = true;
-//                            }
-//                        }
-//
-//                        break;
-//                    case 21:
-//                        //melee evades
-//                        if (mPluginConfig.FilterChatMeleeEvades) {
-//                            if (msg.IndexOf("You evaded") >= 0) {
-//                                e.Eat = true;
-//                            }
-//                        }
-//                        break;
-//                    case 3:
-//                        if (mPluginConfig.FilterTellsMerchant | mPluginConfig.notifytells) {
-//                            string actorname = actornamefromtell(msg);
-//
-//                            WorldObject cursel = Core.WorldFilter[Host.Actions.CurrentSelection];
-//                            WorldObjectCollection actors = Core.WorldFilter.GetByName(actorname);
-//
-//                            bool vendorTell = false;
-//                            bool npcTell = false;
-//
-//                            //multipe actors possible?
-//                            foreach (WorldObject x in actors) {
-//                                if (x.ObjectClass == ObjectClass.Npc) {
-//                                    npcTell = true;
-//                                } else if (x.ObjectClass == ObjectClass.Vendor) {
-//                                    vendorTell = true;
-//                                }
-//                            }
-//
-//
-//                            if (mPluginConfig.FilterTellsMerchant && vendorTell) {
-//                                e.Eat = true;
-//                                return;
-//                            }
-//
-//
-//                            if (mPluginConfig.notifytells & !vendorTell & !npcTell) {
-//
-////                                    if (cursel == null || ((!(msg.IndexOf(cursel.Name) >= 0)))) {
-////                                        PlaySoundFile("rcvtell.wav", mPluginConfig.wavVolume);
-////	
-////                                    }
-//
-//                            }
-//
-//                        }
-//                        break;
-//                    }
-                
-	
-            } catch (Exception ex) {
-                LogError(ex);
-            }
-        }
-        
-        // Confirmed Functional -- Irquk 
-        // TODO:  Verify individual flags are all still working.
-        // TODO:  Review usefulness of different functions.
-        // TODO:  Make menu items with buttons that will also call these functions.
-        [BaseEvent("CommandLineText")]
-		private void Plugin_CommandLineText(object sender, Decal.Adapter.ChatParserInterceptEventArgs e)
+		private void SubscribeChatEvents()
 		{
-			//WriteToChat("I am at CommandLineText");
-			try 
+			try
 			{
-				if (e.Text.StartsWith("/alinco") || e.Text.StartsWith("@alinco"))
-				{
-					string cmd = e.Text.Substring(7).ToLower();
-					//WriteToChat(cmd);
-					
-//					if(cmd.Contains("combine") && cmd.Contains("salvage"))
-//					{	
-//						CombineSalvageBags();
-//					}
-//					if(cmd.Contains("trade") && cmd.Contains("salvage"))
-//					{
-//						//TradeSalvage States:  "1" = all bags, "2" = only partial bags, default to full bags
-//						if(cmd.Contains("all")){TradeSalvageBags(1);}
-//						else if(cmd.Contains("partial")){TradeSalvageBags(2);}
-//						else {TradeSalvageBags(0);}
-//					}
-//					if(cmd.Contains("sell") && cmd.Contains("salvage"))
-//					{
-//						SellSalvageBags();
-//					}
-					
-				}
+				BuildTextCollections();
+				CoreManager.Current.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
+				Host.Underlying.Hooks.StatusTextIntercept += new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);			
+			}catch(Exception ex){LogError(ex);}
+		}
 
-//				else if (cmd.StartsWith("trackxp")) {
-//						Decal.Adapter.Wrappers.WorldObject b = Core.WorldFilter[Host.Actions.CurrentSelection];
-//						if (b == null) {
-//							wtcw("no object selected");
-//						} else if (b.Id == Core.CharacterFilter.Id) {
-//							wtcw("Track item xp off");
-//							mCharconfig.trackobjectxpHudId = 0;
-//	
-//						} else if (!b.HasIdData) {
-//							wtcw("Ident the selected object first then try again");
-//	
-//						} else if (!IsItemInInventory(b)) {
-//							wtcw("The selected object must be in inventory");
-//	
-//						} else {
-//							wtcw("trackxp on");
-//							mCharconfig.trackobjectxpHudId = b.Id;
-//						}
-//	
-//					} else if (cmd.StartsWith("alincodebug")) {
-////						mDebugRules = !mDebugRules;
-////						wtcw("Debugging rules, chatwindow 2 " + mDebugRules);
-//					} else if (cmd.StartsWith("save")) {
-//						forcesave();
-//						e.Eat = true;
-//					} else if (cmd.StartsWith("inventory export")) {
-//						transforminventory1();
-//						e.Eat = true;
-//					} else if (cmd.StartsWith("inventory rescan")) {
-//						startscanInventoryforSerialize(true);
-//						e.Eat = true;
-//					} else if (cmd.StartsWith("inventory update")) {
-//						startscanInventoryforSerialize(false);
-//						e.Eat = true;
-//					} else if (cmd.StartsWith("inventory find")) {
-//						e.Eat = true;
-//					} else if (cmd.StartsWith("tradesalvagep")) {
-//						tradesalvage(true);
-//						e.Eat = true;
-//					} else if (cmd.StartsWith("tradesalvage")) {
-//						tradesalvage(false);
-//						e.Eat = true;
-//					} else if (cmd.StartsWith("tradeust")) {
-//						tradeust();
-//						e.Eat = true;
-//					}  else if (cmd.StartsWith("reset")) {
-//						TotalErrors = 0;
-//						mKills = 0;
-//						mXPStart = Core.CharacterFilter.TotalXP;
-//						mXPStartTime = DateTime.Now;
-//					} else if (e.Text.StartsWith("clear")) {
-////						mNotifiedCorpses.Clear();
-////						mNotifiedItems.Clear();
-//						mColScanInventoryItems.Clear();
-//						mColStacker.Clear();
-//						midInventory.Clear();
-//						// TODO:  See if we care or just eliminate this functionality
-//	
-//					} else if (cmd.StartsWith("find ")) {
-//						int p = e.Text.IndexOf(" ");
-//						// HACK:  Don't know what this does, can't easily determine how to make it work.
-//						//int[] Idarray = (int)Enum.GetValues(typeof(eSomeTestColorsArg));
-//			
-//	
-//	
-//						if (p > 0 & p < e.Text.Length) {
-//							int ncount = 0;
-//							string s = e.Text.Substring(p + 1).ToLower();
-//							wtcw("searching for->" + s);
-//							int id = 0;
-//							WorldObjectCollection wocol = Core.WorldFilter.GetLandscape();
-//							foreach (WorldObject wo in wocol) {
-//								if (wo.Name.ToLower().IndexOf(s) >= 0) {
-//									markobject1(wo.Id);
-////									if (!mNotifiedItems.ContainsKey(wo.Id) && !mNotifiedCorpses.ContainsKey(wo.Id)) {
-////										notify newobject = new notify();
-////										newobject.icon = wo.Icon;
-////										newobject.id = wo.Id;
-////										newobject.name = wo.Name;
-////										newobject.description = wo.ObjectClass.ToString();
-////										newobject.ColorArgb = 0xFF0000;
-////										if (wo.ObjectClass == ObjectClass.Corpse) {
-////											newobject.scantype = IOResult.corpse;
-////											mNotifiedCorpses.Add(wo.Id, newobject);
-////										} else {
-////											newobject.scantype = IOResult.other;
-////											mNotifiedItems.Add(wo.Id, newobject);
-////										}
-////									}
-//									id = wo.Id;
-//									ncount += 1;
-//								}
-//							}
-//	
-//							if (ncount == 1) {
-//								Host.Actions.SelectItem(id);
-//							} else {
-//								wtcw(ncount + " items found");
-//							}
-//						}
-//					} else if (cmd.StartsWith("alincotest")) {
-//						wtcw("Alinco version: " + dllversion);
-//						wtcw(".NET Framework : " + System.Environment.Version.ToString());
-//						Decal.Adapter.Wrappers.WorldObject b = Core.WorldFilter[Host.Actions.CurrentSelection];
-//						if (b == null) {
-//							wtcw("no object selected");
-//						} else {
-//							//TODO:  Replaced significant hex foratting here, verify functionality
-//							wtcw("selected : " + b.Name);
-//							wtcw("Category    " + b.Category.ToString("X")); //Conversion.Hex(b.Category));
-//							wtcw("Id    " + b.Id.ToString("X")); //Conversion.Hex(b.Id));
-//							wtcw("Icon    " + b.Icon);
-//							wtcw("ObjectClass    " + b.ObjectClass.ToString());
-//							wtcw("Container    " + b.Container.ToString("X")); //Conversion.Hex(b.Container));
-//							wtcw("HouseOwner    " + b.Values(LongValueKey.HouseOwner).ToString("X")); //Conversion.Hex(b.Values(LongValueKey.HouseOwner)));
-//							wtcw("Wielder    " + b.Values(LongValueKey.Wielder).ToString("X")); //Conversion.Hex(b.Values(LongValueKey.Wielder)));
-//							wtcw(" ");
-//							wtcw("HasIdData : " + b.HasIdData);
-//							wtcw("EquipType    " + b.Values(LongValueKey.EquipType).ToString("X"));  //Conversion.Hex(b.Values(LongValueKey.EquipType)));
-//							wtcw("Coverage    " + b.Values(LongValueKey.Coverage).ToString("X"));
-//							wtcw("Behavior    " + b.Behavior.ToString("X"));
-//							wtcw("WieldReqType    " + b.Values(LongValueKey.WieldReqType).ToString("X"));
-//							wtcw("WieldReqValue   " + (b.Values(LongValueKey.WieldReqValue)));
-//							wtcw("WieldReqAttribute   " + (b.Values(LongValueKey.WieldReqAttribute)));
-//							wtcw("MissileType    " + (b.Values(LongValueKey.MissileType)));
-//							wtcw("AssociatedSpell    " + (b.Values(LongValueKey.AssociatedSpell)));
-//							wtcw("EquipableSlots    " + b.Values(LongValueKey.EquipableSlots).ToString("X"));
-//							wtcw("EquippedSlots    " + b.Values(LongValueKey.EquippedSlots).ToString("X"));
-//							wtcw("ActivationReqSkillId    " + b.Values(LongValueKey.ActivationReqSkillId).ToString("X"));
-//							wtcw("EquipSkill    " + b.Values(LongValueKey.EquipSkill).ToString("X"));
-//							wtcw("Type    " + b.Values(LongValueKey.Type).ToString("X"));
-//							wtcw("setid    " + b.Values((LongValueKey)0x109).ToString("X"));
-//							wtcw(" ");
-//							wtcw("HealKitSkillBonus    " + (b.Values(LongValueKey.HealKitSkillBonus)));
-//							wtcw("KeysHeld    " + (b.Values(LongValueKey.KeysHeld)));
-//							wtcw("UsesRemaining    " + (b.Values(LongValueKey.UsesRemaining)));
-//							wtcw("UsesTotal    " + (b.Values(LongValueKey.UsesTotal)));
-////							Dim strspells As String = String.Empty
-////							For i As Integer = 1 To b.SpellCount - 1
-////							    Dim oSpell As Decal.Filters.Spell = Plugin.FileService.SpellTable.GetById(b.Spell(i))
-////							    If Not oSpell Is Nothing Then
-////							        strspells &= ", " & oSpell.Name & " 0x" & Hex(oSpell.Id)
-////							    End If
-////							Next
-////							If strspells <> String.Empty Then
-////							    wtcw("  " & strspells)
-////							End If
-////							For i As Integer = 0 To Plugin.FileService.SpellTable.Length - 1
-////							    Try
-////							        Dim oSpell As Decal.Filters.Spell = Plugin.FileService.SpellTable.Item((i))
-////							        If Not oSpell Is Nothing AndAlso Not oSpell.IsDebuff Then
-////	
-////							            If oSpell.Name.ToLower.Contains("two handed") Then
-////							                wtcw(oSpell.Name & " &H" & Hex(oSpell.Id))
-////							            End If
-////							        End If
-////							    Catch ex As Exception
-////							    End Try
-////							Next
-//						}
-//					} else if (cmd.StartsWith("alinco")) {
-//						long frequency = Stopwatch.Frequency;
-//						double nanosecPerTick = (1000L * 1000L * 1000L) / frequency;
-//						wtcw(string.Format("Lookup Statistics: Timer is accurate within {0} nanoseconds", nanosecPerTick.ToString("0.00")));
-//						wtcw(" ");
-//						wtcw("Alinco version " + dllversion + ", available commands: ");
-//						wtcw(" salvage mule:");
-//						wtcw(" /tradeust      => adds the items from the ust list to a open tradewindow");
-//						wtcw(" /tradesalvage  => adds all salvage to a open tradewindow");
-//						wtcw(" /tradesalvagep => partial bags only (< 100 units)");
-//						wtcw(" ");
-//						wtcw(" /inventory export => serializes inventory to userdocuments\\decal plugins\\Alinco3\\inventory");
-//						wtcw(" /inventory update => update inventory");
-//						wtcw(" /inventory find   => not implemented");
-//						wtcw(" ");
-//						wtcw(" /save         => forces to save all settings to disk");
-//						wtcw(" /reset        => reset xp/h");
-//						wtcw(" /find         => searches the landscape");
-//						wtcw(" /clear        => clears the listboxes with matched items and corpses");
-//						wtcw(" /sell         => Adds the salvage to the vendors trade window");
-//						e.Eat = true;
-//					}
-////					else {
-////						if (mPluginConfig != null && mPluginConfig.Shortcuts != null) {
-////							foreach (KeyValuePair<string, string> x in mPluginConfig.Shortcuts) {
-////								if (!string.IsNullOrEmpty(x.Key) && (e.Text.ToLower().StartsWith("/" + x.Key.ToLower().ToString()) | e.Text.ToLower().StartsWith("@" + x.Key.ToLower().ToString()))) {
-////									e.Eat = true;
-////									Host.Actions.InvokeChatParser("/" + x.Value);
-////									break; // TODO: might not be correct. Was : Exit For
-////								}
-////							}
-////						}
-////	
-////					}
-//	
-//				}
-	
-	
-			} catch (Exception ex) {
-				LogError(ex);
-			}
+		private void UnsubscribeChatEvents()
+		{
+			try
+			{
+				CoreManager.Current.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
+				Host.Underlying.Hooks.StatusTextIntercept -= new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);	
+			}catch(Exception ex){LogError(ex);}
 		}
 		
-		[BaseEvent("ChatNameClicked")]
-        private void Plugin_ChatNameClicked(object sender, Decal.Adapter.ChatClickInterceptEventArgs e)
-        {
+		// Text filter sourced from Mag-Tools.
+		// Thanks to Mag-nus for the excellent chat filtering using RegEx. His code definitions are used heavily below.
+		// Sorry Mag-nus.  I just can't leave anything alone.....I heavily repurposed your Regex expressions.
+		// For original Mag-Tools source code, go to http://http://magtools.codeplex.com/
+			
+		private static Collection<Regex> MyDefenseMessages = new Collection<Regex>();
+		private static Collection<Regex> MobDefenseMessages = new Collection<Regex>();
+		private static Collection<Regex> MyAttackMessages = new Collection<Regex>();
+		private static Collection<Regex> MobAttackMessages = new Collection<Regex>();
+		private static Collection<Regex> TargetKilledByMe = new Collection<Regex>();
+		private static Collection<Regex> ChatTypes = new Collection<Regex>();	
+		private static List<string> CastWords = new List<string>();
 
-            try
-            {
+		private void BuildTextCollections()
+		{
+			MyDefenseMessages.Add(new Regex("^You evaded (?<targetname>.+)!$"));
+			MyDefenseMessages.Add(new Regex("^You resist the spell cast by (?<targetname>.+)$"));
+			
+			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) evaded your attack.$"));
+			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell$"));
+	
+			MyAttackMessages.Add(new Regex("^Critical hit!  You [\\w]+ (?<targetname>.*) for (?<points>.+) point.* of .+ damage.*$"));
+			MyAttackMessages.Add(new Regex("^You [\\w]+ (?<targetname>.*) for (?<points>.+) point.* of .+ damage.*$"));
+			MyAttackMessages.Add(new Regex("^Critical hit! You [\\w]+ (?<targetname>.+) for (?<points>.+) point.* with .+$"));
+			MyAttackMessages.Add(new Regex("^You [\\w]+ (?<targetname>.+) for (?<points>.+) point.* with .+$"));
 
-                switch (e.Id)
-                {
-                    case NOTIFYLINK_ID:
+			MobAttackMessages.Add(new Regex("^Critical hit! (?<targetname>.+) [\\w]+ you for (?<points>.+) point.* with .+$"));
+			MobAttackMessages.Add(new Regex("^(?<targetname>.+) [\\w]+ you for (?<points>.+) point.* with .+$"));
+			MobAttackMessages.Add(new Regex("^Magical energies lose (?<points>.+) point.* of health due to (?<targetname>.+) casting .+$"));
+			MobAttackMessages.Add(new Regex("^You lose (?<points>.+) point.* of health due to (?<targetname>.+) casting .+$"));
+			MobAttackMessages.Add(new Regex("^(?<targetname>.+) casts .+ and drains (?<points>.+) point.* .+$"));
+			MobAttackMessages.Add(new Regex("^Critical hit! (?<targetname>.+) [\\w]+ your .+ for (?<points>.*) point.* of .+ damage.*$"));
+			MobAttackMessages.Add(new Regex("^(?<targetname>.+) [\\w]+ your .+ for (?<points>.+) point.* of .+ damage.*$"));
 
-                        int Itemid = Convert.ToInt32(e.Text);
-//                        if (mHudlistboxItems.ContainsKey(Itemid))
-//                        {
-//                            huditemclick(true, (global::GearFoundry.PluginCore.notify)mHudlistboxItems[Itemid], true);
-//                        }
-                        e.Eat = true;
+			TargetKilledByMe.Add(new Regex("^You flatten (?<targetname>.+)'s body with the force of your assault!$"));
+			TargetKilledByMe.Add(new Regex("^You bring (?<targetname>.+) to a fiery end!$"));
+			TargetKilledByMe.Add(new Regex("^You beat (?<targetname>.+) to a lifeless pulp!$"));
+			TargetKilledByMe.Add(new Regex("^You smite (?<targetname>.+) mightily!$"));
+			TargetKilledByMe.Add(new Regex("^You obliterate (?<targetname>.+)!$"));
+			TargetKilledByMe.Add(new Regex("^You run (?<targetname>.+) through!$"));
+			TargetKilledByMe.Add(new Regex("^You reduce (?<targetname>.+) to a sizzling, oozing mass!$"));
+			TargetKilledByMe.Add(new Regex("^You knock (?<targetname>.+) into next Morningthaw!$"));
+			TargetKilledByMe.Add(new Regex("^You split (?<targetname>.+) apart!$"));
+			TargetKilledByMe.Add(new Regex("^You cleave (?<targetname>.+) in twain!$"));
+			TargetKilledByMe.Add(new Regex("^You slay (?<targetname>.+) viciously enough to impart death several times over!$"));
+			TargetKilledByMe.Add(new Regex("^You reduce (?<targetname>.+) to a drained, twisted corpse!$"));
+			TargetKilledByMe.Add(new Regex("^Your killing blow nearly turns (?<targetname>.+) inside-out!$"));
+			TargetKilledByMe.Add(new Regex("^Your attack stops (?<targetname>.+) cold!$"));
+			TargetKilledByMe.Add(new Regex("^Your lightning coruscates over (?<targetname>.+)'s mortal remains!$"));
+			TargetKilledByMe.Add(new Regex("^Your assault sends (?<targetname>.+) to an icy death!$"));
+			TargetKilledByMe.Add(new Regex("^You killed (?<targetname>.+)!$"));
+			TargetKilledByMe.Add(new Regex("^The thunder of crushing (?<targetname>.+) is followed by the deafening silence of death!$"));
+			TargetKilledByMe.Add(new Regex("^The deadly force of your attack is so strong that (?<targetname>.+)'s ancestors feel it!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s seared corpse smolders before you!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is reduced to cinders!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is shattered by your assault!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) catches your attack, with dire consequences!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is utterly destroyed by your attack!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) suffers a frozen fate!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s perforated corpse falls before you!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is fatally punctured!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s death is preceded by a sharp, stabbing pain!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is torn to ribbons by your assault!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is liquified by your attack!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s last strength dissolves before you!$"));
+			TargetKilledByMe.Add(new Regex("^Electricity tears (?<targetname>.+) apart!$"));
+			TargetKilledByMe.Add(new Regex("^Blistered by lightning, (?<targetname>.+) falls!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s last strength withers before you!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is dessicated by your attack!$"));
+			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is incinerated by your assault!$"));
+					
+			ChatTypes.Add(new Regex("^You say, \"(?<msg>.*)\"$"));
+			ChatTypes.Add(new Regex("^<Tell:IIDString:[0-9]+:(?<name>[\\w\\s'-]+)>[\\w\\s'-]+<\\\\Tell> says, \"(?<msg>.*)\"$"));
+			ChatTypes.Add(new Regex("^(?<name>[\\w\\s'-]+) says, \"(?<msg>.*)\"$"));
+			ChatTypes.Add(new Regex("^\\[(?<channel>.+)]+ <Tell:IIDString:[0-9]+:(?<name>[\\w\\s'-]+)>[\\w\\s'-]+<\\\\Tell> says, \"(?<msg>.*)\"$"));
+			ChatTypes.Add(new Regex("^You tell .+, \"(?<msg>.*)\"$"));
+			ChatTypes.Add(new Regex("^<Tell:IIDString:[0-9]+:(?<name>[\\w\\s'-]+)>[\\w\\s'-]+<\\\\Tell> tells you, \"(?<msg>.*)\"$"));
+			ChatTypes.Add(new Regex("^(?<name>[\\w\\s'-]+) tells you, \"(?<msg>.*)\"$"));	
+			
+			CastWords.Add(", \"Zojak");
+			CastWords.Add(", \"Malar");
+			CastWords.Add(", \"Puish");
+			CastWords.Add(", \"Curath");
+			CastWords.Add(", \"Volae");
+			CastWords.Add(", \"Quavosh");
+			CastWords.Add(", \"Shurov");
+			CastWords.Add(", \"Boquar");
+			CastWords.Add(", \"Helkas");
+			CastWords.Add(", \"Equin");
+			CastWords.Add(", \"Roiga");
+			CastWords.Add(", \"Malar");
+			CastWords.Add(", \"Jevak");
+			CastWords.Add(", \"Tugak");
+			CastWords.Add(", \"Slavu");
+			CastWords.Add(", \"Drostu");
+			CastWords.Add(", \"Traku");
+			CastWords.Add(", \"Yanoi");
+			CastWords.Add(", \"Drosta");
+			CastWords.Add(", \"Feazh");	              
+		}
 
-                        break;
-                    case ERRORLINK_ID:
-
-                        string url = null;
-                        url = docPath + "\\Errors.txt";
-
-
-//                        if (File.Exists(url))
-//                        {
-//                            System.Diagnostics.Process myProcess = new System.Diagnostics.Process();
-//                            myProcess.StartInfo.FileName = "notepad.exe";
-//                            myProcess.StartInfo.Arguments = url;
-//                            myProcess.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-//                            myProcess.Start();
-//
-//                        }
-                        e.Eat = true;
-                        break;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                LogError(ex);
-            }
-        }
-        
+		private void ChatBoxTextMessage(object sender, ChatTextInterceptEventArgs e)
+		{
+			try
+			{
+				if(e.Eat || string.IsNullOrEmpty(e.Text)) {return;}
+				if(!bEnableTextFiltering) {return;}
+				
+				if(ChatTypes.Any(x => x.IsMatch(e.Text)))
+				{
+					
+					if(bTextFilterMySpellCasting && e.Text.StartsWith("You say, "))
+					{
+						if(CastWords.Any(x => e.Text.Contains(x))){e.Eat = true;}
+					}
+					if (bTextFilterOthersSpellCasting && e.Text.Contains("says, "))
+					{
+					    if(CastWords.Any(x => e.Text.Contains(x))){e.Eat = true;}
+					}
+					if(bTextFilterBotSpam)
+					{
+						if(e.Text.Trim().EndsWith("-t-\"") || e.Text.Trim().EndsWith("-b-\"")) {e.Eat = true;}
+					}
+					if(bTextFilterVendorTells)
+					{
+						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Vendor).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true;}
+					}
+					if (bTextFilterMonsterTells)
+					{
+						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Monster).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true;}
+					}
+					if(bTextFilterNPCChatter)
+					{
+						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Npc).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true;}
+					}		
+				}
+				else
+				{
+					if(bTextFilterMobDefenseMessages)
+					{
+						if(MobDefenseMessages.Any(x => x.IsMatch(e.Text))) {e.Eat = true;}
+					}
+					if(bTextFilterMyDefenseMessages)
+					{
+						if(MyDefenseMessages.Any(x => x.IsMatch(e.Text))) {e.Eat = true;}
+					}
+					if(bTextFilterMyKillMessages)
+					{
+						if(TargetKilledByMe.Any(x => x.IsMatch(e.Text))) {e.Eat = true;}
+					}
+					if(bTextFilterPKFails)
+					{
+						if(e.Text.StartsWith("You fail to affect ") && e.Text.Contains(" you are not a player killer!")){e.Eat = true;}
+						if(e.Text.Contains("fails to affect you") && e.Text.Contains(" is not a player killer!")) {e.Eat = true;}
+					}
+					if(bTextFilterDirtyFighting)
+					{
+						if(e.Text.StartsWith("Dirty Fighting! ") && e.Text.Contains(" delivers a ")) {e.Eat = true;}
+					}
+					if(bTextFilterMySpellCasting)
+					{
+						if(e.Text.StartsWith("Your spell fizzled.")) {e.Eat = true;}
+						if (e.Text.StartsWith("The spell consumed the following components")) {e.Eat = true;}
+					}
+					if(bTextFilterSpellExpirations)
+					{
+						if (!e.Text.Contains("Brilliance") && !e.Text.Contains("Prodigal") && !e.Text.Contains("Spectral"))
+						{
+							if (e.Text.Contains("has expired.") || e.Text.Contains("have expired.")) {e.Eat = true;}
+						}
+					}
+					if(bTextFilterHealingMessages)
+					{
+						if(e.Text.StartsWith("You ") && e.Text.Contains(" heal yourself for ")) {e.Eat = true;}
+						if(e.Text.StartsWith("You fail to heal yourself. ")) {e.Eat = true;}
+					}
+					if(bTextFilterSalvageMessages)
+					{
+						if(e.Text.StartsWith("You obtain ") && e.Text.Contains(" using your knowledge of ")) {e.Eat = true;}
+						if (e.Text.StartsWith("Salvaging Failed!")) {e.Eat = true;}
+						if (e.Text.Contains("The following were not suitable for salvaging: ")) {e.Eat = true;}
+					}
+					if(bTextFilterManaStoneMessages)
+					{
+						if(e.Text.StartsWith("The Mana Stone gives ")) {e.Eat = true;}
+						if(e.Text.StartsWith("You need ") && e.Text.Trim().EndsWith(" more mana to fully charge your items.")) {e.Eat = true;}
+						if(e.Text.StartsWith("The Mana Stone drains ")) {e.Eat = true;}
+						if(e.Text.StartsWith("The ") && e.Text.Trim().EndsWith(" is destroyed.")) {e.Eat = true;}
+					}
+					if(bTextFilterBotSpam)
+					{
+						if(e.Text.Trim().EndsWith("-t-") || e.Text.Trim().EndsWith("-b-")) {e.Eat = true;}
+					}
+					if(bTextFilterIdentFailures)
+					{
+						if(e.Text.Trim().EndsWith("tried and failed to assess you!")) {e.Eat = true;}
+					}
+					if(bTextFilterKillTaskComplete)
+					{
+						if (e.Text.StartsWith("You have killed ") && e.Text.Trim().EndsWith("Your task is complete!")) {e.Eat = true;}
+					}	
+				}	
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void StatusTextMessage(string StatusText, ref bool bEat)
+		{
+			try
+			{
+				if(!bEnableTextFiltering || StatusText == String.Empty) {return;}
+				if (bTextFilterAllStatus) {bEat = true;}
+				if (bTextFilterBusyStatus && !bEat && StatusText == "You're too busy!") {bEat = true;}
+				if (bTextFilterCastingStatus && !bEat && StatusText.StartsWith("Casting ")){bEat = true;}
+			}catch(Exception ex){LogError(ex);}
+			
+		}
+			
 	}
 }
