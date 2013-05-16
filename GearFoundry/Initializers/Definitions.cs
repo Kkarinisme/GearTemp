@@ -205,6 +205,8 @@ namespace GearFoundry
         string sRuleSpells = "";
         int nRuleNumSpells = 0;
         int nid;
+        int nusearrowid;
+        int arrowtimer;
 
 
 

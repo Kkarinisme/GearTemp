@@ -402,11 +402,32 @@ namespace GearFoundry
                     if (el.Name == "InventoryBurdenEnabled") { binventoryBurdenEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InventoryCompleteEnabled") { binventoryCompleteEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ToonStatsEnabled") { btoonStatsEnabled = Convert.ToBoolean(el.Value); }
-                 //   if (el.Name == "ToonArmorEnabled") { btoonArmorEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "EnableTextFiltering ") { bEnableTextFiltering = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterAllStatus") { bTextFilterAllStatus = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterBusyStatus") { bTextFilterBusyStatus = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterCastingStatus") { bTextFilterCastingStatus = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterMyDefenseMessages") { bTextFilterMyDefenseMessages = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterMobDefenseMessages") { bTextFilterMobDefenseMessages = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterMyKillMessages") { bTextFilterMyKillMessages = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterPKFails") { bTextFilterPKFails = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterDirtyFighting") { bTextFilterDirtyFighting = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterMySpellCasting") { bTextFilterMySpellCasting = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterOthersSpellCasting") { bTextFilterOthersSpellCasting = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterSpellExpirations") { bTextFilterSpellExpirations = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterManaStoneMessages") { bTextFilterManaStoneMessages = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterHealingMessages") { bTextFilterHealingMessages = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterSalvageMessages") { bTextFilterSalvageMessages = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterBotSpam") { bTextFilterBotSpam = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterIdentFailures") { bTextFilterIdentFailures = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterKillTaskComplete") { bTextFilterKillTaskComplete = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterVendorTells") { bTextFilterVendorTells = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterMonsterTells") { bTextFilterMonsterTells = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "TextFilterNPCChatter") { bTextFilterNPCChatter = Convert.ToBoolean(el.Value); }
+                    //   if (el.Name == "ToonArmorEnabled") { btoonArmorEnabled = Convert.ToBoolean(el.Value); }
 
                 }
 
-
+ 
                     chkQuickSlotsv.Checked = bquickSlotsvEnabled;
                     chkQuickSlotsh.Checked = bquickSlotshEnabled;
                     
@@ -419,7 +440,7 @@ namespace GearFoundry
                     chkGearInspectorEnabled.Checked = bGearInspectorEnabled;
                     
                    //GearButler Section
-                     chkGearButlerEnabled.Checked = bGearButlerEnabled;
+                   chkGearButlerEnabled.Checked = bGearButlerEnabled;
 
                    //Inventory Section
                     chkInventory.Checked = binventoryEnabled;
@@ -427,6 +448,32 @@ namespace GearFoundry
                     chkInventoryComplete.Checked = binventoryCompleteEnabled;
                     chkToonStats.Checked = btoonStatsEnabled;
                  //   chkToonArmor.Checked = btoonArmorEnabled;
+
+ 
+
+                    //Filter Section
+                    chkEnableTextFiltering.Checked = bEnableTextFiltering;
+                    chkTextFilterAllStatus.Checked = bTextFilterAllStatus;
+                    chkTextFilterBusyStatus.Checked = bTextFilterBusyStatus;
+                    chkTextFilterCastingStatus.Checked = bTextFilterCastingStatus;
+                    chkTextFilterMyDefenseMessages.Checked = bTextFilterMyDefenseMessages;
+                    chkTextFilterMobDefenseMessages.Checked = bTextFilterMobDefenseMessages;
+                    chkTextFilterMyKillMessages.Checked = bTextFilterMyKillMessages;
+                    chkTextFilterPKFails.Checked = bTextFilterPKFails;
+                    chkTextFilterDirtyFighting.Checked = bTextFilterDirtyFighting;
+                    chkTextFilterMySpellCasting.Checked = bTextFilterMySpellCasting;
+                    chkTextFilterOthersSpellCasting.Checked = bTextFilterOthersSpellCasting;
+                    chkTextFilterSpellExpirations.Checked = bTextFilterSpellExpirations;
+                    chkTextFilterManaStoneMessages.Checked = bTextFilterManaStoneMessages;
+                    chkTextFilterHealingMessages.Checked = bTextFilterHealingMessages;
+                    chkTextFilterSalvageMessages.Checked = bTextFilterSalvageMessages;
+                    chkTextFilterBotSpam.Checked = bTextFilterBotSpam;
+                    chkTextFilterIdentFailures.Checked = bTextFilterIdentFailures;
+                    chkTextFilterKillTaskComplete.Checked = bTextFilterKillTaskComplete;
+                    chkTextFilterVendorTells.Checked = bTextFilterVendorTells;
+                    chkTextFilterMonsterTells.Checked = bTextFilterMonsterTells;
+                    chkTextFilterNPCChatter.Checked = bTextFilterNPCChatter;
+
                 }
             catch (Exception ex) { LogError(ex); }
         
@@ -480,10 +527,94 @@ namespace GearFoundry
                 RenderVerticalQuickSlots(); 
             }
 
-            if (bquickSlotshEnabled)
+
+            if (bEnableTextFiltering)
             {
-                RenderHorizontalQuickSlots(); 
+                SubscribeChatEvents(); 
             }
+
+            if (bTextFilterAllStatus)
+            {
+                SubscribeChatEvents();
+            }
+
+            if (bTextFilterBusyStatus)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterCastingStatus)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterMyDefenseMessages)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterMobDefenseMessages)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterMyKillMessages)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterPKFails)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterDirtyFighting)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterMySpellCasting)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterOthersSpellCasting)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterSpellExpirations)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterManaStoneMessages)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterHealingMessages)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterSalvageMessages)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterBotSpam)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterIdentFailures)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterKillTaskComplete)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterVendorTells)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterMonsterTells)
+            {
+                SubscribeChatEvents();
+            }
+            if (bTextFilterNPCChatter)
+            {
+                SubscribeChatEvents();
+            }
+
 
             
 
@@ -778,6 +909,406 @@ namespace GearFoundry
 
         }
 
+        //Gear Filter Settings
+        void chkEnableTextFiltering_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bEnableTextFiltering = e.Checked;
+                SaveSettings();
+                if (bEnableTextFiltering)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterAllStatus_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterAllStatus = e.Checked;
+                SaveSettings();
+                if (bTextFilterAllStatus)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterBusyStatus_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterBusyStatus = e.Checked;
+                SaveSettings();
+                if (bTextFilterBusyStatus)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterCastingStatus_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterCastingStatus = e.Checked;
+                SaveSettings();
+                if (bTextFilterCastingStatus)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterMyDefenseMessages_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterMyDefenseMessages = e.Checked;
+                SaveSettings();
+                if (bTextFilterMyDefenseMessages)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterMobDefenseMessages_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterMobDefenseMessages = e.Checked;
+                SaveSettings();
+                if (bTextFilterMobDefenseMessages)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterMyKillMessages_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterMyKillMessages = e.Checked;
+                SaveSettings();
+                if (bTextFilterMyKillMessages)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+
+        void chkTextFilterPKFails_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterPKFails = e.Checked;
+                SaveSettings();
+                if (bTextFilterPKFails)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterDirtyFighting_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterDirtyFighting = e.Checked;
+                SaveSettings();
+                if (bTextFilterDirtyFighting)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterMySpellCasting_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterMySpellCasting = e.Checked;
+                SaveSettings();
+                if (bTextFilterMySpellCasting)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterOthersSpellCasting_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterOthersSpellCasting = e.Checked;
+                SaveSettings();
+                if (bTextFilterOthersSpellCasting)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterSpellExpirations_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterSpellExpirations = e.Checked;
+                SaveSettings();
+                if (bTextFilterSpellExpirations)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterManaStoneMessages_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterManaStoneMessages = e.Checked;
+                SaveSettings();
+                if (bTextFilterManaStoneMessages)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterSalvageMessages_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterSalvageMessages = e.Checked;
+                SaveSettings();
+                if (bTextFilterSalvageMessages)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+        void chkTextFilterHealingMessages_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterHealingMessages = e.Checked;
+                SaveSettings();
+                if (bTextFilterHealingMessages)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterBotSpam_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterBotSpam = e.Checked;
+                SaveSettings();
+                if (bTextFilterBotSpam)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterIdentFailures_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterIdentFailures = e.Checked;
+                SaveSettings();
+                if (bTextFilterIdentFailures)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterKillTaskComplete_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterKillTaskComplete = e.Checked;
+                SaveSettings();
+                if (bTextFilterKillTaskComplete)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+        void chkTextFilterVendorTells_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterVendorTells = e.Checked;
+                SaveSettings();
+                if (bTextFilterVendorTells)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+        void chkTextFilterMonsterTells_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterMonsterTells = e.Checked;
+                SaveSettings();
+                if (bTextFilterMonsterTells)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+        void chkTextFilterNPCChatter_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bTextFilterNPCChatter = e.Checked;
+                SaveSettings();
+                if (bTextFilterNPCChatter)
+                {
+                    SubscribeChatEvents();
+                }
+                else
+                {
+                    UnsubscribeChatEvents();
+                }
+
+            }
+            catch { }
+        }
+
+
+
         private void SaveSettings()
         {
             try
@@ -793,7 +1324,29 @@ namespace GearFoundry
                          new XElement("InventoryEnabled", binventoryEnabled),
                          new XElement("InventoryBurdenEnabled", binventoryBurdenEnabled),
                          new XElement("InventoryCompleteEnabled", binventoryCompleteEnabled),
-                         new XElement("ToonStatsEnabled", btoonStatsEnabled)));
+                         new XElement("ToonStatsEnabled", btoonStatsEnabled),
+                         new XElement("EnableTextFiltering", bEnableTextFiltering),
+                         new XElement("TextFilterAllStatus", bTextFilterAllStatus),
+                         new XElement("TextFilterBusyStatus", bTextFilterBusyStatus),
+                         new XElement("TextFilterCastingStatus", bTextFilterCastingStatus),
+                         new XElement("TextFilterMyDefenseMessages", bTextFilterMyDefenseMessages),
+                         new XElement("TextFilterMobDefenseMessages", bTextFilterMobDefenseMessages),
+                         new XElement("TextFilterMyKillMessages", bTextFilterMyKillMessages),
+                         new XElement("TextFilterPKFails", bTextFilterPKFails),
+                         new XElement("TextFilterDirtyFighting", bTextFilterDirtyFighting),
+                         new XElement("TextFilterMySpellCasting", bTextFilterMySpellCasting),
+                         new XElement("TextFilterOthersSpellCasting", bTextFilterOthersSpellCasting),
+                         new XElement("TextFilterSpellExpirations", bTextFilterSpellExpirations),
+                         new XElement("TextFilterManaStoneMessages", bTextFilterManaStoneMessages),
+                         new XElement("TextFilterHealingMessages", bTextFilterHealingMessages),
+                         new XElement("TextFilterSalvageMessages", bTextFilterSalvageMessages),
+                         new XElement("TextFilterBotSpam", bTextFilterBotSpam),
+                         new XElement("TextFilterIdentFailures", bTextFilterIdentFailures),
+                         new XElement("TextFilterKillTaskComplete", bTextFilterKillTaskComplete),
+                         new XElement("TextFilterVendorTells", bTextFilterVendorTells),
+                         new XElement("TextFilterMonsterTells", bTextFilterMonsterTells),
+                         new XElement("TextFilterNPCChatter", bTextFilterNPCChatter)));
+
                       //   new XElement("ToonArmorEnabled", btoonArmorEnabled),
                xdoc.Save(genSettingsFilename);
 
@@ -804,6 +1357,5 @@ namespace GearFoundry
         
     }
 }
-
 
 

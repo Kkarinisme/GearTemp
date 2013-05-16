@@ -393,13 +393,42 @@
           <control progid="DecalControls.Checkbox" name="chkGearInspectorEnabled" left="255" top="170" width="150" height="16" textcolor="16777215" text="Enabled"/>
         	
          
-          <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="100" width="225" height="24" text="Gear"/>
-          <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="120" width="225" height="24" text="Inventory on Startup"/>
-          <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="10" top="140" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>
-          <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="10" top="160" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
-          <control progid="DecalControls.Checkbox" name="chkInventoryWaiting" left="10" top="180" width="225" height="24" textcolor="16777215" text="List inventory waiting to be id'd"/>
-          <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="220" width="225" height="24" text="Misc"/>
-         <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="240" width="225" height="24" text="Gather Toon Stats"/>
+          <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="70" width="225" height="24" text="Gear"/>
+          <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="90" width="225" height="24" text="Inventory on Startup"/>
+          <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="10" top="110" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>
+          <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="10" top="130" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
+          <!--  <control progid="DecalControls.Checkbox" name="chkInventoryWaiting" left="10" top="150" width="225" height="24" textcolor="16777215" text="List inventory waiting to be id'd"/> -->
+
+          <Control progid="DecalControls.StaticText" name="lblGearFilters" left ="5" top="200" width="225" height="24" text="Gear Filters"/>
+          <control progid="DecalControls.Checkbox" name="chkEnableTextFiltering " left="10" top="220" width="130" height="24" text="Filter all Text"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterAllStatus" left="10" top="240" width="130" height="24" textcolor="16777215" text="All Status Messages"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterBusyStatus" left="10" top="260" width="130" height="24" textcolor="16777215" text="Busy Status"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterCastingStatus" left="10" top="280" width="130" height="24" textcolor="16777215" text="Casting Status"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterMyDefenseMessages" left="10" top="300" width="130" height="24" text="My Defense Messages"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterMobDefenseMessages" left="10" top="320" width="130" height="24" textcolor="16777215" text="Mob Defense Messages"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterMyKillMessages" left="10" top="340" width="130" height="24" textcolor="16777215" text="My Kills"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterPKFails" left="10" top="360" width="130" height="24" textcolor="16777215" text="PK Fails"/>
+
+          <Control progid="DecalControls.StaticText" name="lblMoreGearFilters" left ="150" top="200" width="130" height="24" text="And More Gear Filters"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterDirtyFighting" left="150" top="220" width="130" height="24" text="Dirty Fighting"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterMySpellCasting" left="150" top="240" width="130" height="24" textcolor="16777215" text="My SpellCasting"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterOthersSpellCasting" left="150" top="260" width="130" height="24" textcolor="16777215" text="Others SpellCasting"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterSpellExpirations" left="150" top="280" width="130" height="24" textcolor="16777215" text="Spell Expirations"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterManaStoneMessages" left="150" top="300" width="130" height="24" text="Mana Stone Messages"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterHealingMessages" left="150" top="320" width="130" height="24" textcolor="16777215" text="Healing Messages"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterSalvageMessages" left="150" top="340" width="130" height="24" textcolor="16777215" text="Salvage Messages"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterBotSpam" left="150" top="360" width="130" height="24" textcolor="16777215" text="Bot Spam"/>
+
+          <Control progid="DecalControls.StaticText" name="lblEvenMoreGearFilters" left ="300" top="200" width="130" height="24" text="Even More Gear Filters"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterIdentFailures" left="300" top="220" width="130" height="24" text="ID Failures"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterKillTaskComplete" left="300" top="240" width="130" height="24" textcolor="16777215" text="Kill Task Complete"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterVendorTells" left="300" top="260" width="130" height="24" textcolor="16777215" text="Vendor Tells"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterMonsterTells" left="300" top="280" width="130" height="24" textcolor="16777215" text="Monster Tells"/>
+          <control progid="DecalControls.Checkbox" name="chkTextFilterNPCChatter" left="300" top="300" width="130" height="24" text="NPC Chatter"/>
+
+          <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="390" width="225" height="24" text="Misc Gears"/>
+          <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="410" width="225" height="24" text="Gather Toon Stats"/>
+
         </control>
       </control>
     </page>
