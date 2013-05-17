@@ -178,6 +178,7 @@ namespace GearFoundry
                 mWaitingForIDTimer.Stop();
                 for (int n = 0; n < mWaitingForID.Count; n++)
                 {
+ 
                     if (mWaitingForID[n].HasIdData)
                     {
                         ProcessDataInventory();
@@ -190,16 +191,7 @@ namespace GearFoundry
 
 
 
-                //if (identRecd)
-                //{
-                //    GearFoundry.PluginCore.WriteToChat("I am in identRecd");
-
-                   // identRecd = false;
-                //}
-                //else
-                //{ mDoWait(); }
-
-
+ 
 
             }
             catch (Exception ex) { LogError(ex); }

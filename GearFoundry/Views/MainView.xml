@@ -303,10 +303,10 @@
 		</page>
 			<page label="Inventory">
       <control progid="DecalControls.FixedLayout" clipped="">
-        <control progid="DecalControls.PushButton" name="btnGetInventory" left="5" top="5" width="150" height="24" textcolor="16777215" text="Do Complete Inventory "/>
-        <control progid="DecalControls.PushButton" name="btnUpdateInventory" left="175" top="5" width="150" height="24" textcolor="16777215" text="Update Toon Inventory"/>
-         <control progid="DecalControls.PushButton" name="btnGetBurden" left="340" top="5" width="150" height="24" textcolor="16777215" text="Update Stacked Items"/>
-
+        <control progid="DecalControls.PushButton" name="btnGetInventory" left="5" top="5" width="110" height="24" textcolor="16777215" text="Complete Inventory "/>
+        <control progid="DecalControls.PushButton" name="btnUpdateInventory" left="125" top="5" width="110" height="24" textcolor="16777215" text="Update Inventory"/>
+         <control progid="DecalControls.PushButton" name="btnGetBurden" left="245" top="5" width="110" height="24" textcolor="16777215" text="Update Stacked Items"/>
+        <control progid="DecalControls.PushButton" name="btnItemsWaiting" left="365" top="5" width="110" height="24" textcolor="16777215" text="Items Being Id'd"/>
 
         <control progid ="DecalControls.StaticText" name="lblClass" left ="5" top ="35" height="24" width ="40" textcolor ="16777215" text="Class:"/>
                   <control progid="DecalControls.Choice" name="cmbSelectClass" left="50" top="35" width="120" height="24" textcolor="16777215" >

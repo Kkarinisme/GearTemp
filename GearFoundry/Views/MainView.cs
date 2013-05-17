@@ -267,6 +267,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IButton btnGetInventory;
         MyClasses.MetaViewWrappers.IButton btnUpdateInventory;
         MyClasses.MetaViewWrappers.IButton btnGetBurden;
+        MyClasses.MetaViewWrappers.IButton btnItemsWaiting;
         MyClasses.MetaViewWrappers.IButton btnLstInventory;
         MyClasses.MetaViewWrappers.IButton btnClrInventory;
         MyClasses.MetaViewWrappers.ICombo cmbSelectClass;
@@ -328,7 +329,7 @@ namespace GearFoundry
                      chkInventory = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventory"];
                     chkInventoryBurden = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryBurden"];
                    chkInventoryComplete = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryComplete"];
-                    chkInventoryWaiting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryWaiting"];
+                  //  chkInventoryWaiting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryWaiting"];
                     chkToonStats = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonStats"];
                    // chkToonArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonArmor"];
      			}catch(Exception ex){LogError(ex);}
@@ -389,7 +390,7 @@ namespace GearFoundry
                     //Next Control Section
                     
                     chkInventory.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventory_Change);
-                    chkInventoryWaiting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryWaiting_Change);
+                  //  chkInventoryWaiting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryWaiting_Change);
                     chkInventoryBurden.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryBurden_Change);
                     chkInventoryComplete.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryComplete_Change);
                     chkToonStats.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
@@ -759,6 +760,7 @@ namespace GearFoundry
                 btnGetInventory = (MyClasses.MetaViewWrappers.IButton)View["btnGetInventory"];
                 btnUpdateInventory = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateInventory"];
                 btnGetBurden = (MyClasses.MetaViewWrappers.IButton)View["btnGetBurden"];
+                btnItemsWaiting = (MyClasses.MetaViewWrappers.IButton)View["btnItemsWaiting"];
                 //      btnGetToonArmor = (MyClasses.MetaViewWrappers.IButton)View["btnGetToonArmor"];
                 btnLstInventory = (MyClasses.MetaViewWrappers.IButton)View["btnLstInventory"];
                 btnClrInventory = (MyClasses.MetaViewWrappers.IButton)View["btnClrInventory"];
@@ -797,6 +799,7 @@ namespace GearFoundry
                 btnGetInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetInventory_Click);
                 btnUpdateInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateInventory_Click);
                 btnGetBurden.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetBurden_Click);
+                btnItemsWaiting.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnItemsWaiting_Click);
                 ////      btnGetToonArmor.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetToonArmor_Click);
                 btnLstInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnLstInventory_Click);
                 btnClrInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnClrInventory_Click);

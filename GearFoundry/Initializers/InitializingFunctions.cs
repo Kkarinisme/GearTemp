@@ -402,7 +402,7 @@ namespace GearFoundry
                     if (el.Name == "InventoryBurdenEnabled") { binventoryBurdenEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InventoryCompleteEnabled") { binventoryCompleteEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ToonStatsEnabled") { btoonStatsEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "EnableTextFiltering ") { bEnableTextFiltering = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "EnableTextFiltering") { bEnableTextFiltering = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterAllStatus") { bTextFilterAllStatus = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterBusyStatus") { bTextFilterBusyStatus = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterCastingStatus") { bTextFilterCastingStatus = Convert.ToBoolean(el.Value); }
@@ -423,7 +423,7 @@ namespace GearFoundry
                     if (el.Name == "TextFilterVendorTells") { bTextFilterVendorTells = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterMonsterTells") { bTextFilterMonsterTells = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterNPCChatter") { bTextFilterNPCChatter = Convert.ToBoolean(el.Value); }
-                    //   if (el.Name == "ToonArmorEnabled") { btoonArmorEnabled = Convert.ToBoolean(el.Value); }
+                    ////   if (el.Name == "ToonArmorEnabled") { btoonArmorEnabled = Convert.ToBoolean(el.Value); }
 
                 }
 
@@ -443,36 +443,36 @@ namespace GearFoundry
                    chkGearButlerEnabled.Checked = bGearButlerEnabled;
 
                    //Inventory Section
-                    chkInventory.Checked = binventoryEnabled;
-                    chkInventoryBurden.Checked = binventoryBurdenEnabled;
-                    chkInventoryComplete.Checked = binventoryCompleteEnabled;
-                    chkToonStats.Checked = btoonStatsEnabled;
-                 //   chkToonArmor.Checked = btoonArmorEnabled;
+                   chkInventory.Checked = binventoryEnabled;
+                   chkInventoryBurden.Checked = binventoryBurdenEnabled;
+                   chkInventoryComplete.Checked = binventoryCompleteEnabled;
+                   chkToonStats.Checked = btoonStatsEnabled;
+                 ////   chkToonArmor.Checked = btoonArmorEnabled;
 
  
 
-                    //Filter Section
-                    chkEnableTextFiltering.Checked = bEnableTextFiltering;
-                    chkTextFilterAllStatus.Checked = bTextFilterAllStatus;
-                    chkTextFilterBusyStatus.Checked = bTextFilterBusyStatus;
-                    chkTextFilterCastingStatus.Checked = bTextFilterCastingStatus;
-                    chkTextFilterMyDefenseMessages.Checked = bTextFilterMyDefenseMessages;
-                    chkTextFilterMobDefenseMessages.Checked = bTextFilterMobDefenseMessages;
-                    chkTextFilterMyKillMessages.Checked = bTextFilterMyKillMessages;
-                    chkTextFilterPKFails.Checked = bTextFilterPKFails;
-                    chkTextFilterDirtyFighting.Checked = bTextFilterDirtyFighting;
-                    chkTextFilterMySpellCasting.Checked = bTextFilterMySpellCasting;
-                    chkTextFilterOthersSpellCasting.Checked = bTextFilterOthersSpellCasting;
-                    chkTextFilterSpellExpirations.Checked = bTextFilterSpellExpirations;
-                    chkTextFilterManaStoneMessages.Checked = bTextFilterManaStoneMessages;
-                    chkTextFilterHealingMessages.Checked = bTextFilterHealingMessages;
-                    chkTextFilterSalvageMessages.Checked = bTextFilterSalvageMessages;
-                    chkTextFilterBotSpam.Checked = bTextFilterBotSpam;
-                    chkTextFilterIdentFailures.Checked = bTextFilterIdentFailures;
-                    chkTextFilterKillTaskComplete.Checked = bTextFilterKillTaskComplete;
-                    chkTextFilterVendorTells.Checked = bTextFilterVendorTells;
-                    chkTextFilterMonsterTells.Checked = bTextFilterMonsterTells;
-                    chkTextFilterNPCChatter.Checked = bTextFilterNPCChatter;
+                 //   //Filter Section
+                   chkEnableTextFiltering.Checked = bEnableTextFiltering;
+                   chkTextFilterAllStatus.Checked = bTextFilterAllStatus;
+                   chkTextFilterBusyStatus.Checked = bTextFilterBusyStatus;
+                   chkTextFilterCastingStatus.Checked = bTextFilterCastingStatus;
+                   chkTextFilterMyDefenseMessages.Checked = bTextFilterMyDefenseMessages;
+                   chkTextFilterMobDefenseMessages.Checked = bTextFilterMobDefenseMessages;
+                   chkTextFilterMyKillMessages.Checked = bTextFilterMyKillMessages;
+                   chkTextFilterPKFails.Checked = bTextFilterPKFails;
+                   chkTextFilterDirtyFighting.Checked = bTextFilterDirtyFighting;
+                   chkTextFilterMySpellCasting.Checked = bTextFilterMySpellCasting;
+                   chkTextFilterOthersSpellCasting.Checked = bTextFilterOthersSpellCasting;
+                   chkTextFilterSpellExpirations.Checked = bTextFilterSpellExpirations;
+                   chkTextFilterManaStoneMessages.Checked = bTextFilterManaStoneMessages;
+                   chkTextFilterHealingMessages.Checked = bTextFilterHealingMessages;
+                   chkTextFilterSalvageMessages.Checked = bTextFilterSalvageMessages;
+                   chkTextFilterBotSpam.Checked = bTextFilterBotSpam;
+                   chkTextFilterIdentFailures.Checked = bTextFilterIdentFailures;
+                   chkTextFilterKillTaskComplete.Checked = bTextFilterKillTaskComplete;
+                   chkTextFilterVendorTells.Checked = bTextFilterVendorTells;
+                   chkTextFilterMonsterTells.Checked = bTextFilterMonsterTells;
+                   chkTextFilterNPCChatter.Checked = bTextFilterNPCChatter;
 
                 }
             catch (Exception ex) { LogError(ex); }
@@ -527,6 +527,11 @@ namespace GearFoundry
                 RenderVerticalQuickSlots(); 
             }
 
+            if (bquickSlotshEnabled)
+            {
+
+                RenderHorizontalQuickSlots();
+            }
 
             if (bEnableTextFiltering)
             {
@@ -746,17 +751,17 @@ namespace GearFoundry
         }
 
 
-        void chkInventoryWaiting_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-            try
-            {
-                binventoryWaitingEnabled = e.Checked;
+        //void chkInventoryWaiting_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        //{
+        //    try
+        //    {
+        //        binventoryWaitingEnabled = e.Checked;
 
-                //   SaveSettings();
-            }
-            catch (Exception ex) { LogError(ex); }
+        //        //   SaveSettings();
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
 
-        }
+        //}
 
 
 
