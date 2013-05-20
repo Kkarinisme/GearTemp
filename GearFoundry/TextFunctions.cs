@@ -57,7 +57,7 @@ namespace GearFoundry
 			try
 			{
 				BuildTextCollections();
-				CoreManager.Current.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
+				Core.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
 				Host.Underlying.Hooks.StatusTextIntercept += new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);			
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -66,7 +66,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				CoreManager.Current.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
+				Core.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
 				Host.Underlying.Hooks.StatusTextIntercept -= new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);	
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -90,7 +90,7 @@ namespace GearFoundry
 			MyDefenseMessages.Add(new Regex("^You resist the spell cast by (?<targetname>.+)$"));
 			
 			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) evaded your attack.$"));
-			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell$"));
+			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell!$"));
 	
 			MyAttackMessages.Add(new Regex("^Critical hit!  You [\\w]+ (?<targetname>.*) for (?<points>.+) point.* of .+ damage.*$"));
 			MyAttackMessages.Add(new Regex("^You [\\w]+ (?<targetname>.*) for (?<points>.+) point.* of .+ damage.*$"));
