@@ -39,6 +39,17 @@ namespace GearFoundry
             doUpdateInventory();
         }
 
+        void btnItemsWaiting_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+            if (!binventoryWaitingEnabled)
+            { binventoryWaitingEnabled = true; }
+            else
+            { binventoryWaitingEnabled = false; }
+            
+        }
+
+
+
         private void doUpdateInventory()
         {
             try

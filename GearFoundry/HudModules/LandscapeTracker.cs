@@ -894,7 +894,8 @@ namespace GearFoundry
     						break;
     				}
 					HudToChat(LandscapeTrackingList[row].LinkString(), textcolor);
-                    useArrow(LandscapeTrackingList[row].Id);
+                    nusearrowid = LandscapeTrackingList[row].Id;
+                    useArrow();
     			}
     			if(col == 2)
     			{    				

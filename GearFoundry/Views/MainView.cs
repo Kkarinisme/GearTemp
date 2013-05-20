@@ -57,19 +57,35 @@ namespace GearFoundry
         //GearInspector Controls
         MyClasses.MetaViewWrappers.ICheckBox chkGearInspectorEnabled;
         
- 
-        
-        	
-       
-        
-        MyClasses.MetaViewWrappers.ICheckBox chkVulnedIcons;
-        
         
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryWaiting;
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryBurden;
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryComplete;
         MyClasses.MetaViewWrappers.ICheckBox chkInventory;
         MyClasses.MetaViewWrappers.ICheckBox chkToonStats;
+
+
+        MyClasses.MetaViewWrappers.ICheckBox chkEnableTextFiltering;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterAllStatus;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterBusyStatus;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterCastingStatus;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMyDefenseMessages;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMobDefenseMessages;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMyKillMessages;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterPKFails;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterDirtyFighting;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMySpellCasting;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterOthersSpellCasting;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterSpellExpirations;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterManaStoneMessages;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterHealingMessages;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterSalvageMessages;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterBotSpam;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterIdentFailures;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterKillTaskComplete;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterVendorTells;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMonsterTells;
+        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterNPCChatter;
 
 
         // Controls on Notify.SearchRules Page
@@ -251,6 +267,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IButton btnGetInventory;
         MyClasses.MetaViewWrappers.IButton btnUpdateInventory;
         MyClasses.MetaViewWrappers.IButton btnGetBurden;
+        MyClasses.MetaViewWrappers.IButton btnItemsWaiting;
         MyClasses.MetaViewWrappers.IButton btnLstInventory;
         MyClasses.MetaViewWrappers.IButton btnClrInventory;
         MyClasses.MetaViewWrappers.ICombo cmbSelectClass;
@@ -309,15 +326,38 @@ namespace GearFoundry
      			try
      			{
 
-                    //chkVulnedIcons = (MyClasses.MetaViewWrappers.ICheckBox)View["chkVulnedIcons"];
                      chkInventory = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventory"];
                     chkInventoryBurden = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryBurden"];
                    chkInventoryComplete = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryComplete"];
-                    chkInventoryWaiting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryWaiting"];
-               //    chkSalvageComb = (MyClasses.MetaViewWrappers.ICheckBox)View["chkSalvageComb"];
+                  //  chkInventoryWaiting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryWaiting"];
                     chkToonStats = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonStats"];
                    // chkToonArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonArmor"];
      			}catch(Exception ex){LogError(ex);}
+
+
+                chkEnableTextFiltering = (MyClasses.MetaViewWrappers.ICheckBox)View["chkEnableTextFiltering "];
+                chkTextFilterAllStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterAllStatus"];
+                chkTextFilterBusyStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterBusyStatus"];
+                chkTextFilterCastingStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterCastingStatus"];
+                chkTextFilterMyDefenseMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMyDefenseMessages"];
+                chkTextFilterMobDefenseMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMobDefenseMessages"];
+                chkTextFilterMyKillMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMyKillMessages"];
+                chkTextFilterPKFails = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterPKFails"];
+                chkTextFilterDirtyFighting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterDirtyFighting"];
+                chkTextFilterMySpellCasting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMySpellCasting"];
+                chkTextFilterOthersSpellCasting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterOthersSpellCasting"];
+                chkTextFilterSpellExpirations = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterSpellExpirations"];
+                chkTextFilterManaStoneMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterManaStoneMessages"];
+                chkTextFilterHealingMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterHealingMessages"];
+                chkTextFilterSalvageMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterSalvageMessages"];
+                chkTextFilterBotSpam = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterBotSpam"];
+                chkTextFilterIdentFailures = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterIdentFailures"];
+                chkTextFilterKillTaskComplete = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterKillTaskComplete"];
+                chkTextFilterVendorTells = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterVendorTells"];
+                chkTextFilterMonsterTells = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMonsterTells"];
+                chkTextFilterNPCChatter = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterNPCChatter"];
+
+
 				 try
 				 {
                     //WormGears Control Events
@@ -350,7 +390,7 @@ namespace GearFoundry
                     //Next Control Section
                     
                     chkInventory.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventory_Change);
-                    chkInventoryWaiting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryWaiting_Change);
+                  //  chkInventoryWaiting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryWaiting_Change);
                     chkInventoryBurden.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryBurden_Change);
                     chkInventoryComplete.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryComplete_Change);
                     chkToonStats.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
@@ -358,6 +398,38 @@ namespace GearFoundry
 
                 }
                 catch (Exception ex) { LogError(ex); }
+
+ 
+                  try
+                  {
+                      //Next Control Section
+
+                      chkEnableTextFiltering.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkEnableTextFiltering_Change);
+                      chkTextFilterAllStatus.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterAllStatus_Change);
+                      chkTextFilterBusyStatus.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterBusyStatus_Change);
+                      chkTextFilterCastingStatus.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterCastingStatus_Change);
+                      chkTextFilterMyDefenseMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMyDefenseMessages_Change);
+                      chkTextFilterMobDefenseMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMobDefenseMessages_Change);
+                      chkTextFilterMyKillMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMyKillMessages_Change);
+                      chkTextFilterPKFails.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterPKFails_Change);
+                      chkTextFilterDirtyFighting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterDirtyFighting_Change);
+                      chkTextFilterMySpellCasting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMySpellCasting_Change);
+                      chkTextFilterOthersSpellCasting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterOthersSpellCasting_Change);
+                      chkTextFilterSpellExpirations.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterSpellExpirations_Change);
+                      chkTextFilterManaStoneMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterManaStoneMessages_Change);
+                      chkTextFilterHealingMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterHealingMessages_Change);
+                      chkTextFilterSalvageMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterSalvageMessages_Change);
+                      chkTextFilterBotSpam.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterBotSpam_Change);
+                      chkTextFilterIdentFailures.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterIdentFailures_Change);
+                      chkTextFilterKillTaskComplete.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterKillTaskComplete_Change);
+                      chkTextFilterVendorTells.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterVendorTells_Change);
+                      chkTextFilterMonsterTells.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMonsterTells_Change);
+                      chkTextFilterNPCChatter.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterNPCChatter_Change);
+
+                  }
+                  catch (Exception ex) { LogError(ex); }
+
+
 
                   try
                   {
@@ -688,6 +760,7 @@ namespace GearFoundry
                 btnGetInventory = (MyClasses.MetaViewWrappers.IButton)View["btnGetInventory"];
                 btnUpdateInventory = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateInventory"];
                 btnGetBurden = (MyClasses.MetaViewWrappers.IButton)View["btnGetBurden"];
+                btnItemsWaiting = (MyClasses.MetaViewWrappers.IButton)View["btnItemsWaiting"];
                 //      btnGetToonArmor = (MyClasses.MetaViewWrappers.IButton)View["btnGetToonArmor"];
                 btnLstInventory = (MyClasses.MetaViewWrappers.IButton)View["btnLstInventory"];
                 btnClrInventory = (MyClasses.MetaViewWrappers.IButton)View["btnClrInventory"];
@@ -726,6 +799,7 @@ namespace GearFoundry
                 btnGetInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetInventory_Click);
                 btnUpdateInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateInventory_Click);
                 btnGetBurden.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetBurden_Click);
+                btnItemsWaiting.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnItemsWaiting_Click);
                 ////      btnGetToonArmor.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetToonArmor_Click);
                 btnLstInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnLstInventory_Click);
                 btnClrInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnClrInventory_Click);

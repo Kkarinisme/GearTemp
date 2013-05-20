@@ -166,7 +166,7 @@ namespace GearFoundry
             quickiesvHud.UserClickThroughable = false;
             quickiesvHud.UserGhostable = true;
             quickiesvHud.UserMinimizable = false;
-            quickiesvHud.UserResizeable = false;
+            quickiesvHud.UserResizeable =  false;
             quickiesvHud.LoadUserSettings();
             quickiesvHud_Head = new HudFixedLayout();
             quickiesvHud.Controls.HeadControl = quickiesvHud_Head;
@@ -293,7 +293,7 @@ namespace GearFoundry
 
         private void RenderHorizontalQuickSlots()
         {
- 
+
             if (quickieshHud != null)
             {
                 DisposeHorizontalQuickSlots();
@@ -398,7 +398,8 @@ namespace GearFoundry
             {
                 doGetData(xdocQuickSlotsh, quickSlotshFilename);
             }
-  
+ 
+ 
         }
 
         private void DisposeHorizontalQuickSlots()
