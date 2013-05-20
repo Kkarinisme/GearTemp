@@ -110,48 +110,18 @@ namespace GearFoundry
 
                     else
                     {
-                        if (fn == "inventoryFilename")
-                        {
                             try
                             {
-
-                            //    xdoc.Save(inventoryFilename);
-                            //    xdoc = null;
                                 removeExcessObjsfromFile();
- 
-                               // removeToonfromFile();
                                 xdocGenInventory.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
 
-                            //    xdoc = XDocument.Load(genInventoryFilename);
-                            xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
-
+                                xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
+   
                                 xdocGenInventory.Save(genInventoryFilename);
                                 GearFoundry.PluginCore.WriteToChat("General Inventory file has been saved. ");
                             }
                             catch (Exception ex) { LogError(ex); }
 
-                        }
-                        else
-                        {
-                            try
-                            {
-
-                                xdoc.Save(armorFilename);
-                                xdoc = null;
-
-                                //   removeToonfromFile();
-
-                                var MyDoc = XDocument.Load(genArmorFilename);
-                                MyDoc.Root.Add(XDocument.Load(armorFilename).Root.Elements());
-
-                                MyDoc.Save(holdingArmorFilename);
-                                MyDoc = null;
-
-                                xdoc = XDocument.Load(holdingArmorFilename);
-                                xdoc.Save(genArmorFilename);
-                                GearFoundry.PluginCore.WriteToChat("General Armor file has been saved. ");
-                            }
-                            catch (Exception ex) { LogError(ex); }
 
                         }
                         GearFoundry.PluginCore.WriteToChat("File " + fn + " saved in directory " + currDir);
@@ -165,7 +135,7 @@ namespace GearFoundry
 
                     }
                 }
-            }
+           
             catch (Exception ex) { LogError(ex); }
         }
 

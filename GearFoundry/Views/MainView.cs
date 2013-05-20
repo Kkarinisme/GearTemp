@@ -57,7 +57,7 @@ namespace GearFoundry
         //GearInspector Controls
         MyClasses.MetaViewWrappers.ICheckBox chkGearInspectorEnabled;
 
-        //Gears Roll
+        //Gears Tactician
         MyClasses.MetaViewWrappers.ICheckBox chkCombatHudEnabled;
         
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryBurden;
@@ -339,7 +339,7 @@ namespace GearFoundry
                    chkToonArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonArmor"];
      			}catch(Exception ex){LogError(ex);}
 
-                //Gears Roll page
+                //Gears Tactician page
                 chkCombatHudEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkCombatHudEnabled"];
 
                 //Misc Gears
@@ -397,7 +397,7 @@ namespace GearFoundry
 			        chkGearInspectorEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkGearInspectorEnabled_Change);
                    }catch(Exception ex){LogError(ex);}
 
-                  //GearsRoll Controls
+                  //Gear Tactician Controls
                   try
                   {
                       chkCombatHudEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkCombatHudEnabled_Change);

@@ -358,8 +358,6 @@ namespace GearFoundry
 		private static int mLootValMinimum = 100000;
 		private static double mLootValBurdenRatioMinimum = 20;
 
-        //variables used in combathud
-        private static bool bCombatHudEnabled = false;
 
         //variables used in toon statistics program
         private XDocument xDocStats = new XDocument();
@@ -371,7 +369,10 @@ namespace GearFoundry
         private Decal.Interop.D3DService.ID3DService mD3DService;
 
         private static Decal.Interop.D3DService.eShape mArrow;
-        
+
+        //used with switch in util for determining sound to play
+        private static int mSound = 0;
+        private static System.IO.Stream s;
 
 
     }    

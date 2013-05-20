@@ -26,7 +26,6 @@ namespace GearFoundry
     public partial class PluginCore : Decal.Adapter.PluginBase
     {
         //Need to set up directories if not present and to create filenames for needed files
-
         private void InitPaths()
         {
             try
@@ -444,7 +443,7 @@ namespace GearFoundry
                    //GearButler Section
                    chkGearButlerEnabled.Checked = bGearButlerEnabled;
 
-                   //Gears roll Section
+                   //Gear Tactician Section
                    chkCombatHudEnabled.Checked = bCombatHudEnabled;
                    
                    //Misc Gears Section
