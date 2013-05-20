@@ -177,6 +177,8 @@ namespace GearFoundry
                 populateRulesListBox();
                 populateRuleSpellEnabledListBox();
                 startRoutines();
+                
+                
 
                 Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
 
@@ -194,6 +196,8 @@ namespace GearFoundry
                
 
                 mCharacterLoginComplete = true;
+                
+                RenderCombatHud();
                 
   
 

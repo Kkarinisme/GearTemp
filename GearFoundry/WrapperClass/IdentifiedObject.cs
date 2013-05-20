@@ -8,6 +8,8 @@ using System.Text;
 using Decal.Filters;
 using Decal.Adapter;
 using Decal.Adapter.Wrappers;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace GearFoundry
 {
@@ -87,6 +89,15 @@ namespace GearFoundry
 			public double DistanceAway;
 //			public rule matched_rule;
 			
+			public List<DebuffSpell> DebuffSpellList = new List<DebuffSpell>();
+						
+			public class DebuffSpell
+			{
+				public int SpellId = 0;
+				public DateTime SpellCastTime = DateTime.Now;
+				public double SecondsRemaining = 0;
+			}
+			
 			public string IORString()
 			{
 				switch(IOR)
@@ -142,6 +153,10 @@ namespace GearFoundry
 			//not in worldfilter set by OnIdentObject:
 			private int mHealthMax;
 			private int mHealthCurrent;
+			private int mStaminaMax;
+			private int mStaminaCurrent;
+			private int mManaMax;
+			private int mManaCurrent;
 			
 			//wo.properties used in loot selection
 			public int ArmorSet
@@ -583,15 +598,30 @@ namespace GearFoundry
 				return Convert.ToInt32(result);
 			}	
 			public int HealthMax {
-				//value is pushed in from notifyobject no.healthcurrent
 				get { return mHealthMax; }
-				internal set { mHealthMax = value; }
+				set { mHealthMax = value; }
 			}		
 			public int HealthCurrent {
-				//value is pushed in from notifyobject no.healthmax
 				get { return mHealthCurrent; }
-				internal set { mHealthCurrent = value; }
+				set { mHealthCurrent = value; }
 			}
+			public int StaminaMax{
+				get { return mStaminaMax; }
+				set { mStaminaMax = value; }
+			}
+			public int StaminaCurrent{
+				get { return mStaminaCurrent; }
+				set { mStaminaCurrent = value; }
+			}
+			public int ManaMax{
+				get { return mManaMax; }
+				set { mManaMax = value; }
+			}
+			public int ManaCurrent{
+				get { return mManaCurrent; }
+				set { mManaCurrent = value; }
+			}
+			
 	
 			//StringBuilders for ToString() override below...
 			private string CurrentItemLevelString()
