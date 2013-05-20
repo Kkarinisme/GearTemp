@@ -153,10 +153,14 @@ namespace GearFoundry
         
         private void playSoundFromResource(int SoundFileId)
 		{
-		    System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
-		    System.IO.Stream s = a.GetManifestResourceStream("<GearFoundry>.Sounds.blip.wav");
-		    SoundPlayer player = new SoundPlayer(s);
-		    player.Play();
+            if (bMuteSounds) { return; }
+            else
+            {
+                System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
+                System.IO.Stream s = a.GetManifestResourceStream("<GearFoundry>.Sounds.blip.wav");
+                SoundPlayer player = new SoundPlayer(s);
+                player.Play();
+            }
 		}
         
 //        private void playSimpleSound()

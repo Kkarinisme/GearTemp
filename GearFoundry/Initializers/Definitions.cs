@@ -314,32 +314,9 @@ namespace GearFoundry
         private static bool binventoryWaitingEnabled;
         //private static bool bsalvageCombEnabled;
         private static bool btoonStatsEnabled;
-    //    private static bool btoonArmorEnabled;
-        //private static bool b3DArrowEnabled;
-        //private static bool bfullScreenEnabled;
-        //private static bool bmuteEnabled;
-
-        
-        
-        
-        //private static bool btellsEnabled;
-        //private static bool bevadesEnabled;
-        //private static bool bresistsEnabled;
-        //private static bool bspellCastingEnabled;
-        //private static bool bspellsExpireEnabled;
-        //private static bool bvendorTellsEnabled;
-        //private static bool bstackingEnabled;
-        //private static bool bpickupEnabled;
-        //private static bool bustEnabled;
-        
-        //CorpseTrackerFlags
-        //private static bool btoonKillsEnabled;  //Enables tracking of Character's Kills
-        //private static bool btoonCorpsesEnabled;  //Enables tracking and logging of DeadMe(s)
-        
+        private static bool btoonArmorEnabled;
         private static bool bCorpseHudEnabled;
-        //private static bool bFellowKillsEnabled;  //Enables tracking of fellowship kills.
-        //private static bool bPermittedCorpses;
-
+ 
         //Loot Flags
         private static bool bGearInspectorEnabled;
 
@@ -381,10 +358,15 @@ namespace GearFoundry
 		private static int mLootValMinimum = 100000;
 		private static double mLootValBurdenRatioMinimum = 20;
 
+        //variables used in combathud
+        private static bool bCombatHudEnabled = false;
+
         //variables used in toon statistics program
         private XDocument xDocStats = new XDocument();
         private XDocument xDocAllStats = new XDocument();
 
+        //gearmisc variables
+        private static bool bMuteSounds = false;
         private static Decal.Interop.D3DService.CD3DObj mMarkObject;
         private Decal.Interop.D3DService.ID3DService mD3DService;
 
