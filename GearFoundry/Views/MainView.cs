@@ -68,7 +68,8 @@ namespace GearFoundry
 
         //Gears Misc
         MyClasses.MetaViewWrappers.ICheckBox chkMuteSounds;
- 
+        MyClasses.MetaViewWrappers.ICheckBox chkArmor;
+
 
 
         MyClasses.MetaViewWrappers.ICheckBox chkEnableTextFiltering;
@@ -193,12 +194,13 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICombo cboRuleEssMastery;
         MyClasses.MetaViewWrappers.IList lstRuleEssElements;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssLevel;
-        MyClasses.MetaViewWrappers.ITextBox txtRuleEssSummLevel;
+    //    MyClasses.MetaViewWrappers.ITextBox txtRuleEssSummLevel;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssDamageLevel;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssCDLevel;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssCRLevel;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssDRLevel;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssCritLevel;
+        MyClasses.MetaViewWrappers.ITextBox txtRuleEssCritDamResLevel;
 
         // Controls on Notify.SearchRules.Req Spells
 
@@ -211,6 +213,8 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl7;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl6;
         MyClasses.MetaViewWrappers.ITextBox txtRuleSpellMatches;
+        MyClasses.MetaViewWrappers.ITextBox txtRuleNumSpells;
+
         MyClasses.MetaViewWrappers.IStaticText lblRuleMustHaveSpells;
         MyClasses.MetaViewWrappers.IStaticText lblRuleMoreSpells;
 
@@ -344,7 +348,8 @@ namespace GearFoundry
 
                 //Misc Gears
                 chkMuteSounds = (MyClasses.MetaViewWrappers.ICheckBox)View["chkMuteSounds"];
-
+                chkArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkArmor"];
+ 
                 //Text Filtering Controls
                 chkEnableTextFiltering = (MyClasses.MetaViewWrappers.ICheckBox)View["chkEnableTextFiltering "];
                 chkTextFilterAllStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterAllStatus"];
@@ -421,6 +426,7 @@ namespace GearFoundry
                   try
                   {
                       chkMuteSounds.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkMuteSounds_Change);
+                      chkArmor.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkArmor_Change);
                   }
                   catch (Exception ex) { LogError(ex); }
 
@@ -617,21 +623,23 @@ namespace GearFoundry
                       cboRuleEssMastery.Selected = 0;
                       lstRuleEssElements = (MyClasses.MetaViewWrappers.IList)View["lstRuleEssElements"];
                       txtRuleEssLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssLevel"];
-                      txtRuleEssSummLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssSummLevel"];
+                  //    txtRuleEssSummLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssSummLevel"];
                       txtRuleEssDamageLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssDamageLevel"];
                       txtRuleEssCDLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssCDLevel"];
                       txtRuleEssCRLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssCRLevel"];
                       txtRuleEssDRLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssDRLevel"];
                       txtRuleEssCritLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssCritLevel"];
+                      txtRuleEssCritDamResLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssCritDamResLevel"];
 
                       cboRuleEssMastery.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cboRuleEssMastery_Change);
                       txtRuleEssLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssLevel_End);
-                      txtRuleEssSummLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssSummLevel_End);
+                  //    txtRuleEssSummLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssSummLevel_End);
                       txtRuleEssDamageLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssDamageLevel_End);
                       txtRuleEssCDLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssCDLevel_End);
                       txtRuleEssCRLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssCRLevel_End);
                       txtRuleEssDRLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssDRLevel_End);
                       txtRuleEssCritLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssCritLevel_End);
+                      txtRuleEssCritDamResLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssCritDamResLevel_End);
 
                   }
                   catch (Exception ex) { LogError(ex); }
@@ -655,6 +663,7 @@ namespace GearFoundry
                 chkRuleFilterlvl6 = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterlvl6"];
                 chkRuleFilterlvl6.Checked = bRuleFilterlvl6;
                 txtRuleSpellMatches = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleSpellMatches"];
+                txtRuleNumSpells = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleNumSpells"];
        			}catch(Exception ex){LogError(ex);}
                   try
                   {
@@ -668,6 +677,7 @@ namespace GearFoundry
                 chkRuleFilterlvl7.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl7_Change);
                 chkRuleFilterlvl6.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl6_Change);
                 txtRuleSpellMatches.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleSpellMatches_End);
+                txtRuleNumSpells.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleNumSpells_End);
 				}catch(Exception ex){LogError(ex);}
                   try
                   {

@@ -98,6 +98,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Defaults\Rules.xml">
       <LogicalName>Rules.xml</LogicalName>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Defaults\Settings.xml">
       <LogicalName>Settings.xml</LogicalName>

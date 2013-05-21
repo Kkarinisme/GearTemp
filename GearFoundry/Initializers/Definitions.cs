@@ -189,12 +189,12 @@ namespace GearFoundry
         int nRuleEssMastery = 0;
         string sRuleEssElements = "";
         int nRuleEssLevel = 0;
-        int nRuleEssSummLevel = 0;
         int nRuleEssDamageLevel = 0;
         int nRuleEssCDLevel = 0;
         int nRuleEssCRLevel = 0;
         int nRuleEssDRLevel = 0;
         int nRuleEssCritLevel = 0;
+        int nRuleEssCritDamResLevel = 0;
         bool bRuleFilterLegend = true;
         bool bRuleFilterEpic = true;
         bool bRuleFilterMajor = true;
@@ -207,6 +207,7 @@ namespace GearFoundry
         int nid;
         int nusearrowid;
         int arrowtimer;
+        int nspells;
 
 
 
@@ -323,7 +324,8 @@ namespace GearFoundry
         //Butler Flags
         private static bool bGearButlerEnabled;
 
-
+        //Misc flags
+        private static bool bArmorEnabled;
   
         
         

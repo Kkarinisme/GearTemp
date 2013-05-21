@@ -386,14 +386,14 @@ namespace GearFoundry
                 }
 
                sRuleSpells = "";
-                nRuleNumSpells = 0;
+               nspells = 0;
 
-                //Now resetup the variables nRuleNumSpells and sRuleSpells
+                //Now resetup the variables nspells and sRuleSpells
                 foreach (IDNameLoadable spl in EnabledSpellsList)
                 {
                     string sid = spl.ID.ToString();
                     sRuleSpells = sRuleSpells + sid + ",";
-                    nRuleNumSpells++;
+                    nspells++;
                 }
                 //Now remove the final comma from the variable
                 sRuleSpells = sRuleSpells.Substring(0, sRuleSpells.Length - 1);

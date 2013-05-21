@@ -165,9 +165,9 @@
                         <column progid="DecalControls.TextColumn" />
                       </control>
                       <control progid="DecalControls.StaticText" name="lblRuleEssLevel" left="250" top="30" width="100" height="16" text="Essence Lvl: &lt;="/>
-                      <control progid="DecalControls.Edit" name="txtRuleEssLevel" left="355" top="30" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
-                      <control progid="DecalControls.StaticText" name="lblRuleEssSummLevel" left="250" top="50" width="100" height="16" text="Summoning Lvl: &lt;="/>
-                      <control progid="DecalControls.Edit" name="txtRuleEssSummLevel" left="355" top="50" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+                      <control progid="DecalControls.Edit" name="txtRuleEssLevel" left="355" top="30" width="40" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+                      <!--<control progid="DecalControls.StaticText" name="lblRuleEssSummLevel" left="250" top="50" width="100" height="16" text="Summoning Lvl: &lt;="/>
+                      <control progid="DecalControls.Edit" name="txtRuleEssSummLevel" left="355" top="50" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>-->
                       <control progid="DecalControls.StaticText" name="lblRuleEssDamageLevel" left="250" top="70" width="100" height="16" text="Damage Lvl: =&gt;"/>
                       <control progid="DecalControls.Edit" name="txtRuleEssDamageLevel" left="355" top="70" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
                       <control progid="DecalControls.StaticText" name="lblRuleEssCDLevel" left="250" top="90" width="100" height="16" text="CritDam Lvl: =&gt;"/>
@@ -178,8 +178,10 @@
                       <control progid="DecalControls.Edit" name="txtRuleEssDRLevel" left="355" top="130" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
                       <control progid="DecalControls.StaticText" name="lblRuleEssCritLevel" left="250" top="150" width="100" height="16" text="EssCrit Lvl: =&gt;"/>
                       <control progid="DecalControls.Edit" name="txtRuleEssCritLevel" left="355" top="150" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
+                        <control progid="DecalControls.StaticText" name="lblRuleEssCritDamResLevel" left="250" top="170" width="100" height="16" text="EssCritDamResist Lvl: =&gt;"/>
+                        <control progid="DecalControls.Edit" name="txtRuleEssCritDamResLevel" left="355" top="170" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
 
-                    </control>
+                      </control>
                   </page>
                   <!--Essences-->
 
@@ -199,7 +201,10 @@
                       <column progid="DecalControls.TextColumn" fixedwidth="193" />
                       <column progid="DecalControls.TextColumn" />
                     </control>
-                     <control progid="DecalControls.StaticText" name="lblRuleFilterSpells" left="100" top="170" width="130" height="16" text="Filter Spells by:" />
+                    <control progid = "DecalControls.StaticText" name="lblnumSpells" left ="250" top="230" width="150" height="16" text="Number of spells must have:" />
+                    <control progid = "DecalControls.Edit" name="txtRuleNumSpells" left ="410" top="230" width="20" height="16" text="" />
+
+                    <control progid="DecalControls.StaticText" name="lblRuleFilterSpells" left="100" top="170" width="130" height="16" text="Filter Spells by:" />
                     <control progid="DecalControls.Checkbox" name="chkRuleFilterLegend" left="50" top="190" width="50" height="16" text="Legendary" />
                     <control progid="DecalControls.Checkbox" name="chkRuleFilterlvl8" left= "150" top="190" width="50" height="16" text="lvl 8" />
                     <control progid="DecalControls.Checkbox" name="chkRuleFilterEpic" left="50" top="210" width="50" height="16" text="Epic" />
@@ -399,7 +404,8 @@
           <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="90" width="225" height="24" text="Inventory on Startup"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="10" top="110" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="10" top="130" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
- 
+          <control progid="DecalControls.Checkbox" name="chkToonArmor" left="10" top="150" width="225" height="24" textcolor="16777215" text="Inventory armor on Startup"/>
+
 
           <Control progid="DecalControls.StaticText" name="lblGearFilters" left ="5" top="200" width="225" height="24" text="Gear Filters"/>
           <control progid="DecalControls.Checkbox" name="chkEnableTextFiltering " left="10" top="220" width="130" height="24" text="Filter all Text"/>
@@ -431,7 +437,7 @@
           <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="390" width="225" height="24" text="Misc Gears"/>
           <control progid="DecalControls.Checkbox" name="chkMuteSounds" left="10" top="410" width="225" height="24" text="Mute Sound Effects"/>
           <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="430" width="225" height="24" text="Gather Toon Stats"/>
-          <control progid="DecalControls.Checkbox" name="chkToonArmor" left="10" top="450" width="225" height="24" text="Inventory Toon Armor"/>
+          <control progid="DecalControls.Checkbox" name="chkArmor" left="10" top="450" width="225" height="24" text="Work with Armor"/>
 
         </control>
       </control>

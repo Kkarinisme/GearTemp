@@ -365,12 +365,13 @@ namespace GearFoundry
             bRuleBlue = false;
             nRuleEssCDLevel = 0;
             nRuleEssCritLevel = 0;
+            nRuleEssCritDamResLevel = 0;
             nRuleEssCRLevel = 0;
             nRuleEssDamageLevel = 0;
             nRuleEssDRLevel = 0;
             nRuleEssLevel = 0;
             nRuleEssMastery = 0;
-            nRuleEssSummLevel = 0;
+          //  nRuleEssSummLevel = 0;
             bRuleFilterLegend = false;
             bRuleFilterEpic = false;
             bRuleFilterMajor = false;
@@ -425,6 +426,7 @@ namespace GearFoundry
                     if (el.Name == "TextFilterMonsterTells") { bTextFilterMonsterTells = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterNPCChatter") { bTextFilterNPCChatter = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ToonArmorEnabled") { btoonArmorEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "ArmorEnabled") { bArmorEnabled = Convert.ToBoolean(el.Value); }
 
                 }
 
@@ -455,6 +457,7 @@ namespace GearFoundry
                    chkInventoryComplete.Checked = binventoryCompleteEnabled;
                    chkToonStats.Checked = btoonStatsEnabled;
                    chkToonArmor.Checked = btoonArmorEnabled;
+                   chkArmor.Checked = bArmorEnabled;
 
  
 
@@ -524,6 +527,9 @@ namespace GearFoundry
 
             if (btoonArmorEnabled)
             { doGetArmor(); }
+
+            if (bArmorEnabled)
+            { RenderArmorHud(); }
 
 
             if (binventoryBurdenEnabled)
@@ -709,7 +715,7 @@ namespace GearFoundry
             txtRuleEssDamageLevel.Text = nRuleEssDamageLevel.ToString();
             txtRuleEssDRLevel.Text = nRuleEssDRLevel.ToString();
             txtRuleEssLevel.Text = nRuleEssLevel.ToString();
-            txtRuleEssSummLevel.Text = nRuleEssSummLevel.ToString();
+        //    txtRuleEssSummLevel.Text = nRuleEssSummLevel.ToString();
 
  
 
@@ -954,6 +960,22 @@ namespace GearFoundry
 
         }
 
+        void chkArmor_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bArmorEnabled = e.Checked;
+
+
+                SaveSettings();
+                if (bArmorEnabled) { RenderArmorHud(); }
+                else { DisposeArmorHud(); }
+
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+ 
 
 
 
@@ -1375,7 +1397,8 @@ namespace GearFoundry
                          new XElement("InventoryCompleteEnabled", binventoryCompleteEnabled),
                          new XElement("ToonStatsEnabled", btoonStatsEnabled),
                          new XElement("ToonArmorEnabled", btoonArmorEnabled),
-                         new XElement("MuteSounds", bMuteSounds),
+                         new XElement("ArmorEnabled", bArmorEnabled),
+                          new XElement("MuteSounds", bMuteSounds),
                          new XElement("EnableTextFiltering", bEnableTextFiltering),
                          new XElement("TextFilterAllStatus", bTextFilterAllStatus),
                          new XElement("TextFilterBusyStatus", bTextFilterBusyStatus),
@@ -1398,7 +1421,6 @@ namespace GearFoundry
                          new XElement("TextFilterMonsterTells", bTextFilterMonsterTells),
                          new XElement("TextFilterNPCChatter", bTextFilterNPCChatter)));
 
-                      //   new XElement("ToonArmorEnabled", btoonArmorEnabled),
                xdoc.Save(genSettingsFilename);
 
             }
