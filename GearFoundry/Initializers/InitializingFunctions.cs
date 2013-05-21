@@ -26,7 +26,6 @@ namespace GearFoundry
     public partial class PluginCore : Decal.Adapter.PluginBase
     {
         //Need to set up directories if not present and to create filenames for needed files
-
         private void InitPaths()
         {
             try
@@ -396,12 +395,14 @@ namespace GearFoundry
                     if (el.Name == "LandscapeHudEnabled") { bLandscapeHudEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InspectorHudEnabled") { bGearInspectorEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ButlerHudEnabled") { bGearButlerEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "CombatHudEnabled") { bCombatHudEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "QuickSlotsvEnabled") { bquickSlotsvEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "QuickSlotshEnabled") { bquickSlotshEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InventoryEnabled") { binventoryEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InventoryBurdenEnabled") { binventoryBurdenEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "InventoryCompleteEnabled") { binventoryCompleteEnabled = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ToonStatsEnabled") { btoonStatsEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "MuteSounds") { bMuteSounds = Convert.ToBoolean(el.Value); }
                     if (el.Name == "EnableTextFiltering") { bEnableTextFiltering = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterAllStatus") { bTextFilterAllStatus = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterBusyStatus") { bTextFilterBusyStatus = Convert.ToBoolean(el.Value); }
@@ -423,7 +424,7 @@ namespace GearFoundry
                     if (el.Name == "TextFilterVendorTells") { bTextFilterVendorTells = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterMonsterTells") { bTextFilterMonsterTells = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterNPCChatter") { bTextFilterNPCChatter = Convert.ToBoolean(el.Value); }
-                    ////   if (el.Name == "ToonArmorEnabled") { btoonArmorEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "ToonArmorEnabled") { btoonArmorEnabled = Convert.ToBoolean(el.Value); }
 
                 }
 
@@ -442,12 +443,18 @@ namespace GearFoundry
                    //GearButler Section
                    chkGearButlerEnabled.Checked = bGearButlerEnabled;
 
+                   //Gear Tactician Section
+                   chkCombatHudEnabled.Checked = bCombatHudEnabled;
+                   
+                   //Misc Gears Section
+                   chkMuteSounds.Checked = bMuteSounds;
+
                    //Inventory Section
                    chkInventory.Checked = binventoryEnabled;
                    chkInventoryBurden.Checked = binventoryBurdenEnabled;
                    chkInventoryComplete.Checked = binventoryCompleteEnabled;
                    chkToonStats.Checked = btoonStatsEnabled;
-                 ////   chkToonArmor.Checked = btoonArmorEnabled;
+                   chkToonArmor.Checked = btoonArmorEnabled;
 
  
 
@@ -501,6 +508,11 @@ namespace GearFoundry
                 RenderButlerHud();
             }
 
+            if (bCombatHudEnabled)
+            {
+                RenderCombatHud();
+            }
+
             if (binventoryCompleteEnabled)
             {
                 binventoryBurdenEnabled = false;
@@ -509,6 +521,11 @@ namespace GearFoundry
                 doGetInventory();
 
             }
+
+            if (btoonArmorEnabled)
+            { doGetArmor(); }
+
+
             if (binventoryBurdenEnabled)
             {
                 binventoryEnabled = false;
@@ -751,19 +768,6 @@ namespace GearFoundry
         }
 
 
-        //void chkInventoryWaiting_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        //{
-        //    try
-        //    {
-        //        binventoryWaitingEnabled = e.Checked;
-
-        //        //   SaveSettings();
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-
-        //}
-
-
 
         void chkQuickSlotsv_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
@@ -891,6 +895,24 @@ namespace GearFoundry
             catch { }
         }
 
+        void chkCombatHudEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bCombatHudEnabled = e.Checked;
+                SaveSettings();
+                if (bCombatHudEnabled)
+                {
+                    RenderCombatHud();
+                }
+                else
+                {
+                    DisposeCombatHud();
+                }
+            }
+            catch { }
+        }
+
          void chkToonStats_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
             try
@@ -906,13 +928,34 @@ namespace GearFoundry
         {
             try
             {
-              //  btoonArmorEnabled = e.Checked;
+                btoonArmorEnabled = e.Checked;
+               
 
                 SaveSettings();
+                if (btoonArmorEnabled) { doGetArmor(); }
+
             }
             catch (Exception ex) { LogError(ex); }
 
         }
+ 
+       //Misc Gear Settings
+        void chkMuteSounds_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bMuteSounds = e.Checked;
+
+
+                SaveSettings();
+
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
+
+
 
         //Gear Filter Settings
         void chkEnableTextFiltering_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
@@ -1324,12 +1367,15 @@ namespace GearFoundry
                          new XElement("LandscapeHudEnabled", bLandscapeHudEnabled),
                          new XElement("InspectorHudEnabled", bGearInspectorEnabled),
                          new XElement("ButlerHudEnabled", bGearButlerEnabled),
+                         new XElement("CombatHudEnabled", bCombatHudEnabled),
                          new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
                          new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
                          new XElement("InventoryEnabled", binventoryEnabled),
                          new XElement("InventoryBurdenEnabled", binventoryBurdenEnabled),
                          new XElement("InventoryCompleteEnabled", binventoryCompleteEnabled),
                          new XElement("ToonStatsEnabled", btoonStatsEnabled),
+                         new XElement("ToonArmorEnabled", btoonArmorEnabled),
+                         new XElement("MuteSounds", bMuteSounds),
                          new XElement("EnableTextFiltering", bEnableTextFiltering),
                          new XElement("TextFilterAllStatus", bTextFilterAllStatus),
                          new XElement("TextFilterBusyStatus", bTextFilterBusyStatus),

@@ -153,10 +153,51 @@ namespace GearFoundry
         
         private void playSoundFromResource(int SoundFileId)
 		{
-		    System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
-		    System.IO.Stream s = a.GetManifestResourceStream("<GearFoundry>.Sounds.blip.wav");
-		    SoundPlayer player = new SoundPlayer(s);
-		    player.Play();
+            if (bMuteSounds) { return; }
+            else
+            {
+                
+                System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
+                switch (mSound)
+                {
+                    case 1:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.blip.wav");
+                        break;
+                    case 2:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.chime.wav");
+                        break;
+                    case 3:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.click.wav");
+                        break;
+                    case 4:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.click2.wav");
+                        break;
+                    case 5:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.oop.wav");
+                        break;
+                    case 6:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.pluck.wav");
+                        break;
+                    case 7:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.splooge.wav");
+                        break;
+                    case 8:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.till.wav");
+                        break;
+                    case 9:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.womp.wav");
+                        break;
+                    case 10:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.womp2.wav");
+                        break;
+                    default:
+                        s = a.GetManifestResourceStream("<GearFoundry>.Sounds.blip.wav");
+                        break;
+
+                }
+                SoundPlayer player = new SoundPlayer(s);
+                player.Play();
+            }
 		}
         
 //        private void playSimpleSound()

@@ -380,24 +380,26 @@
           <control progid="DecalControls.Checkbox" name="chkQuickSlotsv" left="10" top="20" width="150" height="16" text="Vertical Enabled"/>
           <control progid="DecalControls.Checkbox" name="chkQuickSlotsh" left="10" top="40" width="150" height="16" text="Horizontal Enabled"/>
         	
-          <Control progid="DecalControls.StaticText" name="lblGearVisection" left ="250" top="5" width="150" height="16" text="GearVisection Settings:"/>
-          <control progid="DecalControls.Checkbox" name="chkGearVisectionEnabled" left="255" top="20" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <Control progid="DecalControls.StaticText" name="lblGearVisection" left ="225" top="5" width="150" height="16" text="GearVisection Settings:"/>
+          <control progid="DecalControls.Checkbox" name="chkGearVisectionEnabled" left="230" top="20" width="150" height="16" textcolor="16777215" text="Enabled"/>
         	
-          <Control progid="DecalControls.StaticText" name="lblGearSense" left ="250" top="50" width="150" height="16" text="GearSense Settings:"/>	 
-          <control progid="DecalControls.Checkbox" name="chkGearSenseEnabled" left="255" top="70" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <Control progid="DecalControls.StaticText" name="lblGearSense" left ="225" top="50" width="150" height="16" text="GearSense Settings:"/>	 
+          <control progid="DecalControls.Checkbox" name="chkGearSenseEnabled" left="230" top="70" width="150" height="16" textcolor="16777215" text="Enabled"/>
        	
-          <Control progid="DecalControls.StaticText" name="lblGearButler" left ="250" top="100" width="150" height="16" text="GearButler Settings:"/>	
-          <control progid="DecalControls.Checkbox" name="chkGearButlerEnabled" left="255" top="120" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <Control progid="DecalControls.StaticText" name="lblGearButler" left ="225" top="100" width="150" height="16" text="GearButler Settings:"/>	
+          <control progid="DecalControls.Checkbox" name="chkGearButlerEnabled" left="230" top="120" width="150" height="16" textcolor="16777215" text="Enabled"/>
+
+          <Control progid ="DecalControls.StaticText" name ="lblGearTactician" left ="375" top ="5" width="225" height="24" text="Gear Tactician"/>
+          <control progid="DecalControls.Checkbox" name="chkCombatHudEnabled" left="380" top="20" width="225" height="24" text="Use Combat Hud"/>
+
+          <Control progid="DecalControls.StaticText" name="lblGearInspector" left ="375" top="50" width="150" height="16" text="GearInspector Settings:"/>
+          <control progid="DecalControls.Checkbox" name="chkGearInspectorEnabled" left="380" top="70" width="150" height="16" textcolor="16777215" text="Enabled"/>
         	
-          <Control progid="DecalControls.StaticText" name="lblGearInspector" left ="250" top="150" width="150" height="16" text="GearInspector Settings:"/>
-          <control progid="DecalControls.Checkbox" name="chkGearInspectorEnabled" left="255" top="170" width="150" height="16" textcolor="16777215" text="Enabled"/>
-        	
-         
           <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="70" width="225" height="24" text="Gear"/>
           <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="90" width="225" height="24" text="Inventory on Startup"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="10" top="110" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="10" top="130" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
-          <!--  <control progid="DecalControls.Checkbox" name="chkInventoryWaiting" left="10" top="150" width="225" height="24" textcolor="16777215" text="List inventory waiting to be id'd"/> -->
+ 
 
           <Control progid="DecalControls.StaticText" name="lblGearFilters" left ="5" top="200" width="225" height="24" text="Gear Filters"/>
           <control progid="DecalControls.Checkbox" name="chkEnableTextFiltering " left="10" top="220" width="130" height="24" text="Filter all Text"/>
@@ -427,7 +429,9 @@
           <control progid="DecalControls.Checkbox" name="chkTextFilterNPCChatter" left="300" top="300" width="130" height="24" text="NPC Chatter"/>
 
           <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="390" width="225" height="24" text="Misc Gears"/>
-          <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="410" width="225" height="24" text="Gather Toon Stats"/>
+          <control progid="DecalControls.Checkbox" name="chkMuteSounds" left="10" top="410" width="225" height="24" text="Mute Sound Effects"/>
+          <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="430" width="225" height="24" text="Gather Toon Stats"/>
+          <control progid="DecalControls.Checkbox" name="chkToonArmor" left="10" top="450" width="225" height="24" text="Inventory Toon Armor"/>
 
         </control>
       </control>

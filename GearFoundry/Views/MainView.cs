@@ -56,13 +56,19 @@ namespace GearFoundry
         
         //GearInspector Controls
         MyClasses.MetaViewWrappers.ICheckBox chkGearInspectorEnabled;
+
+        //Gears Tactician
+        MyClasses.MetaViewWrappers.ICheckBox chkCombatHudEnabled;
         
-        
-        MyClasses.MetaViewWrappers.ICheckBox chkInventoryWaiting;
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryBurden;
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryComplete;
         MyClasses.MetaViewWrappers.ICheckBox chkInventory;
         MyClasses.MetaViewWrappers.ICheckBox chkToonStats;
+        MyClasses.MetaViewWrappers.ICheckBox chkToonArmor;
+
+        //Gears Misc
+        MyClasses.MetaViewWrappers.ICheckBox chkMuteSounds;
+ 
 
 
         MyClasses.MetaViewWrappers.ICheckBox chkEnableTextFiltering;
@@ -326,15 +332,20 @@ namespace GearFoundry
      			try
      			{
 
-                     chkInventory = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventory"];
-                    chkInventoryBurden = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryBurden"];
+                   chkInventory = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventory"];
+                   chkInventoryBurden = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryBurden"];
                    chkInventoryComplete = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryComplete"];
-                  //  chkInventoryWaiting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryWaiting"];
-                    chkToonStats = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonStats"];
-                   // chkToonArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonArmor"];
+                   chkToonStats = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonStats"];
+                   chkToonArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonArmor"];
      			}catch(Exception ex){LogError(ex);}
 
+                //Gears Tactician page
+                chkCombatHudEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkCombatHudEnabled"];
 
+                //Misc Gears
+                chkMuteSounds = (MyClasses.MetaViewWrappers.ICheckBox)View["chkMuteSounds"];
+
+                //Text Filtering Controls
                 chkEnableTextFiltering = (MyClasses.MetaViewWrappers.ICheckBox)View["chkEnableTextFiltering "];
                 chkTextFilterAllStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterAllStatus"];
                 chkTextFilterBusyStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterBusyStatus"];
@@ -385,24 +396,37 @@ namespace GearFoundry
 			        //GearInspector Controls
 			        chkGearInspectorEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkGearInspectorEnabled_Change);
                    }catch(Exception ex){LogError(ex);}
+
+                  //Gear Tactician Controls
+                  try
+                  {
+                      chkCombatHudEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkCombatHudEnabled_Change);
+                  }
+                  catch (Exception ex) { LogError(ex); }
+
                   try
                   { 
-                    //Next Control Section
+                    //Inventory Control Section
                     
                     chkInventory.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventory_Change);
-                  //  chkInventoryWaiting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryWaiting_Change);
                     chkInventoryBurden.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryBurden_Change);
                     chkInventoryComplete.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryComplete_Change);
                     chkToonStats.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
-                   // chkToonArmor.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonArmor_Change);
+                   chkToonArmor.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonArmor_Change);
 
                 }
                 catch (Exception ex) { LogError(ex); }
 
- 
+                  //GearsMisc Controls
                   try
                   {
-                      //Next Control Section
+                      chkMuteSounds.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkMuteSounds_Change);
+                  }
+                  catch (Exception ex) { LogError(ex); }
+
+                  try
+                  {
+                      //Text Control Section
 
                       chkEnableTextFiltering.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkEnableTextFiltering_Change);
                       chkTextFilterAllStatus.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterAllStatus_Change);
