@@ -515,80 +515,98 @@ namespace GearFoundry
 								RuleName = String.Empty; goto Next;
 							}	
 					}
-//					
-//					if(rule.RuleWeaponEnabledA || rule.RuleWeaponEnabledB || rule.RuleWeaponEnabledC || rule.RuleWeaponEnabledD)
-//					{
-//						bool[] ruletrue = {false, false, false, false};
-//						if(rule.RuleWeaponEnabledA)
-//						{	
-//							if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.WieldReqValue && 
-//							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.Variance <= rule.VarianceA))
-//							     {ruletrue[0] = true;}
-//						}
-//						if(rule.RuleWeaponEnabledB)
-//						{	
-//							if((rule.MSCleaveB == IOItemWithID.MSCleave && rule.WieldReqValueB == IOItemWithID.WieldReqValue && 
-//							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageB && IOItemWithID.Variance <= rule.VarianceB))
-//							     {ruletrue[1] = true;}
-//						}
-//						if(rule.RuleWeaponEnabledC)
-//						{	
-//							if((rule.MSCleaveC == IOItemWithID.MSCleave && rule.WieldReqValueC == IOItemWithID.WieldReqValue && 
-//							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageC && IOItemWithID.Variance <= rule.VarianceC))
-//							     {ruletrue[2] = true;}
-//						}					
-//						if(rule.RuleWeaponEnabledD)
-//						{	
-//							if((rule.MSCleaveD == IOItemWithID.MSCleave && rule.WieldReqValueD == IOItemWithID.WieldReqValue && 
-//							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageD && IOItemWithID.Variance <= rule.VarianceD))
-//							     {ruletrue[3] = true;}
-//						}
-//						if(!ruletrue[0] && !ruletrue[1] && !ruletrue[2] && !ruletrue[3]) {RuleName = String.Empty; goto Next;}
-//					}
+					//Irquk:  Confirmed Functional
+					if(rule.RuleWeaponEnabledA || rule.RuleWeaponEnabledB || rule.RuleWeaponEnabledC || rule.RuleWeaponEnabledD)
+					{
+						bool[] ruletrue = {false, false, false, false};
+						if(rule.RuleWeaponEnabledA)
+						{	
+							WriteToChat("A Enabled");
+							WriteToChat("Rule: MSCleave A, WRA, MDA, VarA");
+							WriteToChat(rule.MSCleaveA +","+rule.WieldReqValueA+","+ rule.MaxDamageA+","+ rule.VarianceA);
+							WriteToChat("Item: MSCleave A, WRA, MDA, VarA");
+							WriteToChat(IOItemWithID.MSCleave +","+ IOItemWithID.WieldReqValue +","+ IOItemWithID.WeaponMaxDamage+","+ IOItemWithID.Variance);
+							if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.WieldReqValue && 
+							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.Variance <= rule.VarianceA))
+							     {ruletrue[0] = true;}
+						}
+						if(rule.RuleWeaponEnabledB)
+						{	
+							if((rule.MSCleaveB == IOItemWithID.MSCleave && rule.WieldReqValueB == IOItemWithID.WieldReqValue && 
+							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageB && IOItemWithID.Variance <= rule.VarianceB))
+							     {ruletrue[1] = true;}
+						}
+						if(rule.RuleWeaponEnabledC)
+						{	
+							if((rule.MSCleaveC == IOItemWithID.MSCleave && rule.WieldReqValueC == IOItemWithID.WieldReqValue && 
+							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageC && IOItemWithID.Variance <= rule.VarianceC))
+							     {ruletrue[2] = true;}
+						}					
+						if(rule.RuleWeaponEnabledD)
+						{	
+							if((rule.MSCleaveD == IOItemWithID.MSCleave && rule.WieldReqValueD == IOItemWithID.WieldReqValue && 
+							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageD && IOItemWithID.Variance <= rule.VarianceD))
+							     {ruletrue[3] = true;}
+						}
+						if(!ruletrue[0] && !ruletrue[1] && !ruletrue[2] && !ruletrue[3]) {RuleName = String.Empty; goto Next;}
+					}
 					//Irquk:  Confirmed functional
 					if(rule.RuleDamageTypes > 0)
 					{
 						if(!((rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)) {RuleName = String.Empty; goto Next;}
 					}
 //					
-//					//Armor Levels
-//					if(rule.RuleArmorLevel > 0)
-//					{
-//						if(rule.RuleArmorLevel > IOItemWithID.ArmorLevel) {RuleName = String.Empty; goto Next;}
-//					}
+//					//Irquk:  Confirmed functional
+					if(rule.RuleArmorLevel > 0)
+					{
+						if(rule.RuleArmorLevel > IOItemWithID.ArmorLevel) {RuleName = String.Empty; goto Next;}
+					}
 //					//Armor Types
 ////					if(rule.RuleArmorTypes >= 0)
 ////					{
 ////						
 ////					}
-//					if(rule.RuleArmorCoverage > 0)
-//					{
-//						if((IOItemWithID.ArmorCoverage & rule.RuleArmorCoverage) != rule.RuleArmorCoverage) {RuleName = String.Empty; goto Next;}
-//					}
-//					if(rule.RuleUnenchantable)
-//					{
-//						if(IOItemWithID.IntValues(LongValueKey.Unenchantable) != 9999) {RuleName = String.Empty; goto Next;}
-//					}
+					//Irquk:  Confirmed Functional
+					if(rule.RuleArmorSet.Length > 0)
+					{
+						if(!rule.RuleArmorSet.Contains(IOItemWithID.ArmorSet)){RuleName = String.Empty; goto Next;}
+					}
+					//Irquk Confirmed Functional
+					if(rule.RuleArmorCoverage > 0)
+					{
+						if((IOItemWithID.ArmorCoverage & rule.RuleArmorCoverage) != IOItemWithID.ArmorCoverage) {RuleName = String.Empty; goto Next;}
+					}
+					//Irquk Confirmed Functional
+					if(rule.RuleUnenchantable)
+					{
+						if(IOItemWithID.IntValues(LongValueKey.Unenchantable) != 9999) {RuleName = String.Empty; goto Next;}
+					}
 //					
 //					
-//					bool red = false;
-//					bool yellow = false;
-//					bool blue = false;
-//					//Cloaks & Aetheria
-//					if(rule.RuleRed || rule.RuleYellow || rule.RuleBlue)
-//					{
-//						if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 225) {red = true;}
-//						if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 150) {yellow = true;}
-//						if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue  == 75) {blue = true;}
-//						if(!red && !yellow && !blue) {RuleName = String.Empty; goto Next;}
-//					}
-//									
-//					if(rule.RuleItemLevel > 0)
-//					{
-//						if(IOItemWithID.MaxItemLevel < rule.RuleItemLevel) {RuleName = String.Empty; goto Next;}
-//					}
+					bool red = false;
+					bool yellow = false;
+					bool blue = false;
+					//Irquk:  Confirmed Functional
+					if(rule.RuleRed || rule.RuleYellow || rule.RuleBlue)
+					{
+						if(rule.RuleRed) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 225) {red = true;}}
+						if(rule.RuleYellow) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 150) {yellow = true;}}
+						if(rule.RuleBlue){if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue  == 75) {blue = true;}}
+						if(!red && !yellow && !blue){RuleName = String.Empty; goto Next;}
+					}
+									
+					//Irquk:  Confirmed functional
+					if(rule.RuleItemLevel > 0)
+					{
+						if(IOItemWithID.MaxItemLevel < rule.RuleItemLevel) {RuleName = String.Empty; goto Next;}
+					}
+
+				
+					
+					//TODO:  Num spells is currently busted.  Mish will fix and get back to me.
 //					if(rule.RuleSpellNumber > 0)
 //					{
+//						WriteToChat("Spell Number = " + rule.RuleSpellNumber);
 //						int spellmatches = 0;
 //						for(int i = 0; i < IOItemWithID.SpellCount; i++)
 //						{
@@ -596,6 +614,7 @@ namespace GearFoundry
 //						}
 //						//Irq:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
 //						if(rule.RuleSpells.Contains(10000)){if(IOItemWithID.IntValues((LongValueKey)352) == 2){spellmatches++;}}
+//						WriteToChat("Spellmatches: " + spellmatches);
 //						if(spellmatches < rule.RuleSpellNumber) {RuleName = String.Empty; goto Next;}
 //					}
 
@@ -1048,6 +1067,18 @@ namespace GearFoundry
 		        	if(!Int32.TryParse(XRule.Element("MasteryType").Value, out tRule.RuleMastery)) {tRule.RuleMastery = 0;}
 		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = 0;}
 		        	
+		        	if(!Int32.TryParse(XRule.Element("EssDamageLevel").Value, out tRule.RuleEssenceDamage)){tRule.RuleEssenceDamage = 0;}
+		        	if(!Int32.TryParse(XRule.Element("EssDRLevel").Value, out tRule.RuleEssenceDamageResist)){tRule.RuleEssenceDamageResist = 0;}
+		        	if(!Int32.TryParse(XRule.Element("EssCDLevel").Value, out tRule.RuleEssenceCrit)){tRule.RuleEssenceCrit = 0;}
+		        	if(!Int32.TryParse(XRule.Element("EssCRLevel").Value, out tRule.RuleEssenceCritResist)){tRule.RuleEssenceCritResist = 0;}
+		        	if(!Int32.TryParse(XRule.Element("EssSummLevel").Value, out tRule.RuleEssenceSummoningLevel)){tRule.RuleEssenceSummoningLevel = 0;}
+
+		        	
+		        	
+		    
+
+
+		        	
 					splitstring = ((string)XRule.Element("DamageType").Value).Split(',');
 					if(splitstring.Length > 0)
 					{
@@ -1083,10 +1114,11 @@ namespace GearFoundry
 						damagesplit = splitstringDamage[0].Split('-');
 						if(damagesplit.Length == 2)
 						{
+							WriteToChat("Damage split 0, 1 " + damagesplit[0] +", " + damagesplit[1]);
 							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageA)) {tRule.MaxDamageA = 0;}
 							int tint;
 							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-							if(tRule.MaxDamageA > 0) {tRule.VarianceA = (tRule.MaxDamageA - tint)/tRule.MaxDamageA;}
+							if(tRule.MaxDamageA > 0) {tRule.VarianceA = ((double)tRule.MaxDamageA - (double)tint)/(double)tRule.MaxDamageA;}
 							else {tRule.VarianceA = 0;}
 						}
 						else
@@ -1111,7 +1143,7 @@ namespace GearFoundry
 							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageB)) {tRule.MaxDamageB = 0;}
 							int tint;
 							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-							if(tRule.MaxDamageB > 0) {tRule.VarianceB = (tRule.MaxDamageB - tint)/tRule.MaxDamageB;}
+							if(tRule.MaxDamageB > 0) {tRule.VarianceB = ((double)tRule.MaxDamageB - (double)tint)/(double)tRule.MaxDamageB;}
 							else {tRule.VarianceB = 0;}
 						
 						}
@@ -1137,7 +1169,7 @@ namespace GearFoundry
 							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageC)) {tRule.MaxDamageC = 0;}
 							int tint;
 							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-							if(tRule.MaxDamageC > 0) {tRule.VarianceC = (tRule.MaxDamageC - tint)/tRule.MaxDamageC;}
+							if(tRule.MaxDamageC > 0) {tRule.VarianceC = ((double)tRule.MaxDamageC - (double)tint)/(double)tRule.MaxDamageC;}
 							else {tRule.VarianceC = 0;}
 						
 						}
@@ -1163,7 +1195,7 @@ namespace GearFoundry
 							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageD)) {tRule.MaxDamageD = 0;}
 							int tint;
 							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-							if(tRule.MaxDamageD > 0) {tRule.VarianceD = (tRule.MaxDamageD - tint)/tRule.MaxDamageD;}
+							if(tRule.MaxDamageD > 0) {tRule.VarianceD = ((double)tRule.MaxDamageD - (double)tint)/(double)tRule.MaxDamageD;}
 							else {tRule.VarianceD = 0;}
 						
 						}
@@ -1256,6 +1288,8 @@ namespace GearFoundry
 					
 					
 					
+					
+					
 					ItemRulesList.Add(tRule);	
 				}
 				WriteToChat("ItemRulesList:  " + ItemRulesList.Count().ToString());
@@ -1281,11 +1315,7 @@ namespace GearFoundry
 	        public bool RuleRed;
 	        public bool RuleYellow;
 	        public bool RuleBlue;
-	        
-	        //Irq:  Not sure we're keeping these
-	        //bool bRuleTradeBotOnly = false;
-	        //bool bRuleTradeBot = false;
-	        
+	        	        
 	        public int RuleWieldAttribute;
 	        public int RuleMastery;
 	        public int RuleDamageTypes;
@@ -1298,22 +1328,22 @@ namespace GearFoundry
 	        public bool MSCleaveA;
 	        public int WieldReqValueA;
 	        public int MaxDamageA;
-	        public int VarianceA;
+	        public double VarianceA;
 	        public bool RuleWeaponEnabledB;
 	        public bool MSCleaveB;
 	        public int WieldReqValueB;
 	        public int MaxDamageB;
-	        public int VarianceB;
+	        public double VarianceB;
 	        public bool RuleWeaponEnabledC;
 	        public bool MSCleaveC;
 	        public int WieldReqValueC;
 	        public int MaxDamageC;
-	        public int VarianceC;
+	        public double VarianceC;
 	        public bool RuleWeaponEnabledD;
 	        public bool MSCleaveD;
 	        public int WieldReqValueD;
 	        public int MaxDamageD;
-	        public int VarianceD;
+	        public double VarianceD;
 	        
 	        public int RuleArmorLevel;
 	        public int[] RuleArmorTypes;
@@ -1321,6 +1351,13 @@ namespace GearFoundry
 	        public int RuleArmorCoverage;
 	        //public bool RuleAnySet;
 	        public bool RuleUnenchantable;
+	        
+	        public int RuleEssenceDamage;
+	        public int RuleEssenceDamageResist;
+	        public int RuleEssenceCrit;
+	        public int RuleEssenceCritResist;
+	        public int RuleEssenceSummoningLevel;
+	        public int[] RuleEssenceElementals;
 
 	        public int[] RuleSpells;
 	        public int RuleSpellNumber; 	

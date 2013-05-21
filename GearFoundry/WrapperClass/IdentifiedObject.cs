@@ -330,12 +330,72 @@ namespace GearFoundry
 					else {return 0;}
 				}
 			}
+			public int EssenceDamage 
+			{	//wo LongValueKey@370 contains
+				get
+				{
+					if (wo.Values((LongValueKey)370) > 0) {return wo.Values((LongValueKey)370);}
+					else {return 0;}
+				}
+			}
+			public int EssenceDamageResist 
+			{	//wo LongValueKey@371 contains 
+				get
+				{
+					if (wo.Values((LongValueKey)371) > 0) {return wo.Values((LongValueKey)371);}
+					else {return 0;}
+				}
+			}
+			public int EssenceCrit 
+			{	//wo LongValueKey@372 contains
+				get
+				{
+					if (wo.Values((LongValueKey)372) > 0) {return wo.Values((LongValueKey)372);}
+					else {return 0;}
+				}
+			}
+			public int EssenceCritResist
+			{	//wo LongValueKey@373 contains
+				get
+				{
+					if (wo.Values((LongValueKey)373) > 0) {return wo.Values((LongValueKey)373);}
+					else {return 0;}
+				}
+			}
+			public int EssenceSummoningSkill
+			{	//wo LongValueKey@367 contains
+				get
+				{
+					if (wo.Values((LongValueKey)367) > 0) {return wo.Values((LongValueKey)367);}
+					else {return 0;}
+				}
+			}
 			public int WeaponMaxDamage
 			{
 				get
 				{
-					if(wo.Values(LongValueKey.MaxDamage) > 0) {return wo.Values(LongValueKey.MaxDamage);}
-					else{return 0;}
+					if(wo.ObjectClass == ObjectClass.MeleeWeapon)
+					{
+						if(wo.Values(LongValueKey.MaxDamage) > 0) {return wo.Values(LongValueKey.MaxDamage);}
+						else{return 0;}
+					}
+					if(wo.ObjectClass == ObjectClass.MissileWeapon)
+					{
+						if(wo.Values(LongValueKey.ElementalDmgBonus) > 0) {return wo.Values(LongValueKey.ElementalDmgBonus);}
+						else{return 0;}
+					}
+					else if(wo.ObjectClass == ObjectClass.WandStaffOrb)
+					{
+						if(wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) > 0) 
+						{
+							return Convert.ToInt32((wo.Values(DoubleValueKey.ElementalDamageVersusMonsters)-1)*100);
+						}
+						else{return 0;}
+					}
+					else 
+					{
+						return 0;
+					}
 				}
 			}
 			public int WieldReqType 
@@ -993,11 +1053,6 @@ namespace GearFoundry
 		}
 	}
 }
-		
-		
-		
-		
-		
 		
 		
 		

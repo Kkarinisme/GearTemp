@@ -126,7 +126,6 @@
     <Compile Include="Initializers\Globals.cs" />
     <Compile Include="Initializers\InitializingFunctions.cs" />
     <Compile Include="Initializers\SetupUserInterface.cs" />
-    <Compile Include="CompareFunctions.cs" />
     <Compile Include="Inventory\Inventory.cs" />
     <Compile Include="Inventory\InventoryUtil.cs" />
     <Compile Include="Inventory\toonStats.cs" />
