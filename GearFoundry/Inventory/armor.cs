@@ -26,6 +26,26 @@ namespace GearFoundry
 {
     public partial class PluginCore : PluginBase
     {
+        private XDocument xdocGenArmor;
+        private List<String> lstAllToonName;
+        private HudView ArmorHudView = null;
+        private HudFixedLayout ArmorHudLayout = null;
+        private HudTabView ArmorHudTabView = null;
+        private HudFixedLayout ArmorHudTabLayout = null;
+        private HudList ArmorHudList = null;
+        private HudList.HudListRowAccessor ArmorHudListRow = null;
+        private const int ArmorRemoveCircle = 0x60011F8;
+
+        private HudFixedLayout ArmorHudSettings;
+        private HudStaticText lblToonArmorName;
+        private HudCombo cboToonArmorName;
+        private HudCheckBox ShowAllSpells;
+        private HudCheckBox ShowWieldedArmor;
+        private HudCheckBox ShowArmorinInventory;
+        private HudCheckBox ShowBraceletsinInventory;
+        private HudCheckBox ShowRingsinInventory;
+        private HudCheckBox ShowNecklacesinInventory;
+
         XDocument xdocArmor;
         WindowsTimer mWaitingForArmorIDTimer = new WindowsTimer();
 
@@ -323,25 +343,6 @@ namespace GearFoundry
 
         } // end of process data
 
-        private XDocument xdocGenArmor;
-        private List<String> lstAllToonName;
-        private HudView ArmorHudView = null;
-        private HudFixedLayout ArmorHudLayout = null;
-        private HudTabView ArmorHudTabView = null;
-        private HudFixedLayout ArmorHudTabLayout = null;
-        private HudList ArmorHudList = null;
-        private HudList.HudListRowAccessor ArmorHudListRow = null;
-        private const int ArmorRemoveCircle = 0x60011F8;
-
-        private HudFixedLayout ArmorHudSettings;
-        private HudStaticText lblToonArmorName;
-        private HudCombo cboToonArmorName;
-        private HudCheckBox ShowAllSpells;
-        private HudCheckBox ShowWieldedArmor;
-        private HudCheckBox ShowArmorinInventory;
-        private HudCheckBox ShowBraceletsinInventory;
-        private HudCheckBox ShowRingsinInventory;
-        private HudCheckBox ShowNecklacesinInventory;
         //private HudCheckBox ShowAllMobs;Wie
         //private HudCheckBox ShowSelectedMobs;
         //private HudCheckBox ShowAllPlayers;
@@ -354,7 +355,7 @@ namespace GearFoundry
 
         //private HudStaticText txtLSS1;
         //private HudStaticText txtLSS2;
-
+        private string toonArmorName = null;
         private bool ArmorMainTab;
         private bool ArmorSettingsTab;
 
@@ -453,10 +454,38 @@ namespace GearFoundry
 
                 ArmorMainTab = true;
 
+                
+
+
             }
              
             catch (Exception ex) { LogError(ex); }
        }
+
+        private void FillArmorHudList()
+        {
+            xdocGenArmor = XDocument.Load(genArmorFilename);
+            IEnumerable<XElement> names = xdocGenArmor.Element("Objs").Descendants("Obj");
+
+            foreach(XElement el in names)
+            {
+                if(el.Element("ToonName").Value == toonArmorName)
+                {
+                    int icon = Convert.ToInt32(el.Element("ObjIcon").Value);
+                    string armorpiece = el.Element("ObjName").Value;
+                    string spells = el.Element("ObjSpellXML").Value;
+                    ArmorHudListRow = ArmorHudList.AddRow();
+
+                    ((HudPictureBox)ArmorHudListRow[0]).Image = icon + 0x6000000;
+	    	    	((HudStaticText)ArmorHudListRow[1]).Text = armorpiece;
+	    	    	((HudStaticText)ArmorHudListRow[2]).Text = spells;
+
+                }
+            }
+            
+        }
+
+
 
         private void DisposeArmorTabLayout()
         {
@@ -478,8 +507,13 @@ namespace GearFoundry
         {
             try
             {
-                xdocGenArmor = XDocument.Load(genArmorFilename);
+                    
+               xdocGenArmor = XDocument.Load(genArmorFilename);
                 IEnumerable<XElement> names = xdocGenArmor.Element("Objs").Descendants("Obj");
+                ControlGroup myToonNames = new ControlGroup();
+                cboToonArmorName = new HudCombo(myToonNames);
+         //       cboToonArmorName.Change += new MVIndexChangeEventArgs(cboToonArmorName_Change);
+
 
                lstAllToonName = new List<string>();
                 try{
@@ -490,15 +524,18 @@ namespace GearFoundry
                         int i = 0;
                         if (!lstAllToonName.Contains(name))
                         {
+                            try
+                            {
+                                lstAllToonName.Add(name);
+                                cboToonArmorName.AddItem(name, i);
+                                i++;
+                            }
+                            catch (Exception ex) { LogError(ex); }
 
-                            lstAllToonName.Add(name);
-                            cboToonArmorName.AddItem(name, i);
-                            i++;
                         }
                     }
                }
                 catch (Exception ex) { LogError(ex); }
-                WriteToChat("I am ready to add items to combobox");
 
 
         // private HudTextBox ToonArmorName;
@@ -510,9 +547,9 @@ namespace GearFoundry
         //private HudCheckBox ShowNecklacesinInventory;
                 lblToonArmorName = new HudStaticText();
                 lblToonArmorName.Text = "Name of toon whose armor is being studied:";
-                ArmorHudSettings.AddControl(lblToonArmorName,new Rectangle(0,0,150,16));
+                ArmorHudSettings.AddControl(lblToonArmorName,new Rectangle(0,0,250,16));
 
-               ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(5, 15, 100, 16));
+               ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(5, 15, 200, 16));
 
                 //ShowAllMobs = new HudCheckBox();
                 //ShowAllMobs.Text = "Track All Mobs";
@@ -581,6 +618,12 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
        }
 
+        private void cboToonArmorName_Change()
+        {
+            toonArmorName = cboToonArmorName.Current.ToString();
+            FillArmorHudList();
+            
+        }
 
         private void DisposeArmorSettingsLayout()
         {

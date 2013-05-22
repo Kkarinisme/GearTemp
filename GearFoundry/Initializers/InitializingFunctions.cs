@@ -277,15 +277,20 @@ namespace GearFoundry
 
                 IEnumerable<XElement> myelements = xdocRules.Element("Rules").Descendants("Rule");
                 int n = myelements.Count();
+                nNextRuleNum = n;
 
                 foreach (XElement el in myelements)
                 {
 
                     int num = Convert.ToInt32(el.Element("Priority").Value);
-                    if (num == 0)
-                        el.Element("Priority").Value = "999";
- 
+                    if (num == 0) { el.Element("Priority").Value = "999"; }
+                    int rulenum = Convert.ToInt32(el.Element("RuleNum").Value);
+                    if(rulenum>nNextRuleNum){nNextRuleNum=rulenum;}
                 }
+                //Will be number of next rule
+                nNextRuleNum++;
+                WriteToChat("Next rule number will be " + nNextRuleNum);
+
 
                 var lstChecked = from element in myelements
                                    where Convert.ToBoolean(element.Element("Enabled").Value)
@@ -303,7 +308,7 @@ namespace GearFoundry
                                    select element;
 
                  sorted.AddRange(lstUnChecked);
-
+ 
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -314,6 +319,7 @@ namespace GearFoundry
         private void initRulesVariables()
         {
             bRuleEnabled = false;
+            nRuleNum = 0;
             nRulePriority = 0;
             sRuleAppliesTo = "";
             sRuleName = "";
@@ -363,6 +369,7 @@ namespace GearFoundry
             bRuleRed = false;
             bRuleYellow = false;
             bRuleBlue = false;
+            bRuleCloakMustHaveSpell = false;
             nRuleEssCDLevel = 0;
             nRuleEssCritLevel = 0;
             nRuleEssCritDamResLevel = 0;
@@ -707,7 +714,7 @@ namespace GearFoundry
             chkRuleRed.Checked = bRuleRed;
             chkRuleYellow.Checked = bRuleYellow;
             chkRuleBlue.Checked = bRuleBlue;
-
+            chkRuleCloakMustHaveSpell.Checked = bRuleCloakMustHaveSpell;
             cboRuleEssMastery.Selected = nRuleEssMastery;
             txtRuleEssCDLevel.Text = nRuleEssCDLevel.ToString();
             txtRuleEssCritLevel.Text = nRuleEssCritLevel.ToString();

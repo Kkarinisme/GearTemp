@@ -830,37 +830,50 @@ namespace GearFoundry
 
         }
 
-        private void CreateEssElementsList()
-        {
            
-            string[] loadme = { "None", "Fire", "Cold", "Acid","Lightning" };
-
-            int i = 0;
-            foreach (string load in loadme)
+         private void CreateEssElementsList()
+        {
+            IDNameLoadable info;
+            //Again...Flags suck
+            
+            info = new IDNameLoadable(0, "None");
+            EssElementsList.Add(info);
+              info = new IDNameLoadable(1, "Slashing");
+            EssElementsList.Add(info);
+            info = new IDNameLoadable(2, "Piercing");
+            EssElementsList.Add(info);
+            info = new IDNameLoadable(4, "Bludgeoning");
+            EssElementsList.Add(info);
+            info = new IDNameLoadable(8, "Cold");
+            EssElementsList.Add(info);
+             info = new IDNameLoadable(16, "Fire");
+             EssElementsList.Add(info);
+            info = new IDNameLoadable(32, "Acid");
+            EssElementsList.Add(info);
+             info = new IDNameLoadable(64, "Electric");
+             EssElementsList.Add(info);
+             info = new IDNameLoadable(1024, "Void");
+             EssElementsList.Add(info);
+          
+            if(writelists){
+                FileInfo logFile = new FileInfo(GearDir + @"\EssElementsList.csv");    
+                            if(logFile.Exists)
+                {
+                    logFile.Delete();
+                }
+            StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
+            StringBuilder output = new StringBuilder();
+            output.Append("Index, ID#, Damagetype\n");
+            int index = 0;
+            foreach (var idname in EssElementsList)
             {
-                IDNameLoadable info = new IDNameLoadable(i++, load);
-                EssElementsList.Add(info);
+                output.Append(index.ToString() + "," + idname.ID.ToString() + "," + idname.name.ToString() + "\n");
             }
-
-            //if (writelists)
-            //{
-            //    FileInfo logFile = new FileInfo(GearDir + @"\EssMasteryList.csv");
-            //    if (logFile.Exists)
-            //    {
-            //        logFile.Delete();
-            //    }
-            //    StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
-            //    StringBuilder output = new StringBuilder();
-            //    output.Append("Indexed to Mast.ID\n\nMasteryID, Name\n");
-            //    foreach (var info in EssMasteryList)
-            //    {
-            //        output.Append(info.ID.ToString() + "," + info.name.ToString() + "\n");
-            //    }
-            //    writer0.WriteLine(output);
-            //    writer0.Close();
-            //}
-
+            writer0.WriteLine(output);
+            writer0.Close();
+            }
         }
+
 		
 		private void CreateElementalList()
 		{

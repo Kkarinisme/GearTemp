@@ -63,7 +63,8 @@ namespace GearFoundry
            try 
             {
                 WriteToChat("I have clicked button to add a new rule");
-
+                nRuleNum = nNextRuleNum;
+                nNextRuleNum++;
                 sRuleAppliesTo = mFindList(lstRuleApplies, AppliesToList);
                 sRuleArmorSet = mFindList(lstRuleSets, ArmorSetsList);
                 sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);
@@ -176,6 +177,7 @@ namespace GearFoundry
         {
 
             xdoc.Element("Rules").Add(new XElement("Rule",
+                new XElement("RuleNum",nRuleNum),
                 new XElement("Enabled", bRuleEnabled),
                 new XElement("Priority", nRulePriority),
                 new XElement("AppliesToFlag", sRuleAppliesTo),
@@ -208,13 +210,13 @@ namespace GearFoundry
                 new XElement("MustHaveSpell", nRuleMustHaveSpell),
                  new XElement("CloakSets", sRuleCloakSets),
                  new XElement("CloakSpells", sRuleCloakSpells),
+                 new XElement("CloakMustHaveSpell",bRuleCloakMustHaveSpell),
                  new XElement("Red", bRuleRed),
                  new XElement("Yellow", bRuleYellow),
                  new XElement("Blue", bRuleBlue),
                  new XElement("EssMastery", nRuleEssMastery),
                new XElement("EssElements", sRuleEssElements),
                new XElement("EssLevel", nRuleEssLevel),
-            //   new XElement("EssSummLevel", nRuleEssSummLevel),
                new XElement("EssDamageLevel", nRuleEssDamageLevel),
                new XElement("EssCDLevel", nRuleEssCDLevel),
                new XElement("EssCRLevel", nRuleEssCRLevel),
@@ -236,6 +238,7 @@ namespace GearFoundry
         {
             try
             {
+                nRuleNum = Convert.ToInt32(el.Element("RuleNum").Value);
                 bRuleEnabled = Convert.ToBoolean(el.Element("Enabled").Value);
                 nRulePriority = Convert.ToInt32(el.Element("Priority").Value);
                 sRuleAppliesTo = el.Element("AppliesToFlag").Value.ToString();
@@ -272,6 +275,7 @@ namespace GearFoundry
                 bRuleBlue = Convert.ToBoolean(el.Element("Blue").Value);
                 sRuleCloakSets = (el.Element("CloakSets").Value.ToString());
                 sRuleCloakSpells = (el.Element("CloakSpells").Value.ToString());
+                bRuleCloakMustHaveSpell = Convert.ToBoolean(el.Element("CloakMustHaveSpell").Value);
                 nRuleEssMastery = Convert.ToInt32(el.Element("EssMastery").Value);
                 sRuleEssElements = el.Element("EssElements").Value.ToString();
                 nRuleEssLevel = Convert.ToInt32(el.Element("EssLevel").Value);
@@ -303,7 +307,7 @@ namespace GearFoundry
             try
             {
                 IEnumerable<XElement> elements = xdocRules.Element("Rules").Descendants("Rule");
-                xdocRules.Descendants("Rule").Where(x => x.Element("Name").Value.ToString().Trim().Contains(sRuleName.Trim())).Remove();
+                xdocRules.Descendants("Rule").Where(x => x.Element("RuleNum").Value.ToString().Equals(nRuleNum.ToString())).Remove();
                 sRuleAppliesTo = mFindList(lstRuleApplies, AppliesToList);
                 sRuleArmorSet = mFindList(lstRuleSets, ArmorSetsList);
                 sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);

@@ -125,8 +125,9 @@ namespace GearFoundry
         bool mgoon;
         bool mgoonInv;
 
-
+        int nNextRuleNum;
         bool bRuleEnabled = false;
+        int nRuleNum;
         int nRulePriority = 0;
         string sRuleAppliesTo = "";
         string sRuleName = "";

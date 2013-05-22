@@ -1,6 +1,7 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <Rules>
   <Rule>
+    <RuleNum>1</RuleNum>
     <Enabled>false</Enabled>
     <Priority>999</Priority>
     <AppliesToFlag>1</AppliesToFlag>
@@ -26,7 +27,7 @@
     <ReqSkill>1,2,3,4</ReqSkill>
     <MinMax>1-11,2-22,3-33,4-44</MinMax>
     <MSCleave>false,true,false,true</MSCleave>
-    <Coverage></Coverage>
+    <Coverage></Coverage>                      
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
     <Unenchantable>false</Unenchantable>
