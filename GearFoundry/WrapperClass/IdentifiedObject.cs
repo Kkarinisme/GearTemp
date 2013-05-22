@@ -253,8 +253,31 @@ namespace GearFoundry
 						if (wo.Values(LongValueKey.WandElemDmgType) > 0) {return wo.Values(LongValueKey.WandElemDmgType);}
 						else {return 0;}
 					}
-					else {return 0;}
-					
+					else if(wo.ObjectClass == ObjectClass.Misc)
+					{
+						//IconOutline 256 = Acid
+						//32 = fire
+						//128 = frost
+						//64 = lightning
+						//1 = golem
+						//Reads the outline and converts them to standard elemental types for essences
+						switch(wo.Values(LongValueKey.IconOutline))
+						{
+							case 1:
+								return 4;
+							case 32:
+								return 16;
+							case 64:
+								return 64;
+							case 128:
+								return 8;
+							case 256:
+								return 32;
+							default:
+								return 0;
+						}
+					}
+					else {return 0;}	
 				}
 			}
 			public int ElementalDmgBonus 
@@ -330,7 +353,7 @@ namespace GearFoundry
 					else {return 0;}
 				}
 			}
-			public int EssenceDamage 
+			public int EssenceDam
 			{	//wo LongValueKey@370 contains
 				get
 				{
@@ -338,7 +361,7 @@ namespace GearFoundry
 					else {return 0;}
 				}
 			}
-			public int EssenceDamageResist 
+			public int EssenceDamResist 
 			{	//wo LongValueKey@371 contains 
 				get
 				{
@@ -359,6 +382,22 @@ namespace GearFoundry
 				get
 				{
 					if (wo.Values((LongValueKey)373) > 0) {return wo.Values((LongValueKey)373);}
+					else {return 0;}
+				}
+			}
+			public int EssenceCritDam
+			{
+				get
+				{
+					if (wo.Values((LongValueKey)374) > 0) {return wo.Values((LongValueKey)373);}
+					else {return 0;}
+				}
+			}
+			public int EssenceCritDamResist
+			{
+				get
+				{
+					if (wo.Values((LongValueKey)375) > 0) {return wo.Values((LongValueKey)373);}
 					else {return 0;}
 				}
 			}
@@ -592,7 +631,35 @@ namespace GearFoundry
 					else { return 0; }
 				}
 			}
+			public int EssenceLevel
+			{
+				get
+				{
+					switch(wo.Values(LongValueKey.IconOverlay))
+					{
+						case 29730:
+							return 50;
+						case 29731:
+							return 80;
+						case 29732:
+							return 100;
+						case 29733:
+							return 125;
+						case 29734:
+							return 150;
+						case 29735:
+							return 180;
+						case 29736:
+							return 200;
+						default:
+							return 0;			
+					}	
+				}
+			}
 			
+
+			
+
 			//wo.properites which require an ID to calculate (pushed from outside)
 			//This XP value is pushed in from notifyobject no.itemxp = value
 			//TODO:  Review how to automate the ID and improve this.....
@@ -972,6 +1039,13 @@ namespace GearFoundry
 								result = IORString() + wo.Name + ImbueString() + SlayerString() + TinkersString() + xModString(DamageVsMonsters, "vs. Monsters") + xModString(WeaponMeleeBonus, "md") +
 									xModString(WeaponManaCBonus, "mc") + SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
 								break;
+							case ObjectClass.Misc:
+								if(EssenceLevel > 0)
+								{
+									result = IORString() + "L" + EssenceLevel + wo.Name;
+									break;
+								}
+								else goto default;
 							default:
 								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
 								break;
@@ -1053,6 +1127,7 @@ namespace GearFoundry
 		}
 	}
 }
-		
+
+
 		
 		

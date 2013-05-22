@@ -1358,6 +1358,7 @@ namespace GearFoundry
 	        public int RuleEssenceCritResist;
 	        public int RuleEssenceSummoningLevel;
 	        public int[] RuleEssenceElementals;
+	        public int RuleEssenceLevel;
 
 	        public int[] RuleSpells;
 	        public int RuleSpellNumber; 	

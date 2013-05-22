@@ -522,8 +522,8 @@ namespace GearFoundry
 
             }
 
-            if (btoonArmorEnabled)
-            { doGetArmor(); }
+//            if (btoonArmorEnabled)
+//            { doGetArmor(); }
 
 
             if (binventoryBurdenEnabled)
@@ -932,7 +932,7 @@ namespace GearFoundry
                
 
                 SaveSettings();
-                if (btoonArmorEnabled) { doGetArmor(); }
+//                if (btoonArmorEnabled) { doGetArmor(); }
 
             }
             catch (Exception ex) { LogError(ex); }
