@@ -181,7 +181,6 @@ namespace GearFoundry
 				
 				if(ChatTypes.Any(x => x.IsMatch(e.Text)))
 				{
-					
 					if(bTextFilterMySpellCasting && e.Text.StartsWith("You say, "))
 					{
 						if(CastWords.Any(x => e.Text.Contains(x))){e.Eat = true;}

@@ -269,6 +269,8 @@ namespace GearFoundry
                 AppliesToList.Add(info);
                 info = new IDNameLoadable(0x8, "Jewelry");
                 AppliesToList.Add(info);
+                info = new IDNameLoadable(0x80, "Essences");
+                AppliesToList.Add(info);
                 info = new IDNameLoadable(0x100, "Missile Weapons");
                 AppliesToList.Add(info);
                 info = new IDNameLoadable(0x800, "Gems");
@@ -277,6 +279,7 @@ namespace GearFoundry
                 AppliesToList.Add(info);
                 info = new IDNameLoadable(0x8000, "Casters");
                 AppliesToList.Add(info);
+                
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -415,10 +418,10 @@ namespace GearFoundry
 			ArmorCoverageList.Add(info);
 			info = new IDNameLoadable(0x10000 ,"Feet");
 			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x8 ,"Chest(Underwear)");
-			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x10 ,"Abdomen(Underwear)");
-			ArmorCoverageList.Add(info);
+//			info = new IDNameLoadable(0x8 ,"Chest(Underwear)");
+//			ArmorCoverageList.Add(info);
+//			info = new IDNameLoadable(0x10 ,"Abdomen(Underwear)");
+//			ArmorCoverageList.Add(info);
 			
 			if(writelists){
 				FileInfo logFile = new FileInfo(GearDir + @"\ArmorCoverage.csv");	

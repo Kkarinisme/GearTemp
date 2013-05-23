@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <view icon="28170" title="GearFoundry Alpha" width="530" height="500">
 	<control progid="DecalControls.Notebook" name="mainTabs">
-    <page label="Notify">
+    <page label="Inspect">
 			<control progid="DecalControls.FixedLayout" clipped="">
 				<control progid="DecalControls.Notebook" name="nbSetupsetup" left="0" top="0" width="490" height="450">
 					<page label="Search Rules">
@@ -188,7 +188,7 @@
                   <page label="Req. Spells">
 									<control progid="DecalControls.FixedLayout" clipped="">
 										<control progid="DecalControls.StaticText" name="lblRuleMustHaveSpell:" left="10" top="8" width="50" height="16" text="Must have" />
-										<control progid="DecalControls.Edit" name="txtRuleSpellMatches" left="65" top="8" width="150" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
+										<control progid="DecalControls.Edit" name="txtRuleSpellMatches" left="100" top="8" width="30" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
                    <control progid="DecalControls.StaticText" name="lblCurrentSpells" left="10" top="30" width="130" height="16" text="Current Spells Enabled:" />
                     <control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="10" top="50" width="200" height="100">
                       <column progid="DecalControls.TextColumn" fixedwidth="150" />
@@ -408,7 +408,7 @@
 
 
           <Control progid="DecalControls.StaticText" name="lblGearFilters" left ="5" top="200" width="225" height="24" text="Gear Filters"/>
-          <control progid="DecalControls.Checkbox" name="chkEnableTextFiltering " left="10" top="220" width="130" height="24" text="Filter all Text"/>
+          <control progid="DecalControls.Checkbox" name="chkEnableTextFiltering" left="10" top="220" width="130" height="24" text="Enable Text Filters"/>
           <control progid="DecalControls.Checkbox" name="chkTextFilterAllStatus" left="10" top="240" width="130" height="24" textcolor="16777215" text="All Status Messages"/>
           <control progid="DecalControls.Checkbox" name="chkTextFilterBusyStatus" left="10" top="260" width="130" height="24" textcolor="16777215" text="Busy Status"/>
           <control progid="DecalControls.Checkbox" name="chkTextFilterCastingStatus" left="10" top="280" width="130" height="24" textcolor="16777215" text="Casting Status"/>

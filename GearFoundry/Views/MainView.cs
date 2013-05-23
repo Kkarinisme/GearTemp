@@ -351,7 +351,7 @@ namespace GearFoundry
                 chkArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkArmor"];
  
                 //Text Filtering Controls
-                chkEnableTextFiltering = (MyClasses.MetaViewWrappers.ICheckBox)View["chkEnableTextFiltering "];
+                chkEnableTextFiltering = (MyClasses.MetaViewWrappers.ICheckBox)View["chkEnableTextFiltering"];
                 chkTextFilterAllStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterAllStatus"];
                 chkTextFilterBusyStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterBusyStatus"];
                 chkTextFilterCastingStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterCastingStatus"];
