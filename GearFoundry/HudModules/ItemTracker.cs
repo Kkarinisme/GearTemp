@@ -600,23 +600,55 @@ namespace GearFoundry
 					{
 						if(IOItemWithID.MaxItemLevel < rule.RuleItemLevel) {RuleName = String.Empty; goto Next;}
 					}
-
+					//Irquk:  Confirmed functional
+					if(rule.RuleEssenceLevel > 0)
+					{
+						if(rule.RuleEssenceLevel > IOItemWithID.EssenceLevel) {RuleName = String.Empty; goto Next;}
+					}
+					//Irquk:  Confirmed functional
+					if(rule.RuleEssenceDamage > 0)
+					{
+						if(IOItemWithID.EssenceDam < rule.RuleEssenceDamage)  {RuleName = String.Empty; goto Next;}
+					}
+					//Irquk:  confirmed functional
+					if(rule.RuleEssenceDamageResist > 0)
+					{
+						if(IOItemWithID.EssenceDamResist < rule.RuleEssenceDamageResist)  {RuleName = String.Empty; goto Next;}
+					}
+					//Irquk:  confirmed functional
+					if(rule.RuleEssenceCrit > 0)
+					{
+						if(IOItemWithID.EssenceCrit < rule.RuleEssenceCrit)  {RuleName = String.Empty; goto Next;}
+					}
+					//Irquk:  confirmed functional
+					if(rule.RuleEssenceCritResist > 0)
+					{
+						if(IOItemWithID.EssenceCritDamResist < rule.RuleEssenceCritResist)  {RuleName = String.Empty; goto Next;}
+					}
+					//Irquk:  Confirmed functional
+					if(rule.RuleEssenceCritDam > 0)
+					{
+						if(IOItemWithID.EssenceCritDam < rule.RuleEssenceCritDam)  {RuleName = String.Empty; goto Next;}
+					}
+					//Irquk:  confirmed functional
+					if(rule.RuleEssenceCritDamResist > 0)
+					{
+						if(IOItemWithID.EssenceCritDamResist < rule.RuleEssenceCritDamResist)  {RuleName = String.Empty; goto Next;}
+					}
 				
 					
-					//TODO:  Num spells is currently busted.  Mish will fix and get back to me.
-//					if(rule.RuleSpellNumber > 0)
-//					{
-//						WriteToChat("Spell Number = " + rule.RuleSpellNumber);
-//						int spellmatches = 0;
-//						for(int i = 0; i < IOItemWithID.SpellCount; i++)
-//						{
-//							if(rule.RuleSpells.Contains(IOItemWithID.Spell(i))) {spellmatches++;}
-//						}
-//						//Irq:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
-//						if(rule.RuleSpells.Contains(10000)){if(IOItemWithID.IntValues((LongValueKey)352) == 2){spellmatches++;}}
-//						WriteToChat("Spellmatches: " + spellmatches);
-//						if(spellmatches < rule.RuleSpellNumber) {RuleName = String.Empty; goto Next;}
-//					}
+					//Irquk:  confirmed functional. 
+					if(rule.RuleSpellNumber > 0)
+					{
+						int spellmatches = 0;
+						for(int i = 0; i < IOItemWithID.SpellCount; i++)
+						{
+							if(rule.RuleSpells.Contains(IOItemWithID.Spell(i))) {spellmatches++;}
+						}
+						//Irq:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
+						if(rule.RuleSpells.Contains(10000)){if(IOItemWithID.IntValues((LongValueKey)352) == 2){spellmatches++;}}
+						if(spellmatches < rule.RuleSpellNumber) {RuleName = String.Empty; goto Next;}
+					}
 
 
 					if(RuleName != String.Empty)
@@ -1064,21 +1096,20 @@ namespace GearFoundry
 		        	if(!Int32.TryParse(XRule.Element("WieldReqValue").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = 0;}
 					if(!Int32.TryParse(XRule.Element("ItemLevel").Value, out tRule.RuleItemLevel)) {tRule.RuleItemLevel = 0;}	        	
 					if(!Int32.TryParse(XRule.Element("WieldAttribute").Value, out tRule.RuleWieldAttribute)) {tRule.RuleWieldAttribute = 0;}
-		        	if(!Int32.TryParse(XRule.Element("MasteryType").Value, out tRule.RuleMastery)) {tRule.RuleMastery = 0;}
-		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = 0;}
+					if(!Int32.TryParse(XRule.Element("MasteryType").Value, out tRule.RuleMastery)){tRule.RuleMastery = 0;}
+					if(!(tRule.RuleMastery > 0))
+					{
+		        		if(!Int32.TryParse(XRule.Element("EssMastery").Value, out tRule.RuleMastery)){tRule.RuleMastery = 0;}
+					}
 		        	
+		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = 0;}
+		        	if(!Int32.TryParse(XRule.Element("EssLevel").Value, out tRule.RuleEssenceLevel)){tRule.RuleEssenceLevel = 0;}
 		        	if(!Int32.TryParse(XRule.Element("EssDamageLevel").Value, out tRule.RuleEssenceDamage)){tRule.RuleEssenceDamage = 0;}
 		        	if(!Int32.TryParse(XRule.Element("EssDRLevel").Value, out tRule.RuleEssenceDamageResist)){tRule.RuleEssenceDamageResist = 0;}
-		        	if(!Int32.TryParse(XRule.Element("EssCDLevel").Value, out tRule.RuleEssenceCrit)){tRule.RuleEssenceCrit = 0;}
-		        	if(!Int32.TryParse(XRule.Element("EssCRLevel").Value, out tRule.RuleEssenceCritResist)){tRule.RuleEssenceCritResist = 0;}
-		        	if(!Int32.TryParse(XRule.Element("EssSummLevel").Value, out tRule.RuleEssenceSummoningLevel)){tRule.RuleEssenceSummoningLevel = 0;}
-
-		        	
-		        	
-		    
-
-
-		        	
+		        	if(!Int32.TryParse(XRule.Element("EssCritLevel").Value, out tRule.RuleEssenceCrit)){tRule.RuleEssenceCrit = 0;}
+		        	if(!Int32.TryParse(XRule.Element("EssCRLevel").Value, out tRule.RuleEssenceCritResist)){tRule.RuleEssenceCritResist = 0;}     	
+		        	if(!Int32.TryParse(XRule.Element("EssCDLevel").Value, out tRule.RuleEssenceCritDam)){tRule.RuleEssenceCritDam = 0;}     	
+		        	if(!Int32.TryParse(XRule.Element("EssCritDamRes").Value, out tRule.RuleEssenceCritDamResist)){tRule.RuleEssenceCritDamResist = 0;}	        	
 					splitstring = ((string)XRule.Element("DamageType").Value).Split(',');
 					if(splitstring.Length > 0)
 					{
@@ -1086,8 +1117,13 @@ namespace GearFoundry
 						for(int j = 0; j < splitstring.Length; j++){if(!Int32.TryParse(splitstring[j], out sumarray[j])){sumarray[j] = 0;}}
 						tRule.RuleDamageTypes = sumarray.Sum();
 					}
-					
-					WriteToChat("DamageType Sum = " + tRule.RuleDamageTypes.ToString());
+					splitstring = ((string)XRule.Element("EssElements").Value).Split(',');
+					if(splitstring.Length > 0 && tRule.RuleDamageTypes == 0)
+					{
+						sumarray = new int[splitstring.Length];      	
+						for(int j = 0; j < splitstring.Length; j++){if(!Int32.TryParse(splitstring[j], out sumarray[j])){sumarray[j] = 0;}}
+						tRule.RuleDamageTypes = sumarray.Sum();
+					}
 					
 					if(!Double.TryParse(XRule.Element("McModAttack").Value, out tRule.RuleMcModAttack)){tRule.RuleMcModAttack = 0;}
 					
@@ -1114,7 +1150,6 @@ namespace GearFoundry
 						damagesplit = splitstringDamage[0].Split('-');
 						if(damagesplit.Length == 2)
 						{
-							WriteToChat("Damage split 0, 1 " + damagesplit[0] +", " + damagesplit[1]);
 							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageA)) {tRule.MaxDamageA = 0;}
 							int tint;
 							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
@@ -1274,7 +1309,13 @@ namespace GearFoundry
 					splitstring = ((string)XRule.Element("CloakSpells").Value).Split(',');
 					if(splitstring.Length > 0)
 					{
-						tRule.RuleSpellNumber++;  //Add a spell number to indicate that the cloak spells are required.  Should increment from 0 to 1.
+						bool cloakspell;
+						if(!bool.TryParse((string)XRule.Element("CloakMustHaveSpell").Value, out cloakspell)) {cloakspell = false;}
+						if(cloakspell)
+						{
+							WriteToChat("cloakspell +1 added");
+							tRule.RuleSpellNumber++;
+						}
 						for(int j = 0; j < splitstring.Length; j++)
 						{
 							tempint = 0;
@@ -1282,7 +1323,12 @@ namespace GearFoundry
 							if(tempint > 0) {CombineIntList.Add(tempint);}
 						}
 					}
+					foreach(int spel in CombineIntList)
+					{
+						WriteToChat("IntList " + spel);
+					}
 					tRule.RuleSpells = CombineIntList.ToArray();
+	
 					CombineIntList.Clear();
 					
 					
@@ -1352,13 +1398,16 @@ namespace GearFoundry
 	        //public bool RuleAnySet;
 	        public bool RuleUnenchantable;
 	        
+	        public int RuleEssenceLevel;
 	        public int RuleEssenceDamage;
 	        public int RuleEssenceDamageResist;
 	        public int RuleEssenceCrit;
 	        public int RuleEssenceCritResist;
-	        public int RuleEssenceSummoningLevel;
-	        public int[] RuleEssenceElementals;
-	        public int RuleEssenceLevel;
+	        public int RuleEssenceCritDam;
+	        public int RuleEssenceCritDamResist;
+
+	     
+	       
 
 	        public int[] RuleSpells;
 	        public int RuleSpellNumber; 	

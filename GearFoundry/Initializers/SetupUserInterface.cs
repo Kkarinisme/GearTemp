@@ -243,6 +243,7 @@ namespace GearFoundry
                         if (element.Element("Name").Value.ToString() == rowname)
                         {
                             el = element;
+                            nRuleNum = Convert.ToInt32(element.Element("RuleNum").Value);
                             break;
                         }
                     }
@@ -281,7 +282,7 @@ namespace GearFoundry
                         if (mdelete)
                         {
                             //Need to delete the  rule if case 4
-                            xdocRules.Descendants("Rule").Where(x => x.Element("Name").Value.ToString().Trim().Equals(rowname.Trim())).Remove();
+                            xdocRules.Descendants("Rule").Where(x => x.Element("RuleNum").Value.ToString().Equals(nRuleNum.ToString())).Remove();
                             xdocRules.Save(rulesFilename);
                             populateRulesListBox();
                             clearRule();

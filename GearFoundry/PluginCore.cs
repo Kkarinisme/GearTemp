@@ -183,10 +183,10 @@ namespace GearFoundry
                 Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
 
                 WriteToChat("Plugin now online. Server population: " + Core.CharacterFilter.ServerPopulation);
-                if(CloakSpellList != null)
-                    WriteToChat("CloakSpellList count: " + CloakSpellList.Count);
+                if(EssElementsList != null)
+                    WriteToChat("EssElementsList count: " + EssElementsList.Count);
                 else
-                    WriteToChat("CloakSpellList does not exist." );
+                    WriteToChat("EssElementsList does not exist." );
 
 
 

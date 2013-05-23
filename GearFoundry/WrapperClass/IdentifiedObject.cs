@@ -349,7 +349,32 @@ namespace GearFoundry
 			{	//wo LongValueKey@353 contains WeaponMastery
 				get
 				{
-					if (wo.Values((LongValueKey)353) > 0) {return wo.Values((LongValueKey)353);}
+					if(wo.ObjectClass == ObjectClass.MeleeWeapon || wo.ObjectClass == ObjectClass.MissileWeapon)
+					{
+						if (wo.Values((LongValueKey)353) > 0) {return wo.Values((LongValueKey)353);}
+						else {return 0;}
+					}
+					if(wo.ObjectClass == ObjectClass.Misc)
+					{
+						switch(wo.Values(LongValueKey.Icon))
+						{
+							case 7664:
+							case 29738:
+							case 4154:
+								return 1;  //Naturalist
+							case 6978:
+							case 9217: 
+							case 29743:
+							case 29739:
+						    	return 2;  //Primalist
+						    case 13383:
+						    case 5828:
+						    case 4646:
+						    	return 3;  //Necro
+						    default: 
+						    	return 0;
+						}
+					}
 					else {return 0;}
 				}
 			}
