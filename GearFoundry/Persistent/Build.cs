@@ -29,18 +29,33 @@ namespace GearFoundry
 	public partial class PluginCore
 	{
 		DirectoryInfo pluginPersonalFolder = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Decal Plugins\");
-		bool writelists = false;		
+		bool writelists = false;
+
+        //From: Karin.  Lists for use with XDocuments composed of XElements
+        private List<XElement> mSortedMobsList = new List<XElement>();
+        private List<XElement> mSortedTrophiesList = new List<XElement>();
+        private List<XElement> mSortedSalvageList = new List<XElement>();
+        private List<XElement> mSortedMobsListChecked = new List<XElement>();
+        private List<XElement> mSortedTrophiesListChecked = new List<XElement>();
+        private List<XElement> mSortedSalvageListChecked = new List<XElement>();
+        private List<XElement> mPrioritizedRulesList = new List<XElement>();
+        private List<XElement> mPrioritizedRulesListEnabled = new List<XElement>();
+        private List<XElement> mGenSettingsList = new List<XElement>();
+        private List<XElement> mSwitchGearSettingsList = new List<XElement>();
+
+        //From: Karin.  Lists for use with cboboxes using IDNameLoadable class
+        private static List<IDNameLoadable> ClassInvList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> MeleeTypeInvList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> ArmorSetsInvList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> MaterialInvList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> ElementalInvList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> ArmorLevelInvList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> SalvageWorkInvList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> WeaponWieldInvList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> CoverageInvList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> EmbueInvList = new List<IDNameLoadable>();
+
 		
-		//From:  Irquk - to replace old dictionary lookups
-        private static List<spellinfo> SpellIndex = new List<spellinfo>();
-        private static List<spellinfo> CloakSpellList = new List<spellinfo>();
-        private static List<spellinfo> ItemsSpellList = new List<spellinfo>();    
-        private static List<spellinfo> FilteredSpellIndex = new List<spellinfo>();
-        private static List<IDName> HeritageIndex = new List<IDName>();
-		private static List<IDName> SkillIndex = new List<IDName>();
-		private static List<IDName> AttribIndex = new List<IDName>();
-		private static List<IDName> MaterialIndex = new List<IDName>();
-		private static List<IDName> SpeciesIndex = new List<IDName>();
 		private static List<IDNameLoadable> ElementalList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> MasteryIndex = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> SetsIndex = new List<IDNameLoadable>();
@@ -57,6 +72,98 @@ namespace GearFoundry
         private static List<IDNameLoadable> EnabledSpellsList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> EssMasteryList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> EssElementsList = new List<IDNameLoadable>();
+
+        //From:  Irquk - to replace old dictionary lookups
+        private static List<spellinfo> SpellIndex = new List<spellinfo>();
+        private static List<spellinfo> CloakSpellList = new List<spellinfo>();
+        private static List<spellinfo> ItemsSpellList = new List<spellinfo>();
+        private static List<spellinfo> FilteredSpellIndex = new List<spellinfo>();
+        private static List<IDName> HeritageIndex = new List<IDName>();
+        private static List<IDName> SkillIndex = new List<IDName>();
+        private static List<IDName> AttribIndex = new List<IDName>();
+        private static List<IDName> MaterialIndex = new List<IDName>();
+        private static List<IDName> SpeciesIndex = new List<IDName>();
+
+
+        private void ClearRuleRelatedComponents()
+        {
+            ClearRuleLists();
+            ClearRuleListVues();
+        }
+
+        private void ClearRuleLists()
+        {
+            if (mSortedMobsList != null) { mSortedMobsList.Clear(); }
+            if (mSortedMobsListChecked != null) { mSortedMobsListChecked.Clear(); }
+            if (mSortedTrophiesList != null) { mSortedTrophiesList.Clear(); }
+            if (mSortedTrophiesListChecked != null) { mSortedTrophiesListChecked.Clear(); }
+            if (mSortedSalvageList != null) { mSortedSalvageList.Clear(); }
+            if (mSortedSalvageListChecked != null) { mSortedSalvageListChecked.Clear(); }
+            if (mPrioritizedRulesList != null) { mPrioritizedRulesList.Clear(); }
+            if (mPrioritizedRulesListEnabled != null) { mPrioritizedRulesListEnabled.Clear(); }
+            if (mGenSettingsList != null) { mGenSettingsList.Clear(); }
+            if (mSwitchGearSettingsList != null) { mSwitchGearSettingsList.Clear(); }
+            if (ClassInvList != null) { ClassInvList.Clear(); }
+            if (ArmorSetsInvList != null) { ArmorSetsInvList.Clear(); }
+            if (MaterialInvList != null) { MaterialInvList.Clear(); }
+            if (ElementalInvList != null) { ElementalInvList.Clear(); }
+            if (ArmorLevelInvList != null) { ArmorLevelInvList.Clear(); }
+            if (SalvageWorkInvList != null) { SalvageWorkInvList.Clear(); }
+            if (WeaponWieldInvList != null) { WeaponWieldInvList.Clear(); }
+            if (CoverageInvList != null) { CoverageInvList.Clear(); }
+            if (EmbueInvList != null) { EmbueInvList.Clear(); }
+            if (ElementalList != null) { ElementalList.Clear(); }
+            if (MasteryIndex != null) { MasteryIndex.Clear(); }
+            if (SetsIndex != null) { SetsIndex.Clear(); }
+            if (CloakSetsList != null) { CloakSetsList.Clear(); }
+            if (ArmorSetsList != null) { ArmorSetsList.Clear(); }
+            if (ImbueList != null) { ImbueList.Clear(); }
+            if (ArmorIndex != null) { ArmorIndex.Clear(); }
+            if (ArmorCoverageList != null) { ArmorCoverageList.Clear(); }
+            if (ObjectList != null) { ObjectList.Clear(); }
+            if (SlotList != null) { SlotList.Clear(); }
+            if (WeaponTypeList != null) { WeaponTypeList.Clear(); }
+            if (WeaponSubtypeIndex != null) { WeaponSubtypeIndex.Clear(); }
+            if (AppliesToList != null) { AppliesToList.Clear(); }
+            if (EnabledSpellsList != null) { EnabledSpellsList.Clear(); }
+            if (EssMasteryList != null) { EssMasteryList.Clear(); }
+            if (EssElementsList != null) { EssElementsList.Clear(); }
+            if (SpellIndex != null) { SpellIndex.Clear(); }
+            if (CloakSpellList != null) { CloakSpellList.Clear(); }
+            if (ItemsSpellList != null) { ItemsSpellList.Clear(); }
+            if (FilteredSpellIndex != null) { FilteredSpellIndex.Clear(); }
+            if (HeritageIndex != null) { HeritageIndex.Clear(); }
+            if (SkillIndex != null) { SkillIndex.Clear(); }
+            if (AttribIndex != null) { AttribIndex.Clear(); }
+            if (MaterialIndex != null)  {MaterialIndex.Clear(); }
+            if (SpeciesIndex != null) { SpeciesIndex.Clear(); }
+
+        }
+
+        private void ClearRuleListVues()
+        {
+            if (lstRuleApplies != null) { lstRuleApplies.Clear(); }
+            if (lstDamageTypes != null) { lstDamageTypes.Clear(); }
+            if (lstRuleArmorCoverages != null) { lstRuleArmorCoverages.Clear(); }
+            if (lstRuleArmorTypes != null) { lstRuleArmorTypes.Clear(); }
+            if (lstRuleSets != null) { lstRuleSets.Clear(); }
+            if (lstRuleCloakSets != null) { lstRuleCloakSets.Clear(); }
+            if (lstRuleCloakSpells != null) { lstRuleCloakSpells.Clear(); }
+            if (cboRuleEssMastery != null) { cboRuleEssMastery.Clear(); }
+            if (lstRuleEssElements != null) { lstRuleEssElements.Clear(); }
+            if (lstRuleSpellsEnabled != null) { lstRuleSpellsEnabled.Clear(); }
+            if (lstRuleSpells != null) { lstRuleSpells.Clear(); }
+            if (lstRules != null) { lstRules.Clear(); }
+            if (cboWeaponAppliesTo != null) { cboWeaponAppliesTo.Clear(); }
+            if (cboMasteryType != null) { cboMasteryType.Clear(); }
+            if (lstmyTrophies != null) { lstmyTrophies.Clear(); }
+            if (lstmyMobs != null) { lstmyMobs.Clear(); }
+            if (lstNotifySalvage != null) { lstNotifySalvage.Clear(); }
+            if (lstNotifyOptions != null) { lstNotifyOptions.Clear(); }
+            if (lstUstList != null) { lstUstList.Clear(); }
+
+        }
+
  
         private class IDNameLoadable
 		{

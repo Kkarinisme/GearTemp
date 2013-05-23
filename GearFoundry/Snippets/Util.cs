@@ -129,8 +129,7 @@ namespace GearFoundry
                 if (arrowtimer != 0)
                 {
                     arrowtimer = arrowtimer - 1;
-                    WriteToChat("arrowtimer = " + arrowtimer);
-                    DoShowArrow();
+                   DoShowArrow();
                 }
                 else
                 {

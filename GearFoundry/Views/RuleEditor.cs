@@ -21,29 +21,7 @@ namespace GearFoundry
     {
     	
     	     
-        //From: Karin.  Lists for use with XDocuments composed of XElements
-        private List<XElement> mSortedMobsList = new List<XElement>();
-        private List<XElement> mSortedTrophiesList = new List<XElement>();
-        private List<XElement> mSortedSalvageList = new List<XElement>();
-        private List<XElement> mSortedMobsListChecked = new List<XElement>();
-        private List<XElement> mSortedTrophiesListChecked = new List<XElement>();
-        private List<XElement> mSortedSalvageListChecked = new List<XElement>();
-        private List<XElement> mPrioritizedRulesList = new List<XElement>();
-        private List<XElement> mPrioritizedRulesListEnabled = new List<XElement>();
-        private List<XElement> mGenSettingsList = new List<XElement>();
-        private List<XElement> mSwitchGearSettingsList = new List<XElement>();
 
-        //From: Karin.  Lists for use with cboboxes using IDNameLoadable class
-        private static List<IDNameLoadable> ClassInvList= new List<IDNameLoadable>();
-        private static List<IDNameLoadable> MeleeTypeInvList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> ArmorSetsInvList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> MaterialInvList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> ElementalInvList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> ArmorLevelInvList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> SalvageWorkInvList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> WeaponWieldInvList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> CoverageInvList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> EmbueInvList = new List<IDNameLoadable>();    	    	
 
         [ControlEvent("btnRuleClear", "Click")]
         private void btnRuleClear_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)

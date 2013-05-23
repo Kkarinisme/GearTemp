@@ -355,7 +355,7 @@ namespace GearFoundry
 
         //private HudStaticText txtLSS1;
         //private HudStaticText txtLSS2;
-        private string toonArmorName = null;
+        private string toonArmorName = "";
         private bool ArmorMainTab;
         private bool ArmorSettingsTab;
 
@@ -453,6 +453,11 @@ namespace GearFoundry
             //    UpdateArmorHud();
 
                 ArmorMainTab = true;
+                try{
+                FillArmorHudList();
+                }
+
+                catch (Exception ex) { LogError(ex); }
 
                 
 
@@ -464,24 +469,39 @@ namespace GearFoundry
 
         private void FillArmorHudList()
         {
-            xdocGenArmor = XDocument.Load(genArmorFilename);
-            IEnumerable<XElement> names = xdocGenArmor.Element("Objs").Descendants("Obj");
-
-            foreach(XElement el in names)
+            try
             {
-                if(el.Element("ToonName").Value == toonArmorName)
+                WriteToChat("Toonarmorname: " + toonArmorName);
+                if (toonArmorName == "") { toonArmorName = toonName; }
+
+                WriteToChat("I am in function to fillarmorhudlist; toonname to be use is " + toonArmorName);
+                string mname = "";
+
+                xdoc = XDocument.Load(genArmorFilename);
+                IEnumerable<XElement> names = xdoc.Element("Objs").Descendants("Obj");
+
+                foreach (XElement el in names.Descendants())
                 {
-                    int icon = Convert.ToInt32(el.Element("ObjIcon").Value);
-                    string armorpiece = el.Element("ObjName").Value;
-                    string spells = el.Element("ObjSpellXML").Value;
-                    ArmorHudListRow = ArmorHudList.AddRow();
+                    mname = el.Element("ToonName").Value;
+                    WriteToChat("Object name is " + el.Element("ObjName").Value + "Toon Name is " + mname);
+                    if (mname == toonArmorName)
+                    {
+                        WriteToChat("I am now in function to  write out list.");
 
-                    ((HudPictureBox)ArmorHudListRow[0]).Image = icon + 0x6000000;
-	    	    	((HudStaticText)ArmorHudListRow[1]).Text = armorpiece;
-	    	    	((HudStaticText)ArmorHudListRow[2]).Text = spells;
+                        int icon = Convert.ToInt32(el.Element("ObjIcon").Value);
+                        string armorpiece = el.Element("ObjName").Value;
+                        string spells = el.Element("ObjSpellXML").Value;
+                        ArmorHudListRow = ArmorHudList.AddRow();
 
+                        ((HudPictureBox)ArmorHudListRow[0]).Image = icon + 0x6000000;
+                        ((HudStaticText)ArmorHudListRow[1]).Text = armorpiece;
+                        ((HudStaticText)ArmorHudListRow[2]).Text = spells;
+
+                    }
+                    else { WriteToChat("mname = " + mname); }
                 }
             }
+            catch (Exception ex) { LogError(ex); }
             
         }
 
@@ -509,6 +529,7 @@ namespace GearFoundry
             {
                     
                xdocGenArmor = XDocument.Load(genArmorFilename);
+                
                 IEnumerable<XElement> names = xdocGenArmor.Element("Objs").Descendants("Obj");
                 ControlGroup myToonNames = new ControlGroup();
                 cboToonArmorName = new HudCombo(myToonNames);
