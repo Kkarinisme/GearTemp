@@ -87,10 +87,14 @@ namespace GearFoundry
                     try
                     {
 
-                         if (armorobj.Values(LongValueKey.Slot) == -1)
+                        if (armorobj.Values(LongValueKey.Slot) == -1) 
                         {
-
-                            Globals.Host.Actions.RequestId(armorobj.Id);
+                            bool b = armorobj.ObjectClass.Equals("Armor");
+                            bool b1 = armorobj.ObjectClass.Equals("Clothing");
+                            bool b2 = armorobj.ObjectClass.Equals("Jewelry");
+                            bool b3 = armorobj.Name.Contains("Aetheria");
+                            if (b || b1 || b2 || b3)
+                           Globals.Host.Actions.RequestId(armorobj.Id);
                             mWaitingForArmorID.Add(armorobj);
                         }
                     }
@@ -249,10 +253,9 @@ namespace GearFoundry
                         double armorBludg = currentarmorobj.Values(DoubleValueKey.BludgeonProt);
                         double armorSlash = currentarmorobj.Values(DoubleValueKey.SlashProt);
                         double armorPierce = currentarmorobj.Values(DoubleValueKey.PierceProt);
-                        string armorSpellXml = GoGetSpells(currentarmorobj);
+                        string armorSpellXml = GoGetArmorSpells(currentarmorobj);
                         long armorRareID = currentarmorobj.Values(LongValueKey.RareId);
                        long armorModel = currentarmorobj.Values(LongValueKey.Model);
-
                         xdocArmor.Element("Objs").Add(new XElement("Obj",
                         new XElement("ArmorName", armorName),
                         new XElement("ArmorID", armorID),
@@ -343,6 +346,33 @@ namespace GearFoundry
 
         } // end of process data
 
+        private string GoGetArmorSpells(Decal.Adapter.Wrappers.WorldObject o)
+        {
+            FileService fs = (FileService)Core.FileService;
+            int intspellcnt = o.SpellCount;
+            string oXmlSpells = "";
+            for (int i = 0; i < intspellcnt; i++)
+            {
+                int spellId = o.Spell(i);
+
+                Spell spell = fs.SpellTable.GetById(spellId);
+
+                string spellName = spell.Name;
+                if ( spellName.Contains("Legendary") || spellName.Contains("Epic") ||
+                  spellName.Contains("Incantation") || spellName.Contains("Surge")
+                    || spellName.Contains("Cloaked in Skill"))
+                    if(oXmlSpells.Length > 0){oXmlSpells = spellName;}
+                    else { oXmlSpells = oXmlSpells + ", " + spellName; }
+                  
+                else
+                    if (spellName.Contains("Major")) { oXmlSpells = oXmlSpells + ", " + spellName; }
+                    if (oXmlSpells.Length > 0) { oXmlSpells = spellName; }
+                    else { oXmlSpells = oXmlSpells + ", " + spellName; }
+            }
+            return oXmlSpells;
+        }  //endof gogetspells
+
+
         //private HudCheckBox ShowAllMobs;Wie
         //private HudCheckBox ShowSelectedMobs;
         //private HudCheckBox ShowAllPlayers;
@@ -358,6 +388,12 @@ namespace GearFoundry
         private string toonArmorName = "";
         private bool ArmorMainTab;
         private bool ArmorSettingsTab;
+        private int TabWidth = 0;
+        private int TabHeight = 0;
+        private int TabFirstWidth = 400;
+        private int TabFirstHeight = 300;
+        private int TabWidthNew;
+        private int TabHeightNew;
 
         private void RenderArmorHud()
         {
@@ -371,16 +407,21 @@ namespace GearFoundry
             try
             {
 
+
                 if (ArmorHudView != null)
                 {
                     DisposeArmorHud();
                 }
+                xdocGenArmor = XDocument.Load(genArmorFilename);
 
-                ArmorHudView = new HudView("Armor", 300, 220, new ACImage(0x6AA5));
+                if (TabWidth == 0) {TabWidth = TabFirstWidth;}
+                if (TabHeight == 0) { TabHeight = TabFirstHeight; }
+
+                ArmorHudView = new HudView("Armor", TabWidth, TabHeight, new ACImage(0x6AA5));
                // LandscapeHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
                 ArmorHudView.UserAlphaChangeable = false;
                 ArmorHudView.ShowInBar = false;
-                ArmorHudView.UserResizeable = true;
+                ArmorHudView.UserResizeable = false;
                 ArmorHudView.Visible = true;
                 ArmorHudView.Ghosted = false;
                 ArmorHudView.UserMinimizable = false;
@@ -392,7 +433,7 @@ namespace GearFoundry
                 ArmorHudView.Controls.HeadControl = ArmorHudLayout;
 
                 ArmorHudTabView = new HudTabView();
-                ArmorHudLayout.AddControl(ArmorHudTabView, new Rectangle(0, 0, 300, 220));
+                ArmorHudLayout.AddControl(ArmorHudTabView, new Rectangle(0, 0, TabWidth, TabHeight));
 
                 ArmorHudTabLayout = new HudFixedLayout();
                 ArmorHudTabView.AddTab(ArmorHudTabLayout, "Armor");
@@ -401,6 +442,7 @@ namespace GearFoundry
                 ArmorHudTabView.AddTab(ArmorHudSettings, "Settings");
 
                 ArmorHudTabView.OpenTabChange += ArmorHudTabView_OpenTabChange;
+                ArmorHudView.Resize += ArmorHudView_Resize; 
 
                 RenderArmorTabLayout();
 
@@ -409,6 +451,35 @@ namespace GearFoundry
             }
             catch (Exception ex) { LogError(ex); }
             return;
+        }
+
+        private void ArmorHudView_Resize(object sender, System.EventArgs e)
+        {
+            try{
+                if (ArmorHudView.Width - TabWidth > 20)
+                {
+                    TabWidthNew = ArmorHudView.Width;
+                    TabHeightNew = ArmorHudView.Height;
+                    MasterTimer.Interval = 1000;
+                    MasterTimer.Enabled = true;
+                    MasterTimer.Start();
+                    MasterTimer.Tick += ArmorResizeTimerTick;
+                }
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+
+
+  
+        }
+
+        private void ArmorResizeTimerTick(object sender, EventArgs e)
+        {
+            MasterTimer.Stop();
+            TabWidth = TabWidthNew;
+            TabHeight = TabHeightNew;
+            RenderArmorHud();
+
         }
 
 
@@ -439,16 +510,17 @@ namespace GearFoundry
         {
             try
             {
-
+                WriteToChat("I am in RenderArmorTabLayout.  Tabwidth: " + TabWidth + "; TabHeight: " + TabHeight); 
+                
                 ArmorHudList = new HudList();
-                ArmorHudTabLayout.AddControl(ArmorHudList, new Rectangle(0, 0, 300, 220));
+                ArmorHudTabLayout.AddControl(ArmorHudList, new Rectangle(0, 0, TabWidth, TabHeight));
 
-                ArmorHudList.ControlHeight = 16;
-                ArmorHudList.AddColumn(typeof(HudPictureBox), 16, null);
-                ArmorHudList.AddColumn(typeof(HudStaticText), 230, null);
-                ArmorHudList.AddColumn(typeof(HudPictureBox), 16, null);
+                ArmorHudList.ControlHeight = Convert.ToInt32(.05*TabHeight);
+                ArmorHudList.AddColumn(typeof(HudPictureBox), Convert.ToInt32(.05*TabWidth), null);
+                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.35 * TabWidth), null);
+                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.60*TabWidth), null);
 
-                ArmorHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
+           //     ArmorHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
 
             //    UpdateArmorHud();
 
@@ -471,26 +543,18 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("Toonarmorname: " + toonArmorName);
                 if (toonArmorName == "") { toonArmorName = toonName; }
 
-                WriteToChat("I am in function to fillarmorhudlist; toonname to be use is " + toonArmorName);
-                string mname = "";
-
-                xdoc = XDocument.Load(genArmorFilename);
-                IEnumerable<XElement> names = xdoc.Element("Objs").Descendants("Obj");
-
-                foreach (XElement el in names.Descendants())
+                IEnumerable<XElement> marmor = xdocGenArmor.Element("Objs").Descendants("Obj");
+ 
+                foreach (XElement el in marmor)
                 {
-                    mname = el.Element("ToonName").Value;
-                    WriteToChat("Object name is " + el.Element("ObjName").Value + "Toon Name is " + mname);
-                    if (mname == toonArmorName)
+                    if (el.Element("ToonName").Value == toonArmorName)
                     {
-                        WriteToChat("I am now in function to  write out list.");
 
-                        int icon = Convert.ToInt32(el.Element("ObjIcon").Value);
-                        string armorpiece = el.Element("ObjName").Value;
-                        string spells = el.Element("ObjSpellXML").Value;
+                        int icon = Convert.ToInt32(el.Element("ArmorIcon").Value);
+                        string armorpiece = el.Element("ArmorName").Value;
+                        string spells = el.Element("ArmorSpellXml").Value;
                         ArmorHudListRow = ArmorHudList.AddRow();
 
                         ((HudPictureBox)ArmorHudListRow[0]).Image = icon + 0x6000000;
@@ -498,9 +562,9 @@ namespace GearFoundry
                         ((HudStaticText)ArmorHudListRow[2]).Text = spells;
 
                     }
-                    else { WriteToChat("mname = " + mname); }
                 }
-            }
+                ArmorHudView.UserResizeable = true;
+           }
             catch (Exception ex) { LogError(ex); }
             
         }
@@ -528,7 +592,6 @@ namespace GearFoundry
             try
             {
                     
-               xdocGenArmor = XDocument.Load(genArmorFilename);
                 
                 IEnumerable<XElement> names = xdocGenArmor.Element("Objs").Descendants("Obj");
                 ControlGroup myToonNames = new ControlGroup();
@@ -559,13 +622,6 @@ namespace GearFoundry
                 catch (Exception ex) { LogError(ex); }
 
 
-        // private HudTextBox ToonArmorName;
-        //private HudCheckBox ShowAllSpells;
-        //private HudCheckBox ShowWieldedArmor;
-        //private HudCheckBox ShowArmorinInventory;
-        //private HudCheckBox ShowBraceletsinInventory;
-        //private HudCheckBox ShowRingsinInventory;
-        //private HudCheckBox ShowNecklacesinInventory;
                 lblToonArmorName = new HudStaticText();
                 lblToonArmorName.Text = "Name of toon whose armor is being studied:";
                 ArmorHudSettings.AddControl(lblToonArmorName,new Rectangle(0,0,250,16));

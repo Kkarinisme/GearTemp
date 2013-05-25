@@ -574,7 +574,7 @@ namespace GearFoundry
     			LandscapeHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			LandscapeHudView.UserAlphaChangeable = false;
     			LandscapeHudView.ShowInBar = false;
-    			LandscapeHudView.UserResizeable = false;
+                LandscapeHudView.UserResizeable = false;
     			LandscapeHudView.Visible = true;
     			LandscapeHudView.Ghosted = false;
                 LandscapeHudView.UserMinimizable = false;
