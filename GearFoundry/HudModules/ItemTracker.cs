@@ -521,11 +521,6 @@ namespace GearFoundry
 						bool[] ruletrue = {false, false, false, false};
 						if(rule.RuleWeaponEnabledA)
 						{	
-							WriteToChat("A Enabled");
-							WriteToChat("Rule: MSCleave A, WRA, MDA, VarA");
-							WriteToChat(rule.MSCleaveA +","+rule.WieldReqValueA+","+ rule.MaxDamageA+","+ rule.VarianceA);
-							WriteToChat("Item: MSCleave A, WRA, MDA, VarA");
-							WriteToChat(IOItemWithID.MSCleave +","+ IOItemWithID.WieldReqValue +","+ IOItemWithID.WeaponMaxDamage+","+ IOItemWithID.Variance);
 							if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.WieldReqValue && 
 							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.Variance <= rule.VarianceA))
 							     {ruletrue[0] = true;}
@@ -562,10 +557,30 @@ namespace GearFoundry
 						if(rule.RuleArmorLevel > IOItemWithID.ArmorLevel) {RuleName = String.Empty; goto Next;}
 					}
 //					//Armor Types
-////					if(rule.RuleArmorTypes >= 0)
-////					{
-////						
-////					}
+					if(rule.RuleArmorTypes.Length > 0)
+					{
+						WriteToChat("RAT L = " + rule.RuleArmorTypes.Length.ToString());
+						foreach(int armor in rule.RuleArmorTypes)
+						{
+							WriteToChat(ArmorIndex[armor].name);
+						}
+						int IOArmorType = -1;  //I'd prefer 0, but there's a 0 index in the ArmorIndex
+						if(!(IOItemWithID.ArmorLevel > 0)) {RuleName = String.Empty; goto Next;}  //If it's not armor, get rid of it
+						//If it's unknown type make it other.
+						if(!ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower()))) 
+						{
+							IOArmorType = ArmorIndex.Find(x => x.name == "Other").ID;
+						}
+						else if(ArmorIndex.Any(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())))
+						{
+							IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())).ID;
+						}
+						else if(IOArmorType < 0 && ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())))
+						{
+							IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())).ID;
+						}
+						if(!rule.RuleArmorTypes.Contains(IOArmorType)) {RuleName = String.Empty; goto Next;}
+					}
 					//Irquk:  Confirmed Functional
 					if(rule.RuleArmorSet.Length > 0)
 					{
@@ -667,7 +682,7 @@ namespace GearFoundry
 				return;
 				
 			}
-			catch(Exception ex) {WriteToChat(ex.ToString());}
+			catch(Exception ex) {LogError(ex);}
 		}
 		
 		
@@ -1048,17 +1063,11 @@ namespace GearFoundry
 			
 			try
 			{
-				ItemRulesList.Clear();
-
-//				WriteToChat("mPrioritizedRulesListEnabled.Count() = " + mPrioritizedRulesListEnabled.Count().ToString());
-				
+				ItemRulesList.Clear();				
 				for(int i = 0; i < mPrioritizedRulesListEnabled.Count(); i++)
 				{
-					
 					var XRule = mPrioritizedRulesListEnabled[i];
 					ItemRule tRule = new ItemRule();
-
-					//WriteToChat("RuleName = " + (string)mPrioritizedRulesListEnabled[i].Element("Name").Value);
 		        	
 		        	if(!bool.TryParse((XRule.Element("Enabled").Value), out tRule.RuleEnabled)){tRule.RuleEnabled = false;}
 		        	if(!Int32.TryParse((XRule.Element("Priority").Value), out tRule.RulePriority)){tRule.RulePriority = 0;}
@@ -1126,15 +1135,13 @@ namespace GearFoundry
 					}
 					
 					if(!Double.TryParse(XRule.Element("McModAttack").Value, out tRule.RuleMcModAttack)){tRule.RuleMcModAttack = 0;}
-					
+					tRule.ModADD += (int)tRule.RuleMcModAttack;  //Get the int for ModADD
 					if(tRule.RuleMcModAttack > 0) {tRule.RuleMcModAttack += (tRule.RuleMcModAttack*0.01) + 1;}  //convert for direct comparison
-					
 					if(!Double.TryParse(XRule.Element("MeleeDef").Value, out tRule.RuleMeleeD)){tRule.RuleMeleeD = 0;}
-					
+					tRule.ModADD += (int)tRule.RuleMeleeD;
 					if(tRule.RuleMeleeD > 0) {tRule.RuleMeleeD = (tRule.RuleMeleeD*0.01) + 1;}  //convert for direct comparison
-					
 					if(!Double.TryParse(XRule.Element("MagicDef").Value, out tRule.RuleMagicD)){tRule.RuleMagicD = 0;}
-					
+					tRule.ModADD += (int)tRule.RuleMagicD;
 					if(tRule.RuleMagicD != 0) {tRule.RuleMagicD = (tRule.RuleMagicD*0.01) + 1;}  //convert for direct comparison
 	
 					splitstringEnabled = (XRule.Element("WieldEnabled").Value).Split(',');
@@ -1245,15 +1252,19 @@ namespace GearFoundry
 						tRule.MSCleaveD = false; tRule.MaxDamageD = 0; tRule.VarianceD = 0;
 					}		
 					
-					splitstring = (XRule.Element("ArmorType").Value).Split(',');
+					CombineIntList.Clear();
+					splitstring = (XRule.Element("ArmorType").Value).Split(',');	
 					if(splitstring.Length > 0)
 					{
-						tRule.RuleArmorTypes = new int[splitstring.Length];
 						for(int j = 0; j < splitstring.Length; j++)
 						{
-							if(!Int32.TryParse(splitstring[j], out tRule.RuleArmorTypes[j])) {tRule.RuleArmorTypes[j] = 0;}
+							tempint = -1;
+							Int32.TryParse(splitstring[j], out tempint);
+							if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
 						}
+						tRule.RuleArmorTypes = CombineIntList.ToArray();
 					}
+					
 					
 					splitstring = ((string)XRule.Element("Coverage").Value).Split(',');
 					if(splitstring.Length > 0)
@@ -1269,9 +1280,9 @@ namespace GearFoundry
 					{
 						for(int j = 0; j < splitstring.Length; j++)
 						{
-							tempint = 0;
+							tempint = -1;
 							Int32.TryParse(splitstring[j], out tempint);
-							if(tempint > 0) {CombineIntList.Add(tempint); tempint = 0;}
+							if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
 						}
 					}
 					splitstring = (XRule.Element("CloakSets").Value).Split(',');
@@ -1369,7 +1380,6 @@ namespace GearFoundry
 	        public double RuleMeleeD;
 	        public double RuleMagicD;
 	        
-	        //Weapon Matching
 	        public bool RuleWeaponEnabledA;
 	        public bool MSCleaveA;
 	        public int WieldReqValueA;
@@ -1395,7 +1405,6 @@ namespace GearFoundry
 	        public int[] RuleArmorTypes;
 	        public int[] RuleArmorSet;
 	        public int RuleArmorCoverage;
-	        //public bool RuleAnySet;
 	        public bool RuleUnenchantable;
 	        
 	        public int RuleEssenceLevel;
@@ -1406,11 +1415,12 @@ namespace GearFoundry
 	        public int RuleEssenceCritDam;
 	        public int RuleEssenceCritDamResist;
 
-	     
-	       
-
 	        public int[] RuleSpells;
-	        public int RuleSpellNumber; 	
+	        public int RuleSpellNumber; 
+
+			public int ModADD = 0;	        
+	        
+			
 		}
 		
 		

@@ -303,7 +303,7 @@ namespace GearFoundry
 						break;
 				}
 				
-				if(LandscapeTrackingList.FindIndex(x => x.Id == IOLandscape.Id) < 1)
+				if(!LandscapeTrackingList.Any(x => x.Id == IOLandscape.Id))
 				{
 					LandscapeTrackingList.Add(IOLandscape);
 					playSoundFromResource(1);
