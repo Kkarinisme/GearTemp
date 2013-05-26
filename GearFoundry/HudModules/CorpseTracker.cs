@@ -741,7 +741,7 @@ namespace GearFoundry
 	    	    	if(corpse.IOR == IOResult.allcorpses) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.SlateGray;}
 					((HudPictureBox)CorpseHudListRow[2]).Image = CorpseRemoveCircle;
 	    	    }
-	       	}catch(Exception ex){WriteToChat(ex.ToString());}
+	    	}catch(Exception ex){LogError(ex);}
 	    	
 	    }	    
 

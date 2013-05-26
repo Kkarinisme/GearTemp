@@ -521,11 +521,6 @@ namespace GearFoundry
 						bool[] ruletrue = {false, false, false, false};
 						if(rule.RuleWeaponEnabledA)
 						{	
-							WriteToChat("A Enabled");
-							WriteToChat("Rule: MSCleave A, WRA, MDA, VarA");
-							WriteToChat(rule.MSCleaveA +","+rule.WieldReqValueA+","+ rule.MaxDamageA+","+ rule.VarianceA);
-							WriteToChat("Item: MSCleave A, WRA, MDA, VarA");
-							WriteToChat(IOItemWithID.MSCleave +","+ IOItemWithID.WieldReqValue +","+ IOItemWithID.WeaponMaxDamage+","+ IOItemWithID.Variance);
 							if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.WieldReqValue && 
 							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.Variance <= rule.VarianceA))
 							     {ruletrue[0] = true;}
@@ -564,7 +559,27 @@ namespace GearFoundry
 //					//Armor Types
 					if(rule.RuleArmorTypes.Length > 0)
 					{
-						//if(!rule.RuleArmorTypes.Any(x => IOItemWithID.Name.Contains(x))){RuleName = String.Empty; goto Next;}
+						WriteToChat("RAT L = " + rule.RuleArmorTypes.Length.ToString());
+						foreach(int armor in rule.RuleArmorTypes)
+						{
+							WriteToChat(ArmorIndex[armor].name);
+						}
+						int IOArmorType = -1;  //I'd prefer 0, but there's a 0 index in the ArmorIndex
+						if(!(IOItemWithID.ArmorLevel > 0)) {RuleName = String.Empty; goto Next;}  //If it's not armor, get rid of it
+						//If it's unknown type make it other.
+						if(!ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower()))) 
+						{
+							IOArmorType = ArmorIndex.Find(x => x.name == "Other").ID;
+						}
+						else if(ArmorIndex.Any(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())))
+						{
+							IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())).ID;
+						}
+						else if(IOArmorType < 0 && ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())))
+						{
+							IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())).ID;
+						}
+						if(!rule.RuleArmorTypes.Contains(IOArmorType)) {RuleName = String.Empty; goto Next;}
 					}
 					//Irquk:  Confirmed Functional
 					if(rule.RuleArmorSet.Length > 0)
@@ -667,7 +682,7 @@ namespace GearFoundry
 				return;
 				
 			}
-			catch(Exception ex) {WriteToChat(ex.ToString());}
+			catch(Exception ex) {LogError(ex);}
 		}
 		
 		
@@ -1237,15 +1252,19 @@ namespace GearFoundry
 						tRule.MSCleaveD = false; tRule.MaxDamageD = 0; tRule.VarianceD = 0;
 					}		
 					
-					splitstring = (XRule.Element("ArmorType").Value).Split(',');
+					CombineIntList.Clear();
+					splitstring = (XRule.Element("ArmorType").Value).Split(',');	
 					if(splitstring.Length > 0)
 					{
-						tRule.RuleArmorTypes = new int[splitstring.Length];
 						for(int j = 0; j < splitstring.Length; j++)
 						{
-							if(!Int32.TryParse(splitstring[j], out tRule.RuleArmorTypes[j])) {tRule.RuleArmorTypes[j] = 0;}
+							tempint = -1;
+							Int32.TryParse(splitstring[j], out tempint);
+							if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
 						}
+						tRule.RuleArmorTypes = CombineIntList.ToArray();
 					}
+					
 					
 					splitstring = ((string)XRule.Element("Coverage").Value).Split(',');
 					if(splitstring.Length > 0)
@@ -1261,9 +1280,9 @@ namespace GearFoundry
 					{
 						for(int j = 0; j < splitstring.Length; j++)
 						{
-							tempint = 0;
+							tempint = -1;
 							Int32.TryParse(splitstring[j], out tempint);
-							if(tempint > 0) {CombineIntList.Add(tempint); tempint = 0;}
+							if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
 						}
 					}
 					splitstring = (XRule.Element("CloakSets").Value).Split(',');

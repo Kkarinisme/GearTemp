@@ -480,7 +480,6 @@ namespace GearFoundry
 				}
 				else
 				{
-					WriteToChat("CombatTrackingList = " + CombatHudMobTrackingList.Count);
 					CombatTimerSeconds = 0;	
 					for(int i = CombatHudMobTrackingList.Count -1; i >= 0; i--)
 					{
@@ -512,13 +511,10 @@ namespace GearFoundry
 		{
 			try
 			{
-				WriteToChat("Combat chat fires");
 				if(OtherCast.IsMatch(e.Text))
 				{
-					WriteToChat("other cast fires");
 					if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)))
 					{
-						WriteToChat("found in spellcastwords");
 						OtherDebuffCastInfo odci = new OtherDebuffCastInfo();
 						odci.HeardTime = DateTime.Now;
 						odci.SpellWords = AnimationList.Find(x => e.Text.Contains(x.SpellCastWords)).SpellCastWords;
