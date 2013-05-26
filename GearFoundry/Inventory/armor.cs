@@ -39,12 +39,6 @@ namespace GearFoundry
         private HudFixedLayout ArmorHudSettings;
         private HudStaticText lblToonArmorName;
         private HudCombo cboToonArmorName;
-        private HudCheckBox ShowAllSpells;
-        private HudCheckBox ShowWieldedArmor;
-        private HudCheckBox ShowArmorinInventory;
-        private HudCheckBox ShowBraceletsinInventory;
-        private HudCheckBox ShowRingsinInventory;
-        private HudCheckBox ShowNecklacesinInventory;
 
         XDocument xdocArmor;
         WindowsTimer mWaitingForArmorIDTimer = new WindowsTimer();
@@ -358,33 +352,21 @@ namespace GearFoundry
                 Spell spell = fs.SpellTable.GetById(spellId);
 
                 string spellName = spell.Name;
-                if ( spellName.Contains("Legendary") || spellName.Contains("Epic") ||
+                if (spellName.Contains("Legendary") || spellName.Contains("Epic") ||
                   spellName.Contains("Incantation") || spellName.Contains("Surge")
                     || spellName.Contains("Cloaked in Skill"))
-                    if(oXmlSpells.Length > 0){oXmlSpells = spellName;}
-                    else { oXmlSpells = oXmlSpells + ", " + spellName; }
-                  
+                {
+                    oXmlSpells = oXmlSpells + "," + spellName;
+                }
+
                 else
                     if (spellName.Contains("Major")) { oXmlSpells = oXmlSpells + ", " + spellName; }
-                    if (oXmlSpells.Length > 0) { oXmlSpells = spellName; }
-                    else { oXmlSpells = oXmlSpells + ", " + spellName; }
             }
-            return oXmlSpells;
+            if (oXmlSpells.Substring(0, 1) == ",") { return oXmlSpells.Substring(1); }
+            else { return oXmlSpells; }
         }  //endof gogetspells
 
-
-        //private HudCheckBox ShowAllMobs;Wie
-        //private HudCheckBox ShowSelectedMobs;
-        //private HudCheckBox ShowAllPlayers;
-        //private HudCheckBox ShowAllegancePlayers;
-        //private HudCheckBox ShowFellowPlayers;
-        //private HudCheckBox ShowTrophies;
-        //private HudCheckBox ShowLifeStones;
-        //private HudCheckBox ShowAllPortals;
-        //private HudCheckBox ShowAllNPCs;
-
-        //private HudStaticText txtLSS1;
-        //private HudStaticText txtLSS2;
+          
         private string toonArmorName = "";
         private bool ArmorMainTab;
         private bool ArmorSettingsTab;
@@ -412,13 +394,13 @@ namespace GearFoundry
                 {
                     DisposeArmorHud();
                 }
+                xdocGenArmor = new XDocument();
                 xdocGenArmor = XDocument.Load(genArmorFilename);
 
                 if (TabWidth == 0) {TabWidth = TabFirstWidth;}
                 if (TabHeight == 0) { TabHeight = TabFirstHeight; }
 
                 ArmorHudView = new HudView("Armor", TabWidth, TabHeight, new ACImage(0x6AA5));
-               // LandscapeHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
                 ArmorHudView.UserAlphaChangeable = false;
                 ArmorHudView.ShowInBar = false;
                 ArmorHudView.UserResizeable = false;
@@ -628,68 +610,8 @@ namespace GearFoundry
 
                ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(5, 15, 200, 16));
 
-                //ShowAllMobs = new HudCheckBox();
-                //ShowAllMobs.Text = "Track All Mobs";
-                //LandscapeHudSettings.AddControl(ShowAllMobs, new Rectangle(0, 0, 150, 16));
-                //ShowAllMobs.Checked = gsSettings.bShowAllMobs;
 
-                //ShowSelectedMobs = new HudCheckBox();
-                //ShowSelectedMobs.Text = "Track Selected Mobs";
-                //LandscapeHudSettings.AddControl(ShowSelectedMobs, new Rectangle(0, 18, 150, 16));
-                //ShowSelectedMobs.Checked = gsSettings.bShowSelectedMobs;
-
-                //ShowAllPlayers = new HudCheckBox();
-                //ShowAllPlayers.Text = "Track All Players";
-                //LandscapeHudSettings.AddControl(ShowAllPlayers, new Rectangle(0, 36, 150, 16));
-                //ShowAllPlayers.Checked = gsSettings.bShowAllPlayers;
-
-                //ShowAllegancePlayers = new HudCheckBox();
-                //ShowAllegancePlayers.Text = "Track Allegiance Players";
-                //LandscapeHudSettings.AddControl(ShowAllegancePlayers, new Rectangle(0, 54, 150, 16));
-                //ShowAllegancePlayers.Checked = gsSettings.bShowAllegancePlayers;
-
-                //ShowFellowPlayers = new HudCheckBox();
-                //ShowFellowPlayers.Text = "Track Fellowship Players";
-                //LandscapeHudSettings.AddControl(ShowFellowPlayers, new Rectangle(0, 72, 150, 16));
-                //ShowFellowPlayers.Checked = gsSettings.bShowFellowPlayers;
-
-                //ShowAllNPCs = new HudCheckBox();
-                //ShowAllNPCs.Text = "Track All NPCs";
-                //LandscapeHudSettings.AddControl(ShowAllNPCs, new Rectangle(0, 90, 150, 16));
-                //ShowAllNPCs.Checked = gsSettings.bShowAllNPCs;
-
-                //ShowTrophies = new HudCheckBox();
-                //ShowTrophies.Text = "Track Selected NPCs and Trophies";
-                //LandscapeHudSettings.AddControl(ShowTrophies, new Rectangle(0, 108, 150, 16));
-                //ShowTrophies.Checked = gsSettings.bShowTrophies;
-
-                //ShowLifeStones = new HudCheckBox();
-                //ShowLifeStones.Text = "Track Lifestones";
-                //LandscapeHudSettings.AddControl(ShowLifeStones, new Rectangle(0, 126, 150, 16));
-                //ShowLifeStones.Checked = gsSettings.bShowLifeStones;
-
-                //ShowAllPortals = new HudCheckBox();
-                //ShowAllPortals.Text = "Track Portals";
-                //LandscapeHudSettings.AddControl(ShowAllPortals, new Rectangle(0, 144, 150, 16));
-                //ShowAllPortals.Checked = gsSettings.bShowAllPortals;
-
-                //txtLSS1 = new HudStaticText();
-                //txtLSS1.Text = "Player tracking funtions do not request player IDs.";
-                //txtLSS2 = new HudStaticText();
-                //txtLSS2.Text = "Players will not track until ID'd another way.";
-                //LandscapeHudSettings.AddControl(txtLSS1, new Rectangle(0, 162, 300, 16));
-                //LandscapeHudSettings.AddControl(txtLSS2, new Rectangle(0, 180, 300, 16));
-
-                //ShowAllMobs.Change += ShowAllMobs_Change;
-                //ShowSelectedMobs.Change += ShowSelectedMobs_Change;
-                //ShowAllPlayers.Change += ShowAllPlayers_Change;
-                //ShowFellowPlayers.Change += ShowFellowPlayers_Change;
-                //ShowAllegancePlayers.Change += ShowAllegancePlayers_Change;
-                //ShowAllNPCs.Change += ShowAllNPCs_Change;
-                //ShowTrophies.Change += ShowTrophies_Change;
-                //ShowLifeStones.Change += ShowLifeStones_Change;
-                //ShowAllPortals.Change += ShowAllPortals_Change;
-
+ 
                 ArmorSettingsTab = true;
              }
             catch (Exception ex) { LogError(ex); }
@@ -707,27 +629,6 @@ namespace GearFoundry
             try
             {
                 if (!ArmorSettingsTab) { return; }
-                //ShowAllMobs.Change -= ShowAllMobs_Change;
-                //ShowSelectedMobs.Change -= ShowSelectedMobs_Change;
-                //ShowAllPlayers.Change -= ShowAllPlayers_Change;
-                //ShowFellowPlayers.Change -= ShowFellowPlayers_Change;
-                //ShowAllegancePlayers.Change -= ShowAllegancePlayers_Change;
-                //ShowAllNPCs.Change -= ShowAllNPCs_Change;
-                //ShowTrophies.Change -= ShowTrophies_Change;
-                //ShowLifeStones.Change -= ShowLifeStones_Change;
-                //ShowAllPortals.Change -= ShowAllPortals_Change;
-
-                //txtLSS2.Dispose();
-                //txtLSS1.Dispose();
-                //ShowAllPortals.Dispose();
-                //ShowLifeStones.Dispose();
-                //ShowTrophies.Dispose();
-                //ShowAllNPCs.Dispose();
-                //ShowFellowPlayers.Dispose();
-                //ShowAllegancePlayers.Dispose();
-                //ShowAllPlayers.Dispose();
-                //ShowSelectedMobs.Dispose();
-                //ShowAllMobs.Dispose();
 
                 ArmorSettingsTab = false;
             }
@@ -742,7 +643,7 @@ namespace GearFoundry
             try
             {
                 WriteToChat("I am in method to dispose armor hud");
-              //  UnsubscribeArmorEvents();
+                UnsubscribeArmorEvents();
                 try { DisposeArmorTabLayout(); }
                 catch { }
                 try { DisposeArmorSettingsLayout(); }
@@ -756,6 +657,15 @@ namespace GearFoundry
             }
             catch (Exception ex) { LogError(ex); }
             return;
+        }
+
+        private void UnsubscribeArmorEvents()
+        {
+            ArmorHudTabView.OpenTabChange -= ArmorHudTabView_OpenTabChange;
+            ArmorHudView.Resize -= ArmorHudView_Resize;
+            MasterTimer.Tick -= ArmorResizeTimerTick;
+
+
         }
 
         private void ArmorHudList_Click(object sender, int row, int col)
