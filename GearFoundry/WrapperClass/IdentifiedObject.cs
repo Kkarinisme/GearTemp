@@ -1083,8 +1083,8 @@ namespace GearFoundry
 				return result;
 			}
 
-
-
+			//Begin reproduction of Mag-Tools buffed weapon values
+	
 
 
 			

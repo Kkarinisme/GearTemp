@@ -562,10 +562,10 @@ namespace GearFoundry
 						if(rule.RuleArmorLevel > IOItemWithID.ArmorLevel) {RuleName = String.Empty; goto Next;}
 					}
 //					//Armor Types
-////					if(rule.RuleArmorTypes >= 0)
-////					{
-////						
-////					}
+					if(rule.RuleArmorTypes.Length > 0)
+					{
+						//if(!rule.RuleArmorTypes.Any(x => IOItemWithID.Name.Contains(x))){RuleName = String.Empty; goto Next;}
+					}
 					//Irquk:  Confirmed Functional
 					if(rule.RuleArmorSet.Length > 0)
 					{
@@ -1048,17 +1048,11 @@ namespace GearFoundry
 			
 			try
 			{
-				ItemRulesList.Clear();
-
-//				WriteToChat("mPrioritizedRulesListEnabled.Count() = " + mPrioritizedRulesListEnabled.Count().ToString());
-				
+				ItemRulesList.Clear();				
 				for(int i = 0; i < mPrioritizedRulesListEnabled.Count(); i++)
 				{
-					
 					var XRule = mPrioritizedRulesListEnabled[i];
 					ItemRule tRule = new ItemRule();
-
-					//WriteToChat("RuleName = " + (string)mPrioritizedRulesListEnabled[i].Element("Name").Value);
 		        	
 		        	if(!bool.TryParse((XRule.Element("Enabled").Value), out tRule.RuleEnabled)){tRule.RuleEnabled = false;}
 		        	if(!Int32.TryParse((XRule.Element("Priority").Value), out tRule.RulePriority)){tRule.RulePriority = 0;}
@@ -1126,15 +1120,13 @@ namespace GearFoundry
 					}
 					
 					if(!Double.TryParse(XRule.Element("McModAttack").Value, out tRule.RuleMcModAttack)){tRule.RuleMcModAttack = 0;}
-					
+					tRule.ModADD += (int)tRule.RuleMcModAttack;  //Get the int for ModADD
 					if(tRule.RuleMcModAttack > 0) {tRule.RuleMcModAttack += (tRule.RuleMcModAttack*0.01) + 1;}  //convert for direct comparison
-					
 					if(!Double.TryParse(XRule.Element("MeleeDef").Value, out tRule.RuleMeleeD)){tRule.RuleMeleeD = 0;}
-					
+					tRule.ModADD += (int)tRule.RuleMeleeD;
 					if(tRule.RuleMeleeD > 0) {tRule.RuleMeleeD = (tRule.RuleMeleeD*0.01) + 1;}  //convert for direct comparison
-					
 					if(!Double.TryParse(XRule.Element("MagicDef").Value, out tRule.RuleMagicD)){tRule.RuleMagicD = 0;}
-					
+					tRule.ModADD += (int)tRule.RuleMagicD;
 					if(tRule.RuleMagicD != 0) {tRule.RuleMagicD = (tRule.RuleMagicD*0.01) + 1;}  //convert for direct comparison
 	
 					splitstringEnabled = (XRule.Element("WieldEnabled").Value).Split(',');
@@ -1369,7 +1361,6 @@ namespace GearFoundry
 	        public double RuleMeleeD;
 	        public double RuleMagicD;
 	        
-	        //Weapon Matching
 	        public bool RuleWeaponEnabledA;
 	        public bool MSCleaveA;
 	        public int WieldReqValueA;
@@ -1395,7 +1386,6 @@ namespace GearFoundry
 	        public int[] RuleArmorTypes;
 	        public int[] RuleArmorSet;
 	        public int RuleArmorCoverage;
-	        //public bool RuleAnySet;
 	        public bool RuleUnenchantable;
 	        
 	        public int RuleEssenceLevel;
@@ -1406,11 +1396,12 @@ namespace GearFoundry
 	        public int RuleEssenceCritDam;
 	        public int RuleEssenceCritDamResist;
 
-	     
-	       
-
 	        public int[] RuleSpells;
-	        public int RuleSpellNumber; 	
+	        public int RuleSpellNumber; 
+
+			public int ModADD = 0;	        
+	        
+			
 		}
 		
 		

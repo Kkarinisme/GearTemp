@@ -96,6 +96,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="WrapperClass\IOMagToolsEcho.cs" />
     <EmbeddedResource Include="Defaults\Rules.xml">
       <LogicalName>Rules.xml</LogicalName>
       <SubType>Designer</SubType>
@@ -123,6 +124,7 @@
     <Compile Include="PluginCore.cs" />
     <Compile Include="Views\MainView.cs" />
     <Compile Include="VTInterop\Plugin.Public.cs" />
+    <Compile Include="VTInterop\VTInterop.cs" />
     <Compile Include="WrapperClass\GearScore.cs" />
     <Compile Include="WrapperClass\IdentifiedObject.cs" />
     <Compile Include="HudModules\QuickSlotsHud.cs" />
