@@ -25,36 +25,70 @@ namespace GearFoundry
         private List<WorldObject> InventorySalvage = new List<WorldObject>();
 		private Queue<IdentifiedObject> SalvageObjectQueue = new Queue<IdentifiedObject>();  
 			
+		string[] splitstring;
+		string[] splstr;
 		private void FillSalvageRules()
 		{
 			try
 			{
 				SalvageRulesList.Clear();
-				for(int i = 0; i < mSortedSalvageListChecked.Count(); i++)
+				foreach(var XSalv in mSortedSalvageListChecked)
 				{
-					string[] splitstring = mSortedSalvageListChecked[i].Element("combine").Value.Split(',');
-					foreach(string salstr in splitstring)
+					
+					splitstring = XSalv.Element("combine").Value.Split(',');
+					
+					if(splitstring.Count() == 1)
 					{
 						SalvageRule sr = new SalvageRule();
+						Int32.TryParse(XSalv.Element("intvalue").Value, out sr.material);
 						
-						if(salstr.Contains("-"))
+						if(splitstring[0].Contains("-"))
 						{
-						   	string[] splstr = salstr.Split('-');
-						   	bool success0 = Double.TryParse(splstr[0], out sr.minwork);
-						   	bool success1 = Double.TryParse(splstr[1], out sr.maxwork);
-						   	bool success2 = Int32.TryParse(mSortedSalvageListChecked[i].Element("intvalue").Value, out sr.material);
-						   	sr.ruleid = sr.material.ToString("00") + sr.minwork.ToString("00") + sr.maxwork.ToString("00");
-						   	if(success0 && success1 & success2) {SalvageRulesList.Add(sr);}
+							splstr = splitstring[0].Split('-');
+							   	bool success0 = Double.TryParse(splstr[0], out sr.minwork);
+							   	bool success1 = Double.TryParse(splstr[1], out sr.maxwork);
+							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N") + "-" + sr.maxwork.ToString("N");
+							   	if(success0 && success1) {SalvageRulesList.Add(sr);}
 						}
 						else
 						{
-							bool success = Double.TryParse(salstr, out sr.minwork);
-							sr.maxwork = sr.minwork;
-							bool success1 = Int32.TryParse(mSortedSalvageListChecked[i].Element("intvalue").Value, out sr.material);
-							sr.ruleid = sr.material.ToString("00") + sr.minwork.ToString("00") + sr.maxwork.ToString("00");
-							if(success && success1) {SalvageRulesList.Add(sr);}
+							bool success0 = Double.TryParse(splitstring[0], out sr.minwork);
+							sr.maxwork = 10;
+							sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N") + "-" + sr.maxwork.ToString("N");
+							if(success0) {SalvageRulesList.Add(sr);}
 						}
 					}
+					else
+					{
+						foreach(string salvstring in splitstring)
+						{
+							SalvageRule sr = new SalvageRule();					
+							Int32.TryParse(XSalv.Element("intvalue").Value, out sr.material);
+							
+							if(salvstring.Contains("-"))
+							{
+							   	string[] splstr = salvstring.Split('-');
+							   	bool success0 = Double.TryParse(splstr[0], out sr.minwork);
+							   	bool success1 = Double.TryParse(splstr[1], out sr.maxwork);
+							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N") + "-" + sr.maxwork.ToString("N");
+							   	if(success0 && success1) {SalvageRulesList.Add(sr);}
+							}
+							else
+							{
+								bool success = Double.TryParse(salvstring, out sr.minwork);
+								sr.maxwork = sr.minwork;
+								sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N") + "-" + sr.maxwork.ToString("N");
+								if(success) {SalvageRulesList.Add(sr);}
+							}
+							
+							
+						}
+					}
+				
+				
+				
+				
+			
 				}
 			} catch{}
 		}

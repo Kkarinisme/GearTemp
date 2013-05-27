@@ -16,19 +16,20 @@ using VirindiViewService.Themes;
 
 namespace GearFoundry
 {
-	/// <summary>
-	/// Description of ItemTracker.
-	/// </summary>
 	public partial class PluginCore
 	{		
 		//
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();
+		private List<ModifiedRule> ModifiedRulesList = new List<ModifiedRule>();
 		
 		private OpenContainer mOpenContainer = new OpenContainer();
 		private List<int> ItemExclusionList = new List<int>();
 		private List<IdentifiedObject> ItemTrackingList = new List<IdentifiedObject>();
 		private List<int> ItemIDListenList = new List<int>();
 		private List<int> ManaTankItems = new List<int>();
+		private  List<IdentifiedObject> SalvageItemsList = new  List<IdentifiedObject>();
+		
+		private GearInspectorSettings GISettings = new GearInspectorSettings();
 		
 		public class OpenContainer
 		{
@@ -37,26 +38,114 @@ namespace GearFoundry
 			public List<IdentifiedObject> ContainerIOs = new List<PluginCore.IdentifiedObject>();
 		}
 		
-		void SubscribeLootEvents()
+		public class GearInspectorSettings
+		{
+			public bool IdentifySalvage = true;
+			public bool AutoLoot = true;
+			public bool AutoSalvage = true;
+			public bool AutoAetheria = true;
+			public bool AutoCombine = true;
+			public bool AutoStack = true;
+			public bool ModifiedLooting = true;
+			public bool GearScore = true;
+			public bool CheckForL7Scrolls = true;
+			
+    	}
+		
+		private void SubscribeLootEvents()
 		{
 			try
 			{
 				CoreManager.Current.ContainerOpened += LootContainerOpened;
              	Core.EchoFilter.ServerDispatch += ServerDispatchItem;
+             	Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
+             	Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
+             	Core.CharacterFilter.ActionComplete += Inspector_ActionComplete;
+             	MasterTimer.Tick += Inspector_Tick;
 			}
 			catch{}
 		}
 		
-		void UnsubscribeLootEvents()
+		private void UnsubscribeLootEvents()
 		{
 			try
 			{
 				CoreManager.Current.ContainerOpened -= LootContainerOpened;
              	Core.EchoFilter.ServerDispatch -= ServerDispatchItem;
+             	Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
+             	Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
+             	Core.CharacterFilter.ActionComplete -= Inspector_ActionComplete;
+             	MasterTimer.Tick -= Inspector_Tick;
 			}catch{}
 		}
 		
-		void LootContainerOpened(object sender, ContainerOpenedEventArgs e)
+	 	private int InspectorLootDelayCounter = 0;
+	 	private bool InspectorWait2Seconds = false;
+	 	
+		private void Inspector_ActionComplete(object sender, System.EventArgs e)
+		{
+			try
+			{
+				if(ItemTrackingList.Count > 0)
+				{
+					InspectorWait2Seconds = true;
+					InspectorLootDelayCounter = 0;					
+				}
+				else
+				{
+					InspectorWait2Seconds = false;
+				}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void Inspector_Tick(object sender, System.EventArgs e)
+		{
+			try
+			{
+				if(InspectorWait2Seconds)
+				{
+					InspectorLootDelayCounter++;
+				}
+				if(InspectorLootDelayCounter > 3)
+				{
+				
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void InspectorItemDestroyed(object sender, ItemDestroyedEventArgs e)
+		{
+			try
+			{
+				if(e == null){return;}
+				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.ItemGuid)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.ItemGuid);}
+				if(ItemExclusionList.Any(x => x == e.ItemGuid)){ItemExclusionList.RemoveAll(x => x == e.ItemGuid);}
+				if(ItemTrackingList.Any(x => x.Id == e.ItemGuid)){ItemTrackingList.RemoveAll(x => x.Id == e.ItemGuid);}
+				if(ItemIDListenList.Any(x => x == e.ItemGuid)){ItemIDListenList.RemoveAll(x => x == e.ItemGuid);}
+				if(ManaTankItems.Any(x => x == e.ItemGuid)){ManaTankItems.RemoveAll(x => x == e.ItemGuid);}
+				if(SalvageItemsList.Any(x => x.Id == e.ItemGuid)){SalvageItemsList.RemoveAll(x => x.Id == e.ItemGuid);}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void InspectorItemReleased(object sender, ReleaseObjectEventArgs e)
+		{
+			try
+			{
+				if(e == null) {return;}
+				
+				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.Released.Id)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.Released.Id);}
+				if(ItemExclusionList.Any(x => x == e.Released.Id)){ItemExclusionList.RemoveAll(x => x == e.Released.Id);}
+				if(ItemTrackingList.Any(x => x.Id == e.Released.Id)){ItemTrackingList.RemoveAll(x => x.Id == e.Released.Id);}
+				if(ItemIDListenList.Any(x => x == e.Released.Id)){ItemIDListenList.RemoveAll(x => x == e.Released.Id);}
+				if(ManaTankItems.Any(x => x == e.Released.Id)){ManaTankItems.RemoveAll(x => x == e.Released.Id);}
+				if(SalvageItemsList.Any(x => x.Id == e.Released.Id)){SalvageItemsList.RemoveAll(x => x.Id == e.Released.Id);}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void LootContainerOpened(object sender, ContainerOpenedEventArgs e)
 		{
 			//Patterned off Mag-Tools Looter
 			try
@@ -130,11 +219,13 @@ namespace GearFoundry
 			{
 				if(!bItemHudEnabled) {return;}
         		int PossibleItemID = Convert.ToInt32(pMsg["object"]);
-        		//Read and report manual IDs, but keep them out of 
+        		
+        		//Read and report manual IDs, but keep them out of the item list
         		if(PossibleItemID == Host.Actions.CurrentSelection && bReportItemStrings)
         		{
         			ManualCheckItemForMatches(new IdentifiedObject(Core.WorldFilter[PossibleItemID]));
         		}
+        		
         		if(!ItemIDListenList.Contains(PossibleItemID)) {return;}
         		CheckItemForMatches(new IdentifiedObject(Core.WorldFilter[PossibleItemID]));
 			} 
@@ -151,7 +242,7 @@ namespace GearFoundry
 				WorldObject[] ContainerContents = Core.WorldFilter.GetByContainer(container.Id).ToArray();
 				foreach(WorldObject wo in ContainerContents)
 				{
-					if(ItemExclusionList.FindIndex(x => x == wo.Id) < 0)
+					if(!ItemExclusionList.Any(x => x == wo.Id))
 					{
 						mOpenContainer.ContainerIOs.Add(new IdentifiedObject(wo));
 					}
@@ -172,7 +263,7 @@ namespace GearFoundry
 		
 
 		
-		void SeparateItemsToID(IdentifiedObject IOItem)
+		private void SeparateItemsToID(IdentifiedObject IOItem)
 		{
 			try
 			{
@@ -180,8 +271,7 @@ namespace GearFoundry
 				if(!IOItem.isvalid)
 				{
 					IOItem.IOR = IOResult.nomatch;
-					ItemExclusionList.Add(IOItem.Id);
-					mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
+					mOpenContainer.ContainerIOs.RemoveAll(x => !x.isvalid);
 					StillLootingCheck();
 					return;
 				}
@@ -246,9 +336,10 @@ namespace GearFoundry
 							mOpenContainer.ContainerIOs[mOpenContainer.ContainerIOs.FindIndex(x => x.Id == IOItem.Id)].IOR = IOResult.unknown;
 							ItemIDListenList.Add(IOItem.Id);
 							return;	
-					}
-					CheckItemForMatches(IOItem);
-					
+						default:
+							CheckItemForMatches(IOItem);
+							return;				
+					}		
 				}
 			} catch (Exception ex) {LogError(ex);} 
 			return;
@@ -256,7 +347,7 @@ namespace GearFoundry
 		
 		
 		
-		void CheckItemForMatches(IdentifiedObject IOItem)
+		private void CheckItemForMatches(IdentifiedObject IOItem)
 		{
 			try
 			{
@@ -267,11 +358,17 @@ namespace GearFoundry
 				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
+				
+				if(IOItem.IOR != IOResult.unknown)
+				{
+					ItemTrackingList.Add(IOItem);
+				}
+				
 			}catch{}		
 		}	
 		
 		
-		void ManualCheckItemForMatches(IdentifiedObject IOItem)
+		private void ManualCheckItemForMatches(IdentifiedObject IOItem)
 		{
 			try
 			{
@@ -284,6 +381,7 @@ namespace GearFoundry
 				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
 				
 				ReportStringToChat(IOItem.LinkString());
+				ReportStringToChat(IOItem.ModString());
 			}catch{}
 		}
 		
@@ -293,7 +391,7 @@ namespace GearFoundry
 			//TODO:  Refine this to make more useful if there is a community request
 			try
 			{
-				if(!bscrolls7Enabled) 
+				if(!GISettings.CheckForL7Scrolls) 
 				{
 					IOScroll.IOR = IOResult.nomatch;
 					return;
@@ -323,8 +421,7 @@ namespace GearFoundry
 					where (namecheck.ToLower().Contains((string)XTrophies.Element("key").Value.ToLower()) && !Convert.ToBoolean(XTrophies.Element("isexact").Value)) ||
 					(namecheck == (string)XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value))
 							  select XTrophies;
-				
-				
+					
 				if(matches.Count() > 0)
 				{
 					IOItem.IOR = IOResult.trophy;
@@ -337,21 +434,20 @@ namespace GearFoundry
 		{
 			try
 			{
-				//reference pointers and Linq functions don't mix
 				IdentifiedObject IoItemSalvageMirror = IOItemSalvage;
 				
 				if(IOItemSalvage.SalvageWorkmanship > 0)
 				{
-					//If an active rule exists for this salvage type, review it for a match.  
 					var salvagerulecheck = from allrules in SalvageRulesList
-										where (allrules.material == IoItemSalvageMirror.IntValues(LongValueKey.Material)) &&
+						where (allrules.material == IoItemSalvageMirror.Matieral) &&
 												(IoItemSalvageMirror.SalvageWorkmanship >= allrules.minwork) &&
-						       					(IoItemSalvageMirror.SalvageWorkmanship <= (allrules.maxwork +0.99))
+												(IoItemSalvageMirror.SalvageWorkmanship <= (allrules.maxwork +0.99))
 										select allrules;
 					
 					if(salvagerulecheck.Count() > 0)
 					{
 						IOItemSalvage.IOR = IOResult.salvage;
+						IOItemSalvage.rulename = salvagerulecheck.First().ruleid;
 					}
 				}
 			}
@@ -556,10 +652,9 @@ namespace GearFoundry
 					{
 						if(rule.RuleArmorLevel > IOItemWithID.ArmorLevel) {RuleName = String.Empty; goto Next;}
 					}
-//					//Armor Types
+//					//Irquk:  Confirmed functional
 					if(rule.RuleArmorTypes.Length > 0)
 					{
-						WriteToChat("RAT L = " + rule.RuleArmorTypes.Length.ToString());
 						foreach(int armor in rule.RuleArmorTypes)
 						{
 							WriteToChat(ArmorIndex[armor].name);
@@ -722,6 +817,7 @@ namespace GearFoundry
 						return;
 					case IOResult.salvage:
 						ItemTrackingList.Add(IOItem);
+						SalvageItemsList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
 						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
 						StillLootingCheck();
@@ -805,6 +901,17 @@ namespace GearFoundry
 		private HudButton ItemHudUstButton = null;
 		
 		private const int ItemRemoveCircle = 0x60011F8;
+		private const int ItemUstIcon = 0x60026BA;
+		
+		private HudCheckBox InspectorIdentifySalvage = null;
+		private HudCheckBox InspectorAutoLoot = null;
+		private HudCheckBox InspectorAutoAetheria = null;
+		private HudCheckBox InspectorAutoCombine = null;
+		private HudCheckBox InspectorAutoStack = null;
+		private HudCheckBox InspectorModifiedLooting = null;
+		private HudCheckBox InspectorGearScore = null;
+		private HudCheckBox InspectorCheckForL7Scrolls = null;
+		
 			
     	private void RenderItemHud()
     	{
@@ -910,8 +1017,50 @@ namespace GearFoundry
     	{
     		try
     		{
+
+    			InspectorIdentifySalvage = new HudCheckBox();
+    			InspectorIdentifySalvage.Text = "Identify Salvage";
+    			ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0,0,150,16));
+    			InspectorIdentifySalvage.Checked = GISettings.IdentifySalvage;
     			
+    			InspectorAutoLoot = new HudCheckBox();
+    			InspectorAutoLoot.Text = "Automatically Loot Items";
+    			ItemHudSettingsLayout.AddControl(InspectorAutoLoot, new Rectangle(0,18,150,16));
+    			InspectorAutoLoot.Checked = GISettings.AutoLoot;
+    			
+    			InspectorAutoAetheria = new HudCheckBox();
+    			InspectorAutoAetheria.Text = "Loot and Dessicate Junk Aetheria";
+    			ItemHudSettingsLayout.AddControl(InspectorAutoAetheria, new Rectangle(0,36,150,16));
+    			InspectorAutoAetheria.Checked = GISettings.AutoAetheria;
+    			
+    			InspectorAutoCombine = new HudCheckBox();
+    			InspectorAutoCombine.Text = "AutoCombine Looted Salvage";
+    			ItemHudSettingsLayout.AddControl(InspectorAutoCombine, new Rectangle(0,54,150,16));
+    			InspectorAutoCombine.Checked = GISettings.AutoCombine;
+    			
+    			InspectorAutoStack = new HudCheckBox();
+    			InspectorAutoStack.Text = "AutoStack Looted Items";
+    			ItemHudSettingsLayout.AddControl(InspectorAutoStack, new Rectangle(0,72,150,16));
+    			InspectorAutoStack.Checked = GISettings.AutoStack;
+    			
+    			InspectorModifiedLooting = new HudCheckBox();
+    			InspectorModifiedLooting.Text = "Enabled Modified Looting";
+    			ItemHudSettingsLayout.AddControl(InspectorModifiedLooting, new Rectangle(0,90,150,16));
+    			InspectorModifiedLooting.Checked = GISettings.ModifiedLooting;
+    			
+    			InspectorGearScore = new HudCheckBox();
+    			InspectorGearScore.Text = "Use GearScore Report Strings";
+    			ItemHudSettingsLayout.AddControl(InspectorGearScore, new Rectangle(0,108,150,16));
+    			InspectorGearScore.Checked = GISettings.GearScore;
+    			
+    			InspectorCheckForL7Scrolls = new HudCheckBox();
+    			InspectorCheckForL7Scrolls.Text = "Loot Unknown L7 Spells";
+    			ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0,126,150,16));
+    			InspectorCheckForL7Scrolls.Checked = GISettings.CheckForL7Scrolls;
+    			  			
     			InspectorSettingsTab = true;
+    			
+   
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -964,8 +1113,7 @@ namespace GearFoundry
     	
     	
     	private void DisposeItemHud()
-    	{
-    			
+    	{    			
     		try
     		{
     			UnsubscribeLootEvents();
@@ -986,33 +1134,11 @@ namespace GearFoundry
 			{
     			if(col == 0)
     			{
-    				Host.Actions.SelectItem(ItemTrackingList[row].Id);
-    				int textcolor;
-    				switch(ItemTrackingList[row].IOR)
-    				{
-    					case IOResult.lifestone:
-    						textcolor = 13;
-    						break;
-    					case IOResult.monster:
-    						textcolor = 6;
-    						break;
-    					case IOResult.allegplayers:
-    						textcolor = 13;
-    						break;
-    					case IOResult.npc:
-    						textcolor = 3;
-    						break;
-    					default:
-    						textcolor = 2;
-    						break;
-    				}
-    				
-    				
-    				HudToChat(ItemTrackingList[row].LinkString(), textcolor);
+    				Core.Actions.MoveItem(ItemTrackingList[row].Id,Core.CharacterFilter.Id,0,true);		
     			}
     			if(col == 1)
     			{
-    				Host.Actions.UseItem(ItemTrackingList[row].Id, 0);
+    				HudToChat(ItemTrackingList[row].LinkString(), 1);
     			}
     			if(col == 2)
     			{    				
@@ -1027,24 +1153,39 @@ namespace GearFoundry
 	    private void UpdateItemHud()
 	    {  	
 	    	try
-	    	{    		
-	    		ItemHudInspectorList.ClearRows();
-	    		   	    		
-	    	    foreach(IdentifiedObject spawn in ItemTrackingList)
-	    	    {
-	    	    	ItemHudListRow = ItemHudInspectorList.AddRow();
-	    	    	
-	    	    	((HudPictureBox)ItemHudListRow[0]).Image = spawn.Icon + 0x6000000;
-	    	    	((HudStaticText)ItemHudListRow[1]).Text = spawn.IORString() + spawn.Name;
-	    	    	if(spawn.IOR == IOResult.trophy) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.SlateGray;}
-	    	    	if(spawn.IOR == IOResult.lifestone) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Blue;}
-	    	    	if(spawn.IOR == IOResult.monster) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Orange;}
-	    	    	if(spawn.IOR == IOResult.npc) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Yellow;}
-	    	    	if(spawn.IOR == IOResult.portal)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Purple;}
-	    	    	if(spawn.IOR == IOResult.players)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.AntiqueWhite;}
-	    	    	if(spawn.IOR == IOResult.allegplayers)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.DarkSlateBlue;}
-					((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;
-	    	    }
+	    	{    
+	    		if(InspectorTab)
+	    		{
+		    		ItemHudInspectorList.ClearRows();
+		    		   	    		
+		    	    foreach(IdentifiedObject item in ItemTrackingList)
+		    	    {
+		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();
+		    	    	
+		    	    	((HudPictureBox)ItemHudListRow[0]).Image = item.Icon + 0x6000000;
+		    	    	((HudStaticText)ItemHudListRow[1]).Text = item.IORString() + item.Name;
+		    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Wheat;}
+		    	    	if(item.IOR == IOResult.salvage) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleVioletRed;}
+		    	    	if(item.IOR == IOResult.val) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleGoldenrod;}
+		    	    	if(item.IOR == IOResult.spell) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Lavender;}
+		    	    	if(item.IOR == IOResult.rule)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.LightGreen;}
+		    	    	if(item.IOR == IOResult.rare)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.HotPink;}
+		    	    	if(item.IOR == IOResult.manatank)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.CornflowerBlue;}
+						((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;
+		    	    }
+	    		}
+	    		if(InspectorUstTab)
+	    		{
+	    			foreach(IdentifiedObject ustitem in SalvageItemsList)
+	    			{
+	    				ItemHudListRow = ItemHudUstList.AddRow();
+	    				((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;
+	    				((HudStaticText)ItemHudListRow[1]).Text = ustitem.IORString() + ustitem.Name;
+	    				((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;
+	    				
+	    			}
+	    		}
+	    		
 	       	}catch(Exception ex){WriteToChat(ex.ToString());}
 	    	
 	    }
@@ -1134,16 +1275,6 @@ namespace GearFoundry
 						tRule.RuleDamageTypes = sumarray.Sum();
 					}
 					
-					if(!Double.TryParse(XRule.Element("McModAttack").Value, out tRule.RuleMcModAttack)){tRule.RuleMcModAttack = 0;}
-					tRule.ModADD += (int)tRule.RuleMcModAttack;  //Get the int for ModADD
-					if(tRule.RuleMcModAttack > 0) {tRule.RuleMcModAttack += (tRule.RuleMcModAttack*0.01) + 1;}  //convert for direct comparison
-					if(!Double.TryParse(XRule.Element("MeleeDef").Value, out tRule.RuleMeleeD)){tRule.RuleMeleeD = 0;}
-					tRule.ModADD += (int)tRule.RuleMeleeD;
-					if(tRule.RuleMeleeD > 0) {tRule.RuleMeleeD = (tRule.RuleMeleeD*0.01) + 1;}  //convert for direct comparison
-					if(!Double.TryParse(XRule.Element("MagicDef").Value, out tRule.RuleMagicD)){tRule.RuleMagicD = 0;}
-					tRule.ModADD += (int)tRule.RuleMagicD;
-					if(tRule.RuleMagicD != 0) {tRule.RuleMagicD = (tRule.RuleMagicD*0.01) + 1;}  //convert for direct comparison
-	
 					splitstringEnabled = (XRule.Element("WieldEnabled").Value).Split(',');
 					splitstringWield = (XRule.Element("ReqSkill").Value).Split(',');
 					splitstringDamage = (XRule.Element("MinMax").Value).Split(',');
@@ -1334,10 +1465,6 @@ namespace GearFoundry
 							if(tempint > 0) {CombineIntList.Add(tempint);}
 						}
 					}
-					foreach(int spel in CombineIntList)
-					{
-						WriteToChat("IntList " + spel);
-					}
 					tRule.RuleSpells = CombineIntList.ToArray();
 	
 					CombineIntList.Clear();
@@ -1349,10 +1476,76 @@ namespace GearFoundry
 					
 					ItemRulesList.Add(tRule);	
 				}
-				WriteToChat("ItemRulesList:  " + ItemRulesList.Count().ToString());
 				
 			} catch(Exception ex1){WriteToChat(ex1.ToString());}
 		}
+			
+		private class ModifiedRule
+		{
+			public bool RuleEnabled; 
+	        public int RulePriority; 
+	        public int RuleAppliesTo;
+	        public string RuleName; 
+	        public List<string> RuleKeyWords = new List<string>();
+	        public List<string> RuleKeyWordsNot = new List<string>();
+	      
+	        public int RuleWieldLevel;
+	        public int RuleItemLevel;
+	        
+	       	public int RuleWieldAttribute;
+	        public int RuleMastery;
+	        
+	        public int RuleDamageTypes;
+	        
+	        public int WeaponModifiers;
+	        
+	        
+	        public bool RuleRed;
+	        public bool RuleYellow;
+	        public bool RuleBlue;
+	        	        
+
+	        
+	        public bool RuleWeaponEnabledA;
+	        public bool MSCleaveA;
+	        public int WieldReqValueA;
+	        public int MaxDamageA;
+	        public double VarianceA;
+	        public bool RuleWeaponEnabledB;
+	        public bool MSCleaveB;
+	        public int WieldReqValueB;
+	        public int MaxDamageB;
+	        public double VarianceB;
+	        public bool RuleWeaponEnabledC;
+	        public bool MSCleaveC;
+	        public int WieldReqValueC;
+	        public int MaxDamageC;
+	        public double VarianceC;
+	        public bool RuleWeaponEnabledD;
+	        public bool MSCleaveD;
+	        public int WieldReqValueD;
+	        public int MaxDamageD;
+	        public double VarianceD;
+	        
+	        public int RuleArmorLevel;
+	        public int[] RuleArmorTypes;
+	        public int[] RuleArmorSet;
+	        public int RuleArmorCoverage;
+	        public bool RuleUnenchantable;
+	        
+	        public int RuleEssenceLevel;
+	        public int RuleEssenceDamage;
+	        public int RuleEssenceDamageResist;
+	        public int RuleEssenceCrit;
+	        public int RuleEssenceCritResist;
+	        public int RuleEssenceCritDam;
+	        public int RuleEssenceCritDamResist;
+
+	        public int[] RuleSpells;
+	        public int RuleSpellNumber; 
+			
+		}
+		
 		
 		
 		private class ItemRule
@@ -1416,18 +1609,7 @@ namespace GearFoundry
 	        public int RuleEssenceCritDamResist;
 
 	        public int[] RuleSpells;
-	        public int RuleSpellNumber; 
-
-			public int ModADD = 0;	        
-	        
-			
-		}
-		
-		
-		
-		
-		
-		
-		
+	        public int RuleSpellNumber;         		
+		}	
 	}
 }

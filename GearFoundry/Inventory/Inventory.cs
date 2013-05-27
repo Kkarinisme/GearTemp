@@ -122,7 +122,7 @@ namespace GearFoundry
 
 
                     }
-                    catch (Exception ex) { mgoonInv = false; doGetInventory(); }
+                    catch (Exception ex) { mgoonInv = false; doGetInventory(); LogError(ex);}
 
 
                 }

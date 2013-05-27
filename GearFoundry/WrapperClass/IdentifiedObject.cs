@@ -87,7 +87,49 @@ namespace GearFoundry
 			public bool notify;
 			public string rulename;
 			public double DistanceAway;
-//			public rule matched_rule;
+			public double GearScore
+			{
+				get
+				{
+					switch(wo.ObjectClass)
+					{
+						case ObjectClass.Gem:
+							if(Aetheriacheck) {return (double)MaxItemLevel;}
+							return 0;
+						case ObjectClass.Clothing:
+							if(WieldSlot == 0x8000000) {return (double)MaxItemLevel;}
+							if(ArmorLevel > 0) {return ArmorLevelComaparison;}
+							return 0;
+
+						case ObjectClass.Armor:
+							return ArmorLevelComaparison;
+
+						case ObjectClass.MeleeWeapon:
+							return DamageComparison + WeaponModifiers;
+
+						case ObjectClass.MissileWeapon:
+							return DamageComparison + WeaponModifiers;
+
+						case ObjectClass.WandStaffOrb:
+							return DamageComparison + WeaponModifiers;
+						
+						case ObjectClass.Misc:
+							if(wo.Name.ToLower().Contains("essence")) { return EssenceComparison;}
+							return 0;
+						default:
+							return 0;
+
+					}
+				}
+			}
+			
+			public string ExtendedGearScore;
+			
+			public string GearScoreString()
+			{
+				if(GearScore > 0) {return "{GS " + GearScore.ToString("N0") + "} ";}
+				else return String.Empty;
+			}
 			
 			public List<DebuffSpell> DebuffSpellList = new List<DebuffSpell>();
 						
@@ -137,7 +179,7 @@ namespace GearFoundry
 					case IOResult.npc:
 						return "(NPC) ";
 					case IOResult.salvage:
-						return "(Salvage) ";
+						return "(" + rulename + ") ";
 					default:
 						return String.Empty;
 				}
@@ -157,6 +199,403 @@ namespace GearFoundry
 			private int mStaminaCurrent;
 			private int mManaMax;
 			private int mManaCurrent;
+			
+			public double EssenceComparison
+			{
+				get
+				{
+					return EssenceCrit + EssenceCritDam + EssenceCritDamResist + EssenceCritResist + EssenceDam + EssenceDamResist;
+				}
+			}
+			
+			
+			//Modified Looting Properties (calculated)
+			public double WeaponModifiers
+			{
+				get
+				{	
+					double modsum = 0;
+					double cantripattackboosters = 0;
+					double cantripdefenseboosters = 0;
+					double cantripmanaconversionboosters = 0;
+					
+					if(wo.DoubleKeys.Contains((int)DoubleValueKey.MeleeDefenseBonus)){modsum += (wo.Values(DoubleValueKey.MeleeDefenseBonus) - 1) * 100;}
+					if(wo.DoubleKeys.Contains((int)DoubleValueKey.AttackBonus)) {modsum += (wo.Values(DoubleValueKey.AttackBonus) - 1) * 100;}
+					if(wo.DoubleKeys.Contains((int)DoubleValueKey.ManaCBonus)) {modsum += wo.Values(DoubleValueKey.ManaCBonus) * 100;}
+					if(wo.DoubleKeys.Contains((int)DoubleValueKey.MagicDBonus)) {modsum += (wo.Values(DoubleValueKey.MagicDBonus) - 1) * 100;}
+					if(wo.DoubleKeys.Contains((int)DoubleValueKey.MissileDBonus)){modsum += (wo.Values(DoubleValueKey.MissileDBonus) -1 ) * 100;}	
+					
+					if(wo.SpellCount > 0)
+					{
+						for(int i = 0; i <= wo.SpellCount -1; i++)
+						{				
+							if(wo.Spell(i) == 6094 && cantripattackboosters < 9){cantripattackboosters = 9;}
+							else if(wo.Spell(i) == 4666 && cantripattackboosters < 7){cantripattackboosters = 7;}
+							else if(wo.Spell(i) == 2591 && cantripattackboosters < 5) {cantripattackboosters = 5;}
+							else if(wo.Spell(i) == 2603 && cantripattackboosters < 3) {cantripattackboosters = 3;}
+							
+							if(wo.Spell(i) == 6091 && cantripdefenseboosters < 9){cantripdefenseboosters = 9;}
+							else if(wo.Spell(i) == 4663 && cantripdefenseboosters < 7){cantripdefenseboosters = 7;}
+							else if(wo.Spell(i) == 2588 && cantripdefenseboosters < 5) {cantripdefenseboosters = 5;}
+							else if(wo.Spell(i) == 2600 && cantripdefenseboosters < 3) {cantripdefenseboosters = 3;}	
+							
+							if(wo.ObjectClass == ObjectClass.WandStaffOrb)
+							{
+								if(wo.Spell(i) == 6087 && cantripmanaconversionboosters < 30){cantripmanaconversionboosters = 30;}
+								else if(wo.Spell(i) == 6086 && cantripmanaconversionboosters < 25){cantripmanaconversionboosters = 25;}
+								else if(wo.Spell(i) == 3200 && cantripmanaconversionboosters < 20){cantripmanaconversionboosters = 20;}
+								else if(wo.Spell(i) == 3202 && cantripmanaconversionboosters < 20){cantripmanaconversionboosters = 15;}
+								else if(wo.Spell(i) == 3199 && cantripmanaconversionboosters < 10){cantripmanaconversionboosters = 10;}
+								else if(wo.Spell(i) == 3201 && cantripmanaconversionboosters < 5){cantripmanaconversionboosters = 5;}
+							}
+						}
+					}						
+					return modsum + cantripattackboosters + cantripdefenseboosters + ((wo.Values(DoubleValueKey.ManaCBonus) * 100) * (cantripmanaconversionboosters * .01));
+				}
+			}
+			
+			public string WeaponModString()
+			{
+				if(WeaponModifiers > 0) {return " WepMods: " + WeaponModifiers.ToString("N1");}
+				else {return String.Empty;}
+				
+			}
+			
+			public double ArmorLevelComaparison
+			{
+				get 
+				{
+					if(wo.Values(LongValueKey.Unenchantable) > 0)
+					{
+						double steelvalue = wo.Values(LongValueKey.ArmorLevel) / 20;
+						double cantripsteelbonus = 0;
+						double enchantmentsteelbonus = 0;
+						double protectionpenatly = 0;
+						double tinkersavailable = 10;
+						
+						
+						double slashbase = wo.Values(DoubleValueKey.SlashProt);
+						double piercebase = wo.Values(DoubleValueKey.PierceProt);
+						double bludgebase = wo.Values(DoubleValueKey.BludgeonProt);
+						double acidbase = wo.Values(DoubleValueKey.AcidProt);
+						double coldbase = wo.Values(DoubleValueKey.ColdProt);
+						double firebase = wo.Values(DoubleValueKey.FireProt);
+						double lightbase = wo.Values(DoubleValueKey.LightningProt);
+						
+						double slashtinksbonus = 0;
+						double piercetinksbonus = 0;
+						double bludgtinksbonus = 0;
+						double acidtinksbonus = 0;
+						double coldtinksbonus = 0;
+						double firetinksbonus = 0;
+						double lighttinksbonus = 0;
+						
+						double scbonus = 0;
+						double sebonus = 0;
+						double pcbonus = 0;
+						double pebonus = 0;
+						double bcbonus = 0;						
+						double bebonus = 0;
+						double acbonus = 0;
+						double aebonus = 0;
+						double ccbonus = 0;
+						double cebonus = 0;
+						double fcbonus = 0;
+						double febonus = 0;
+						double lcbonus = 0;
+						double lebonus = 0;
+						
+						if(wo.SpellCount > 0)
+						{
+							for(int i = 0; i <= wo.SpellCount -1; i++)
+							{				
+								//Armor Level modifers
+								if(wo.Spell(i) == 6095 && cantripsteelbonus < 4){cantripsteelbonus = 4;}
+								else if(wo.Spell(i) == 4667 && cantripsteelbonus < 3){cantripsteelbonus = 3;}
+								else if(wo.Spell(i) == 2592 && cantripsteelbonus < 2){cantripsteelbonus = 2;}
+								else if(wo.Spell(i) == 2604 && cantripsteelbonus < 1){cantripsteelbonus = 1;}								
+								if(wo.Spell(i) == 4407 && enchantmentsteelbonus < 12){enchantmentsteelbonus = 12;}
+								else if(wo.Spell(i) == 3908 && enchantmentsteelbonus < 12){enchantmentsteelbonus = 12;}
+								else if(wo.Spell(i) == 2108 && enchantmentsteelbonus < 11){enchantmentsteelbonus = 11;}
+								else if(wo.Spell(i) == 1486 && enchantmentsteelbonus < 10){enchantmentsteelbonus = 10;}
+								else if(wo.Spell(i) == 1485 && enchantmentsteelbonus < 7.5){enchantmentsteelbonus = 7.5;}
+								else if(wo.Spell(i) == 1484 && enchantmentsteelbonus < 5){enchantmentsteelbonus = 5;}
+								else if(wo.Spell(i) == 1483 && enchantmentsteelbonus < 3.75){enchantmentsteelbonus = 3.75;}
+								else if(wo.Spell(i) == 1482 && enchantmentsteelbonus < 2.5){enchantmentsteelbonus = 2.5;}
+								else if(wo.Spell(i) == 51 && enchantmentsteelbonus < 1){enchantmentsteelbonus = 1;}
+								
+								
+								//Slash modifiers
+								if(wo.Spell(i) == 4293 && sebonus < 2){sebonus = 2;}
+								else if(wo.Spell(i) == 2094 && sebonus < 1.70){sebonus = 1.7;}
+								else if(wo.Spell(i) == 1562 && sebonus < 1.50){sebonus = 1.5;}
+								else if(wo.Spell(i) == 1561 && sebonus < 1.0){sebonus = 1.0;}
+								else if(wo.Spell(i) == 1560 && sebonus < 0.75){sebonus = 0.75;}
+								else if(wo.Spell(i) == 1559 && sebonus < 0.5){sebonus = 0.5;}
+								else if(wo.Spell(i) == 1568 && sebonus < 0.25){sebonus = 0.25;}
+								else if(wo.Spell(i) == 37 && sebonus < 0.1){sebonus = 0.1;}
+								if(wo.Spell(i) == 6097 && scbonus < 0.25){scbonus = 0.25;}
+								else if(wo.Spell(i) == 4669 && scbonus < 0.2){scbonus = 0.2;}
+								else if(wo.Spell(i) == 2594 && scbonus < 0.15){scbonus = 0.15;}
+								else if(wo.Spell(i) == 2606 && scbonus < 0.1){scbonus = 0.1;}	
+								
+								//Pierce modifers
+								if(wo.Spell(i) == 4212 && pebonus < 2){pebonus = 2;}
+								else if(wo.Spell(i) == 2113 && pebonus < 1.70){pebonus = 1.7;}
+								else if(wo.Spell(i) == 1574 && pebonus < 1.50){pebonus = 1.5;}
+								else if(wo.Spell(i) == 1573 && pebonus < 1.0){pebonus = 1.0;}
+								else if(wo.Spell(i) == 1572 && pebonus < 0.75){pebonus = 0.75;}
+								else if(wo.Spell(i) == 1571 && pebonus < 0.5){pebonus = 0.5;}
+								else if(wo.Spell(i) == 1570 && pebonus < 0.25){pebonus = 0.25;}
+								else if(wo.Spell(i) == 1569 && pebonus < 0.1){pebonus = 0.1;}	
+								if(wo.Spell(i) == 6096 && pcbonus < 0.25){pcbonus = 0.25;}
+								else if(wo.Spell(i) == 4668 && pcbonus < 0.2){pcbonus = 0.2;}
+								else if(wo.Spell(i) == 2593 && pcbonus < 0.15){pcbonus = 0.15;}
+								else if(wo.Spell(i) == 2605 && pcbonus < 0.1){pcbonus = 0.1;}								
+								
+								//Bludgeon  modifers
+								if(wo.Spell(i) == 4397 && bebonus < 2){bebonus = 2;}
+								else if(wo.Spell(i) == 2098 && bebonus < 1.70){bebonus = 1.7;}
+								else if(wo.Spell(i) == 1516 && bebonus < 1.50){bebonus = 1.5;}
+								else if(wo.Spell(i) == 1515 && bebonus < 1.0){bebonus = 1.0;}
+								else if(wo.Spell(i) == 1514 && bebonus < 0.75){bebonus = 0.75;}
+								else if(wo.Spell(i) == 1513 && bebonus < 0.5){bebonus = 0.5;}
+								else if(wo.Spell(i) == 1512 && bebonus < 0.25){bebonus = 0.25;}
+								else if(wo.Spell(i) == 1511 && bebonus < 0.1){bebonus = 0.1;}	
+								if(wo.Spell(i) == 6090 && bcbonus < 0.25){bcbonus = 0.25;}
+								else if(wo.Spell(i) == 4662 && bcbonus < 0.2){bcbonus = 0.2;}
+								else if(wo.Spell(i) == 2587 && bcbonus < 0.15){bcbonus = 0.15;}
+								else if(wo.Spell(i) == 2599 && bcbonus < 0.1){bcbonus = 0.1;}
+								
+								//Acid modifers
+								if(wo.Spell(i) == 4391 && aebonus < 2){aebonus = 2;}
+								else if(wo.Spell(i) == 2092 && aebonus < 1.70){aebonus = 1.7;}
+								else if(wo.Spell(i) == 1498 && aebonus < 1.50){aebonus = 1.5;}
+								else if(wo.Spell(i) == 1497 && aebonus < 1.0){aebonus = 1.0;}
+								else if(wo.Spell(i) == 1496 && aebonus < 0.75){aebonus = 0.75;}
+								else if(wo.Spell(i) == 1495 && aebonus < 0.5){aebonus = 0.5;}
+								else if(wo.Spell(i) == 1494 && aebonus < 0.25){aebonus = 0.25;}
+								else if(wo.Spell(i) == 1493 && aebonus < 0.1){aebonus = 0.1;}	
+								if(wo.Spell(i) == 6088 && acbonus < 0.25){acbonus = 0.25;}
+								else if(wo.Spell(i) == 4660 && acbonus < 0.2){acbonus = 0.2;}
+								else if(wo.Spell(i) == 2585 && acbonus < 0.15){acbonus = 0.15;}
+								else if(wo.Spell(i) == 2597 && acbonus < 0.1){acbonus = 0.1;}
+								
+								//Fire modifers
+								if(wo.Spell(i) == 4401 && febonus < 2){febonus = 2;}
+								else if(wo.Spell(i) == 2102 && febonus < 1.70){febonus = 1.7;}
+								else if(wo.Spell(i) == 1552 && febonus < 1.50){febonus = 1.5;}
+								else if(wo.Spell(i) == 1551 && febonus < 1.0){febonus = 1.0;}
+								else if(wo.Spell(i) == 1550 && febonus < 0.75){febonus = 0.75;}
+								else if(wo.Spell(i) == 1549 && febonus < 0.5){febonus = 0.5;}
+								else if(wo.Spell(i) == 1548 && febonus < 0.25){febonus = 0.25;}
+								else if(wo.Spell(i) == 1547 && febonus < 0.1){febonus = 0.1;}	
+								if(wo.Spell(i) == 6092 && fcbonus < 0.25){fcbonus = 0.25;}
+								else if(wo.Spell(i) == 4664 && fcbonus < 0.2){fcbonus = 0.2;}
+								else if(wo.Spell(i) == 2589 && fcbonus < 0.15){fcbonus = 0.15;}
+								else if(wo.Spell(i) == 2601 && fcbonus < 0.1){fcbonus = 0.1;}
+								
+								//Cold modifers
+								if(wo.Spell(i) == 4403 && cebonus < 2){cebonus = 2;}
+								else if(wo.Spell(i) == 2104 && cebonus < 1.70){cebonus = 1.7;}
+								else if(wo.Spell(i) == 1528 && cebonus < 1.50){cebonus = 1.5;}
+								else if(wo.Spell(i) == 1527 && cebonus < 1.0){cebonus = 1.0;}
+								else if(wo.Spell(i) == 1526 && cebonus < 0.75){cebonus = 0.75;}
+								else if(wo.Spell(i) == 1525 && cebonus < 0.5){cebonus = 0.5;}
+								else if(wo.Spell(i) == 1524 && cebonus < 0.25){cebonus = 0.25;}
+								else if(wo.Spell(i) == 1523 && cebonus < 0.1){cebonus = 0.1;}	
+								if(wo.Spell(i) == 6093 && ccbonus < 0.25){ccbonus = 0.25;}
+								else if(wo.Spell(i) == 4665 && ccbonus < 0.2){ccbonus = 0.2;}
+								else if(wo.Spell(i) == 2590 && ccbonus < 0.15){ccbonus = 0.15;}
+								else if(wo.Spell(i) == 2602 && ccbonus < 0.1){ccbonus = 0.1;}
+								
+								//Lightning modifers
+								if(wo.Spell(i) == 4409 && lebonus < 2){lebonus = 2;}
+								else if(wo.Spell(i) == 2110 && lebonus < 1.70){lebonus = 1.7;}
+								else if(wo.Spell(i) == 1540 && lebonus < 1.50){lebonus = 1.5;}
+								else if(wo.Spell(i) == 1539 && lebonus < 1.0){lebonus = 1.0;}
+								else if(wo.Spell(i) == 1538 && lebonus < 0.75){lebonus = 0.75;}
+								else if(wo.Spell(i) == 1537 && lebonus < 0.5){lebonus = 0.5;}
+								else if(wo.Spell(i) == 1536 && lebonus < 0.25){lebonus = 0.25;}
+								else if(wo.Spell(i) == 1535 && lebonus < 0.1){lebonus = 0.1;}	
+								if(wo.Spell(i) == 6099 && lcbonus < 0.25){lcbonus = 0.25;}
+								else if(wo.Spell(i) == 4671 && lcbonus < 0.2){lcbonus = 0.2;}
+								else if(wo.Spell(i) == 2595 && lcbonus < 0.15){lcbonus = 0.15;}
+								else if(wo.Spell(i) == 2607 && lcbonus < 0.1){lcbonus = 0.1;}	
+							}
+						}
+						
+						slashtinksbonus = (slashbase + slashbase * sebonus + slashbase * scbonus) / 0.2;
+						piercetinksbonus = (piercebase + piercebase * pebonus + piercebase * pcbonus) / 0.2; 
+						bludgtinksbonus = (bludgebase + bludgebase * bebonus + bludgebase * bcbonus) / 0.2;
+						acidtinksbonus = (acidbase + acidbase * aebonus + acidbase * acbonus) / 0.4;
+						coldtinksbonus = (coldbase + coldbase * cebonus + coldbase * ccbonus) / 0.4;
+						firetinksbonus = (firebase + firebase * febonus + firebase * fcbonus) / 0.4;
+						lighttinksbonus = (lightbase + lightbase * lebonus + lightbase * lcbonus) / 0.4;
+						
+						if(slashtinksbonus < 10) {protectionpenatly += 10 - slashtinksbonus;}
+						if(piercetinksbonus < 10) {protectionpenatly += 10 - piercetinksbonus;}
+						if(bludgtinksbonus < 10) {protectionpenatly += 10 - bludgtinksbonus;}
+						if(acidtinksbonus < 5) {protectionpenatly += 5 - acidtinksbonus;}
+						if(firetinksbonus < 5) {protectionpenatly += 5 - firetinksbonus;}
+						if(lighttinksbonus < 5) {protectionpenatly += 5 - lighttinksbonus;}
+						if(coldtinksbonus < 5) {protectionpenatly += 5 - coldtinksbonus;}
+						
+						return steelvalue + cantripsteelbonus + enchantmentsteelbonus + tinkersavailable - wo.Values(LongValueKey.NumberTimesTinkered) - protectionpenatly;
+						
+					}
+					else
+					{
+						double steelvalue = wo.Values(LongValueKey.ArmorLevel) / 20;
+						double cantripsteelbonus = 0;
+						double tinerkersavaible = 10;
+						if(wo.SpellCount > 0)
+						{
+							for(int i = 0; i <= wo.SpellCount -1; i++)
+							{				
+								if(wo.Spell(i) == 6095 && cantripsteelbonus < 4){cantripsteelbonus = 4;}
+								else if(wo.Spell(i) == 4667 && cantripsteelbonus < 3){cantripsteelbonus = 3;}
+								else if(wo.Spell(i) == 2592 && cantripsteelbonus < 2){cantripsteelbonus = 2;}
+								else if(wo.Spell(i) == 2604 && cantripsteelbonus < 1){cantripsteelbonus = 1;}
+							}
+						}
+						return steelvalue + cantripsteelbonus + tinerkersavaible - wo.Values(LongValueKey.NumberTimesTinkered);
+						
+					}
+					
+				}
+				
+			}
+			
+			public string ArmorLevelComaparisonString()
+			{
+				return " ArmorScore " + ArmorLevelComaparison.ToString("N1");
+			}
+
+			public double DamageComparison
+			{
+				get
+				{
+					if(wo.ObjectClass == ObjectClass.MeleeWeapon)
+					{
+						double availabletinks = 10;
+						double granitetinks = 0;
+						double fudgefactor = 1;
+						double mscleaveadjust = 1;
+						double cantripdamageboosters = 0;
+						
+						if(wo.Values(LongValueKey.WieldReqAttribute) == 44)
+						{
+							//Best Heavy Weapon (420): 0.29 variance and 63 damage
+							//Best Heavy Weapon (420) UA: 0.44 Variance and 55 damage
+							//Best Heavy Weapon (420) MS: 0.4 Variance and 34 damage
+							//Target weapon (420) == 0.33 Variance and 73 damage (approximate tinks of granite to make it Best 420 normal
+							//MS and UA are fudged for animation time since I do not know it exactly
+							for(int i = 0; i < 10; i++)
+							{
+								if((wo.Values(DoubleValueKey.Variance) * Math.Pow(0.80,i)) < 0.33) {granitetinks = i; break;}
+							}
+							if(MSCleave){mscleaveadjust = 2; fudgefactor = 0.9480;}
+							if(WeaponMasteryCategory == 1) {fudgefactor = 1.158;}
+						}
+						if(wo.Values(LongValueKey.WieldReqAttribute) == 45 || wo.Values(LongValueKey.WieldReqAttribute) == 46)
+						{
+							//Best L/F Weapon (420): 0.23 Variance and 50 damage
+							//Best L/F Weapon (420) UA: 0.43 Variance and 44 damage
+							//Best L/F Weapon (420) MS: 0.24 Variance and 24 damage
+							//Target Weapon (420) == 0.28 Variance and 60 damage
+							//MS and UA are fuged for animation times since I do know now them exactly
+							for(int i = 0; i < 10; i++)
+							{
+								if((wo.Values(DoubleValueKey.Variance) * Math.Pow(0.80,i)) < 0.28) {granitetinks = i; break;}
+							}
+							//Double the max damage if it is a cleaving/multistrike for comparison
+							if(MSCleave){mscleaveadjust = 2; fudgefactor = 0.9666;}
+							if(WeaponMasteryCategory == 1) {fudgefactor = 1.153;}
+	
+							
+						}
+						if(wo.Values(LongValueKey.WieldReqAttribute) == 41)
+						{
+							//Best 2H Weapon (420):  0.3 Variance and 45 damage
+							//Best 2H Weapon (420) Cleave: 0.3 Variance 42 damage
+							//Target 2H Weapon (420):  0.3 Variance and 55 damage
+							//The double strike weapon (spear) is adjusted down just as the Multi-Strike ones are animated slower.
+							//TODO:  Go back and check this carefully, data from Thresher may not be properly separated.  I do not know if Spears return MSCleave true
+							if(!MSCleave){mscleaveadjust = .9454;}	
+						}
+						
+						if(wo.SpellCount > 0)
+						{
+							for(int i = 0; i <= wo.SpellCount -1; i++)
+							{				
+								if(wo.Spell(i) == 6089 && cantripdamageboosters < 10){cantripdamageboosters = 10;}
+								else if(wo.Spell(i) == 4661 && cantripdamageboosters < 7){cantripdamageboosters = 7;}
+								else if(wo.Spell(i) == 2586 && cantripdamageboosters < 4){cantripdamageboosters = 4;}
+								else if(wo.Spell(i) == 2598 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
+								else if(wo.Spell(i) == 2486 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
+							}
+						}					
+						return (wo.Values(LongValueKey.MaxDamage) * fudgefactor * mscleaveadjust) + (availabletinks - granitetinks) + cantripdamageboosters
+							- wo.Values(LongValueKey.NumberTimesTinkered);
+					}
+					
+					if(wo.ObjectClass == ObjectClass.MissileWeapon)
+					{
+						double availabletinks = 10;
+						double mahoganytinks = 0;
+						double cantripdamageboosters = 0;
+						
+						mahoganytinks = ((wo.Values(DoubleValueKey.DamageBonus) - 1) / 0.04);
+						
+						if(wo.SpellCount > 0)
+						{
+							for(int i = 0; i <= wo.SpellCount -1; i++)
+							{				
+								if(wo.Spell(i) == 6089 && cantripdamageboosters < 10){cantripdamageboosters = 10;}
+								else if(wo.Spell(i) == 4661 && cantripdamageboosters < 7){cantripdamageboosters = 7;}
+								else if(wo.Spell(i) == 2586 && cantripdamageboosters < 4){cantripdamageboosters = 4;}
+								else if(wo.Spell(i) == 2598 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
+								else if(wo.Spell(i) == 2486 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
+							}
+						}
+						
+						return mahoganytinks + availabletinks + cantripdamageboosters + (double)wo.Values(LongValueKey.ElementalDmgBonus) - wo.Values(LongValueKey.NumberTimesTinkered);										
+					}
+					
+					if(wo.ObjectClass == ObjectClass.WandStaffOrb)
+					{
+						double availabletinks = 10;
+						double cantripdamageboosters = 0;
+						double elementaldamagevsmonsters = 0;
+						
+						if(wo.SpellCount > 0)
+						{
+							for(int i = 0; i <= wo.SpellCount -1; i++)
+							{				
+								if(wo.Spell(i) == 6098 && cantripdamageboosters < 7){cantripdamageboosters = 7;}
+								else if(wo.Spell(i) == 4670 && cantripdamageboosters < 5){cantripdamageboosters = 5;}
+								else if(wo.Spell(i) == 3250 && cantripdamageboosters < 3){cantripdamageboosters = 3;}
+								else if(wo.Spell(i) == 3251 && cantripdamageboosters < 1) {cantripdamageboosters = 1;}
+							}
+						}
+						if(wo.DoubleKeys.Contains((int)DoubleValueKey.ElementalDamageVersusMonsters)){elementaldamagevsmonsters = ((wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) -1) * 100);}
+						
+						return availabletinks + elementaldamagevsmonsters  + cantripdamageboosters - wo.Values(LongValueKey.NumberTimesTinkered);
+					}
+									
+					
+					
+					
+					return 0;
+					
+					
+				}
+			}
+			public string DamageString()
+			{
+				return " Dam: " + DamageComparison.ToString("N0") ;
+			}
 			
 			//wo.properties used in loot selection
 			public int ArmorSet
@@ -278,6 +717,14 @@ namespace GearFoundry
 						}
 					}
 					else {return 0;}	
+				}
+			}
+			public int Matieral
+			{
+				get
+				{
+					if(wo.Values(LongValueKey.Material) > 0) { return wo.Values(LongValueKey.Material);}
+					else {return -1;}
 				}
 			}
 			public int ElementalDmgBonus 
@@ -810,7 +1257,9 @@ namespace GearFoundry
 				string strspells = string.Empty;
 				for (int i = 0; i <= wo.SpellCount - 1; i++) 
 				{
-					strspells += ", " + SpellIndex[wo.Spell(i)].spellname;
+					if(SpellIndex[wo.Spell(i)].spellname.ToLower().Contains("legendary")) {strspells += ", " + SpellIndex[wo.Spell(i)].spellname;}
+					if(SpellIndex[wo.Spell(i)].spellname.ToLower().Contains("epic")) {strspells += ", " + SpellIndex[wo.Spell(i)].spellname;}
+					if(SpellIndex[wo.Spell(i)].spellname.ToLower().Contains("major")) {strspells += ", " + SpellIndex[wo.Spell(i)].spellname;}
 				}
 				return strspells;
 			}			
@@ -991,6 +1440,90 @@ namespace GearFoundry
 				return " (" + "<Tell:IIDString:" + GOARROWLINK_ID + ":" + inputcoords + ">" + inputcoords + "<\\Tell>" + ")";
 			}
 
+			
+			public string ModString()
+			{
+				//builds result string with appropriate goodies to report
+				string result = string.Empty;
+				try {
+					if (wo != null) 
+					{
+						switch(wo.ObjectClass)
+						{
+							case ObjectClass.Armor:
+								result = IORString() +  GearScoreString() + wo.Name + SetString() +  ArmorLevelComaparisonString() + SpellDescriptions() + WieldString() + ActivateString() + LoreString();
+								break;
+							case ObjectClass.Clothing:
+								if(ArmorLevel > 0)
+								{
+									result = IORString() + GearScoreString() + wo.Name + SetString() + ArmorLevelComaparisonString() + SpellDescriptions() + WieldString() + ActivateString() +	LoreString();
+								}
+								else
+								{
+									result = IORString() + wo.Name + SetString() + SpellDescriptions() + WieldString() + ActivateString() + LoreString();
+								}
+								break;
+							case ObjectClass.Container:
+								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
+								break;
+							case ObjectClass.Corpse:
+								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
+								break;
+							case ObjectClass.Gem:
+								result = IORString() + wo.Name + SetString() + WieldlvlString() + SpellDescriptions();
+								break;
+							case ObjectClass.Jewelry:
+								result = IORString() + wo.Name + SetString() + ImbueString() + SpellDescriptions() + WieldString() + LoreString();
+								break;
+							case ObjectClass.Lifestone:
+								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
+								break;
+							case ObjectClass.MeleeWeapon:
+								result = IORString() + GearScoreString() + wo.Name +  DamageString() + WeaponModString() +SpellDescriptions() + WieldString() + LoreString();
+								break;
+							case ObjectClass.MissileWeapon:
+								result = IORString() + GearScoreString() + wo.Name + DamageString() + WeaponModString() +SpellDescriptions() + WieldString() + LoreString();
+								break;
+							case ObjectClass.Monster:
+								result = IORString() + wo.Name + "(" + HealthCurrent + "/" + HealthMax + ") " + wo.Name + " [L:" + Convert.ToString(wo.Values(LongValueKey.CreatureLevel)) + "]" + CoordsStringLink(wo.Coordinates().ToString());
+								break;
+							case ObjectClass.Npc:
+								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
+								break;
+							case ObjectClass.Player:
+								result = IORString() + wo.Name;
+								break;
+							case ObjectClass.Portal:
+								result = IORString() + wo.Values(StringValueKey.PortalDestination) + CoordsStringLink(wo.Coordinates().ToString());
+								break;
+							case ObjectClass.Salvage:
+								result = SalvageString();
+								break;
+							case ObjectClass.Vendor:
+								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
+								break;
+							case ObjectClass.WandStaffOrb:
+								result = IORString() + GearScoreString() + wo.Name + DamageString() + WeaponModString() + SpellDescriptions() + WieldString() + LoreString();
+								break;
+							case ObjectClass.Misc:
+								if(EssenceLevel > 0)
+								{
+									result = IORString() + GearScoreString() + "L" + EssenceLevel + " " + wo.Name;
+									break;
+								}
+								else goto default;
+							default:
+								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
+								break;
+						}
+						
+					}
+				} catch (Exception ex) {
+					LogError(ex);
+				}
+				return result;
+			}
+			
 
 
 			public string LinkString()

@@ -663,7 +663,7 @@ namespace GearFoundry
     			}
     			if(col == 2)
     			{    				
-    				ItemExclusionList.Add(CorpseTrackingList[row].Id);
+    				CorpseExclusionList.Add(CorpseTrackingList[row].Id);
     				CorpseTrackingList.RemoveAt(row);
     			}
 				UpdateCorpseHud();

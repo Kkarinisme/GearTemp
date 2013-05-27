@@ -182,11 +182,8 @@ namespace GearFoundry
         bool bRuleMustBeUnEnchantable = false;
         bool bRuleCloakMustHaveSpell = false;
         bool bRuleRed = false;
-        int nRuleRed = 225;
         bool bRuleYellow = false;
-        int nRuleYellow = 150;
         bool bRuleBlue = false;
-        int nRuleBlue = 75;
         int nRuleEssMastery = 0;
         string sRuleEssElements = "";
         int nRuleEssLevel = 0;
@@ -219,7 +216,6 @@ namespace GearFoundry
         //used in inventory functions
         private XDocument newDoc = new XDocument();
 
-        private static bool identRecd = false;
         private static bool getBurden = false;
 
         //used in inventory functions
@@ -252,8 +248,9 @@ namespace GearFoundry
 
         private static WindowsTimer mWaitingForIDTimer = new WindowsTimer();
         private int m = 500;
-        private int n = 0;
+        //ToMish:  Are you using these?  If not can they be removed?
         private int k = 0;
+        private int n = 0;
         private int mcount = 0;
 
         //Used in inventory functions
@@ -328,33 +325,10 @@ namespace GearFoundry
         //Misc flags
         private static bool bArmorEnabled;
   
+		//Landscape Tracker Flags
+        private static bool bLandscapeHudEnabled;   
         
-        
-        //LandscapeTrackerFlags
-        private static bool bportalsEnabled;
-        private static bool ballPlayersEnabled;
-        private static bool ballegEnabled;
-        private static bool bfellowEnabled;
-        private static bool bselectedMobsEnabled;
-        
-        
-        private static bool bLandscapeHudEnabled;
-        private static bool bLandscapeTrophiesEnabled;
-        private static bool bLandscapeLifestonesEnabled;
-        private static bool bShowAllMobs;
-        private static bool bShowAllNPCs;
-        
-        //GearButler Flags
-        private static bool bAutoRingKeys;
-        
-        
-        
-        //ItemTrackerFlags
-        private static bool bscrolls7Enabled;  //This is the current deftault functionality.
-        private static bool bscrolls7TndEnabled;  //not sure what this one is.
-        private static bool ballScrollsEnabled;  //not currently in use
-        
-       
+        //ItemTrackerFlags            
         private static bool bItemHudEnabled = true;
 		private static bool bReportItemStrings = true;
 		private static int mLootManaMinimum = 5000;

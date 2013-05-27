@@ -205,7 +205,7 @@ namespace GearFoundry
                 else
                 { return ""; }
             }
-            catch (Exception ex) { return null; }
+            catch (Exception ex) {LogError(ex); return null; }
         }
 
         // [ControlEvent]("lstRules", "Selected")

@@ -435,7 +435,6 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 
-		int changer = 0;
 		private void CombatHud_ActionComplete(object sender, System.EventArgs e)
 		{
 			try
