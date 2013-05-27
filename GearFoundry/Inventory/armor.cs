@@ -37,7 +37,10 @@ namespace GearFoundry
         private const int ArmorRemoveCircle = 0x60011F8;
 
         private HudFixedLayout ArmorHudSettings;
+        private HudStaticText lblToonArmorNameInfo;
         private HudStaticText lblToonArmorName;
+        private HudStaticText lblToonLevel;
+        private HudStaticText lblToonMaster;
         private HudCombo cboToonArmorName;
 
         XDocument xdocArmor;
@@ -191,7 +194,6 @@ namespace GearFoundry
                 IEnumerable<XElement> myelements = xdocArmor.Element("Objs").Descendants("Obj");
 
                 xdocArmor.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
-                //   xdocArmor.Save(genInventoryFilename);
                 xdocArmor = null;
 
             }
@@ -286,8 +288,7 @@ namespace GearFoundry
                         new XElement("ArmorRareID", armorRareID)));
 
 
-                        //  xdoc.Save(inventoryFilename);
-
+ 
 
                         currentarmorobj = null;
                         armorClassName = null;
@@ -362,8 +363,12 @@ namespace GearFoundry
                 else
                     if (spellName.Contains("Major")) { oXmlSpells = oXmlSpells + ", " + spellName; }
             }
-            if (oXmlSpells.Substring(0, 1) == ",") { return oXmlSpells.Substring(1); }
-            else { return oXmlSpells; }
+            if (oXmlSpells.Length > 0)
+            {
+                if (oXmlSpells.Substring(0, 1) == ",") { return oXmlSpells.Substring(1); }
+                else { return oXmlSpells; }
+            }
+            else { return ""; }
         }  //endof gogetspells
 
           
@@ -376,6 +381,9 @@ namespace GearFoundry
         private int TabFirstHeight = 300;
         private int TabWidthNew;
         private int TabHeightNew;
+        private List<XElement> myChoice;
+        private XElement currentel;
+
 
         private void RenderArmorHud()
         {
@@ -492,17 +500,23 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in RenderArmorTabLayout.  Tabwidth: " + TabWidth + "; TabHeight: " + TabHeight); 
-                
+                WriteToChat("I am in RenderArmorTabLayout.  Tabwidth: " + TabWidth + "; TabHeight: " + TabHeight);
+                lblToonArmorName = new HudStaticText();
+                lblToonLevel = new HudStaticText();
+                lblToonMaster = new HudStaticText();
                 ArmorHudList = new HudList();
-                ArmorHudTabLayout.AddControl(ArmorHudList, new Rectangle(0, 0, TabWidth, TabHeight));
+                ArmorHudTabLayout.AddControl(lblToonArmorName, new Rectangle(0,0,TabWidth/2,16));
+                ArmorHudTabLayout.AddControl(lblToonLevel, new Rectangle(TabWidth/2 + 10,0,TabWidth/4,16));
+                ArmorHudTabLayout.AddControl(lblToonMaster, new Rectangle(TabWidth*3/4 + 10,0,TabWidth/4,16));
+                
+                ArmorHudTabLayout.AddControl(ArmorHudList, new Rectangle(0,20, TabWidth, TabHeight));
 
                 ArmorHudList.ControlHeight = Convert.ToInt32(.05*TabHeight);
                 ArmorHudList.AddColumn(typeof(HudPictureBox), Convert.ToInt32(.05*TabWidth), null);
                 ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.35 * TabWidth), null);
                 ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.60*TabWidth), null);
 
-           //     ArmorHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
+                ArmorHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
 
             //    UpdateArmorHud();
 
@@ -526,6 +540,7 @@ namespace GearFoundry
             try
             {
                 if (toonArmorName == "") { toonArmorName = toonName; }
+                myChoice = new List<XElement>();
 
                 IEnumerable<XElement> marmor = xdocGenArmor.Element("Objs").Descendants("Obj");
  
@@ -533,6 +548,7 @@ namespace GearFoundry
                 {
                     if (el.Element("ToonName").Value == toonArmorName)
                     {
+                        myChoice.Add(el);
 
                         int icon = Convert.ToInt32(el.Element("ArmorIcon").Value);
                         string armorpiece = el.Element("ArmorName").Value;
@@ -573,12 +589,20 @@ namespace GearFoundry
         {
             try
             {
-                    
-                
-                IEnumerable<XElement> names = xdocGenArmor.Element("Objs").Descendants("Obj");
+
+                List<XElement> names = new List<XElement>();
+                IEnumerable<XElement> prenames = xdocGenArmor.Element("Objs").Descendants("Obj");
+                var lstsorted = from element in prenames
+                                 orderby element.Element("ToonName").Value ascending
+
+                                 select element;
+                names.AddRange(lstsorted);
+
                 ControlGroup myToonNames = new ControlGroup();
                 cboToonArmorName = new HudCombo(myToonNames);
-         //       cboToonArmorName.Change += new MVIndexChangeEventArgs(cboToonArmorName_Change);
+
+                cboToonArmorName.Change += (sender,index) => cboToonArmorName_Change(sender,index);
+
 
 
                lstAllToonName = new List<string>();
@@ -604,11 +628,11 @@ namespace GearFoundry
                 catch (Exception ex) { LogError(ex); }
 
 
-                lblToonArmorName = new HudStaticText();
-                lblToonArmorName.Text = "Name of toon whose armor is being studied:";
-                ArmorHudSettings.AddControl(lblToonArmorName,new Rectangle(0,0,250,16));
+                lblToonArmorNameInfo = new HudStaticText();
+                lblToonArmorNameInfo.Text = "Name of toon whose armor is being studied:";
+                ArmorHudSettings.AddControl(lblToonArmorNameInfo,new Rectangle(0,10,TabWidth,16));
 
-               ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(5, 15, 200, 16));
+               ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(5, 25, TabWidth-20, 16));
 
 
  
@@ -617,13 +641,14 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
        }
 
-        private void cboToonArmorName_Change()
+        private void cboToonArmorName_Change(object sender, EventArgs e)
         {
-            toonArmorName = cboToonArmorName.Current.ToString();
-            FillArmorHudList();
+            toonArmorName = lstAllToonName[cboToonArmorName.Current];
+          //  WriteToChat(toonArmorName + "has been selected");
+            lblToonArmorName.Text = toonArmorName;
+ 
             
         }
-
         private void DisposeArmorSettingsLayout()
         {
             try
@@ -672,44 +697,23 @@ namespace GearFoundry
         {
             try
             {
-                if (col == 0)
-                {
-//                    Host.Actions.UseItem(LandscapeTrackingList[row].Id, 0);
-                }
-                if (col == 1)
-                {
-                    //Host.Actions.SelectItem(LandscapeTrackingList[row].Id);
-                    //int textcolor;
+                int mrow = row;
+                currentel = myChoice[row];
+                string armorobjName = currentel.Element("ArmorName").Value;
+                string armorobjAl = currentel.Element("ArmorAl").Value;
+                string armorobjWork = currentel.Element("ArmorWork").Value;
+                string armorobjTinks = currentel.Element("ArmorTink").Value;
+                string armorobjLevel = currentel.Element("ArmorWieldValue").Value;
+                int armorobjArmorSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
+                int armorobjCovers = Convert.ToInt32(currentel.Element("ArmorCovers").Value);
+                string objArmorSetName = ArmorSetsInvList[armorobjArmorSet].name;
 
-                    //switch (LandscapeTrackingList[row].IOR)
-                    //{
-                    //    case IOResult.lifestone:
-                    //        textcolor = 13;
-                    //        break;
-                    //    case IOResult.monster:
-                    //        textcolor = 6;
-                    //        break;
-                    //    case IOResult.allegplayers:
-                    //        textcolor = 13;
-                    //        break;
-                    //    case IOResult.npc:
-                    //        textcolor = 3;
-                    //        break;
-                    //    default:
-                    //        textcolor = 2;
-                    //        break;
-                   // }
-                    //HudToChat(LandscapeTrackingList[row].LinkString(), textcolor);
-                    //nusearrowid = LandscapeTrackingList[row].Id;
-                    //useArrow();
-                }
-                if (col == 2)
-                {
-                //    LandscapeExclusionList.Add(LandscapeTrackingList[row].Id);
-                //    LandscapeTrackingList.RemoveAt(row);
-                //}
-//                UpdateLandscapeHud();
-                }
+                message = armorobjName + ", Al: " + armorobjAl + " , Work: " + armorobjWork + ", Tinks: " + armorobjTinks + ", Armor Wield Level: " + 
+                    armorobjLevel + ", Set: " + objArmorSetName;
+                WriteToChat(message);
+                
+                   
+                UpdateLandscapeHud();
 
             }
             catch (Exception ex) { LogError(ex); }

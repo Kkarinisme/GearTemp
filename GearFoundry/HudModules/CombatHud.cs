@@ -622,6 +622,12 @@ namespace GearFoundry
 		private Rectangle CombatHudTargetRectangle = new Rectangle(0,0,50,50);
 		private Rectangle CombatHudMiniVulsRectangle = new Rectangle(0,0,16,16);
 		private Rectangle CombatHudListVulsRectangle = new Rectangle(0,0,16,16);
+        private int CombatHudWidth;
+        private int CombatHudHeight;
+        private int CombatHudFirstWidth = 600;
+        private int CombatHudFirstHeight = 220;
+        private int CombatHudWidthNew;
+        private int CombatHudHeightNew;
 
 		
 		private void RenderCombatHud()
@@ -640,8 +646,10 @@ namespace GearFoundry
 				{
 					DisposeCombatHud();
 				}
-				
-				CombatHudView = new HudView("GearTactician", 600, 220, new ACImage(0x6AA8));
+                if (CombatHudWidth == 0) { CombatHudWidth = CombatHudFirstWidth; }
+                if (CombatHudHeight == 0) { CombatHudHeight = CombatHudFirstHeight; }
+
+				CombatHudView = new HudView("GearTactician", CombatHudWidth, CombatHudHeight, new ACImage(0x6AA8));
 				CombatHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
 				CombatHudView.Visible = true;
 				CombatHudView.UserAlphaChangeable = false;
@@ -655,7 +663,7 @@ namespace GearFoundry
 				CombatHudView.Controls.HeadControl = CombatHudLayout;
 				
 				CombatHudTabView = new HudTabView();
-				CombatHudLayout.AddControl(CombatHudTabView, new Rectangle(0,0,600,220));
+				CombatHudLayout.AddControl(CombatHudTabView, new Rectangle(0,0,CombatHudWidth,CombatHudHeight));
 				
 				CombatHudMainTab = new HudFixedLayout();
 				CombatHudTabView.AddTab(CombatHudMainTab, "GearTactician");
@@ -668,11 +676,43 @@ namespace GearFoundry
 				RenderCombatHudMainTab();
 				
 				SubscribeCombatEvents();
+                CombatHudView.UserResizeable = true;
+ 
 						
 			}catch(Exception ex){LogError(ex);}
 			return;
-		}	
-		
+		}
+        private void CombatHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (CombatHudView.Width - CombatHudWidth > 20)
+                {
+                    CombatHudWidthNew = CombatHudView.Width;
+                    CombatHudHeightNew = CombatHudView.Height;
+                    MasterTimer.Interval = 1000;
+                    MasterTimer.Enabled = true;
+                    MasterTimer.Start();
+                    MasterTimer.Tick += CombatHudResizeTimerTick;
+                }
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+
+
+
+        }
+
+        private void CombatHudResizeTimerTick(object sender, EventArgs e)
+        {
+            MasterTimer.Stop();
+            CombatHudWidth = CombatHudWidthNew;
+            CombatHudHeight = CombatHudHeightNew;
+            RenderCombatHud();
+
+        }
+
+
 		private void CombatHudTabView_OpenTabChange(object sender, System.EventArgs e)
 		{
 			try
@@ -707,13 +747,13 @@ namespace GearFoundry
 			{
 				CombatHudTargetName = new HudStaticText();
 				CombatHudTargetName.TextAlignment = VirindiViewService.WriteTextFormats.Center;
-				CombatHudMainTab.AddControl(CombatHudTargetName, new Rectangle(0,0,100,16));
+				CombatHudMainTab.AddControl(CombatHudTargetName, new Rectangle(0,0,130,16));
 				
 				CombatHudTargetImage = new HudImageStack();
-				CombatHudMainTab.AddControl(CombatHudTargetImage, new Rectangle(20,20,50,50));
+                CombatHudMainTab.AddControl(CombatHudTargetImage, new Rectangle(Convert.ToInt32(CombatHudWidth * .1), Convert.ToInt32(CombatHudHeight * .1), Convert.ToInt32(CombatHudWidth * .2), Convert.ToInt32(CombatHudHeight * .2)));
 				
 				CombatHudTargetHealth = new HudProgressBar();
-				CombatHudTargetHealth.ProgressEmpty = new ACImage(Color.Black);
+                CombatHudTargetHealth.ProgressEmpty = new ACImage(Color.Black);
 				CombatHudTargetHealth.ProgressFilled = new ACImage(Color.Red);
 				CombatHudTargetHealth.Min = 0;
 				CombatHudTargetHealth.Max = 100;
@@ -754,7 +794,7 @@ namespace GearFoundry
 				CombatHudMainTab.AddControl(CombatHudFocusClear, new Rectangle(45,190,35,16));
 				
 				CombatHudDebuffTrackerList = new HudList();
-				CombatHudMainTab.AddControl(CombatHudDebuffTrackerList, new Rectangle(110,0,500,200));
+				CombatHudMainTab.AddControl(CombatHudDebuffTrackerList, new Rectangle(110,0,Convert.ToInt32(CombatHudWidth - 110),CombatHudHeight-20));
 				CombatHudDebuffTrackerList.ControlHeight = 12;	
 				CombatHudDebuffTrackerList.AddColumn(typeof(HudProgressBar), 100, null);
 				for(int i = 0; i < 20; i++)
@@ -763,6 +803,8 @@ namespace GearFoundry
 				}
 				
 				bCombatHudMainTab = true;
+                CombatHudView.UserResizeable = true;
+           
 			
 				CombatHudFocusSet.Hit += CombatHudFocusSet_Hit;
 				CombatHudFocusClear.Hit += CombatHudFocusClear_Hit;

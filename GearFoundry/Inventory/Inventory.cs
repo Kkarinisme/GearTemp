@@ -48,12 +48,29 @@ namespace GearFoundry
             
         }
 
+        private void doCheckFiles()
+        {
+            if(!File.Exists(genInventoryFilename))
+            {
+                 XDocument tempDoc = new XDocument(new XElement("Objs"));
+                 tempDoc.Save(genInventoryFilename);
+                 tempDoc = null;
+
+            }
+            if(!File.Exists(inventoryFilename))
+            {
+                 XDocument tempDoc = new XDocument(new XElement("Objs"));
+                 tempDoc.Save(inventoryFilename);
+                 tempDoc = null;
+            }
+         }
 
 
         private void doUpdateInventory()
         {
             try
             {
+              //  doCheckFiles();
                 //Need a timer for processing inventory
                 mWaitingForIDTimer = new WindowsTimer();
                 //Need a list to hold the inventory
@@ -109,20 +126,8 @@ namespace GearFoundry
 
 
                 }
-                else //if that toon not previously inventoried need to start an inventory file for them
-                {
-                    xdocToonInventory = new XDocument(new XElement("Objs"));
-                }
-
-                // if no toon previously inventoried in this server need to begin a general inventory file (genInventoryFilename)
-                if (!File.Exists(genInventoryFilename))
-                {
-                    xdocGenInventory = new XDocument(new XElement("Objs"));
-                    //xdoc.Save(genInventoryFilename);
-                    //tempDoc = null;
-
-                }
-                else   { xdocGenInventory = XDocument.Load(genInventoryFilename); }
+  
+               xdocGenInventory = XDocument.Load(genInventoryFilename); 
 
                 // if left this subprogram because of exception in update need a way to avoid returning to this program
                 if (mgoonInv)
