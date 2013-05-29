@@ -100,6 +100,7 @@ namespace GearFoundry
 				Core.WorldFilter.CreateObject += new EventHandler<CreateObjectEventArgs>(CombatHud_CreateObject);
 				Core.CharacterFilter.ChangePortalMode += new EventHandler<ChangePortalModeEventArgs>(CombatHud_ChangePortalMode);
 				Core.ItemSelected += new EventHandler<ItemSelectedEventArgs>(CombatHud_ItemSelected);
+
 				WriteToChat("@unfilter -spellcasting");
 				FillCombatHudRegex();
 			}catch(Exception ex){LogError(ex);}
@@ -213,7 +214,9 @@ namespace GearFoundry
 				Core.EchoFilter.ServerDispatch -= new EventHandler<NetworkMessageEventArgs>(ServerDispatchCombat);
 				Core.WorldFilter.CreateObject -= new EventHandler<CreateObjectEventArgs>(CombatHud_CreateObject);
 				Core.CharacterFilter.ChangePortalMode -= new EventHandler<ChangePortalModeEventArgs>(CombatHud_ChangePortalMode);
-				Core.ItemSelected -= new EventHandler<ItemSelectedEventArgs>(CombatHud_ItemSelected);				
+				Core.ItemSelected -= new EventHandler<ItemSelectedEventArgs>(CombatHud_ItemSelected);
+                CombatHudView.Resize -= CombatHudView_Resize; 
+
 			}catch(Exception ex){LogError(ex);}
 		}	
 		
@@ -807,6 +810,7 @@ namespace GearFoundry
 			
 				CombatHudFocusSet.Hit += CombatHudFocusSet_Hit;
 				CombatHudFocusClear.Hit += CombatHudFocusClear_Hit;
+                CombatHudView.Resize += CombatHudView_Resize; 
 
 				UpdateCombatHudMainTab();
 				

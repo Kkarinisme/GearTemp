@@ -911,8 +911,14 @@ namespace GearFoundry
 		private HudCheckBox InspectorModifiedLooting = null;
 		private HudCheckBox InspectorGearScore = null;
 		private HudCheckBox InspectorCheckForL7Scrolls = null;
-		
-			
+
+        private int ItemHudWidth;
+        private int ItemHudHeight;
+        private int ItemHudFirstWidth = 300;
+        private int ItemHudFirstHeight = 220;
+        private int ItemHudWidthNew;
+        private int ItemHudHeightNew;
+	
     	private void RenderItemHud()
     	{
     		try{
@@ -920,9 +926,14 @@ namespace GearFoundry
     			if(ItemHudView != null)
     			{
     				DisposeItemHud();
-    			}			
-    			
-    			ItemHudView = new HudView("Inspector", 300, 220, new ACImage(0x6AA8));
+    			}
+
+                if (ItemHudWidth == 0) { ItemHudWidth = ItemHudFirstWidth; }
+                if (ItemHudHeight == 0) { ItemHudHeight = ItemHudFirstHeight; }
+
+
+
+                ItemHudView = new HudView("Inspector", ItemHudWidth, ItemHudHeight, new ACImage(0x6AA8));
     			ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ItemHudView.UserAlphaChangeable = false;
     			ItemHudView.ShowInBar = false;
@@ -934,7 +945,7 @@ namespace GearFoundry
     			ItemHudView.Controls.HeadControl = ItemHudLayout;
     			
     			ItemHudTabView = new HudTabView();
-    			ItemHudLayout.AddControl(ItemHudTabView, new Rectangle(0,0,300,220));
+    			ItemHudLayout.AddControl(ItemHudTabView, new Rectangle(0,0,ItemHudWidth,ItemHudHeight));
     		
     			ItemHudInspectorLayout = new HudFixedLayout();
     			ItemHudTabView.AddTab(ItemHudInspectorLayout, "Inspector");
@@ -950,10 +961,43 @@ namespace GearFoundry
     			RenderItemHudInspectorTab();
     			
 				SubscribeLootEvents();
+                ItemHudView.UserResizeable = true;
+
 			  							
     		}catch(Exception ex) {WriteToChat(ex.ToString());}
     		
     	}
+
+        private void ItemHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (ItemHudView.Width - ItemHudWidth > 20)
+                {
+                    ItemHudWidthNew = ItemHudView.Width;
+                    ItemHudHeightNew = ItemHudView.Height;
+                    MasterTimer.Interval = 1000;
+                    MasterTimer.Enabled = true;
+                    MasterTimer.Start();
+                    MasterTimer.Tick += ItemHudResizeTimerTick;
+                }
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+
+
+
+        }
+
+        private void ItemHudResizeTimerTick(object sender, EventArgs e)
+        {
+            MasterTimer.Stop();
+            ItemHudWidth = ItemHudWidthNew;
+            ItemHudHeight = ItemHudHeightNew;
+            RenderItemHud();
+
+        }
+
     	
     	private void ItemHudTabView_OpenTabChange(object sender, System.EventArgs e)
     	{
@@ -992,7 +1036,7 @@ namespace GearFoundry
     			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
     			ItemHudUstList.AddColumn(typeof(HudStaticText), 200, null);
     			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
-    			ItemHudUstLayout.AddControl(ItemHudUstList, new Rectangle(0,30,300,270));
+    			ItemHudUstLayout.AddControl(ItemHudUstList, new Rectangle(0,30,ItemHudWidth,ItemHudHeight));
 		
     			
     			InspectorUstTab = true;

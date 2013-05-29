@@ -116,6 +116,8 @@ namespace GearFoundry
                 Core.CharacterFilter.ChangePortalMode += new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeCorpses);
                 Core.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxCorpse);
                 Core.ContainerOpened += new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
+                CorpseHudView.Resize += CorpseHudView_Resize; 
+
 			}
 			catch(Exception ex){LogError(ex);}
 		}
@@ -132,6 +134,8 @@ namespace GearFoundry
                 Core.CharacterFilter.ChangePortalMode -= new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeCorpses);
                 Core.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxCorpse);
                 Core.ContainerOpened -= new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
+                CorpseHudView.Resize -= CorpseHudView_Resize; 
+
 			}
 			catch(Exception ex){LogError(ex);}
 		}
@@ -458,6 +462,13 @@ namespace GearFoundry
 		private bool CorpseSettingsTab;
 		
 		private const int CorpseRemoveCircle = 0x60011F8;
+        private int CorpseHudWidth;
+        private int CorpseHudHeight;
+        private int CorpseHudFirstWidth = 300;
+        private int CorpseHudFirstHeight = 220;
+        private int CorpseHudWidthNew;
+        private int CorpseHudHeightNew;
+
 			
     	private void RenderCorpseHud()
     	{
@@ -474,10 +485,14 @@ namespace GearFoundry
     			if(CorpseHudView != null)
     			{
     				DisposeCorpseHud();
-    			}			
+    			}
+                if (CorpseHudWidth == 0) { CorpseHudWidth = CorpseHudFirstWidth; }
+                if (CorpseHudHeight == 0) { CorpseHudHeight = CorpseHudFirstHeight; }
+
     			
-    			CorpseHudView = new HudView("GearVisection", 300, 220, new ACImage(0x6AA4));
-    			CorpseHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+    		//	CorpseHudView = new HudView("GearVisection", 300, 220, new ACImage(0x6AA4));
+                CorpseHudView = new HudView("GearVisection", CorpseHudWidth, CorpseHudHeight, new ACImage(0x6AA4));
+                CorpseHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			CorpseHudView.UserAlphaChangeable = false;
     			CorpseHudView.ShowInBar = false;
     			CorpseHudView.UserResizeable = false;
@@ -491,7 +506,7 @@ namespace GearFoundry
     			CorpseHudView.Controls.HeadControl = CorpseHudLayout;
     			
     			CorpseHudTabView = new HudTabView();
-    			CorpseHudLayout.AddControl(CorpseHudTabView, new Rectangle(0,0,300,220));
+    			CorpseHudLayout.AddControl(CorpseHudTabView, new Rectangle(0,0,CorpseHudWidth,CorpseHudHeight));
     		
     			CorpseHudTabLayout = new HudFixedLayout();
     			CorpseHudTabView.AddTab(CorpseHudTabLayout, "GearVisection");
@@ -504,10 +519,44 @@ namespace GearFoundry
     			
 
 				SubscribeCorpseEvents();
+                CorpseHudView.UserResizeable = true;
+
+
 			  							
     		}catch(Exception ex){LogError(ex);}
     		
     	}
+
+        private void CorpseHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (CorpseHudView.Width - CorpseHudWidth > 20)
+                {
+                    CorpseHudWidthNew = CorpseHudView.Width;
+                    CorpseHudHeightNew = CorpseHudView.Height;
+                    MasterTimer.Interval = 1000;
+                    MasterTimer.Enabled = true;
+                    MasterTimer.Start();
+                    MasterTimer.Tick += CorpseHudResizeTimerTick;
+                }
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+
+
+
+        }
+
+        private void CorpseHudResizeTimerTick(object sender, EventArgs e)
+        {
+            MasterTimer.Stop();
+            CorpseHudWidth = CorpseHudWidthNew;
+            CorpseHudHeight = CorpseHudHeightNew;
+            RenderCorpseHud();
+
+        }
+
     	
     	private void CorpseHudTabView_OpenTabChange(object sender, System.EventArgs e)
     	{
@@ -535,10 +584,10 @@ namespace GearFoundry
     		try
     		{
     			CorpseHudList = new HudList();
-    			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0,300,220));
+    			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0,CorpseHudWidth,CorpseHudHeight));
 				CorpseHudList.ControlHeight = 16;	
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
-				CorpseHudList.AddColumn(typeof(HudStaticText), 230, null);
+				CorpseHudList.AddColumn(typeof(HudStaticText), CorpseHudWidth-40, null);
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
 				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);	
