@@ -126,6 +126,14 @@ namespace GearFoundry
 		private bool ButlerTab = false;
 		private bool MaidTab = false;
 		private bool ValetTab = false;
+
+        private int ButlerHudWidth;
+        private int ButlerHudHeight;
+        private int ButlerHudFirstWidth = 300;
+        private int ButlerHudFirstHeight = 500;
+        private int ButlerHudWidthNew;
+        private int ButlerHudHeightNew;
+
 		
 		public class ButlerSettings
 		{
@@ -214,7 +222,9 @@ namespace GearFoundry
 				Core.WorldFilter.ReleaseObject += ButlerReleased;
 				MasterTimer.Tick += ButlerTimerDo;
 				Core.EchoFilter.ServerDispatch += ButlerServerDispatch;
+                ButlerHudView.Resize += ButlerHudView_Resize; 
 				LastStoneUpdate = DateTime.Now;
+
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -230,6 +240,9 @@ namespace GearFoundry
 				Core.WorldFilter.ReleaseObject -= ButlerReleased;
 				MasterTimer.Tick -= ButlerTimerDo;
 				Core.EchoFilter.ServerDispatch -= ButlerServerDispatch;
+                ButlerHudView.Resize -= ButlerHudView_Resize; 
+
+
 			}
 			catch(Exception ex){LogError(ex);}
 		}	
@@ -348,9 +361,13 @@ namespace GearFoundry
     			if(ButlerHudView != null)
     			{
     				DisposeButlerHud();
-    			}			
+    			}
+
+                if (ButlerHudWidth == 0) { ButlerHudWidth = ButlerHudFirstWidth; }
+                if (ButlerHudHeight == 0) { ButlerHudHeight = ButlerHudFirstHeight; }
+
     			
-    			ButlerHudView = new HudView("GearButler", 300, 600, new ACImage(0x6AA3));
+    			ButlerHudView = new HudView("GearButler", ButlerHudWidth, ButlerHudHeight, new ACImage(0x6AA3));
     			ButlerHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ButlerHudView.UserAlphaChangeable = false;
     			ButlerHudView.ShowInBar = true;
@@ -363,7 +380,7 @@ namespace GearFoundry
     			ButlerHudView.Controls.HeadControl = ButlerHudLayout;
     			
     			ButlerHudTabView = new HudTabView();
-    			ButlerHudLayout.AddControl(ButlerHudTabView, new Rectangle(0,0,300,600));
+    			ButlerHudLayout.AddControl(ButlerHudTabView, new Rectangle(0,0,ButlerHudWidth,ButlerHudHeight));
     		
     			ButlerHudTabLayout = new HudFixedLayout();
     			ButlerHudTabView.AddTab(ButlerHudTabLayout, "Butler");
@@ -379,12 +396,46 @@ namespace GearFoundry
  				RenderButlerHudButlerLayout();
  				
  				SubscribeButlerEvents();
+                ButlerHudView.UserResizeable = true;
+
  				
  				ButlerTab = true;
 			  							
     		}catch(Exception ex) {LogError(ex);}
     		return;
     	}
+
+        private void ButlerHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (ButlerHudView.Width - ButlerHudWidth > 20)
+                {
+                    ButlerHudWidthNew = ButlerHudView.Width;
+                    ButlerHudHeightNew = ButlerHudView.Height;
+                    MasterTimer.Interval = 1000;
+                    MasterTimer.Enabled = true;
+                    MasterTimer.Start();
+                    MasterTimer.Tick += ButlerHudResizeTimerTick;
+                }
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+
+
+
+        }
+
+        private void ButlerHudResizeTimerTick(object sender, EventArgs e)
+        {
+            MasterTimer.Stop();
+            ButlerHudWidth = ButlerHudWidthNew;
+            ButlerHudHeight = ButlerHudHeightNew;
+            RenderButlerHud();
+
+        }
+
+ 
     	
     	private void ButlerHudTabView_OpenTabChange(object sender, System.EventArgs e)
     	{
@@ -510,7 +561,8 @@ namespace GearFoundry
     			ButlerHudCurrentSelectionLabel = new HudStaticText();
     			ButlerHudCurrentSelectionLabel.Text = "Current Selection";
     			ButlerHudCurrentSelectionLabel.TextAlignment = VirindiViewService.WriteTextFormats.Center;
-    			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionLabel, new Rectangle(75,0,150,16));
+    		 //	ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionLabel, new Rectangle(75,0,150,16));
+                ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionLabel, new Rectangle(75, 0, 150, 16));
 				
     			ButlerHudUseCurrentSelection = new HudButton();
     			ButlerHudUseCurrentSelection.Text = "Use";
@@ -1510,7 +1562,8 @@ namespace GearFoundry
 			{          
 				ValetDisrobe = new HudButton();
 				ValetDisrobe.Text = "Birthday Suit";
-				ValetTabLayout.AddControl(ValetDisrobe, new Rectangle(100,10,100,20));
+			//	ValetTabLayout.AddControl(ValetDisrobe, new Rectangle(100,10,100,20));
+                ValetTabLayout.AddControl(ValetDisrobe, new Rectangle(Convert.ToInt32(ButlerHudWidth *.33),10,Convert.ToInt32(ButlerHudWidth *.33),20));
 				
 				ValetEquipSuit1 = new HudButton();
 				ValetEquipSuit1.Text = "Business Suit";

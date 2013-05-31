@@ -448,7 +448,8 @@
                 <control progid="DecalControls.FixedLayout" clipped="">
                   <control progid="DecalControls.StaticText" name="AboutText1" left="20" top="20" width="400" height="40" justify="Left" fontsize="18" fontstyle="" text="GearFoundry is a multi-functional plugin."/>
                   <control progid="DecalControls.StaticText" name="AboutText2" left="25" top="40" width="400" height="40" justify="Left" fontsize="18" fontstyle="" text="It consists of notifying,looting,inventorying and other options"/>
-                  <control progid="DecalControls.StaticText" name="Editionnumber" left="20" top="70" width="400" height="40"  justify="Left" fontsize="18" fontstyle="" text="Version 1008"/>
+                  <control progid="DecalControls.StaticText" name="AboutText2" left="25" top="60" width="400" height="40" justify="Left" fontsize="18" fontstyle="" text="Many of the concepts were taken from the original Alinco but there are numerous other add-ons in this completely re-written version."/>
+                  <control progid="DecalControls.StaticText" name="Editionnumber" left="20" top="90" width="400" height="40"  justify="Left" fontsize="18" fontstyle="" text="Version 1008"/>
                  <control progid="DecalControls.StaticText" name="UseAtOwnRisk" left="20" top="180" width="400" height="40" textcolor="192" justify="Center" fontsize="20" fontstyle=" bold" text="USE AT YOUR OWN RISK!"/>
                 </control>
               </page>

@@ -553,6 +553,14 @@ namespace GearFoundry
 		
 		private bool LandscapeMainTab;
 		private bool LandscapeSettingsTab;
+
+        private int LandscapeHudWidth;
+        private int LandscapeHudHeight;
+        private int LandscapeHudFirstWidth = 300;
+        private int LandscapeHudFirstHeight = 220;
+        private int LandscapeHudWidthNew;
+        private int LandscapeHudHeightNew;
+
 					
     	private void RenderLandscapeHud()
     	{
@@ -568,9 +576,14 @@ namespace GearFoundry
     			if(LandscapeHudView != null)
     			{
     				DisposeLandscapeHud();
-    			}			
-    			
-    			LandscapeHudView = new HudView("GearSense", 300, 220, new ACImage(0x6AA5));
+    			}
+
+                if (LandscapeHudWidth == 0) { LandscapeHudWidth = LandscapeHudFirstWidth; }
+                if (LandscapeHudHeight == 0) { LandscapeHudHeight = LandscapeHudFirstHeight; }
+
+
+
+                LandscapeHudView = new HudView("GearSense", LandscapeHudWidth, LandscapeHudHeight, new ACImage(0x6AA5));
     			LandscapeHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			LandscapeHudView.UserAlphaChangeable = false;
     			LandscapeHudView.ShowInBar = false;
@@ -586,7 +599,7 @@ namespace GearFoundry
     			LandscapeHudView.Controls.HeadControl = LandscapeHudLayout;
     			
     			LandscapeHudTabView = new HudTabView();
-    			LandscapeHudLayout.AddControl(LandscapeHudTabView, new Rectangle(0,0,300,220));
+    			LandscapeHudLayout.AddControl(LandscapeHudTabView, new Rectangle(0,0,LandscapeHudWidth,LandscapeHudHeight));
     		
     			LandscapeHudTabLayout = new HudFixedLayout();
     			LandscapeHudTabView.AddTab(LandscapeHudTabLayout, "GearSense");
@@ -599,12 +612,44 @@ namespace GearFoundry
     			RenderLandscapeTabLayout();
     			
     			SubscribeLandscapeEvents();
+
+                LandscapeHudView.UserResizeable = true;
+
   							
     		}catch(Exception ex) {LogError(ex);}
     		return;
     	}
-    	
-    	
+
+        private void LandscapeHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (LandscapeHudView.Width - LandscapeHudWidth > 20)
+                {
+                    LandscapeHudWidthNew = LandscapeHudView.Width;
+                    LandscapeHudHeightNew = LandscapeHudView.Height;
+                    MasterTimer.Interval = 1000;
+                    MasterTimer.Enabled = true;
+                    MasterTimer.Start();
+                    MasterTimer.Tick += LandscapeHudResizeTimerTick;
+                }
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+
+
+
+        }
+
+        private void LandscapeHudResizeTimerTick(object sender, EventArgs e)
+        {
+            MasterTimer.Stop();
+            LandscapeHudWidth = LandscapeHudWidthNew;
+            LandscapeHudHeight = LandscapeHudHeightNew;
+            RenderLandscapeHud();
+
+        }
+   	
     	private void LandscapeHudTabView_OpenTabChange(object sender, System.EventArgs e)
     	{
     		try
@@ -632,11 +677,11 @@ namespace GearFoundry
     		{
     			
     			LandscapeHudList = new HudList();
-    			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0,300,220));
+    			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0,LandscapeHudWidth,LandscapeHudHeight));
 
 				LandscapeHudList.ControlHeight = 16;	
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
-				LandscapeHudList.AddColumn(typeof(HudStaticText), 230, null);
+				LandscapeHudList.AddColumn(typeof(HudStaticText), LandscapeHudWidth - 40, null);
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
 				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col); 

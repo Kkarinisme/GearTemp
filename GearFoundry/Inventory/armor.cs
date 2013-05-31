@@ -27,6 +27,9 @@ namespace GearFoundry
     public partial class PluginCore : PluginBase
     {
         private XDocument xdocGenArmor;
+        private XDocument xdocArmor;
+        private XDocument xdocAllStats;
+
         private List<String> lstAllToonName;
         private HudView ArmorHudView = null;
         private HudFixedLayout ArmorHudLayout = null;
@@ -43,7 +46,8 @@ namespace GearFoundry
         private HudStaticText lblToonMaster;
         private HudCombo cboToonArmorName;
 
-        XDocument xdocArmor;
+        private string toonArmorName = "";
+
         WindowsTimer mWaitingForArmorIDTimer = new WindowsTimer();
 
 
@@ -62,6 +66,7 @@ namespace GearFoundry
                 armorFilename = toonDir + @"\" + toonName + "Armor.xml";
                 genArmorFilename = currDir + @"\allToonsArmor.xml";
                 holdingArmorFilename = world + @"\holdingArmor.xml";
+                allStatsFilename = currDir + @"\AllToonStats.xml";
                 
 
                 xdocArmor = new XDocument(new XElement("Objs"));
@@ -372,7 +377,6 @@ namespace GearFoundry
         }  //endof gogetspells
 
           
-        private string toonArmorName = "";
         private bool ArmorMainTab;
         private bool ArmorSettingsTab;
         private int TabWidth = 0;
@@ -561,6 +565,31 @@ namespace GearFoundry
 
                     }
                 }
+                if(allStatsFilename != null)
+                {
+                    string toonLevel;
+                    string toonMastery;
+                    xdocAllStats = new XDocument();
+                    xdocAllStats = XDocument.Load(allStatsFilename);
+                    IEnumerable<XElement> mStats = xdocAllStats.Element("Toons").Descendants("Toon");
+
+                    foreach (XElement elName in mStats)
+                    {
+                        WriteToChat("toonArmorName = " + toonArmorName);
+                        if (elName.Element("ToonName").Value == toonArmorName)
+                        {
+                            WriteToChat("I am in the foreach for mstats");
+                            toonLevel = elName.Element("Level").Value;
+                            lblToonLevel.Text = "Level: " + toonLevel;
+                            //  toonMastery = elName.Element("Mastery").Value;
+                            break;
+                        }
+                    }
+                           
+
+
+
+                 }
                 ArmorHudView.UserResizeable = true;
            }
             catch (Exception ex) { LogError(ex); }
