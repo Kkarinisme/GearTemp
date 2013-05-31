@@ -310,7 +310,7 @@ namespace GearFoundry
 			{
 				if(OtherCastBuffer.Count > 0)
 				{
-					OtherCastBuffer.RemoveAll(x => (DateTime.Now - x.HeardTime).Seconds > 4);
+					OtherCastBuffer.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 4);
 				}
 				if(OtherCastBuffer.Count == 0) {return;}
 	

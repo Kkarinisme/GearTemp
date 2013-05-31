@@ -209,6 +209,92 @@ namespace GearFoundry
 			}
 			
 			
+			//These are not scoring properly
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 5/31/2013 7:22 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 5/31/2013 7:25 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] ID: 86BCAFA8
+//[VTank] ObjectClass: Misc
+//[VTank] (S) Name: Blizzard Wisp Essence
+//[VTank] (S) UsageInstructions: Use this essence to summon or dismiss your Blizzard Wisp.
+//[VTank] (B) CanBeSold: True
+//[VTank] (I) CreateFlags1: 1076382872
+//[VTank] (I) Type: 49309
+//[VTank] (I) Icon: 29739
+//[VTank] (I) Category: 128
+//[VTank] (I) Behavior: 67108882
+//[VTank] (I) CreateFlags2: 7
+//[VTank] (I) IconUnderlay: 29728
+//[VTank] (I) Value: 10000
+//[VTank] (I) Unknown10: 8
+//[VTank] (I) UsageMask: 16
+//[VTank] (I) IconOutline: 128
+//[VTank] (I) UsesRemaining: 50
+//[VTank] (I) UsesTotal: 50
+//[VTank] (I) Container: 1342600506
+//[VTank] (I) Burden: 50
+//[VTank] (I) IconOverlay: 29736
+//[VTank] (I) PhysicsDataFlags: 137345
+//[VTank] (I) 368: 54
+//[VTank] (I) 369: 185
+//[VTank] (I) Bonded: 0
+//[VTank] (I) Attuned: 0
+//[VTank] (I) 374: 7
+//[VTank] (I) 375: 13
+//[VTank] (I) CooldownID: 213
+//[VTank] (I) Workmanship: 8
+//[VTank] (I) 366: 54
+//[VTank] (I) 367: 570
+//[VTank] (D) 167: 45
+//[VTank] Palette Entry 0: ID 0x000BEF, Ex Color: 000000, 0/0
+
+//
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 5/31/2013 7:22 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 5/31/2013 7:26 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] ID: 86BCB1F3
+//[VTank] ObjectClass: Misc
+//[VTank] (S) Name: Caustic Grievver Essence
+//[VTank] (S) UsageInstructions: Use this essence to summon or dismiss your Caustic Grievver.
+//[VTank] (B) CanBeSold: True
+//[VTank] (I) CreateFlags1: 1076382872
+//[VTank] (I) Type: 49372
+//[VTank] (I) Icon: 7664
+//[VTank] (I) Category: 128
+//[VTank] (I) Behavior: 67108882
+//[VTank] (I) CreateFlags2: 7
+//[VTank] (I) IconUnderlay: 29728
+//[VTank] (I) Value: 10000
+//[VTank] (I) Unknown10: 8
+//[VTank] (I) UsageMask: 16
+//[VTank] (I) IconOutline: 256
+//[VTank] (I) UsesRemaining: 50
+//[VTank] (I) UsesTotal: 50
+//[VTank] (I) Container: 1342600506
+//[VTank] (I) Burden: 50
+//[VTank] (I) IconOverlay: 29736
+//[VTank] (I) PhysicsDataFlags: 137345
+//[VTank] (I) 368: 54
+//[VTank] (I) 369: 185
+//[VTank] (I) Bonded: 0
+//[VTank] (I) Attuned: 0
+//[VTank] (I) 372: 5
+//[VTank] (I) 374: 10
+//[VTank] (I) 375: 7
+//[VTank] (I) CooldownID: 213
+//[VTank] (I) Workmanship: 8
+//[VTank] (I) 366: 54
+//[VTank] (I) 367: 570
+//[VTank] (D) 167: 45
+//[VTank] Palette Entry 0: ID 0x000BF0, Ex Color: 000000, 0/0
+			
+			
 			//Modified Looting Properties (calculated)
 			public double WeaponModifiers
 			{
@@ -249,7 +335,11 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 3201 && cantripmanaconversionboosters < 5){cantripmanaconversionboosters = 5;}
 							}
 						}
-					}						
+					}
+					if(wo.ObjectClass == ObjectClass.WandStaffOrb && wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) == 0)
+					{
+						return modsum + cantripattackboosters + cantripdefenseboosters + ((wo.Values(DoubleValueKey.ManaCBonus) * 100) * (cantripmanaconversionboosters * .01)) + 10 - wo.Values(LongValueKey.NumberTimesTinkered);
+					}
 					return modsum + cantripattackboosters + cantripdefenseboosters + ((wo.Values(DoubleValueKey.ManaCBonus) * 100) * (cantripmanaconversionboosters * .01));
 				}
 			}
@@ -580,8 +670,14 @@ namespace GearFoundry
 							}
 						}
 						if(wo.DoubleKeys.Contains((int)DoubleValueKey.ElementalDamageVersusMonsters)){elementaldamagevsmonsters = ((wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) -1) * 100);}
-						
-						return availabletinks + elementaldamagevsmonsters  + cantripdamageboosters - wo.Values(LongValueKey.NumberTimesTinkered);
+						if(elementaldamagevsmonsters > 0)
+						{							
+							return availabletinks + elementaldamagevsmonsters  + cantripdamageboosters - wo.Values(LongValueKey.NumberTimesTinkered);
+						}
+						else
+						{
+							return 0;
+						}
 					}
 									
 					
@@ -592,6 +688,15 @@ namespace GearFoundry
 					
 				}
 			}
+			public bool Unehcantable
+			{
+				get
+				{
+					if(wo.Values(LongValueKey.Unenchantable) > 0) {return true;}
+					else return false;
+				}
+			}
+			
 			public string DamageString()
 			{
 				return " Dam: " + DamageComparison.ToString("N0") ;
@@ -805,20 +910,28 @@ namespace GearFoundry
 					{
 						switch(wo.Values(LongValueKey.Icon))
 						{
+							case 4154:
 							case 7664:
 							case 29738:
-							case 4154:
 								return 1;  //Naturalist
+								
 							case 6978:
+							case 7285:
 							case 9217: 
+							case 9218:
+							case 29739:		
 							case 29743:
-							case 29739:
+							case 29744:
+							case 29745:
+							case 29746:
 						    	return 2;  //Primalist
-						    case 13383:
-						    case 5828:
+						    						    
 						    case 4646:
+						    case 5828:
+						    case 13383:
 						    	return 3;  //Necro
-						    default: 
+						    
+						    default:
 						    	return 0;
 						}
 					}
