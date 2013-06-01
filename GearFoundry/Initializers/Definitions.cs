@@ -321,6 +321,8 @@ namespace GearFoundry
 
         //Butler Flags
         private static bool bGearButlerEnabled;
+        
+        private static bool bCombatHudEnabled;
 
         //Misc flags
         private static bool bArmorEnabled;

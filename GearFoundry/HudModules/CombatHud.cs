@@ -28,18 +28,27 @@ namespace GearFoundry
 		private Queue<SpellCastInfo> SpellCastBuffer = new Queue<SpellCastInfo>();
 		private List<OtherDebuffCastInfo> OtherCastBuffer = new List<OtherDebuffCastInfo>();
 		
-		private bool bCombatHudEnabled = true;
+		
 		private bool bCombatHudMainTab = false;
 		private bool bCombatHudSettingsTab = false;
 		private bool bCombatHudInPortalSpace = true;
 		private int CombatHudFocusTargetGUID = 0;
 		
+		private GearTacticianSettings gtSettings;
+				
 		//Enclose in class for saving.
-		public bool bCombatHudTrackLifeDebuffs = true;
-		public bool bCombatHudTrackCreatureDebuffs = true;
-		public bool bCombatHudTrackItemDebuffs = true;
-		public bool bCombatHudTrackVoidDebuffs = true;
-		public int CombatHudRenderColumns = 10;
+		public class GearTacticianSettings
+		{
+			public bool bCombatHudTrackLifeDebuffs = true;
+			public bool bCombatHudTrackCreatureDebuffs = true;
+			public bool bCombatHudTrackItemDebuffs = true;
+			public bool bCombatHudTrackVoidDebuffs = true;
+			public int CombatHudRenderColumns = 10;
+		}
+		
+		
+		
+			
 		public DateTime CombatHudLastUpdate;
 				
 		private List<Regex> CombatHudRegexEx;
@@ -85,6 +94,62 @@ namespace GearFoundry
 				SpellId = spellid;
 			}
 		}	
+		
+		private void CombatHudReadWriteSettings(bool read)
+		{
+			try
+			{
+				FileInfo GearTacticianSettingsFile = new FileInfo(toonDir + @"\GearTactician.xml");
+								
+				if (read)
+				{
+					
+					try
+					{
+						if (!GearTacticianSettingsFile.Exists)
+		                {
+		                    try
+		                    {
+		                    	string filedefaults = GetResourceTextFile("GearTactician.xml");
+		                    	using (StreamWriter writedefaults = new StreamWriter(GearTacticianSettingsFile.ToString(), true))
+								{
+									writedefaults.Write(filedefaults);
+									writedefaults.Close();
+								}
+		                    }
+		                    catch (Exception ex) { LogError(ex); }
+		                }
+						
+						using (XmlReader reader = XmlReader.Create(GearTacticianSettingsFile.ToString()))
+						{	
+							XmlSerializer serializer = new XmlSerializer(typeof(GearTacticianSettings));
+							gtSettings = (GearTacticianSettings)serializer.Deserialize(reader);
+							reader.Close();
+						}
+					}
+					catch
+					{
+						gtSettings = new GearTacticianSettings();
+					}
+				}
+				
+				
+				if(!read)
+				{
+					if(GearTacticianSettingsFile.Exists)
+					{
+						GearTacticianSettingsFile.Delete();
+					}
+					
+					using (XmlWriter writer = XmlWriter.Create(GearTacticianSettingsFile.ToString()))
+					{
+			   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearTacticianSettings));
+			   			serializer2.Serialize(writer, gtSettings);
+			   			writer.Close();
+					}
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
 			
 		private void SubscribeCombatEvents()
 		{
@@ -542,7 +607,7 @@ namespace GearFoundry
 				switch(SpellIndex[e.SpellId].spellschool.ToLower())
 				{
 					case "item enchantment":
-						if(bCombatHudTrackItemDebuffs)
+						if(gtSettings.bCombatHudTrackItemDebuffs)
 						{
 							if(SpellIndex[e.SpellId].isdebuff)
 							{	
@@ -554,7 +619,7 @@ namespace GearFoundry
 						}
 						return;
 					case "creature enchantment":
-						if(bCombatHudTrackCreatureDebuffs)
+						if(gtSettings.bCombatHudTrackCreatureDebuffs)
 						{
 							if(SpellIndex[e.SpellId].isdebuff)
 							{
@@ -566,7 +631,7 @@ namespace GearFoundry
 						}
 						return;
 					case "life magic":
-						if(bCombatHudTrackLifeDebuffs)
+						if(gtSettings.bCombatHudTrackLifeDebuffs)
 						{
 							if(SpellIndex[e.SpellId].isdebuff)
 							{
@@ -578,7 +643,7 @@ namespace GearFoundry
 						}
 						return;
 					case "void magic":
-						if(bCombatHudTrackVoidDebuffs)
+						if(gtSettings.bCombatHudTrackVoidDebuffs)
 						{
 							if(SpellIndex[e.SpellId].duration > 0)
 							{
@@ -636,7 +701,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				//ReadWrite here
+				CombatHudReadWriteSettings(true);
 				
 				
 			}catch(Exception ex){LogError(ex);}

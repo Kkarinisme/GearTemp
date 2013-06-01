@@ -206,6 +206,7 @@ namespace GearFoundry
 				if(e.ItemGuid != mOpenContainer.ContainerGUID)
 				{
 					//This should close a new container and allow render frame to reopen the old one.  If you simply closed the old one, or reopened the old one.
+					//May be unnecessary
 					if(mOpenContainer.ContainerIsLooting) 
 					{
 						Core.Actions.UseItem(e.ItemGuid,0);
@@ -324,7 +325,35 @@ namespace GearFoundry
 		{
 			try
 			{
-				CoreManager.Current.RenderFrame += new EventHandler<EventArgs>(RenderFrame_LootingCheck);		
+				mOpenContainer.ContainerIsLooting = true;
+				CoreManager.Current.RenderFrame += new EventHandler<EventArgs>(RenderFrame_LootingCheck);					
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void RenderFrame_LootingCheck(object sender, System.EventArgs e)
+		{
+			try
+			{
+				if((DateTime.Now - mOpenContainer.LastCheck).TotalMilliseconds < 300) {return;}					
+        		if(mOpenContainer.ContainerIOs.Count > 0)
+        		{	
+        			if(mOpenContainer.ContainerGUID != Core.Actions.OpenedContainer)
+        			{
+        				Core.Actions.UseItem(mOpenContainer.ContainerGUID, 0);
+        			}
+        			if(GISettings.AutoLoot)
+        			{
+        				if(mOpenContainer.ContainerIOs.Any(x => x.IOR != IOResult.unknown))
+        			  	{
+        					Core.Actions.MoveItem(mOpenContainer.ContainerIOs.First(x => x.IOR != IOResult.unknown).Id,Core.CharacterFilter.Id,0,true);
+        			  	}
+        			}
+        		}
+        		else
+        		{
+        			mOpenContainer.ContainerIsLooting = false;
+        			UnlockContainer();
+        		}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -336,26 +365,7 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void RenderFrame_LootingCheck(object sender, System.EventArgs e)
-		{
-			try
-			{
-				if((DateTime.Now - mOpenContainer.LastCheck).TotalMilliseconds < 300) {return;}					
-        		if(mOpenContainer.ContainerIOs.Count > 0)
-        		{
-        			mOpenContainer.ContainerIsLooting = true;
-        			if(mOpenContainer.ContainerGUID != Core.Actions.OpenedContainer)
-        			{
-        				Core.Actions.UseItem(mOpenContainer.ContainerGUID, 0);
-        			}
-        		}
-        		else
-        		{
-        			mOpenContainer.ContainerIsLooting = false;
-        			UnlockContainer();
-        		}
-			}catch(Exception ex){LogError(ex);}
-		}
+
 		
 		private void AutoPickUp(int ItemId)
 		{
@@ -591,11 +601,6 @@ namespace GearFoundry
 		{
 			
 			//Irq:  Note to self:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
-			//To the causal observer....  This is how you redefine a problem and crush it with linq.  
-			//There are coders that would curse my bastardized linq sorts here when they could be done in C#, but hell, I'm lazy....
-			//The other way retained from the original alinco checks a lot of fields no one really cares about and wastes CPU cycles looping.
-			//This way only checks relevant fields and only ones that a max level toon would care about.
-			//WATCH MY LINQ DUST!!!!!!!!!!!
 			try
 			{
 				
@@ -700,14 +705,16 @@ namespace GearFoundry
 							}
 
 						case ObjectClass.MeleeWeapon:
+						case ObjectClass.MissileWeapon:
+						case ObjectClass.WandStaffOrb:
 							var reducedmeleematches = from ruls in AppliesToListMatches
-								where IOItemWithID.WeaponModifiers >= ruls.WeaponModSum &&
+								where IOItemWithID.GearScore >= ruls.WeaponModSum &&
 								((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0) &&
 								ruls.RuleWieldAttribute == IOItemWithID.WieldReqAttribute &&
-								((ruls.RuleWeaponEnabledA && IOItemWithID.DamageComparison >= ruls.MaxDamageA && IOItemWithID.WieldReqValue == ruls.WieldReqValueA) ||
-								 (ruls.RuleWeaponEnabledB && IOItemWithID.DamageComparison >= ruls.MaxDamageB && IOItemWithID.WieldReqValue == ruls.WieldReqValueB) ||
-								 (ruls.RuleWeaponEnabledC && IOItemWithID.DamageComparison >= ruls.MaxDamageC && IOItemWithID.WieldReqValue == ruls.WieldReqValueC) ||
-								 (ruls.RuleWeaponEnabledD && IOItemWithID.DamageComparison >= ruls.MaxDamageD && IOItemWithID.WieldReqValue == ruls.WieldReqValueD))
+								((ruls.RuleWeaponEnabledA && IOItemWithID.WieldReqValue == ruls.WieldReqValueA) ||
+								 (ruls.RuleWeaponEnabledB && IOItemWithID.WieldReqValue == ruls.WieldReqValueB) ||
+								 (ruls.RuleWeaponEnabledC && IOItemWithID.WieldReqValue == ruls.WieldReqValueC) ||
+								 (ruls.RuleWeaponEnabledD && IOItemWithID.WieldReqValue == ruls.WieldReqValueD))
 								orderby ruls.RulePriority
 								select ruls;
 							if(reducedmeleematches.Count() > 0)
@@ -720,50 +727,6 @@ namespace GearFoundry
 							{
 								return;
 							}	
-							
-						case ObjectClass.MissileWeapon:
-							var reducedmissilematches = from ruls in AppliesToListMatches
-								where IOItemWithID.WeaponModifiers >= ruls.WeaponModSum &&
-								(ruls.RuleMastery == 0 || ruls.RuleMastery == IOItemWithID.WeaponMasteryCategory) &&
-								((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0) &&
-								((ruls.RuleWeaponEnabledA && IOItemWithID.DamageComparison >= ruls.MaxDamageA && IOItemWithID.WieldReqValue == ruls.WieldReqValueA) ||
-								(ruls.RuleWeaponEnabledB && IOItemWithID.DamageComparison >= ruls.MaxDamageB && IOItemWithID.WieldReqValue == ruls.WieldReqValueB) ||
-								(ruls.RuleWeaponEnabledC && IOItemWithID.DamageComparison >= ruls.MaxDamageC && IOItemWithID.WieldReqValue == ruls.WieldReqValueC) ||
-								(ruls.RuleWeaponEnabledD && IOItemWithID.DamageComparison >= ruls.MaxDamageD && IOItemWithID.WieldReqValue == ruls.WieldReqValueD))
-								orderby ruls.RulePriority
-								select ruls;
-							if(reducedmissilematches.Count() > 0)
-							{
-								IOItemWithID.rulename = reducedmissilematches.First().RuleName; 
-								IOItemWithID.IOR = IOResult.rule; 
-								return;
-							}
-							else
-							{
-								return;
-							}
-							
-						case ObjectClass.WandStaffOrb:
-							var reducedcastermatches = from ruls in AppliesToListMatches
-								where IOItemWithID.WeaponModifiers >= ruls.WeaponModSum &&
-								(ruls.RuleWieldAttribute == 0 || ruls.RuleWieldAttribute == IOItemWithID.WieldReqAttribute) &&
-								((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0) &&
-								((ruls.RuleWeaponEnabledA && IOItemWithID.DamageComparison >= ruls.MaxDamageA && IOItemWithID.WieldReqValue == ruls.WieldReqValueA) ||
-								(ruls.RuleWeaponEnabledB && IOItemWithID.DamageComparison >= ruls.MaxDamageB && IOItemWithID.WieldReqValue == ruls.WieldReqValueB) ||
-								(ruls.RuleWeaponEnabledC && IOItemWithID.DamageComparison >= ruls.MaxDamageC && IOItemWithID.WieldReqValue == ruls.WieldReqValueC) ||
-								(ruls.RuleWeaponEnabledD && IOItemWithID.DamageComparison >= ruls.MaxDamageD && IOItemWithID.WieldReqValue == ruls.WieldReqValueD))
-								orderby ruls.RulePriority
-								select ruls;
-							if(reducedcastermatches.Count() > 0)
-							{
-								IOItemWithID.rulename = reducedcastermatches.First().RuleName; 
-								IOItemWithID.IOR = IOResult.rule; 
-								return;
-							}
-							else
-							{
-								return;
-							}
 
 								
 						case ObjectClass.Gem:
@@ -824,13 +787,18 @@ namespace GearFoundry
 						case ObjectClass.Misc:
 							if(IOItemWithID.Name.ToLower().Contains("essence"))
 							{
+								WriteToChat("Bonus Comparison = " + IOItemWithID.BonusComparison);
+								WriteToChat("Essence Level = " + IOItemWithID.EssenceLevel);
+								WriteToChat("Essence Mastery = " + IOItemWithID.WeaponMasteryCategory);
+								
 								var reducedessencematches = from ruls in AppliesToListMatches
-									where IOItemWithID.EssenceComparison >= ruls.EssenceModSum &&
+									where IOItemWithID.BonusComparison >= ruls.EssenceModSum &&
 									IOItemWithID.EssenceLevel == ruls.RuleEssenceLevel &&
 									(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
 									((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0)
 									orderby ruls.RulePriority
 									select ruls;
+								
 								if(reducedessencematches.Count() > 0)
 								{
 									IOItemWithID.rulename = reducedessencematches.First().RuleName; 
@@ -1060,32 +1028,32 @@ namespace GearFoundry
 						//Irquk:  Confirmed functional
 						if(rule.RuleEssenceDamage > 0)
 						{
-							if(IOItemWithID.EssenceDam < rule.RuleEssenceDamage)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.Dam < rule.RuleEssenceDamage)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  confirmed functional
 						if(rule.RuleEssenceDamageResist > 0)
 						{
-							if(IOItemWithID.EssenceDamResist < rule.RuleEssenceDamageResist)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.DamResist < rule.RuleEssenceDamageResist)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  confirmed functional
 						if(rule.RuleEssenceCrit > 0)
 						{
-							if(IOItemWithID.EssenceCrit < rule.RuleEssenceCrit)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.Crit < rule.RuleEssenceCrit)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  confirmed functional
 						if(rule.RuleEssenceCritResist > 0)
 						{
-							if(IOItemWithID.EssenceCritDamResist < rule.RuleEssenceCritResist)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.CritDamResist < rule.RuleEssenceCritResist)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  Confirmed functional
 						if(rule.RuleEssenceCritDam > 0)
 						{
-							if(IOItemWithID.EssenceCritDam < rule.RuleEssenceCritDam)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.CritDam < rule.RuleEssenceCritDam)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  confirmed functional
 						if(rule.RuleEssenceCritDamResist > 0)
 						{
-							if(IOItemWithID.EssenceCritDamResist < rule.RuleEssenceCritDamResist)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.CritDamResist < rule.RuleEssenceCritDamResist)  {RuleName = String.Empty; goto Next;}
 						}
 					
 						
@@ -1135,45 +1103,45 @@ namespace GearFoundry
 					case IOResult.rule:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.manatank:
 						ItemTrackingList.Add(IOItem);
 						ManaTankItems.Add(IOItem.Id);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.rare:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.salvage:
 						ItemTrackingList.Add(IOItem);
 						SalvageItemsList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.spell:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.trophy:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.val:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					default:

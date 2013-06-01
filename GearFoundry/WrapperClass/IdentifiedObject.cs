@@ -46,12 +46,25 @@ namespace GearFoundry
            	unknown
         }
 		
+		internal enum WeaponMastery
+		{	
+			None = 0,
+			Unarmed = 1,
+			Sword = 2,
+			Axe = 3,
+			Mace = 4,
+			Spear = 5,
+			Dagger = 6,
+			Staff = 7,
+			Bow= 8,
+			Crossbow = 9,
+			Thrown = 10,
+			TwoHanded = 11			
+		}
+		
 
 		public class IdentifiedObject
 		{
-			// establishes class IdentifiedObject to hold properties associted  with world objects
-		
-			// wo 
 			private WorldObject wo;
 		
 			public IdentifiedObject(WorldObject obj)
@@ -91,44 +104,62 @@ namespace GearFoundry
 			{
 				get
 				{
+					double fudgefactor = 0;
+					double gearscorereturn = 0;
 					switch(wo.ObjectClass)
 					{
 						case ObjectClass.Gem:
-							if(Aetheriacheck) {return (double)MaxItemLevel;}
-							return 0;
+							if(Aetheriacheck) {gearscorereturn += (double)MaxItemLevel;}
+							break;
+							
 						case ObjectClass.Clothing:
-							if(WieldSlot == 0x8000000) {return (double)MaxItemLevel;}
-							if(ArmorLevel > 0) {return ArmorLevelComaparison;}
-							return 0;
+							if(WieldSlot == 0x8000000) {gearscorereturn += (double)MaxItemLevel;}
+							if(ArmorLevel > 0) {gearscorereturn += ArmorLevelComaparison;}
+							break;
 
 						case ObjectClass.Armor:
-							return ArmorLevelComaparison;
+							gearscorereturn += ArmorLevelComaparison;
+							break;
 
 						case ObjectClass.MeleeWeapon:
-							return DamageComparison + WeaponModifiers;
+							gearscorereturn += DamageComparison + WeaponModifiers;
+							break;
 
 						case ObjectClass.MissileWeapon:
-							return DamageComparison + WeaponModifiers;
+							//Best XBow (375):  +165% and + 18 Elemental
+							//Best Trown (375):  +160% and + 18 Elemental
+							//Best Bow (375):  +140% and + 18 Elemental
+							//Target Weapon (375) = +165 and + 18 elemental
+							if(WeaponMasteryCategory == (int)WeaponMastery.Bow) {fudgefactor = 6;}
+							if(WeaponMasteryCategory == (int)WeaponMastery.Thrown) {fudgefactor = 1;}
+							gearscorereturn += DamageComparison + WeaponModifiers + fudgefactor;
+							break;
 
 						case ObjectClass.WandStaffOrb:
-							return DamageComparison + WeaponModifiers;
+							gearscorereturn += DamageComparison + WeaponModifiers;
+							break;
 						
-						case ObjectClass.Misc:
-							if(wo.Name.ToLower().Contains("essence")) { return EssenceComparison;}
-							return 0;
 						default:
-							return 0;
+							gearscorereturn = 0;
+							break;
 
 					}
+					gearscorereturn += BonusComparison;
+					return gearscorereturn;
 				}
 			}
 			
-			public string ExtendedGearScore;
+			public string ExtendedGearScore()
+			{
+				return String.Empty;
+			}
 			
 			public string GearScoreString()
 			{
-				if(GearScore > 0) {return "{GS " + GearScore.ToString("N0") + "} ";}
-				else return String.Empty;
+				string gearscorestring = String.Empty;
+				if(!wo.HasIdData) {return gearscorestring = "{NO ID}";}
+				if(GearScore > 0) {gearscorestring += "{GS " + GearScore.ToString("N0") + "} ";}
+				return gearscorestring;
 			}
 			
 			public List<DebuffSpell> DebuffSpellList = new List<DebuffSpell>();
@@ -200,11 +231,11 @@ namespace GearFoundry
 			private int mManaMax;
 			private int mManaCurrent;
 			
-			public double EssenceComparison
+			public double BonusComparison
 			{
 				get
 				{
-					return EssenceCrit + EssenceCritDam + EssenceCritDamResist + EssenceCritResist + EssenceDam + EssenceDamResist;
+					return Crit + CritResist + CritDam + CritDamResist + Dam + DamResist;
 				}
 			}
 			
@@ -635,6 +666,10 @@ namespace GearFoundry
 						double availabletinks = 10;
 						double mahoganytinks = 0;
 						double cantripdamageboosters = 0;
+						//Best XBow (375):  +165% and + 18 Elemental
+						//Best Trown (375):  +160% and + 18 Elemental
+						//Best Bow (375):  +140% and + 18 Elemental
+						//Target Weapon (375) = +165 and + 18 elemental
 						
 						mahoganytinks = ((wo.Values(DoubleValueKey.DamageBonus) - 1) / 0.04);
 						
@@ -648,8 +683,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2598 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
 								else if(wo.Spell(i) == 2486 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
 							}
-						}
-						
+						}					
 						return mahoganytinks + availabletinks + cantripdamageboosters + (double)wo.Values(LongValueKey.ElementalDmgBonus) - wo.Values(LongValueKey.NumberTimesTinkered);										
 					}
 					
@@ -938,51 +972,51 @@ namespace GearFoundry
 					else {return 0;}
 				}
 			}
-			public int EssenceDam
+			public int Dam
 			{	//wo LongValueKey@370 contains
 				get
 				{
-					if (wo.Values((LongValueKey)370) > 0) {return wo.Values((LongValueKey)370);}
+					if (wo.LongKeys.Contains(370)) {return wo.Values((LongValueKey)370);}
 					else {return 0;}
 				}
 			}
-			public int EssenceDamResist 
+			public int DamResist 
 			{	//wo LongValueKey@371 contains 
 				get
 				{
-					if (wo.Values((LongValueKey)371) > 0) {return wo.Values((LongValueKey)371);}
+					if (wo.LongKeys.Contains(371)) {return wo.Values((LongValueKey)371);}
 					else {return 0;}
 				}
 			}
-			public int EssenceCrit 
+			public int Crit 
 			{	//wo LongValueKey@372 contains
 				get
 				{
-					if (wo.Values((LongValueKey)372) > 0) {return wo.Values((LongValueKey)372);}
+					if (wo.LongKeys.Contains(372)) {return wo.Values((LongValueKey)372);}
 					else {return 0;}
 				}
 			}
-			public int EssenceCritResist
+			public int CritResist
 			{	//wo LongValueKey@373 contains
 				get
 				{
-					if (wo.Values((LongValueKey)373) > 0) {return wo.Values((LongValueKey)373);}
+					if (wo.LongKeys.Contains(373)) {return wo.Values((LongValueKey)373);}
 					else {return 0;}
 				}
 			}
-			public int EssenceCritDam
+			public int CritDam
 			{
 				get
 				{
-					if (wo.Values((LongValueKey)374) > 0) {return wo.Values((LongValueKey)373);}
+					if (wo.LongKeys.Contains(374)) {return wo.Values((LongValueKey)374);}
 					else {return 0;}
 				}
 			}
-			public int EssenceCritDamResist
+			public int CritDamResist
 			{
 				get
 				{
-					if (wo.Values((LongValueKey)375) > 0) {return wo.Values((LongValueKey)373);}
+					if (wo.LongKeys.Contains(375)) {return wo.Values((LongValueKey)375);}
 					else {return 0;}
 				}
 			}
