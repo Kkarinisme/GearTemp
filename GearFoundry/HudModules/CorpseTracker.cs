@@ -531,7 +531,9 @@ namespace GearFoundry
         {
             try
             {
-                if (CorpseHudView.Width - CorpseHudWidth > 20)
+                bool bw = Math.Abs(CorpseHudView.Width - CorpseHudWidth) > 20;
+                bool bh = Math.Abs(CorpseHudView.Height - CorpseHudHeight) > 20;
+                if (bh || bw)
                 {
                     CorpseHudWidthNew = CorpseHudView.Width;
                     CorpseHudHeightNew = CorpseHudView.Height;

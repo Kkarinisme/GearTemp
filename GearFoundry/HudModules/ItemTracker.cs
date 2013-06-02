@@ -451,7 +451,9 @@ namespace GearFoundry
         {
             try
             {
-                if (ItemHudView.Width - ItemHudWidth > 20)
+                bool bw = Math.Abs(ItemHudView.Width - ItemHudWidth) > 20;
+                bool bh = Math.Abs(ItemHudView.Height - ItemHudHeight) > 20;
+                if (bh || bw)
                 {
                     ItemHudWidthNew = ItemHudView.Width;
                     ItemHudHeightNew = ItemHudView.Height;

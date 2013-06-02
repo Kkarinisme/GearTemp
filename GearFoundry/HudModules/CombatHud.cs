@@ -753,7 +753,9 @@ namespace GearFoundry
         {
             try
             {
-                if (CombatHudView.Width - CombatHudWidth > 20)
+                bool bw = Math.Abs(CombatHudView.Width - CombatHudWidth) > 20;
+                bool bh = Math.Abs(CombatHudView.Height - CombatHudHeight) > 20;
+                if (bh || bw)
                 {
                     CombatHudWidthNew = CombatHudView.Width;
                     CombatHudHeightNew = CombatHudView.Height;

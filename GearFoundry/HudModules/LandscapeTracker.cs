@@ -624,7 +624,9 @@ namespace GearFoundry
         {
             try
             {
-                if (LandscapeHudView.Width - LandscapeHudWidth > 20)
+                bool bw = Math.Abs(LandscapeHudView.Width - LandscapeHudWidth) > 20;
+                bool bh = Math.Abs(LandscapeHudView.Height - LandscapeHudHeight) > 20;
+                if (bh || bw)
                 {
                     LandscapeHudWidthNew = LandscapeHudView.Width;
                     LandscapeHudHeightNew = LandscapeHudView.Height;

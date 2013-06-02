@@ -409,7 +409,9 @@ namespace GearFoundry
         {
             try
             {
-                if (ButlerHudView.Width - ButlerHudWidth > 20)
+                bool bw = Math.Abs(ButlerHudView.Width - ButlerHudWidth) > 20;
+                bool bh = Math.Abs(ButlerHudView.Height - ButlerHudHeight) > 20;
+                if (bh || bw)
                 {
                     ButlerHudWidthNew = ButlerHudView.Width;
                     ButlerHudHeightNew = ButlerHudView.Height;
