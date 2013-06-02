@@ -289,8 +289,7 @@ namespace GearFoundry
                 }
                 //Will be number of next rule
                 nNextRuleNum++;
-                WriteToChat("Next rule number will be " + nNextRuleNum);
-
+ 
 
                 var lstChecked = from element in myelements
                                    where Convert.ToBoolean(element.Element("Enabled").Value)
@@ -433,7 +432,7 @@ namespace GearFoundry
                     if (el.Name == "TextFilterMonsterTells") { bTextFilterMonsterTells = Convert.ToBoolean(el.Value); }
                     if (el.Name == "TextFilterNPCChatter") { bTextFilterNPCChatter = Convert.ToBoolean(el.Value); }
                     if (el.Name == "ToonArmorEnabled") { btoonArmorEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "ArmorEnabled") { bArmorEnabled = Convert.ToBoolean(el.Value); }
+                    if (el.Name == "ArmorHudEnabled") { bArmorHudEnabled = Convert.ToBoolean(el.Value); }
 
                 }
 
@@ -464,7 +463,7 @@ namespace GearFoundry
                    chkInventoryComplete.Checked = binventoryCompleteEnabled;
                    chkToonStats.Checked = btoonStatsEnabled;
                    chkToonArmor.Checked = btoonArmorEnabled;
-                   chkArmor.Checked = bArmorEnabled;
+                   chkArmorHud.Checked = bArmorHudEnabled;
 
  
 
@@ -535,11 +534,13 @@ namespace GearFoundry
             if (btoonArmorEnabled)
             { doGetArmor(); }
 
-            if (bArmorEnabled)
-            { RenderArmorHud(); }
 
-            if (bArmorEnabled)
-            { RenderArmorHud(); }
+            if (bArmorHudEnabled)
+            {
+                if (File.Exists(armorSettingsFilename))
+                { getArmorHudSettings(); }
+                RenderArmorHud(); 
+            }
 
 
             if (binventoryBurdenEnabled)
@@ -970,24 +971,39 @@ namespace GearFoundry
 
         }
 
-        void chkArmor_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkArmorHud_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
             try
             {
-                bArmorEnabled = e.Checked;
+                bArmorHudEnabled = e.Checked;
 
 
                 SaveSettings();
-                if (bArmorEnabled) { RenderArmorHud(); }
+                if (bArmorHudEnabled) 
+                {
+                    if (File.Exists(armorSettingsFilename))
+                    { getArmorHudSettings(); }
+                    RenderArmorHud(); 
+                }
                 else { DisposeArmorHud(); }
 
             }
             catch (Exception ex) { LogError(ex); }
 
         }
- 
 
 
+        void getArmorHudSettings()
+        {
+
+            try{
+                xdocArmorSettings = XDocument.Load(armorSettingsFilename);
+                ArmorHudWidth = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudWidth").Value);
+                 ArmorHudHeight = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudHeight").Value);
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
 
         //Gear Filter Settings
         void chkEnableTextFiltering_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
@@ -1407,7 +1423,7 @@ namespace GearFoundry
                          new XElement("InventoryCompleteEnabled", binventoryCompleteEnabled),
                          new XElement("ToonStatsEnabled", btoonStatsEnabled),
                          new XElement("ToonArmorEnabled", btoonArmorEnabled),
-                         new XElement("ArmorEnabled", bArmorEnabled),
+                         new XElement("ArmorHudEnabled", bArmorHudEnabled),
                           new XElement("MuteSounds", bMuteSounds),
                          new XElement("EnableTextFiltering", bEnableTextFiltering),
                          new XElement("TextFilterAllStatus", bTextFilterAllStatus),

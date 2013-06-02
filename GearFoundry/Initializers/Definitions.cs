@@ -101,9 +101,6 @@ namespace GearFoundry
         private string genSettingsFilename = null;
         private string toonSettingsFilename = null;
         private string inventoryFilename = null;
-        private string armorFilename = null;
-        private string genArmorFilename = null;
-        private string holdingArmorFilename = null;
         private string genInventoryFilename = null;
         private string holdingInventoryFilename = null;
         private string holdingStatsFilename = null;
@@ -323,7 +320,7 @@ namespace GearFoundry
         private static bool bGearButlerEnabled;
 
         //Misc flags
-        private static bool bArmorEnabled;
+        private static bool bArmorHudEnabled;
   
 		//Landscape Tracker Flags
         private static bool bLandscapeHudEnabled;   
