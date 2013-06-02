@@ -15,6 +15,9 @@ using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using VirindiViewService.Themes;
 using System.Xml.Serialization;
 using System.Xml;
+using WindowsTimer = System.Windows.Forms.Timer;
+
+
 
 namespace GearFoundry
 {
@@ -22,7 +25,7 @@ namespace GearFoundry
 	{		
 		//
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();
-		
+        private WindowsTimer itemHudResizeTimer;
 		private OpenContainer mOpenContainer = new OpenContainer();
 		private List<int> ItemExclusionList = new List<int>();
 		private List<IdentifiedObject> ItemTrackingList = new List<IdentifiedObject>();
@@ -53,6 +56,8 @@ namespace GearFoundry
 			public bool ModifiedLooting;
 			public bool GearScore;
 			public bool CheckForL7Scrolls;
+            public int ItemHudWidth;
+            public int ItemHudHeight;
 			
     	}
 		
@@ -1258,10 +1263,11 @@ namespace GearFoundry
                 {
                     ItemHudWidthNew = ItemHudView.Width;
                     ItemHudHeightNew = ItemHudView.Height;
-                    MasterTimer.Interval = 1000;
-                    MasterTimer.Enabled = true;
-                    MasterTimer.Start();
-                    MasterTimer.Tick += ItemHudResizeTimerTick;
+                    itemHudResizeTimer = new WindowsTimer();
+                    itemHudResizeTimer.Interval = 1000;
+                    itemHudResizeTimer.Enabled = true;
+                    itemHudResizeTimer.Start();
+                    itemHudResizeTimer.Tick += ItemHudResizeTimerTick;
                 }
             }
             catch (Exception ex) { LogError(ex); }
@@ -1273,7 +1279,6 @@ namespace GearFoundry
 
         private void ItemHudResizeTimerTick(object sender, EventArgs e)
         {
-            MasterTimer.Stop();
             ItemHudWidth = ItemHudWidthNew;
             ItemHudHeight = ItemHudHeightNew;
             RenderItemHud();
