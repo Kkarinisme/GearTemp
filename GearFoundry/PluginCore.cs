@@ -269,10 +269,7 @@ namespace GearFoundry
                 
                
 
-                mCharacterLoginComplete = true;
-                
-                RenderCombatHud();
-                
+                mCharacterLoginComplete = true;             
   
 
             }

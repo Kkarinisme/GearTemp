@@ -415,9 +415,9 @@ namespace GearFoundry
                 {
                     ButlerHudWidthNew = ButlerHudView.Width;
                     ButlerHudHeightNew = ButlerHudView.Height;
-                    MasterTimer.Interval = 1000;
-                    MasterTimer.Enabled = true;
-                    MasterTimer.Start();
+//                    MasterTimer.Interval = 1000;
+//                    MasterTimer.Enabled = true;
+//                    MasterTimer.Start();
                     MasterTimer.Tick += ButlerHudResizeTimerTick;
                 }
             }
@@ -430,9 +430,10 @@ namespace GearFoundry
 
         private void ButlerHudResizeTimerTick(object sender, EventArgs e)
         {
-            MasterTimer.Stop();
+//            MasterTimer.Stop();
             ButlerHudWidth = ButlerHudWidthNew;
             ButlerHudHeight = ButlerHudHeightNew;
+            MasterTimer.Tick -= ButlerHudResizeTimerTick;
             RenderButlerHud();
 
         }

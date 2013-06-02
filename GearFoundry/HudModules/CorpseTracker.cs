@@ -537,9 +537,9 @@ namespace GearFoundry
                 {
                     CorpseHudWidthNew = CorpseHudView.Width;
                     CorpseHudHeightNew = CorpseHudView.Height;
-                    MasterTimer.Interval = 1000;
-                    MasterTimer.Enabled = true;
-                    MasterTimer.Start();
+//                    MasterTimer.Interval = 1000;
+//                    MasterTimer.Enabled = true;
+//                    MasterTimer.Start();
                     MasterTimer.Tick += CorpseHudResizeTimerTick;
                 }
             }
@@ -552,9 +552,10 @@ namespace GearFoundry
 
         private void CorpseHudResizeTimerTick(object sender, EventArgs e)
         {
-            MasterTimer.Stop();
+//            MasterTimer.Stop();
             CorpseHudWidth = CorpseHudWidthNew;
             CorpseHudHeight = CorpseHudHeightNew;
+            MasterTimer.Tick -= CorpseHudResizeTimerTick;
             RenderCorpseHud();
 
         }

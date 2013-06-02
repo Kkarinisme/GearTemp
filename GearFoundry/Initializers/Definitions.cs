@@ -51,6 +51,7 @@ namespace GearFoundry
         private const int AC_SET_OBJECT_DWORD = 0x2CE;
         private const int AC_CLOSE_CONTAINER = 0x0052;
         private const int AC_APPLY_VISUALSOUND = 0xF755;
+        private const int AC_MOVE_OBJECT_INTO_INVENTORY = 0xF74A;
         
         private const int GE_MESSAGE_BOX = 0x4;
         
