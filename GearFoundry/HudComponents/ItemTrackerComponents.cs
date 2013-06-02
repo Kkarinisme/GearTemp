@@ -96,7 +96,7 @@ namespace GearFoundry
 	 			if(e.Changed.Id == ItemHudMoveId)
 	 			{
 	 				IHRenderTime150 = DateTime.Now;
-	 				Core.RenderFrame += new EventHandler<EventArgs>(IHRenderFrame150ms);
+//	 				Core.RenderFrame += new EventHandler<EventArgs>(IHRenderFrame150ms);
 	 			}
 	 			
 	 		}catch(Exception ex){LogError(ex);}
@@ -122,7 +122,7 @@ namespace GearFoundry
 				if(GISettings.AutoLoot && bCorpseHudEnabled && CorpseTrackingList.Count > 0) 
 				{
 					AutoLootDelayStart = DateTime.Now;
-					Core.RenderFrame += new EventHandler<EventArgs>(AutoLootStarter);
+//					Core.RenderFrame += new EventHandler<EventArgs>(AutoLootStarter);
 				}
 				
 			}catch(Exception ex){LogError(ex);}
@@ -148,19 +148,7 @@ namespace GearFoundry
 		{
 			//Patterned off Mag-Tools Looter
 			try
-			{				
-				//Check to see if previous container was still being IDd
-				if(mOpenContainer.ContainerGUID != 0 && e.ItemGuid != mOpenContainer.ContainerGUID)
-				{
-					//This should close a new container and allow render frame to reopen the old one.  If you simply closed the old one, or reopened the old one.
-					//May be unnecessary
-					if(mOpenContainer.ContainerIsLooting) 
-					{
-						Core.Actions.UseItem(e.ItemGuid,0);
-					}
-					return;
-				}
-			
+			{					
 				
 				WorldObject container = Core.WorldFilter[e.ItemGuid];
 				
@@ -238,35 +226,36 @@ namespace GearFoundry
 		{
 			try
 			{
-				if((DateTime.Now - mOpenContainer.LastCheck).TotalMilliseconds < 300) {return;}					
+				if((DateTime.Now - mOpenContainer.LastCheck).TotalMilliseconds < 300) {return;}	
+				if((DateTime.Now - mOpenContainer.LastCheck).TotalSeconds > 5) {UnlockContainer();}
         		
 
 				if(GISettings.AutoLoot)
     			{
-    				if(mOpenContainer.ContainerIOs.Any(x => x.IOR != IOResult.unknown) && ItemHudMoveId == 0)
-    				{
-    					if(mOpenContainer.ContainerGUID != Core.Actions.OpenedContainer)
-    					{
-    						Core.Actions.UseItem(mOpenContainer.ContainerGUID, 0);
-    					}
-    					
-    					Core.Actions.MoveItem(mOpenContainer.ContainerIOs.First(x => x.IOR != IOResult.unknown).Id,Core.CharacterFilter.Id,0,true);
-    					ItemHudMoveId = mOpenContainer.ContainerIOs.First(x => x.IOR != IOResult.unknown).Id;
-    					return;
-    			  	}
-    				else if(mOpenContainer.ContainerIOs.Any(x => x.IOR == IOResult.unknown))
-    				{
-    					if(mOpenContainer.ContainerGUID != Core.Actions.OpenedContainer)
-    					{
-    						Core.Actions.UseItem(mOpenContainer.ContainerGUID, 0);
-    					}
-    					return;
-    				}
-    				else
-    				{
-    					mOpenContainer.ContainerIsLooting = false;
-        				UnlockContainer();
-    				}
+//    				if(mOpenContainer.ContainerIOs.Any(x => x.IOR != IOResult.unknown) && ItemHudMoveId == 0)
+//    				{
+////    					if(mOpenContainer.ContainerGUID != Core.Actions.OpenedContainer)
+////    					{
+////    						Core.Actions.UseItem(mOpenContainer.ContainerGUID, 0);
+////    					}
+//    					
+////    					Core.Actions.MoveItem(mOpenContainer.ContainerIOs.First(x => x.IOR != IOResult.unknown).Id,Core.CharacterFilter.Id,0,true);
+////    					ItemHudMoveId = mOpenContainer.ContainerIOs.First(x => x.IOR != IOResult.unknown).Id;
+//    					return;
+//    			  	}
+//    				else if(mOpenContainer.ContainerIOs.Any(x => x.IOR == IOResult.unknown))
+//    				{
+////    					if(mOpenContainer.ContainerGUID != Core.Actions.OpenedContainer)
+////    					{
+////    						Core.Actions.UseItem(mOpenContainer.ContainerGUID, 0);
+////    					}
+//    					return;
+//    				}
+//    				else
+//    				{
+//    					mOpenContainer.ContainerIsLooting = false;
+//        				UnlockContainer();
+//    				}
     			}
 					
 				if(mOpenContainer.ContainerIOs.Count > 0 && mOpenContainer.ContainerIOs.Any(x => x.IOR == IOResult.unknown))
@@ -278,7 +267,6 @@ namespace GearFoundry
 				}
 				else
         		{
-        			mOpenContainer.ContainerIsLooting = false;
         			UnlockContainer();
         		}
         		
@@ -290,6 +278,7 @@ namespace GearFoundry
 		{
 			try
 			{
+				mOpenContainer.ContainerIsLooting = false;
 				CoreManager.Current.RenderFrame -= new EventHandler<EventArgs>(RenderFrame_LootingCheck);					
 			}catch(Exception ex){LogError(ex);}
 		}
