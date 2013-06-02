@@ -15,7 +15,6 @@ using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using VirindiViewService.Themes;
 using System.Xml.Serialization;
 using System.Xml;
-using WindowsTimer = System.Windows.Forms.Timer;
 
 
 
@@ -25,7 +24,6 @@ namespace GearFoundry
 	{		
 
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();
-        private WindowsTimer itemHudResizeTimer;
 		private OpenContainer mOpenContainer = new OpenContainer();
 		
 		private List<int> ItemExclusionList = new List<int>();
@@ -39,7 +37,7 @@ namespace GearFoundry
 		private int ItemHudMoveId = 0;
 		private DateTime IHRenderTime150;
 		private DateTime AutoLootDelayStart;
-		
+ 		
 		private GearInspectorSettings GISettings = new GearInspectorSettings();
 			
 		public class GearInspectorSettings
@@ -85,6 +83,7 @@ namespace GearFoundry
              	Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
              	Core.CharacterFilter.ActionComplete -= Inspector_ActionComplete;
              	Core.WorldFilter.ChangeObject -= new EventHandler<ChangeObjectEventArgs>(ItemHud_ChangeObject);
+                ItemHudView.Resize -= ItemHudView_Resize;
              	
              	
              	
@@ -411,12 +410,10 @@ namespace GearFoundry
     			{
     				DisposeItemHud();
     			}
-
-                if (ItemHudWidth == 0) { ItemHudWidth = ItemHudFirstWidth; }
-                if (ItemHudHeight == 0) { ItemHudHeight = ItemHudFirstHeight; }
-
-
-
+                if (GISettings.ItemHudWidth == 0) { ItemHudWidth = ItemHudFirstWidth; }
+                else { ItemHudWidth = GISettings.ItemHudWidth; }
+                if (GISettings.ItemHudHeight == 0) { ItemHudHeight = ItemHudFirstHeight; }
+                else { ItemHudHeight = GISettings.ItemHudHeight; }
                 ItemHudView = new HudView("Inspector", ItemHudWidth, ItemHudHeight, new ACImage(0x6AA8));
     			ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ItemHudView.UserAlphaChangeable = false;
@@ -441,6 +438,7 @@ namespace GearFoundry
     			ItemHudTabView.AddTab(ItemHudSettingsLayout, "Settings");
     			
     			ItemHudTabView.OpenTabChange += ItemHudTabView_OpenTabChange;
+                ItemHudView.Resize += ItemHudView_Resize; 
   				
     			RenderItemHudInspectorTab();
     			
@@ -451,22 +449,19 @@ namespace GearFoundry
     		}catch(Exception ex) {LogError(ex);}
     		
     	}
-
+       
         private void ItemHudView_Resize(object sender, System.EventArgs e)
         {
             try
             {
-                bool bw = Math.Abs(ItemHudView.Width - ItemHudWidth) > 20;
+               bool bw = Math.Abs(ItemHudView.Width - ItemHudWidth) > 20;
                 bool bh = Math.Abs(ItemHudView.Height - ItemHudHeight) > 20;
                 if (bh || bw)
                 {
-                    ItemHudWidthNew = ItemHudView.Width;
+                   ItemHudWidthNew = ItemHudView.Width;
                     ItemHudHeightNew = ItemHudView.Height;
-                    itemHudResizeTimer = new WindowsTimer();
-                    itemHudResizeTimer.Interval = 1000;
-                    itemHudResizeTimer.Enabled = true;
-                    itemHudResizeTimer.Start();
-                    itemHudResizeTimer.Tick += ItemHudResizeTimerTick;
+                    MasterTimer.Tick += ItemHudResizeTimerTick;
+                    return;
                 }
             }
             catch (Exception ex) { LogError(ex); }
@@ -477,7 +472,10 @@ namespace GearFoundry
         {
             ItemHudWidth = ItemHudWidthNew;
             ItemHudHeight = ItemHudHeightNew;
-             MasterTimer.Tick -= ItemHudResizeTimerTick;
+            GISettings.ItemHudWidth = ItemHudWidth;
+            GISettings.ItemHudHeight = ItemHudHeight;
+            GearInspectorReadWriteSettings(false);
+            MasterTimer.Tick -= ItemHudResizeTimerTick;
             RenderItemHud();
         }
 

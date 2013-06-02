@@ -46,6 +46,9 @@ namespace GearFoundry
 			public bool bDeadMes = true;
 			public bool Permitteds = true;
 			public List<MyCorpses> DeadMeList = new List<PluginCore.MyCorpses>();
+            public int CorpseHudWidth;
+            public int CorpseHudHeight;
+
     	}
 		
 		private void GearVisectionReadWriteSettings(bool read)
@@ -486,8 +489,10 @@ namespace GearFoundry
     			{
     				DisposeCorpseHud();
     			}
-                if (CorpseHudWidth == 0) { CorpseHudWidth = CorpseHudFirstWidth; }
-                if (CorpseHudHeight == 0) { CorpseHudHeight = CorpseHudFirstHeight; }
+                if (ghSettings.CorpseHudWidth == 0) { CorpseHudWidth = CorpseHudFirstWidth; }
+                else { CorpseHudWidth = ghSettings.CorpseHudWidth; }
+                if (ghSettings.CorpseHudHeight == 0) { CorpseHudHeight = CorpseHudFirstHeight; }
+                else { CorpseHudHeight = ghSettings.CorpseHudHeight; }
 
     			
     		//	CorpseHudView = new HudView("GearVisection", 300, 220, new ACImage(0x6AA4));
@@ -515,6 +520,8 @@ namespace GearFoundry
     			CorpseHudTabView.AddTab(CorpseHudSettingsTab, "Settings");
     			
     			CorpseHudTabView.OpenTabChange += CorpseHudTabView_OpenTabChange;
+                CorpseHudView.Resize += CorpseHudView_Resize; 
+
     			RenderCorpseHudTab();
     			
 
@@ -537,9 +544,6 @@ namespace GearFoundry
                 {
                     CorpseHudWidthNew = CorpseHudView.Width;
                     CorpseHudHeightNew = CorpseHudView.Height;
-//                    MasterTimer.Interval = 1000;
-//                    MasterTimer.Enabled = true;
-//                    MasterTimer.Start();
                     MasterTimer.Tick += CorpseHudResizeTimerTick;
                 }
             }
@@ -552,9 +556,11 @@ namespace GearFoundry
 
         private void CorpseHudResizeTimerTick(object sender, EventArgs e)
         {
-//            MasterTimer.Stop();
             CorpseHudWidth = CorpseHudWidthNew;
             CorpseHudHeight = CorpseHudHeightNew;
+            ghSettings.CorpseHudWidth = CorpseHudWidth;
+            ghSettings.CorpseHudHeight = CorpseHudHeight;
+            GearVisectionReadWriteSettings(false);            
             MasterTimer.Tick -= CorpseHudResizeTimerTick;
             RenderCorpseHud();
 

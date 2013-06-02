@@ -468,11 +468,8 @@ namespace GearFoundry
                 if  ( bh|| bw)
                 {
                    ArmorHudWidthNew = ArmorHudView.Width;
-                    ArmorHudHeightNew = ArmorHudView.Height;
-//                    MasterTimer.Interval = 1000;
-//                    MasterTimer.Enabled = true;
-//                    MasterTimer.Start();
-                    MasterTimer.Tick += ArmorResizeTimerTick;
+                   ArmorHudHeightNew = ArmorHudView.Height;
+                   MasterTimer.Tick += ArmorResizeTimerTick;
                 }
             }
             catch (Exception ex) { LogError(ex); }
@@ -484,14 +481,10 @@ namespace GearFoundry
 
         private void ArmorResizeTimerTick(object sender, EventArgs e)
         {
-//            MasterTimer.Stop();
             ArmorHudWidth = ArmorHudWidthNew;
             ArmorHudHeight = ArmorHudHeightNew;
             MasterTimer.Tick -= ArmorResizeTimerTick;
             RenderArmorHud();
-            }
-            catch (Exception ex) { LogError(ex); }
-
 
         }
 

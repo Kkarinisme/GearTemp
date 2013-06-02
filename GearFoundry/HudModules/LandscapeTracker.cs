@@ -40,6 +40,9 @@ namespace GearFoundry
 			public bool bShowLifeStones = true;
 			public bool bShowAllPortals = true;
 			public bool bShowAllNPCs = true;
+            public int LandscapeHudWidth;
+            public int LandscapeHudHeight;
+
 		}
 		
 		
@@ -127,7 +130,9 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteLandscape;
                 Core.ItemDestroyed -= OnLandscapeDestroyed;
                 Core.CharacterFilter.ChangePortalMode -= ChangePortalModeLandscape;  
- 				Core.CharacterFilter.ChangeFellowship -= ChangeFellowship_Changed;                
+ 				Core.CharacterFilter.ChangeFellowship -= ChangeFellowship_Changed;
+                LandscapeHudView.Resize -= LandscapeHudView_Resize;
+
 			
 			}catch(Exception ex) {LogError(ex);}
 			return;
@@ -578,8 +583,10 @@ namespace GearFoundry
     				DisposeLandscapeHud();
     			}
 
-                if (LandscapeHudWidth == 0) { LandscapeHudWidth = LandscapeHudFirstWidth; }
-                if (LandscapeHudHeight == 0) { LandscapeHudHeight = LandscapeHudFirstHeight; }
+                if (gsSettings.LandscapeHudWidth == 0) { LandscapeHudWidth = LandscapeHudFirstWidth; }
+                else { LandscapeHudWidth = gsSettings.LandscapeHudWidth; }
+                if (gsSettings.LandscapeHudHeight == 0) { LandscapeHudHeight = LandscapeHudFirstHeight; }
+                else { LandscapeHudHeight = gsSettings.LandscapeHudHeight; }
 
 
 
@@ -608,6 +615,7 @@ namespace GearFoundry
     			LandscapeHudTabView.AddTab(LandscapeHudSettings, "Settings");
     			
     			LandscapeHudTabView.OpenTabChange += LandscapeHudTabView_OpenTabChange;
+                LandscapeHudView.Resize += LandscapeHudView_Resize; 
     			
     			RenderLandscapeTabLayout();
     			
@@ -630,9 +638,6 @@ namespace GearFoundry
                 {
                     LandscapeHudWidthNew = LandscapeHudView.Width;
                     LandscapeHudHeightNew = LandscapeHudView.Height;
-//                    MasterTimer.Interval = 1000;
-//                    MasterTimer.Enabled = true;
-//                    MasterTimer.Start();
                     MasterTimer.Tick += LandscapeHudResizeTimerTick;
                 }
             }
@@ -645,9 +650,11 @@ namespace GearFoundry
 
         private void LandscapeHudResizeTimerTick(object sender, EventArgs e)
         {
-//            MasterTimer.Stop();
             LandscapeHudWidth = LandscapeHudWidthNew;
             LandscapeHudHeight = LandscapeHudHeightNew;
+            gsSettings.LandscapeHudWidth = LandscapeHudWidth;
+            gsSettings.LandscapeHudHeight = LandscapeHudHeight;
+            GearSenseReadWriteSettings(false);            
             MasterTimer.Tick -= LandscapeHudResizeTimerTick;
             RenderLandscapeHud();
 
