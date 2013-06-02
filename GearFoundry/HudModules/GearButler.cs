@@ -27,6 +27,7 @@ namespace GearFoundry
 		private List<WorldObject> MaidSalvage;
 		private List<WorldObject> MaidStackList;
 		private List<WorldObject> MaidKeyList;
+		private Queue<WorldObject> UnchargedManaStones = new Queue<WorldObject>();
 		
 		private List<ValetTicket> ValetEquipList;
 		private List<WorldObject> ValetRemoveList;
@@ -37,6 +38,7 @@ namespace GearFoundry
 		private bool bButlerTradeOpen = false;
 		private int MaidKeyToRing = 0;
 		private int MatchedKeyRingId = 0;
+		private DateTime LastStoneUpdate;
 		
 		private static int GB_USE_ICON = 0x6000FB7;
 		private static int GB_GIVE_ICON = 0x60011F7;
@@ -221,6 +223,7 @@ namespace GearFoundry
 				MasterTimer.Tick += ButlerTimerDo;
 				Core.EchoFilter.ServerDispatch += ButlerServerDispatch;
                 ButlerHudView.Resize += ButlerHudView_Resize; 
+				LastStoneUpdate = DateTime.Now;
 
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -853,13 +856,22 @@ namespace GearFoundry
     			}
     			if(Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.CurrentMana) > 0)
     			{
-    				WorldObject[] unchargedstones = (from stuff in Core.WorldFilter.GetInventory()
-    				                                 where stuff.ObjectClass == ObjectClass.ManaStone && stuff.Values(LongValueKey.CurrentMana) == 0
-    				                                 orderby stuff.Values(DoubleValueKey.ManaTransferEfficiency) descending
-    				                                 select stuff).ToArray();
-    				if(unchargedstones.Count() > 0)
+    				WorldObject[] stones = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0).OrderBy(x => x.Values(DoubleValueKey.ManaTransferEfficiency)).ToArray();
+    				foreach(var stone in stones)
     				{
-    					Core.Actions.UseItem(unchargedstones[0].Id,1);
+    					if(!UnchargedManaStones.Any(x => x.Id == stone.Id)) {UnchargedManaStones.Enqueue(stone);}
+    				}
+    				LastStoneUpdate = DateTime.Now;
+    				
+    				if(UnchargedManaStones.Count > 0)
+    				{
+    					WriteToChat("Uncharged Mana Stone ID = " + UnchargedManaStones.First().Id);
+    					Core.Actions.UseItem(UnchargedManaStones.Dequeue().Id,1);
+    					foreach(var stone in UnchargedManaStones)
+    					{
+    						WriteToChat("List Stones: " + stone.Id);
+    					}
+    					
     				}
     				else
     				{

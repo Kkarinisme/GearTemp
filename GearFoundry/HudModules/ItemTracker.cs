@@ -13,6 +13,8 @@ using VirindiViewService.Controls;
 using VirindiHUDs;
 using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using VirindiViewService.Themes;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace GearFoundry
 {
@@ -20,14 +22,14 @@ namespace GearFoundry
 	{		
 		//
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();
-		private List<ModifiedRule> ModifiedRulesList = new List<ModifiedRule>();
 		
 		private OpenContainer mOpenContainer = new OpenContainer();
 		private List<int> ItemExclusionList = new List<int>();
 		private List<IdentifiedObject> ItemTrackingList = new List<IdentifiedObject>();
 		private List<int> ItemIDListenList = new List<int>();
 		private List<int> ManaTankItems = new List<int>();
-		private  List<IdentifiedObject> SalvageItemsList = new  List<IdentifiedObject>();
+		private List<IdentifiedObject> SalvageItemsList = new  List<IdentifiedObject>();
+		private bool ItemHudActionComplete = true;
 		
 		private GearInspectorSettings GISettings = new GearInspectorSettings();
 		
@@ -35,22 +37,81 @@ namespace GearFoundry
 		{
 			public bool ContainerIsLooting = false;
 			public int ContainerGUID;
+			public DateTime LastCheck;
+			public DateTime LootingStarted;
 			public List<IdentifiedObject> ContainerIOs = new List<PluginCore.IdentifiedObject>();
 		}
 		
 		public class GearInspectorSettings
 		{
-			public bool IdentifySalvage = true;
-			public bool AutoLoot = true;
-			public bool AutoSalvage = true;
-			public bool AutoAetheria = true;
-			public bool AutoCombine = true;
-			public bool AutoStack = true;
-			public bool ModifiedLooting = true;
-			public bool GearScore = true;
-			public bool CheckForL7Scrolls = true;
+			public bool IdentifySalvage;
+			public bool AutoLoot;
+			public bool AutoSalvage;
+			public bool AutoAetheria;
+			public bool AutoCombine;
+			public bool AutoStack;
+			public bool ModifiedLooting;
+			public bool GearScore;
+			public bool CheckForL7Scrolls;
 			
     	}
+		
+		
+		private void GearInspectorReadWriteSettings(bool read)
+		{
+			try
+			{
+				FileInfo GearInspectorSettingsFile = new FileInfo(toonDir + @"\GearInspector.xml");
+								
+				if (read)
+				{
+					
+					try
+					{
+						if (!GearInspectorSettingsFile.Exists)
+		                {
+		                    try
+		                    {
+		                    	string filedefaults = GetResourceTextFile("GearInspector.xml");
+		                    	using (StreamWriter writedefaults = new StreamWriter(GearInspectorSettingsFile.ToString(), true))
+								{
+									writedefaults.Write(filedefaults);
+									writedefaults.Close();
+								}
+		                    }
+		                    catch (Exception ex) { LogError(ex); }
+		                }
+						
+						using (XmlReader reader = XmlReader.Create(GearInspectorSettingsFile.ToString()))
+						{	
+							XmlSerializer serializer = new XmlSerializer(typeof(GearInspectorSettings));
+							GISettings = (GearInspectorSettings)serializer.Deserialize(reader);
+							reader.Close();
+						}
+					}
+					catch
+					{
+						GISettings = new GearInspectorSettings();
+					}
+				}
+				
+				
+				if(!read)
+				{
+					if(GearInspectorSettingsFile.Exists)
+					{
+						GearInspectorSettingsFile.Delete();
+					}
+					
+					using (XmlWriter writer = XmlWriter.Create(GearInspectorSettingsFile.ToString()))
+					{
+			   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearInspectorSettings));
+			   			serializer2.Serialize(writer, GISettings);
+			   			writer.Close();
+					}
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
 		
 		private void SubscribeLootEvents()
 		{
@@ -86,16 +147,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(ItemTrackingList.Count > 0)
-				{
-					InspectorWait2Seconds = true;
-					InspectorLootDelayCounter = 0;					
-				}
-				else
-				{
-					InspectorWait2Seconds = false;
-				}
-				
+				ItemHudActionComplete = true;				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -153,13 +205,20 @@ namespace GearFoundry
 				//Check to see if previous container was still being IDd
 				if(e.ItemGuid != mOpenContainer.ContainerGUID)
 				{
-					//This should close a new container and reopen the old one.  If you simply closed the old one, or reopened the old one.
-					if(mOpenContainer.ContainerIsLooting) {Core.Actions.UseItem(mOpenContainer.ContainerGUID, 0);}
+					//This should close a new container and allow render frame to reopen the old one.  If you simply closed the old one, or reopened the old one.
+					//May be unnecessary
+					if(mOpenContainer.ContainerIsLooting) 
+					{
+						Core.Actions.UseItem(e.ItemGuid,0);
+					}
 					return;
+				}
+				else
+				{				
+					
 				}
 				
 				WorldObject container = Core.WorldFilter[e.ItemGuid];
-				
 				if(container == null) {return;}
 				if(container.Name.Contains("Storage")) {return;}
 				if(container.ObjectClass == ObjectClass.Corpse)
@@ -218,27 +277,27 @@ namespace GearFoundry
 			try
 			{
 				if(!bItemHudEnabled) {return;}
-        		int PossibleItemID = Convert.ToInt32(pMsg["object"]);
-        		
+    	   		int PossibleItemID = Convert.ToInt32(pMsg["object"]);		
         		//Read and report manual IDs, but keep them out of the item list
         		if(PossibleItemID == Host.Actions.CurrentSelection && bReportItemStrings)
         		{
         			ManualCheckItemForMatches(new IdentifiedObject(Core.WorldFilter[PossibleItemID]));
-        		}
-        		
+        		}  		
         		if(!ItemIDListenList.Contains(PossibleItemID)) {return;}
         		CheckItemForMatches(new IdentifiedObject(Core.WorldFilter[PossibleItemID]));
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
 		
+		//Callbacks are made using CoreManager.Current.RenderFrame event.  It checks every time a new frame is rendered.  sweet.....
 		
 		private void CheckContainer(WorldObject container)
 		{
 			try
 			{
-				mOpenContainer.ContainerIsLooting = true;
 				mOpenContainer.ContainerGUID = container.Id;
+				mOpenContainer.LastCheck = DateTime.Now;
+				mOpenContainer.LootingStarted = DateTime.Now;
 				WorldObject[] ContainerContents = Core.WorldFilter.GetByContainer(container.Id).ToArray();
 				foreach(WorldObject wo in ContainerContents)
 				{
@@ -256,12 +315,65 @@ namespace GearFoundry
 					foreach(IdentifiedObject IOItem in mOpenContainer.ContainerIOs)
 					{
 						SeparateItemsToID(IOItem);
+						LockContainerOpen();
 					}
 				}
 			}catch{}
 		}
 		
+		private void LockContainerOpen()
+		{
+			try
+			{
+				mOpenContainer.ContainerIsLooting = true;
+				CoreManager.Current.RenderFrame += new EventHandler<EventArgs>(RenderFrame_LootingCheck);					
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void RenderFrame_LootingCheck(object sender, System.EventArgs e)
+		{
+			try
+			{
+				if((DateTime.Now - mOpenContainer.LastCheck).TotalMilliseconds < 300) {return;}					
+        		if(mOpenContainer.ContainerIOs.Count > 0)
+        		{	
+        			if(mOpenContainer.ContainerGUID != Core.Actions.OpenedContainer)
+        			{
+        				Core.Actions.UseItem(mOpenContainer.ContainerGUID, 0);
+        			}
+        			if(GISettings.AutoLoot)
+        			{
+        				if(mOpenContainer.ContainerIOs.Any(x => x.IOR != IOResult.unknown))
+        			  	{
+        					Core.Actions.MoveItem(mOpenContainer.ContainerIOs.First(x => x.IOR != IOResult.unknown).Id,Core.CharacterFilter.Id,0,true);
+        			  	}
+        			}
+        		}
+        		else
+        		{
+        			mOpenContainer.ContainerIsLooting = false;
+        			UnlockContainer();
+        		}
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void UnlockContainer()
+		{
+			try
+			{
+				CoreManager.Current.RenderFrame -= new EventHandler<EventArgs>(RenderFrame_LootingCheck);					
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 
+		
+		private void AutoPickUp(int ItemId)
+		{
+			try
+			{
+				Core.Actions.MoveItem(ItemId, Core.CharacterFilter.Id, 0, true);
+			}catch(Exception ex){LogError(ex);}
+		}
 		
 		private void SeparateItemsToID(IdentifiedObject IOItem)
 		{
@@ -272,7 +384,6 @@ namespace GearFoundry
 				{
 					IOItem.IOR = IOResult.nomatch;
 					mOpenContainer.ContainerIOs.RemoveAll(x => !x.isvalid);
-					StillLootingCheck();
 					return;
 				}
 				
@@ -357,12 +468,9 @@ namespace GearFoundry
 				if(IOItem.IOR == IOResult.unknown) {CheckSalvageItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
+				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}				
 				
-				if(IOItem.IOR != IOResult.unknown)
-				{
-					ItemTrackingList.Add(IOItem);
-				}
+				if(IOItem.IOR != IOResult.unknown) {EvaluateItemMatches(IOItem);}
 				
 			}catch{}		
 		}	
@@ -488,6 +596,7 @@ namespace GearFoundry
 		
 		
 		//Irq:  This code is untested and only partially complete
+		List<int> ModifiedIOSpells = new List<int>();
 		private void CheckRulesItem(ref IdentifiedObject IOItemWithIDReference)
 		{
 			
@@ -495,6 +604,7 @@ namespace GearFoundry
 			try
 			{
 				
+				ModifiedIOSpells.Clear();
 				IdentifiedObject IOItemWithID = IOItemWithIDReference;
 
 				var AppliesToListMatches = from rules in ItemRulesList
@@ -505,276 +615,477 @@ namespace GearFoundry
 				if(AppliesToListMatches.Count() == 0) {return;}
 				
 				string RuleName;
-				foreach(var rule in AppliesToListMatches)
-				{	
+				if(GISettings.ModifiedLooting)
+				{
+					for(int i = 0; i < IOItemWithID.SpellCount; i ++)
+					{
+						ModifiedIOSpells.Add(IOItemWithID.Spell(i));
+					}
 					
-					//DEBUG CODE
-					WriteToChat(rule.RuleName);
-					
-					RuleName = rule.RuleName;					
-					//If it's already assigned a rule, don't check any longer. 
-					if(IOItemWithID.IOR == IOResult.rule){return;}
-
-					//Irquk:  Keywords confirmed functional
-					if(rule.RuleKeyWords.Count() > 0)
-					{
-						foreach(string checkstring in rule.RuleKeyWords)
-						{
-							if(!IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
-						}
-					}
-					//Irquk:  Exclusion Keywords confirmed functional
-					if(rule.RuleKeyWordsNot.Count() > 0)
-					{
-						foreach(string checkstring in rule.RuleKeyWordsNot)
-						{
-							if(IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
-						}
-					}
-					//Irquk:  Confirmed functional Check Arcane Lore (Arcane Lore is a <= field)
-					if(rule.RuleArcaneLore > 0)
-					{
-						if(IOItemWithID.IntValues(LongValueKey.LoreRequirement) > rule.RuleArcaneLore) {RuleName = String.Empty; goto Next;}
-					}
-//					//Irquk: confirmed functional Check Value, this is a <= field
-					if(rule.RuleValue > 0)
-					{
-						if(IOItemWithID.IntValues(LongValueKey.Value) > rule.RuleValue) {RuleName = String.Empty; goto Next;}
-					}
-//					//Irquk: confirmed functional Check Work, this is a <= field
-					if(rule.RuleWork > 0)
-					{
-						if(IOItemWithID.DblValues(DoubleValueKey.SalvageWorkmanship) > rule.RuleWork) {RuleName = String.Empty; goto Next;}
-					}
-//					//Irquk: Confirmed Functional. Check Burden, this is a <= field
-					if(rule.RuleBurden > 0)
-					{
-						if(IOItemWithID.IntValues(LongValueKey.Burden) > rule.RuleBurden) {RuleName = String.Empty; goto Next;}
-					}
-//					//Irquk:  Confirmed Functional  Check Wield Level.  Field is a <= field
-					if(rule.RuleWieldLevel > 0)
-					{
-						int levelcheck = 0;
-						if(IOItemWithID.WieldReqType == 7) {levelcheck = IOItemWithID.WieldReqValue; }
-						if(IOItemWithID.WieldReqType2 == 7) {levelcheck = IOItemWithID.WieldReqValue2;}	
-						if(levelcheck > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
-					}
-//					//Irquk:  confirmed Functional, basica comparison only to WieldAttribute1
-					if(rule.RuleWieldAttribute > 0)
-					{
-						if(IOItemWithID.WieldReqType != 7) 
-						{
-							if(IOItemWithID.WieldReqAttribute !=  rule.RuleWieldAttribute){	RuleName = String.Empty; goto Next;}
-						}
-					}
-//					//Irquk:  Confirmed Functional
-					if(rule.RuleMastery > 0)
-					{
-						if(IOItemWithID.WeaponMasteryCategory != rule.RuleMastery) {RuleName = String.Empty; goto Next;}
-					}
-//					//Irquk:  Confirmed Functional
-					if(rule.RuleMeleeD > 0)
-					{
-						if(rule.RuleMeleeD > IOItemWithID.WeaponMeleeBonus) {RuleName = String.Empty; goto Next;}
-					}
-//					//Irquk:  Confirmed Functional
-					if(rule.RuleMcModAttack > 0)
-					{
-						if(IOItemWithID.ObjectClass == ObjectClass.WandStaffOrb)
-						{
-							//NOTE:  Mana C doesn't report as 1.xxxx like all other doubles for weapons.  It has had +1 added in IdentifiedObject get acesssor to correct
-							if(rule.RuleMcModAttack > (IOItemWithID.WeaponManaCBonus)) {RuleName = String.Empty; goto Next;}
-						}
-						if(IOItemWithID.ObjectClass == ObjectClass.MissileWeapon)
-						{
-							if(rule.RuleMcModAttack > IOItemWithID.WeaponMissileModifier) {RuleName = String.Empty; goto Next;}
-						}
-						if(IOItemWithID.ObjectClass == ObjectClass.MeleeWeapon)
-						{
-							if(rule.RuleMcModAttack > IOItemWithID.WeaponAttackBonus) {RuleName = String.Empty; goto Next;}
-						}
-					}
-//					//Irquk:  confirmed functional for Missile D bonus
-					//TODO:  Check magic D bonus
-					if(rule.RuleMagicD > 0)
-					{
-							if(IOItemWithID.WeaponMagicDBonus > 0)
+					switch(IOItemWithID.ObjectClass)
+					{					
+						case ObjectClass.Armor:
+							//this matching currently ignores armor types
+							var reducedarmormatches = from ruls in AppliesToListMatches
+								where IOItemWithID.ArmorLevel >= ruls.RuleArmorLevel &&  //will match 0 AL values on rule.
+								(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.ArmorCoverage) == IOItemWithID.ArmorCoverage) &&   //Will ignore or match armor coverage for true
+								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	//will determine if number of spells are on object
+								(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.ArmorSet))  && //Will ignore or match armor sets
+								ruls.RuleUnenchantable == IOItemWithID.Unehcantable
+								orderby ruls.RulePriority
+								select ruls;
+							if(reducedarmormatches.Count() > 0)
 							{
-								if(rule.RuleMagicD > IOItemWithID.WeaponMagicDBonus) {RuleName = String.Empty; goto Next;}
-							}
-							else if(IOItemWithID.WeaponMissileDBonus > 0)
-							{
-								if(rule.RuleMagicD > IOItemWithID.WeaponMissileDBonus) {RuleName = String.Empty; goto Next;}
+								IOItemWithID.rulename = reducedarmormatches.First().RuleName; 
+								IOItemWithID.IOR = IOResult.rule; 
+								return;
 							}
 							else
 							{
-								RuleName = String.Empty; goto Next;
+								return;
+							}
+							
+						case ObjectClass.Clothing:
+							if(IOItemWithID.ArmorLevel > 0)
+							{
+								var reducedarmorclothmatches = from ruls in AppliesToListMatches
+									where IOItemWithID.ArmorLevel >= ruls.RuleArmorLevel &&  //will match 0 AL values on rule.
+									(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.ArmorCoverage) == IOItemWithID.ArmorCoverage) &&   //Will ignore or match armor coverage for true
+									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	//will determine if number of spells are on object
+									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.ArmorSet))  && //Will ignore or match armor sets
+									ruls.RuleUnenchantable == IOItemWithID.Unehcantable
+									orderby ruls.RulePriority
+									select ruls;	
+								if(reducedarmorclothmatches.Count() > 0)
+								{
+									IOItemWithID.rulename = reducedarmorclothmatches.First().RuleName; 
+									IOItemWithID.IOR = IOResult.rule; 
+									return;
+								}
+								else 
+								{
+									return;
+								}
+							}
+							else if(IOItemWithID.WieldSlot == 0x8000000)
+							{
+								var reducedcloakmatches = from ruls in AppliesToListMatches
+									where IOItemWithID.MaxItemLevel >= ruls.RuleItemLevel &&
+									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
+									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.ArmorSet))
+									orderby ruls.RulePriority
+									select ruls;
+								if(reducedcloakmatches.Count() > 0)
+								{
+									IOItemWithID.rulename = reducedcloakmatches.First().RuleName; 
+									IOItemWithID.IOR = IOResult.rule; 
+									return;
+								}
+								else 
+								{
+									return;
+								}
+							}
+							else
+							{
+								var reducedclothmatches = from ruls in AppliesToListMatches
+									where ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber
+									orderby ruls.RulePriority
+									select ruls;
+								if(reducedclothmatches.Count() > 0)
+								{
+									IOItemWithID.rulename = reducedclothmatches.First().RuleName; 
+									IOItemWithID.IOR = IOResult.rule; 
+									return;
+								}
+								else 
+								{
+									return;
+								}										
+							}
+
+						case ObjectClass.MeleeWeapon:
+						case ObjectClass.MissileWeapon:
+						case ObjectClass.WandStaffOrb:
+							var reducedmeleematches = from ruls in AppliesToListMatches
+								where IOItemWithID.GearScore >= ruls.WeaponModSum &&
+								((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0) &&
+								ruls.RuleWieldAttribute == IOItemWithID.WieldReqAttribute &&
+								((ruls.RuleWeaponEnabledA && IOItemWithID.WieldReqValue == ruls.WieldReqValueA) ||
+								 (ruls.RuleWeaponEnabledB && IOItemWithID.WieldReqValue == ruls.WieldReqValueB) ||
+								 (ruls.RuleWeaponEnabledC && IOItemWithID.WieldReqValue == ruls.WieldReqValueC) ||
+								 (ruls.RuleWeaponEnabledD && IOItemWithID.WieldReqValue == ruls.WieldReqValueD))
+								orderby ruls.RulePriority
+								select ruls;
+							if(reducedmeleematches.Count() > 0)
+							{
+								IOItemWithID.rulename = reducedmeleematches.First().RuleName; 
+								IOItemWithID.IOR = IOResult.rule; 
+								return;
+							}
+							else
+							{
+								return;
 							}	
-					}
-					//Irquk:  Confirmed Functional
-					if(rule.RuleWeaponEnabledA || rule.RuleWeaponEnabledB || rule.RuleWeaponEnabledC || rule.RuleWeaponEnabledD)
-					{
-						bool[] ruletrue = {false, false, false, false};
-						if(rule.RuleWeaponEnabledA)
-						{	
-							if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.WieldReqValue && 
-							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.Variance <= rule.VarianceA))
-							     {ruletrue[0] = true;}
-						}
-						if(rule.RuleWeaponEnabledB)
-						{	
-							if((rule.MSCleaveB == IOItemWithID.MSCleave && rule.WieldReqValueB == IOItemWithID.WieldReqValue && 
-							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageB && IOItemWithID.Variance <= rule.VarianceB))
-							     {ruletrue[1] = true;}
-						}
-						if(rule.RuleWeaponEnabledC)
-						{	
-							if((rule.MSCleaveC == IOItemWithID.MSCleave && rule.WieldReqValueC == IOItemWithID.WieldReqValue && 
-							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageC && IOItemWithID.Variance <= rule.VarianceC))
-							     {ruletrue[2] = true;}
-						}					
-						if(rule.RuleWeaponEnabledD)
-						{	
-							if((rule.MSCleaveD == IOItemWithID.MSCleave && rule.WieldReqValueD == IOItemWithID.WieldReqValue && 
-							    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageD && IOItemWithID.Variance <= rule.VarianceD))
-							     {ruletrue[3] = true;}
-						}
-						if(!ruletrue[0] && !ruletrue[1] && !ruletrue[2] && !ruletrue[3]) {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk:  Confirmed functional
-					if(rule.RuleDamageTypes > 0)
-					{
-						if(!((rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)) {RuleName = String.Empty; goto Next;}
-					}
-//					
-//					//Irquk:  Confirmed functional
-					if(rule.RuleArmorLevel > 0)
-					{
-						if(rule.RuleArmorLevel > IOItemWithID.ArmorLevel) {RuleName = String.Empty; goto Next;}
-					}
-//					//Irquk:  Confirmed functional
-					if(rule.RuleArmorTypes.Length > 0)
-					{
-						foreach(int armor in rule.RuleArmorTypes)
-						{
-							WriteToChat(ArmorIndex[armor].name);
-						}
-						int IOArmorType = -1;  //I'd prefer 0, but there's a 0 index in the ArmorIndex
-						if(!(IOItemWithID.ArmorLevel > 0)) {RuleName = String.Empty; goto Next;}  //If it's not armor, get rid of it
-						//If it's unknown type make it other.
-						if(!ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower()))) 
-						{
-							IOArmorType = ArmorIndex.Find(x => x.name == "Other").ID;
-						}
-						else if(ArmorIndex.Any(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())))
-						{
-							IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())).ID;
-						}
-						else if(IOArmorType < 0 && ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())))
-						{
-							IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())).ID;
-						}
-						if(!rule.RuleArmorTypes.Contains(IOArmorType)) {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk:  Confirmed Functional
-					if(rule.RuleArmorSet.Length > 0)
-					{
-						if(!rule.RuleArmorSet.Contains(IOItemWithID.ArmorSet)){RuleName = String.Empty; goto Next;}
-					}
-					//Irquk Confirmed Functional
-					if(rule.RuleArmorCoverage > 0)
-					{
-						if((IOItemWithID.ArmorCoverage & rule.RuleArmorCoverage) != IOItemWithID.ArmorCoverage) {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk Confirmed Functional
-					if(rule.RuleUnenchantable)
-					{
-						if(IOItemWithID.IntValues(LongValueKey.Unenchantable) != 9999) {RuleName = String.Empty; goto Next;}
-					}
-//					
-//					
-					bool red = false;
-					bool yellow = false;
-					bool blue = false;
-					//Irquk:  Confirmed Functional
-					if(rule.RuleRed || rule.RuleYellow || rule.RuleBlue)
-					{
-						if(rule.RuleRed) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 225) {red = true;}}
-						if(rule.RuleYellow) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 150) {yellow = true;}}
-						if(rule.RuleBlue){if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue  == 75) {blue = true;}}
-						if(!red && !yellow && !blue){RuleName = String.Empty; goto Next;}
-					}
-									
-					//Irquk:  Confirmed functional
-					if(rule.RuleItemLevel > 0)
-					{
-						if(IOItemWithID.MaxItemLevel < rule.RuleItemLevel) {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk:  Confirmed functional
-					if(rule.RuleEssenceLevel > 0)
-					{
-						if(rule.RuleEssenceLevel > IOItemWithID.EssenceLevel) {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk:  Confirmed functional
-					if(rule.RuleEssenceDamage > 0)
-					{
-						if(IOItemWithID.EssenceDam < rule.RuleEssenceDamage)  {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk:  confirmed functional
-					if(rule.RuleEssenceDamageResist > 0)
-					{
-						if(IOItemWithID.EssenceDamResist < rule.RuleEssenceDamageResist)  {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk:  confirmed functional
-					if(rule.RuleEssenceCrit > 0)
-					{
-						if(IOItemWithID.EssenceCrit < rule.RuleEssenceCrit)  {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk:  confirmed functional
-					if(rule.RuleEssenceCritResist > 0)
-					{
-						if(IOItemWithID.EssenceCritDamResist < rule.RuleEssenceCritResist)  {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk:  Confirmed functional
-					if(rule.RuleEssenceCritDam > 0)
-					{
-						if(IOItemWithID.EssenceCritDam < rule.RuleEssenceCritDam)  {RuleName = String.Empty; goto Next;}
-					}
-					//Irquk:  confirmed functional
-					if(rule.RuleEssenceCritDamResist > 0)
-					{
-						if(IOItemWithID.EssenceCritDamResist < rule.RuleEssenceCritDamResist)  {RuleName = String.Empty; goto Next;}
-					}
-				
-					
-					//Irquk:  confirmed functional. 
-					if(rule.RuleSpellNumber > 0)
-					{
-						int spellmatches = 0;
-						for(int i = 0; i < IOItemWithID.SpellCount; i++)
-						{
-							if(rule.RuleSpells.Contains(IOItemWithID.Spell(i))) {spellmatches++;}
-						}
-						//Irq:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
-						if(rule.RuleSpells.Contains(10000)){if(IOItemWithID.IntValues((LongValueKey)352) == 2){spellmatches++;}}
-						if(spellmatches < rule.RuleSpellNumber) {RuleName = String.Empty; goto Next;}
-					}
 
-
-					if(RuleName != String.Empty)
-					{
-						IOItemWithIDReference.IOR = IOResult.rule;
-						IOItemWithIDReference.rulename = RuleName;
-						return;
+								
+						case ObjectClass.Gem:
+							if(IOItemWithID.WieldSlot == 0x10000000 || IOItemWithID.WieldSlot == 0x20000000 || IOItemWithID.WieldSlot == 0x40000000)
+							{
+							 	var reducedaetheriamatches = from ruls in AppliesToListMatches
+							 		where ((ruls.RuleRed && IOItemWithID.WieldSlot == 0x40000000) ||
+							 		       (ruls.RuleYellow && IOItemWithID.WieldSlot == 0x20000000) ||
+							 		       (ruls.RuleBlue && IOItemWithID.WieldSlot == 0x10000000)) &&
+							 				IOItemWithID.MaxItemLevel >= ruls.RuleItemLevel
+							 		orderby ruls.RulePriority
+							 		select ruls;
+							 	if(reducedaetheriamatches.Count() > 0)
+								{
+									IOItemWithID.rulename = reducedaetheriamatches.First().RuleName; 
+									IOItemWithID.IOR = IOResult.rule; 
+									return;
+								}
+								else
+								{
+									return;
+								}	
+						   	}
+							else
+							{
+								var reducedgemmatches = from ruls in AppliesToListMatches
+									where ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber
+									orderby ruls.RulePriority
+									select ruls;
+								if(reducedgemmatches.Count() > 0)
+								{
+									IOItemWithID.rulename = reducedgemmatches.First().RuleName; 
+									IOItemWithID.IOR = IOResult.rule; 
+									return;
+								}
+								else
+								{
+									return;
+								}	
+							}
+							
+						case ObjectClass.Jewelry:
+							var reducedjewelrymatches = from ruls in AppliesToListMatches
+								where ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber
+									orderby ruls.RulePriority
+									select ruls;
+								if(reducedjewelrymatches.Count() > 0)
+								{
+									IOItemWithID.rulename = reducedjewelrymatches.First().RuleName; 
+									IOItemWithID.IOR = IOResult.rule; 
+									return;
+								}
+								else
+								{
+									return;
+								}
+						
+						case ObjectClass.Misc:
+							if(IOItemWithID.Name.ToLower().Contains("essence"))
+							{
+								WriteToChat("Bonus Comparison = " + IOItemWithID.BonusComparison);
+								WriteToChat("Essence Level = " + IOItemWithID.EssenceLevel);
+								WriteToChat("Essence Mastery = " + IOItemWithID.WeaponMasteryCategory);
+								
+								var reducedessencematches = from ruls in AppliesToListMatches
+									where IOItemWithID.BonusComparison >= ruls.EssenceModSum &&
+									IOItemWithID.EssenceLevel == ruls.RuleEssenceLevel &&
+									(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
+									((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0)
+									orderby ruls.RulePriority
+									select ruls;
+								
+								if(reducedessencematches.Count() > 0)
+								{
+									IOItemWithID.rulename = reducedessencematches.First().RuleName; 
+									IOItemWithID.IOR = IOResult.rule; 
+									return;
+								}
+								else
+								{
+									return;
+								}	
+							}
+							else
+							{
+								return;
+							}
+						default:
+							return;
 					}
-					
-					Next:
-					if(RuleName == String.Empty)
-					{
-						IOItemWithIDReference.IOR = IOResult.unknown;
-					}	
 				}
-				return;
+				else
+				{
+					foreach(var rule in AppliesToListMatches)
+					{					
+						RuleName = rule.RuleName;					
+						//If it's already assigned a rule, don't check any longer. 
+						if(IOItemWithID.IOR == IOResult.rule){return;}
+	
+						//Irquk:  Keywords confirmed functional
+						if(rule.RuleKeyWords.Count() > 0)
+						{
+							foreach(string checkstring in rule.RuleKeyWords)
+							{
+								if(!IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
+							}
+						}
+						//Irquk:  Exclusion Keywords confirmed functional
+						if(rule.RuleKeyWordsNot.Count() > 0)
+						{
+							foreach(string checkstring in rule.RuleKeyWordsNot)
+							{
+								if(IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
+							}
+						}
+						//Irquk:  Confirmed functional Check Arcane Lore (Arcane Lore is a <= field)
+						if(rule.RuleArcaneLore > 0)
+						{
+							if(IOItemWithID.IntValues(LongValueKey.LoreRequirement) > rule.RuleArcaneLore) {RuleName = String.Empty; goto Next;}
+						}
+	//					//Irquk: confirmed functional Check Value, this is a <= field
+						if(rule.RuleValue > 0)
+						{
+							if(IOItemWithID.IntValues(LongValueKey.Value) > rule.RuleValue) {RuleName = String.Empty; goto Next;}
+						}
+	//					//Irquk: confirmed functional Check Work, this is a <= field
+						if(rule.RuleWork > 0)
+						{
+							if(IOItemWithID.DblValues(DoubleValueKey.SalvageWorkmanship) > rule.RuleWork) {RuleName = String.Empty; goto Next;}
+						}
+	//					//Irquk: Confirmed Functional. Check Burden, this is a <= field
+						if(rule.RuleBurden > 0)
+						{
+							if(IOItemWithID.IntValues(LongValueKey.Burden) > rule.RuleBurden) {RuleName = String.Empty; goto Next;}
+						}
+	//					//Irquk:  Confirmed Functional  Check Wield Level.  Field is a <= field
+						if(rule.RuleWieldLevel > 0)
+						{
+							int levelcheck = 0;
+							if(IOItemWithID.WieldReqType == 7) {levelcheck = IOItemWithID.WieldReqValue; }
+							if(IOItemWithID.WieldReqType2 == 7) {levelcheck = IOItemWithID.WieldReqValue2;}	
+							if(levelcheck > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
+						}
+	//					//Irquk:  confirmed Functional, basica comparison only to WieldAttribute1
+						if(rule.RuleWieldAttribute > 0)
+						{
+							if(IOItemWithID.WieldReqType != 7) 
+							{
+								if(IOItemWithID.WieldReqAttribute !=  rule.RuleWieldAttribute){	RuleName = String.Empty; goto Next;}
+							}
+						}
+	//					//Irquk:  Confirmed Functional
+						if(rule.RuleMastery > 0)
+						{
+							if(IOItemWithID.WeaponMasteryCategory != rule.RuleMastery) {RuleName = String.Empty; goto Next;}
+						}
+	//					//Irquk:  Confirmed Functional
+						if(rule.RuleMeleeD > 0)
+						{
+							if(rule.RuleMeleeD > IOItemWithID.WeaponMeleeBonus) {RuleName = String.Empty; goto Next;}
+						}
+	//					//Irquk:  Confirmed Functional
+						if(rule.RuleMcModAttack > 0)
+						{
+							if(IOItemWithID.ObjectClass == ObjectClass.WandStaffOrb)
+							{
+								//NOTE:  Mana C doesn't report as 1.xxxx like all other doubles for weapons.  It has had +1 added in IdentifiedObject get acesssor to correct
+								if(rule.RuleMcModAttack > (IOItemWithID.WeaponManaCBonus)) {RuleName = String.Empty; goto Next;}
+							}
+							if(IOItemWithID.ObjectClass == ObjectClass.MissileWeapon)
+							{
+								if(rule.RuleMcModAttack > IOItemWithID.WeaponMissileModifier) {RuleName = String.Empty; goto Next;}
+							}
+							if(IOItemWithID.ObjectClass == ObjectClass.MeleeWeapon)
+							{
+								if(rule.RuleMcModAttack > IOItemWithID.WeaponAttackBonus) {RuleName = String.Empty; goto Next;}
+							}
+						}
+	//					//Irquk:  confirmed functional for Missile D bonus
+						//TODO:  Check magic D bonus
+						if(rule.RuleMagicD > 0)
+						{
+								if(IOItemWithID.WeaponMagicDBonus > 0)
+								{
+									if(rule.RuleMagicD > IOItemWithID.WeaponMagicDBonus) {RuleName = String.Empty; goto Next;}
+								}
+								else if(IOItemWithID.WeaponMissileDBonus > 0)
+								{
+									if(rule.RuleMagicD > IOItemWithID.WeaponMissileDBonus) {RuleName = String.Empty; goto Next;}
+								}
+								else
+								{
+									RuleName = String.Empty; goto Next;
+								}	
+						}
+						//Irquk:  Confirmed Functional
+						if(rule.RuleWeaponEnabledA || rule.RuleWeaponEnabledB || rule.RuleWeaponEnabledC || rule.RuleWeaponEnabledD)
+						{
+							bool[] ruletrue = {false, false, false, false};
+							if(rule.RuleWeaponEnabledA)
+							{	
+								if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.WieldReqValue && 
+								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.Variance <= rule.VarianceA))
+								     {ruletrue[0] = true;}
+							}
+							if(rule.RuleWeaponEnabledB)
+							{	
+								if((rule.MSCleaveB == IOItemWithID.MSCleave && rule.WieldReqValueB == IOItemWithID.WieldReqValue && 
+								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageB && IOItemWithID.Variance <= rule.VarianceB))
+								     {ruletrue[1] = true;}
+							}
+							if(rule.RuleWeaponEnabledC)
+							{	
+								if((rule.MSCleaveC == IOItemWithID.MSCleave && rule.WieldReqValueC == IOItemWithID.WieldReqValue && 
+								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageC && IOItemWithID.Variance <= rule.VarianceC))
+								     {ruletrue[2] = true;}
+							}					
+							if(rule.RuleWeaponEnabledD)
+							{	
+								if((rule.MSCleaveD == IOItemWithID.MSCleave && rule.WieldReqValueD == IOItemWithID.WieldReqValue && 
+								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageD && IOItemWithID.Variance <= rule.VarianceD))
+								     {ruletrue[3] = true;}
+							}
+							if(!ruletrue[0] && !ruletrue[1] && !ruletrue[2] && !ruletrue[3]) {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk:  Confirmed functional
+						if(rule.RuleDamageTypes > 0)
+						{
+							if(!((rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)) {RuleName = String.Empty; goto Next;}
+						}
+	//					
+	//					//Irquk:  Confirmed functional
+						if(rule.RuleArmorLevel > 0)
+						{
+							if(rule.RuleArmorLevel > IOItemWithID.ArmorLevel) {RuleName = String.Empty; goto Next;}
+						}
+	//					//Irquk:  Confirmed functional
+						if(rule.RuleArmorTypes.Length > 0)
+						{
+							foreach(int armor in rule.RuleArmorTypes)
+							{
+								WriteToChat(ArmorIndex[armor].name);
+							}
+							int IOArmorType = -1;  //I'd prefer 0, but there's a 0 index in the ArmorIndex
+							if(!(IOItemWithID.ArmorLevel > 0)) {RuleName = String.Empty; goto Next;}  //If it's not armor, get rid of it
+							//If it's unknown type make it other.
+							if(!ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower()))) 
+							{
+								IOArmorType = ArmorIndex.Find(x => x.name == "Other").ID;
+							}
+							else if(ArmorIndex.Any(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())))
+							{
+								IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())).ID;
+							}
+							else if(IOArmorType < 0 && ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())))
+							{
+								IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())).ID;
+							}
+							if(!rule.RuleArmorTypes.Contains(IOArmorType)) {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk:  Confirmed Functional
+						if(rule.RuleArmorSet.Length > 0)
+						{
+							if(!rule.RuleArmorSet.Contains(IOItemWithID.ArmorSet)){RuleName = String.Empty; goto Next;}
+						}
+						//Irquk Confirmed Functional
+						if(rule.RuleArmorCoverage > 0)
+						{
+							if((IOItemWithID.ArmorCoverage & rule.RuleArmorCoverage) != IOItemWithID.ArmorCoverage) {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk Confirmed Functional
+						if(rule.RuleUnenchantable)
+						{
+							if(IOItemWithID.IntValues(LongValueKey.Unenchantable) != 9999) {RuleName = String.Empty; goto Next;}
+						}
+				
+						bool red = false;
+						bool yellow = false;
+						bool blue = false;
+						//Irquk:  Confirmed Functional
+						if(rule.RuleRed || rule.RuleYellow || rule.RuleBlue)
+						{
+							if(rule.RuleRed) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 225) {red = true;}}
+							if(rule.RuleYellow) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 150) {yellow = true;}}
+							if(rule.RuleBlue){if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue  == 75) {blue = true;}}
+							if(!red && !yellow && !blue){RuleName = String.Empty; goto Next;}
+						}
+										
+						//Irquk:  Confirmed functional
+						if(rule.RuleItemLevel > 0)
+						{
+							if(IOItemWithID.MaxItemLevel < rule.RuleItemLevel) {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk:  Confirmed functional
+						if(rule.RuleEssenceLevel > 0)
+						{
+							if(rule.RuleEssenceLevel > IOItemWithID.EssenceLevel) {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk:  Confirmed functional
+						if(rule.RuleEssenceDamage > 0)
+						{
+							if(IOItemWithID.Dam < rule.RuleEssenceDamage)  {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk:  confirmed functional
+						if(rule.RuleEssenceDamageResist > 0)
+						{
+							if(IOItemWithID.DamResist < rule.RuleEssenceDamageResist)  {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk:  confirmed functional
+						if(rule.RuleEssenceCrit > 0)
+						{
+							if(IOItemWithID.Crit < rule.RuleEssenceCrit)  {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk:  confirmed functional
+						if(rule.RuleEssenceCritResist > 0)
+						{
+							if(IOItemWithID.CritDamResist < rule.RuleEssenceCritResist)  {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk:  Confirmed functional
+						if(rule.RuleEssenceCritDam > 0)
+						{
+							if(IOItemWithID.CritDam < rule.RuleEssenceCritDam)  {RuleName = String.Empty; goto Next;}
+						}
+						//Irquk:  confirmed functional
+						if(rule.RuleEssenceCritDamResist > 0)
+						{
+							if(IOItemWithID.CritDamResist < rule.RuleEssenceCritDamResist)  {RuleName = String.Empty; goto Next;}
+						}
+					
+						
+						//Irquk:  confirmed functional. 
+						if(rule.RuleSpellNumber > 0)
+						{
+							int spellmatches = 0;
+							for(int i = 0; i < IOItemWithID.SpellCount; i++)
+							{
+								if(rule.RuleSpells.Contains(IOItemWithID.Spell(i))) {spellmatches++;}
+							}
+							//Irq:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
+							if(rule.RuleSpells.Contains(10000)){if(IOItemWithID.IntValues((LongValueKey)352) == 2){spellmatches++;}}
+							if(spellmatches < rule.RuleSpellNumber) {RuleName = String.Empty; goto Next;}
+						}
+	
+	
+						if(RuleName != String.Empty)
+						{
+							IOItemWithIDReference.IOR = IOResult.rule;
+							IOItemWithIDReference.rulename = RuleName;
+							return;
+						}
+						
+						Next:
+						if(RuleName == String.Empty)
+						{
+							IOItemWithIDReference.IOR = IOResult.unknown;
+						}	
+					}
+					return;	
+				}
 				
 			}
 			catch(Exception ex) {LogError(ex);}
@@ -789,96 +1100,58 @@ namespace GearFoundry
 			{
 				switch(IOItem.IOR)
 				{
-					case IOResult.unknown:
-						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						StillLootingCheck();
-						return;
 					case IOResult.rule:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						StillLootingCheck();
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.manatank:
 						ItemTrackingList.Add(IOItem);
+						ManaTankItems.Add(IOItem.Id);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						StillLootingCheck();
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.rare:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						StillLootingCheck();
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.salvage:
 						ItemTrackingList.Add(IOItem);
 						SalvageItemsList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						StillLootingCheck();
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.spell:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						StillLootingCheck();
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.trophy:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						StillLootingCheck();
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					case IOResult.val:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						StillLootingCheck();
+						UpdateItemHud();
 						//PlaySound?
 						return;
 					default:
 						ItemExclusionList.Add(IOItem.Id);
 						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						StillLootingCheck();
 						return;
 				}
 			}catch{}
 		}
 
-		private void StillLootingCheck()
-        {
-        	try
-        	{
-        		bool StillLootingFlag = false;
-        		
-        		IdentifiedObject[] StillLootingCheckArray = mOpenContainer.ContainerIOs.ToArray();
-        		if(StillLootingCheckArray.Count() > 0)
-        		{
-        			foreach(IdentifiedObject IOLootingCheck in StillLootingCheckArray)
-	        		{
-        				if(!StillLootingFlag)
-        				{
-        					 if(IOLootingCheck.IOR == IOResult.unknown) {StillLootingFlag = true;}
-        				}
-	        		}
-        			mOpenContainer.ContainerIsLooting = StillLootingFlag;
-        		}
-        		else
-        		{
-        			mOpenContainer.ContainerIsLooting = false;
-        		}
-        		
-        	}
-        	catch{}
-        }
 			
 		private bool InspectorTab = false;
 		private bool InspectorUstTab = false;
@@ -921,6 +1194,13 @@ namespace GearFoundry
 	
     	private void RenderItemHud()
     	{
+    		try
+    		{
+    			GearInspectorReadWriteSettings(true);
+    	
+    		}catch{}
+    		
+    		
     		try{
     			    			
     			if(ItemHudView != null)
@@ -1103,6 +1383,17 @@ namespace GearFoundry
     			InspectorCheckForL7Scrolls.Text = "Loot Unknown L7 Spells";
     			ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0,126,150,16));
     			InspectorCheckForL7Scrolls.Checked = GISettings.CheckForL7Scrolls;
+    			
+    			InspectorIdentifySalvage.Change += InspectorIdentifySalvage_Change;
+    			InspectorAutoLoot.Change += InspectorAutoLoot_Change;
+    			InspectorAutoAetheria.Change += InspectorAutoAetheria_Change;
+    			InspectorAutoCombine.Change += InspectorAutoCombine_Change;
+    			InspectorAutoStack.Change += InspectorAutoStack_Change;
+    			InspectorModifiedLooting.Change += InspectorModifiedLooting_Change;
+    			InspectorGearScore.Change += InspectorGearScore_Change;
+    			InspectorCheckForL7Scrolls.Change += InspectorCheckForL7Scrolls_Change;
+    			
+    			
     			  			
     			InspectorSettingsTab = true;
     			
@@ -1110,12 +1401,104 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
+    	private void InspectorIdentifySalvage_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.IdentifySalvage = InspectorIdentifySalvage.Checked;
+    			GearInspectorReadWriteSettings(false);
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+
+    	private void InspectorAutoLoot_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.AutoLoot = InspectorAutoLoot.Checked;
+    			GearInspectorReadWriteSettings(false);
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void InspectorAutoAetheria_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.AutoAetheria = InspectorAutoAetheria.Checked;
+    			GearInspectorReadWriteSettings(false);
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void InspectorAutoCombine_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.AutoCombine = InspectorAutoCombine.Checked;
+				GearInspectorReadWriteSettings(false);    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void InspectorAutoStack_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.AutoStack = InspectorAutoStack.Checked;
+    			GearInspectorReadWriteSettings(false);
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void InspectorModifiedLooting_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.ModifiedLooting = InspectorModifiedLooting.Checked;
+    			GearInspectorReadWriteSettings(false);
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void InspectorGearScore_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.GearScore = InspectorGearScore.Checked;
+    			GearInspectorReadWriteSettings(false);
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void InspectorCheckForL7Scrolls_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.CheckForL7Scrolls = InspectorCheckForL7Scrolls.Checked;
+    			GearInspectorReadWriteSettings(false);
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    		
     	private void DisposeItemHudSettingsTab()
     	{
     		try
     		{
     			if(!InspectorSettingsTab){return;}
     			
+    			InspectorIdentifySalvage.Change -= InspectorIdentifySalvage_Change;
+    			InspectorAutoLoot.Change -= InspectorAutoLoot_Change;
+    			InspectorAutoAetheria.Change -= InspectorAutoAetheria_Change;
+    			InspectorAutoCombine.Change -= InspectorAutoCombine_Change;
+    			InspectorAutoStack.Change -= InspectorAutoStack_Change;
+    			InspectorModifiedLooting.Change -= InspectorModifiedLooting_Change;
+    			InspectorGearScore.Change -= InspectorGearScore_Change;
+    			InspectorCheckForL7Scrolls.Change -= InspectorCheckForL7Scrolls_Change;
+    			
+    			
+    			InspectorIdentifySalvage.Dispose();
+    			InspectorAutoLoot.Dispose();
+    			InspectorAutoAetheria.Dispose();
+    			InspectorAutoCombine.Dispose();
+    			InspectorAutoStack.Dispose();
+    			InspectorModifiedLooting.Dispose();
+    			InspectorGearScore.Dispose();
+    			InspectorCheckForL7Scrolls.Dispose();
+    			  			
     			InspectorSettingsTab = false;
     			
     		}catch(Exception ex){LogError(ex);}
@@ -1154,10 +1537,7 @@ namespace GearFoundry
     			
     		}catch(Exception ex){LogError(ex);}
     	}
-    	
-    	
-    	
-    	
+    		
     	private void DisposeItemHud()
     	{    			
     		try
@@ -1236,7 +1616,7 @@ namespace GearFoundry
 	    	
 	    }
 		
-			private void FillItemRules()
+		private void FillItemRules()
 		{
 			string[] splitstring;
 	        string[] splitstringEnabled;
@@ -1297,6 +1677,9 @@ namespace GearFoundry
 					{
 		        		if(!Int32.TryParse(XRule.Element("EssMastery").Value, out tRule.RuleMastery)){tRule.RuleMastery = 0;}
 					}
+					if(!Double.TryParse(XRule.Element("McModAttack").Value, out tRule.RuleMcModAttack)){tRule.RuleMcModAttack = 0;}
+					if(!Double.TryParse(XRule.Element("MeleeDef").Value, out tRule.RuleMeleeD)){tRule.RuleMeleeD = 0;}
+					if(!Double.TryParse(XRule.Element("MagicDef").Value, out tRule.RuleMagicD)){tRule.RuleMagicD = 0;}
 		        	
 		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = 0;}
 		        	if(!Int32.TryParse(XRule.Element("EssLevel").Value, out tRule.RuleEssenceLevel)){tRule.RuleEssenceLevel = 0;}
@@ -1515,84 +1898,16 @@ namespace GearFoundry
 	
 					CombineIntList.Clear();
 					
+					//rules for modified looting behavior
 					
+					tRule.WeaponModSum = tRule.RuleMcModAttack + tRule.RuleMeleeD + tRule.RuleMagicD;
+					tRule.EssenceModSum = tRule.RuleEssenceCrit + tRule.RuleEssenceCritDam +tRule.RuleEssenceCritDamResist + tRule.RuleEssenceCritResist + tRule.RuleEssenceDamage + tRule.RuleEssenceDamageResist;
 					
-					
-					
-					
-					ItemRulesList.Add(tRule);	
+					ItemRulesList.Add(tRule);
 				}
 				
-			} catch(Exception ex1){WriteToChat(ex1.ToString());}
+			} catch(Exception ex){LogError(ex);}
 		}
-			
-		private class ModifiedRule
-		{
-			public bool RuleEnabled; 
-	        public int RulePriority; 
-	        public int RuleAppliesTo;
-	        public string RuleName; 
-	        public List<string> RuleKeyWords = new List<string>();
-	        public List<string> RuleKeyWordsNot = new List<string>();
-	      
-	        public int RuleWieldLevel;
-	        public int RuleItemLevel;
-	        
-	       	public int RuleWieldAttribute;
-	        public int RuleMastery;
-	        
-	        public int RuleDamageTypes;
-	        
-	        public int WeaponModifiers;
-	        
-	        
-	        public bool RuleRed;
-	        public bool RuleYellow;
-	        public bool RuleBlue;
-	        	        
-
-	        
-	        public bool RuleWeaponEnabledA;
-	        public bool MSCleaveA;
-	        public int WieldReqValueA;
-	        public int MaxDamageA;
-	        public double VarianceA;
-	        public bool RuleWeaponEnabledB;
-	        public bool MSCleaveB;
-	        public int WieldReqValueB;
-	        public int MaxDamageB;
-	        public double VarianceB;
-	        public bool RuleWeaponEnabledC;
-	        public bool MSCleaveC;
-	        public int WieldReqValueC;
-	        public int MaxDamageC;
-	        public double VarianceC;
-	        public bool RuleWeaponEnabledD;
-	        public bool MSCleaveD;
-	        public int WieldReqValueD;
-	        public int MaxDamageD;
-	        public double VarianceD;
-	        
-	        public int RuleArmorLevel;
-	        public int[] RuleArmorTypes;
-	        public int[] RuleArmorSet;
-	        public int RuleArmorCoverage;
-	        public bool RuleUnenchantable;
-	        
-	        public int RuleEssenceLevel;
-	        public int RuleEssenceDamage;
-	        public int RuleEssenceDamageResist;
-	        public int RuleEssenceCrit;
-	        public int RuleEssenceCritResist;
-	        public int RuleEssenceCritDam;
-	        public int RuleEssenceCritDamResist;
-
-	        public int[] RuleSpells;
-	        public int RuleSpellNumber; 
-			
-		}
-		
-		
 		
 		private class ItemRule
 		{
@@ -1655,7 +1970,12 @@ namespace GearFoundry
 	        public int RuleEssenceCritDamResist;
 
 	        public int[] RuleSpells;
-	        public int RuleSpellNumber;         		
+	        public int RuleSpellNumber;     
+
+	        public double WeaponModSum;
+	        public double EssenceModSum;
+	        
+
 		}	
 	}
 }

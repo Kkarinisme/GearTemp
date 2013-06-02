@@ -46,12 +46,25 @@ namespace GearFoundry
            	unknown
         }
 		
+		internal enum WeaponMastery
+		{	
+			None = 0,
+			Unarmed = 1,
+			Sword = 2,
+			Axe = 3,
+			Mace = 4,
+			Spear = 5,
+			Dagger = 6,
+			Staff = 7,
+			Bow= 8,
+			Crossbow = 9,
+			Thrown = 10,
+			TwoHanded = 11			
+		}
+		
 
 		public class IdentifiedObject
 		{
-			// establishes class IdentifiedObject to hold properties associted  with world objects
-		
-			// wo 
 			private WorldObject wo;
 		
 			public IdentifiedObject(WorldObject obj)
@@ -91,44 +104,62 @@ namespace GearFoundry
 			{
 				get
 				{
+					double fudgefactor = 0;
+					double gearscorereturn = 0;
 					switch(wo.ObjectClass)
 					{
 						case ObjectClass.Gem:
-							if(Aetheriacheck) {return (double)MaxItemLevel;}
-							return 0;
+							if(Aetheriacheck) {gearscorereturn += (double)MaxItemLevel;}
+							break;
+							
 						case ObjectClass.Clothing:
-							if(WieldSlot == 0x8000000) {return (double)MaxItemLevel;}
-							if(ArmorLevel > 0) {return ArmorLevelComaparison;}
-							return 0;
+							if(WieldSlot == 0x8000000) {gearscorereturn += (double)MaxItemLevel;}
+							if(ArmorLevel > 0) {gearscorereturn += ArmorLevelComaparison;}
+							break;
 
 						case ObjectClass.Armor:
-							return ArmorLevelComaparison;
+							gearscorereturn += ArmorLevelComaparison;
+							break;
 
 						case ObjectClass.MeleeWeapon:
-							return DamageComparison + WeaponModifiers;
+							gearscorereturn += DamageComparison + WeaponModifiers;
+							break;
 
 						case ObjectClass.MissileWeapon:
-							return DamageComparison + WeaponModifiers;
+							//Best XBow (375):  +165% and + 18 Elemental
+							//Best Trown (375):  +160% and + 18 Elemental
+							//Best Bow (375):  +140% and + 18 Elemental
+							//Target Weapon (375) = +165 and + 18 elemental
+							if(WeaponMasteryCategory == (int)WeaponMastery.Bow) {fudgefactor = 6;}
+							if(WeaponMasteryCategory == (int)WeaponMastery.Thrown) {fudgefactor = 1;}
+							gearscorereturn += DamageComparison + WeaponModifiers + fudgefactor;
+							break;
 
 						case ObjectClass.WandStaffOrb:
-							return DamageComparison + WeaponModifiers;
+							gearscorereturn += DamageComparison + WeaponModifiers;
+							break;
 						
-						case ObjectClass.Misc:
-							if(wo.Name.ToLower().Contains("essence")) { return EssenceComparison;}
-							return 0;
 						default:
-							return 0;
+							gearscorereturn = 0;
+							break;
 
 					}
+					gearscorereturn += BonusComparison;
+					return gearscorereturn;
 				}
 			}
 			
-			public string ExtendedGearScore;
+			public string ExtendedGearScore()
+			{
+				return String.Empty;
+			}
 			
 			public string GearScoreString()
 			{
-				if(GearScore > 0) {return "{GS " + GearScore.ToString("N0") + "} ";}
-				else return String.Empty;
+				string gearscorestring = String.Empty;
+				if(!wo.HasIdData) {return gearscorestring = "{NO ID}";}
+				if(GearScore > 0) {gearscorestring += "{GS " + GearScore.ToString("N0") + "} ";}
+				return gearscorestring;
 			}
 			
 			public List<DebuffSpell> DebuffSpellList = new List<DebuffSpell>();
@@ -200,13 +231,99 @@ namespace GearFoundry
 			private int mManaMax;
 			private int mManaCurrent;
 			
-			public double EssenceComparison
+			public double BonusComparison
 			{
 				get
 				{
-					return EssenceCrit + EssenceCritDam + EssenceCritDamResist + EssenceCritResist + EssenceDam + EssenceDamResist;
+					return Crit + CritResist + CritDam + CritDamResist + Dam + DamResist;
 				}
 			}
+			
+			
+			//These are not scoring properly
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 5/31/2013 7:22 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 5/31/2013 7:25 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] ID: 86BCAFA8
+//[VTank] ObjectClass: Misc
+//[VTank] (S) Name: Blizzard Wisp Essence
+//[VTank] (S) UsageInstructions: Use this essence to summon or dismiss your Blizzard Wisp.
+//[VTank] (B) CanBeSold: True
+//[VTank] (I) CreateFlags1: 1076382872
+//[VTank] (I) Type: 49309
+//[VTank] (I) Icon: 29739
+//[VTank] (I) Category: 128
+//[VTank] (I) Behavior: 67108882
+//[VTank] (I) CreateFlags2: 7
+//[VTank] (I) IconUnderlay: 29728
+//[VTank] (I) Value: 10000
+//[VTank] (I) Unknown10: 8
+//[VTank] (I) UsageMask: 16
+//[VTank] (I) IconOutline: 128
+//[VTank] (I) UsesRemaining: 50
+//[VTank] (I) UsesTotal: 50
+//[VTank] (I) Container: 1342600506
+//[VTank] (I) Burden: 50
+//[VTank] (I) IconOverlay: 29736
+//[VTank] (I) PhysicsDataFlags: 137345
+//[VTank] (I) 368: 54
+//[VTank] (I) 369: 185
+//[VTank] (I) Bonded: 0
+//[VTank] (I) Attuned: 0
+//[VTank] (I) 374: 7
+//[VTank] (I) 375: 13
+//[VTank] (I) CooldownID: 213
+//[VTank] (I) Workmanship: 8
+//[VTank] (I) 366: 54
+//[VTank] (I) 367: 570
+//[VTank] (D) 167: 45
+//[VTank] Palette Entry 0: ID 0x000BEF, Ex Color: 000000, 0/0
+
+//
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 5/31/2013 7:22 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 5/31/2013 7:26 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] ID: 86BCB1F3
+//[VTank] ObjectClass: Misc
+//[VTank] (S) Name: Caustic Grievver Essence
+//[VTank] (S) UsageInstructions: Use this essence to summon or dismiss your Caustic Grievver.
+//[VTank] (B) CanBeSold: True
+//[VTank] (I) CreateFlags1: 1076382872
+//[VTank] (I) Type: 49372
+//[VTank] (I) Icon: 7664
+//[VTank] (I) Category: 128
+//[VTank] (I) Behavior: 67108882
+//[VTank] (I) CreateFlags2: 7
+//[VTank] (I) IconUnderlay: 29728
+//[VTank] (I) Value: 10000
+//[VTank] (I) Unknown10: 8
+//[VTank] (I) UsageMask: 16
+//[VTank] (I) IconOutline: 256
+//[VTank] (I) UsesRemaining: 50
+//[VTank] (I) UsesTotal: 50
+//[VTank] (I) Container: 1342600506
+//[VTank] (I) Burden: 50
+//[VTank] (I) IconOverlay: 29736
+//[VTank] (I) PhysicsDataFlags: 137345
+//[VTank] (I) 368: 54
+//[VTank] (I) 369: 185
+//[VTank] (I) Bonded: 0
+//[VTank] (I) Attuned: 0
+//[VTank] (I) 372: 5
+//[VTank] (I) 374: 10
+//[VTank] (I) 375: 7
+//[VTank] (I) CooldownID: 213
+//[VTank] (I) Workmanship: 8
+//[VTank] (I) 366: 54
+//[VTank] (I) 367: 570
+//[VTank] (D) 167: 45
+//[VTank] Palette Entry 0: ID 0x000BF0, Ex Color: 000000, 0/0
 			
 			
 			//Modified Looting Properties (calculated)
@@ -249,7 +366,11 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 3201 && cantripmanaconversionboosters < 5){cantripmanaconversionboosters = 5;}
 							}
 						}
-					}						
+					}
+					if(wo.ObjectClass == ObjectClass.WandStaffOrb && wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) == 0)
+					{
+						return modsum + cantripattackboosters + cantripdefenseboosters + ((wo.Values(DoubleValueKey.ManaCBonus) * 100) * (cantripmanaconversionboosters * .01)) + 10 - wo.Values(LongValueKey.NumberTimesTinkered);
+					}
 					return modsum + cantripattackboosters + cantripdefenseboosters + ((wo.Values(DoubleValueKey.ManaCBonus) * 100) * (cantripmanaconversionboosters * .01));
 				}
 			}
@@ -545,6 +666,10 @@ namespace GearFoundry
 						double availabletinks = 10;
 						double mahoganytinks = 0;
 						double cantripdamageboosters = 0;
+						//Best XBow (375):  +165% and + 18 Elemental
+						//Best Trown (375):  +160% and + 18 Elemental
+						//Best Bow (375):  +140% and + 18 Elemental
+						//Target Weapon (375) = +165 and + 18 elemental
 						
 						mahoganytinks = ((wo.Values(DoubleValueKey.DamageBonus) - 1) / 0.04);
 						
@@ -558,8 +683,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2598 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
 								else if(wo.Spell(i) == 2486 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
 							}
-						}
-						
+						}					
 						return mahoganytinks + availabletinks + cantripdamageboosters + (double)wo.Values(LongValueKey.ElementalDmgBonus) - wo.Values(LongValueKey.NumberTimesTinkered);										
 					}
 					
@@ -580,8 +704,14 @@ namespace GearFoundry
 							}
 						}
 						if(wo.DoubleKeys.Contains((int)DoubleValueKey.ElementalDamageVersusMonsters)){elementaldamagevsmonsters = ((wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) -1) * 100);}
-						
-						return availabletinks + elementaldamagevsmonsters  + cantripdamageboosters - wo.Values(LongValueKey.NumberTimesTinkered);
+						if(elementaldamagevsmonsters > 0)
+						{							
+							return availabletinks + elementaldamagevsmonsters  + cantripdamageboosters - wo.Values(LongValueKey.NumberTimesTinkered);
+						}
+						else
+						{
+							return 0;
+						}
 					}
 									
 					
@@ -592,6 +722,15 @@ namespace GearFoundry
 					
 				}
 			}
+			public bool Unehcantable
+			{
+				get
+				{
+					if(wo.Values(LongValueKey.Unenchantable) > 0) {return true;}
+					else return false;
+				}
+			}
+			
 			public string DamageString()
 			{
 				return " Dam: " + DamageComparison.ToString("N0") ;
@@ -805,71 +944,79 @@ namespace GearFoundry
 					{
 						switch(wo.Values(LongValueKey.Icon))
 						{
+							case 4154:
 							case 7664:
 							case 29738:
-							case 4154:
 								return 1;  //Naturalist
+								
 							case 6978:
+							case 7285:
 							case 9217: 
+							case 9218:
+							case 29739:		
 							case 29743:
-							case 29739:
+							case 29744:
+							case 29745:
+							case 29746:
 						    	return 2;  //Primalist
-						    case 13383:
-						    case 5828:
+						    						    
 						    case 4646:
+						    case 5828:
+						    case 13383:
 						    	return 3;  //Necro
-						    default: 
+						    
+						    default:
 						    	return 0;
 						}
 					}
 					else {return 0;}
 				}
 			}
-			public int EssenceDam
+			public int Dam
 			{	//wo LongValueKey@370 contains
 				get
 				{
-					if (wo.Values((LongValueKey)370) > 0) {return wo.Values((LongValueKey)370);}
+					if (wo.LongKeys.Contains(370)) {return wo.Values((LongValueKey)370);}
 					else {return 0;}
 				}
 			}
-			public int EssenceDamResist 
+			public int DamResist 
 			{	//wo LongValueKey@371 contains 
 				get
 				{
-					if (wo.Values((LongValueKey)371) > 0) {return wo.Values((LongValueKey)371);}
+					if (wo.LongKeys.Contains(371)) {return wo.Values((LongValueKey)371);}
 					else {return 0;}
 				}
 			}
-			public int EssenceCrit 
+			public int Crit 
 			{	//wo LongValueKey@372 contains
 				get
 				{
-					if (wo.Values((LongValueKey)372) > 0) {return wo.Values((LongValueKey)372);}
+					if (wo.LongKeys.Contains(372)) {return wo.Values((LongValueKey)372);}
 					else {return 0;}
 				}
 			}
-			public int EssenceCritResist
+			public int CritResist
 			{	//wo LongValueKey@373 contains
 				get
 				{
-					if (wo.Values((LongValueKey)373) > 0) {return wo.Values((LongValueKey)373);}
+					if (wo.LongKeys.Contains(373)) {return wo.Values((LongValueKey)373);}
 					else {return 0;}
 				}
 			}
-			public int EssenceCritDam
+			public int CritDam
 			{
 				get
 				{
-					if (wo.Values((LongValueKey)374) > 0) {return wo.Values((LongValueKey)373);}
+					if (wo.LongKeys.Contains(374)) {return wo.Values((LongValueKey)374);}
 					else {return 0;}
 				}
 			}
-			public int EssenceCritDamResist
+			public int CritDamResist
 			{
 				get
 				{
-					if (wo.Values((LongValueKey)375) > 0) {return wo.Values((LongValueKey)373);}
+					if (wo.LongKeys.Contains(375)) {return wo.Values((LongValueKey)375);}
 					else {return 0;}
 				}
 			}
