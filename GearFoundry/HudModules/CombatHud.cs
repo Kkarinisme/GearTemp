@@ -757,9 +757,9 @@ namespace GearFoundry
                 {
                     CombatHudWidthNew = CombatHudView.Width;
                     CombatHudHeightNew = CombatHudView.Height;
-                    MasterTimer.Interval = 1000;
-                    MasterTimer.Enabled = true;
-                    MasterTimer.Start();
+//                    MasterTimer.Interval = 1000;
+//                    MasterTimer.Enabled = true;
+//                    MasterTimer.Start();
                     MasterTimer.Tick += CombatHudResizeTimerTick;
                 }
             }
@@ -772,9 +772,10 @@ namespace GearFoundry
 
         private void CombatHudResizeTimerTick(object sender, EventArgs e)
         {
-            MasterTimer.Stop();
+//            MasterTimer.Stop();
             CombatHudWidth = CombatHudWidthNew;
             CombatHudHeight = CombatHudHeightNew;
+             MasterTimer.Tick -= CombatHudResizeTimerTick;
             RenderCombatHud();
 
         }

@@ -110,8 +110,8 @@ namespace GearFoundry
             MasterTimer.Interval = 100;
             
             arrowtimer = 60;
-            MasterTimer.Enabled = true;
-            MasterTimer.Start();
+//            MasterTimer.Enabled = true;
+//            MasterTimer.Start();
             MasterTimer.Tick += ArrowTimerTick;
 
             
@@ -129,11 +129,12 @@ namespace GearFoundry
                 if (arrowtimer != 0)
                 {
                     arrowtimer = arrowtimer - 1;
+                    MasterTimer.Tick -= ArrowTimerTick;
                    DoShowArrow();
                 }
                 else
                 {
-                    MasterTimer.Stop();
+//                    MasterTimer.Stop();
                 }
  
             }

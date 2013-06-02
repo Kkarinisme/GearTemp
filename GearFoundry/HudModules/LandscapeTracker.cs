@@ -628,9 +628,9 @@ namespace GearFoundry
                 {
                     LandscapeHudWidthNew = LandscapeHudView.Width;
                     LandscapeHudHeightNew = LandscapeHudView.Height;
-                    MasterTimer.Interval = 1000;
-                    MasterTimer.Enabled = true;
-                    MasterTimer.Start();
+//                    MasterTimer.Interval = 1000;
+//                    MasterTimer.Enabled = true;
+//                    MasterTimer.Start();
                     MasterTimer.Tick += LandscapeHudResizeTimerTick;
                 }
             }
@@ -643,9 +643,10 @@ namespace GearFoundry
 
         private void LandscapeHudResizeTimerTick(object sender, EventArgs e)
         {
-            MasterTimer.Stop();
+//            MasterTimer.Stop();
             LandscapeHudWidth = LandscapeHudWidthNew;
             LandscapeHudHeight = LandscapeHudHeightNew;
+            MasterTimer.Tick -= LandscapeHudResizeTimerTick;
             RenderLandscapeHud();
 
         }

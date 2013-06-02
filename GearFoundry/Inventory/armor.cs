@@ -454,9 +454,9 @@ namespace GearFoundry
                 {
                     TabWidthNew = ArmorHudView.Width;
                     TabHeightNew = ArmorHudView.Height;
-                    MasterTimer.Interval = 1000;
-                    MasterTimer.Enabled = true;
-                    MasterTimer.Start();
+//                    MasterTimer.Interval = 1000;
+//                    MasterTimer.Enabled = true;
+//                    MasterTimer.Start();
                     MasterTimer.Tick += ArmorResizeTimerTick;
                 }
             }
@@ -469,9 +469,10 @@ namespace GearFoundry
 
         private void ArmorResizeTimerTick(object sender, EventArgs e)
         {
-            MasterTimer.Stop();
+//            MasterTimer.Stop();
             TabWidth = TabWidthNew;
             TabHeight = TabHeightNew;
+            MasterTimer.Tick -= ArmorResizeTimerTick;
             RenderArmorHud();
 
         }
