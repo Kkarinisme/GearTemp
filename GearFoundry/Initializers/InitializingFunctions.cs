@@ -396,6 +396,42 @@ namespace GearFoundry
             try
             {
 
+                //bCorpseHudEnabled = Convert.ToBoolean(el.Element("CorpseHudEnabled").Value);
+                //bLandscapeHudEnabled = Convert.ToBoolean(el.Element("LandscapeHudEnabled").Value);
+                //bGearInspectorEnabled = Convert.ToBoolean(el.Element("InspectorHudEnabled").Value);
+                //bGearButlerEnabled = Convert.ToBoolean(el.Element("ButlerHudEnabled").Value);
+                //bCombatHudEnabled = Convert.ToBoolean(el.Element("CombatHudEnabled").Value);
+                //bquickSlotsvEnabled = Convert.ToBoolean(el.Element("QuickSlotsvEnabled").Value);
+                //bquickSlotshEnabled = Convert.ToBoolean(el.Element("QuickSlotshEnabled").Value);
+                //binventoryEnabled = Convert.ToBoolean(el.Element("InventoryEnabled").Value);
+                //binventoryBurdenEnabled = Convert.ToBoolean(el.Element("InventoryBurdenEnabled").Value);
+                //binventoryCompleteEnabled = Convert.ToBoolean(el.Element("InventoryCompleteEnabled").Value);
+                //btoonStatsEnabled = Convert.ToBoolean(el.Element("ToonStatsEnabled").Value);
+                //bMuteSounds = Convert.ToBoolean(el.Element("MuteSounds").Value);
+                //bEnableTextFiltering = Convert.ToBoolean(el.Element("EnableTextFiltering").Value);
+                //bTextFilterAllStatus = Convert.ToBoolean(el.Element("TextFilterAllStatus").Value);
+                //bTextFilterBusyStatus = Convert.ToBoolean(el.Element("TextFilterBusyStatus").Value);
+                //bTextFilterCastingStatus = Convert.ToBoolean(el.Element("TextFilterCastingStatus").Value);
+                //bTextFilterMyDefenseMessages = Convert.ToBoolean(el.Element("TextFilterMyDefenseMessages").Value);
+                //bTextFilterMobDefenseMessages = Convert.ToBoolean(el.Element("TextFilterMobDefenseMessages").Value);
+                //bTextFilterMyKillMessages = Convert.ToBoolean(el.Element("TextFilterMyKillMessages").Value);
+                //bTextFilterPKFails = Convert.ToBoolean(el.Element("TextFilterPKFails").Value);
+                //bTextFilterDirtyFighting = Convert.ToBoolean(el.Element("TextFilterDirtyFighting").Value);
+                //bTextFilterMySpellCasting = Convert.ToBoolean(el.Element("TextFilterMySpellCasting").Value);
+                //bTextFilterOthersSpellCasting = Convert.ToBoolean(el.Element("TextFilterOthersSpellCasting").Value);
+                //bTextFilterSpellExpirations = Convert.ToBoolean(el.Element("TextFilterSpellExpirations").Value);
+                //bTextFilterManaStoneMessages = Convert.ToBoolean(el.Element("TextFilterManaStoneMessages").Value);
+                //bTextFilterHealingMessages = Convert.ToBoolean(el.Element("TextFilterHealingMessages").Value);
+                //bTextFilterSalvageMessages = Convert.ToBoolean(el.Element("TextFilterSalvageMessages").Value);
+                //bTextFilterBotSpam = Convert.ToBoolean(el.Element("TextFilterBotSpam").Value);
+                //bTextFilterIdentFailures = Convert.ToBoolean(el.Element("TextFilterIdentFailures").Value);
+                //bTextFilterKillTaskComplete = Convert.ToBoolean(el.Element("TextFilterKillTaskComplete").Value);
+                //bTextFilterVendorTells = Convert.ToBoolean(el.Element("TextFilterVendorTells").Value);
+                //bTextFilterMonsterTells = Convert.ToBoolean(el.Element("TextFilterMonsterTells").Value);
+                //bTextFilterNPCChatter = Convert.ToBoolean(el.Element("TextFilterNPCChatter").Value);
+                //btoonArmorEnabled = Convert.ToBoolean(el.Element("ToonArmorEnabled").Value);
+                //bArmorHudEnabled = Convert.ToBoolean(el.Element("ArmorHudEnabled").Value);
+
                 foreach (XElement el in mGenSettingsList)
                 {
                     if (el.Name == "CorpseHudEnabled") { bCorpseHudEnabled = Convert.ToBoolean(el.Value); }
@@ -440,7 +476,7 @@ namespace GearFoundry
                     chkQuickSlotsv.Checked = bquickSlotsvEnabled;
                     chkQuickSlotsh.Checked = bquickSlotshEnabled;
                     
-                    //GearVisection Section                   
+                  //  GearVisection Section                   
                     chkGearVisectionEnabled.Checked = bCorpseHudEnabled;
                     
                     //GearSense Section

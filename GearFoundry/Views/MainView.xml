@@ -188,7 +188,7 @@
                   <page label="Req. Spells">
 									<control progid="DecalControls.FixedLayout" clipped="">
 										<control progid="DecalControls.StaticText" name="lblRuleMustHaveSpell:" left="10" top="8" width="50" height="16" text="Must have" />
-										<control progid="DecalControls.Edit" name="txtRuleSpellMatches" left="100" top="8" width="30" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
+										<control progid="DecalControls.Edit" name="txtRuleSpellMatches" left="100" top="8" width="150" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
                    <control progid="DecalControls.StaticText" name="lblCurrentSpells" left="10" top="30" width="130" height="16" text="Current Spells Enabled:" />
                     <control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="10" top="50" width="200" height="100">
                       <column progid="DecalControls.TextColumn" fixedwidth="150" />
