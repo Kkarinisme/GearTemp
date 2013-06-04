@@ -187,22 +187,22 @@
 
                   <page label="Req. Spells">
 									<control progid="DecalControls.FixedLayout" clipped="">
-										<control progid="DecalControls.StaticText" name="lblRuleMustHaveSpell:" left="10" top="8" width="50" height="16" text="Must have" />
-										<control progid="DecalControls.Edit" name="txtRuleSpellMatches" left="100" top="8" width="150" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
+										<!--<control progid="DecalControls.StaticText" name="lblRuleMustHaveSpell:" left="10" top="8" width="100" height="16" text="Number of spells must have: " />
+										<control progid="DecalControls.Edit" name="txtRuleSpellMatches" left="110" top="8" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text="" />-->
                    <control progid="DecalControls.StaticText" name="lblCurrentSpells" left="10" top="30" width="130" height="16" text="Current Spells Enabled:" />
                     <control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="10" top="50" width="200" height="100">
                       <column progid="DecalControls.TextColumn" fixedwidth="150" />
                       <column progid="DecalControls.TextColumn"  />
                       <column progid="DecalControls.IconColumn" fixedwidth="15"  />
                     </control>
-                    <control progid="DecalControls.StaticText" name="lblRuleMoreSpells" left="230" top="10" width="180" height="16" text="Select more spells from the list:" />
+                    <control progid="DecalControls.StaticText" name="lblRuleMoreSpells" left="230" top="10" width="180" height="16" text="Select desired spells from the list:" />
                     <control progid="DecalControls.List" name="lstRuleSpells" left="230" top="30" width="250" height="200">
                       <column progid="DecalControls.CheckColumn" fixedwidth="20"/>
                       <column progid="DecalControls.TextColumn" fixedwidth="193" />
                       <column progid="DecalControls.TextColumn" />
                     </control>
-                    <control progid = "DecalControls.StaticText" name="lblnumSpells" left ="250" top="230" width="150" height="16" text="Number of spells must have:" />
-                    <control progid = "DecalControls.Edit" name="txtRuleNumSpells" left ="410" top="230" width="20" height="16" text="" />
+                    <control progid = "DecalControls.StaticText" name="lblnumSpells" left ="230" top="240" width="150" height="16" text="Number of spells must have:" />
+                    <control progid = "DecalControls.Edit" name="txtRuleNumSpells" left ="400" top="240" width="20" height="16" text="" />
 
                     <control progid="DecalControls.StaticText" name="lblRuleFilterSpells" left="100" top="170" width="130" height="16" text="Filter Spells by:" />
                     <control progid="DecalControls.Checkbox" name="chkRuleFilterLegend" left="50" top="190" width="50" height="16" text="Legendary" />
@@ -399,7 +399,10 @@
 
           <Control progid="DecalControls.StaticText" name="lblGearInspector" left ="375" top="50" width="150" height="16" text="GearInspector Settings:"/>
           <control progid="DecalControls.Checkbox" name="chkGearInspectorEnabled" left="380" top="70" width="150" height="16" textcolor="16777215" text="Enabled"/>
-        	
+
+          <Control progid="DecalControls.StaticText" name="lbluseRemote" left ="375" top="100" width="150" height="16" text="Use RemoteGear:"/>
+          <control progid="DecalControls.Checkbox" name="chkRemoteGearEnabled" left="380" top="120" width="150" height="16" textcolor="16777215" text="Enabled"/>
+
           <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="70" width="225" height="24" text="Gear"/>
           <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="90" width="225" height="24" text="Inventory on Startup"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="10" top="110" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>

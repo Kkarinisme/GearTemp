@@ -125,6 +125,7 @@
     <Compile Include="Initializers\Build.cs" />
     <Compile Include="Inventory\armor.cs" />
     <Compile Include="PluginCore.cs" />
+    <Compile Include="RemoteGear.cs" />
     <Compile Include="Views\MainView.cs" />
     <Compile Include="VTInterop\Plugin.Public.cs" />
     <Compile Include="VTInterop\VTInterop.cs" />
@@ -210,9 +211,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="HudComponents" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

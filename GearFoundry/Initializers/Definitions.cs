@@ -109,6 +109,7 @@ namespace GearFoundry
         private string allStatsFilename = null;
         private string quickSlotsvFilename = null;
         private string quickSlotshFilename = null;
+        private string remoteGearFilename = null;
 
 
 
@@ -197,7 +198,7 @@ namespace GearFoundry
         bool bRuleFilterlvl8 = true;
         bool bRuleFilterlvl7 = true;
         bool bRuleFilterlvl6 = true;
-        int nRuleMustHaveSpell = 0;
+      //  int nRuleMustHaveSpell = 0;
         string sRuleSpells = "";
         int nRuleNumSpells = 0;
         int nid;
@@ -321,6 +322,8 @@ namespace GearFoundry
         private static bool bGearButlerEnabled;
         
         private static bool bCombatHudEnabled;
+
+        private static bool bRemoteGearEnabled;
 
         //Misc flags
         private static bool bArmorHudEnabled;

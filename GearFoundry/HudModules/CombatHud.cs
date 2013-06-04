@@ -102,7 +102,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				FileInfo GearTacticianSettingsFile = new FileInfo(toonDir + @"\GearTactician.xml");
+                FileInfo GearTacticianSettingsFile = new FileInfo(GearDir + @"\GearTactician.xml");
 								
 				if (read)
 				{

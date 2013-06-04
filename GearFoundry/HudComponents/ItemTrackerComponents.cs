@@ -37,7 +37,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				FileInfo GearInspectorSettingsFile = new FileInfo(toonDir + @"\GearInspector.xml");
+                FileInfo GearInspectorSettingsFile = new FileInfo(GearDir + @"\GearInspector.xml");
 								
 				if (read)
 				{

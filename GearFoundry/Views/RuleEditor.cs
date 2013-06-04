@@ -185,7 +185,7 @@ namespace GearFoundry
                new XElement("ArmorType", sRuleArmorType),
                  new XElement("ArmorSet", sRuleArmorSet),
                 new XElement("Unenchantable", bRuleMustBeUnEnchantable),
-                new XElement("MustHaveSpell", nRuleMustHaveSpell),
+            //    new XElement("MustHaveSpell", nRuleMustHaveSpell),
                  new XElement("CloakSets", sRuleCloakSets),
                  new XElement("CloakSpells", sRuleCloakSpells),
                  new XElement("CloakMustHaveSpell",bRuleCloakMustHaveSpell),
@@ -265,7 +265,7 @@ namespace GearFoundry
                 nRuleEssCritLevel = Convert.ToInt32(el.Element("EssCritLevel").Value);
                 nRuleEssCritDamResLevel = Convert.ToInt32(el.Element("EssCritDamRes").Value);
                 sRuleSpells = el.Element("Spells").Value;
-                nRuleMustHaveSpell = Convert.ToInt32(el.Element("MustHaveSpell").Value);
+             //   nRuleMustHaveSpell = Convert.ToInt32(el.Element("MustHaveSpell").Value);
                 nRuleNumSpells = Convert.ToInt32(el.Element("NumSpells").Value);
                 bRuleFilterLegend = Convert.ToBoolean(el.Element("FilterLegend").Value);
                 bRuleFilterEpic = Convert.ToBoolean(el.Element("FilterEpic").Value);
@@ -274,7 +274,7 @@ namespace GearFoundry
                 bRuleFilterlvl7 = Convert.ToBoolean(el.Element("FilterLvl7").Value);
                 bRuleFilterlvl6 = Convert.ToBoolean(el.Element("FilterLvl6").Value);
                 WriteToChat("sRuleSpells: " + sRuleSpells);
-                WriteToChat("nRuleMustHaveSpell: " + nRuleMustHaveSpell.ToString());
+             //   WriteToChat("nRuleMustHaveSpell: " + nRuleMustHaveSpell.ToString());
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -1087,31 +1087,31 @@ namespace GearFoundry
         }
 
 
-        [ControlEvent("txtRuleSpellMatches", "End")]
-        private void txtRuleSpellMatches_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-            if (!sRuleSpells.Contains(txtRuleSpellMatches.Text))
-            {
-                foreach (spellinfo spell in FilteredSpellIndex)
-                {
-                    try
-                    {
-                        if (spell.spellname.ToLower().Contains(txtRuleSpellMatches.Text.ToLower()))
-                        {
-                            string name = spell.spellname;
-                            int id = spell.spellid;
-                            nRuleMustHaveSpell = id;
-                            //if (!sRuleSpells.Contains(nRuleMustHaveSpell.ToString()))
-                            //{
+        //[ControlEvent("txtRuleSpellMatches", "End")]
+        //private void txtRuleSpellMatches_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        //{
+        //    if (!sRuleSpells.Contains(txtRuleSpellMatches.Text))
+        //    {
+        //        foreach (spellinfo spell in FilteredSpellIndex)
+        //        {
+        //            try
+        //            {
+        //                if (spell.spellname.ToLower().Contains(txtRuleSpellMatches.Text.ToLower()))
+        //                {
+        //                    string name = spell.spellname;
+        //                    int id = spell.spellid;
+        //                    nRuleMustHaveSpell = id;
+        //                    //if (!sRuleSpells.Contains(nRuleMustHaveSpell.ToString()))
+        //                    //{
 
-                            WriteEnabledSpellsList(id, name);
-                            populateRuleSpellEnabledListBox();
-                            // }
-                        }
-                    }
-                    catch (Exception ex) { LogError(ex); }
-                }
-            }
-        }
+        //                    WriteEnabledSpellsList(id, name);
+        //                    populateRuleSpellEnabledListBox();
+        //                    // }
+        //                }
+        //            }
+        //            catch (Exception ex) { LogError(ex); }
+        //        }
+        //    }
+        //}
     }
 }

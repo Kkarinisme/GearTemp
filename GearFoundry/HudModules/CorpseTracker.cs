@@ -55,7 +55,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				FileInfo GearVisectionSettingsFile = new FileInfo(toonDir + @"\GearVisection.xml");
+				FileInfo GearVisectionSettingsFile = new FileInfo(GearDir + @"\GearVisection.xml");
 								
 				if (read)
 				{

@@ -50,7 +50,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				FileInfo GearSenseSettingsFile = new FileInfo(toonDir + @"\GearSense.xml");
+				FileInfo GearSenseSettingsFile = new FileInfo(GearDir + @"\GearSense.xml");
 								
 				if (read)
 				{

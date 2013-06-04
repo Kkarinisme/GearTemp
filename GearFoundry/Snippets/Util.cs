@@ -105,9 +105,8 @@ namespace GearFoundry
         {
             try{
             MasterTimer.Interval = 100;
-            
-            arrowtimer = 60;
-            MasterTimer.Tick += ArrowTimerTick;
+                arrowtimer = 20;
+                MasterTimer.Tick += ArrowTimerTick;
             }
             catch (Exception ex) { LogError(ex); }
  
@@ -117,27 +116,21 @@ namespace GearFoundry
         {
             try
             {
-                if (arrowtimer != 0)
-                {
-                    arrowtimer = arrowtimer - 1;
+                   arrowtimer = arrowtimer - 1;
                     MasterTimer.Tick -= ArrowTimerTick;
                    DoShowArrow();
-                }
-                else
-                {
-//                    MasterTimer.Stop();
-                }
  
             }
             catch (Exception ex) { LogError(ex); }
-            return;
+        
         }
 
         private void DoShowArrow()
         {
             Decal.Adapter.Wrappers.D3DObj mMarkObject;
             mMarkObject = Core.D3DService.PointToObject(nusearrowid, (unchecked((int)0xFFBB0000)));
- 
+            if (arrowtimer != 0) { MasterTimer.Tick += ArrowTimerTick; }
+            else { return; }
         }
         
 
