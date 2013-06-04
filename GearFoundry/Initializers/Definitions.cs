@@ -34,7 +34,7 @@ namespace GearFoundry
         private System.Windows.Forms.Timer MasterTimer;
         public static string Log;
 
-        static PluginCore Instance;
+        public static PluginCore Instance;
         static PluginHost host;      
         
         //Interop Codes

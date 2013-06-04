@@ -51,36 +51,41 @@ namespace GearFoundry
 			public bool GearScore;
 			public bool CheckForL7Scrolls;
 			public bool SalvageHighValue;
+			public int LootByValue;
+			public int LootByMana;
 			
     	}
 		
-		private void SubscribeLootEvents()
+		private void SubscribeItemEvents()
 		{
 			try
 			{
-				Core.ContainerOpened += LootContainerOpened;
+				
              	Core.EchoFilter.ServerDispatch += ServerDispatchItem;
              	Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
              	Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
              	Core.CharacterFilter.ActionComplete += Inspector_ActionComplete;
-             	Core.WorldFilter.ChangeObject += new EventHandler<ChangeObjectEventArgs>(ItemHud_ChangeObject);
+             	
+             	
+             	SubscribeItemTrackerLooterEvents();
        			
              	
 			}
 			catch(Exception ex){LogError(ex);}
 		}
 		
-		private void UnsubscribeLootEvents()
+		private void UnsubscribeItemEvents()
 		{
 			try
 			{
-				Core.ContainerOpened -= LootContainerOpened;
+				
              	Core.EchoFilter.ServerDispatch -= ServerDispatchItem;
              	Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
              	Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
              	Core.CharacterFilter.ActionComplete -= Inspector_ActionComplete;
-             	Core.WorldFilter.ChangeObject -= new EventHandler<ChangeObjectEventArgs>(ItemHud_ChangeObject);
              	
+             	
+             	UnSubscribeItemTrackerLooterEvents();
              	
              	
 			}catch(Exception ex){LogError(ex);}
@@ -116,242 +121,7 @@ namespace GearFoundry
 				
 			}catch(Exception ex){LogError(ex);}
 		}
-		
-
-		
-		private void ServerDispatchItem(object sender, Decal.Adapter.NetworkMessageEventArgs e)
-        {
-        	int iEvent = 0;
-            try
-            {                   	
-            	if(e.Message.Type == AC_GAME_EVENT)
-            	{	
-            		try
-                    {
-                    	iEvent = Convert.ToInt32(e.Message["event"]);
-                    }
-                    catch{}
-                    if(iEvent == GE_IDENTIFY_OBJECT)
-                    {
-                    	 OnIdentItem(e.Message);
-                    }
-                    
-            	}
-            }
-            catch (Exception ex)
-            {
-                LogError(ex);
-            }
-        }  
-		
-		
-		private void OnIdentItem(Decal.Adapter.Message pMsg)
-		{
-			try
-			{
-				if(!bItemHudEnabled) {return;}
-    	   		int PossibleItemID = Convert.ToInt32(pMsg["object"]);		
-        		//Read and report manual IDs, but keep them out of the item list
-        		if(PossibleItemID == Host.Actions.CurrentSelection && bReportItemStrings)
-        		{
-        			ManualCheckItemForMatches(new IdentifiedObject(Core.WorldFilter[PossibleItemID]));
-        		}  		
-        		if(!ItemIDListenList.Contains(PossibleItemID)) {return;}
-        		CheckItemForMatches(new IdentifiedObject(Core.WorldFilter[PossibleItemID]));
-			} 
-			catch (Exception ex) {LogError(ex);}
-		}
-		
-		private void ManualCheckItemForMatches(IdentifiedObject IOItem)
-		{
-			try
-			{
-				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
-				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {CheckSalvageItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
 				
-				if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.ModString());}
-				else {ReportStringToChat(IOItem.LinkString());}
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-
-		
-		private void SeparateItemsToID(IdentifiedObject IOItem)
-		{
-			try
-			{
-				//Get rid of non-existant items...
-				if(!IOItem.isvalid)
-				{
-					IOItem.IOR = IOResult.nomatch;
-					mOpenContainer.ContainerIOs.RemoveAll(x => !x.isvalid);
-					return;
-				}
-				
-				//Flag items that need additional info to ID...
-				if(!IOItem.HasIdData)
-				{
-					switch(IOItem.ObjectClass)
-					{
-						case ObjectClass.Armor:
-							IdqueueAdd(IOItem.Id);
-							mOpenContainer.ContainerIOs[mOpenContainer.ContainerIOs.FindIndex(x => x.Id == IOItem.Id)].IOR = IOResult.unknown;
-							ItemIDListenList.Add(IOItem.Id);
-							return;
-							
-						case ObjectClass.Clothing:
-							IdqueueAdd(IOItem.Id);
-							mOpenContainer.ContainerIOs[mOpenContainer.ContainerIOs.FindIndex(x => x.Id == IOItem.Id)].IOR = IOResult.unknown;
-							ItemIDListenList.Add(IOItem.Id);
-							return;
-							
-						case ObjectClass.Gem:
-							if(IOItem.Aetheriacheck)
-							{
-								IdqueueAdd(IOItem.Id);
-								mOpenContainer.ContainerIOs[mOpenContainer.ContainerIOs.FindIndex(x => x.Id == IOItem.Id)].IOR = IOResult.unknown;
-								ItemIDListenList.Add(IOItem.Id);
-								return;
-							}
-							else goto default;							
-						case ObjectClass.Jewelry:
-							IdqueueAdd(IOItem.Id);
-							mOpenContainer.ContainerIOs[mOpenContainer.ContainerIOs.FindIndex(x => x.Id == IOItem.Id)].IOR = IOResult.unknown;
-							ItemIDListenList.Add(IOItem.Id);
-							return;		
-						case ObjectClass.MeleeWeapon:
-							IdqueueAdd(IOItem.Id);
-							mOpenContainer.ContainerIOs[mOpenContainer.ContainerIOs.FindIndex(x => x.Id == IOItem.Id)].IOR = IOResult.unknown;
-							ItemIDListenList.Add(IOItem.Id);
-							return;
-							
-						case ObjectClass.MissileWeapon:	//bow = mastery 8, crossbow = mastery 9, atlan = mastery 10, don't ID rocks....
-							if (IOItem.WeaponMasteryCategory == 8 | IOItem.WeaponMasteryCategory == 9 | IOItem.WeaponMasteryCategory == 10) 
-							{
-								IdqueueAdd(IOItem.Id);
-								mOpenContainer.ContainerIOs[mOpenContainer.ContainerIOs.FindIndex(x => x.Id == IOItem.Id)].IOR = IOResult.unknown;
-								ItemIDListenList.Add(IOItem.Id);
-								return;
-							}
-							else goto default;						
-						case ObjectClass.Misc:
-							if(IOItem.Name.Contains("Essence"))
-							{
-								IdqueueAdd(IOItem.Id);
-								mOpenContainer.ContainerIOs[mOpenContainer.ContainerIOs.FindIndex(x => x.Id == IOItem.Id)].IOR = IOResult.unknown;
-								ItemIDListenList.Add(IOItem.Id);
-								return;
-							}
-							else goto default;
-							
-						case ObjectClass.WandStaffOrb:
-							IdqueueAdd(IOItem.Id);
-							mOpenContainer.ContainerIOs[mOpenContainer.ContainerIOs.FindIndex(x => x.Id == IOItem.Id)].IOR = IOResult.unknown;
-							ItemIDListenList.Add(IOItem.Id);
-							return;	
-						default:
-							CheckItemForMatches(IOItem);
-							return;				
-					}		
-				}
-			} catch (Exception ex) {LogError(ex);} 
-			return;
-		}
-		
-		
-		
-		private void CheckItemForMatches(IdentifiedObject IOItem)
-		{
-			try
-			{
-				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
-				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {CheckSalvageItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
-				
-				if(IOItem.IOR != IOResult.nomatch)
-				{
-					if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.ModString());}
-					else {ReportStringToChat(IOItem.LinkString());}
-				}
-				
-				if(IOItem.IOR != IOResult.unknown) {EvaluateItemMatches(IOItem);}
-				
-			}catch(Exception ex){LogError(ex);}
-		}	
-		
-		private void EvaluateItemMatches(IdentifiedObject IOItem)
-		{
-			try
-			{
-				//Keep those duplicates out
-				if(ItemTrackingList.Any(x => x.Id == IOItem.Id) || ItemExclusionList.Contains(IOItem.Id)) {return;}
-				
-				switch(IOItem.IOR)
-				{
-					case IOResult.rule:
-						ItemTrackingList.Add(IOItem);
-						ItemExclusionList.Add(IOItem.Id);
-						UpdateItemHud();
-						//PlaySound?
-						return;
-					case IOResult.manatank:
-						ItemTrackingList.Add(IOItem);
-						ManaTankItems.Add(IOItem.Id);
-						ItemExclusionList.Add(IOItem.Id);
-						UpdateItemHud();
-						//PlaySound?
-						return;
-					case IOResult.rare:
-						ItemTrackingList.Add(IOItem);
-						ItemExclusionList.Add(IOItem.Id);
-						UpdateItemHud();
-						//PlaySound?
-						return;
-					case IOResult.salvage:
-						ItemTrackingList.Add(IOItem);
-						SalvageItemsList.Add(IOItem);
-						ItemExclusionList.Add(IOItem.Id);
-						UpdateItemHud();
-						//PlaySound?
-						return;
-					case IOResult.spell:
-						ItemTrackingList.Add(IOItem);
-						ItemExclusionList.Add(IOItem.Id);
-						UpdateItemHud();
-						//PlaySound?
-						return;
-					case IOResult.trophy:
-						ItemTrackingList.Add(IOItem);
-						ItemExclusionList.Add(IOItem.Id);
-						UpdateItemHud();
-						//PlaySound?
-						return;
-					case IOResult.val:
-						ItemTrackingList.Add(IOItem);
-						ItemExclusionList.Add(IOItem.Id);
-						if(GISettings.SalvageHighValue) {SalvageItemsList.Add(IOItem);}
-						UpdateItemHud();
-						//PlaySound?
-						return;
-					default:
-						ItemExclusionList.Add(IOItem.Id);
-						mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);
-						return;
-				}
-			}catch(Exception ex){LogError(ex);}
-		}
-
-			
 		private bool InspectorTab = false;
 		private bool InspectorUstTab = false;
 		private bool InspectorSettingsTab = false;
@@ -383,6 +153,10 @@ namespace GearFoundry
 		private HudCheckBox InspectorModifiedLooting = null;
 		private HudCheckBox InspectorGearScore = null;
 		private HudCheckBox InspectorCheckForL7Scrolls = null;
+		private HudStaticText InspectorHudValueLabel = null;
+		private HudTextBox InspectorLootByValue = null;
+		private HudStaticText InspectorHudManaLabel = null;
+		private HudTextBox InspectorLootByMana = null;
 
         private int ItemHudWidth;
         private int ItemHudHeight;
@@ -439,7 +213,7 @@ namespace GearFoundry
   				
     			RenderItemHudInspectorTab();
     			
-				SubscribeLootEvents();
+				SubscribeItemEvents();
                 ItemHudView.UserResizeable = true;
 
 			  							
@@ -580,6 +354,22 @@ namespace GearFoundry
     			ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0,126,150,16));
     			InspectorCheckForL7Scrolls.Checked = GISettings.CheckForL7Scrolls;
     			
+    			InspectorHudValueLabel = new HudStaticText();
+    			InspectorHudValueLabel.Text = "High Value Loot.";
+    			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,142,150,16));
+    			
+    			InspectorLootByValue = new HudTextBox();
+    			ItemHudSettingsLayout.AddControl(InspectorLootByValue, new Rectangle(0,142,45,16));
+    			InspectorLootByValue.Text = GISettings.LootByValue.ToString();
+    			
+    			InspectorHudManaLabel = new HudStaticText();
+    			InspectorHudManaLabel.Text = "Mana Value Loot.";
+    			ItemHudSettingsLayout.AddControl(InspectorHudManaLabel, new Rectangle(50,158,150,16));		
+    			
+    			InspectorLootByMana = new HudTextBox();
+    			ItemHudSettingsLayout.AddControl(InspectorLootByMana, new Rectangle(0,158,45,16));
+    			InspectorLootByMana.Text = GISettings.LootByMana.ToString();
+    			
     			InspectorIdentifySalvage.Change += InspectorIdentifySalvage_Change;
     			InspectorAutoLoot.Change += InspectorAutoLoot_Change;
     			InspectorAutoAetheria.Change += InspectorAutoAetheria_Change;
@@ -588,12 +378,31 @@ namespace GearFoundry
     			InspectorModifiedLooting.Change += InspectorModifiedLooting_Change;
     			InspectorGearScore.Change += InspectorGearScore_Change;
     			InspectorCheckForL7Scrolls.Change += InspectorCheckForL7Scrolls_Change;
-    			
-    			
+    			InspectorLootByValue.LostFocus += InspectorLootByValue_LostFocus;
+    			InspectorLootByMana.LostFocus += InspectorLootByMana_LostFocus;	
     			  			
     			InspectorSettingsTab = true;
     			
    
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void InspectorLootByValue_LostFocus(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			Int32.TryParse(InspectorLootByValue.Text, out GISettings.LootByValue);
+    			GearInspectorReadWriteSettings(false);
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void InspectorLootByMana_LostFocus(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			Int32.TryParse(InspectorLootByMana.Text, out GISettings.LootByMana);
+    			GearInspectorReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -684,6 +493,8 @@ namespace GearFoundry
     			InspectorModifiedLooting.Change -= InspectorModifiedLooting_Change;
     			InspectorGearScore.Change -= InspectorGearScore_Change;
     			InspectorCheckForL7Scrolls.Change -= InspectorCheckForL7Scrolls_Change;
+    			InspectorLootByValue.LostFocus -= InspectorLootByValue_LostFocus;
+    			InspectorLootByMana.LostFocus -= InspectorLootByMana_LostFocus;
     			
     			
     			InspectorIdentifySalvage.Dispose();
@@ -694,6 +505,10 @@ namespace GearFoundry
     			InspectorModifiedLooting.Dispose();
     			InspectorGearScore.Dispose();
     			InspectorCheckForL7Scrolls.Dispose();
+    			InspectorLootByMana.Dispose();
+    			InspectorLootByValue.Dispose();
+    			InspectorHudManaLabel.Dispose();
+    			InspectorHudValueLabel.Dispose();
     			  			
     			InspectorSettingsTab = false;
     			
@@ -738,7 +553,7 @@ namespace GearFoundry
     	{    			
     		try
     		{
-    			UnsubscribeLootEvents();
+    			UnsubscribeItemEvents();
     			
     			ItemHudSettingsLayout.Dispose();
     			ItemHudUstLayout.Dispose();

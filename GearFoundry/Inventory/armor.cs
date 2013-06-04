@@ -484,13 +484,15 @@ namespace GearFoundry
 
         private void ArmorResizeTimerTick(object sender, EventArgs e)
         {
+        	try
+        	{
 //            MasterTimer.Stop();
             ArmorHudWidth = ArmorHudWidthNew;
             ArmorHudHeight = ArmorHudHeightNew;
             MasterTimer.Tick -= ArmorResizeTimerTick;
             RenderArmorHud();
-            }
-            catch (Exception ex) { LogError(ex); }
+        
+        	}catch (Exception ex) { LogError(ex); }
 
 
         }

@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # SharpDevelop 4.3
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearFoundry", "GearFoundry\GearFoundry.csproj", "{70389EC2-7A91-4DE4-8EA5-5C1454270E8E}"
 EndProject
+Project("{CFEE4113-1246-4D54-95CB-156813CB8593}") = "GearFoundrySetup", "GearFoundrySetup\GearFoundrySetup.wixproj", "{DF5CBD43-B6E4-48B0-A1E4-EF3CC130EAF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFVTInterOp", "GFVTInterOp\GFVTInterOp.csproj", "{DF6E40BB-0DA3-4602-AB26-195F31A5DA9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +18,14 @@ Global
 		{70389EC2-7A91-4DE4-8EA5-5C1454270E8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{70389EC2-7A91-4DE4-8EA5-5C1454270E8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{70389EC2-7A91-4DE4-8EA5-5C1454270E8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF5CBD43-B6E4-48B0-A1E4-EF3CC130EAF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF5CBD43-B6E4-48B0-A1E4-EF3CC130EAF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF5CBD43-B6E4-48B0-A1E4-EF3CC130EAF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF5CBD43-B6E4-48B0-A1E4-EF3CC130EAF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF6E40BB-0DA3-4602-AB26-195F31A5DA9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF6E40BB-0DA3-4602-AB26-195F31A5DA9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF6E40BB-0DA3-4602-AB26-195F31A5DA9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF6E40BB-0DA3-4602-AB26-195F31A5DA9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

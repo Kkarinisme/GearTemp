@@ -23,6 +23,28 @@ namespace GearFoundry
 	/// </summary>
 	public partial class PluginCore
 	{
+		//Item Tracker Manual ID functions begin here
+		
+		private void ManualCheckItemForMatches(IdentifiedObject IOItem)
+		{
+			try
+			{
+				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
+				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckSalvageItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
+				
+				if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.ModString());}
+				else {ReportStringToChat(IOItem.LinkString());}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		
+		// Item Tracker ID functions begin here
 		private void CheckSalvageItem(ref IdentifiedObject IOItemSalvage)
 		{
 			try
@@ -50,7 +72,8 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(IOItemMana.IntValues(LongValueKey.CurrentMana) > mLootManaMinimum)
+				if(GISettings.LootByMana == 0){return;}
+				if(IOItemMana.IntValues(LongValueKey.CurrentMana) > GISettings.LootByMana)
 				{
 					//Irq:  TODO:  Cull manatanks when there is not a mana stone to eat them.  It's irritating.  Make a list of them for destruction as needed.
 					//Irq:  TODO:  Add mana value or find it....
@@ -63,12 +86,14 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(GISettings.LootByValue == 0){return;}
+				
 				double ratio = ((double)IOItemVal.Value / (double)IOItemVal.Burden);
-				if(ratio > mLootValBurdenRatioMinimum)
+				if(ratio >= mLootValBurdenRatioMinimum)
 				{
 					IOItemVal.IOR = IOResult.val;
 				}
-				else if(IOItemVal.Value > mLootValMinimum)
+				else if(IOItemVal.Value >= GISettings.LootByValue)
 				{
 					IOItemVal.IOR = IOResult.val;
 				}
@@ -606,7 +631,7 @@ namespace GearFoundry
 			catch(Exception ex) {LogError(ex);}
 		}
 		
-				private void FillItemRules()
+		private void FillItemRules()
 		{
 			string[] splitstring;
 	        string[] splitstringEnabled;

@@ -18,16 +18,17 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <RunCodeAnalysis>False</RunCodeAnalysis>
     <RunSourceAnalysis>False</RunSourceAnalysis>
     <TargetFrameworkProfile />
     <NoWin32Manifest>False</NoWin32Manifest>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;VVS_REFERENCED;DECAL_INTEROP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -44,12 +45,13 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <StartAction>Project</StartAction>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Decal.Adapter">
@@ -94,6 +96,9 @@
     <Reference Include="VirindiViewService">
       <HintPath>Repositories\Virindi\VirindiViewService.dll</HintPath>
     </Reference>
+    <Reference Include="VTLooterGF">
+      <HintPath>..\VTLooterGF\bin\Debug\VTLooterGF.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="WrapperClass\IOMagToolsEcho.cs" />
@@ -114,9 +119,9 @@
     <None Include="Documents\Files Karin is using.txt" />
     <None Include="Documents\GuidetoVariablesandFunctions.txt" />
     <None Include="Documents\IrquksStatusList" />
-    <Compile Include="HudComponents\ItemTrackerAutoFunctions.cs" />
     <Compile Include="HudComponents\ItemTrackerComponents.cs" />
     <Compile Include="HudComponents\ItemTrackerIdentify.cs" />
+    <Compile Include="HudComponents\ItemTrackerLooter.cs" />
     <Compile Include="HudModules\CombatHud.cs" />
     <Compile Include="HudModules\CorpseTracker.cs" />
     <Compile Include="HudModules\GearButler.cs" />
@@ -126,8 +131,6 @@
     <Compile Include="Inventory\armor.cs" />
     <Compile Include="PluginCore.cs" />
     <Compile Include="Views\MainView.cs" />
-    <Compile Include="VTInterop\Plugin.Public.cs" />
-    <Compile Include="VTInterop\VTInterop.cs" />
     <Compile Include="WrapperClass\IdentifiedObject.cs" />
     <Compile Include="HudModules\QuickSlotsHud.cs" />
     <Compile Include="Initializers\Definitions.cs" />
