@@ -195,7 +195,7 @@ namespace GearFoundry
                 chkRuleFilterlvl8.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl8_Change);
                 chkRuleFilterlvl7.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl7_Change);
                 chkRuleFilterlvl6.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl6_Change);
-                txtRuleSpellMatches.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleSpellMatches_End);
+             //   txtRuleSpellMatches.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleSpellMatches_End);
                 txtRuleNumSpells.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleNumSpells_End);
                 chkTrophyExact.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTrophyExact_Change);
                 //  // cboTrophysetupAlert.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cboTrophysetupAlert_Change);

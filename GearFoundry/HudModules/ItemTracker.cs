@@ -16,13 +16,14 @@ using VirindiViewService.Themes;
 using System.Xml.Serialization;
 using System.Xml;
 
+
+
 namespace GearFoundry
 {
 	public partial class PluginCore
 	{		
 
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();
-		
 		private OpenContainer mOpenContainer = new OpenContainer();
 		
 		private List<int> ItemExclusionList = new List<int>();
@@ -36,7 +37,7 @@ namespace GearFoundry
 		private int ItemHudMoveId = 0;
 		private DateTime IHRenderTime150;
 		private DateTime AutoLootDelayStart;
-		
+ 		
 		private GearInspectorSettings GISettings = new GearInspectorSettings();
 			
 		public class GearInspectorSettings
@@ -51,6 +52,8 @@ namespace GearFoundry
 			public bool GearScore;
 			public bool CheckForL7Scrolls;
 			public bool SalvageHighValue;
+            public int ItemHudWidth;
+            public int ItemHudHeight;
 			public int LootByValue;
 			public int LootByMana;
 			
@@ -83,6 +86,7 @@ namespace GearFoundry
              	Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
              	Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
              	Core.CharacterFilter.ActionComplete -= Inspector_ActionComplete;
+                ItemHudView.Resize -= ItemHudView_Resize;
              	
              	
              	UnSubscribeItemTrackerLooterEvents();
@@ -180,12 +184,10 @@ namespace GearFoundry
     			{
     				DisposeItemHud();
     			}
-
-                if (ItemHudWidth == 0) { ItemHudWidth = ItemHudFirstWidth; }
-                if (ItemHudHeight == 0) { ItemHudHeight = ItemHudFirstHeight; }
-
-
-
+                if (GISettings.ItemHudWidth == 0) { ItemHudWidth = ItemHudFirstWidth; }
+                else { ItemHudWidth = GISettings.ItemHudWidth; }
+                if (GISettings.ItemHudHeight == 0) { ItemHudHeight = ItemHudFirstHeight; }
+                else { ItemHudHeight = GISettings.ItemHudHeight; }
                 ItemHudView = new HudView("Inspector", ItemHudWidth, ItemHudHeight, new ACImage(0x6AA8));
     			ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ItemHudView.UserAlphaChangeable = false;
@@ -210,6 +212,7 @@ namespace GearFoundry
     			ItemHudTabView.AddTab(ItemHudSettingsLayout, "Settings");
     			
     			ItemHudTabView.OpenTabChange += ItemHudTabView_OpenTabChange;
+                ItemHudView.Resize += ItemHudView_Resize; 
   				
     			RenderItemHudInspectorTab();
     			
@@ -220,21 +223,19 @@ namespace GearFoundry
     		}catch(Exception ex) {LogError(ex);}
     		
     	}
-
+       
         private void ItemHudView_Resize(object sender, System.EventArgs e)
         {
             try
             {
-                bool bw = Math.Abs(ItemHudView.Width - ItemHudWidth) > 20;
+               bool bw = Math.Abs(ItemHudView.Width - ItemHudWidth) > 20;
                 bool bh = Math.Abs(ItemHudView.Height - ItemHudHeight) > 20;
                 if (bh || bw)
                 {
-                    ItemHudWidthNew = ItemHudView.Width;
+                   ItemHudWidthNew = ItemHudView.Width;
                     ItemHudHeightNew = ItemHudView.Height;
-//                    MasterTimer.Interval = 1000;
-//                    MasterTimer.Enabled = true;
-//                    MasterTimer.Start();
                     MasterTimer.Tick += ItemHudResizeTimerTick;
+                    return;
                 }
             }
             catch (Exception ex) { LogError(ex); }
@@ -243,10 +244,12 @@ namespace GearFoundry
 
         private void ItemHudResizeTimerTick(object sender, EventArgs e)
         {
-//            MasterTimer.Stop();
             ItemHudWidth = ItemHudWidthNew;
             ItemHudHeight = ItemHudHeightNew;
-             MasterTimer.Tick -= ItemHudResizeTimerTick;
+            GISettings.ItemHudWidth = ItemHudWidth;
+            GISettings.ItemHudHeight = ItemHudHeight;
+            GearInspectorReadWriteSettings(false);
+            MasterTimer.Tick -= ItemHudResizeTimerTick;
             RenderItemHud();
         }
 

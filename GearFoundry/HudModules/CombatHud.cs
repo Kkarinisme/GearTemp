@@ -44,6 +44,9 @@ namespace GearFoundry
 			public bool bCombatHudTrackItemDebuffs = true;
 			public bool bCombatHudTrackVoidDebuffs = true;
 			public int CombatHudRenderColumns = 10;
+            public int CombatHudWidth;
+            public int CombatHudHeight;
+
 		}
 		
 		
@@ -99,7 +102,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				FileInfo GearTacticianSettingsFile = new FileInfo(toonDir + @"\GearTactician.xml");
+                FileInfo GearTacticianSettingsFile = new FileInfo(GearDir + @"\GearTactician.xml");
 								
 				if (read)
 				{
@@ -713,8 +716,10 @@ namespace GearFoundry
 				{
 					DisposeCombatHud();
 				}
-                if (CombatHudWidth == 0) { CombatHudWidth = CombatHudFirstWidth; }
-                if (CombatHudHeight == 0) { CombatHudHeight = CombatHudFirstHeight; }
+                if (gtSettings.CombatHudWidth == 0) { CombatHudWidth = CombatHudFirstWidth; }
+                else { CombatHudWidth = gtSettings.CombatHudWidth; }
+                if (gtSettings.CombatHudHeight == 0) { CombatHudHeight = CombatHudFirstHeight; }
+                else { CombatHudHeight = gtSettings.CombatHudHeight; }
 
 				CombatHudView = new HudView("GearTactician", CombatHudWidth, CombatHudHeight, new ACImage(0x6AA8));
 				CombatHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
@@ -739,6 +744,7 @@ namespace GearFoundry
 				CombatHudTabView.AddTab(CombatHudSettingsTab, "Settings");
 				
 				CombatHudTabView.OpenTabChange += CombatHudTabView_OpenTabChange;
+                CombatHudView.Resize += CombatHudView_Resize; 
 				
 				RenderCombatHudMainTab();
 				
@@ -759,9 +765,6 @@ namespace GearFoundry
                 {
                     CombatHudWidthNew = CombatHudView.Width;
                     CombatHudHeightNew = CombatHudView.Height;
-//                    MasterTimer.Interval = 1000;
-//                    MasterTimer.Enabled = true;
-//                    MasterTimer.Start();
                     MasterTimer.Tick += CombatHudResizeTimerTick;
                 }
             }
@@ -774,10 +777,12 @@ namespace GearFoundry
 
         private void CombatHudResizeTimerTick(object sender, EventArgs e)
         {
-//            MasterTimer.Stop();
             CombatHudWidth = CombatHudWidthNew;
             CombatHudHeight = CombatHudHeightNew;
-             MasterTimer.Tick -= CombatHudResizeTimerTick;
+            gtSettings.CombatHudWidth = CombatHudWidth;
+            gtSettings.CombatHudHeight = CombatHudHeight;
+            CombatHudReadWriteSettings(false);
+            MasterTimer.Tick -= CombatHudResizeTimerTick;
             RenderCombatHud();
 
         }

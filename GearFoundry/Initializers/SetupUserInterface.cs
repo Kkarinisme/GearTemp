@@ -426,6 +426,7 @@ namespace GearFoundry
                     setUpForChecks(n, flag, lst);
                 }
 
+ 
                 populateEssElementsListBox();
                 flag = sRuleEssElements;
                 if (flag.Length != 0)
@@ -1219,7 +1220,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in function populateEssElementsListBox");
 
                 int mList = 3;
                 populateLst(lstRuleEssElements, EssElementsList, mList);

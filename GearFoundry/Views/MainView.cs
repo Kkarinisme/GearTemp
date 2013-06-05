@@ -59,7 +59,12 @@ namespace GearFoundry
 
         //Gears Tactician
         MyClasses.MetaViewWrappers.ICheckBox chkCombatHudEnabled;
-        
+
+        //Remote Gear
+        MyClasses.MetaViewWrappers.ICheckBox chkRemoteGearEnabled;
+
+
+        //Gear
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryBurden;
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryComplete;
         MyClasses.MetaViewWrappers.ICheckBox chkInventory;
@@ -212,7 +217,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl8;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl7;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl6;
-        MyClasses.MetaViewWrappers.ITextBox txtRuleSpellMatches;
+//        MyClasses.MetaViewWrappers.ITextBox txtRuleSpellMatches;
         MyClasses.MetaViewWrappers.ITextBox txtRuleNumSpells;
 
         MyClasses.MetaViewWrappers.IStaticText lblRuleMustHaveSpells;
@@ -346,6 +351,9 @@ namespace GearFoundry
                 //Gears Tactician page
                 chkCombatHudEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkCombatHudEnabled"];
 
+                //Remote Gear
+                chkRemoteGearEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRemoteGearEnabled"];
+
                 //Misc Gears
                 chkMuteSounds = (MyClasses.MetaViewWrappers.ICheckBox)View["chkMuteSounds"];
                 chkArmorHud = (MyClasses.MetaViewWrappers.ICheckBox)View["chkArmorHud"];
@@ -406,6 +414,13 @@ namespace GearFoundry
                   try
                   {
                       chkCombatHudEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkCombatHudEnabled_Change);
+                  }
+                  catch (Exception ex) { LogError(ex); }
+
+
+                  try
+                  {
+                      chkRemoteGearEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRemoteGearEnabled_Change);
                   }
                   catch (Exception ex) { LogError(ex); }
 
@@ -662,7 +677,7 @@ namespace GearFoundry
                 chkRuleFilterlvl7.Checked = bRuleFilterlvl7;
                 chkRuleFilterlvl6 = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterlvl6"];
                 chkRuleFilterlvl6.Checked = bRuleFilterlvl6;
-                txtRuleSpellMatches = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleSpellMatches"];
+//txtRuleSpellMatches = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleSpellMatches"];
                 txtRuleNumSpells = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleNumSpells"];
        			}catch(Exception ex){LogError(ex);}
                   try
@@ -676,7 +691,7 @@ namespace GearFoundry
                 chkRuleFilterlvl8.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl8_Change);
                 chkRuleFilterlvl7.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl7_Change);
                 chkRuleFilterlvl6.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl6_Change);
-                txtRuleSpellMatches.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleSpellMatches_End);
+               // txtRuleSpellMatches.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleSpellMatches_End);
                 txtRuleNumSpells.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleNumSpells_End);
 				}catch(Exception ex){LogError(ex);}
                   try

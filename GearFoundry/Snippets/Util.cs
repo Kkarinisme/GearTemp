@@ -104,19 +104,9 @@ namespace GearFoundry
         private void useArrow()
         {
             try{
-            WriteToChat("Iam in function to usearrow");
-          //  Decal.Interop.D3DService.ID3DService mD3DService = (ID3DService)Core.Service
-          // Decal.Interop.D3DService.CD3DObj mMarkObject;
             MasterTimer.Interval = 100;
-            
-            arrowtimer = 60;
-//            MasterTimer.Enabled = true;
-//            MasterTimer.Start();
-            MasterTimer.Tick += ArrowTimerTick;
-
-            
-            //mMarkObject =  mD3DService.MarkObjectWithShape(nid, Decal.Interop.D3DService.eShape.eVArrow, 16776960);
-          // mMarkObject = Core.D3DService.MarkObjectWithShape(nid, D3DShape.VerticalArrow, (unchecked ((int)0xFFBB0000)));
+                arrowtimer = 20;
+                MasterTimer.Tick += ArrowTimerTick;
             }
             catch (Exception ex) { LogError(ex); }
  
@@ -126,27 +116,21 @@ namespace GearFoundry
         {
             try
             {
-                if (arrowtimer != 0)
-                {
-                    arrowtimer = arrowtimer - 1;
+                   arrowtimer = arrowtimer - 1;
                     MasterTimer.Tick -= ArrowTimerTick;
                    DoShowArrow();
-                }
-                else
-                {
-//                    MasterTimer.Stop();
-                }
  
             }
             catch (Exception ex) { LogError(ex); }
-            return;
+        
         }
 
         private void DoShowArrow()
         {
             Decal.Adapter.Wrappers.D3DObj mMarkObject;
             mMarkObject = Core.D3DService.PointToObject(nusearrowid, (unchecked((int)0xFFBB0000)));
- 
+            if (arrowtimer != 0) { MasterTimer.Tick += ArrowTimerTick; }
+            else { return; }
         }
         
 

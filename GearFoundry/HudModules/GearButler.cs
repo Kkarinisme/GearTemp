@@ -141,6 +141,9 @@ namespace GearFoundry
 			public List<ValetTicket> SuitList1 = new List<ValetTicket>();
 			public List<ValetTicket> SuitList2 = new List<ValetTicket>();
 			public List<ValetTicket> SuitList3 = new List<ValetTicket>();
+            public int ButlerHudWidth;
+            public int ButlerHudHeight;
+
 		}
 	
 		public class ValetTicket
@@ -363,8 +366,10 @@ namespace GearFoundry
     				DisposeButlerHud();
     			}
 
-                if (ButlerHudWidth == 0) { ButlerHudWidth = ButlerHudFirstWidth; }
-                if (ButlerHudHeight == 0) { ButlerHudHeight = ButlerHudFirstHeight; }
+                if (GearButlerSettings.ButlerHudWidth == 0) { ButlerHudWidth = ButlerHudFirstWidth; }
+                else { ButlerHudWidth = GearButlerSettings.ButlerHudWidth; }
+                if (GearButlerSettings.ButlerHudHeight == 0) { ButlerHudHeight = ButlerHudFirstHeight; }
+                else { ButlerHudHeight = GearButlerSettings.ButlerHudHeight; }
 
     			
     			ButlerHudView = new HudView("GearButler", ButlerHudWidth, ButlerHudHeight, new ACImage(0x6AA3));
@@ -392,6 +397,7 @@ namespace GearFoundry
     			ButlerHudTabView.AddTab(ValetTabLayout, "Valet");
     			
  				ButlerHudTabView.OpenTabChange += ButlerHudTabView_OpenTabChange;
+                ButlerHudView.Resize += ButlerHudView_Resize; 
  				
  				RenderButlerHudButlerLayout();
  				
@@ -415,10 +421,8 @@ namespace GearFoundry
                 {
                     ButlerHudWidthNew = ButlerHudView.Width;
                     ButlerHudHeightNew = ButlerHudView.Height;
-//                    MasterTimer.Interval = 1000;
-//                    MasterTimer.Enabled = true;
-//                    MasterTimer.Start();
                     MasterTimer.Tick += ButlerHudResizeTimerTick;
+                    return;
                 }
             }
             catch (Exception ex) { LogError(ex); }
@@ -433,6 +437,9 @@ namespace GearFoundry
 //            MasterTimer.Stop();
             ButlerHudWidth = ButlerHudWidthNew;
             ButlerHudHeight = ButlerHudHeightNew;
+            GearButlerSettings.ButlerHudWidth = ButlerHudWidth;
+            GearButlerSettings.ButlerHudHeight = ButlerHudHeight;
+            GearButlerReadWriteSettings(false);
             MasterTimer.Tick -= ButlerHudResizeTimerTick;
             RenderButlerHud();
 

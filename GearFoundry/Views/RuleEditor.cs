@@ -185,7 +185,7 @@ namespace GearFoundry
                new XElement("ArmorType", sRuleArmorType),
                  new XElement("ArmorSet", sRuleArmorSet),
                 new XElement("Unenchantable", bRuleMustBeUnEnchantable),
-                new XElement("MustHaveSpell", nRuleMustHaveSpell),
+            //    new XElement("MustHaveSpell", nRuleMustHaveSpell),
                  new XElement("CloakSets", sRuleCloakSets),
                  new XElement("CloakSpells", sRuleCloakSpells),
                  new XElement("CloakMustHaveSpell",bRuleCloakMustHaveSpell),
@@ -216,6 +216,7 @@ namespace GearFoundry
         {
             try
             {
+                WriteToChat("I am in function to getVariables");
                 nRuleNum = Convert.ToInt32(el.Element("RuleNum").Value);
                 bRuleEnabled = Convert.ToBoolean(el.Element("Enabled").Value);
                 nRulePriority = Convert.ToInt32(el.Element("Priority").Value);
@@ -257,13 +258,14 @@ namespace GearFoundry
                 nRuleEssMastery = Convert.ToInt32(el.Element("EssMastery").Value);
                 sRuleEssElements = el.Element("EssElements").Value.ToString();
                 nRuleEssLevel = Convert.ToInt32(el.Element("EssLevel").Value);
-               nRuleEssDamageLevel = Convert.ToInt32(el.Element("EssDamageLevel").Value);
+                nRuleEssDamageLevel = Convert.ToInt32(el.Element("EssDamageLevel").Value);
                 nRuleEssCDLevel = Convert.ToInt32(el.Element("EssCDLevel").Value);
                 nRuleEssCRLevel = Convert.ToInt32(el.Element("EssCRLevel").Value);
                 nRuleEssDRLevel = Convert.ToInt32(el.Element("EssDRLevel").Value);
                 nRuleEssCritLevel = Convert.ToInt32(el.Element("EssCritLevel").Value);
-                nRuleEssCritDamResLevel = Convert.ToInt32(el.Element("EssCritDamResLevel").Value);
-               sRuleSpells = el.Element("Spells").Value;
+                nRuleEssCritDamResLevel = Convert.ToInt32(el.Element("EssCritDamRes").Value);
+                sRuleSpells = el.Element("Spells").Value;
+             //   nRuleMustHaveSpell = Convert.ToInt32(el.Element("MustHaveSpell").Value);
                 nRuleNumSpells = Convert.ToInt32(el.Element("NumSpells").Value);
                 bRuleFilterLegend = Convert.ToBoolean(el.Element("FilterLegend").Value);
                 bRuleFilterEpic = Convert.ToBoolean(el.Element("FilterEpic").Value);
@@ -271,6 +273,8 @@ namespace GearFoundry
                 bRuleFilterlvl8 = Convert.ToBoolean(el.Element("FilterLvl8").Value);
                 bRuleFilterlvl7 = Convert.ToBoolean(el.Element("FilterLvl7").Value);
                 bRuleFilterlvl6 = Convert.ToBoolean(el.Element("FilterLvl6").Value);
+                WriteToChat("sRuleSpells: " + sRuleSpells);
+             //   WriteToChat("nRuleMustHaveSpell: " + nRuleMustHaveSpell.ToString());
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -1083,32 +1087,31 @@ namespace GearFoundry
         }
 
 
-        [ControlEvent("txtRuleSpellMatches", "End")]
-        private void txtRuleSpellMatches_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
+        //[ControlEvent("txtRuleSpellMatches", "End")]
+        //private void txtRuleSpellMatches_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        //{
+        //    if (!sRuleSpells.Contains(txtRuleSpellMatches.Text))
+        //    {
+        //        foreach (spellinfo spell in FilteredSpellIndex)
+        //        {
+        //            try
+        //            {
+        //                if (spell.spellname.ToLower().Contains(txtRuleSpellMatches.Text.ToLower()))
+        //                {
+        //                    string name = spell.spellname;
+        //                    int id = spell.spellid;
+        //                    nRuleMustHaveSpell = id;
+        //                    //if (!sRuleSpells.Contains(nRuleMustHaveSpell.ToString()))
+        //                    //{
 
-            if (!sRuleSpells.Contains(txtRuleSpellMatches.Text))
-            {
-                foreach (spellinfo spell in FilteredSpellIndex)
-                {
-                    try
-                    {
-                        if (spell.spellname.ToLower().Contains(txtRuleSpellMatches.Text.ToLower()))
-                        {
-                            string name = spell.spellname;
-                            int id = spell.spellid;
-                            nRuleMustHaveSpell = id;
-                            //if (!sRuleSpells.Contains(nRuleMustHaveSpell.ToString()))
-                            //{
-
-                            WriteEnabledSpellsList(id, name);
-                            populateRuleSpellEnabledListBox();
-                            // }
-                        }
-                    }
-                    catch (Exception ex) { LogError(ex); }
-                }
-            }
-        }
+        //                    WriteEnabledSpellsList(id, name);
+        //                    populateRuleSpellEnabledListBox();
+        //                    // }
+        //                }
+        //            }
+        //            catch (Exception ex) { LogError(ex); }
+        //        }
+        //    }
+        //}
     }
 }

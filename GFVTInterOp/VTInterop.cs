@@ -35,6 +35,7 @@ namespace GFVTInterOp
 					case 2:
 						return uTank2.LootPlugins.LootAction.Salvage;
 				}
+				
 			} catch (Exception ex) {GearFoundry.PluginCore.LogError(ex);}
 	
 			return uTank2.LootPlugins.LootAction.NoLoot;
@@ -45,13 +46,14 @@ namespace GFVTInterOp
 	
 			try 
 			{
+				PluginCore.WriteToChat("Checked to see if ID was needed.");
 
 				int result = GFInstance.VTLinkDecision(item.Id, item.GetValueInt(IntValueKey.Container, 0), 1);
 				if (result == 1) 
 				{
 					return true;
 				}
-	
+				
 				switch (item.ObjectClass) 
 				{
 					case uTank2.LootPlugins.ObjectClass.Gem:
@@ -63,8 +65,6 @@ namespace GFVTInterOp
 					case uTank2.LootPlugins.ObjectClass.WandStaffOrb:
 					case uTank2.LootPlugins.ObjectClass.Misc:
 						return true;
-					default:
-						return false;
 				}
 	
 			} catch (Exception ex) {GearFoundry.PluginCore.LogError(ex);}

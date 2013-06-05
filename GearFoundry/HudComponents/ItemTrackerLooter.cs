@@ -361,8 +361,8 @@ namespace GearFoundry
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
-		
-		
+			
+		private List<IdentifiedObject> WaitingVTIOs = new List<IdentifiedObject>();
 		public int VTLinkDecision(int id, int reserved1, int reserved2)
 		{
 			try
@@ -388,7 +388,7 @@ namespace GearFoundry
 						case IOResult.manatank:
 						case IOResult.rare:
 						case IOResult.spell:
-						case IOResult.trophy:						
+						case IOResult.trophy:								
 							return 1;						
 						case IOResult.salvage:
 							return 2;
@@ -398,39 +398,75 @@ namespace GearFoundry
 						default:
 							return 0;
 					}
-						
 				}
-				else
+				
+				IdentifiedObject VTIO = new IdentifiedObject(Core.WorldFilter[id]);	
+				if(!VTIO.HasIdData)
 				{
-					IdentifiedObject VTIO = new IdentifiedObject(Core.WorldFilter[id]);
-
-					if(VTIO.HasIdData){CheckRulesItem(ref VTIO);}
-					if(VTIO.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref VTIO);}
-					if(VTIO.IOR == IOResult.unknown) {TrophyListCheckItem(ref VTIO);}
-					if(VTIO.IOR == IOResult.unknown) {CheckSalvageItem(ref VTIO);}
-					if(VTIO.IOR == IOResult.unknown) {CheckManaItem(ref VTIO);}
-					if(VTIO.IOR == IOResult.unknown) {CheckValueItem(ref VTIO);}
-					if(VTIO.IOR == IOResult.unknown) {VTIO.IOR = IOResult.nomatch;}
+					Core.RenderFrame += new EventHandler<EventArgs>(DoesVTIOHaveID);
+					WaitingVTIOs.Add(VTIO);
+					SendVTIOtoCallBack(VTIO);
 					
-					switch(ItemTrackingList.Find(x => x.Id == id).IOR)
-					{
-						case IOResult.rule:
-						case IOResult.manatank:
-						case IOResult.rare:
-						case IOResult.spell:
-						case IOResult.trophy:						
-							return 1;						
-						case IOResult.salvage:
-							return 2;
-						case IOResult.val:
-							if(GISettings.SalvageHighValue) {return 2;}
-							else{return 1;}
-						default:
-							return 0;
-					}
 				}
+				
+				CheckRulesItem(ref VTIO);
+				if(VTIO.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref VTIO);}
+				if(VTIO.IOR == IOResult.unknown) {TrophyListCheckItem(ref VTIO);}
+				if(VTIO.IOR == IOResult.unknown) {CheckSalvageItem(ref VTIO);}
+				if(VTIO.IOR == IOResult.unknown) {CheckManaItem(ref VTIO);}
+				if(VTIO.IOR == IOResult.unknown) {CheckValueItem(ref VTIO);}
+				if(VTIO.IOR == IOResult.unknown) {VTIO.IOR = IOResult.nomatch;}
+				
+													
+				switch(VTIO.IOR)
+				{
+					case IOResult.rule:
+					case IOResult.manatank:
+					case IOResult.rare:
+					case IOResult.spell:
+					case IOResult.trophy:								
+						return 1;						
+					case IOResult.salvage:
+						return 2;
+					case IOResult.val:
+						if(GISettings.SalvageHighValue) {return 2;}
+						else{return 1;}
+					default:
+						return 0;
+				}
+
+
 						
 			}catch(Exception ex){LogError(ex); return 0;}
-		}	
+		}
+		
+		private void SendVTIOtoCallBack(IdentifiedObject VTIO)
+		{	
+			if(WaitingVTIOs.Count == 0) 
+			{
+				Core.RenderFrame -= new EventHandler<EventArgs>(DoesVTIOHaveID);
+				return;
+			}
+		}
+		
+		private void DoesVTIOHaveID(object sender, EventArgs e)
+		{
+			try
+			{
+				if(WaitingVTIOs.Any(x => x.HasIdData == true)){WaitingVTIOs.RemoveAll(x => x.HasIdData == true);}
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		
+		private void IDChecker(object sender, System.EventArgs e)
+		{
+			try
+			{
+					
+			}catch(Exception ex){LogError(ex);}
+			
+			
+		}
+
 	}
 }
