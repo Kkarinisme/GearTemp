@@ -989,11 +989,11 @@ namespace GearFoundry
                 SaveSettings();
                 if (bRemoteGearEnabled)
                 {
-//                    RenderRemoteGearHud();
+                    //RenderRemoteGearHud();
                 }
                 else
                 {
-//                    DisposeRemoteGearHud();
+                    //DisposeRemoteGearHud();
                 }
             }
             catch { }

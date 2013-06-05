@@ -48,14 +48,14 @@ namespace GearFoundry
 			public bool AutoAetheria;
 			public bool AutoCombine;
 			public bool AutoStack;
-			public bool ModifiedLooting;
+			public bool ModifiedLooting = true;
 			public bool GearScore;
 			public bool CheckForL7Scrolls;
-			public bool SalvageHighValue;
+			public bool SalvageHighValue = false;
             public int ItemHudWidth;
             public int ItemHudHeight;
-			public int LootByValue;
-			public int LootByMana;
+			public int LootByValue = 0;
+			public int LootByMana = 0;
 			
     	}
 		

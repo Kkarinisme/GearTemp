@@ -46,8 +46,6 @@ namespace GFVTInterOp
 	
 			try 
 			{
-				PluginCore.WriteToChat("Checked to see if ID was needed.");
-
 				int result = GFInstance.VTLinkDecision(item.Id, item.GetValueInt(IntValueKey.Container, 0), 1);
 				if (result == 1) 
 				{

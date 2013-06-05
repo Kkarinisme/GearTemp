@@ -96,9 +96,6 @@
     <Reference Include="VirindiViewService">
       <HintPath>Repositories\Virindi\VirindiViewService.dll</HintPath>
     </Reference>
-    <Reference Include="VTLooterGF">
-      <HintPath>..\VTLooterGF\bin\Debug\VTLooterGF.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="WrapperClass\IOMagToolsEcho.cs" />
@@ -188,9 +185,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Defaults\Mobs.xml">
       <LogicalName>Mobs.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Defaults\RulesBak.xml">
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Defaults\Salvage.xml">
       <LogicalName>Salvage.xml</LogicalName>

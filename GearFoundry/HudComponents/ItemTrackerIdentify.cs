@@ -277,7 +277,7 @@ namespace GearFoundry
 
 								
 						case ObjectClass.Gem:
-							if(IOItemWithID.WieldSlot == 0x10000000 || IOItemWithID.WieldSlot == 0x20000000 || IOItemWithID.WieldSlot == 0x40000000)
+							if(IOItemWithID.Aetheriacheck)
 							{
 							 	var reducedaetheriamatches = from ruls in AppliesToListMatches
 							 		where ((ruls.RuleRed && IOItemWithID.WieldSlot == 0x40000000) ||
@@ -299,20 +299,7 @@ namespace GearFoundry
 						   	}
 							else
 							{
-								var reducedgemmatches = from ruls in AppliesToListMatches
-									where ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber
-									orderby ruls.RulePriority
-									select ruls;
-								if(reducedgemmatches.Count() > 0)
-								{
-									IOItemWithID.rulename = reducedgemmatches.First().RuleName; 
-									IOItemWithID.IOR = IOResult.rule; 
-									return;
-								}
-								else
-								{
-									return;
-								}	
+								return;
 							}
 							
 						case ObjectClass.Jewelry:
