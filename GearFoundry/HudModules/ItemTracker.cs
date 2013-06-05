@@ -189,7 +189,7 @@ namespace GearFoundry
                 if (GISettings.ItemHudHeight == 0) { ItemHudHeight = ItemHudFirstHeight; }
                 else { ItemHudHeight = GISettings.ItemHudHeight; }
                 ItemHudView = new HudView("Inspector", ItemHudWidth, ItemHudHeight, new ACImage(0x6AA8));
-    			ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+    		//	ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ItemHudView.UserAlphaChangeable = false;
     			ItemHudView.ShowInBar = false;
     			ItemHudView.Visible = true;
@@ -319,47 +319,47 @@ namespace GearFoundry
 
     			InspectorIdentifySalvage = new HudCheckBox();
     			InspectorIdentifySalvage.Text = "Identify Salvage";
-    			ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0,0,150,16));
+                ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0, 0, 200, 16));
     			InspectorIdentifySalvage.Checked = GISettings.IdentifySalvage;
     			
     			InspectorAutoLoot = new HudCheckBox();
     			InspectorAutoLoot.Text = "Automatically Loot Items";
-    			ItemHudSettingsLayout.AddControl(InspectorAutoLoot, new Rectangle(0,18,150,16));
+    			ItemHudSettingsLayout.AddControl(InspectorAutoLoot, new Rectangle(0,18,200,16));
     			InspectorAutoLoot.Checked = GISettings.AutoLoot;
     			
     			InspectorAutoAetheria = new HudCheckBox();
     			InspectorAutoAetheria.Text = "Loot and Dessicate Junk Aetheria";
-    			ItemHudSettingsLayout.AddControl(InspectorAutoAetheria, new Rectangle(0,36,150,16));
+                ItemHudSettingsLayout.AddControl(InspectorAutoAetheria, new Rectangle(0, 36, 200, 16));
     			InspectorAutoAetheria.Checked = GISettings.AutoAetheria;
     			
     			InspectorAutoCombine = new HudCheckBox();
     			InspectorAutoCombine.Text = "AutoCombine Looted Salvage";
-    			ItemHudSettingsLayout.AddControl(InspectorAutoCombine, new Rectangle(0,54,150,16));
+                ItemHudSettingsLayout.AddControl(InspectorAutoCombine, new Rectangle(0, 54, 200, 16));
     			InspectorAutoCombine.Checked = GISettings.AutoCombine;
     			
     			InspectorAutoStack = new HudCheckBox();
     			InspectorAutoStack.Text = "AutoStack Looted Items";
-    			ItemHudSettingsLayout.AddControl(InspectorAutoStack, new Rectangle(0,72,150,16));
+                ItemHudSettingsLayout.AddControl(InspectorAutoStack, new Rectangle(0, 72, 200, 16));
     			InspectorAutoStack.Checked = GISettings.AutoStack;
     			
     			InspectorModifiedLooting = new HudCheckBox();
     			InspectorModifiedLooting.Text = "Enabled Modified Looting";
-    			ItemHudSettingsLayout.AddControl(InspectorModifiedLooting, new Rectangle(0,90,150,16));
+                ItemHudSettingsLayout.AddControl(InspectorModifiedLooting, new Rectangle(0, 90, 200, 16));
     			InspectorModifiedLooting.Checked = GISettings.ModifiedLooting;
     			
     			InspectorGearScore = new HudCheckBox();
     			InspectorGearScore.Text = "Use GearScore Report Strings";
-    			ItemHudSettingsLayout.AddControl(InspectorGearScore, new Rectangle(0,108,150,16));
+                ItemHudSettingsLayout.AddControl(InspectorGearScore, new Rectangle(0, 108, 200, 16));
     			InspectorGearScore.Checked = GISettings.GearScore;
     			
     			InspectorCheckForL7Scrolls = new HudCheckBox();
     			InspectorCheckForL7Scrolls.Text = "Loot Unknown L7 Spells";
-    			ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0,126,150,16));
+                ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0, 126, 200, 16));
     			InspectorCheckForL7Scrolls.Checked = GISettings.CheckForL7Scrolls;
     			
     			InspectorHudValueLabel = new HudStaticText();
     			InspectorHudValueLabel.Text = "High Value Loot.";
-    			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,142,150,16));
+    			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,142,200,16));
     			
     			InspectorLootByValue = new HudTextBox();
     			ItemHudSettingsLayout.AddControl(InspectorLootByValue, new Rectangle(0,142,45,16));
@@ -367,7 +367,7 @@ namespace GearFoundry
     			
     			InspectorHudManaLabel = new HudStaticText();
     			InspectorHudManaLabel.Text = "Mana Value Loot.";
-    			ItemHudSettingsLayout.AddControl(InspectorHudManaLabel, new Rectangle(50,158,150,16));		
+    			ItemHudSettingsLayout.AddControl(InspectorHudManaLabel, new Rectangle(50,158,200,16));		
     			
     			InspectorLootByMana = new HudTextBox();
     			ItemHudSettingsLayout.AddControl(InspectorLootByMana, new Rectangle(0,158,45,16));

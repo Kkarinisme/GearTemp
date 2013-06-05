@@ -569,7 +569,7 @@ namespace GearFoundry
 
             if (bRemoteGearEnabled)
             {
-//                RenderRemoteGearHud();
+                RenderRemoteGearHud();
             }
 
             if (binventoryCompleteEnabled)
@@ -989,11 +989,11 @@ namespace GearFoundry
                 SaveSettings();
                 if (bRemoteGearEnabled)
                 {
-                    //RenderRemoteGearHud();
+                    RenderRemoteGearHud();
                 }
                 else
                 {
-                    //DisposeRemoteGearHud();
+                    DisposeRemoteGearHud();
                 }
             }
             catch { }
@@ -1045,14 +1045,14 @@ namespace GearFoundry
             try
             {
                 bArmorHudEnabled = e.Checked;
-
-
+                
                 SaveSettings();
                 if (bArmorHudEnabled) 
                 {
                     if (File.Exists(armorSettingsFilename))
                     { getArmorHudSettings(); }
-                    RenderArmorHud(); 
+                    RenderArmorHud();
+
                 }
                 else { DisposeArmorHud(); }
 
@@ -1066,6 +1066,8 @@ namespace GearFoundry
         {
 
             try{
+                WriteToChat("I am in function to get armorhud settings");
+                    
                 xdocArmorSettings = XDocument.Load(armorSettingsFilename);
                 ArmorHudWidth = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudWidth").Value);
                  ArmorHudHeight = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudHeight").Value);

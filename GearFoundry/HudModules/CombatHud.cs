@@ -722,7 +722,7 @@ namespace GearFoundry
                 else { CombatHudHeight = gtSettings.CombatHudHeight; }
 
 				CombatHudView = new HudView("GearTactician", CombatHudWidth, CombatHudHeight, new ACImage(0x6AA8));
-				CombatHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+				// CombatHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
 				CombatHudView.Visible = true;
 				CombatHudView.UserAlphaChangeable = false;
 				CombatHudView.ShowInBar = false;

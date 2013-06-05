@@ -497,7 +497,7 @@ namespace GearFoundry
     			
     		//	CorpseHudView = new HudView("GearVisection", 300, 220, new ACImage(0x6AA4));
                 CorpseHudView = new HudView("GearVisection", CorpseHudWidth, CorpseHudHeight, new ACImage(0x6AA4));
-                CorpseHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+              //  CorpseHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			CorpseHudView.UserAlphaChangeable = false;
     			CorpseHudView.ShowInBar = false;
     			CorpseHudView.UserResizeable = false;

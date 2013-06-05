@@ -127,6 +127,7 @@
     <Compile Include="Initializers\Build.cs" />
     <Compile Include="Inventory\armor.cs" />
     <Compile Include="PluginCore.cs" />
+    <Compile Include="HudModules\RemoteGear.cs" />
     <Compile Include="Views\MainView.cs" />
     <Compile Include="WrapperClass\IdentifiedObject.cs" />
     <Compile Include="HudModules\QuickSlotsHud.cs" />

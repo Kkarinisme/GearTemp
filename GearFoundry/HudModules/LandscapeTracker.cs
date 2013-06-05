@@ -591,7 +591,7 @@ namespace GearFoundry
 
 
                 LandscapeHudView = new HudView("GearSense", LandscapeHudWidth, LandscapeHudHeight, new ACImage(0x6AA5));
-    			LandscapeHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+    		//	LandscapeHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			LandscapeHudView.UserAlphaChangeable = false;
     			LandscapeHudView.ShowInBar = false;
                 LandscapeHudView.UserResizeable = false;
@@ -691,7 +691,7 @@ namespace GearFoundry
 
 				LandscapeHudList.ControlHeight = 16;	
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
-				LandscapeHudList.AddColumn(typeof(HudStaticText), LandscapeHudWidth - 40, null);
+				LandscapeHudList.AddColumn(typeof(HudStaticText), 200, null);
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
 				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col); 

@@ -414,15 +414,17 @@ namespace GearFoundry
             try
             {
 
-
+                WriteToChat("I am in Render armor hud");
                 if (ArmorHudView != null)
                 {
                     DisposeArmorHud();
                 }
+                WriteToChat("Armor hud width: " + ArmorHudWidth.ToString());
+
                 xdocGenArmor = new XDocument();
                 xdocGenArmor = XDocument.Load(genArmorFilename);
 
-                if (ArmorHudWidth == 0) { ArmorHudWidth = ArmorHudFirstWidth; }
+                if (ArmorHudWidth == 0) { ArmorHudWidth = ArmorHudFirstWidth; WriteToChat("Armor Hud width: " + ArmorHudWidth.ToString()); }
                 if (ArmorHudHeight == 0) { ArmorHudHeight = ArmorHudFirstHeight; }
 
                 ArmorHudView = new HudView("Armor", ArmorHudWidth, ArmorHudHeight, new ACImage(0x6AA5));
@@ -434,7 +436,6 @@ namespace GearFoundry
                 ArmorHudView.UserMinimizable = false;
                 ArmorHudView.UserClickThroughable = false;
                 ArmorHudView.LoadUserSettings();
-
 
                 ArmorHudLayout = new HudFixedLayout();
                 ArmorHudView.Controls.HeadControl = ArmorHudLayout;
