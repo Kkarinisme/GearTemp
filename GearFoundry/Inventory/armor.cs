@@ -73,7 +73,6 @@ namespace GearFoundry
                 genArmorFilename = currDir + @"\allToonsArmor.xml";
                 holdingArmorFilename = world + @"\holdingArmor.xml";
                 allStatsFilename = currDir + @"\AllToonStats.xml";
-                armorSettingsFilename = currDir + @"\ArmorSettings.xml";
                 
 
                 xdocArmor = new XDocument(new XElement("Objs"));
@@ -164,7 +163,6 @@ namespace GearFoundry
                     n = 0;
                     mWaitingForID = null;
                     xdoc = null;
-                    fn = null;
 
                 
             }
@@ -232,7 +230,6 @@ namespace GearFoundry
                     {
                         WorldObject currentarmorobj = mWaitingForArmorID[n];
                         mWaitingForArmorID.Remove(mWaitingForArmorID[n]);
-                        //   if ((fn == "armorFilename") && (currentobj.Values(LongValueKey.Imbued) == 0)) { break; }
                         string armorClassName = currentarmorobj.ObjectClass.ToString();
                         string armorName = currentarmorobj.Name;
                         
@@ -404,12 +401,6 @@ namespace GearFoundry
 
         private void RenderArmorHud()
         {
-            try
-            {
-                //GearSenseReadWriteSettings(true);
-
-            }
-            catch { }
 
             try
             {
@@ -419,11 +410,16 @@ namespace GearFoundry
                 {
                     DisposeArmorHud();
                 }
-                WriteToChat("Armor hud width: " + ArmorHudWidth.ToString());
-
+                if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = currDir + @"\ArmorSettings.xml"; }
+                if (genArmorFilename == "" || genArmorFilename == null) { genArmorFilename = currDir + @"\allToonsArmor.xml"; }
                 xdocGenArmor = new XDocument();
                 xdocGenArmor = XDocument.Load(genArmorFilename);
 
+
+                if (ArmorHudWidth == 0)
+                {
+                    getArmorHudSettings();
+                }
                 if (ArmorHudWidth == 0) { ArmorHudWidth = ArmorHudFirstWidth; WriteToChat("Armor Hud width: " + ArmorHudWidth.ToString()); }
                 if (ArmorHudHeight == 0) { ArmorHudHeight = ArmorHudFirstHeight; }
 
@@ -495,6 +491,8 @@ namespace GearFoundry
 
 
             {
+                if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = currDir + @"\ArmorSettings.xml"; }
+                WriteToChat("I am in save armor settings and armor settings filename is " + armorSettingsFilename);
                 xdoc = new XDocument(new XElement("Settings"));
                 xdoc.Element("Settings").Add(new XElement("Setting",
                     new XElement("ArmorHudWidth", ArmorHudWidth),

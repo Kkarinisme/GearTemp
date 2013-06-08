@@ -26,8 +26,12 @@ namespace GearFoundry
 {
     public partial class PluginCore : PluginBase
     {
+        WindowsTimer mInventoryTimer = null;
+        int inventoryTimer = 0;
+        string mInventoryKey = "None";
         void btnUpdateInventory_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
+            mInventoryKey = "Update button";
             GearFoundry.PluginCore.WriteToChat("The button to update inventory was clicked");
             doUpdateInventory();
         }
@@ -70,7 +74,7 @@ namespace GearFoundry
         {
             try
             {
-              //  doCheckFiles();
+                doCheckFiles();
                 //Need a timer for processing inventory
                 mWaitingForIDTimer = new WindowsTimer();
                 //Need a list to hold the inventory
@@ -118,17 +122,15 @@ namespace GearFoundry
                             //Create list of the ID's currently in the inventory
                             { moldObjsID.Add(element.Value); }
                         }
-                        GearFoundry.PluginCore.WriteToChat("moldobjsid is created and count is " + moldObjsID.Count);
-
+ 
 
                     }
-                    catch (Exception ex) { mgoonInv = false; doGetInventory(); LogError(ex);}
+                    catch (Exception ex) {WriteToChat("I am in the catch exception"); mgoonInv = false; doGetInventory(); LogError(ex);}
 
 
                 }
   
-               xdocGenInventory = XDocument.Load(genInventoryFilename); 
-
+               xdocGenInventory = XDocument.Load(genInventoryFilename);
                 // if left this subprogram because of exception in update need a way to avoid returning to this program
                 if (mgoonInv)
                 {
@@ -165,14 +167,14 @@ namespace GearFoundry
                         // initialize event timer for processing inventory
                         mWaitingForIDTimer.Tick += new EventHandler(TimerEventProcessor);
 
-                        // Sets the timer interval to 5 seconds.
+                       //  Sets the timer interval to 5 seconds.
                         mWaitingForIDTimer.Interval = 10000;
-                        
-                        ProcessDataInventory();
+                        ProcessDataInventory(); // This one in the doupdate
                     }
                     //Now need to start routines that will continue to get data as becomes available or will end the search and save the files
-                    fn = "inventoryFilename";
-                    mIsFinished();  //This routine used both by the inventory and by the armor routines
+                   mIsFinished();  
+
+                    mIsFinished();  
 
                 }
 
