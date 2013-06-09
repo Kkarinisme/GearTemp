@@ -246,7 +246,7 @@ namespace GearFoundry
 						}
 						if (gsSettings.bShowAllegancePlayers && Core.CharacterFilter.Monarch != null && Core.CharacterFilter.Monarch.Id != 0) 
 						{
-							if (Core.CharacterFilter.Monarch.Id == IOLandscape.IntValues(LongValueKey.Monarch)) 
+							if (Core.CharacterFilter.Monarch.Id == IOLandscape.LValue(LongValueKey.Monarch)) 
 							{
 								IOLandscape.IOR = IOResult.allegplayers;
 								goto default;

@@ -9,8 +9,12 @@
 					<Component Id="LicenseFile" Guid="59b682e1-c790-43ba-a9e2-54ffad8f4540" DiskId="1">
 						<File Id="LicenseFile" Name="license.rtf" Source="license.rtf"/>
 					</Component>
-					<Component Id="GearFoundry" Guid="$(var.GFAddonID)" DiskId="1">
+					<!-- Switch for Debug vs Release compiles-->
+					<!--Component Id="GearFoundry" Guid="$(var.GFAddonID)" DiskId="1">
 						<File Id="GearFoundry" Name="GearFoundry.dll" Source="../GearFoundry/bin/release/GearFoundry.dll"/>
+					</Component-->
+					<Component Id="GearFoundry" Guid="$(var.GFAddonID)" DiskId="1">
+						<File Id="GearFoundry" Name="GearFoundry.dll" Source="../GearFoundry/bin/debug/GearFoundry.dll"/>
 					</Component>
 					<Component Id="GFVTInterop" Guid="$(var.GFVTIAddonID)" DiskId="1">
 						<File Id="GFVTI" Name="GFVTInterop.dll" Source="../GFVTInterOp/bin/release/GFVTInterop.dll"/>
