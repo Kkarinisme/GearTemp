@@ -235,7 +235,6 @@ namespace GearFoundry
         //used by both the inventory and armor programs to hold current object being processed
         private WorldObject currentobj;
 
-        private string fn;
         private List<string> moldObjsID = new List<string>();
         private List<WorldObject> mWaitingForID;
         private List<WorldObject> mWaitingForArmorID;

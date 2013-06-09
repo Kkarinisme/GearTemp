@@ -26,6 +26,7 @@ namespace GearFoundry
         {
             try
             {
+                mInventoryKey = "doGetInventory";
                 xdoc = new XDocument(new XElement("Objs"));
                 //Need a list to hold the inventory
                 mWaitingForIDTimer = new WindowsTimer();
@@ -57,9 +58,7 @@ namespace GearFoundry
 
                 } // endof foreach world object
 
-                GearFoundry.PluginCore.WriteToChat("Items being inventoried " + mWaitingForID.Count);
-
-                ProcessDataInventory();
+                ProcessDataInventory(); //This one in the doget inventory
 
                 // initialize event timer for processing inventory
                 mWaitingForIDTimer.Tick += new EventHandler(TimerEventProcessor);
@@ -70,9 +69,7 @@ namespace GearFoundry
 
 
                 //Now need to start routines that will continue to get data as becomes available or will end the search and save the files
-                fn = "inventoryFilename";
-
-                mIsFinished();  //This routine used both by the inventory and by the armor routines
+                mIsFinished();  
 
             } //end of try
             catch (Exception ex) { LogError(ex); }
@@ -87,53 +84,49 @@ namespace GearFoundry
             {
                 int n = mWaitingForID.Count;
                 string s = n.ToString();
-                if (n < m)
+                if (n == 0)
                 {
-                    GearFoundry.PluginCore.WriteToChat(s);
-                    m = n;
-                    string mname = null;
-
-
-                    if (mWaitingForID.Count > 0)
+                    try
                     {
-                        if (binventoryWaitingEnabled)
-                        {
-                            for (int i = 0; i < n; i++)
-                            {
-                                mname = mWaitingForID[i].Name;
-                                GearFoundry.PluginCore.WriteToChat(mname);
+                        removeExcessObjsfromFile();
+                        xdocGenInventory.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
 
-                            }
-                        }
-                        mDoWait();
-                    }
+                        xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
 
-                    else
-                    {
-                            try
-                            {
-                                removeExcessObjsfromFile();
-                                xdocGenInventory.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
-
-                                xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
-   
-                                xdocGenInventory.Save(genInventoryFilename);
-                                GearFoundry.PluginCore.WriteToChat("General Inventory file has been saved. ");
-                            }
-                            catch (Exception ex) { LogError(ex); }
-
-
-                        }
-                        GearFoundry.PluginCore.WriteToChat("File " + fn + " saved in directory " + currDir);
-
-                        m = 500;
-                  //      k = 0;
+                        xdocGenInventory.Save(genInventoryFilename);
+                        GearFoundry.PluginCore.WriteToChat("General Inventory file has been saved. ");
+                         m = 500;
+                    //      k = 0;
                         n = 0;
                         mWaitingForID = null;
                         xdoc = null;
-                        fn = null;
-
                     }
+                    catch (Exception ex) { LogError(ex); }
+                 }
+                 else if (n < m )
+                 {
+                        GearFoundry.PluginCore.WriteToChat(s);
+                        m = n;
+                        string mname = null;
+
+                        if (mWaitingForID.Count > 0)
+                        {
+                            if (binventoryWaitingEnabled)
+                            {
+                                for (int i = 0; i < n; i++)
+                                {
+                                    mname = mWaitingForID[i].Name;
+                                    GearFoundry.PluginCore.WriteToChat(mname);
+
+                                }
+                            }
+                            mDoWait();
+                        }
+                    }
+
+
+ 
+                
                 }
            
             catch (Exception ex) { LogError(ex); }
@@ -141,38 +134,53 @@ namespace GearFoundry
 
 
 
-        public void TimerEventProcessor(Object Sender, EventArgs mWaitingForIDTimer_Tick)
+         public void mDoWait()
         {
             try
             {
-                mWaitingForIDTimer.Stop();
-                for (int n = 0; n < mWaitingForID.Count; n++)
-                {
- 
-                    if (mWaitingForID[n].HasIdData)
-                    {
-                        ProcessDataInventory();
-                        mIsFinished();
-
-                    }
-                    else
-                    { mDoWait(); }
-                }
-
-
-
- 
-
-            }
+                mWaitingForIDTimer.Start();
+           }
             catch (Exception ex) { LogError(ex); }
 
         }
 
+        public void TimerEventProcessor(Object Sender, EventArgs mWaitingForIDTimer_Tick)
 
-
-        public void mDoWait()
         {
-            mWaitingForIDTimer.Start();
+            try
+            {
+
+
+                mWaitingForIDTimer.Stop();
+
+
+
+                for (int n = 0; n < mWaitingForID.Count; n++)
+                {
+
+                    if (mWaitingForID[n].HasIdData)
+                    {
+                        //  bidentRecd = false;
+                        ProcessDataInventory();
+                        mIsFinished();
+                    }
+                    else
+                    { mDoWait(); }
+                }
+            }
+
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
+        public void mDoWaitMore()
+        {
+            try
+            {
+                mWaitingForIDTimer.Start();
+            }
+            catch (Exception ex) { LogError(ex); }
+
         }
 
         //This is routine that puts the data of an obj into the inventory file xml
@@ -187,12 +195,10 @@ namespace GearFoundry
                     {
                         currentobj = mWaitingForID[n];
                         mWaitingForID.Remove(mWaitingForID[n]);
-                        //   if ((fn == "armorFilename") && (currentobj.Values(LongValueKey.Imbued) == 0)) { break; }
                         objClassName = currentobj.ObjectClass.ToString();
                         objName = currentobj.Name;
                         objID = currentobj.Id;
                         objIcon = currentobj.Icon;
-                        Type t = objIcon.GetType();
 
                         long objDesc = currentobj.Values(LongValueKey.DescriptionFormat);
                         long objMat = currentobj.Values(LongValueKey.Material);
@@ -254,150 +260,151 @@ namespace GearFoundry
                         long objUnknown8000000 = currentobj.Values(LongValueKey.Unknown8000000);
                         long objUsageMask = currentobj.Values(LongValueKey.UsageMask);
 
-                        xdocToonInventory.Element("Objs").Add(new XElement("Obj",
-                        new XElement("ObjName", objName),
-                        new XElement("ObjID", objID),
-                        new XElement("ToonName", toonName),
-                        new XElement("ObjIcon", objIcon),
-                        new XElement("ObjClass", objClassName),
-                        new XElement("ObjDesc", objDesc),
-                        new XElement("ObjMaterial", objMat),
-                        new XElement("ObjAl", objAl),
-                        new XElement("ObjSet", objSet),
-                        new XElement("ObjCovers", objCovers),
-                        new XElement("ObjEqSlot", objEqSlot),
-                        new XElement("ObjToonLevel", objToonLevel),
-                        new XElement("ObjLoreReq", objLore),
-                        new XElement("ObjSkillLevReq", objSkillLevReq),
-                        new XElement("ObjWork", objWork),
-                        new XElement("ObjTink", objTinks),
-                        new XElement("ObjCatType", objCatType),
-                        new XElement("ObjCleaveType", objCleaveType),
-                        new XElement("ObjMissType", objMissType),
-                        new XElement("ObjType", objType),
-                        new XElement("ObjElemDmg", objElemDmg),
-                        new XElement("ObjAtt", objAtt),
-                        new XElement("ObjBnd", objBnd),
-                        new XElement("ObjEmbue", objEmbue),
-                        new XElement("ObjSlayer", objSlayer),
-                        new XElement("ObjWieldAttr", objWieldAttrInt),
-                        new XElement("ObjWieldType", objWieldType),
-                        new XElement("ObjWieldValue", objWieldValue),
-                        new XElement("ObjDamage", objDamage),
-                        new XElement("ObjElemvsMons", objElemvsMons),
-                        new XElement("ObjMelD", objMelD),
-                        new XElement("ObjMagicD", objMagicD),
-                        new XElement("ObjManaC", objManaC),
-                        new XElement("ObjMissileD", objMissileD),
-                        new XElement("ObjSalvWork", objSalvWork),
-                        new XElement("ObjAttack", objAttack),
-                        new XElement("ObjDamageBonus", objDamageBonus),
-                        new XElement("ObjMaxDamage", objMaxDamage),
-                        new XElement("ObjVariance", objVariance),
-                        new XElement("ObjMastery", objMastery),
-                        new XElement("ObjSpellXml", objSpellXml),
-                        new XElement("ObjMagicDamage", objMagicDam),
-                        new XElement("ObjBurden", objBurden),
-                        new XElement("ObjStackCount", objStackCount),
-                        new XElement("ObjAcid", objAcid),
-                        new XElement("ObjLight", objLight),
-                        new XElement("ObjFire", objFire),
-                        new XElement("ObjCold", objCold),
-                        new XElement("ObjBludg", objBludg),
-                        new XElement("ObjSlash", objSlash),
-                        new XElement("ObjPierce", objPierce),
-                        new XElement("ObjRareID", objRareID),
-                        new XElement("IconOverlay", iconOverlay),
-                        new XElement("IconOutline", iconOutline),
-                        new XElement("IconUnderlay", iconUnderlay),
-                        new XElement("ObjFlags", objFlags),
-                        new XElement("ObjCreateFlag1", objCreateFlag1),
-                        new XElement("ObjCreateFlag2", objCreateFlag2),
-                        new XElement("ObjUnknown10", objUnknown10),
-                        new XElement("ObjUnknown100000", objUnknown100000),
-                        new XElement("ObjUnknown800000", objUnknown800000),
-                        new XElement("ObjUnknown8000000", objUnknown8000000),
-                        new XElement("ObjUsageMask", objUsageMask)));
+                      //  xdocToonInventory.Element("Objs").Add(new XElement("Obj",
+                            xdocToonInventory.Element("Objs").Add(new XElement("Obj",
+                            new XElement("ObjName", objName),
+                            new XElement("ObjID", objID),
+                            new XElement("ToonName", toonName),
+                            new XElement("ObjIcon", objIcon),
+                            new XElement("ObjClass", objClassName),
+                            new XElement("ObjDesc", objDesc),
+                            new XElement("ObjMaterial", objMat),
+                            new XElement("ObjAl", objAl),
+                            new XElement("ObjSet", objSet),
+                            new XElement("ObjCovers", objCovers),
+                            new XElement("ObjEqSlot", objEqSlot),
+                            new XElement("ObjToonLevel", objToonLevel),
+                            new XElement("ObjLoreReq", objLore),
+                            new XElement("ObjSkillLevReq", objSkillLevReq),
+                            new XElement("ObjWork", objWork),
+                            new XElement("ObjTink", objTinks),
+                            new XElement("ObjCatType", objCatType),
+                            new XElement("ObjCleaveType", objCleaveType),
+                            new XElement("ObjMissType", objMissType),
+                            new XElement("ObjType", objType),
+                            new XElement("ObjElemDmg", objElemDmg),
+                            new XElement("ObjAtt", objAtt),
+                            new XElement("ObjBnd", objBnd),
+                            new XElement("ObjEmbue", objEmbue),
+                            new XElement("ObjSlayer", objSlayer),
+                            new XElement("ObjWieldAttr", objWieldAttrInt),
+                            new XElement("ObjWieldType", objWieldType),
+                            new XElement("ObjWieldValue", objWieldValue),
+                            new XElement("ObjDamage", objDamage),
+                            new XElement("ObjElemvsMons", objElemvsMons),
+                            new XElement("ObjMelD", objMelD),
+                            new XElement("ObjMagicD", objMagicD),
+                            new XElement("ObjManaC", objManaC),
+                            new XElement("ObjMissileD", objMissileD),
+                            new XElement("ObjSalvWork", objSalvWork),
+                            new XElement("ObjAttack", objAttack),
+                            new XElement("ObjDamageBonus", objDamageBonus),
+                            new XElement("ObjMaxDamage", objMaxDamage),
+                            new XElement("ObjVariance", objVariance),
+                            new XElement("ObjMastery", objMastery),
+                            new XElement("ObjSpellXml", objSpellXml),
+                            new XElement("ObjMagicDamage", objMagicDam),
+                            new XElement("ObjBurden", objBurden),
+                            new XElement("ObjStackCount", objStackCount),
+                            new XElement("ObjAcid", objAcid),
+                            new XElement("ObjLight", objLight),
+                            new XElement("ObjFire", objFire),
+                            new XElement("ObjCold", objCold),
+                            new XElement("ObjBludg", objBludg),
+                            new XElement("ObjSlash", objSlash),
+                            new XElement("ObjPierce", objPierce),
+                            new XElement("ObjRareID", objRareID),
+                            new XElement("IconOverlay", iconOverlay),
+                            new XElement("IconOutline", iconOutline),
+                            new XElement("IconUnderlay", iconUnderlay),
+                            new XElement("ObjFlags", objFlags),
+                            new XElement("ObjCreateFlag1", objCreateFlag1),
+                            new XElement("ObjCreateFlag2", objCreateFlag2),
+                            new XElement("ObjUnknown10", objUnknown10),
+                            new XElement("ObjUnknown100000", objUnknown100000),
+                            new XElement("ObjUnknown800000", objUnknown800000),
+                            new XElement("ObjUnknown8000000", objUnknown8000000),
+                            new XElement("ObjUsageMask", objUsageMask)));
 
 
-                        //  xdoc.Save(inventoryFilename);
+                            //  xdoc.Save(inventoryFilename);
 
 
-                        currentobj = null;
-                        objClassName = null;
-                        objName = null;
-                        objDesc = 0;
-                        objID = 0;
-                        objIcon = 0;
+                            currentobj = null;
+                            objClassName = null;
+                            objName = null;
+                            objDesc = 0;
+                            objID = 0;
+                            objIcon = 0;
 
-                        objAl = 0;
-                        objSet = 0;
-                        objMat = 0;
-                        objCovers = 0;
-                        objToonLevel = 0;
-                        objLore = 0;
-                        objSkillLevReq = 0;
-                        objTinks = 0;
-                        objWork = 0;
-                        objCatType = 0;
-                        objCleaveType = 0;
-                        objMissType = 0;
-                        objType = 0;
-                        objElemDmg = 0;
-                        objMastery = 0;
+                            objAl = 0;
+                            objSet = 0;
+                            objMat = 0;
+                            objCovers = 0;
+                            objToonLevel = 0;
+                            objLore = 0;
+                            objSkillLevReq = 0;
+                            objTinks = 0;
+                            objWork = 0;
+                            objCatType = 0;
+                            objCleaveType = 0;
+                            objMissType = 0;
+                            objType = 0;
+                            objElemDmg = 0;
+                            objMastery = 0;
 
-                        objAtt = 0;
-                        objBnd = 0;
-                        objEmbue = 0;
-                        objSlayer = 0;
-                        objWieldAttrInt = 0;
-                        objWieldType = 0;
-                        objWieldValue = 0;
-                        objDamage = 0;
-                        objElemvsMons = 0;
-                        objMelD = 0;
-                        objMagicD = 0;
-                        objManaC = 0;
-                        objMissileD = 0;
-                        objSalvWork = 0;
-                        objAttack = 0;
-                        objDamageBonus = 0;
-                        objEqSlot = 0;
-                        objVariance = 0;
-                        objMaxDamage = 0;
-                        objSpellXml = null;
+                            objAtt = 0;
+                            objBnd = 0;
+                            objEmbue = 0;
+                            objSlayer = 0;
+                            objWieldAttrInt = 0;
+                            objWieldType = 0;
+                            objWieldValue = 0;
+                            objDamage = 0;
+                            objElemvsMons = 0;
+                            objMelD = 0;
+                            objMagicD = 0;
+                            objManaC = 0;
+                            objMissileD = 0;
+                            objSalvWork = 0;
+                            objAttack = 0;
+                            objDamageBonus = 0;
+                            objEqSlot = 0;
+                            objVariance = 0;
+                            objMaxDamage = 0;
+                            objSpellXml = null;
 
-                        objMagicDam = 0;
-                        objRareID = 0;
-                        objBurden = 0;
-                        objStackCount = 0;
-                        objAcid = 0;
-                        objLight = 0;
-                        objFire = 0;
-                        objCold = 0;
-                        objBludg = 0;
-                        objSlash = 0;
-                        objPierce = 0;
+                            objMagicDam = 0;
+                            objRareID = 0;
+                            objBurden = 0;
+                            objStackCount = 0;
+                            objAcid = 0;
+                            objLight = 0;
+                            objFire = 0;
+                            objCold = 0;
+                            objBludg = 0;
+                            objSlash = 0;
+                            objPierce = 0;
 
-                        objModel = 0;
-
-
-                        iconOverlay = 0;
-                        iconUnderlay = 0;
-                        iconOutline = 0;
-
-                        objFlags = 0;
-                        objCreateFlag1 = 0;
-                        objCreateFlag2 = 0;
-                        objUnknown10 = 0;
-                        objUnknown100000 = 0;
-                        objUnknown800000 = 0;
-                        objUnknown8000000 = 0;
-                        objUsageMask = 0;
-                    } // end of if
+                            objModel = 0;
 
 
-                } // endof try
+                            iconOverlay = 0;
+                            iconUnderlay = 0;
+                            iconOutline = 0;
+
+                            objFlags = 0;
+                            objCreateFlag1 = 0;
+                            objCreateFlag2 = 0;
+                            objUnknown10 = 0;
+                            objUnknown100000 = 0;
+                            objUnknown800000 = 0;
+                            objUnknown8000000 = 0;
+                            objUsageMask = 0;
+                        }
+                    } // end of try
+
+
 
                 catch (Exception ex) { LogError(ex); }
 
@@ -437,6 +444,7 @@ namespace GearFoundry
         {
             try
             {
+                WriteToChat("I am in removeexcessobjs and keyword is " + mInventoryKey);
                // List<string> holding = new List<string>();
               //  xdoc = XDocument.Load(inventoryFilename);
                 IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("Obj");

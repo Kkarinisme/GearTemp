@@ -587,8 +587,6 @@ namespace GearFoundry
 
             if (bArmorHudEnabled)
             {
-                if (File.Exists(armorSettingsFilename))
-                { getArmorHudSettings(); }
                 RenderArmorHud(); 
             }
 
@@ -1049,8 +1047,8 @@ namespace GearFoundry
                 SaveSettings();
                 if (bArmorHudEnabled) 
                 {
-                    if (File.Exists(armorSettingsFilename))
-                    { getArmorHudSettings(); }
+                   // if (File.Exists(armorSettingsFilename))
+                   // { getArmorHudSettings(); }
                     RenderArmorHud();
 
                 }
@@ -1071,6 +1069,7 @@ namespace GearFoundry
                 xdocArmorSettings = XDocument.Load(armorSettingsFilename);
                 ArmorHudWidth = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudWidth").Value);
                  ArmorHudHeight = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudHeight").Value);
+                WriteToChat("ArmorHudWidth: " + ArmorHudWidth.ToString());
             }
             catch (Exception ex) { LogError(ex); }
 

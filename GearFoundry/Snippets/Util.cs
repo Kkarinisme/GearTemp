@@ -104,7 +104,7 @@ namespace GearFoundry
         private void useArrow()
         {
             try{
-            MasterTimer.Interval = 100;
+          //  MasterTimer.Interval = 100;
                 arrowtimer = 20;
                 MasterTimer.Tick += ArrowTimerTick;
             }
