@@ -437,10 +437,10 @@
           <control progid="DecalControls.Checkbox" name="chkTextFilterNPCChatter" left="300" top="300" width="130" height="24" text="NPC Chatter"/>
 
           <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="390" width="225" height="24" text="Misc Gears"/>
-          <control progid="DecalControls.Checkbox" name="chkMuteSounds" left="10" top="410" width="100" height="24" text="Mute Sound Effects"/>
-          <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="430" width="100" height="24" text="Gather Toon Stats"/>
-          <control progid="DecalControls.Checkbox" name="chkToonArmor" left="150" top="410" width="100" height="24" textcolor="16777215" text="Inventory armor on Startup"/>
-          <control progid="DecalControls.Checkbox" name="chkArmorHud" left="150" top="430" width="100" height="24" text="Use Armor Hud"/>
+          <control progid="DecalControls.Checkbox" name="chkMuteSounds" left="10" top="410" width="130" height="24" text="Mute Sound Effects"/>
+          <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="430" width="130" height="24" text="Gather Toon Stats"/>
+          <control progid="DecalControls.Checkbox" name="chkToonArmor" left="150" top="410" width="150" height="24" textcolor="16777215" text="Inventory armor on Startup"/>
+          <control progid="DecalControls.Checkbox" name="chkArmorHud" left="150" top="430" width="130" height="24" text="Use Armor Hud"/>
 
         </control>
       </control>

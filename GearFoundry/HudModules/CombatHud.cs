@@ -832,7 +832,8 @@ namespace GearFoundry
 				CombatHudTargetHealth.ProgressFilled = new ACImage(Color.Red);
 				CombatHudTargetHealth.Min = 0;
 				CombatHudTargetHealth.Max = 100;
-				CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5,75,95,16));
+				//CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5,75,95,16));
+                CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5, 75, 125, 16));
 				
 				CombatHudMiniVulArray = new HudImageStack[20];
 				for(int i = 0; i < 20; i++)
