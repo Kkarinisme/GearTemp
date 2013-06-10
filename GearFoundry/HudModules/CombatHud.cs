@@ -33,20 +33,21 @@ namespace GearFoundry
 		private bool bCombatHudSettingsTab = false;
 		private bool bCombatHudInPortalSpace = true;
 		private int CombatHudFocusTargetGUID = 0;
+		private bool bCHFirstRender = true;
 		
 		private GearTacticianSettings gtSettings;
 				
-		//Enclose in class for saving.
 		public class GearTacticianSettings
 		{
 			public bool bCombatHudTrackLifeDebuffs = true;
 			public bool bCombatHudTrackCreatureDebuffs = true;
 			public bool bCombatHudTrackItemDebuffs = true;
 			public bool bCombatHudTrackVoidDebuffs = true;
-			public int CombatHudRenderColumns = 10;
-            public int CombatHudWidth;
-            public int CombatHudHeight;
-
+			public bool bCombatHudMedium = false;
+			public bool bCombatHudMinimal = false;
+			public bool bShowAll = false;
+            public int CombatHudWidth = 600;
+            public int CombatHudHeight = 220;
 		}
 		
 		
@@ -55,7 +56,11 @@ namespace GearFoundry
 		public DateTime CombatHudLastUpdate;
 				
 		private List<Regex> CombatHudRegexEx;
-		private Regex OtherCast = new Regex("^(?<name>[\\w\\s'-]+) says, \"");
+		private List<Regex> OtherCastRegexList = new List<Regex>();
+		
+
+	
+//		Vita de Urchin says, "Cruath Quasith"
 		
 		private List<SpellMapLoadable> AnimationList;
 		
@@ -80,6 +85,9 @@ namespace GearFoundry
 		{
 			public string SpellWords;
 			public DateTime HeardTime;
+			public int SpellId;
+			public int Animation;
+			public string SpellSchool;
 		}
 		
 		private class SpellMapLoadable
@@ -184,8 +192,8 @@ namespace GearFoundry
 				CombatHudRegexEx.Add(new Regex("Target is out of range."));
 				CombatHudRegexEx.Add(new Regex("Your spell fizzled."));
 				CombatHudRegexEx.Add(new Regex("^(?<targetname>.+) has no appropriate targets equipped for this spell.$"));
-				CombatHudRegexEx.Add(new Regex("You fail to affect (?<targetname>.+) because you are not a player killer!$"));	
-
+				CombatHudRegexEx.Add(new Regex("You fail to affect (?<targetname>.+) because you are not a player killer!$"));		
+				
 				AnimationList = new List<SpellMapLoadable>();
 				//void
 				AnimationList.Add(new SpellMapLoadable("Zojak Bor",100691559,4,5393));  //Corrosion
@@ -278,12 +286,11 @@ namespace GearFoundry
 				MasterTimer.Tick -= CombatHud_OnTimerDo;
 				Core.WorldFilter.ReleaseObject -= CombatHud_ReleaseObject;
 				Core.ItemDestroyed -= CombatHud_ItemDestroyed;
-				Core.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(CombatHud_ChatBoxMessage);
-				Core.EchoFilter.ServerDispatch -= new EventHandler<NetworkMessageEventArgs>(ServerDispatchCombat);
-				Core.WorldFilter.CreateObject -= new EventHandler<CreateObjectEventArgs>(CombatHud_CreateObject);
-				Core.CharacterFilter.ChangePortalMode -= new EventHandler<ChangePortalModeEventArgs>(CombatHud_ChangePortalMode);
-				Core.ItemSelected -= new EventHandler<ItemSelectedEventArgs>(CombatHud_ItemSelected);
-                CombatHudView.Resize -= CombatHudView_Resize; 
+				Core.ChatBoxMessage -= CombatHud_ChatBoxMessage;
+				Core.EchoFilter.ServerDispatch -= ServerDispatchCombat;
+				Core.WorldFilter.CreateObject -= CombatHud_CreateObject;
+				Core.CharacterFilter.ChangePortalMode -= CombatHud_ChangePortalMode;
+				Core.ItemSelected -= CombatHud_ItemSelected;
 
 			}catch(Exception ex){LogError(ex);}
 		}	
@@ -379,14 +386,21 @@ namespace GearFoundry
 		{
 			try
 			{
+				
 				if(OtherCastBuffer.Count > 0)
 				{
-					OtherCastBuffer.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 4);
+					OtherCastBuffer.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 5);
 				}
+				
+				
 				if(OtherCastBuffer.Count == 0) {return;}
 	
 				//Will ignore debuffs under L6 (or there abouts).
-				if(pMsg.Value<double>(3) < 1) {return;}
+				if(pMsg.Value<double>(2) < 1) {
+					return;
+				}
+				
+				
 				
 				if(Core.WorldFilter[pMsg.Value<int>(0)].ObjectClass == ObjectClass.Monster)
 				{
@@ -399,41 +413,33 @@ namespace GearFoundry
 				{
 					return;
 				}
-				
-				
-				//Logic.  Determine what spell was cast and assign durations.
-				//0.  pmsg contains 0 = target info, 2 = animation info
-				//0.  OtherCastBuffer has spell names from the past 4 seconds in it.
-				//1.  Determine what spells have been cast from the spell cast buffer.
-				//2.  Determine if our animation is one of those.
 
+				int probablespellid = (from spels in OtherCastBuffer
+										where spels.Animation == pMsg.Value<int>(1)
+										select spels).First().SpellId;
 				
-				var mostprobablespell = (from ani in AnimationList
-									 where ani.SpellAnimation == pMsg.Value<int>(2) && OtherCastBuffer.Any(x => x.SpellWords == ani.SpellCastWords)
-									 select ani).First();
-				
-				
-				if(mostprobablespell != null)
+				if(probablespellid != 0)
 				{	
 					if(CombatHudMobTrackingList.Any(x => x.Id == pMsg.Value<int>(0)))
 					{
 						
 						IdentifiedObject CastTarget = CombatHudMobTrackingList.First(x => x.Id == pMsg.Value<int>(0));
 						
-						if(CastTarget.DebuffSpellList.Any(x => x.SpellId == mostprobablespell.SpellId))
+						if(CastTarget.DebuffSpellList.Any(x => x.SpellId == probablespellid))
 					   	{
-							CastTarget.DebuffSpellList.Find(x => x.SpellId == mostprobablespell.SpellId).SpellCastTime = DateTime.Now;
-							CastTarget.DebuffSpellList.Find(x => x.SpellId == mostprobablespell.SpellId).SecondsRemaining = SpellIndex[mostprobablespell.SpellId].duration;
+							CastTarget.DebuffSpellList.Find(x => x.SpellId == probablespellid).SpellCastTime = DateTime.Now;
+							CastTarget.DebuffSpellList.Find(x => x.SpellId == probablespellid).SecondsRemaining = SpellIndex[probablespellid].duration;
 					   	}
 					   	else
 					   	{
 					   		IdentifiedObject.DebuffSpell dbspellnew = new IdentifiedObject.DebuffSpell();
-					   		dbspellnew.SpellId = mostprobablespell.SpellId;
+					   		dbspellnew.SpellId = probablespellid;
 					   		dbspellnew.SpellCastTime = DateTime.Now;
-					   		dbspellnew.SecondsRemaining = SpellIndex[mostprobablespell.SpellId].duration;
+					   		dbspellnew.SecondsRemaining = SpellIndex[probablespellid].duration;
 					   		CastTarget.DebuffSpellList.Add(dbspellnew);	
 					   	}
 					}
+					UpdateCombatHudMainTab();
 				}
 
 				
@@ -580,24 +586,38 @@ namespace GearFoundry
 		private void CombatHud_ChatBoxMessage(object sender, ChatTextInterceptEventArgs e)
 		{
 			try
-			{
-				if(OtherCast.IsMatch(e.Text))
+			{					
+				if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)) && e.Text.Contains("says, "))
 				{
-					if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)))
+					
+					
+					OtherDebuffCastInfo odci = new OtherDebuffCastInfo();
+					odci.HeardTime = DateTime.Now;
+					var tanimation = AnimationList.Find(x => e.Text.Contains(x.SpellCastWords));	
+					odci.SpellWords =tanimation.SpellCastWords;
+					odci.SpellId = tanimation.SpellId;
+					odci.Animation = tanimation.SpellAnimation;
+					odci.SpellSchool = SpellIndex[odci.SpellId].spellschool;
+					
+					switch(SpellIndex[odci.SpellId].spellschool.ToLower())
 					{
-						OtherDebuffCastInfo odci = new OtherDebuffCastInfo();
-						odci.HeardTime = DateTime.Now;
-						odci.SpellWords = AnimationList.Find(x => e.Text.Contains(x.SpellCastWords)).SpellCastWords;
-						OtherCastBuffer.Add(odci);
-					}
-				}
-				
-				
-				if(SpellCastBuffer.Count == 0) {return;}
-				if(CombatHudRegexEx.Any(x => x.IsMatch(e.Text)))
-			   	{
-					SpellCastBuffer.Dequeue();
-				}				
+						case "item enchantment":
+							if(!gtSettings.bCombatHudTrackItemDebuffs) {return;}
+							break;
+						case "creature enchantment":
+							if(!gtSettings.bCombatHudTrackCreatureDebuffs) {return;}
+							break;
+						case "life magic":
+							if(!gtSettings.bCombatHudTrackLifeDebuffs) {return;}
+							break;
+						case "void magic":
+							if(!gtSettings.bCombatHudTrackVoidDebuffs){return;}
+							break;
+						default:
+							return;	
+					}	
+					OtherCastBuffer.Add(odci);
+				}			
 			}catch(Exception ex){LogError(ex);}
 		}
 		                                
@@ -676,6 +696,15 @@ namespace GearFoundry
 		private HudButton CombatHudFocusSet = null;
 		private HudButton CombatHudFocusClear = null;
 		
+		private HudCheckBox CHTrackCreature = null;
+		private HudCheckBox CHTrackItem = null;
+		private HudCheckBox CHTrackLife = null;
+		private HudCheckBox CHTRackVoid = null;
+		private HudCheckBox CHRenderMedium = null;
+		private HudCheckBox CHRenderMinimal = null;
+		private HudCheckBox CHShowAll = null;
+		
+		
 		private HudImageStack[] CombatHudMiniVulArray = null;
 		
 		private HudList CombatHudDebuffTrackerList = null;
@@ -688,25 +717,21 @@ namespace GearFoundry
 		private const int CombatHudFocusTargetBackground =  0x600335C;
 		private const int CombatHudCurrentTargetBackground =  0x60011F4;
 		private const int CombatHudNeutralBackground = 0x600109A;
-		
+		private ACImage FocusBar = new ACImage(Color.DarkRed);
+		private ACImage CurrentBar =  new ACImage(Color.MediumVioletRed);
+		private ACImage RedBar = new ACImage(Color.Red);
+		private  ACImage EmptyBar = new ACImage(Color.Black);
+				
 		private Rectangle CombatHudTargetRectangle = new Rectangle(0,0,50,50);
 		private Rectangle CombatHudMiniVulsRectangle = new Rectangle(0,0,16,16);
 		private Rectangle CombatHudListVulsRectangle = new Rectangle(0,0,16,16);
-        private int CombatHudWidth;
-        private int CombatHudHeight;
-        private int CombatHudFirstWidth = 600;
-        private int CombatHudFirstHeight = 220;
-        private int CombatHudWidthNew;
-        private int CombatHudHeightNew;
 
 		
 		private void RenderCombatHud()
 		{
 			try
 			{
-				CombatHudReadWriteSettings(true);
-				
-				
+				CombatHudReadWriteSettings(true);	
 			}catch(Exception ex){LogError(ex);}
 			
 			try
@@ -716,26 +741,26 @@ namespace GearFoundry
 				{
 					DisposeCombatHud();
 				}
-                if (gtSettings.CombatHudWidth == 0) { CombatHudWidth = CombatHudFirstWidth; }
-                else { CombatHudWidth = gtSettings.CombatHudWidth; }
-                if (gtSettings.CombatHudHeight == 0) { CombatHudHeight = CombatHudFirstHeight; }
-                else { CombatHudHeight = gtSettings.CombatHudHeight; }
+				
 
-				CombatHudView = new HudView("GearTactician", CombatHudWidth, CombatHudHeight, new ACImage(0x6AA8));
-				// CombatHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+				
+
+				CombatHudView = new HudView("GearTactician", gtSettings.CombatHudWidth, gtSettings.CombatHudHeight, new ACImage(0x6AA8));
 				CombatHudView.Visible = true;
 				CombatHudView.UserAlphaChangeable = false;
 				CombatHudView.ShowInBar = false;
-				CombatHudView.UserResizeable = false;
 				CombatHudView.UserClickThroughable = false;
 				CombatHudView.UserMinimizable = false;
+				if(gtSettings.bCombatHudMinimal){CombatHudView.UserResizeable = false;}
+				else{CombatHudView.UserResizeable = true;}
+				
 				CombatHudView.LoadUserSettings();
 				
 				CombatHudLayout = new HudFixedLayout();
 				CombatHudView.Controls.HeadControl = CombatHudLayout;
 				
 				CombatHudTabView = new HudTabView();
-				CombatHudLayout.AddControl(CombatHudTabView, new Rectangle(0,0,CombatHudWidth,CombatHudHeight));
+				CombatHudLayout.AddControl(CombatHudTabView, new Rectangle(0,0, CombatHudView.Width, CombatHudView.Height));
 				
 				CombatHudMainTab = new HudFixedLayout();
 				CombatHudTabView.AddTab(CombatHudMainTab, "GearTactician");
@@ -744,28 +769,73 @@ namespace GearFoundry
 				CombatHudTabView.AddTab(CombatHudSettingsTab, "Settings");
 				
 				CombatHudTabView.OpenTabChange += CombatHudTabView_OpenTabChange;
-                CombatHudView.Resize += CombatHudView_Resize; 
+				if(CombatHudView.UserResizeable){CombatHudView.Resize += CombatHudView_Resize;}
 				
-				RenderCombatHudMainTab();
+                if(bCombatHudSettingsTab) {RenderCombatHudSettingsTab();}
+                else{RenderCombatHudMainTab();}
+                
 				
 				SubscribeCombatEvents();
-                CombatHudView.UserResizeable = true;
- 
 						
 			}catch(Exception ex){LogError(ex);}
 			return;
 		}
+		
+		private void AlterCombatHud()
+		{		
+			try
+			{
+				//Clean up old combathud tabs
+				DisposeCombatHudMainTab();
+				DisposeCombatHudSettingsTab();
+				CombatHudTabView.OpenTabChange -= CombatHudTabView_OpenTabChange;
+				CombatHudLayout.Dispose();
+				CombatHudTabView.Dispose();
+				CombatHudMainTab.Dispose();
+				CombatHudSettingsTab.Dispose();
+			
+				CombatHudView.Height = gtSettings.CombatHudHeight;
+				CombatHudView.Width = gtSettings.CombatHudWidth;
+
+				if(gtSettings.bCombatHudMinimal){CombatHudView.UserResizeable = false;}
+				else{CombatHudView.UserResizeable = true;}			
+				
+				CombatHudLayout = new HudFixedLayout();
+				CombatHudView.Controls.HeadControl = CombatHudLayout;
+				
+				CombatHudTabView = new HudTabView();
+				CombatHudLayout.AddControl(CombatHudTabView, new Rectangle(0,0, CombatHudView.Width, CombatHudView.Height));
+				
+				CombatHudMainTab = new HudFixedLayout();
+				CombatHudTabView.AddTab(CombatHudMainTab, "GearTactician");
+				
+				CombatHudSettingsTab = new HudFixedLayout();
+				CombatHudTabView.AddTab(CombatHudSettingsTab, "Settings");
+				
+				CombatHudTabView.OpenTabChange += CombatHudTabView_OpenTabChange;
+				if(CombatHudView.UserResizeable){CombatHudView.Resize += CombatHudView_Resize;}
+				
+                if(bCombatHudSettingsTab) {RenderCombatHudSettingsTab();}
+                else{RenderCombatHudMainTab();}
+						
+			}catch(Exception ex){LogError(ex);}
+			return;
+		}
+		
+		private bool CHRenderWaitSet = false;
         private void CombatHudView_Resize(object sender, System.EventArgs e)
         {
             try
             {
-                bool bw = Math.Abs(CombatHudView.Width - CombatHudWidth) > 20;
-                bool bh = Math.Abs(CombatHudView.Height - CombatHudHeight) > 20;
+            	if(bCombatHudSettingsTab) { return;}
+                bool bw = Math.Abs(CombatHudView.Width - gtSettings.CombatHudWidth) > 20;
+                bool bh = Math.Abs(CombatHudView.Height - gtSettings.CombatHudHeight) > 20;
                 if (bh || bw)
                 {
-                    CombatHudWidthNew = CombatHudView.Width;
-                    CombatHudHeightNew = CombatHudView.Height;
-                    MasterTimer.Tick += CombatHudResizeTimerTick;
+                    gtSettings.CombatHudWidth = CombatHudView.Width;
+                    gtSettings.CombatHudHeight = CombatHudView.Height;
+                    CombatHudResizeTime = DateTime.Now;
+                    Core.RenderFrame += new EventHandler<EventArgs>(CombatHudResizeWait);
                 }
             }
             catch (Exception ex) { LogError(ex); }
@@ -774,17 +844,20 @@ namespace GearFoundry
 
 
         }
-
-        private void CombatHudResizeTimerTick(object sender, EventArgs e)
+		
+        DateTime CombatHudResizeTime;
+        private void CombatHudResizeWait(object sender, EventArgs e)
         {
-            CombatHudWidth = CombatHudWidthNew;
-            CombatHudHeight = CombatHudHeightNew;
-            gtSettings.CombatHudWidth = CombatHudWidth;
-            gtSettings.CombatHudHeight = CombatHudHeight;
-            CombatHudReadWriteSettings(false);
-            MasterTimer.Tick -= CombatHudResizeTimerTick;
-            RenderCombatHud();
+        	if((DateTime.Now - CombatHudResizeTime).TotalMilliseconds > 500)
+        	{
+	        	Core.RenderFrame -= CombatHudResizeWait;
+	        	WriteToChat("H:" + gtSettings.CombatHudHeight.ToString());
+	        	WriteToChat("W:" + gtSettings.CombatHudWidth.ToString());
+        	
 
+           		CombatHudReadWriteSettings(false);
+            	AlterCombatHud();
+        	}
         }
 
 
@@ -792,7 +865,17 @@ namespace GearFoundry
 		{
 			try
 			{
-				
+				 switch(CombatHudTabView.CurrentTab)
+    			{
+    				case 0:
+				 		DisposeCombatHudSettingsTab();
+    					RenderCombatHudMainTab();
+    					return;
+    				case 1:
+    					DisposeCombatHudMainTab();
+    					RenderCombatHudSettingsTab();
+    					return;
+    			}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -804,6 +887,8 @@ namespace GearFoundry
 				UnsubscribeCombatEvents();
 				DisposeCombatHudMainTab();
 				DisposeCombatHudSettingsTab();
+				
+				if(CombatHudView.UserResizeable) {CombatHudView.Resize -= CombatHudView_Resize;}
 				
 				CombatHudTabView.OpenTabChange -= CombatHudTabView_OpenTabChange;
 				
@@ -820,6 +905,7 @@ namespace GearFoundry
 		{
 			try
 			{
+<<<<<<< HEAD
 				CombatHudTargetName = new HudStaticText();
 				CombatHudTargetName.TextAlignment = VirindiViewService.WriteTextFormats.Center;
 				CombatHudMainTab.AddControl(CombatHudTargetName, new Rectangle(0,0,130,16));
@@ -837,56 +923,137 @@ namespace GearFoundry
 				
 				CombatHudMiniVulArray = new HudImageStack[20];
 				for(int i = 0; i < 20; i++)
+=======
+				if(gtSettings.bCombatHudMedium)
+>>>>>>> 9d09cb9b6fa9d65b5dedf5b366d682081f659dd2
 				{
-					CombatHudMiniVulArray[i] = new HudImageStack();
+					CombatHudFocusSet = new HudButton();
+					CombatHudFocusSet.Text = "Focus";
+					CombatHudMainTab.AddControl(CombatHudFocusSet, new Rectangle(0,0,35,16));
+					
+					CombatHudFocusClear = new HudButton();
+					CombatHudFocusClear.Text = "Reset";
+					CombatHudMainTab.AddControl(CombatHudFocusClear, new Rectangle(0,20,35,16));
+					
+					CombatHudDebuffTrackerList = new HudList();
+					CombatHudMainTab.AddControl(CombatHudDebuffTrackerList, new Rectangle(40,0, CombatHudView.Width -40, CombatHudView.Height -10));
+					CombatHudDebuffTrackerList.ControlHeight = 12;	
+					CombatHudDebuffTrackerList.AddColumn(typeof(HudProgressBar), 100, null);
+					for(int i = 0; i < 20; i++)
+					{
+						CombatHudDebuffTrackerList.AddColumn(typeof(HudImageStack), 16, null);
+					}	
+					CombatHudDebuffTrackerList.AddColumn(typeof(HudStaticText), 1, null);					
 				}
-				
-				for(int i = 0; i < 20; i++)
+				else if(gtSettings.bCombatHudMinimal)
 				{
-					if(i < 5)
+					CombatHudFocusSet = new HudButton();
+					CombatHudFocusSet.Text = "F";
+					CombatHudMainTab.AddControl(CombatHudFocusSet, new Rectangle(0,0,20,16));
+					
+					CombatHudFocusClear = new HudButton();
+					CombatHudFocusClear.Text = "R";
+					CombatHudMainTab.AddControl(CombatHudFocusClear, new Rectangle(22,0,20,16));	
+
+					CombatHudTargetHealth = new HudProgressBar();
+	                CombatHudTargetHealth.ProgressEmpty = EmptyBar;
+					CombatHudTargetHealth.ProgressFilled = RedBar;
+					CombatHudTargetHealth.Min = 0;
+					CombatHudTargetHealth.Max = 100;
+					CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(44,0,86,16));
+					
+					CombatHudMiniVulArray = new HudImageStack[20];
+					for(int i = 0; i < 20; i++)
 					{
-						CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle((i*20),105,16,16));
-					}
-					if(5 <= i && i < 10)
-					{
-						CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle(((i-5)*20),125,16,16));
-					}
-					if(10 <= i && i < 15)
-					{
-						CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle(((i-10)*20),145,16,16));
-					}
-					if(15 <= i)
-					{
-						CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle(((i-15)*20),165,16,16));
-					}
+						CombatHudMiniVulArray[i] = new HudImageStack();
+						CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle((i*18) + 132,0,16,16));
+					}					
 				}
-				
-				CombatHudFocusSet = new HudButton();
-				CombatHudFocusSet.Text = "Focus";
-				CombatHudMainTab.AddControl(CombatHudFocusSet, new Rectangle(5,190,35,16));
-				
-				CombatHudFocusClear = new HudButton();
-				CombatHudFocusClear.Text = "Reset";
-				CombatHudMainTab.AddControl(CombatHudFocusClear, new Rectangle(45,190,35,16));
-				
-				CombatHudDebuffTrackerList = new HudList();
-				CombatHudMainTab.AddControl(CombatHudDebuffTrackerList, new Rectangle(110,0,Convert.ToInt32(CombatHudWidth - 110),CombatHudHeight-20));
-				CombatHudDebuffTrackerList.ControlHeight = 12;	
-				CombatHudDebuffTrackerList.AddColumn(typeof(HudProgressBar), 100, null);
-				for(int i = 0; i < 20; i++)
+				else
 				{
-					CombatHudDebuffTrackerList.AddColumn(typeof(HudImageStack), 16, null);
+					CombatHudTargetName = new HudStaticText();
+					CombatHudTargetName.TextAlignment = VirindiViewService.WriteTextFormats.Center;
+					CombatHudMainTab.AddControl(CombatHudTargetName, new Rectangle(0,0,130,16));
+					
+					CombatHudTargetImage = new HudImageStack();
+	                CombatHudMainTab.AddControl(CombatHudTargetImage, new Rectangle(25, 0, 50, 50));
+					
+					CombatHudTargetHealth = new HudProgressBar();
+	                CombatHudTargetHealth.ProgressEmpty = EmptyBar;
+					CombatHudTargetHealth.ProgressFilled = RedBar;
+					CombatHudTargetHealth.Min = 0;
+					CombatHudTargetHealth.Max = 100;
+					CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5,75,95,16));
+					
+					CombatHudMiniVulArray = new HudImageStack[20];
+					for(int i = 0; i < 20; i++)
+					{
+						CombatHudMiniVulArray[i] = new HudImageStack();
+					}
+					
+					for(int i = 0; i < 20; i++)
+					{
+						if(i < 5)
+						{
+							CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle((i*20),105,16,16));
+						}
+						if(5 <= i && i < 10)
+						{
+							CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle(((i-5)*20),125,16,16));
+						}
+						if(10 <= i && i < 15)
+						{
+							CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle(((i-10)*20),145,16,16));
+						}
+						if(15 <= i)
+						{
+							CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle(((i-15)*20),165,16,16));
+						}
+					}
+					
+					CombatHudFocusSet = new HudButton();
+					CombatHudFocusSet.Text = "Focus";
+					CombatHudMainTab.AddControl(CombatHudFocusSet, new Rectangle(5,190,35,16));
+					
+					CombatHudFocusClear = new HudButton();
+					CombatHudFocusClear.Text = "Reset";
+					CombatHudMainTab.AddControl(CombatHudFocusClear, new Rectangle(45,190,35,16));
+					
+					CombatHudDebuffTrackerList = new HudList();
+					CombatHudMainTab.AddControl(CombatHudDebuffTrackerList, new Rectangle(110,0,CombatHudView.Width - 110,CombatHudView.Height));
+					CombatHudDebuffTrackerList.ControlHeight = 12;	
+					CombatHudDebuffTrackerList.AddColumn(typeof(HudProgressBar), 100, null);
+					for(int i = 0; i < 20; i++)
+					{
+						CombatHudDebuffTrackerList.AddColumn(typeof(HudImageStack), 16, null);
+					}	
+					CombatHudDebuffTrackerList.AddColumn(typeof(HudStaticText), 1, null);
 				}
 				
 				bCombatHudMainTab = true;
-                CombatHudView.UserResizeable = true;
-           
-			
+				
+				if(!gtSettings.bCombatHudMinimal)
+				{
+					CombatHudDebuffTrackerList.Click +=  (sender, row, col) => CombatHudDebuffTrackerList_Click(sender, row, col);
+				}
+				
 				CombatHudFocusSet.Hit += CombatHudFocusSet_Hit;
 				CombatHudFocusClear.Hit += CombatHudFocusClear_Hit;
-                CombatHudView.Resize += CombatHudView_Resize; 
-
+	            
 				UpdateCombatHudMainTab();
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CombatHudDebuffTrackerList_Click(object sender, int row, int col)
+		{
+			try
+			{
+				if(col == 0)
+				{
+					CombatHudRow = CombatHudDebuffTrackerList[row];
+					Core.Actions.SelectItem(Convert.ToInt32(((HudStaticText)CombatHudRow[21]).Text));
+				}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -897,27 +1064,27 @@ namespace GearFoundry
 			{
 				if(!bCombatHudMainTab) {return;}
 				
-				CombatHudFocusSet.Hit -= CombatHudFocusSet_Hit;
-				CombatHudFocusClear.Hit -= CombatHudFocusClear_Hit;
+				if(CombatHudFocusSet != null){CombatHudFocusSet.Hit -= CombatHudFocusSet_Hit;}
+				if(CombatHudFocusClear != null){CombatHudFocusClear.Hit -= CombatHudFocusClear_Hit;}
 				
-				CombatHudDebuffTrackerList.Dispose();
+				if(CombatHudDebuffTrackerList != null) {CombatHudDebuffTrackerList.Dispose();}
 				
-				for(int i = 0; i < 20; i++)
+				if(CombatHudMiniVulArray != null)
 				{
-					CombatHudMiniVulArray[i].Dispose();
+					for(int i = 0; i < 20; i++)
+					{
+						CombatHudMiniVulArray[i].Dispose();
+					}
 				}
 											
-				CombatHudFocusClear.Dispose();
-				CombatHudFocusSet.Dispose();
-				CombatHudTargetHealth.Dispose();
+				if(CombatHudFocusClear != null){CombatHudFocusClear.Dispose();}
+				if(CombatHudFocusSet != null){CombatHudFocusSet.Dispose();}
+				if(CombatHudTargetHealth != null){CombatHudTargetHealth.Dispose();}
 				
-				CombatHudTargetImage.Dispose();
-				CombatHudTargetName.Dispose();
+				if(CombatHudTargetImage != null) {CombatHudTargetImage.Dispose();}
+				if(CombatHudTargetName != null) {CombatHudTargetName.Dispose();}
 				
 				bCombatHudMainTab = false;
-								
-
-				
 
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -954,6 +1121,49 @@ namespace GearFoundry
 		{
 			try
 			{
+				CHTrackCreature = new HudCheckBox();
+				CHTrackCreature.Text = "Creature";
+				CHTrackCreature.Checked = gtSettings.bCombatHudTrackCreatureDebuffs;
+				CombatHudSettingsTab.AddControl(CHTrackCreature, new Rectangle(0,0,60,16));
+				
+				CHTrackItem = new HudCheckBox();
+				CHTrackItem.Text = "Item";
+				CHTrackItem.Checked = gtSettings.bCombatHudTrackItemDebuffs;
+				CombatHudSettingsTab.AddControl(CHTrackItem, new Rectangle(65,0,45,16));
+				
+				CHTrackLife = new HudCheckBox();
+				CHTrackLife.Text = "Life";
+				CHTrackLife.Checked = gtSettings.bCombatHudTrackLifeDebuffs;
+				CombatHudSettingsTab.AddControl(CHTrackLife, new Rectangle(115,0,45,16));
+				
+				CHTRackVoid = new HudCheckBox();
+				CHTRackVoid.Text = "Void";
+				CHTRackVoid.Checked = gtSettings.bCombatHudTrackVoidDebuffs;
+				CombatHudSettingsTab.AddControl(CHTRackVoid, new Rectangle(165,0,45,16));
+				
+				CHRenderMedium = new HudCheckBox();
+				CHRenderMedium.Text = "Less";
+				CHRenderMedium.Checked = gtSettings.bCombatHudMedium;
+				CombatHudSettingsTab.AddControl(CHRenderMedium, new Rectangle(215,0,45,16));
+				
+				CHRenderMinimal = new HudCheckBox();
+				CHRenderMinimal.Text = "Minimal";
+				CHRenderMinimal.Checked = gtSettings.bCombatHudMinimal;
+				CombatHudSettingsTab.AddControl(CHRenderMinimal, new Rectangle(265,0,60,16));
+				
+				CHShowAll = new HudCheckBox();
+				CHShowAll.Text = "All Mobs";
+				CHShowAll.Checked = gtSettings.bShowAll;
+				CombatHudSettingsTab.AddControl(CHShowAll, new Rectangle(330,0,70,16));
+				
+				CHTrackCreature.Change += CHTrackCreature_Change;
+				CHTrackItem.Change += CHTrackItem_Change;
+				CHTrackLife.Change += CHTrackLife_Change;
+				CHTRackVoid.Change += CHTRackVoid_Change;
+				CHRenderMedium.Change += CHRenderMedium_Change;
+				CHRenderMinimal.Change += CHRenderMinimal_Change;
+				CHShowAll.Change += CHShowAll_Change;
+				
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -962,7 +1172,123 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(!bCombatHudSettingsTab) {return;}
 				
+				CHTrackCreature.Change -= CHTrackCreature_Change;
+				CHTrackItem.Change -= CHTrackItem_Change;
+				CHTrackLife.Change -= CHTrackLife_Change;
+				CHTRackVoid.Change -= CHTRackVoid_Change;
+				CHRenderMedium.Change -= CHRenderMedium_Change;
+				CHRenderMinimal.Change -= CHRenderMinimal_Change;
+				CHShowAll.Change -= CHShowAll_Change;
+				
+				CHTrackCreature.Dispose();				
+				CHTrackItem.Dispose();
+				CHTrackLife.Dispose();				
+				CHTRackVoid.Dispose();				
+				CHRenderMedium.Dispose();			
+				CHRenderMinimal.Dispose();
+				
+				bCombatHudSettingsTab = false;				
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CHShowAll_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bShowAll = CHShowAll.Checked;
+				CombatHudReadWriteSettings(false);
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CHTrackCreature_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudTrackCreatureDebuffs = CHTrackCreature.Checked;
+				CombatHudReadWriteSettings(false);
+			}catch(Exception ex){LogError(ex);}
+		}
+			
+		private void CHTrackItem_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudTrackItemDebuffs = CHTrackItem.Checked;
+				CombatHudReadWriteSettings(false);
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CHTrackLife_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudTrackLifeDebuffs = CHTrackLife.Checked;
+				CombatHudReadWriteSettings(false);
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CHTRackVoid_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudTrackVoidDebuffs = CHTRackVoid.Checked;
+				CombatHudReadWriteSettings(false);
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CHRenderMedium_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudMedium = CHRenderMedium.Checked;
+				if(gtSettings.bCombatHudMinimal && gtSettings.bCombatHudMedium)
+				{
+					gtSettings.bCombatHudMinimal = false;
+					CHRenderMinimal.Checked = gtSettings.bCombatHudMinimal;
+				}
+				if(gtSettings.bCombatHudMedium)
+				{
+					gtSettings.CombatHudWidth = 400;
+					gtSettings.CombatHudHeight = 200;
+				}
+				else
+				{
+					gtSettings.CombatHudWidth = 600;
+					gtSettings.CombatHudHeight = 220;
+				}
+				CombatHudReadWriteSettings(false);
+				Core.RenderFrame += new EventHandler<EventArgs>(CombatHudResizeWait);
+				
+			
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CHRenderMinimal_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudMinimal = CHRenderMinimal.Checked;
+				if(gtSettings.bCombatHudMinimal && gtSettings.bCombatHudMedium)
+				{
+					gtSettings.bCombatHudMedium = false;		
+					CHRenderMedium.Checked = gtSettings.bCombatHudMedium;
+				}
+				if(gtSettings.bCombatHudMinimal)
+				{
+					gtSettings.CombatHudWidth = 500;
+					gtSettings.CombatHudHeight = 30;
+				}
+				else
+				{
+					gtSettings.CombatHudWidth = 600;
+					gtSettings.CombatHudHeight = 220;
+				}
+				CombatHudReadWriteSettings(false);
+				Core.RenderFrame += new EventHandler<EventArgs>(CombatHudResizeWait);
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -974,7 +1300,7 @@ namespace GearFoundry
 				if(CombatHudMobTrackingList.Count == 0) {return;}
 				if(Core.Actions.CurrentSelection == 0 && CombatHudFocusTargetGUID == 0){return;}
 				if(((TimeSpan)(DateTime.Now - CombatHudLastUpdate)).TotalSeconds < 1){return;}
-								
+				
 				if(CombatHudFocusTargetGUID != 0)
 				{
 					if(!CombatHudMobTrackingList.Any(x => x.Id == CombatHudFocusTargetGUID))
@@ -995,7 +1321,169 @@ namespace GearFoundry
 				{
 					CHTargetIO = null;
 				}
+				
+				
+				
+				
+				if(gtSettings.bCombatHudMinimal)
+				{
+					if(CHTargetIO != null && CHTargetIO.isvalid)
+					{
+						CombatHudTargetHealth.Min = 0;
+						CombatHudTargetHealth.Max = 100;
+						CombatHudTargetHealth.PreText = CHTargetIO.HealthCurrent + "/" + CHTargetIO.HealthMax;
+						if(CHTargetIO.Id == CombatHudFocusTargetGUID) {CombatHudTargetHealth.ProgressFilled = FocusBar;}
+						else if(CHTargetIO.Id == CombatHudFocusTargetGUID) {CombatHudTargetHealth.ProgressFilled = CurrentBar;}
+						else{CombatHudTargetHealth.ProgressFilled =  RedBar;}
+						if(CHTargetIO.HealthCurrent < CHTargetIO.HealthMax)
+						{
+							CombatHudTargetHealth.Position = Convert.ToInt32(((double)CHTargetIO.HealthCurrent / (double)CHTargetIO.HealthMax)*100);
+						}
+						else
+						{
+							CombatHudTargetHealth.Position = 100;
+						}
+						if(CHTargetIO.DebuffSpellList.Count > 0)
+						{
+							for(int i = 0; i < 20; i++)
+							{
+								CombatHudMiniVulArray[i].Clear();
+								if(i < CHTargetIO.DebuffSpellList.Count)
+								{
+									if(CHTargetIO.DebuffSpellList[i].SecondsRemaining > 60)
+									{
+										CombatHudMiniVulArray[i].Add(CombatHudTargetRectangle, CombatHudGoodBackground);
+										CombatHudMiniVulArray[i].Add(CombatHudTargetRectangle, SpellIndex[CHTargetIO.DebuffSpellList[i].SpellId].spellicon);
+										
+									}
+									if(CHTargetIO.DebuffSpellList[i].SecondsRemaining <= 60 && CHTargetIO.DebuffSpellList[i].SecondsRemaining > 30)
+									{
+										CombatHudMiniVulArray[i].Add(CombatHudTargetRectangle, CombatHudWarningBackground);
+										CombatHudMiniVulArray[i].Add(CombatHudTargetRectangle, SpellIndex[CHTargetIO.DebuffSpellList[i].SpellId].spellicon);
+									}
+									if(CHTargetIO.DebuffSpellList[i].SecondsRemaining <= 30)
+									{
+										CombatHudMiniVulArray[i].Add(CombatHudTargetRectangle, CombatHudExpiringBackground);
+										CombatHudMiniVulArray[i].Add(CombatHudTargetRectangle, SpellIndex[CHTargetIO.DebuffSpellList[i].SpellId].spellicon);
+									}
+								}
+								else
+								{
+									CombatHudMiniVulArray[i].Add(CombatHudTargetRectangle, CombatHudNeutralBackground);
+								}
+							}
+						}	
+					}
+					CombatHudLastUpdate = DateTime.Now;
+					return;
+				}
+				
+				if(gtSettings.bCombatHudMedium)
+				{
+					CombatHudDebuffTrackerList.ClearRows();
+					if(CombatHudFocusTargetGUID != 0)
+					{
+						IdentifiedObject FocusIO = CombatHudMobTrackingList.Find(x => x.Id == CombatHudFocusTargetGUID);
+						CombatHudRow = CombatHudDebuffTrackerList.AddRow();
+						((HudProgressBar)CombatHudRow[0]).FontHeight = 6;
+						((HudProgressBar)CombatHudRow[0]).PreText = FocusIO.Name;	
+						((HudProgressBar)CombatHudRow[0]).Min = 0;
+						((HudProgressBar)CombatHudRow[0]).Max = 100;
+						((HudProgressBar)CombatHudRow[0]).ProgressFilled = FocusBar;
+						((HudProgressBar)CombatHudRow[0]).ProgressEmpty = EmptyBar;
+						if(FocusIO.HealthCurrent < FocusIO.HealthMax)
+						{					
+							((HudProgressBar)CombatHudRow[0]).Position = Convert.ToInt32(((double)FocusIO.HealthCurrent / (double)FocusIO.HealthMax)*100);
+						}
+						else
+						{
+							((HudProgressBar)CombatHudRow[0]).Position = 100;
+						}
+						
+						int loopindex;
+						if(FocusIO.DebuffSpellList.Count < 20){loopindex = FocusIO.DebuffSpellList.Count;}
+						else{loopindex = 20;}
+							
+						for(int j = 0; j < loopindex; j++)
+						{
+							if(FocusIO.DebuffSpellList[j].SecondsRemaining > 60) 
+							{
+								((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, CombatHudGoodBackground);
+							}
+							else if(FocusIO.DebuffSpellList[j].SecondsRemaining <= 60  && FocusIO.DebuffSpellList[j].SecondsRemaining > 30)
+							{
+								((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, CombatHudWarningBackground);
+							}
+							else if(FocusIO.DebuffSpellList[j].SecondsRemaining <= 30 && FocusIO.DebuffSpellList[j].SecondsRemaining > 0)
+							{
+								((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, CombatHudExpiringBackground);
+							}
+							else
+							{
+								((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, CombatHudNeutralBackground);
+							}
+							((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, SpellIndex[FocusIO.DebuffSpellList[j].SpellId].spellicon);
+						}
+						((HudStaticText)CombatHudRow[21]).Text = FocusIO.Id.ToString();
+					}
 					
+					for(int i = 0; i < CombatHudMobTrackingList.Count; i++)
+					{
+						if((CombatHudMobTrackingList[i].DebuffSpellList.Count > 0 || gtSettings.bShowAll) && CombatHudMobTrackingList[i].Id != CombatHudFocusTargetGUID)
+						{
+							CombatHudRow = CombatHudDebuffTrackerList.AddRow();
+							((HudProgressBar)CombatHudRow[0]).FontHeight = 6;
+							((HudProgressBar)CombatHudRow[0]).PreText = CombatHudMobTrackingList[i].Name;	
+							((HudProgressBar)CombatHudRow[0]).Min = 0;
+							((HudProgressBar)CombatHudRow[0]).Max = 100;
+							if(CombatHudMobTrackingList[i].Id == Core.Actions.CurrentSelection) {((HudProgressBar)CombatHudRow[0]).ProgressFilled = CurrentBar;}
+							else{((HudProgressBar)CombatHudRow[0]).ProgressFilled = RedBar;}
+							((HudProgressBar)CombatHudRow[0]).ProgressEmpty = EmptyBar;
+							
+							if(CombatHudMobTrackingList[i].HealthCurrent < CombatHudMobTrackingList[i].HealthMax)
+							{					
+								((HudProgressBar)CombatHudRow[0]).Position = Convert.ToInt32(((double)CombatHudMobTrackingList[i].HealthCurrent / (double)CombatHudMobTrackingList[i].HealthMax)*100);
+							}
+							else
+							{
+								((HudProgressBar)CombatHudRow[0]).Position = 100;
+							}
+							
+							int loopindex;
+							if(CombatHudMobTrackingList[i].DebuffSpellList.Count < 20){loopindex = CombatHudMobTrackingList[i].DebuffSpellList.Count;}
+							else{loopindex = 20;}
+							
+							for(int j = 0; j < loopindex; j++)
+							{
+								if(CombatHudMobTrackingList[i].DebuffSpellList[j].SecondsRemaining > 60) 
+								{
+									((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, CombatHudGoodBackground);
+								}
+								else if(CombatHudMobTrackingList[i].DebuffSpellList[j].SecondsRemaining <= 60  && CombatHudMobTrackingList[i].DebuffSpellList[j].SecondsRemaining > 30)
+								{
+									((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, CombatHudWarningBackground);
+								}
+								else if(CombatHudMobTrackingList[i].DebuffSpellList[j].SecondsRemaining <= 30 && CombatHudMobTrackingList[i].DebuffSpellList[j].SecondsRemaining > 0)
+								{
+									((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, CombatHudExpiringBackground);
+								}
+								else
+								{
+									((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, CombatHudNeutralBackground);
+								}
+								((HudImageStack)CombatHudRow[j+1]).Add(CombatHudListVulsRectangle, SpellIndex[CombatHudMobTrackingList[i].DebuffSpellList[j].SpellId].spellicon);
+							}
+							((HudStaticText)CombatHudRow[21]).Text = CombatHudMobTrackingList[i].Id.ToString();
+						}
+						
+					}
+				
+					CombatHudLastUpdate = DateTime.Now;
+					return;
+		
+				}
+		
+													
 				if(CHTargetIO != null && CHTargetIO.isvalid)
 				{	
 					CombatHudTargetName.Text = CHTargetIO.Name;
@@ -1070,15 +1558,18 @@ namespace GearFoundry
 				
 				for(int i = 0; i < CombatHudMobTrackingList.Count; i++)
 				{
-					if(CombatHudMobTrackingList[i].DebuffSpellList.Count > 0)
+					if(CombatHudMobTrackingList[i].DebuffSpellList.Count > 0 || gtSettings.bShowAll)
 					{
 						CombatHudRow = CombatHudDebuffTrackerList.AddRow();
 						((HudProgressBar)CombatHudRow[0]).FontHeight = 6;
 						((HudProgressBar)CombatHudRow[0]).PreText = CombatHudMobTrackingList[i].Name;	
 						((HudProgressBar)CombatHudRow[0]).Min = 0;
 						((HudProgressBar)CombatHudRow[0]).Max = 100;
-						((HudProgressBar)CombatHudRow[0]).ProgressFilled = new ACImage(Color.Red);
-						((HudProgressBar)CombatHudRow[0]).ProgressEmpty = new ACImage(Color.Black);
+						
+						if(CombatHudMobTrackingList[i].Id == CombatHudFocusTargetGUID) {((HudProgressBar)CombatHudRow[0]).ProgressFilled = FocusBar;}
+						else if(CombatHudMobTrackingList[i].Id == Core.Actions.CurrentSelection) {((HudProgressBar)CombatHudRow[0]).ProgressFilled = CurrentBar;}
+						else{((HudProgressBar)CombatHudRow[0]).ProgressFilled =  RedBar;}
+						((HudProgressBar)CombatHudRow[0]).ProgressEmpty = EmptyBar;
 						
 						if(CombatHudMobTrackingList[i].HealthCurrent < CombatHudMobTrackingList[i].HealthMax)
 						{					
@@ -1115,9 +1606,11 @@ namespace GearFoundry
 						}
 						
 					}
+					((HudStaticText)CombatHudRow[21]).Text = CombatHudMobTrackingList[i].Id.ToString();
 				}
 				
 				CombatHudLastUpdate = DateTime.Now;
+				return;
 
 				
 			}catch(Exception ex){LogError(ex);}

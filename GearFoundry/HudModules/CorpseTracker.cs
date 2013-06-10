@@ -242,15 +242,15 @@ namespace GearFoundry
 							
 				//Corpses with loot on them.
 				//Enables tracking of kills made by the character
-				if(IOCorpse.IntValues(LongValueKey.Burden) > 6000 && ghSettings.bKillsBySelf)
+				if(IOCorpse.LValue(LongValueKey.Burden) > 6000 && ghSettings.bKillsBySelf)
 				{
 					if(!IOCorpse.HasIdData)	{IdqueueAdd(IOCorpse.Id); return;}
-					else if(string.IsNullOrEmpty(IOCorpse.StringValues(StringValueKey.FullDescription))){return;}
+					else if(string.IsNullOrEmpty(IOCorpse.SValue(StringValueKey.FullDescription))){return;}
 					else
 					{
-						if (IOCorpse.StringValues(StringValueKey.FullDescription).Contains(Core.CharacterFilter.Name)) 
+						if (IOCorpse.SValue(StringValueKey.FullDescription).Contains(Core.CharacterFilter.Name)) 
 						{
-							if (IOCorpse.StringValues(StringValueKey.FullDescription).Contains("generated a rare item")) 
+							if (IOCorpse.SValue(StringValueKey.FullDescription).Contains("generated a rare item")) 
 							{
 								IOCorpse.IOR = IOResult.corpsewithrare;
 								if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
@@ -277,7 +277,7 @@ namespace GearFoundry
 						{
 							foreach(string fellow in FellowMemberTrackingList)
 							{
-								if(IOCorpse.StringValues(StringValueKey.FullDescription).Contains(fellow)) 
+								if(IOCorpse.SValue(StringValueKey.FullDescription).Contains(fellow)) 
 								{
 									IOCorpse.IOR = IOResult.corpsefellowkill;
 									if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 

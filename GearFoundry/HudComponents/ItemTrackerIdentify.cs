@@ -73,7 +73,7 @@ namespace GearFoundry
 			try
 			{
 				if(GISettings.LootByMana == 0){return;}
-				if(IOItemMana.IntValues(LongValueKey.CurrentMana) > GISettings.LootByMana)
+				if(IOItemMana.LValue(LongValueKey.CurrentMana) > GISettings.LootByMana)
 				{
 					//Irq:  TODO:  Cull manatanks when there is not a mana stone to eat them.  It's irritating.  Make a list of them for destruction as needed.
 					//Irq:  TODO:  Add mana value or find it....
@@ -155,7 +155,7 @@ namespace GearFoundry
 				IdentifiedObject IOItemWithID = IOItemWithIDReference;
 
 				var AppliesToListMatches = from rules in ItemRulesList
-					where (rules.RuleAppliesTo & IOItemWithID.IntValues(LongValueKey.Category)) == IOItemWithID.IntValues(LongValueKey.Category)
+					where (rules.RuleAppliesTo & IOItemWithID.LValue(LongValueKey.Category)) == IOItemWithID.LValue(LongValueKey.Category)
 					orderby rules.RulePriority
 					select rules;
 				
@@ -174,11 +174,11 @@ namespace GearFoundry
 						case ObjectClass.Armor:
 							//this matching currently ignores armor types
 							var reducedarmormatches = from ruls in AppliesToListMatches
-								where IOItemWithID.ArmorLevel >= ruls.RuleArmorLevel &&  //will match 0 AL values on rule.
+								where IOItemWithID.LValue(LongValueKey.ArmorLevel) >= ruls.RuleArmorLevel &&  //will match 0 AL values on rule.
 								(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.ArmorCoverage) == IOItemWithID.ArmorCoverage) &&   //Will ignore or match armor coverage for true
 								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	//will determine if number of spells are on object
-								(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.ArmorSet))  && //Will ignore or match armor sets
-								ruls.RuleUnenchantable == IOItemWithID.Unehcantable
+								(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && //Will ignore or match armor sets
+								(!ruls.RuleUnenchantable || IOItemWithID.LValue(LongValueKey.Unenchantable) > 0)
 								orderby ruls.RulePriority
 								select ruls;
 							if(reducedarmormatches.Count() > 0)
@@ -193,14 +193,13 @@ namespace GearFoundry
 							}
 							
 						case ObjectClass.Clothing:
-							if(IOItemWithID.ArmorLevel > 0)
+							if(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)
 							{
 								var reducedarmorclothmatches = from ruls in AppliesToListMatches
-									where IOItemWithID.ArmorLevel >= ruls.RuleArmorLevel &&  //will match 0 AL values on rule.
+									where IOItemWithID.LValue(LongValueKey.ArmorLevel) >= ruls.RuleArmorLevel &&  //will match 0 AL values on rule.
 									(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.ArmorCoverage) == IOItemWithID.ArmorCoverage) &&   //Will ignore or match armor coverage for true
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	//will determine if number of spells are on object
-									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.ArmorSet))  && //Will ignore or match armor sets
-									ruls.RuleUnenchantable == IOItemWithID.Unehcantable
+									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))   //Will ignore or match armor sets
 									orderby ruls.RulePriority
 									select ruls;	
 								if(reducedarmorclothmatches.Count() > 0)
@@ -214,12 +213,12 @@ namespace GearFoundry
 									return;
 								}
 							}
-							else if(IOItemWithID.WieldSlot == 0x8000000)
+							else if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
 							{
 								var reducedcloakmatches = from ruls in AppliesToListMatches
 									where IOItemWithID.MaxItemLevel >= ruls.RuleItemLevel &&
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
-									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.ArmorSet))
+									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))
 									orderby ruls.RulePriority
 									select ruls;
 								if(reducedcloakmatches.Count() > 0)
@@ -257,11 +256,11 @@ namespace GearFoundry
 							var reducedmeleematches = from ruls in AppliesToListMatches
 								where IOItemWithID.GearScore >= ruls.WeaponModSum &&
 								((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0) &&
-								ruls.RuleWieldAttribute == IOItemWithID.WieldReqAttribute &&
-								((ruls.RuleWeaponEnabledA && IOItemWithID.WieldReqValue == ruls.WieldReqValueA) ||
-								 (ruls.RuleWeaponEnabledB && IOItemWithID.WieldReqValue == ruls.WieldReqValueB) ||
-								 (ruls.RuleWeaponEnabledC && IOItemWithID.WieldReqValue == ruls.WieldReqValueC) ||
-								 (ruls.RuleWeaponEnabledD && IOItemWithID.WieldReqValue == ruls.WieldReqValueD))
+								ruls.RuleWieldAttribute == IOItemWithID.LValue(LongValueKey.WieldReqAttribute) &&
+								((ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
+								 (ruls.RuleWeaponEnabledB && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueB) ||
+								 (ruls.RuleWeaponEnabledC && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueC) ||
+								 (ruls.RuleWeaponEnabledD && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueD))
 								orderby ruls.RulePriority
 								select ruls;
 							if(reducedmeleematches.Count() > 0)
@@ -280,9 +279,9 @@ namespace GearFoundry
 							if(IOItemWithID.Aetheriacheck)
 							{
 							 	var reducedaetheriamatches = from ruls in AppliesToListMatches
-							 		where ((ruls.RuleRed && IOItemWithID.WieldSlot == 0x40000000) ||
-							 		       (ruls.RuleYellow && IOItemWithID.WieldSlot == 0x20000000) ||
-							 		       (ruls.RuleBlue && IOItemWithID.WieldSlot == 0x10000000)) &&
+							 		where ((ruls.RuleRed && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x40000000) ||
+							 		       (ruls.RuleYellow && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x20000000) ||
+							 		       (ruls.RuleBlue && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x10000000)) &&
 							 				IOItemWithID.MaxItemLevel >= ruls.RuleItemLevel
 							 		orderby ruls.RulePriority
 							 		select ruls;
@@ -351,102 +350,93 @@ namespace GearFoundry
 				}
 				else
 				{
+					//UberLinqSearch......
+//						var LinqRulesSearch = from rules in AppliesToListMatches
+//							where (rules.RuleKeyWords.Count == 0 || IOItemWithID.Name.Split(' ').Union(rules.RuleKeyWords).Count >= rules.RuleKeyWords.Count) &&
+//							(rules.RuleKeyWordsNot.Count == 0 || IOItemWithID.Name.Split(' ').Union(rules.RuleKeyWordsNot).Count == 
+					
+					
 					foreach(var rule in AppliesToListMatches)
 					{					
 						RuleName = rule.RuleName;					
-						//If it's already assigned a rule, don't check any longer. 
 						if(IOItemWithID.IOR == IOResult.rule){return;}
-	
-						//Irquk:  Keywords confirmed functional
-						if(rule.RuleKeyWords.Count() > 0)
-						{
+						if(rule.RuleKeyWords.Count() > 0) {
 							foreach(string checkstring in rule.RuleKeyWords)
 							{
 								if(!IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
 							}
 						}
-						//Irquk:  Exclusion Keywords confirmed functional
-						if(rule.RuleKeyWordsNot.Count() > 0)
-						{
+						if(rule.RuleKeyWordsNot.Count() > 0) {
 							foreach(string checkstring in rule.RuleKeyWordsNot)
 							{
 								if(IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
 							}
 						}
-						//Irquk:  Confirmed functional Check Arcane Lore (Arcane Lore is a <= field)
 						if(rule.RuleArcaneLore > 0)
 						{
-							if(IOItemWithID.IntValues(LongValueKey.LoreRequirement) > rule.RuleArcaneLore) {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue(LongValueKey.LoreRequirement) > rule.RuleArcaneLore) {RuleName = String.Empty; goto Next;}
 						}
-	//					//Irquk: confirmed functional Check Value, this is a <= field
 						if(rule.RuleValue > 0)
 						{
-							if(IOItemWithID.IntValues(LongValueKey.Value) > rule.RuleValue) {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue(LongValueKey.Value) > rule.RuleValue) {RuleName = String.Empty; goto Next;}
 						}
-	//					//Irquk: confirmed functional Check Work, this is a <= field
 						if(rule.RuleWork > 0)
 						{
-							if(IOItemWithID.DblValues(DoubleValueKey.SalvageWorkmanship) > rule.RuleWork) {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.DValue(DoubleValueKey.SalvageWorkmanship) > rule.RuleWork) {RuleName = String.Empty; goto Next;}
 						}
-	//					//Irquk: Confirmed Functional. Check Burden, this is a <= field
 						if(rule.RuleBurden > 0)
 						{
-							if(IOItemWithID.IntValues(LongValueKey.Burden) > rule.RuleBurden) {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue(LongValueKey.Burden) > rule.RuleBurden) {RuleName = String.Empty; goto Next;}
 						}
-	//					//Irquk:  Confirmed Functional  Check Wield Level.  Field is a <= field
 						if(rule.RuleWieldLevel > 0)
 						{
-							int levelcheck = 0;
-							if(IOItemWithID.WieldReqType == 7) {levelcheck = IOItemWithID.WieldReqValue; }
-							if(IOItemWithID.WieldReqType2 == 7) {levelcheck = IOItemWithID.WieldReqValue2;}	
-							if(levelcheck > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
-						}
-	//					//Irquk:  confirmed Functional, basica comparison only to WieldAttribute1
-						if(rule.RuleWieldAttribute > 0)
-						{
-							if(IOItemWithID.WieldReqType != 7) 
-							{
-								if(IOItemWithID.WieldReqAttribute !=  rule.RuleWieldAttribute){	RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7) {
+								if(IOItemWithID.LValue(LongValueKey.WieldReqValue) > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
+							} else if (IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) == 7) {
+								if(IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
 							}
 						}
-	//					//Irquk:  Confirmed Functional
+						if(rule.RuleWieldAttribute > 0)
+						{
+							if(IOItemWithID.LValue(LongValueKey.WieldReqType) != 7)
+							{
+								if(IOItemWithID.LValue(LongValueKey.WieldReqAttribute) !=  rule.RuleWieldAttribute){RuleName = String.Empty; goto Next;}
+							}
+						}
 						if(rule.RuleMastery > 0)
 						{
 							if(IOItemWithID.WeaponMasteryCategory != rule.RuleMastery) {RuleName = String.Empty; goto Next;}
 						}
-	//					//Irquk:  Confirmed Functional
 						if(rule.RuleMeleeD > 0)
 						{
-							if(rule.RuleMeleeD > IOItemWithID.WeaponMeleeBonus) {RuleName = String.Empty; goto Next;}
+							if(rule.RuleMeleeD > ((IOItemWithID.DValue(DoubleValueKey.MeleeDefenseBonus) - 1) * 100)) {RuleName = String.Empty; goto Next;}
 						}
-	//					//Irquk:  Confirmed Functional
 						if(rule.RuleMcModAttack > 0)
 						{
 							if(IOItemWithID.ObjectClass == ObjectClass.WandStaffOrb)
 							{
-								//NOTE:  Mana C doesn't report as 1.xxxx like all other doubles for weapons.  It has had +1 added in IdentifiedObject get acesssor to correct
-								if(rule.RuleMcModAttack > (IOItemWithID.WeaponManaCBonus)) {RuleName = String.Empty; goto Next;}
+								if(rule.RuleMcModAttack > (IOItemWithID.DValue(DoubleValueKey.ManaCBonus) * 100)) {RuleName = String.Empty; goto Next;}
 							}
 							if(IOItemWithID.ObjectClass == ObjectClass.MissileWeapon)
 							{
-								if(rule.RuleMcModAttack > IOItemWithID.WeaponMissileModifier) {RuleName = String.Empty; goto Next;}
+								if(rule.RuleMcModAttack > ((IOItemWithID.DValue(DoubleValueKey.DamageBonus) -1 ) * 100)) {RuleName = String.Empty; goto Next;}
 							}
 							if(IOItemWithID.ObjectClass == ObjectClass.MeleeWeapon)
 							{
-								if(rule.RuleMcModAttack > IOItemWithID.WeaponAttackBonus) {RuleName = String.Empty; goto Next;}
+								if(rule.RuleMcModAttack > ((IOItemWithID.DValue(DoubleValueKey.AttackBonus) - 1 ) * 100)) {RuleName = String.Empty; goto Next;}
 							}
 						}
 	//					//Irquk:  confirmed functional for Missile D bonus
 						//TODO:  Check magic D bonus
 						if(rule.RuleMagicD > 0)
 						{
-								if(IOItemWithID.WeaponMagicDBonus > 0)
+								if(IOItemWithID.DValue(DoubleValueKey.MagicDBonus) > 0)
 								{
-									if(rule.RuleMagicD > IOItemWithID.WeaponMagicDBonus) {RuleName = String.Empty; goto Next;}
+									if(rule.RuleMagicD > ((IOItemWithID.DValue(DoubleValueKey.MagicDBonus) - 1) * 100)) {RuleName = String.Empty; goto Next;}
 								}
-								else if(IOItemWithID.WeaponMissileDBonus > 0)
+								else if(IOItemWithID.DValue(DoubleValueKey.MissileDBonus) > 0)
 								{
-									if(rule.RuleMagicD > IOItemWithID.WeaponMissileDBonus) {RuleName = String.Empty; goto Next;}
+									if(rule.RuleMagicD > ((IOItemWithID.DValue(DoubleValueKey.MissileDBonus) -1) * 100)) {RuleName = String.Empty; goto Next;}
 								}
 								else
 								{
@@ -459,25 +449,25 @@ namespace GearFoundry
 							bool[] ruletrue = {false, false, false, false};
 							if(rule.RuleWeaponEnabledA)
 							{	
-								if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.WieldReqValue && 
+								if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.LValue(LongValueKey.WieldReqValue) &&
 								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.Variance <= rule.VarianceA))
 								     {ruletrue[0] = true;}
 							}
 							if(rule.RuleWeaponEnabledB)
 							{	
-								if((rule.MSCleaveB == IOItemWithID.MSCleave && rule.WieldReqValueB == IOItemWithID.WieldReqValue && 
+								if((rule.MSCleaveB == IOItemWithID.MSCleave && rule.WieldReqValueB == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
 								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageB && IOItemWithID.Variance <= rule.VarianceB))
 								     {ruletrue[1] = true;}
 							}
 							if(rule.RuleWeaponEnabledC)
 							{	
-								if((rule.MSCleaveC == IOItemWithID.MSCleave && rule.WieldReqValueC == IOItemWithID.WieldReqValue && 
+								if((rule.MSCleaveC == IOItemWithID.MSCleave && rule.WieldReqValueC == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
 								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageC && IOItemWithID.Variance <= rule.VarianceC))
 								     {ruletrue[2] = true;}
 							}					
 							if(rule.RuleWeaponEnabledD)
 							{	
-								if((rule.MSCleaveD == IOItemWithID.MSCleave && rule.WieldReqValueD == IOItemWithID.WieldReqValue && 
+								if((rule.MSCleaveD == IOItemWithID.MSCleave && rule.WieldReqValueD == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
 								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageD && IOItemWithID.Variance <= rule.VarianceD))
 								     {ruletrue[3] = true;}
 							}
@@ -492,13 +482,13 @@ namespace GearFoundry
 	//					//Irquk:  Confirmed functional
 						if(rule.RuleArmorLevel > 0)
 						{
-							if(rule.RuleArmorLevel > IOItemWithID.ArmorLevel) {RuleName = String.Empty; goto Next;}
+							if(rule.RuleArmorLevel > IOItemWithID.LValue(LongValueKey.ArmorLevel)) {RuleName = String.Empty; goto Next;}
 						}
 	//					//Irquk:  Confirmed functional
 						if(rule.RuleArmorTypes.Length > 0)
 						{
 							int IOArmorType = -1;  //I'd prefer 0, but there's a 0 index in the ArmorIndex
-							if(!(IOItemWithID.ArmorLevel > 0)) {RuleName = String.Empty; goto Next;}  //If it's not armor, get rid of it
+							if(!(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)) {RuleName = String.Empty; goto Next;}  //If it's not armor, get rid of it
 							//If it's unknown type make it other.
 							if(!ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower()))) 
 							{
@@ -517,7 +507,7 @@ namespace GearFoundry
 						//Irquk:  Confirmed Functional
 						if(rule.RuleArmorSet.Length > 0)
 						{
-							if(!rule.RuleArmorSet.Contains(IOItemWithID.ArmorSet)){RuleName = String.Empty; goto Next;}
+							if(!rule.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))){RuleName = String.Empty; goto Next;}
 						}
 						//Irquk Confirmed Functional
 						if(rule.RuleArmorCoverage > 0)
@@ -527,7 +517,7 @@ namespace GearFoundry
 						//Irquk Confirmed Functional
 						if(rule.RuleUnenchantable)
 						{
-							if(IOItemWithID.IntValues(LongValueKey.Unenchantable) != 9999) {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue(LongValueKey.Unenchantable) != 9999) {RuleName = String.Empty; goto Next;}
 						}
 				
 						bool red = false;
@@ -536,9 +526,9 @@ namespace GearFoundry
 						//Irquk:  Confirmed Functional
 						if(rule.RuleRed || rule.RuleYellow || rule.RuleBlue)
 						{
-							if(rule.RuleRed) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 225) {red = true;}}
-							if(rule.RuleYellow) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue == 150) {yellow = true;}}
-							if(rule.RuleBlue){if(IOItemWithID.WieldReqType == 7 && IOItemWithID.WieldReqValue  == 75) {blue = true;}}
+							if(rule.RuleRed) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 225) {red = true;}}
+							if(rule.RuleYellow) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 150) {yellow = true;}}
+							if(rule.RuleBlue){if(IOItemWithID.WieldReqType == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue)  == 75) {blue = true;}}
 							if(!red && !yellow && !blue){RuleName = String.Empty; goto Next;}
 						}
 										
@@ -593,7 +583,7 @@ namespace GearFoundry
 								if(rule.RuleSpells.Contains(IOItemWithID.Spell(i))) {spellmatches++;}
 							}
 							//Irq:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
-							if(rule.RuleSpells.Contains(10000)){if(IOItemWithID.IntValues((LongValueKey)352) == 2){spellmatches++;}}
+							if(rule.RuleSpells.Contains(10000)){if(IOItemWithID.LValue((LongValueKey)NewLongKeys.DamageAbsorb) == 2){spellmatches++;}}
 							if(spellmatches < rule.RuleSpellNumber) {RuleName = String.Empty; goto Next;}
 						}
 	

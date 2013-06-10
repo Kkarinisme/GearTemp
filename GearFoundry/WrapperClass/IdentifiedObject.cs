@@ -46,6 +46,22 @@ namespace GearFoundry
            	unknown
         }
 		
+		internal enum NewLongKeys
+		{
+			WeaponMastery = 353,
+			WieldReqAttribute2 = 271,
+			WieldReqValue2 = 272,
+			WieldReqType2 = 270,
+			Dam = 370,
+			DamResist = 371,
+			Crit = 372,
+			CritResist = 373,
+			CritDam = 374,
+			CritDamResist = 375,
+			DamageAbsorb = 352				
+		}
+
+		
 		internal enum WeaponMastery
 		{	
 			None = 0,
@@ -79,16 +95,17 @@ namespace GearFoundry
 			//wrappers: the overloads of function Values in wrappers.worldobject makes me type too much -Losado
 			//wrappers below allow direct access to all world object properties not expressly
 			//included in the IdentifiedObject (IO) data class.  Many properties are expressly defined and loaded.  -Irquk
-			public int IntValues(Decal.Adapter.Wrappers.LongValueKey eval) {
+			
+			public int LValue(Decal.Adapter.Wrappers.LongValueKey eval) {
 				return wo.Values(eval); 
 			}
-			public double DblValues(Decal.Adapter.Wrappers.DoubleValueKey eval) {
+			public double DValue(Decal.Adapter.Wrappers.DoubleValueKey eval) {
 				return wo.Values(eval); 
 			}
-			public string StringValues(Decal.Adapter.Wrappers.StringValueKey eval) {
+			public string SValue(Decal.Adapter.Wrappers.StringValueKey eval) {
 				return wo.Values(eval);
 			}
-			public bool BoolValues(Decal.Adapter.Wrappers.BoolValueKey eval) {
+			public bool BValue(Decal.Adapter.Wrappers.BoolValueKey eval) {
 				return wo.Values(eval); 
 			}
 			
@@ -113,8 +130,8 @@ namespace GearFoundry
 							break;
 							
 						case ObjectClass.Clothing:
-							if(WieldSlot == 0x8000000) {gearscorereturn += (double)MaxItemLevel;}
-							if(ArmorLevel > 0) {gearscorereturn += ArmorLevelComaparison;}
+							if(wo.Values(LongValueKey.EquipableSlots) == 0x8000000) {gearscorereturn += (double)MaxItemLevel;}
+							if(wo.Values(LongValueKey.ArmorLevel) > 0) {gearscorereturn += ArmorLevelComaparison;}
 							break;
 
 						case ObjectClass.Armor:
@@ -140,7 +157,6 @@ namespace GearFoundry
 							break;
 						
 						default:
-							gearscorereturn = 0;
 							break;
 
 					}
@@ -157,7 +173,7 @@ namespace GearFoundry
 			public string GearScoreString()
 			{
 				string gearscorestring = String.Empty;
-				if(!wo.HasIdData) {return gearscorestring = "{NO ID}";}
+				if(!wo.HasIdData) {return gearscorestring = "{NO ID} ";}
 				if(GearScore > 0) {gearscorestring += "{GS " + GearScore.ToString("N0") + "} ";}
 				return gearscorestring;
 			}
@@ -238,94 +254,7 @@ namespace GearFoundry
 					return Crit + CritResist + CritDam + CritDamResist + Dam + DamResist;
 				}
 			}
-			
-			
-			//These are not scoring properly
-//[VTank] --------------Object dump--------------
-//[VTank] [Meta] Create count: 1
-//[VTank] [Meta] Create time: 5/31/2013 7:22 AM
-//[VTank] [Meta] Has identify data: True
-//[VTank] [Meta] Last ID time: 5/31/2013 7:25 AM
-//[VTank] [Meta] Worldfilter valid: True
-//[VTank] ID: 86BCAFA8
-//[VTank] ObjectClass: Misc
-//[VTank] (S) Name: Blizzard Wisp Essence
-//[VTank] (S) UsageInstructions: Use this essence to summon or dismiss your Blizzard Wisp.
-//[VTank] (B) CanBeSold: True
-//[VTank] (I) CreateFlags1: 1076382872
-//[VTank] (I) Type: 49309
-//[VTank] (I) Icon: 29739
-//[VTank] (I) Category: 128
-//[VTank] (I) Behavior: 67108882
-//[VTank] (I) CreateFlags2: 7
-//[VTank] (I) IconUnderlay: 29728
-//[VTank] (I) Value: 10000
-//[VTank] (I) Unknown10: 8
-//[VTank] (I) UsageMask: 16
-//[VTank] (I) IconOutline: 128
-//[VTank] (I) UsesRemaining: 50
-//[VTank] (I) UsesTotal: 50
-//[VTank] (I) Container: 1342600506
-//[VTank] (I) Burden: 50
-//[VTank] (I) IconOverlay: 29736
-//[VTank] (I) PhysicsDataFlags: 137345
-//[VTank] (I) 368: 54
-//[VTank] (I) 369: 185
-//[VTank] (I) Bonded: 0
-//[VTank] (I) Attuned: 0
-//[VTank] (I) 374: 7
-//[VTank] (I) 375: 13
-//[VTank] (I) CooldownID: 213
-//[VTank] (I) Workmanship: 8
-//[VTank] (I) 366: 54
-//[VTank] (I) 367: 570
-//[VTank] (D) 167: 45
-//[VTank] Palette Entry 0: ID 0x000BEF, Ex Color: 000000, 0/0
-
-//
-//[VTank] --------------Object dump--------------
-//[VTank] [Meta] Create count: 1
-//[VTank] [Meta] Create time: 5/31/2013 7:22 AM
-//[VTank] [Meta] Has identify data: True
-//[VTank] [Meta] Last ID time: 5/31/2013 7:26 AM
-//[VTank] [Meta] Worldfilter valid: True
-//[VTank] ID: 86BCB1F3
-//[VTank] ObjectClass: Misc
-//[VTank] (S) Name: Caustic Grievver Essence
-//[VTank] (S) UsageInstructions: Use this essence to summon or dismiss your Caustic Grievver.
-//[VTank] (B) CanBeSold: True
-//[VTank] (I) CreateFlags1: 1076382872
-//[VTank] (I) Type: 49372
-//[VTank] (I) Icon: 7664
-//[VTank] (I) Category: 128
-//[VTank] (I) Behavior: 67108882
-//[VTank] (I) CreateFlags2: 7
-//[VTank] (I) IconUnderlay: 29728
-//[VTank] (I) Value: 10000
-//[VTank] (I) Unknown10: 8
-//[VTank] (I) UsageMask: 16
-//[VTank] (I) IconOutline: 256
-//[VTank] (I) UsesRemaining: 50
-//[VTank] (I) UsesTotal: 50
-//[VTank] (I) Container: 1342600506
-//[VTank] (I) Burden: 50
-//[VTank] (I) IconOverlay: 29736
-//[VTank] (I) PhysicsDataFlags: 137345
-//[VTank] (I) 368: 54
-//[VTank] (I) 369: 185
-//[VTank] (I) Bonded: 0
-//[VTank] (I) Attuned: 0
-//[VTank] (I) 372: 5
-//[VTank] (I) 374: 10
-//[VTank] (I) 375: 7
-//[VTank] (I) CooldownID: 213
-//[VTank] (I) Workmanship: 8
-//[VTank] (I) 366: 54
-//[VTank] (I) 367: 570
-//[VTank] (D) 167: 45
-//[VTank] Palette Entry 0: ID 0x000BF0, Ex Color: 000000, 0/0
-			
-			
+				
 			//Modified Looting Properties (calculated)
 			public double WeaponModifiers
 			{
@@ -712,111 +641,17 @@ namespace GearFoundry
 						{
 							return 0;
 						}
-					}
-									
-					
-					
-					
-					return 0;
-					
-					
+					}										
+					return 0;					
 				}
 			}
-			public bool Unehcantable
-			{
-				get
-				{
-					if(wo.Values(LongValueKey.Unenchantable) > 0) {return true;}
-					else return false;
-				}
-			}
+
 			
 			public string DamageString()
 			{
 				return " Dam: " + DamageComparison.ToString("N0") ;
 			}
 			
-			//wo.properties used in loot selection
-			public int ArmorSet
-			{
-				get 
-				{
-					if (wo.Values(LongValueKey.ArmorSet) > 0) {return wo.Values((LongValueKey.ArmorSet));}
-					else {return 0;}
-				}
-			}	
-			public int WieldReqValue2
-			{
-				get
-				{
-					if (wo.Values((LongValueKey)272) > 0) {return wo.Values((LongValueKey)272);}
-					else {return 0;}
-				}
-			}
-			public int WieldReqAttribute2
-			{
-				get
-				{
-					if (wo.Values((LongValueKey)271) > 0) {return wo.Values((LongValueKey)271);}
-					else {return 0;}
-				}
-			}
-			public int WieldReqType2
-			{
-				get
-				{
-					if (wo.Values((LongValueKey)270) > 0) {return wo.Values((LongValueKey)270);}
-					else {return 0;}
-				}
-			}
-			public int WieldReqValue 
-			{
-				get
-				{
-					if (wo.Values(LongValueKey.WieldReqValue) > 0) {return wo.Values(LongValueKey.WieldReqValue);}
-					else {return 0;}
-				}
-			}	
-			public int WieldReqAttribute
-			{
-				get
-				{
-					if (wo.Values(LongValueKey.WieldReqAttribute) > 0) {return wo.Values(LongValueKey.WieldReqAttribute);}
-					else {return 0;}
-				}
-			}
-			public int ArmorLevel
-			{
-				get 
-				{
-					if (wo.Values(LongValueKey.ArmorLevel) > 0) {return wo.Values(LongValueKey.ArmorLevel);}
-					else {return 0;}
-				}
-			}	
-			public int WieldSlot
-			{	
-				get
-				{
-					if (wo.Values(LongValueKey.EquipableSlots) > 0) {return wo.Values(LongValueKey.EquipableSlots);}
-					else {return 0;}
-				}
-			}
-			public int MissileType 
-			{
-				get
-				{
-					if (wo.Values(LongValueKey.MissileType) > 0) {return wo.Values(LongValueKey.MissileType);}
-					else {return 0;}
-				}
-			}
-			public int RareID
-			{
-				get 
-				{
-					if (wo.Values(LongValueKey.RareId) > 0) {return wo.Values(LongValueKey.RareId);}
-					else {return 0;}
-				}
-			}
 			public int DamageType 
 			{
 				get
@@ -903,14 +738,6 @@ namespace GearFoundry
 				get 
 				{
 					if (wo.Values(LongValueKey.Coverage) > 0) {return wo.Values(LongValueKey.Coverage);}
-					else {return 0;}
-				}
-			}
-			public int Workmanship 
-			{	//NOTE:  This property requires an ID before it is set on wo
-				get 
-				{
-					if (wo.Values(LongValueKey.Workmanship) > 0) {return wo.Values(LongValueKey.Workmanship);}
 					else {return 0;}
 				}
 			}
@@ -1116,18 +943,6 @@ namespace GearFoundry
 					else {return false;}
 				}
 			}
-			public int WeaponSubtype
-			{
-				get
-				{
-					//Weapons w/Wield Reqs use that value, Weapons w/o WieldReqs use EquipSkill (possibly could  use equipskill for all
-					//TODO:  Check and see if EquipSkill can replace WieldReqAttribute entirely here.
-                    
-					if (wo.Values(LongValueKey.WieldReqAttribute) > 0) {return wo.Values(LongValueKey.WieldReqAttribute);}
-					else if (wo.Values(LongValueKey.EquipSkill) > 0) {return wo.Values(LongValueKey.EquipSkill);}
-					else {return 0;}
-				}
-			}
 			public double MinDamage
 			{
 				get
@@ -1146,85 +961,10 @@ namespace GearFoundry
 					return Convert.ToBoolean(wo != null);
 				}
 			}
-			public double DamageVsMonsters
-			{
-				get
-				{
-					if (wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) > 0)
-					{
-						return wo.Values(DoubleValueKey.ElementalDamageVersusMonsters);
-					} 
-					else {return 0;}
-				}
-			}		
-			public double WeaponMissileModifier
-			{
-				get
-				{
-					if (wo.Values(DoubleValueKey.DamageBonus) > 0)
-					{
-						return wo.Values(DoubleValueKey.DamageBonus);
-					} 
-					else {return 0;}
-				}
-			}		
-			public double WeaponMagicDBonus
-			{
-				get
-				{
-					if (wo.Values(DoubleValueKey.MagicDBonus) > 0) 
-					{
-						return wo.Values(DoubleValueKey.MagicDBonus);
-					} 
-					else {return 0;}
-				}
-			}	
-			public double WeaponMissileDBonus
-			{
-				get
-				{
-					if (wo.Values(DoubleValueKey.MissileDBonus) > 0) 
-					{
-						return wo.Values(DoubleValueKey.MissileDBonus);
-					} 
-					else {return 0;}
-				}
-			}
+	
+
 			
 			
-			public double WeaponManaCBonus
-			{
-				get
-				{
-					if (wo.Values(DoubleValueKey.ManaCBonus) > 0) 
-					{
-						return wo.Values(DoubleValueKey.ManaCBonus) + 1;
-					} 
-					else {return 0;}
-				}
-			}
-			public double WeaponAttackBonus
-			{
-				get
-				{
-					if (wo.Values(DoubleValueKey.AttackBonus) > 0) 
-					{
-						return wo.Values(DoubleValueKey.AttackBonus);
-					} 
-					else {return 0;}
-				}
-			}
-			public double WeaponMeleeBonus
-			{
-				get
-				{
-					if (wo.Values(DoubleValueKey.MeleeDefenseBonus) > 0) 
-					{
-						return wo.Values(DoubleValueKey.MeleeDefenseBonus);
-					} 
-					else {return 0;}
-				}
-			}
 			public bool MSCleave 
 			{
 				get 
@@ -1238,17 +978,6 @@ namespace GearFoundry
 			public int Spell (int idx) 
 			{
 				return wo.Spell(idx);
-			}
-			public int wieldlvl
-			{
-				get
-				{
-					if (wo.Values(LongValueKey.WieldReqType) == 7) 
-					{
-						return wo.Values(LongValueKey.WieldReqValue, 0);
-					}
-					else { return 0; }
-				}
 			}
 			public int EssenceLevel
 			{
@@ -1413,11 +1142,11 @@ namespace GearFoundry
 			private string SetString()
 			{
 				string name = string.Empty;
-				if (ArmorSet > 0) 
+				if (wo.Values(LongValueKey.ArmorSet) > 0)
 				{   //Could go directly to [ArmorSet] but this  won't throw an exception if it's not there
-					int idx = SetsIndex.FindIndex(x => x.ID == ArmorSet);
+					int idx = SetsIndex.FindIndex(x => x.ID == wo.Values(LongValueKey.ArmorSet));
 					if(idx > 0) {name = SetsIndex[idx].name;}
-					else { name = "Unknown Set " + ArmorSet.ToString("0x");}
+					else { name = "Unknown Set " + wo.Values(LongValueKey.ArmorSet).ToString("0x");}
 				}
 				return name;
 			}
@@ -1601,7 +1330,7 @@ namespace GearFoundry
 								result = IORString() +  GearScoreString() + wo.Name + SetString() +  ArmorLevelComaparisonString() + SpellDescriptions() + WieldString() + ActivateString() + LoreString();
 								break;
 							case ObjectClass.Clothing:
-								if(ArmorLevel > 0)
+								if(wo.Values(LongValueKey.ArmorLevel) > 0 || wo.Values(LongValueKey.EquipableSlots) == 0x8000000)
 								{
 									result = IORString() + GearScoreString() + wo.Name + SetString() + ArmorLevelComaparisonString() + SpellDescriptions() + WieldString() + ActivateString() +	LoreString();
 								}
@@ -1617,6 +1346,10 @@ namespace GearFoundry
 								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
 								break;
 							case ObjectClass.Gem:
+								if(Aetheriacheck)
+								{
+									result = IORString() + GearScoreString() + wo.Name + SetString() + WieldlvlString() + SpellDescriptions();
+								}
 								result = IORString() + wo.Name + SetString() + WieldlvlString() + SpellDescriptions();
 								break;
 							case ObjectClass.Jewelry:
@@ -1687,7 +1420,7 @@ namespace GearFoundry
 										LoreString() + RankString() + RaceString() + CraftString() + ProtsString();
 								break;
 							case ObjectClass.Clothing:
-								if(ArmorLevel > 0)
+								if(wo.Values(LongValueKey.ArmorLevel) > 0)
 								{
 									result = IORString() + wo.Name + CurrentItemLevelString() + SetString() + ALString() + ImbueString() + TinkersString() + SpellDescriptions() + WieldString() + ActivateString() + 
 										LoreString() + RankString() + RaceString() + CraftString() + ProtsString();
@@ -1715,12 +1448,12 @@ namespace GearFoundry
 								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
 								break;
 							case ObjectClass.MeleeWeapon:
-								result = IORString() + wo.Name +  WeaponMasteryString() + ImbueString() + SlayerString() + TinkersString() + MinMaxDamage() + xModString(WeaponAttackBonus, "a") + xModString(WeaponMeleeBonus, "md") +
+								result = IORString() + wo.Name +  WeaponMasteryString() + ImbueString() + SlayerString() + TinkersString() + MinMaxDamage() + xModString(wo.Values(DoubleValueKey.AttackBonus), "a") + xModString(wo.Values(DoubleValueKey.MeleeDefenseBonus), "md") +
 								SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
 								break;
 							case ObjectClass.MissileWeapon:
-								result = IORString() + wo.Name + WeaponMasteryString() + ImbueString() + SlayerString() +  TinkersString() + xModString(WeaponMissileModifier, string.Empty) + ElementalDmgBonusString()  +
-								xModString(WeaponMeleeBonus, "md") + SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
+								result = IORString() + wo.Name + WeaponMasteryString() + ImbueString() + SlayerString() +  TinkersString() + xModString(wo.Values(DoubleValueKey.DamageBonus), string.Empty) + ElementalDmgBonusString()  +
+									xModString(wo.Values(DoubleValueKey.MeleeDefenseBonus), "md") + SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
 								break;
 							case ObjectClass.Monster:
 								result = IORString() + wo.Name + "(" + HealthCurrent + "/" + HealthMax + ") " + wo.Name + " [L:" + Convert.ToString(wo.Values(LongValueKey.CreatureLevel)) + "]" + CoordsStringLink(wo.Coordinates().ToString());
@@ -1741,8 +1474,8 @@ namespace GearFoundry
 								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
 								break;
 							case ObjectClass.WandStaffOrb:
-								result = IORString() + wo.Name + ImbueString() + SlayerString() + TinkersString() + xModString(DamageVsMonsters, "vs. Monsters") + xModString(WeaponMeleeBonus, "md") +
-									xModString(WeaponManaCBonus, "mc") + SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
+								result = IORString() + wo.Name + ImbueString() + SlayerString() + TinkersString() + xModString(wo.Values(DoubleValueKey.DamageBonus), "vs. Monsters") + xModString(wo.Values(DoubleValueKey.MeleeDefenseBonus), "md") +
+									xModString(wo.Values(DoubleValueKey.ManaCBonus), "mc") + SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
 								break;
 							case ObjectClass.Misc:
 								if(EssenceLevel > 0)
@@ -1762,73 +1495,6 @@ namespace GearFoundry
 				}
 				return result;
 			}
-
-			//Begin reproduction of Mag-Tools buffed weapon values
-	
-
-
-			
-//			public override string ToString()
-//			{
-//				//builds result string with appropriate goodies to report
-//				string result = string.Empty;
-//				try {
-//					if (wo != null) 
-//					{
-//						result = IORString();
-//						result += wo.Name + CurrentItemLevelString();
-//						if (wo.ObjectClass == ObjectClass.Armor) 
-//						{
-//							result += SetString() + ALString() + ImbueString() + TinkersString() + SpellDescriptions() + WieldString() + ActivateString() + 
-//								LoreString() + RankString() + RaceString() + CraftString() + ProtsString();
-//						}
-//						else if (wo.ObjectClass == ObjectClass.Clothing) 
-//						{
-//							result += SetString() + ALString() + ImbueString() + TinkersString() + SpellDescriptions() + WieldString() + ActivateString() + 
-//								LoreString() + RankString() + RaceString() + CraftString();
-//						} 
-//						else if (wo.ObjectClass == ObjectClass.Jewelry)
-//						{
-//							result += SetString() + ALString() + ImbueString() + TinkersString() + SpellDescriptions() + WieldString() + LoreString() + 
-//								RankString() + RaceString() + CraftString();
-//						}
-//						else if (wo.ObjectClass == ObjectClass.MissileWeapon) 
-//						{
-//							result += WeaponMasteryString() + ImbueString() + SlayerString() +  TinkersString() + xModString(WeaponMissileModifier, string.Empty) + ElementalDmgBonusString()  +
-//								xModString(WeaponMeleeBonus, "md") + SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
-//						} 
-//						else if (wo.ObjectClass == ObjectClass.MeleeWeapon) 
-//						{
-//							result += WeaponMasteryString() + ImbueString() + SlayerString() + TinkersString() + MinMaxDamage() + xModString(WeaponAttackBonus, "a") + xModString(WeaponMeleeBonus, "md") +
-//								SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
-//						} 
-//						else if	(wo.ObjectClass == ObjectClass.WandStaffOrb) 
-//						{
-//							result += ImbueString() + SlayerString() + TinkersString() + xModString(DamageVsMonsters, "vs. Monsters") + xModString(WeaponMeleeBonus, "md") +
-//								xModString(WeaponManaCBonus, "mc") + SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
-//						}
-//						else if (wo.ObjectClass == ObjectClass.Gem & Aetheriacheck)
-//						{
-//							result += SetString() + WieldlvlString() + SpellDescriptions();
-//						}
-//						else if (wo.HasIdData && (wo.ObjectClass == ObjectClass.Player || wo.ObjectClass == ObjectClass.Monster)) 
-//						{
-//							result = "(" + HealthCurrent + "/" + HealthMax + ") " + wo.Name + " [L:" + Convert.ToString(wo.Values(LongValueKey.CreatureLevel)) + "]";
-//						}
-//						else if (wo.ObjectClass == ObjectClass.Salvage)
-//						{
-//							result = SalvageString();
-//						}
-//						else if (wo.ObjectClass == ObjectClass.Portal)
-//						{
-//							result += wo.Values(StringValueKey.PortalDestination) + " (" + wo.Coordinates().ToString() + ")";                  
-//						}
-//					}
-//				} catch (Exception ex) {
-//					LogError(ex);
-//				}
-//				return result;
-//			}
 		}
 	}
 }

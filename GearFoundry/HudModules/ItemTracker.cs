@@ -35,8 +35,6 @@ namespace GearFoundry
 		private List<IdentifiedObject> SalvageItemsList = new  List<IdentifiedObject>();
 		
 		private int ItemHudMoveId = 0;
-		private DateTime IHRenderTime150;
-		private DateTime AutoLootDelayStart;
  		
 		private GearInspectorSettings GISettings = new GearInspectorSettings();
 			
