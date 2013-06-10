@@ -885,40 +885,22 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		
 		private void RenderCombatHudMainTab()
 		{
 			try
 			{
-<<<<<<< HEAD
-				CombatHudTargetName = new HudStaticText();
-				CombatHudTargetName.TextAlignment = VirindiViewService.WriteTextFormats.Center;
-				CombatHudMainTab.AddControl(CombatHudTargetName, new Rectangle(0,0,130,16));
-				
-				CombatHudTargetImage = new HudImageStack();
-                CombatHudMainTab.AddControl(CombatHudTargetImage, new Rectangle(Convert.ToInt32(CombatHudWidth * .1), Convert.ToInt32(CombatHudHeight * .1), Convert.ToInt32(CombatHudWidth * .2), Convert.ToInt32(CombatHudHeight * .2)));
-				
-				CombatHudTargetHealth = new HudProgressBar();
-                CombatHudTargetHealth.ProgressEmpty = new ACImage(Color.Black);
-				CombatHudTargetHealth.ProgressFilled = new ACImage(Color.Red);
-				CombatHudTargetHealth.Min = 0;
-				CombatHudTargetHealth.Max = 100;
-				//CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5,75,95,16));
-                CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5, 75, 125, 16));
-				
-				CombatHudMiniVulArray = new HudImageStack[20];
-				for(int i = 0; i < 20; i++)
-=======
 				if(gtSettings.bCombatHudMedium)
->>>>>>> 9d09cb9b6fa9d65b5dedf5b366d682081f659dd2
+
 				{
 					CombatHudFocusSet = new HudButton();
 					CombatHudFocusSet.Text = "Focus";
 					CombatHudMainTab.AddControl(CombatHudFocusSet, new Rectangle(0,0,35,16));
-					
+
 					CombatHudFocusClear = new HudButton();
 					CombatHudFocusClear.Text = "Reset";
 					CombatHudMainTab.AddControl(CombatHudFocusClear, new Rectangle(0,20,35,16));
-					
+
 					CombatHudDebuffTrackerList = new HudList();
 					CombatHudMainTab.AddControl(CombatHudDebuffTrackerList, new Rectangle(40,0, CombatHudView.Width -40, CombatHudView.Height -10));
 					CombatHudDebuffTrackerList.ControlHeight = 12;	
@@ -934,7 +916,7 @@ namespace GearFoundry
 					CombatHudFocusSet = new HudButton();
 					CombatHudFocusSet.Text = "F";
 					CombatHudMainTab.AddControl(CombatHudFocusSet, new Rectangle(0,0,20,16));
-					
+
 					CombatHudFocusClear = new HudButton();
 					CombatHudFocusClear.Text = "R";
 					CombatHudMainTab.AddControl(CombatHudFocusClear, new Rectangle(22,0,20,16));	
@@ -945,7 +927,7 @@ namespace GearFoundry
 					CombatHudTargetHealth.Min = 0;
 					CombatHudTargetHealth.Max = 100;
 					CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(44,0,86,16));
-					
+
 					CombatHudMiniVulArray = new HudImageStack[20];
 					for(int i = 0; i < 20; i++)
 					{
@@ -958,23 +940,23 @@ namespace GearFoundry
 					CombatHudTargetName = new HudStaticText();
 					CombatHudTargetName.TextAlignment = VirindiViewService.WriteTextFormats.Center;
 					CombatHudMainTab.AddControl(CombatHudTargetName, new Rectangle(0,0,130,16));
-					
+
 					CombatHudTargetImage = new HudImageStack();
 	                CombatHudMainTab.AddControl(CombatHudTargetImage, new Rectangle(25, 0, 50, 50));
-					
+
 					CombatHudTargetHealth = new HudProgressBar();
 	                CombatHudTargetHealth.ProgressEmpty = EmptyBar;
 					CombatHudTargetHealth.ProgressFilled = RedBar;
 					CombatHudTargetHealth.Min = 0;
 					CombatHudTargetHealth.Max = 100;
 					CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5,75,95,16));
-					
+
 					CombatHudMiniVulArray = new HudImageStack[20];
 					for(int i = 0; i < 20; i++)
 					{
 						CombatHudMiniVulArray[i] = new HudImageStack();
 					}
-					
+
 					for(int i = 0; i < 20; i++)
 					{
 						if(i < 5)
@@ -994,15 +976,15 @@ namespace GearFoundry
 							CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle(((i-15)*20),165,16,16));
 						}
 					}
-					
+
 					CombatHudFocusSet = new HudButton();
 					CombatHudFocusSet.Text = "Focus";
 					CombatHudMainTab.AddControl(CombatHudFocusSet, new Rectangle(5,190,35,16));
-					
+
 					CombatHudFocusClear = new HudButton();
 					CombatHudFocusClear.Text = "Reset";
 					CombatHudMainTab.AddControl(CombatHudFocusClear, new Rectangle(45,190,35,16));
-					
+
 					CombatHudDebuffTrackerList = new HudList();
 					CombatHudMainTab.AddControl(CombatHudDebuffTrackerList, new Rectangle(110,0,CombatHudView.Width - 110,CombatHudView.Height));
 					CombatHudDebuffTrackerList.ControlHeight = 12;	
@@ -1013,21 +995,22 @@ namespace GearFoundry
 					}	
 					CombatHudDebuffTrackerList.AddColumn(typeof(HudStaticText), 1, null);
 				}
-				
+
 				bCombatHudMainTab = true;
-				
+
 				if(!gtSettings.bCombatHudMinimal)
 				{
 					CombatHudDebuffTrackerList.Click +=  (sender, row, col) => CombatHudDebuffTrackerList_Click(sender, row, col);
 				}
-				
+
 				CombatHudFocusSet.Hit += CombatHudFocusSet_Hit;
 				CombatHudFocusClear.Hit += CombatHudFocusClear_Hit;
-	            
+
 				UpdateCombatHudMainTab();
-				
+
 			}catch(Exception ex){LogError(ex);}
 		}
+		
 		
 		private void CombatHudDebuffTrackerList_Click(object sender, int row, int col)
 		{
