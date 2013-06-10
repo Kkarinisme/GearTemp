@@ -10,6 +10,7 @@ using Decal.Adapter;
 using Decal.Adapter.Wrappers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GearFoundry
 {
@@ -48,6 +49,7 @@ namespace GearFoundry
 		
 		internal enum NewLongKeys
 		{
+			SummoningSkill = 367,
 			WeaponMastery = 353,
 			WieldReqAttribute2 = 271,
 			WieldReqValue2 = 272,
@@ -58,9 +60,9 @@ namespace GearFoundry
 			CritResist = 373,
 			CritDam = 374,
 			CritDamResist = 375,
-			DamageAbsorb = 352				
-		}
-
+			DamageAbsorb = 352,	
+			MaxItemLevel = 319				
+		}	
 		
 		internal enum WeaponMastery
 		{	
@@ -117,6 +119,7 @@ namespace GearFoundry
 			public bool notify;
 			public string rulename;
 			public double DistanceAway;
+			
 			public double GearScore
 			{
 				get
@@ -126,11 +129,11 @@ namespace GearFoundry
 					switch(wo.ObjectClass)
 					{
 						case ObjectClass.Gem:
-							if(Aetheriacheck) {gearscorereturn += (double)MaxItemLevel;}
+							if(Aetheriacheck) {gearscorereturn += (double)wo.Values((LongValueKey)NewLongKeys.MaxItemLevel);}
 							break;
 							
 						case ObjectClass.Clothing:
-							if(wo.Values(LongValueKey.EquipableSlots) == 0x8000000) {gearscorereturn += (double)MaxItemLevel;}
+							if(wo.Values(LongValueKey.EquipableSlots) == 0x8000000) {gearscorereturn += (double)wo.Values((LongValueKey)NewLongKeys.MaxItemLevel);}
 							if(wo.Values(LongValueKey.ArmorLevel) > 0) {gearscorereturn += ArmorLevelComaparison;}
 							break;
 
@@ -165,17 +168,267 @@ namespace GearFoundry
 				}
 			}
 			
-			public string ExtendedGearScore()
+			public string ExtendedGearScore
 			{
-				return String.Empty;
+				get
+				{
+					int[] CantripArray = new int[4];
+					if(wo.SpellCount == 0) { return String.Empty;}
+					else
+					{
+						for(int i = 0; i <= wo.SpellCount -1; i++)
+						{				
+							if(SpellIndex[wo.Spell(i)].spelllevel == 11) {CantripArray[0]++;}
+							if(SpellIndex[wo.Spell(i)].spelllevel == 13) {CantripArray[1]++;}
+							if(SpellIndex[wo.Spell(i)].spelllevel == 14) {CantripArray[2]++;}
+							if(SpellIndex[wo.Spell(i)].spelllevel == 15) {CantripArray[3]++;}		
+						}
+					}
+					if(CantripArray.Sum() == 0) {return String.Empty;}
+					string ReportString = String.Empty;
+					if(CantripArray[3] > 0) {ReportString += CantripArray[3].ToString() + "L";}
+					if(CantripArray[2] > 0) {ReportString += CantripArray[2].ToString() + "E";}
+					if(CantripArray[1] > 0) {ReportString += CantripArray[1].ToString() + "Mj";}
+					if(CantripArray[0] > 0) {ReportString += CantripArray[0].ToString() + "Mn";}
+					return ReportString;	
+				}
+				
+			}
+			
+			public double DebuffItems
+			{
+				get
+				{
+					if(wo.ActiveSpellCount == 0){return 0;}
+					double debuffspelltinks = 0;
+
+					//Builds armor enchantment gearscore for subtraction
+					if(wo.Values(LongValueKey.ArmorLevel) > 0)
+					{
+						double cantripsteelbonus = 0;
+						double enchantmentsteelbonus = 0;
+						for(int i = 0; i <= wo.ActiveSpellCount -1; i++)
+						{				
+							//Armor Level modifers
+							if(wo.ActiveSpell(i) == 6095 && cantripsteelbonus < 4){cantripsteelbonus = 4;}
+							else if(wo.ActiveSpell(i) == 4667 && cantripsteelbonus < 3){cantripsteelbonus = 3;}
+							else if(wo.ActiveSpell(i) == 2592 && cantripsteelbonus < 2){cantripsteelbonus = 2;}
+							else if(wo.ActiveSpell(i) == 2604 && cantripsteelbonus < 1){cantripsteelbonus = 1;}								
+							if(wo.ActiveSpell(i) == 4407 && enchantmentsteelbonus < 12){enchantmentsteelbonus = 12;}
+							else if(wo.ActiveSpell(i) == 3908 && enchantmentsteelbonus < 12){enchantmentsteelbonus = 12;}
+							else if(wo.ActiveSpell(i) == 2108 && enchantmentsteelbonus < 11){enchantmentsteelbonus = 11;}
+							else if(wo.ActiveSpell(i) == 1486 && enchantmentsteelbonus < 10){enchantmentsteelbonus = 10;}
+							else if(wo.ActiveSpell(i) == 1485 && enchantmentsteelbonus < 7.5){enchantmentsteelbonus = 7.5;}
+							else if(wo.ActiveSpell(i) == 1484 && enchantmentsteelbonus < 5){enchantmentsteelbonus = 5;}
+							else if(wo.ActiveSpell(i) == 1483 && enchantmentsteelbonus < 3.75){enchantmentsteelbonus = 3.75;}
+							else if(wo.ActiveSpell(i) == 1482 && enchantmentsteelbonus < 2.5){enchantmentsteelbonus = 2.5;}
+							else if(wo.ActiveSpell(i) == 51 && enchantmentsteelbonus < 1){enchantmentsteelbonus = 1;}
+						}
+						
+						debuffspelltinks += cantripsteelbonus + enchantmentsteelbonus;
+												
+						if(wo.Values(LongValueKey.Unenchantable) > 0)
+						{
+							double steelvalue = wo.Values(LongValueKey.ArmorLevel) / 20;
+	
+							double protectionpenatly = 0;
+													
+							double slashbase = wo.Values(DoubleValueKey.SlashProt);
+							double piercebase = wo.Values(DoubleValueKey.PierceProt);
+							double bludgebase = wo.Values(DoubleValueKey.BludgeonProt);
+							double acidbase = wo.Values(DoubleValueKey.AcidProt);
+							double coldbase = wo.Values(DoubleValueKey.ColdProt);
+							double firebase = wo.Values(DoubleValueKey.FireProt);
+							double lightbase = wo.Values(DoubleValueKey.LightningProt);
+							
+							double slashtinksbonus = 0;
+							double piercetinksbonus = 0;
+							double bludgtinksbonus = 0;
+							double acidtinksbonus = 0;
+							double coldtinksbonus = 0;
+							double firetinksbonus = 0;
+							double lighttinksbonus = 0;
+							
+							double scbonus = 0;
+							double sebonus = 0;
+							double pcbonus = 0;
+							double pebonus = 0;
+							double bcbonus = 0;						
+							double bebonus = 0;
+							double acbonus = 0;
+							double aebonus = 0;
+							double ccbonus = 0;
+							double cebonus = 0;
+							double fcbonus = 0;
+							double febonus = 0;
+							double lcbonus = 0;
+							double lebonus = 0;
+							
+							for(int i = 0; i <= wo.ActiveSpellCount -1; i++)
+							{				
+								//Armor Level modifers
+								if(wo.ActiveSpell(i) == 6095 && cantripsteelbonus < 4){cantripsteelbonus = 4;}
+								else if(wo.ActiveSpell(i) == 4667 && cantripsteelbonus < 3){cantripsteelbonus = 3;}
+								else if(wo.ActiveSpell(i) == 2592 && cantripsteelbonus < 2){cantripsteelbonus = 2;}
+								else if(wo.ActiveSpell(i) == 2604 && cantripsteelbonus < 1){cantripsteelbonus = 1;}								
+								if(wo.ActiveSpell(i) == 4407 && enchantmentsteelbonus < 12){enchantmentsteelbonus = 12;}
+								else if(wo.ActiveSpell(i) == 3908 && enchantmentsteelbonus < 12){enchantmentsteelbonus = 12;}
+								else if(wo.ActiveSpell(i) == 2108 && enchantmentsteelbonus < 11){enchantmentsteelbonus = 11;}
+								else if(wo.ActiveSpell(i) == 1486 && enchantmentsteelbonus < 10){enchantmentsteelbonus = 10;}
+								else if(wo.ActiveSpell(i) == 1485 && enchantmentsteelbonus < 7.5){enchantmentsteelbonus = 7.5;}
+								else if(wo.ActiveSpell(i) == 1484 && enchantmentsteelbonus < 5){enchantmentsteelbonus = 5;}
+								else if(wo.ActiveSpell(i) == 1483 && enchantmentsteelbonus < 3.75){enchantmentsteelbonus = 3.75;}
+								else if(wo.ActiveSpell(i) == 1482 && enchantmentsteelbonus < 2.5){enchantmentsteelbonus = 2.5;}
+								else if(wo.ActiveSpell(i) == 51 && enchantmentsteelbonus < 1){enchantmentsteelbonus = 1;}
+																
+								//Slash modifiers
+								if(wo.ActiveSpell(i) == 4293 && sebonus < 2){sebonus = 2;}
+								else if(wo.ActiveSpell(i) == 2094 && sebonus < 1.70){sebonus = 1.7;}
+								else if(wo.ActiveSpell(i) == 1562 && sebonus < 1.50){sebonus = 1.5;}
+								else if(wo.ActiveSpell(i) == 1561 && sebonus < 1.0){sebonus = 1.0;}
+								else if(wo.ActiveSpell(i) == 1560 && sebonus < 0.75){sebonus = 0.75;}
+								else if(wo.ActiveSpell(i) == 1559 && sebonus < 0.5){sebonus = 0.5;}
+								else if(wo.ActiveSpell(i) == 1568 && sebonus < 0.25){sebonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 37 && sebonus < 0.1){sebonus = 0.1;}
+								if(wo.ActiveSpell(i) == 6097 && scbonus < 0.25){scbonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 4669 && scbonus < 0.2){scbonus = 0.2;}
+								else if(wo.ActiveSpell(i) == 2594 && scbonus < 0.15){scbonus = 0.15;}
+								else if(wo.ActiveSpell(i) == 2606 && scbonus < 0.1){scbonus = 0.1;}	
+								
+								//Pierce modifers
+								if(wo.ActiveSpell(i) == 4212 && pebonus < 2){pebonus = 2;}
+								else if(wo.ActiveSpell(i) == 2113 && pebonus < 1.70){pebonus = 1.7;}
+								else if(wo.ActiveSpell(i) == 1574 && pebonus < 1.50){pebonus = 1.5;}
+								else if(wo.ActiveSpell(i) == 1573 && pebonus < 1.0){pebonus = 1.0;}
+								else if(wo.ActiveSpell(i) == 1572 && pebonus < 0.75){pebonus = 0.75;}
+								else if(wo.ActiveSpell(i) == 1571 && pebonus < 0.5){pebonus = 0.5;}
+								else if(wo.ActiveSpell(i) == 1570 && pebonus < 0.25){pebonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 1569 && pebonus < 0.1){pebonus = 0.1;}	
+								if(wo.ActiveSpell(i) == 6096 && pcbonus < 0.25){pcbonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 4668 && pcbonus < 0.2){pcbonus = 0.2;}
+								else if(wo.ActiveSpell(i) == 2593 && pcbonus < 0.15){pcbonus = 0.15;}
+								else if(wo.ActiveSpell(i) == 2605 && pcbonus < 0.1){pcbonus = 0.1;}								
+								
+								//Bludgeon  modifers
+								if(wo.ActiveSpell(i) == 4397 && bebonus < 2){bebonus = 2;}
+								else if(wo.ActiveSpell(i) == 2098 && bebonus < 1.70){bebonus = 1.7;}
+								else if(wo.ActiveSpell(i) == 1516 && bebonus < 1.50){bebonus = 1.5;}
+								else if(wo.ActiveSpell(i) == 1515 && bebonus < 1.0){bebonus = 1.0;}
+								else if(wo.ActiveSpell(i) == 1514 && bebonus < 0.75){bebonus = 0.75;}
+								else if(wo.ActiveSpell(i) == 1513 && bebonus < 0.5){bebonus = 0.5;}
+								else if(wo.ActiveSpell(i) == 1512 && bebonus < 0.25){bebonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 1511 && bebonus < 0.1){bebonus = 0.1;}	
+								if(wo.ActiveSpell(i) == 6090 && bcbonus < 0.25){bcbonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 4662 && bcbonus < 0.2){bcbonus = 0.2;}
+								else if(wo.ActiveSpell(i) == 2587 && bcbonus < 0.15){bcbonus = 0.15;}
+								else if(wo.ActiveSpell(i) == 2599 && bcbonus < 0.1){bcbonus = 0.1;}
+								
+								//Acid modifers
+								if(wo.ActiveSpell(i) == 4391 && aebonus < 2){aebonus = 2;}
+								else if(wo.ActiveSpell(i) == 2092 && aebonus < 1.70){aebonus = 1.7;}
+								else if(wo.ActiveSpell(i) == 1498 && aebonus < 1.50){aebonus = 1.5;}
+								else if(wo.ActiveSpell(i) == 1497 && aebonus < 1.0){aebonus = 1.0;}
+								else if(wo.ActiveSpell(i) == 1496 && aebonus < 0.75){aebonus = 0.75;}
+								else if(wo.ActiveSpell(i) == 1495 && aebonus < 0.5){aebonus = 0.5;}
+								else if(wo.ActiveSpell(i) == 1494 && aebonus < 0.25){aebonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 1493 && aebonus < 0.1){aebonus = 0.1;}	
+								if(wo.ActiveSpell(i) == 6088 && acbonus < 0.25){acbonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 4660 && acbonus < 0.2){acbonus = 0.2;}
+								else if(wo.ActiveSpell(i) == 2585 && acbonus < 0.15){acbonus = 0.15;}
+								else if(wo.ActiveSpell(i) == 2597 && acbonus < 0.1){acbonus = 0.1;}
+								
+								//Fire modifers
+								if(wo.ActiveSpell(i) == 4401 && febonus < 2){febonus = 2;}
+								else if(wo.ActiveSpell(i) == 2102 && febonus < 1.70){febonus = 1.7;}
+								else if(wo.ActiveSpell(i) == 1552 && febonus < 1.50){febonus = 1.5;}
+								else if(wo.ActiveSpell(i) == 1551 && febonus < 1.0){febonus = 1.0;}
+								else if(wo.ActiveSpell(i) == 1550 && febonus < 0.75){febonus = 0.75;}
+								else if(wo.ActiveSpell(i) == 1549 && febonus < 0.5){febonus = 0.5;}
+								else if(wo.ActiveSpell(i) == 1548 && febonus < 0.25){febonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 1547 && febonus < 0.1){febonus = 0.1;}	
+								if(wo.ActiveSpell(i) == 6092 && fcbonus < 0.25){fcbonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 4664 && fcbonus < 0.2){fcbonus = 0.2;}
+								else if(wo.ActiveSpell(i) == 2589 && fcbonus < 0.15){fcbonus = 0.15;}
+								else if(wo.ActiveSpell(i) == 2601 && fcbonus < 0.1){fcbonus = 0.1;}
+								
+								//Cold modifers
+								if(wo.ActiveSpell(i) == 4403 && cebonus < 2){cebonus = 2;}
+								else if(wo.ActiveSpell(i) == 2104 && cebonus < 1.70){cebonus = 1.7;}
+								else if(wo.ActiveSpell(i) == 1528 && cebonus < 1.50){cebonus = 1.5;}
+								else if(wo.ActiveSpell(i) == 1527 && cebonus < 1.0){cebonus = 1.0;}
+								else if(wo.ActiveSpell(i) == 1526 && cebonus < 0.75){cebonus = 0.75;}
+								else if(wo.ActiveSpell(i) == 1525 && cebonus < 0.5){cebonus = 0.5;}
+								else if(wo.ActiveSpell(i) == 1524 && cebonus < 0.25){cebonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 1523 && cebonus < 0.1){cebonus = 0.1;}	
+								if(wo.ActiveSpell(i) == 6093 && ccbonus < 0.25){ccbonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 4665 && ccbonus < 0.2){ccbonus = 0.2;}
+								else if(wo.ActiveSpell(i) == 2590 && ccbonus < 0.15){ccbonus = 0.15;}
+								else if(wo.ActiveSpell(i) == 2602 && ccbonus < 0.1){ccbonus = 0.1;}
+								
+								//Lightning modifers
+								if(wo.ActiveSpell(i) == 4409 && lebonus < 2){lebonus = 2;}
+								else if(wo.ActiveSpell(i) == 2110 && lebonus < 1.70){lebonus = 1.7;}
+								else if(wo.ActiveSpell(i) == 1540 && lebonus < 1.50){lebonus = 1.5;}
+								else if(wo.ActiveSpell(i) == 1539 && lebonus < 1.0){lebonus = 1.0;}
+								else if(wo.ActiveSpell(i) == 1538 && lebonus < 0.75){lebonus = 0.75;}
+								else if(wo.ActiveSpell(i) == 1537 && lebonus < 0.5){lebonus = 0.5;}
+								else if(wo.ActiveSpell(i) == 1536 && lebonus < 0.25){lebonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 1535 && lebonus < 0.1){lebonus = 0.1;}	
+								if(wo.ActiveSpell(i) == 6099 && lcbonus < 0.25){lcbonus = 0.25;}
+								else if(wo.ActiveSpell(i) == 4671 && lcbonus < 0.2){lcbonus = 0.2;}
+								else if(wo.ActiveSpell(i) == 2595 && lcbonus < 0.15){lcbonus = 0.15;}
+								else if(wo.ActiveSpell(i) == 2607 && lcbonus < 0.1){lcbonus = 0.1;}	
+							}							
+							
+							slashtinksbonus = (slashbase + slashbase * sebonus + slashbase * scbonus) / 0.2;
+							piercetinksbonus = (piercebase + piercebase * pebonus + piercebase * pcbonus) / 0.2; 
+							bludgtinksbonus = (bludgebase + bludgebase * bebonus + bludgebase * bcbonus) / 0.2;
+							acidtinksbonus = (acidbase + acidbase * aebonus + acidbase * acbonus) / 0.4;
+							coldtinksbonus = (coldbase + coldbase * cebonus + coldbase * ccbonus) / 0.4;
+							firetinksbonus = (firebase + firebase * febonus + firebase * fcbonus) / 0.4;
+							lighttinksbonus = (lightbase + lightbase * lebonus + lightbase * lcbonus) / 0.4;
+							
+							if(slashtinksbonus < 10) {protectionpenatly += 10 - slashtinksbonus;}
+							if(piercetinksbonus < 10) {protectionpenatly += 10 - piercetinksbonus;}
+							if(bludgtinksbonus < 10) {protectionpenatly += 10 - bludgtinksbonus;}
+							if(acidtinksbonus < 5) {protectionpenatly += 5 - acidtinksbonus;}
+							if(firetinksbonus < 5) {protectionpenatly += 5 - firetinksbonus;}
+							if(lighttinksbonus < 5) {protectionpenatly += 5 - lighttinksbonus;}
+							if(coldtinksbonus < 5) {protectionpenatly += 5 - coldtinksbonus;}
+							
+							return enchantmentsteelbonus + cantripsteelbonus;
+							
+//							wo.Values(LongValueKey.NumberTimesTinkered) - protectionpenatly;
+							
+							
+						}
+						else
+						{
+							
+						}
+						
+						
+						
+						
+						
+					}
+					
+						
+					
+					return 0;	
+					
+				}
 			}
 			
 			public string GearScoreString()
 			{
 				string gearscorestring = String.Empty;
 				if(!wo.HasIdData) {return gearscorestring = "{NO ID} ";}
-				if(GearScore > 0) {gearscorestring += "{GS " + GearScore.ToString("N0") + "} ";}
-				return gearscorestring;
+				if(GearScore  > 0 || ExtendedGearScore != String.Empty) {gearscorestring += "{GS";}
+				if(GearScore > 0) {gearscorestring += " " + GearScore.ToString("N0");}	
+				if(ExtendedGearScore != String.Empty) {gearscorestring += " " + ExtendedGearScore;}
+				if(GearScore  > 0 || ExtendedGearScore != String.Empty) {gearscorestring += "} ";}
+				return gearscorestring;		
 			}
 			
 			public List<DebuffSpell> DebuffSpellList = new List<DebuffSpell>();
@@ -229,9 +482,7 @@ namespace GearFoundry
 						return "(" + rulename + ") ";
 					default:
 						return String.Empty;
-				}
-					
-            
+				}  
 			}
 			
 			public string DistanceString()
@@ -251,7 +502,9 @@ namespace GearFoundry
 			{
 				get
 				{
-					return Crit + CritResist + CritDam + CritDamResist + Dam + DamResist;
+					return (double)wo.Values((LongValueKey)NewLongKeys.Crit) + (double)wo.Values((LongValueKey)NewLongKeys.CritResist) + 
+						(double)wo.Values((LongValueKey)NewLongKeys.CritDam) + (double)wo.Values((LongValueKey)NewLongKeys.CritDamResist) + 
+						(double)wo.Values((LongValueKey)NewLongKeys.Dam) + (double)wo.Values((LongValueKey)NewLongKeys.DamResist);
 				}
 			}
 				
@@ -516,6 +769,31 @@ namespace GearFoundry
 				}
 				
 			}
+			public int ArmorType
+			{
+				get
+				{
+					//If it doesn't have an armor value, return negative
+					if(!wo.LongKeys.Contains((int)LongValueKey.ArmorLevel)) {return -1;}
+					//If it's unknown type make it other.
+					if(!ArmorIndex.Any(x => wo.Name.ToLower().Contains(x.name.ToLower()))) 
+					{
+						return ArmorIndex.Find(x => x.name == "Other").ID;
+					}
+					else if(ArmorIndex.Any(x => wo.Name.ToLower().StartsWith(x.name.ToLower())))
+					{
+						return ArmorIndex.Find(x => wo.Name.ToLower().StartsWith(x.name.ToLower())).ID;
+					}		
+					else if(ArmorIndex.Any(x => wo.Name.ToLower().Contains(x.name.ToLower())))
+					{
+						return ArmorIndex.Find(x => wo.Name.ToLower().Contains(x.name.ToLower())).ID;
+					}
+					else
+					{
+						return ArmorIndex.Find(x => x.name == "Other").ID;
+					}			
+				}
+			}
 			
 			public string ArmorLevelComaparisonString()
 			{
@@ -652,6 +930,7 @@ namespace GearFoundry
 				return " Dam: " + DamageComparison.ToString("N0") ;
 			}
 			
+			//Because of the need to read the icons from the essences for damage types, this can't be read directly from wo.  Combined all for for ease of reference
 			public int DamageType 
 			{
 				get
@@ -693,71 +972,7 @@ namespace GearFoundry
 					else {return 0;}	
 				}
 			}
-			public int Matieral
-			{
-				get
-				{
-					if(wo.Values(LongValueKey.Material) > 0) { return wo.Values(LongValueKey.Material);}
-					else {return -1;}
-				}
-			}
-			public int ElementalDmgBonus 
-			{
-				get
-				{
-					if (wo.Values(LongValueKey.ElementalDmgBonus) > 0) {return wo.Values(LongValueKey.ElementalDmgBonus);}
-					else {return 0;}
-				}
-			}
-			public int Burden
-			{
-				get 
-				{
-					if (wo.Values(LongValueKey.Burden) > 0) {return wo.Values(LongValueKey.Burden);}
-					else {return 0;}
-				}
-			}
-			public int Value 
-			{
-				get 
-				{
-					if (wo.Values(LongValueKey.Value) > 0) {return wo.Values(LongValueKey.Value);}
-					else {return 0;}
-				}
-			}
-			public double Variance 
-			{
-				get 
-				{
-					if (wo.Values(DoubleValueKey.Variance) > 0) {return wo.Values(DoubleValueKey.Variance);}
-					else {return 0;}
-				}
-			}
-			public int ArmorCoverage 
-			{
-				get 
-				{
-					if (wo.Values(LongValueKey.Coverage) > 0) {return wo.Values(LongValueKey.Coverage);}
-					else {return 0;}
-				}
-			}
-			public double SalvageWorkmanship 
-			{   //NOTE:  This property DOES NOT require an ID before it is set on wo
-				get 
-				{
-					if (wo.Values(DoubleValueKey.SalvageWorkmanship) > 0) {return wo.Values(DoubleValueKey.SalvageWorkmanship);}
-					else {return 0;}
-				}
-			}
-			public int MaxItemLevel 
-			{	//wo LongValueKey@319 contains max item level
-				get
-				{	
-					if (wo.Values((LongValueKey)319) > 0){return wo.Values((LongValueKey)319);}
-					else {return 0;}
-					
-				}
-			}	
+			
 			public int WeaponMasteryCategory 
 			{	//wo LongValueKey@353 contains WeaponMastery
 				get
@@ -799,62 +1014,9 @@ namespace GearFoundry
 					else {return 0;}
 				}
 			}
-			public int Dam
-			{	//wo LongValueKey@370 contains
-				get
-				{
-					if (wo.LongKeys.Contains(370)) {return wo.Values((LongValueKey)370);}
-					else {return 0;}
-				}
-			}
-			public int DamResist 
-			{	//wo LongValueKey@371 contains 
-				get
-				{
-					if (wo.LongKeys.Contains(371)) {return wo.Values((LongValueKey)371);}
-					else {return 0;}
-				}
-			}
-			public int Crit 
-			{	//wo LongValueKey@372 contains
-				get
-				{
-					if (wo.LongKeys.Contains(372)) {return wo.Values((LongValueKey)372);}
-					else {return 0;}
-				}
-			}
-			public int CritResist
-			{	//wo LongValueKey@373 contains
-				get
-				{
-					if (wo.LongKeys.Contains(373)) {return wo.Values((LongValueKey)373);}
-					else {return 0;}
-				}
-			}
-			public int CritDam
-			{
-				get
-				{
-					if (wo.LongKeys.Contains(374)) {return wo.Values((LongValueKey)374);}
-					else {return 0;}
-				}
-			}
-			public int CritDamResist
-			{
-				get
-				{
-					if (wo.LongKeys.Contains(375)) {return wo.Values((LongValueKey)375);}
-					else {return 0;}
-				}
-			}
-			public int EssenceSummoningSkill
-			{	//wo LongValueKey@367 contains
-				get
-				{
-					if (wo.Values((LongValueKey)367) > 0) {return wo.Values((LongValueKey)367);}
-					else {return 0;}
-				}
-			}
+			
+
+			//TODO:  This should be rolled into the matching function in identify
 			public int WeaponMaxDamage
 			{
 				get
@@ -883,14 +1045,8 @@ namespace GearFoundry
 					}
 				}
 			}
-			public int WieldReqType 
-			{
-				get 
-				{
-					if (wo.Values(LongValueKey.WieldReqType) > 0) {return wo.Values(LongValueKey.WieldReqType);}
-					else {return 0;}
-				}
-			}
+			
+			//I'm keeping these for ease of access.
 			public int SpellCount 
 			{
 				get { return wo.SpellCount; }
@@ -915,19 +1071,6 @@ namespace GearFoundry
 			{
 				get { return wo.ObjectClass; }
 			}
-			public Decal.Adapter.Wrappers.CoordsObject Coordinates 
-			{
-				get 
-				{
-					//Todo not always true, but don't care for now -Losado
-					if (wo.Container != 0) 
-					{
-						return null;
-						//Not sure I do either -Irquk
-					}
-					return wo.Coordinates();
-				}
-			}
 			public int Container 
 			{
 				get { return wo.Container; }
@@ -943,17 +1086,7 @@ namespace GearFoundry
 					else {return false;}
 				}
 			}
-			public double MinDamage
-			{
-				get
-				{
-					if (wo.Values(DoubleValueKey.Variance) > 0) 
-					{
-						return Math.Round((wo.Values(LongValueKey.MaxDamage) - wo.Values(LongValueKey.MaxDamage) * wo.Values(DoubleValueKey.Variance)), 2);
-					} 
-					else {return 0;}
-				}
-			}
+
 			public bool isvalid
 			{
 				get
@@ -961,10 +1094,7 @@ namespace GearFoundry
 					return Convert.ToBoolean(wo != null);
 				}
 			}
-	
 
-			
-			
 			public bool MSCleave 
 			{
 				get 
@@ -1005,7 +1135,7 @@ namespace GearFoundry
 				}
 			}
 			
-
+			
 			
 
 			//wo.properites which require an ID to calculate (pushed from outside)
@@ -1023,7 +1153,7 @@ namespace GearFoundry
 				{
 					int x = CurrentItemLevel();
 					int nextlvl = x + 1;
-					if (nextlvl <= MaxItemLevel & mItemxp != 0) 
+					if (nextlvl <= wo.Values((LongValueKey)NewLongKeys.MaxItemLevel) & mItemxp != 0)
 					{
 						//aetheria =  2^N-1 billion XP
 						//rare = 2000000000
@@ -1044,10 +1174,10 @@ namespace GearFoundry
 			public int CurrentItemLevel()
 			{
 				//defines CurrentItemLevel and calculates it
-				int x = MaxItemLevel;
+				int x = wo.Values((LongValueKey)NewLongKeys.MaxItemLevel);
 				long result = 0;
 				int lvl = 0;
-				if (MaxItemLevel > 0) {
+				if (wo.Values((LongValueKey)NewLongKeys.MaxItemLevel) > 0) {
 					//1,2,4,8,16
 					if (wo.Values(LongValueKey.RareId) == 0) {
 						if (mItemxp < 1000000000) {
@@ -1101,7 +1231,7 @@ namespace GearFoundry
 			//StringBuilders for ToString() override below...
 			private string CurrentItemLevelString()
 			{
-				if (MaxItemLevel > 0) {return "(" + CurrentItemLevel() + "/" + MaxItemLevel + ")";}
+				if (wo.LongKeys.Contains((int)NewLongKeys.MaxItemLevel)) {return "(" + CurrentItemLevel() + "/" + wo.Values((LongValueKey)NewLongKeys.MaxItemLevel) + ")";}
 				else return String.Empty;
 			}	
 			private string SlayerString()

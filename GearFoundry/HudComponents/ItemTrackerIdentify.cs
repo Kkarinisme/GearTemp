@@ -51,12 +51,12 @@ namespace GearFoundry
 			{
 				IdentifiedObject IoItemSalvageMirror = IOItemSalvage;
 				
-				if(IOItemSalvage.SalvageWorkmanship > 0)
+				if(IOItemSalvage.DValue(DoubleValueKey.SalvageWorkmanship) > 0)
 				{
 					var salvagerulecheck = from allrules in SalvageRulesList
-						where (allrules.material == IoItemSalvageMirror.Matieral) &&
-												(IoItemSalvageMirror.SalvageWorkmanship >= allrules.minwork) &&
-												(IoItemSalvageMirror.SalvageWorkmanship <= (allrules.maxwork +0.99))
+						where (allrules.material == IoItemSalvageMirror.LValue(LongValueKey.Material)) &&
+												(IoItemSalvageMirror.DValue(DoubleValueKey.SalvageWorkmanship) >= allrules.minwork) &&
+												(IoItemSalvageMirror.DValue(DoubleValueKey.SalvageWorkmanship) <= (allrules.maxwork +0.99))
 										select allrules;
 					
 					if(salvagerulecheck.Count() > 0)
@@ -88,12 +88,12 @@ namespace GearFoundry
 			{
 				if(GISettings.LootByValue == 0){return;}
 				
-				double ratio = ((double)IOItemVal.Value / (double)IOItemVal.Burden);
+				double ratio = ((double)IOItemVal.LValue(LongValueKey.Value) / (double)IOItemVal.LValue(LongValueKey.Burden));
 				if(ratio >= mLootValBurdenRatioMinimum)
 				{
 					IOItemVal.IOR = IOResult.val;
 				}
-				else if(IOItemVal.Value >= GISettings.LootByValue)
+				else if(IOItemVal.LValue(LongValueKey.Value) >= GISettings.LootByValue)
 				{
 					IOItemVal.IOR = IOResult.val;
 				}
@@ -172,12 +172,12 @@ namespace GearFoundry
 					switch(IOItemWithID.ObjectClass)
 					{					
 						case ObjectClass.Armor:
-							//this matching currently ignores armor types
 							var reducedarmormatches = from ruls in AppliesToListMatches
-								where IOItemWithID.LValue(LongValueKey.ArmorLevel) >= ruls.RuleArmorLevel &&  //will match 0 AL values on rule.
-								(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.ArmorCoverage) == IOItemWithID.ArmorCoverage) &&   //Will ignore or match armor coverage for true
-								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	//will determine if number of spells are on object
-								(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && //Will ignore or match armor sets
+								where IOItemWithID.LValue(LongValueKey.ArmorLevel) >= ruls.RuleArmorLevel &&  
+								(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
+								(ruls.RuleArmorTypes.Count() == 0 || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
+								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
+								(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && 
 								(!ruls.RuleUnenchantable || IOItemWithID.LValue(LongValueKey.Unenchantable) > 0)
 								orderby ruls.RulePriority
 								select ruls;
@@ -196,10 +196,11 @@ namespace GearFoundry
 							if(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)
 							{
 								var reducedarmorclothmatches = from ruls in AppliesToListMatches
-									where IOItemWithID.LValue(LongValueKey.ArmorLevel) >= ruls.RuleArmorLevel &&  //will match 0 AL values on rule.
-									(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.ArmorCoverage) == IOItemWithID.ArmorCoverage) &&   //Will ignore or match armor coverage for true
-									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	//will determine if number of spells are on object
-									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))   //Will ignore or match armor sets
+									where IOItemWithID.LValue(LongValueKey.ArmorLevel) >= ruls.RuleArmorLevel &&  
+									(ruls.RuleArmorTypes.Count() == 0 || ruls.RuleArmorTypes.Contains(25)) &&
+									(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&  
+									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
+									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  
 									orderby ruls.RulePriority
 									select ruls;	
 								if(reducedarmorclothmatches.Count() > 0)
@@ -216,7 +217,7 @@ namespace GearFoundry
 							else if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
 							{
 								var reducedcloakmatches = from ruls in AppliesToListMatches
-									where IOItemWithID.MaxItemLevel >= ruls.RuleItemLevel &&
+									where IOItemWithID.LValue((LongValueKey)NewLongKeys.MaxItemLevel) >= ruls.RuleItemLevel &&
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
 									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))
 									orderby ruls.RulePriority
@@ -282,7 +283,7 @@ namespace GearFoundry
 							 		where ((ruls.RuleRed && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x40000000) ||
 							 		       (ruls.RuleYellow && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x20000000) ||
 							 		       (ruls.RuleBlue && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x10000000)) &&
-							 				IOItemWithID.MaxItemLevel >= ruls.RuleItemLevel
+							 				IOItemWithID.LValue((LongValueKey)NewLongKeys.MaxItemLevel) >= ruls.RuleItemLevel
 							 		orderby ruls.RulePriority
 							 		select ruls;
 							 	if(reducedaetheriamatches.Count() > 0)
@@ -450,25 +451,25 @@ namespace GearFoundry
 							if(rule.RuleWeaponEnabledA)
 							{	
 								if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.LValue(LongValueKey.WieldReqValue) &&
-								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.Variance <= rule.VarianceA))
+								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceA))
 								     {ruletrue[0] = true;}
 							}
 							if(rule.RuleWeaponEnabledB)
 							{	
 								if((rule.MSCleaveB == IOItemWithID.MSCleave && rule.WieldReqValueB == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
-								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageB && IOItemWithID.Variance <= rule.VarianceB))
+								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageB && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceB))
 								     {ruletrue[1] = true;}
 							}
 							if(rule.RuleWeaponEnabledC)
 							{	
 								if((rule.MSCleaveC == IOItemWithID.MSCleave && rule.WieldReqValueC == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
-								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageC && IOItemWithID.Variance <= rule.VarianceC))
+								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageC && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceC))
 								     {ruletrue[2] = true;}
 							}					
 							if(rule.RuleWeaponEnabledD)
 							{	
 								if((rule.MSCleaveD == IOItemWithID.MSCleave && rule.WieldReqValueD == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
-								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageD && IOItemWithID.Variance <= rule.VarianceD))
+								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageD && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceD))
 								     {ruletrue[3] = true;}
 							}
 							if(!ruletrue[0] && !ruletrue[1] && !ruletrue[2] && !ruletrue[3]) {RuleName = String.Empty; goto Next;}
@@ -484,25 +485,10 @@ namespace GearFoundry
 						{
 							if(rule.RuleArmorLevel > IOItemWithID.LValue(LongValueKey.ArmorLevel)) {RuleName = String.Empty; goto Next;}
 						}
-	//					//Irquk:  Confirmed functional
+	//					//Irquk:  Modified, functionality untested
 						if(rule.RuleArmorTypes.Length > 0)
 						{
-							int IOArmorType = -1;  //I'd prefer 0, but there's a 0 index in the ArmorIndex
-							if(!(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)) {RuleName = String.Empty; goto Next;}  //If it's not armor, get rid of it
-							//If it's unknown type make it other.
-							if(!ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower()))) 
-							{
-								IOArmorType = ArmorIndex.Find(x => x.name == "Other").ID;
-							}
-							else if(ArmorIndex.Any(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())))
-							{
-								IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().StartsWith(x.name.ToLower())).ID;
-							}
-							else if(IOArmorType < 0 && ArmorIndex.Any(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())))
-							{
-								IOArmorType = ArmorIndex.Find(x => IOItemWithID.Name.ToLower().Contains(x.name.ToLower())).ID;
-							}
-							if(!rule.RuleArmorTypes.Contains(IOArmorType)) {RuleName = String.Empty; goto Next;}
+							if(!rule.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) {RuleName = String.Empty; goto Next;} 
 						}
 						//Irquk:  Confirmed Functional
 						if(rule.RuleArmorSet.Length > 0)
@@ -512,7 +498,7 @@ namespace GearFoundry
 						//Irquk Confirmed Functional
 						if(rule.RuleArmorCoverage > 0)
 						{
-							if((IOItemWithID.ArmorCoverage & rule.RuleArmorCoverage) != IOItemWithID.ArmorCoverage) {RuleName = String.Empty; goto Next;}
+							if((IOItemWithID.LValue(LongValueKey.Coverage) & rule.RuleArmorCoverage) != IOItemWithID.LValue(LongValueKey.Coverage)) {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk Confirmed Functional
 						if(rule.RuleUnenchantable)
@@ -526,16 +512,16 @@ namespace GearFoundry
 						//Irquk:  Confirmed Functional
 						if(rule.RuleRed || rule.RuleYellow || rule.RuleBlue)
 						{
-							if(rule.RuleRed) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 225) {red = true;}}
-							if(rule.RuleYellow) {if(IOItemWithID.WieldReqType == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 150) {yellow = true;}}
-							if(rule.RuleBlue){if(IOItemWithID.WieldReqType == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue)  == 75) {blue = true;}}
+							if(rule.RuleRed) {if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 225) {red = true;}}
+							if(rule.RuleYellow) {if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 150) {yellow = true;}}
+							if(rule.RuleBlue){if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue)  == 75) {blue = true;}}
 							if(!red && !yellow && !blue){RuleName = String.Empty; goto Next;}
 						}
 										
 						//Irquk:  Confirmed functional
 						if(rule.RuleItemLevel > 0)
 						{
-							if(IOItemWithID.MaxItemLevel < rule.RuleItemLevel) {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.MaxItemLevel) < rule.RuleItemLevel) {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  Confirmed functional
 						if(rule.RuleEssenceLevel > 0)
@@ -545,32 +531,32 @@ namespace GearFoundry
 						//Irquk:  Confirmed functional
 						if(rule.RuleEssenceDamage > 0)
 						{
-							if(IOItemWithID.Dam < rule.RuleEssenceDamage)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.Dam) < rule.RuleEssenceDamage)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  confirmed functional
 						if(rule.RuleEssenceDamageResist > 0)
 						{
-							if(IOItemWithID.DamResist < rule.RuleEssenceDamageResist)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.DamResist) < rule.RuleEssenceDamageResist)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  confirmed functional
 						if(rule.RuleEssenceCrit > 0)
 						{
-							if(IOItemWithID.Crit < rule.RuleEssenceCrit)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.Crit) < rule.RuleEssenceCrit)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  confirmed functional
 						if(rule.RuleEssenceCritResist > 0)
 						{
-							if(IOItemWithID.CritDamResist < rule.RuleEssenceCritResist)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.CritDamResist) < rule.RuleEssenceCritResist)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  Confirmed functional
 						if(rule.RuleEssenceCritDam > 0)
 						{
-							if(IOItemWithID.CritDam < rule.RuleEssenceCritDam)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.CritDam) < rule.RuleEssenceCritDam)  {RuleName = String.Empty; goto Next;}
 						}
 						//Irquk:  confirmed functional
 						if(rule.RuleEssenceCritDamResist > 0)
 						{
-							if(IOItemWithID.CritDamResist < rule.RuleEssenceCritDamResist)  {RuleName = String.Empty; goto Next;}
+							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.CritDamResist) < rule.RuleEssenceCritDamResist)  {RuleName = String.Empty; goto Next;}
 						}
 					
 						

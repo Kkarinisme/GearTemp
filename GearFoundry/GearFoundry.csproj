@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WrapperClass\MonsterObject.cs" />
     <None Include="WrapperClass\IOMagToolsEcho.cs" />
     <EmbeddedResource Include="Defaults\Rules.xml">
       <LogicalName>Rules.xml</LogicalName>

@@ -213,7 +213,7 @@ namespace GearFoundry
 						MyCorpses DeadMe = new MyCorpses();
 						DeadMe.Name = IOCorpse.Name;
 						DeadMe.IconID = IOCorpse.Icon;
-						DeadMe.Coordinates = IOCorpse.Coordinates.ToString();
+//						DeadMe.Coordinates = IOCorpse.Coordinates.ToString();
 						DeadMe.GUID = IOCorpse.Id;
 						
 						ghSettings.DeadMeList.Add(DeadMe);

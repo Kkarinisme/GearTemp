@@ -23,8 +23,8 @@ namespace GearFoundry
 	public partial class PluginCore
 	{
 	
-		private List<IdentifiedObject> CombatHudMobTrackingList = new List<IdentifiedObject>();
-		private IdentifiedObject CHTargetIO = null;
+		private List<MonsterObject> CombatHudMobTrackingList = new List<MonsterObject>();
+		private MonsterObject CHTargetIO = null;
 		private Queue<SpellCastInfo> SpellCastBuffer = new Queue<SpellCastInfo>();
 		private List<OtherDebuffCastInfo> OtherCastBuffer = new List<OtherDebuffCastInfo>();
 		
@@ -33,8 +33,7 @@ namespace GearFoundry
 		private bool bCombatHudSettingsTab = false;
 		private bool bCombatHudInPortalSpace = true;
 		private int CombatHudFocusTargetGUID = 0;
-		private bool bCHFirstRender = true;
-		
+
 		private GearTacticianSettings gtSettings;
 				
 		public class GearTacticianSettings
@@ -334,7 +333,7 @@ namespace GearFoundry
 				CombatHudMobTrackingList.Clear();
 				foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Monster))
 				{
-					CombatHudMobTrackingList.Add(new IdentifiedObject(wo));
+					CombatHudMobTrackingList.Add(new MonsterObject(wo));
 				}
 				
 			}catch(Exception ex){LogError(ex);}
@@ -349,7 +348,7 @@ namespace GearFoundry
 				{
 					if(!CombatHudMobTrackingList.Any(x => x.Id == e.New.Id))
 					{
-						CombatHudMobTrackingList.Add(new IdentifiedObject(Core.WorldFilter[e.New.Id]));
+						CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[e.New.Id]));
 					}
 					IdqueueAdd(e.New.Id);
 				}
@@ -406,7 +405,7 @@ namespace GearFoundry
 				{
 					if(!CombatHudMobTrackingList.Any(x => x.Id == pMsg.Value<int>(0)))
 					{
-						CombatHudMobTrackingList.Add(new IdentifiedObject(Core.WorldFilter[pMsg.Value<int>(0)]));
+						CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[pMsg.Value<int>(0)]));
 					}
 				}
 				else
@@ -423,7 +422,7 @@ namespace GearFoundry
 					if(CombatHudMobTrackingList.Any(x => x.Id == pMsg.Value<int>(0)))
 					{
 						
-						IdentifiedObject CastTarget = CombatHudMobTrackingList.First(x => x.Id == pMsg.Value<int>(0));
+						MonsterObject CastTarget = CombatHudMobTrackingList.First(x => x.Id == pMsg.Value<int>(0));
 						
 						if(CastTarget.DebuffSpellList.Any(x => x.SpellId == probablespellid))
 					   	{
@@ -432,7 +431,7 @@ namespace GearFoundry
 					   	}
 					   	else
 					   	{
-					   		IdentifiedObject.DebuffSpell dbspellnew = new IdentifiedObject.DebuffSpell();
+					   		MonsterObject.DebuffSpell dbspellnew = new MonsterObject.DebuffSpell();
 					   		dbspellnew.SpellId = probablespellid;
 					   		dbspellnew.SpellCastTime = DateTime.Now;
 					   		dbspellnew.SecondsRemaining = SpellIndex[probablespellid].duration;
@@ -466,32 +465,17 @@ namespace GearFoundry
 				{
 	        		if(!CombatHudMobTrackingList.Any(x => x.Id == PossibleMobID))
 					{
-						CombatHudMobTrackingList.Add(new IdentifiedObject(Core.WorldFilter[PossibleMobID]));
+						CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[PossibleMobID]));
 					}
         			if((pMsg.Value<int>("flags") & 0x100) == 0x100)
         			{
  
         				if(pMsg.Value<int>(11) > 0) {CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).HealthMax = pMsg.Value<int>(11);}
-        				//else{CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).HealthMax = 0;}
-        				if(pMsg.Value<int>(10) > 0) {CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).HealthCurrent = pMsg.Value<int>(10);}
-        				//else{CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).HealthCurrent = 0;}
+	      				if(pMsg.Value<int>(10) > 0) {CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).HealthCurrent = pMsg.Value<int>(10);}
 //        				if(pMsg.Value<int>(20) > 0){CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).StaminaMax = pMsg.Value<int>(20);}
-//        				//else{CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).StaminaMax = 0;}
 //        				if(pMsg.Value<int>(18) > 0) {CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).StaminaCurrent = pMsg.Value<int>(18);}
-//        				//else{CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).StaminaCurrent = 0;}
 //        				if(pMsg.Value<int>(21) > 0) {CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).ManaMax = pMsg.Value<int>(21);}
-//        				//else{CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).ManaMax = 0;}
 //        				if(pMsg.Value<int>(19) > 0) {CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).ManaCurrent = pMsg.Value<int>(19);}
-//        				//else{CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).ManaCurrent = 0;}
-        				
-//        				int	health = pMsg.Value<int>(10);
-//        				int maxHealth = pMsg.Value<int>(11);
-//        				int stamina = pMsg.Value<int>(18);
-//        				int maxStamina = pMsg.Value<int>(20);
-//        				int mana = pMsg.Value<int>(19);
-//        				int maxMana = pMsg.Value<int>(21);
-        				
-	
         			}
 				}
 			} 
@@ -522,7 +506,7 @@ namespace GearFoundry
 					
 					if(CombatHudMobTrackingList.Any(x => x.Id == spellcast.SpellTargetId))
 					{
-						IdentifiedObject CastTarget = CombatHudMobTrackingList.First(x => x.Id == spellcast.SpellTargetId);
+						MonsterObject CastTarget = CombatHudMobTrackingList.First(x => x.Id == spellcast.SpellTargetId);
 							
 					   	if(CastTarget.DebuffSpellList.Any(x => x.SpellId == spellcast.SpellCastId))
 					   	{
@@ -532,7 +516,7 @@ namespace GearFoundry
 					   	}
 					   	else
 					   	{
-					   		IdentifiedObject.DebuffSpell dbspellnew = new IdentifiedObject.DebuffSpell();
+					   		MonsterObject.DebuffSpell dbspellnew = new MonsterObject.DebuffSpell();
 					   		dbspellnew.SpellId = spellcast.SpellCastId;
 					   		dbspellnew.SpellCastTime = DateTime.Now;
 					   		dbspellnew.SecondsRemaining = Convert.ToInt32(SpellIndex[spellcast.SpellCastId].duration);
@@ -822,7 +806,7 @@ namespace GearFoundry
 			return;
 		}
 		
-		private bool CHRenderWaitSet = false;
+
         private void CombatHudView_Resize(object sender, System.EventArgs e)
         {
             try
@@ -1285,7 +1269,7 @@ namespace GearFoundry
 				{
 					if(!CombatHudMobTrackingList.Any(x => x.Id == CombatHudFocusTargetGUID))
 					{
-						CombatHudMobTrackingList.Add(new IdentifiedObject(Core.WorldFilter[CombatHudFocusTargetGUID]));
+						CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[CombatHudFocusTargetGUID]));
 					}
 					CHTargetIO = CombatHudMobTrackingList.Find(x => x.Id == CombatHudFocusTargetGUID);
 				}
@@ -1293,7 +1277,7 @@ namespace GearFoundry
 				{
 					if(!CombatHudMobTrackingList.Any(x => x.Id == Core.Actions.CurrentSelection))
 					{
-						CombatHudMobTrackingList.Add(new IdentifiedObject(Core.WorldFilter[Core.Actions.CurrentSelection]));
+						CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[Core.Actions.CurrentSelection]));
 					}
 					CHTargetIO = CombatHudMobTrackingList.Find(x => x.Id == Core.Actions.CurrentSelection);
 				}
@@ -1363,7 +1347,7 @@ namespace GearFoundry
 					CombatHudDebuffTrackerList.ClearRows();
 					if(CombatHudFocusTargetGUID != 0)
 					{
-						IdentifiedObject FocusIO = CombatHudMobTrackingList.Find(x => x.Id == CombatHudFocusTargetGUID);
+						MonsterObject FocusIO = CombatHudMobTrackingList.Find(x => x.Id == CombatHudFocusTargetGUID);
 						CombatHudRow = CombatHudDebuffTrackerList.AddRow();
 						((HudProgressBar)CombatHudRow[0]).FontHeight = 6;
 						((HudProgressBar)CombatHudRow[0]).PreText = FocusIO.Name;	
