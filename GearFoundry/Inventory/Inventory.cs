@@ -28,10 +28,8 @@ namespace GearFoundry
     {
         WindowsTimer mInventoryTimer = null;
         int inventoryTimer = 0;
-        string mInventoryKey = "None";
         void btnUpdateInventory_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
-            mInventoryKey = "Update button";
             GearFoundry.PluginCore.WriteToChat("The button to update inventory was clicked");
             doUpdateInventory();
         }

@@ -889,7 +889,27 @@ namespace GearFoundry
 		{
 			try
 			{
+<<<<<<< HEAD
+				CombatHudTargetName = new HudStaticText();
+				CombatHudTargetName.TextAlignment = VirindiViewService.WriteTextFormats.Center;
+				CombatHudMainTab.AddControl(CombatHudTargetName, new Rectangle(0,0,130,16));
+				
+				CombatHudTargetImage = new HudImageStack();
+                CombatHudMainTab.AddControl(CombatHudTargetImage, new Rectangle(Convert.ToInt32(CombatHudWidth * .1), Convert.ToInt32(CombatHudHeight * .1), Convert.ToInt32(CombatHudWidth * .2), Convert.ToInt32(CombatHudHeight * .2)));
+				
+				CombatHudTargetHealth = new HudProgressBar();
+                CombatHudTargetHealth.ProgressEmpty = new ACImage(Color.Black);
+				CombatHudTargetHealth.ProgressFilled = new ACImage(Color.Red);
+				CombatHudTargetHealth.Min = 0;
+				CombatHudTargetHealth.Max = 100;
+				//CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5,75,95,16));
+                CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5, 75, 125, 16));
+				
+				CombatHudMiniVulArray = new HudImageStack[20];
+				for(int i = 0; i < 20; i++)
+=======
 				if(gtSettings.bCombatHudMedium)
+>>>>>>> 9d09cb9b6fa9d65b5dedf5b366d682081f659dd2
 				{
 					CombatHudFocusSet = new HudButton();
 					CombatHudFocusSet.Text = "Focus";

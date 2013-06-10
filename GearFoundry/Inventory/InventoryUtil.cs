@@ -26,8 +26,7 @@ namespace GearFoundry
         {
             try
             {
-                mInventoryKey = "doGetInventory";
-                xdoc = new XDocument(new XElement("Objs"));
+               xdoc = new XDocument(new XElement("Objs"));
                 //Need a list to hold the inventory
                 mWaitingForIDTimer = new WindowsTimer();
                 mWaitingForID = new List<WorldObject>();
@@ -444,9 +443,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in removeexcessobjs and keyword is " + mInventoryKey);
-               // List<string> holding = new List<string>();
-              //  xdoc = XDocument.Load(inventoryFilename);
                 IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("Obj");
 
                 int oldCount = (int)(xdocToonInventory.Element("Objs").Elements("Obj").Count());
