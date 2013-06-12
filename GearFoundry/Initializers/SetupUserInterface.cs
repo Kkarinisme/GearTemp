@@ -67,11 +67,14 @@ namespace GearFoundry
         {
             try
             {
+                // Variable initiations
                 bool mgoon = true;
                 string mcomb = "";
                 MyClasses.MetaViewWrappers.IListRow row = null;
                 string mID = "";
+                //This is gotten from the sender function which has identified event args and sent as a parameter
                 row = lstvue[margs.Row];
+                //If this function follows a click on the check box then mchecked will be different here from in the salvagelist (lst)
                 mchecked = Convert.ToBoolean(row[0][0]);
                 sname = (Convert.ToString(row[1][0]));
                 mtxt.Text = sname;
@@ -85,6 +88,8 @@ namespace GearFoundry
                     switch (margs.Column)
                     {
                         case 0:
+                            mchecked = Convert.ToBoolean(row[0][0]);
+                            doSalvageUpdate();
                             break;
 
                         case 1:
@@ -96,7 +101,7 @@ namespace GearFoundry
                     }
 
                     mchecked = Convert.ToBoolean(row[0][0]);
-                }
+                } //end of salvage selected
                 else if (xdoc != null && ((filename == mobsFilename) || (filename == trophiesFilename)))
                 {
                     IEnumerable<XElement> elements = xdoc.Element("GameItems").Descendants("item");
@@ -128,18 +133,21 @@ namespace GearFoundry
                             break;
                     }
                     mchecked = Convert.ToBoolean(row[0][0]);
-                }
-                if (mitem != 3)
+                }  // end of trophies or mobs selected
+                if (mitem != 3)  //ie if not the salvage because don't want to totally remove salvage just enable or unenable it
                 {
-
+                    //Need to remove object being worked on before adding it back so won't have a duplication of itme.
                     if (xdoc != null)
                     {
                         IEnumerable<XElement> elements = xdoc.Element("GameItems").Descendants("item");
                         xdoc.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Contains(sname.Trim())).Remove();
                     }
+                    //If want to keep the item above need to add it back with the new data
                     if (mgoon)
                     { addMyItem(xdoc, filename, mID, mexact, mitem); }
+
                     else
+                    // Need to save the file without the item in it.
                     {
                         xdoc.Save(filename);
                         if (xdoc == xdocTrophies)
@@ -1288,7 +1296,33 @@ namespace GearFoundry
 
             else
             {
+                doSalvageUpdate();
+            }
+            //    sname = txtSalvageName.Text.ToString().Trim();
+            //    sinput = txtSalvageString.Text.ToString().Trim();
 
+            //    //  IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("item");
+            //    var el = from item in mSortedSalvageList
+            //             where item.Element("key").Value.ToString().Contains(sname)
+            //             select item;
+            //    mintvalue = Convert.ToInt32(el.First().Element("intvalue").Value);
+            //}
+            //if (xdocSalvage != null)
+            //{
+
+            //    IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("item");
+            //    xdocSalvage.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Contains(sname.Trim())).Remove();
+            //}
+            //string mID = "";
+            //bool mexact = false;
+            //int mitem = 3;
+
+            //addMyItem(xdocSalvage, salvageFilename, mID, mexact, mitem);
+            //FillSalvageRules();
+        }
+
+        private void doSalvageUpdate()
+        {
                 sname = txtSalvageName.Text.ToString().Trim();
                 sinput = txtSalvageString.Text.ToString().Trim();
 
@@ -1297,7 +1331,7 @@ namespace GearFoundry
                          where item.Element("key").Value.ToString().Contains(sname)
                          select item;
                 mintvalue = Convert.ToInt32(el.First().Element("intvalue").Value);
-            }
+          
             if (xdocSalvage != null)
             {
 
@@ -1310,6 +1344,7 @@ namespace GearFoundry
 
             addMyItem(xdocSalvage, salvageFilename, mID, mexact, mitem);
             FillSalvageRules();
+
         }
 
         private void txtMaxMana_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
