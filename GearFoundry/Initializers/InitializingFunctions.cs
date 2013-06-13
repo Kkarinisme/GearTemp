@@ -390,95 +390,48 @@ namespace GearFoundry
 
         }
 
- 
         private void fillSettingsVariables()
         {
             try
             {
-                //WriteToChat("quickslotsvenabled: " + Convert.ToBoolean(el.Element("Setting").Element("QuickSlotsvEnabled").Value));
-                ////bCorpseHudEnabled = Convert.ToBoolean(el.Element("CorpseHudEnabled").Value);
-                ////bLandscapeHudEnabled = Convert.ToBoolean(el.Element("LandscapeHudEnabled").Value);
-                ////bGearInspectorEnabled = Convert.ToBoolean(el.Element("InspectorHudEnabled").Value);
-                ////bGearButlerEnabled = Convert.ToBoolean(el.Element("ButlerHudEnabled").Value);
-                ////bCombatHudEnabled = Convert.ToBoolean(el.Element("CombatHudEnabled").Value);
-                ////bRemoteGearEnabled= Convert.ToBoolean(el.Element("RemoteGearEnabled").Value);
-                //try{
-                //bquickSlotsvEnabled = Convert.ToBoolean(el.Element("Setting").Element("QuickSlotsvEnabled").Value);
-                //bquickSlotshEnabled = Convert.ToBoolean(el.Element("Setting").Element("QuickSlotshEnabled").Value);
-                //}
-                //catch (Exception ex) { LogError(ex); }
+                bCorpseHudEnabled = Convert.ToBoolean(mGenSettingsList[0].Value);
+                bLandscapeHudEnabled = Convert.ToBoolean(mGenSettingsList[1].Value);
+                bGearInspectorEnabled = Convert.ToBoolean(mGenSettingsList[2].Value);
+                bGearButlerEnabled = Convert.ToBoolean(mGenSettingsList[3].Value);
+                bCombatHudEnabled = Convert.ToBoolean(mGenSettingsList[4].Value);
+                bRemoteGearEnabled = Convert.ToBoolean(mGenSettingsList[5].Value);
+                bquickSlotsvEnabled = Convert.ToBoolean(mGenSettingsList[6].Value);
+                bquickSlotshEnabled = Convert.ToBoolean(mGenSettingsList[7].Value);
+                binventoryEnabled = Convert.ToBoolean(mGenSettingsList[8].Value);
+                binventoryBurdenEnabled = Convert.ToBoolean(mGenSettingsList[9].Value);
+                binventoryCompleteEnabled = Convert.ToBoolean(mGenSettingsList[10].Value);
+                btoonStatsEnabled = Convert.ToBoolean(mGenSettingsList[11].Value);
+                btoonArmorEnabled = Convert.ToBoolean(mGenSettingsList[12].Value);
+                bArmorHudEnabled = Convert.ToBoolean(mGenSettingsList[13].Value);
+                bMuteSounds = Convert.ToBoolean(mGenSettingsList[14].Value);
+                bEnableTextFiltering = Convert.ToBoolean(mGenSettingsList[15].Value);
+                bTextFilterAllStatus = Convert.ToBoolean(mGenSettingsList[16].Value);
+                bTextFilterBusyStatus = Convert.ToBoolean(mGenSettingsList[17].Value);
+                bTextFilterCastingStatus = Convert.ToBoolean(mGenSettingsList[18].Value);
+                bTextFilterMyDefenseMessages = Convert.ToBoolean(mGenSettingsList[19].Value);
+                bTextFilterMobDefenseMessages = Convert.ToBoolean(mGenSettingsList[20].Value);
+                bTextFilterMyKillMessages = Convert.ToBoolean(mGenSettingsList[21].Value);
+                bTextFilterPKFails = Convert.ToBoolean(mGenSettingsList[22].Value);
+                bTextFilterDirtyFighting = Convert.ToBoolean(mGenSettingsList[23].Value);
+                bTextFilterMySpellCasting = Convert.ToBoolean(mGenSettingsList[24].Value);
+                bTextFilterOthersSpellCasting = Convert.ToBoolean(mGenSettingsList[25].Value);
+                bTextFilterSpellExpirations = Convert.ToBoolean(mGenSettingsList[26].Value);
+                bTextFilterManaStoneMessages = Convert.ToBoolean(mGenSettingsList[27].Value);
+                bTextFilterHealingMessages = Convert.ToBoolean(mGenSettingsList[28].Value);
+                bTextFilterSalvageMessages = Convert.ToBoolean(mGenSettingsList[29].Value);
+                bTextFilterBotSpam = Convert.ToBoolean(mGenSettingsList[30].Value);
+                bTextFilterIdentFailures = Convert.ToBoolean(mGenSettingsList[31].Value);
+                bTextFilterKillTaskComplete = Convert.ToBoolean(mGenSettingsList[32].Value);
+                bTextFilterVendorTells = Convert.ToBoolean(mGenSettingsList[33].Value);
+                bTextFilterMonsterTells = Convert.ToBoolean(mGenSettingsList[34].Value);
+                bTextFilterNPCChatter = Convert.ToBoolean(mGenSettingsList[35].Value);
 
-                ////binventoryEnabled = Convert.ToBoolean(el.Element("InventoryEnabled").Value);
-                ////binventoryBurdenEnabled = Convert.ToBoolean(el.Element("InventoryBurdenEnabled").Value);
-                ////binventoryCompleteEnabled = Convert.ToBoolean(el.Element("InventoryCompleteEnabled").Value);
-                ////btoonStatsEnabled = Convert.ToBoolean(el.Element("ToonStatsEnabled").Value);
-                ////bMuteSounds = Convert.ToBoolean(el.Element("MuteSounds").Value);
-                ////bEnableTextFiltering = Convert.ToBoolean(el.Element("EnableTextFiltering").Value);
-                ////bTextFilterAllStatus = Convert.ToBoolean(el.Element("TextFilterAllStatus").Value);
-                ////bTextFilterBusyStatus = Convert.ToBoolean(el.Element("TextFilterBusyStatus").Value);
-                ////bTextFilterCastingStatus = Convert.ToBoolean(el.Element("TextFilterCastingStatus").Value);
-                ////bTextFilterMyDefenseMessages = Convert.ToBoolean(el.Element("TextFilterMyDefenseMessages").Value);
-                ////bTextFilterMobDefenseMessages = Convert.ToBoolean(el.Element("TextFilterMobDefenseMessages").Value);
-                ////bTextFilterMyKillMessages = Convert.ToBoolean(el.Element("TextFilterMyKillMessages").Value);
-                ////bTextFilterPKFails = Convert.ToBoolean(el.Element("TextFilterPKFails").Value);
-                ////bTextFilterDirtyFighting = Convert.ToBoolean(el.Element("TextFilterDirtyFighting").Value);
-                ////bTextFilterMySpellCasting = Convert.ToBoolean(el.Element("TextFilterMySpellCasting").Value);
-                ////bTextFilterOthersSpellCasting = Convert.ToBoolean(el.Element("TextFilterOthersSpellCasting").Value);
-                ////bTextFilterSpellExpirations = Convert.ToBoolean(el.Element("TextFilterSpellExpirations").Value);
-                ////bTextFilterManaStoneMessages = Convert.ToBoolean(el.Element("TextFilterManaStoneMessages").Value);
-                ////bTextFilterHealingMessages = Convert.ToBoolean(el.Element("TextFilterHealingMessages").Value);
-                ////bTextFilterSalvageMessages = Convert.ToBoolean(el.Element("TextFilterSalvageMessages").Value);
-                ////bTextFilterBotSpam = Convert.ToBoolean(el.Element("TextFilterBotSpam").Value);
-                ////bTextFilterIdentFailures = Convert.ToBoolean(el.Element("TextFilterIdentFailures").Value);
-                ////bTextFilterKillTaskComplete = Convert.ToBoolean(el.Element("TextFilterKillTaskComplete").Value);
-                ////bTextFilterVendorTells = Convert.ToBoolean(el.Element("TextFilterVendorTells").Value);
-                ////bTextFilterMonsterTells = Convert.ToBoolean(el.Element("TextFilterMonsterTells").Value);
-                ////bTextFilterNPCChatter = Convert.ToBoolean(el.Element("TextFilterNPCChatter").Value);
-                ////btoonArmorEnabled = Convert.ToBoolean(el.Element("ToonArmorEnabled").Value);
-                ////bArmorHudEnabled = Convert.ToBoolean(el.Element("ArmorHudEnabled").Value);
-
-                foreach (XElement el in mGenSettingsList)
-                {
-                    if (el.Name == "CorpseHudEnabled") { bCorpseHudEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "LandscapeHudEnabled") { bLandscapeHudEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "InspectorHudEnabled") { bGearInspectorEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "ButlerHudEnabled") { bGearButlerEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "CombatHudEnabled") { bCombatHudEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "RemoteGearEnabled") { bRemoteGearEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "QuickSlotsvEnabled") { bquickSlotsvEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "QuickSlotshEnabled") { bquickSlotshEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "InventoryEnabled") { binventoryEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "InventoryBurdenEnabled") { binventoryBurdenEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "InventoryCompleteEnabled") { binventoryCompleteEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "ToonStatsEnabled") { btoonStatsEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "MuteSounds") { bMuteSounds = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "EnableTextFiltering") { bEnableTextFiltering = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterAllStatus") { bTextFilterAllStatus = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterBusyStatus") { bTextFilterBusyStatus = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterCastingStatus") { bTextFilterCastingStatus = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterMyDefenseMessages") { bTextFilterMyDefenseMessages = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterMobDefenseMessages") { bTextFilterMobDefenseMessages = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterMyKillMessages") { bTextFilterMyKillMessages = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterPKFails") { bTextFilterPKFails = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterDirtyFighting") { bTextFilterDirtyFighting = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterMySpellCasting") { bTextFilterMySpellCasting = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterOthersSpellCasting") { bTextFilterOthersSpellCasting = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterSpellExpirations") { bTextFilterSpellExpirations = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterManaStoneMessages") { bTextFilterManaStoneMessages = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterHealingMessages") { bTextFilterHealingMessages = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterSalvageMessages") { bTextFilterSalvageMessages = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterBotSpam") { bTextFilterBotSpam = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterIdentFailures") { bTextFilterIdentFailures = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterKillTaskComplete") { bTextFilterKillTaskComplete = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterVendorTells") { bTextFilterVendorTells = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterMonsterTells") { bTextFilterMonsterTells = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "TextFilterNPCChatter") { bTextFilterNPCChatter = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "ToonArmorEnabled") { btoonArmorEnabled = Convert.ToBoolean(el.Value); }
-                    if (el.Name == "ArmorHudEnabled") { bArmorHudEnabled = Convert.ToBoolean(el.Value); }
-
-                }
-
-
+ 
                     chkQuickSlotsv.Checked = bquickSlotsvEnabled;
                     chkQuickSlotsh.Checked = bquickSlotshEnabled;
  
@@ -775,16 +728,6 @@ namespace GearFoundry
             txtRuleEssDRLevel.Text = nRuleEssDRLevel.ToString();
             txtRuleEssLevel.Text = nRuleEssLevel.ToString();
             txtRuleNumSpells.Text = nRuleNumSpells.ToString();
-        //    txtRuleEssSummLevel.Text = nRuleEssSummLevel.ToString();
-
- 
-
-            //if (nRuleMustHaveSpell > 0)
-            //{
-            //    getSpellName(nRuleMustHaveSpell.ToString());
-            //    txtRuleSpellMatches.Text = sname;
-            //}
-            //else { txtRuleSpellMatches.Text = ""; }
 
             chkRuleFilterLegend.Checked = bRuleFilterLegend;
             chkRuleFilterEpic.Checked = bRuleFilterEpic;

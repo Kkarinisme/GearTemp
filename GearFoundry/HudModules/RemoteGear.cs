@@ -63,7 +63,7 @@ namespace GearFoundry
 
             xdocRemoteGear = XDocument.Load(remoteGearFilename);
 
-            remoteGearHud = new VirindiViewService.HudView("", 30, 360, new ACImage(Color.Transparent), false, "RemoteGear");
+            remoteGearHud = new VirindiViewService.HudView("", 30, 165, new ACImage(Color.Transparent), false, "RemoteGear");
             remoteGearHud.ShowInBar = false;
             remoteGearHud.UserAlphaChangeable = false;
             remoteGearHud.Visible = true;
@@ -77,56 +77,42 @@ namespace GearFoundry
             remoteGearTabView = new HudTabView();
             remoteGearTabFixedLayout = new HudFixedLayout();
 
-            remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 359));
+            remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 164));
             remoteGearTabView.AddTab(remoteGearTabFixedLayout, "");
 
             //Butler
             mRemoteGear0 = new HudPictureBox();
             mRemoteGear0.Image = new ACImage(25907);
             remoteGearTabFixedLayout.AddControl(mRemoteGear0, new Rectangle(2, 5, 25, 25));
-            //nRemoteGear++;
-            try { mRemoteGear0.Hit += (sender, obj) => mRemoteGear0_Hit(sender, obj); }
-            catch (Exception ex) { LogError(ex); }
+            mRemoteGear0.Hit += (sender, obj) => mRemoteGear0_Hit(sender, obj); 
 
             //CorpseHud
             mRemoteGear1 = new HudPictureBox();
-            int GR_Corpse_ICON = 0x6001C09;
-
+            int GR_Corpse_ICON = 0x6001070;
             mRemoteGear1.Image = GR_Corpse_ICON;
             remoteGearTabFixedLayout.AddControl(mRemoteGear1, new Rectangle(2, 35, 25, 25));
-            //nRemoteGear++;
-            try { mRemoteGear1.Hit += (sender, obj) => mRemoteGear1_Hit(sender, obj); }
-            catch (Exception ex) { LogError(ex); }
+            mRemoteGear1.Hit += (sender, obj) => mRemoteGear1_Hit(sender, obj); 
 
             //GearInspector
             mRemoteGear2 = new HudPictureBox();
             int GR_Inspector_ICON = 0x600218D;
-
             mRemoteGear2.Image = GR_Inspector_ICON;
             remoteGearTabFixedLayout.AddControl(mRemoteGear2, new Rectangle(2, 65, 25, 25));
-            //nRemoteGear++;
-            try { mRemoteGear2.Hit += (sender, obj) => mRemoteGear2_Hit(sender, obj); }
-            catch (Exception ex) { LogError(ex); }
+            mRemoteGear2.Hit += (sender, obj) => mRemoteGear2_Hit(sender, obj); 
 
             //GearSense
             mRemoteGear3 = new HudPictureBox();
             mRemoteGear3.Image = new ACImage(4949);
-
             remoteGearTabFixedLayout.AddControl(mRemoteGear3, new Rectangle(2, 95, 25, 25));
-            //nRemoteGear++;
-            try { mRemoteGear3.Hit += (sender, obj) => mRemoteGear3_Hit(sender, obj); }
-            catch (Exception ex) { LogError(ex); }
+            mRemoteGear3.Hit += (sender, obj) => mRemoteGear3_Hit(sender, obj); 
 
 
            //CombatHud
             mRemoteGear4 = new HudPictureBox();
-            int GR_Combat_ICON = 0x6006590;
+            int GR_Combat_ICON = 0x6004D06;
             mRemoteGear4.Image = GR_Combat_ICON;
-
             remoteGearTabFixedLayout.AddControl(mRemoteGear4, new Rectangle(2, 125, 25, 25));
-            //nRemoteGear++;
-            try { mRemoteGear4.Hit += (sender, obj) => mRemoteGear4_Hit(sender, obj); }
-            catch (Exception ex) { LogError(ex); }
+            mRemoteGear4.Hit += (sender, obj) => mRemoteGear4_Hit(sender, obj); 
 
 
           }
@@ -156,7 +142,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in MremoteGear0_Hit");
                 if (bGearButlerEnabled == true)
                 {
                     bGearButlerEnabled = false;
@@ -170,6 +155,7 @@ namespace GearFoundry
 
                 }
                 chkGearButlerEnabled.Checked = bGearButlerEnabled;
+                SaveSettings();
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -180,7 +166,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in MremoteGear1_Hit");
                 if (bCorpseHudEnabled == true)
                 {
                     bCorpseHudEnabled = false;
@@ -197,6 +182,8 @@ namespace GearFoundry
 
             }
             catch (Exception ex) { LogError(ex); }
+            SaveSettings();
+
 
 
         }
@@ -204,7 +191,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in MremoteGear2_Hit");
                 if (bGearInspectorEnabled == true)
                 {
                     bGearInspectorEnabled = false;
@@ -218,6 +204,7 @@ namespace GearFoundry
 
                 }
                 chkGearInspectorEnabled.Checked = bGearInspectorEnabled;
+                SaveSettings();
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -228,7 +215,6 @@ namespace GearFoundry
         private void mRemoteGear3_Hit(object sender, System.EventArgs e)
         {
             try{
-                WriteToChat("I am in MremoteGear3_Hit");
                 if (bLandscapeHudEnabled == true)
                 {
                     bLandscapeHudEnabled = false;
@@ -242,7 +228,8 @@ namespace GearFoundry
 
                 }
                    chkGearSenseEnabled.Checked = bLandscapeHudEnabled;
- 
+                   SaveSettings();
+
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -252,7 +239,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in MremoteGear5_Hit");
                 if (bCombatHudEnabled == true)
                 {
                     bCombatHudEnabled = false;
@@ -266,6 +252,7 @@ namespace GearFoundry
 
                 }
                 chkCombatHudEnabled.Checked = bCombatHudEnabled;
+                SaveSettings();
 
             }
             catch (Exception ex) { LogError(ex); }

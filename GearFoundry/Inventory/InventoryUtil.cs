@@ -87,6 +87,7 @@ namespace GearFoundry
                 {
                     try
                     {
+                        mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor);
                         removeExcessObjsfromFile();
                         xdocGenInventory.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
 
@@ -107,6 +108,7 @@ namespace GearFoundry
                         GearFoundry.PluginCore.WriteToChat(s);
                         m = n;
                         string mname = null;
+                        
 
                         if (mWaitingForID.Count > 0)
                         {
@@ -153,7 +155,8 @@ namespace GearFoundry
                 mWaitingForIDTimer.Stop();
 
 
-
+              //if (mWaitingForID != null) 
+              //{
                 for (int n = 0; n < mWaitingForID.Count; n++)
                 {
 
@@ -166,6 +169,8 @@ namespace GearFoundry
                     else
                     { mDoWait(); }
                 }
+
+          //  }
             }
 
             catch (Exception ex) { LogError(ex); }

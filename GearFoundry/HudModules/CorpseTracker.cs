@@ -596,7 +596,7 @@ namespace GearFoundry
     			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0,CorpseHudWidth,CorpseHudHeight));
 				CorpseHudList.ControlHeight = 16;	
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
-				CorpseHudList.AddColumn(typeof(HudStaticText), CorpseHudWidth-40, null);
+				CorpseHudList.AddColumn(typeof(HudStaticText), 200, null);
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
 				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);	

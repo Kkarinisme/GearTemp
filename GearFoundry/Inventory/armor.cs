@@ -70,6 +70,7 @@ namespace GearFoundry
                 mWaitingForArmorID = new List<WorldObject>();
 
                 armorFilename = toonDir + @"\" + toonName + "Armor.xml";
+                armorSettingsFilename = currDir + @"\ArmorSettings.xml"; 
                 genArmorFilename = currDir + @"\allToonsArmor.xml";
                 holdingArmorFilename = world + @"\holdingArmor.xml";
                 allStatsFilename = currDir + @"\AllToonStats.xml";
@@ -543,8 +544,9 @@ namespace GearFoundry
 
                 ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
                 ArmorHudList.AddColumn(typeof(HudPictureBox), Convert.ToInt32(.05*ArmorHudWidth), null);
-                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.35 * ArmorHudWidth), null);
-                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.60*ArmorHudWidth), null);
+                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.18 * ArmorHudWidth), null);
+                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.20 * ArmorHudWidth), null);
+                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.57 * ArmorHudWidth), null);
 
                 ArmorHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
 
@@ -583,11 +585,22 @@ namespace GearFoundry
                         int icon = Convert.ToInt32(el.Element("ArmorIcon").Value);
                         string armorpiece = el.Element("ArmorName").Value;
                         string spells = el.Element("ArmorSpellXml").Value;
+                        string armorclass = el.Element("ArmorClass").Value;
+                        int nset = Convert.ToInt32(el.Element("ArmorSet").Value);
+                        string SetName = "";
+                        if (armorclass == "Armor") { SetName = ArmorSetsInvList[nset].name; }
+                      
+                        //int armorobjArmorSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
+                        //string objArmorSetName = ArmorSetsInvList[armorobjArmorSet].name;
+
+
+ 
                         ArmorHudListRow = ArmorHudList.AddRow();
 
                         ((HudPictureBox)ArmorHudListRow[0]).Image = icon + 0x6000000;
                         ((HudStaticText)ArmorHudListRow[1]).Text = armorpiece;
-                        ((HudStaticText)ArmorHudListRow[2]).Text = spells;
+                        ((HudStaticText)ArmorHudListRow[2]).Text = SetName;
+                        ((HudStaticText)ArmorHudListRow[3]).Text = spells;
 
                     }
                 }
@@ -775,8 +788,6 @@ namespace GearFoundry
         {
             try
             {
-                //if ((DateTime.Now - LastGearSenseUpdate).TotalMilliseconds < 1000) { return; }
-                //else { LastGearSenseUpdate = DateTime.Now; }
 
                 if (!ArmorMainTab) { return; }
 
