@@ -150,7 +150,8 @@ namespace GearFoundry
 					//Enchantable Armors
 					if(wo.Values(LongValueKey.Unenchantable) == 0)
 					{
-						double observedarmortinks = wo.Values(LongValueKey.ArmorLevel) / 20;
+						double observedarmortinks = 0;
+						if(wo.LongKeys.Contains((int)LongValueKey.ArmorLevel)) {observedarmortinks = wo.Values(LongValueKey.ArmorLevel) / 20;}
 						double availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);
 						double basearmortinks = 0;
 						double cantrippenality = 0;
@@ -844,7 +845,7 @@ namespace GearFoundry
 			
 			public string SkillString()
 			{
-				if(SkillScore > 0) {return " SkillMods: " + SkillScore.ToString("N1");}
+				if(SkillScore > 0) {return " Skill Modifers: " + SkillScore.ToString("N1") + ",";}
 				else {return String.Empty;}
 				
 			}
@@ -877,14 +878,14 @@ namespace GearFoundry
 			
 			public string ArmorLevelComaparisonString()
 			{
-				return " ArmorScore " + ArmorScore.ToString("N1");
+				return " ArmorScore: " + ArmorScore.ToString("N0") + ",";
 			}
 
 			
 			
 			public string OffenseString()
 			{
-				return " Dam: " + OffenseScore.ToString("N0") ;
+				return " Damage Score: " + OffenseScore.ToString("N0") + "," ;
 			}
 			
 			//Because of the need to read the icons from the essences for damage types, this can't be read directly from wo.  Combined all for for ease of reference
@@ -1396,21 +1397,26 @@ namespace GearFoundry
 								if(wo.Values(LongValueKey.ArmorLevel) > 0 || wo.Values(LongValueKey.EquipableSlots) == 0x8000000)
 								{
 									result = IORString() +  GearScoreString() + wo.Name + SetString() +  ArmorLevelComaparisonString() + SpellDescriptions();
+									break;
 								}
 								else
 								{
-									result = IORString() + wo.Name + SetString() + SpellDescriptions() + WieldString() + ActivateString() + LoreString();
+									result = IORString() + GearScoreString() +  wo.Name + SpellDescriptions();
+									break;
 								}
-								break;
 							case ObjectClass.Gem:
 								if(Aetheriacheck)
 								{
-									result = IORString() + GearScoreString() + wo.Name + SetString() + WieldlvlString() + SpellDescriptions();
+									result = IORString() + GearScoreString() + wo.Name + SetString() + SpellDescriptions();
+									break;
 								}
-								result = IORString() + wo.Name + SetString() + WieldlvlString() + SpellDescriptions();
-								break;
+								else
+								{
+									result = IORString() + GearScoreString() + wo.Name + SetString() + SpellDescriptions();
+									break;
+								}
 							case ObjectClass.Jewelry:
-								result = IORString() + wo.Name + SetString() + ImbueString() + SpellDescriptions() + WieldString() + LoreString();
+								result = IORString() + GearScoreString() + wo.Name + SetString() + ImbueString() + SpellDescriptions() + WieldString() + LoreString();
 								break;
 							case ObjectClass.MeleeWeapon:
 							case ObjectClass.MissileWeapon:
