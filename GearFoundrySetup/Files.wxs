@@ -10,18 +10,18 @@
 						<File Id="LicenseFile" Name="license.rtf" Source="license.rtf"/>
 					</Component>
 					<!-- Switch for Debug vs Release compiles-->
-					<!--Component Id="GearFoundry" Guid="$(var.GFAddonID)" DiskId="1">
-						<File Id="GearFoundry" Name="GearFoundry.dll" Source="../GearFoundry/bin/release/GearFoundry.dll"/>
-					</Component-->
 					<Component Id="GearFoundry" Guid="$(var.GFAddonID)" DiskId="1">
-						<File Id="GearFoundry" Name="GearFoundry.dll" Source="../GearFoundry/bin/debug/GearFoundry.dll"/>
+						<File Id="GearFoundry" Name="GearFoundry.dll" Source="../GearFoundry/bin/release/GearFoundry.dll"/>
 					</Component>
+					<!--Component Id="GearFoundry" Guid="$(var.GFAddonID)" DiskId="1">
+						<File Id="GearFoundry" Name="GearFoundry.dll" Source="../GearFoundry/bin/debug/GearFoundry.dll"/>
+					</Component-->
 					<Component Id="GFVTInterop" Guid="$(var.GFVTIAddonID)" DiskId="1">
 						<File Id="GFVTI" Name="GFVTInterop.dll" Source="../GFVTInterOp/bin/release/GFVTInterop.dll"/>
 					</Component>
 				
 					<Component Id="GFRegSettings">
-						<RegistryKey Root="HKLM" Key="Software\Decal\Plugins\4be061a1-3f70-423c-8571-3542dd63373e">
+						<RegistryKey Root="HKLM" Key="Software\Decal\Plugins\$(var.GFAddonID)">
 							<RegistryValue Value="GearFoundry" Type="string"/>
 							<RegistryValue Name="Assembly" Value="GearFoundry.dll" Type="string"/>
 							<RegistryValue Name="Enabled" Value="1" Type="integer"/>
@@ -33,7 +33,7 @@
 					
 				
 					<Component Id="GFVTRegSettings">
-						<RegistryKey Root="HKLM" Key="Software\Decal\LootPlugins\cafc3e03-de72-417d-a2b8-aaa8145dc523">
+						<RegistryKey Root="HKLM" Key="Software\Decal\LootPlugins\$(var.GFVTIAddonID)">
 							<RegistryValue Value="GFVTInterOp" Type="string"/>
 							<RegistryValue Name="Assembly" Value="GFVTInterOp.dll" Type="string"/>
 							<RegistryValue Name="Object" Value="GFVTInterOp.LootPlugin" Type="string"/>
