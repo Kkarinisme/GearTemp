@@ -31,8 +31,8 @@ namespace GearFoundry
 		private List<int> ModifiedIOSpells = new List<int>();
 		
 		private List<int> ManaTankItems = new List<int>();
-		private List<IdentifiedObject> ItemTrackingList = new List<IdentifiedObject>();
-		private List<IdentifiedObject> SalvageItemsList = new  List<IdentifiedObject>();
+		private List<LootObject> ItemTrackingList = new List<LootObject>();
+		private List<LootObject> SalvageItemsList = new  List<LootObject>();
 		
 		private int ItemHudMoveId = 0;
  		
@@ -189,6 +189,7 @@ namespace GearFoundry
                 ItemHudView = new HudView("Inspector", ItemHudWidth, ItemHudHeight, new ACImage(0x6AA8));
     		//	ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ItemHudView.UserAlphaChangeable = false;
+    			ItemHudView.UserMinimizable = false;
     			ItemHudView.ShowInBar = false;
     			ItemHudView.Visible = true;
     			ItemHudView.UserResizeable = false;
@@ -580,7 +581,7 @@ namespace GearFoundry
     			}
     			if(col == 1)
     			{
-    				if(GISettings.ModifiedLooting) {HudToChat(ItemTrackingList[row].ModString(), 1);}
+    				if(GISettings.ModifiedLooting) {HudToChat(ItemTrackingList[row].GSReportString(), 1);}
     				else{HudToChat(ItemTrackingList[row].LinkString(), 1);}
     			}
     			if(col == 2)
@@ -603,7 +604,7 @@ namespace GearFoundry
 	    		{
 		    		ItemHudInspectorList.ClearRows();
 		    		   	    		
-		    	    foreach(IdentifiedObject item in ItemTrackingList)
+		    	    foreach(LootObject item in ItemTrackingList)
 		    	    {
 		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();
 		    	    	
@@ -621,7 +622,7 @@ namespace GearFoundry
 	    		}
 	    		if(InspectorUstTab)
 	    		{
-	    			foreach(IdentifiedObject ustitem in SalvageItemsList)
+	    			foreach(LootObject ustitem in SalvageItemsList)
 	    			{
 	    				ItemHudListRow = ItemHudUstList.AddRow();
 	    				((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;

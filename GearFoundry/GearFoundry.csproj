@@ -98,8 +98,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WrapperClass\MonsterObject.cs" />
-    <None Include="WrapperClass\IOMagToolsEcho.cs" />
+    <Compile Include="Initializers\Enums.cs" />
+    <Compile Include="WrapperClasses\LandscapeObject.cs" />
+    <Compile Include="WrapperClasses\LootObject.cs" />
+    <Compile Include="WrapperClasses\MonsterObject.cs" />
+    <None Include="WrapperClasses\IOMagToolsEcho.cs" />
     <EmbeddedResource Include="Defaults\Rules.xml">
       <LogicalName>Rules.xml</LogicalName>
       <SubType>Designer</SubType>
@@ -130,7 +133,7 @@
     <Compile Include="PluginCore.cs" />
     <Compile Include="HudModules\RemoteGear.cs" />
     <Compile Include="Views\MainView.cs" />
-    <Compile Include="WrapperClass\IdentifiedObject.cs" />
+    <None Include="WrapperClasses\IdentifiedObject.cs" />
     <Compile Include="HudModules\QuickSlotsHud.cs" />
     <Compile Include="Initializers\Definitions.cs" />
     <Compile Include="Initializers\Globals.cs" />

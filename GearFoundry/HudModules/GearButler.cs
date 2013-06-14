@@ -1130,7 +1130,7 @@ namespace GearFoundry
     			}
     			if(col == 1)
     			{
-    				try{HudToChat(new IdentifiedObject(ButlerInventory[row]).LinkString(), 2);}catch{}
+    				try{HudToChat(new LootObject(ButlerInventory[row]).LinkString(), 2);}catch{}
     			}
     			if(col == 3)
     			{    				

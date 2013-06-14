@@ -21,7 +21,7 @@ namespace GearFoundry
 	public partial class PluginCore
 	{
 		private List<int> LandscapeExclusionList = new List<int>();
-		private List<IdentifiedObject> LandscapeTrackingList = new List<IdentifiedObject>();
+		private List<LandscapeObject> LandscapeTrackingList = new List<LandscapeObject>();
 		private List<string> LandscapeFellowMemberTrackingList = new List<string>();
 		private bool mLandscapeInPortalSpace = true;
 		
@@ -146,7 +146,7 @@ namespace GearFoundry
 				{
 					if(LandscapeTrackingList.FindIndex(x => x.Name == name) < 0)
 					{
-						LandscapeTrackingList.Add(new IdentifiedObject(Core.WorldFilter.GetByName(name).First));
+						LandscapeTrackingList.Add(new LandscapeObject(Core.WorldFilter.GetByName(name).First));
 					}
 				}
 			}catch{}
@@ -161,7 +161,7 @@ namespace GearFoundry
 				if(e.New.Container != 0 || LandscapeExclusionList.Contains(e.New.Id)) {return;}
 				else
 				{
-					CheckLandscape(new IdentifiedObject(e.New));
+					CheckLandscape(new LandscapeObject(e.New));
 				}
 			} catch (Exception ex){LogError(ex);}
 			return;
@@ -213,13 +213,13 @@ namespace GearFoundry
 				
         		int PossibleLandscapeID = Convert.ToInt32(pMsg["object"]);	
         		if(Core.WorldFilter[PossibleLandscapeID].Container != 0 || LandscapeExclusionList.Contains(PossibleLandscapeID)) {return;}
-        		else{CheckLandscape(new IdentifiedObject(Core.WorldFilter[PossibleLandscapeID]));}
+        		else{CheckLandscape(new LandscapeObject(Core.WorldFilter[PossibleLandscapeID]));}
 				
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
         
-        private void CheckLandscape(IdentifiedObject IOLandscape)
+        private void CheckLandscape(LandscapeObject IOLandscape)
 		{
 			try
 			{
@@ -321,7 +321,7 @@ namespace GearFoundry
 			return;
 		}
 			
-		private void MonsterListCheckLandscape(ref IdentifiedObject IOLandscape)
+		private void MonsterListCheckLandscape(ref LandscapeObject IOLandscape)
 		{
 			try 
 			{		
@@ -343,7 +343,7 @@ namespace GearFoundry
 			return;
 		}
 		
-		private void TrophyListCheckLandscape(ref IdentifiedObject IOLandscape)
+		private void TrophyListCheckLandscape(ref LandscapeObject IOLandscape)
 		{	
 			try
 			{
@@ -974,7 +974,7 @@ namespace GearFoundry
 	    		
 	    		LandscapeHudList.ClearRows();
 	    		
-	    	    foreach(IdentifiedObject item in LandscapeTrackingList)
+	    	    foreach(LandscapeObject item in LandscapeTrackingList)
 	    	    {
 	    	    	LandscapeHudListRow = LandscapeHudList.AddRow();
 	    	    	

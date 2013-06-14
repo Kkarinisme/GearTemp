@@ -23,7 +23,7 @@ namespace GearFoundry
 	
 	    private List<SalvageRule> SalvageRulesList = new List<SalvageRule>();
         private List<WorldObject> InventorySalvage = new List<WorldObject>();
-		private Queue<IdentifiedObject> SalvageObjectQueue = new Queue<IdentifiedObject>();  
+		private Queue<LootObject> SalvageObjectQueue = new Queue<LootObject>();  
 			
 		string[] splitstring;
 		string[] splstr;
@@ -120,7 +120,7 @@ namespace GearFoundry
 			{
 				for(int i = 0; i < SalvageObjectQueue.Count; i ++)
 				{	
-					IdentifiedObject io_crush = SalvageObjectQueue.Dequeue();
+					LootObject io_crush = SalvageObjectQueue.Dequeue();
 					Host.Actions.SalvagePanelAdd(io_crush.Id);
 					host.Actions.SalvagePanelSalvage();
 					CombineSalvageBags();	

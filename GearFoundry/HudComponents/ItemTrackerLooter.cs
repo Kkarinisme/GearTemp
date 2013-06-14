@@ -32,6 +32,8 @@ namespace GearFoundry
 			{
 				Core.ContainerOpened += LootContainerOpened;
 				Core.WorldFilter.ChangeObject += new EventHandler<ChangeObjectEventArgs>(ItemHud_ChangeObject);
+				Core.ItemDestroyed += ItemTracker_ItemDestroyed;
+				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased; 
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -41,17 +43,38 @@ namespace GearFoundry
 			{
 				Core.ContainerOpened -= LootContainerOpened;
 				Core.WorldFilter.ChangeObject -= new EventHandler<ChangeObjectEventArgs>(ItemHud_ChangeObject);
+				Core.ItemDestroyed += ItemTracker_ItemDestroyed;
+				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased;
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		private void ItemTracker_ItemDestroyed(object sender, ItemDestroyedEventArgs e)
+		{
+			try
+			{
+				if(LootedCorpsesList.Contains(e.ItemGuid)) {LootedCorpsesList.RemoveAll(x => x == e.ItemGuid);}
+				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.ItemGuid)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.ItemGuid);}
+				if(WaitingVTIOs.Any(x => x.Id == e.ItemGuid)){WaitingVTIOs.RemoveAll(x => x.Id == e.ItemGuid);}
+			}catch(Exception ex){LogError(ex);}
+		}
 		
+		private void ItemTracker_ObjectReleased(object sender, ReleaseObjectEventArgs e)
+		{
+			try
+			{
+				if(LootedCorpsesList.Contains(e.Released.Id)) {LootedCorpsesList.RemoveAll(x => x == e.Released.Id);}
+				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.Released.Id)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.Released.Id);}
+				if(WaitingVTIOs.Any(x => x.Id == e.Released.Id)){WaitingVTIOs.RemoveAll(x => x.Id == e.Released.Id);}			
+			}catch(Exception ex){LogError(ex);}
+		}
+				
 		public class OpenContainer
 		{
 			public bool ContainerIsLooting = false;
 			public int ContainerGUID = 0;
 			public DateTime LastCheck;
 			public DateTime LootingStarted;
-			public List<IdentifiedObject> ContainerIOs = new List<PluginCore.IdentifiedObject>();
+			public List<LootObject> ContainerIOs = new List<PluginCore.LootObject>();
 		}
 		
 		private void ItemHud_ChangeObject(object sender, ChangeObjectEventArgs e)
@@ -114,8 +137,6 @@ namespace GearFoundry
 				
 				if(Core.WorldFilter.GetByContainer(container.Id).Count == 0) {return;}
 				
-				
-				
 				mOpenContainer.ContainerGUID = container.Id;
 				mOpenContainer.LastCheck = DateTime.Now;
 				mOpenContainer.LootingStarted = DateTime.Now;
@@ -124,7 +145,7 @@ namespace GearFoundry
 				{
 					if(!ItemExclusionList.Any(x => x == wo.Id))
 					{
-						mOpenContainer.ContainerIOs.Add(new IdentifiedObject(wo));
+						mOpenContainer.ContainerIOs.Add(new LootObject(wo));
 					}
 					SeparateItemsToID(mOpenContainer.ContainerIOs.Last());
 				}
@@ -148,8 +169,8 @@ namespace GearFoundry
 			{
 				//Check every 300 ms
 				if((DateTime.Now - mOpenContainer.LastCheck).TotalMilliseconds < 300) {return;}	
-				//if it's been at it 10s, it's not happening
-				if((DateTime.Now - mOpenContainer.LootingStarted).TotalSeconds > 10) {UnlockContainer();}
+				//if it's been at it 5s, it's not happening
+				if((DateTime.Now - mOpenContainer.LootingStarted).TotalSeconds > 5) {UnlockContainer();}
         		//ID function must clean these out to unlock container.  This will hold it open until all IDs complete.
 				if(mOpenContainer.ContainerIOs.Count > 0)
 				{
@@ -170,11 +191,13 @@ namespace GearFoundry
 			try
 			{
 				mOpenContainer.ContainerIsLooting = false;
+				mOpenContainer.ContainerGUID = 0;
+				mOpenContainer.ContainerIOs.Clear();
 				CoreManager.Current.RenderFrame -= new EventHandler<EventArgs>(RenderFrame_LootingCheck);					
 			}catch(Exception ex){LogError(ex);}
 		}
 			
-		private void SeparateItemsToID(IdentifiedObject IOItem)
+		private void SeparateItemsToID(LootObject IOItem)
 		{
 				try
 				{
@@ -253,20 +276,20 @@ namespace GearFoundry
         		//Bypass looter and use manual ID feature
         		if(PossibleItemID == Host.Actions.CurrentSelection && bReportItemStrings)
         		{
-        			ManualCheckItemForMatches(new IdentifiedObject(Core.WorldFilter[PossibleItemID]));
+        			ManualCheckItemForMatches(new LootObject(Core.WorldFilter[PossibleItemID]));
         		}  		
         		if(ItemIDListenList.Contains(PossibleItemID))
         		{
         			//It came back quit listening already....
         			ItemIDListenList.RemoveAll(x => x == PossibleItemID);
-        			CheckItemForMatches(new IdentifiedObject(Core.WorldFilter[PossibleItemID]));
+        			CheckItemForMatches(new LootObject(Core.WorldFilter[PossibleItemID]));
         		}
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
 		
 		
-		private void CheckItemForMatches(IdentifiedObject IOItem)
+		private void CheckItemForMatches(LootObject IOItem)
 		{
 			try
 			{
@@ -285,7 +308,7 @@ namespace GearFoundry
 				}
 				else
 				{
-					if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.ModString());}
+					if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.GSReportString());}
 					else {ReportStringToChat(IOItem.LinkString());}
 					EvaluateItemMatches(IOItem);
 				}
@@ -293,7 +316,7 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void EvaluateItemMatches(IdentifiedObject IOItem)
+		private void EvaluateItemMatches(LootObject IOItem)
 		{
 			try
 			{
@@ -362,7 +385,7 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 			
-		private List<IdentifiedObject> WaitingVTIOs = new List<IdentifiedObject>();
+		private List<LootObject> WaitingVTIOs = new List<LootObject>();
 		public int VTLinkDecision(int id, int reserved1, int reserved2)
 		{
 			try
@@ -400,7 +423,7 @@ namespace GearFoundry
 					}
 				}
 				
-				IdentifiedObject VTIO = new IdentifiedObject(Core.WorldFilter[id]);	
+				LootObject VTIO = new LootObject(Core.WorldFilter[id]);	
 				if(!VTIO.HasIdData)
 				{
 					Core.RenderFrame += new EventHandler<EventArgs>(DoesVTIOHaveID);
@@ -440,7 +463,7 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex); return 0;}
 		}
 		
-		private void SendVTIOtoCallBack(IdentifiedObject VTIO)
+		private void SendVTIOtoCallBack(LootObject VTIO)
 		{	
 			if(WaitingVTIOs.Count == 0) 
 			{

@@ -25,7 +25,7 @@ namespace GearFoundry
 	{
 		//Item Tracker Manual ID functions begin here
 		
-		private void ManualCheckItemForMatches(IdentifiedObject IOItem)
+		private void ManualCheckItemForMatches(LootObject IOItem)
 		{
 			try
 			{
@@ -37,7 +37,7 @@ namespace GearFoundry
 				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
 				
-				if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.ModString());}
+				if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.GSReportString());}
 				else {ReportStringToChat(IOItem.LinkString());}
 				
 			}catch(Exception ex){LogError(ex);}
@@ -45,11 +45,11 @@ namespace GearFoundry
 		
 		
 		// Item Tracker ID functions begin here
-		private void CheckSalvageItem(ref IdentifiedObject IOItemSalvage)
+		private void CheckSalvageItem(ref LootObject IOItemSalvage)
 		{
 			try
 			{
-				IdentifiedObject IoItemSalvageMirror = IOItemSalvage;
+				LootObject IoItemSalvageMirror = IOItemSalvage;
 				
 				if(IOItemSalvage.DValue(DoubleValueKey.SalvageWorkmanship) > 0)
 				{
@@ -68,7 +68,7 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void CheckManaItem(ref IdentifiedObject IOItemMana)
+		private void CheckManaItem(ref LootObject IOItemMana)
 		{
 			try
 			{
@@ -82,7 +82,7 @@ namespace GearFoundry
 			} catch(Exception ex){LogError(ex);}
 		}
 		
-		private void CheckValueItem(ref IdentifiedObject IOItemVal)
+		private void CheckValueItem(ref LootObject IOItemVal)
 		{
 			try
 			{
@@ -100,7 +100,7 @@ namespace GearFoundry
 			} catch(Exception ex){LogError(ex);}
 		}
 		
-		private void CheckUnknownScrolls(ref IdentifiedObject IOScroll)
+		private void CheckUnknownScrolls(ref LootObject IOScroll)
 		{
 			//TODO:  Refine this to make more useful if there is a community request
 			try
@@ -124,7 +124,7 @@ namespace GearFoundry
 		}
 		
 		
-		private void TrophyListCheckItem(ref IdentifiedObject IOItem)
+		private void TrophyListCheckItem(ref LootObject IOItem)
 		{	
 			try
 			{
@@ -144,7 +144,7 @@ namespace GearFoundry
 			return;
 		}
 		
-		private void CheckRulesItem(ref IdentifiedObject IOItemWithIDReference)
+		private void CheckRulesItem(ref LootObject IOItemWithIDReference)
 		{
 			
 			//Irq:  Note to self:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
@@ -152,7 +152,7 @@ namespace GearFoundry
 			{
 				
 				ModifiedIOSpells.Clear();
-				IdentifiedObject IOItemWithID = IOItemWithIDReference;
+				LootObject IOItemWithID = IOItemWithIDReference;
 
 				var AppliesToListMatches = from rules in ItemRulesList
 					where (rules.RuleAppliesTo & IOItemWithID.LValue(LongValueKey.Category)) == IOItemWithID.LValue(LongValueKey.Category)
@@ -323,7 +323,7 @@ namespace GearFoundry
 							{
 								
 								var reducedessencematches = from ruls in AppliesToListMatches
-									where IOItemWithID.BonusComparison >= ruls.EssenceModSum &&
+									where IOItemWithID.RatingScore >= ruls.EssenceModSum &&
 									IOItemWithID.EssenceLevel == ruls.RuleEssenceLevel &&
 									(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
 									((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0)

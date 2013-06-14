@@ -24,7 +24,7 @@ namespace GearFoundry
 		//UNDONE:  Need to complete logging and verify functionality of DEADME
 		private List<string> FellowMemberTrackingList = new List<string>();
 		private List<int> CorpseExclusionList = new List<int>();
-		private List<IdentifiedObject> CorpseTrackingList = new List<IdentifiedObject>();
+		private List<LandscapeObject> CorpseTrackingList = new List<LandscapeObject>();
 		private bool mCorpseTrackerInPoralSpace = true;
 		private List<string> PermittedCorpsesList = new List<string>(); 
 		public GearVisectionSettings ghSettings;	
@@ -151,7 +151,7 @@ namespace GearFoundry
 				if(e.New.ObjectClass == ObjectClass.Corpse) 
 				{
 					if(CorpseExclusionList.Contains(e.New.Id)){return;}
-					else{CheckCorpse(new IdentifiedObject(e.New));}
+					else{CheckCorpse(new LandscapeObject(e.New));}
 				}
 		
 			} catch (Exception ex){LogError(ex);}
@@ -194,13 +194,13 @@ namespace GearFoundry
         		if(Core.WorldFilter[PossibleCorpseID].ObjectClass == ObjectClass.Corpse)
 				{
         			if(CorpseExclusionList.Contains(PossibleCorpseID)){return;}
-        			else{CheckCorpse(new IdentifiedObject(Core.WorldFilter[PossibleCorpseID]));}
+        			else{CheckCorpse(new LandscapeObject(Core.WorldFilter[PossibleCorpseID]));}
 				}
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
         
-        private void CheckCorpse(IdentifiedObject IOCorpse)
+        private void CheckCorpse(LandscapeObject IOCorpse)
 		{
 			try
 			{	
@@ -785,7 +785,7 @@ namespace GearFoundry
 	    		
 	    		CorpseHudList.ClearRows();
   	    		
-	    	    foreach(IdentifiedObject corpse in CorpseTrackingList)
+	    	    foreach(LandscapeObject corpse in CorpseTrackingList)
 	    	    {
 	    	    	CorpseHudListRow = CorpseHudList.AddRow();
 	    	    	
