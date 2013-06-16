@@ -990,8 +990,6 @@ namespace GearFoundry
                 SaveSettings();
                 if (bArmorHudEnabled) 
                 {
-                   // if (File.Exists(armorSettingsFilename))
-                   // { getArmorHudSettings(); }
                     RenderArmorHud();
 
                 }
@@ -1007,16 +1005,50 @@ namespace GearFoundry
         {
 
             try{
-                WriteToChat("I am in function to get armorhud settings");
                     
                 xdocArmorSettings = XDocument.Load(armorSettingsFilename);
                 ArmorHudWidth = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudWidth").Value);
                  ArmorHudHeight = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudHeight").Value);
-                WriteToChat("ArmorHudWidth: " + ArmorHudWidth.ToString());
             }
             catch (Exception ex) { LogError(ex); }
 
         }
+
+        void chkInventoryHud_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                binventoryHudEnabled = e.Checked;
+
+                SaveSettings();
+                if (binventoryHudEnabled)
+                {
+                    // if (File.Exists(armorSettingsFilename))
+                    // { getArmorHudSettings(); }
+                    RenderInventoryHud();
+
+                }
+                else { DisposeInventoryHud(); }
+
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
+
+        void getInventoryHudSettings()
+        {
+
+            try
+            {
+                xdocInventorySettings = XDocument.Load(inventorySettingsFilename);
+                InventoryHudWidth = Convert.ToInt32(xdocInventorySettings.Element("Settings").Element("Setting").Element("InventoryHudWidth").Value);
+                InventoryHudHeight = Convert.ToInt32(xdocInventorySettings.Element("Settings").Element("Setting").Element("InventoryHudHeight").Value);
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
 
         //Gear Filter Settings
         void chkEnableTextFiltering_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)

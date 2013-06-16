@@ -305,13 +305,9 @@ namespace GearFoundry
 
       private static bool bvulnedIconsEnabled;
         
-        private static bool binventoryEnabled;
-        private static bool binventoryBurdenEnabled;
-        private static bool binventoryCompleteEnabled;
-        private static bool binventoryWaitingEnabled;
-        //private static bool bsalvageCombEnabled;
-        private static bool btoonStatsEnabled;
-        private static bool btoonArmorEnabled;
+         private static bool btoonArmorEnabled;
+
+        //Corpse Hud Flags
         private static bool bCorpseHudEnabled;
  
         //Loot Flags
@@ -324,8 +320,11 @@ namespace GearFoundry
 
         private static bool bRemoteGearEnabled;
 
-        //Misc flags
+        //Inventory flags
         private static bool bArmorHudEnabled;
+        private static bool binventoryHudEnabled;
+        private static bool btoonStatsEnabled;
+
   
 		//Landscape Tracker Flags
         private static bool bLandscapeHudEnabled;   

@@ -408,7 +408,6 @@ namespace GearFoundry
             try
             {
 
-                WriteToChat("I am in Render armor hud");
                 if (ArmorHudView != null)
                 {
                     DisposeArmorHud();
@@ -423,7 +422,7 @@ namespace GearFoundry
                 {
                     getArmorHudSettings();
                 }
-                if (ArmorHudWidth == 0) { ArmorHudWidth = ArmorHudFirstWidth; WriteToChat("Armor Hud width: " + ArmorHudWidth.ToString()); }
+                if (ArmorHudWidth == 0) { ArmorHudWidth = ArmorHudFirstWidth;  }
                 if (ArmorHudHeight == 0) { ArmorHudHeight = ArmorHudFirstHeight; }
 
                 ArmorHudView = new HudView("Armor", ArmorHudWidth, ArmorHudHeight, new ACImage(0x6AA5));

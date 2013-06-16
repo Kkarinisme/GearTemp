@@ -28,6 +28,379 @@ namespace GearFoundry
     {
         WindowsTimer mInventoryTimer = null;
         int inventoryTimer = 0;
+        private bool InventoryMainTab;
+        private bool InventorySettingsTab;
+        private int InventoryHudWidth = 0;
+        private int InventoryHudHeight = 0;
+        private int InventoryHudFirstWidth = 400;
+        private int InventoryHudFirstHeight = 300;
+        private int InventoryHudWidthNew;
+        private HudFixedLayout InventoryHudLayout = null;
+        private HudTabView InventoryHudTabView = null;
+        private HudFixedLayout InventoryHudTabLayout = null;
+        private HudList InventoryHudList = null;
+        private HudList.HudListRowAccessor InventoryHudListRow = null;
+        private const int InventoryRemoveCircle = 0x60011F8;
+
+        private HudFixedLayout InventoryHudSettings;
+        private int InventoryHudHeightNew;
+        private HudView InventoryHudView;
+        private string inventorySettingsFilename;
+        private XDocument xdocGenArmor;
+        private XDocument xdocArmor;
+        private XDocument xdocArmorSettings;
+        private XDocument xdocAllStats;
+
+        private string inventoryFilename = null;
+        private string genInventoryFilename = null;
+        private string holdingInventoryFilename = null;
+        private string InventorySettingsFilename = null;
+        private static bool binventoryEnabled;
+        private static bool binventoryBurdenEnabled;
+        private static bool binventoryCompleteEnabled;
+        private static bool binventoryWaitingEnabled;
+
+
+
+
+        private void RenderInventoryHud()
+        {
+
+            try
+            {
+
+                WriteToChat("I am in Render Inventory hud");
+                if (InventoryHudView != null)
+                {
+                    DisposeInventoryHud();
+                }
+                if (inventorySettingsFilename == "" || inventorySettingsFilename == null) { inventorySettingsFilename = currDir + @"\InventorySettings.xml"; }
+
+
+                if (InventoryHudWidth == 0)
+                {
+                    getInventoryHudSettings();
+                }
+                if (InventoryHudWidth == 0) { InventoryHudWidth = InventoryHudFirstWidth;  }
+                if (InventoryHudHeight == 0) { InventoryHudHeight = InventoryHudFirstHeight; }
+
+                InventoryHudView = new HudView("Inventory", InventoryHudWidth, InventoryHudHeight, new ACImage(0x6AA5));
+                InventoryHudView.UserAlphaChangeable = false;
+                InventoryHudView.ShowInBar = false;
+                InventoryHudView.UserResizeable = false;
+                InventoryHudView.Visible = true;
+                InventoryHudView.Ghosted = false;
+                InventoryHudView.UserMinimizable = false;
+                InventoryHudView.UserClickThroughable = false;
+                InventoryHudView.LoadUserSettings();
+
+                InventoryHudLayout = new HudFixedLayout();
+                InventoryHudView.Controls.HeadControl = ArmorHudLayout;
+
+                InventoryHudTabView = new HudTabView();
+                InventoryHudLayout.AddControl(InventoryHudTabView, new Rectangle(0, 0, InventoryHudWidth, InventoryHudHeight));
+
+                InventoryHudTabLayout = new HudFixedLayout();
+                InventoryHudTabView.AddTab(InventoryHudTabLayout, "Inventory");
+
+                InventoryHudSettings = new HudFixedLayout();
+                InventoryHudTabView.AddTab(InventoryHudSettings, "Settings");
+
+                InventoryHudTabView.OpenTabChange += InventoryHudTabView_OpenTabChange;
+                InventoryHudView.Resize += InventoryHudView_Resize;
+
+                RenderInventoryTabLayout();
+
+                //      SubscribeArmorEvents();
+
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+        }
+
+        private void InventoryHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+                bool bw = Math.Abs(InventoryHudView.Width - InventoryHudWidth) > 20;
+                bool bh = Math.Abs(InventoryHudView.Height - InventoryHudHeight) > 20;
+                if (bh || bw)
+                {
+                    InventoryHudWidthNew = InventoryHudView.Width;
+                    InventoryHudHeightNew = InventoryHudView.Height;
+                    MasterTimer.Tick += InventoryResizeTimerTick;
+                }
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+
+
+
+        }
+
+        private void InventoryResizeTimerTick(object sender, EventArgs e)
+        {
+            InventoryHudWidth = InventoryHudWidthNew;
+            InventoryHudHeight = InventoryHudHeightNew;
+            MasterTimer.Tick -= InventoryResizeTimerTick;
+            RenderInventoryHud();
+
+        }
+
+        private void SaveInventorySettings()
+        {
+            try
+            {
+                if (inventorySettingsFilename == "" || inventorySettingsFilename == null) { inventorySettingsFilename = currDir + @"\InventorySettings.xml"; }
+                WriteToChat("I am in save inventory settings and inventory settings filename is " + inventorySettingsFilename);
+                xdoc = new XDocument(new XElement("Settings"));
+                xdoc.Element("Settings").Add(new XElement("Setting",
+                    new XElement("InventoryHudWidth", InventoryHudWidth),
+                    new XElement("InventoryHudHeight", InventoryHudHeight)));
+                xdoc.Save(inventorySettingsFilename);
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
+
+
+        private void InventoryHudTabView_OpenTabChange(object sender, System.EventArgs e)
+        {
+            try
+            {
+                switch (InventoryHudTabView.CurrentTab)
+                {
+                    case 0:
+                        DisposeInventorySettingsLayout();
+                        RenderInventoryTabLayout();
+                        return;
+                    case 1:
+                        DisposeInventoryTabLayout();
+
+                        RenderInventorySettingsTabLayout();
+                        break;
+                }
+
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
+
+        private void InventoryTabLayout()
+        {
+            try
+            {
+                //lblToonArmorName = new HudStaticText();
+                //lblToonLevel = new HudStaticText();
+                //lblToonMaster = new HudStaticText();
+                //ArmorHudList = new HudList();
+                //ArmorHudTabLayout.AddControl(lblToonArmorName, new Rectangle(0, 0, ArmorHudWidth / 2, 16));
+                //ArmorHudTabLayout.AddControl(lblToonLevel, new Rectangle(ArmorHudWidth / 2 + 10, 0, ArmorHudWidth / 4, 16));
+                //ArmorHudTabLayout.AddControl(lblToonMaster, new Rectangle(ArmorHudWidth * 3 / 4 + 10, 0, ArmorHudWidth / 4, 16));
+
+                //ArmorHudTabLayout.AddControl(ArmorHudList, new Rectangle(0, 20, ArmorHudWidth, ArmorHudHeight));
+
+                //ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
+                //ArmorHudList.AddColumn(typeof(HudPictureBox), Convert.ToInt32(.05 * ArmorHudWidth), null);
+                //ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.25 * ArmorHudWidth), null);
+                //ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.18 * ArmorHudWidth), null);
+                //ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.52 * ArmorHudWidth), null);
+
+                //ArmorHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
+
+                //    UpdateArmorHud();
+
+                InventoryMainTab = true;
+                try
+                {
+                   // FillArmorHudList();
+                }
+
+                catch (Exception ex) { LogError(ex); }
+
+
+
+
+            }
+
+            catch (Exception ex) { LogError(ex); }
+        }
+
+
+        private void DisposeInventoryTabLayout()
+        {
+            try
+            {
+                if (!InventoryMainTab) { return; }
+
+                InventoryHudList.Click -= (sender, row, col) => InventoryHudList_Click(sender, row, col);
+                InventoryHudList.Dispose();
+
+                InventoryMainTab = false;
+
+
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
+        private void RenderInventorySettingsTabLayout()
+        {
+            try
+            {
+
+                //List<XElement> names = new List<XElement>();
+                //IEnumerable<XElement> prenames = xdocGenArmor.Element("Objs").Descendants("Obj");
+                //var lstsorted = from element in prenames
+                //                orderby element.Element("ToonName").Value ascending
+
+                //                select element;
+                //names.AddRange(lstsorted);
+
+                //ControlGroup myToonNames = new ControlGroup();
+                //cboToonArmorName = new HudCombo(myToonNames);
+
+                //cboToonArmorName.Change += (sender, index) => cboToonArmorName_Change(sender, index);
+                //btnInventoryArmor = new HudButton();
+                //btnInventoryArmor.Text = "Inventory Armor";
+                //btnInventoryArmor.Hit += (sender, index) => btnInventoryArmor_Hit(sender, index);
+
+
+
+                //lstAllToonName = new List<string>();
+                //try
+                //{
+                //    string name = "";
+                //    foreach (XElement el in names)
+                //    {
+                //        name = el.Element("ToonName").Value;
+                //        int i = 0;
+                //        if (!lstAllToonName.Contains(name))
+                //        {
+                //            try
+                //            {
+                //                lstAllToonName.Add(name);
+                //                cboToonArmorName.AddItem(name, i);
+                //                i++;
+                //            }
+                //            catch (Exception ex) { LogError(ex); }
+
+                //        }
+                //    }
+                //}
+                //catch (Exception ex) { LogError(ex); }
+
+
+                //lblToonArmorNameInfo = new HudStaticText();
+                //lblToonArmorNameInfo.Text = "Name of toon whose armor is being studied:";
+
+                //ArmorHudSettings.AddControl(btnInventoryArmor, new Rectangle(5, 20, 100, 20));
+
+                //ArmorHudSettings.AddControl(lblToonArmorNameInfo, new Rectangle(5, 60, ArmorHudWidth, 16));
+
+                //ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(10, 75, ArmorHudWidth - 20, 16));
+
+
+
+                InventorySettingsTab = true;
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
+        //private void cboToonArmorName_Change(object sender, EventArgs e)
+        //{
+        //    toonArmorName = lstAllToonName[cboToonArmorName.Current];
+        //    //  WriteToChat(toonArmorName + "has been selected");
+        //    lblToonArmorName.Text = toonArmorName;
+
+
+        //}
+
+        private void btnInventoryArmor_Hit(object sender, EventArgs e)
+        {
+            doGetArmor();
+
+        }
+
+        private void DisposeArmorSettingsLayout()
+        {
+            try
+            {
+                if (!ArmorSettingsTab) { return; }
+                btnInventoryArmor = null;
+                btnInventoryArmor.Hit -= (sender, index) => btnInventoryArmor_Hit(sender, index);
+                cboToonArmorName = null;
+
+                cboToonArmorName.Change -= (sender, index) => cboToonArmorName_Change(sender, index);
+
+
+                ArmorSettingsTab = false;
+            }
+            catch { }
+        }
+
+
+
+        private void DisposeInventoryHud()
+        {
+
+            try
+            {
+                SaveInventorySettings();
+                UnsubscribeInventoryEvents();
+                try { DisposeInventoryTabLayout(); }
+                catch { }
+                try { DisposeInventorySettingsLayout(); }
+                catch { }
+
+                InventoryHudSettings.Dispose();
+                InventoryHudLayout.Dispose();
+                InventoryHudTabLayout.Dispose();
+                InventoryHudTabView.Dispose();
+                InventoryHudView.Dispose();
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+        }
+
+        private void UnsubscribeInventoryEvents()
+        {
+            InventoryHudTabView.OpenTabChange -= InventoryHudTabView_OpenTabChange;
+            InventoryHudView.Resize -= InventoryHudView_Resize;
+            MasterTimer.Tick -= InventoryResizeTimerTick;
+
+
+        }
+
+        //private void ArmorHudList_Click(object sender, int row, int col)
+        //{
+        //    try
+        //    {
+        //        int mrow = row;
+        //        currentel = myChoice[row];
+        //        string armorobjName = currentel.Element("ArmorName").Value;
+        //        string armorobjAl = currentel.Element("ArmorAl").Value;
+        //        string armorobjWork = currentel.Element("ArmorWork").Value;
+        //        string armorobjTinks = currentel.Element("ArmorTink").Value;
+        //        string armorobjLevel = currentel.Element("ArmorWieldValue").Value;
+        //        int armorobjArmorSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
+        //        int armorobjCovers = Convert.ToInt32(currentel.Element("ArmorCovers").Value);
+        //        string objArmorSetName = SetsIndex[armorobjArmorSet].name;
+
+        //        message = armorobjName + ", Al: " + armorobjAl + " , Work: " + armorobjWork + ", Tinks: " + armorobjTinks + ", Armor Wield Level: " +
+        //            armorobjLevel + ", Set: " + objArmorSetName;
+        //        WriteToChat(message);
+
+
+        //        UpdateLandscapeHud();
+
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //    return;
+        //}
+
+        
+        
         void btnUpdateInventory_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
             GearFoundry.PluginCore.WriteToChat("The button to update inventory was clicked");
@@ -244,7 +617,7 @@ namespace GearFoundry
             {
               //  objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
                 objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
-               objArmorSetName = ArmorSetsInvList[cmbArmorSet.Selected].name;
+                objArmorSetName = ArmorSetsInvList[cmbArmorSet.Selected].name;
                 GearFoundry.PluginCore.WriteToChat("ArmorSet index = " + cmbArmorSet.Selected); 
                  GearFoundry.PluginCore.WriteToChat("ArmorSet ID = " + ArmorSetsInvList[cmbArmorSet.Selected].ID); 
                  GearFoundry.PluginCore.WriteToChat("ArmorSet Name = " + ArmorSetsInvList[cmbArmorSet.Selected].name); 
