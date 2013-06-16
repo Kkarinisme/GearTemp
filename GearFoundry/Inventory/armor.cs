@@ -52,6 +52,7 @@ namespace GearFoundry
         private HudStaticText lblToonLevel;
         private HudStaticText lblToonMaster;
         private HudCombo cboToonArmorName;
+        private HudButton btnInventoryArmor;
 
         private string toonArmorName = "";
 
@@ -136,35 +137,36 @@ namespace GearFoundry
                 int na = mWaitingForArmorID.Count;
                      if (mWaitingForArmorID.Count > 0)
                     {
+                         WriteToChat("Armor waiting for id: " + na.ToString());
 
                         mArmorCountWait();
                     }
 
-                    else if (mWaitingForArmorID.Count == 0)
-                    {
+                     else if (mWaitingForArmorID.Count == 0)
+                     {
 
-                        try
-                        {
-                            xdocArmor.Save(armorFilename);
-                            XDocument xdocGenArmor = XDocument.Load(genArmorFilename);
-                            xdocGenArmor.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
+                         try
+                         {
+                             xdocArmor.Save(armorFilename);
+                             XDocument xdocGenArmor = XDocument.Load(genArmorFilename);
+                             xdocGenArmor.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
 
-                            xdocGenArmor.Root.Add(XDocument.Load(armorFilename).Root.Elements());
+                             xdocGenArmor.Root.Add(XDocument.Load(armorFilename).Root.Elements());
 
-                            xdocGenArmor.Save(genArmorFilename);
-                            GearFoundry.PluginCore.WriteToChat("General Armor file has been saved. ");
+                             xdocGenArmor.Save(genArmorFilename);
+                             GearFoundry.PluginCore.WriteToChat("General Armor file has been saved. ");
 
-                        }
-                        catch (Exception ex) { LogError(ex); }
+                         }
+                         catch (Exception ex) { LogError(ex); }
 
-                    }
 
-                    m = 30;
-                    k = 0;
-                    n = 0;
-                    mWaitingForID = null;
-                    xdoc = null;
 
+                         m = 30;
+                         k = 0;
+                         n = 0;
+                         mWaitingForID = null;
+                         xdoc = null;
+                     }
                 
             }
 
@@ -542,11 +544,11 @@ namespace GearFoundry
                 
                 ArmorHudTabLayout.AddControl(ArmorHudList, new Rectangle(0,20, ArmorHudWidth, ArmorHudHeight));
 
-                ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
+                //ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
                 ArmorHudList.AddColumn(typeof(HudPictureBox), Convert.ToInt32(.05*ArmorHudWidth), null);
+                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.25 * ArmorHudWidth), null);
                 ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.18 * ArmorHudWidth), null);
-                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.20 * ArmorHudWidth), null);
-                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.57 * ArmorHudWidth), null);
+                ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.52 * ArmorHudWidth), null);
 
                 ArmorHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
 
@@ -588,8 +590,9 @@ namespace GearFoundry
                         string armorclass = el.Element("ArmorClass").Value;
                         int nset = Convert.ToInt32(el.Element("ArmorSet").Value);
                         string SetName = "";
-                        if (armorclass == "Armor") { SetName = ArmorSetsInvList[nset].name; }
-                      
+                       // if (armorclass == "Armor") { SetName = ArmorSetsInvList[nset].name; }
+                        if (armorclass == "Armor") { SetName = SetsIndex[nset].name; }
+                        
                         //int armorobjArmorSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
                         //string objArmorSetName = ArmorSetsInvList[armorobjArmorSet].name;
 
@@ -666,6 +669,9 @@ namespace GearFoundry
                 cboToonArmorName = new HudCombo(myToonNames);
 
                 cboToonArmorName.Change += (sender,index) => cboToonArmorName_Change(sender,index);
+                btnInventoryArmor = new HudButton();
+                btnInventoryArmor.Text = "Inventory Armor";
+                btnInventoryArmor.Hit += (sender,index) => btnInventoryArmor_Hit(sender,index);
 
 
 
@@ -694,9 +700,12 @@ namespace GearFoundry
 
                 lblToonArmorNameInfo = new HudStaticText();
                 lblToonArmorNameInfo.Text = "Name of toon whose armor is being studied:";
-                ArmorHudSettings.AddControl(lblToonArmorNameInfo,new Rectangle(0,10,ArmorHudWidth,16));
 
-               ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(5, 25, ArmorHudWidth-20, 16));
+                ArmorHudSettings.AddControl(btnInventoryArmor, new Rectangle(5, 20, 100, 20));
+
+                ArmorHudSettings.AddControl(lblToonArmorNameInfo,new Rectangle(5,60,ArmorHudWidth,16));
+
+               ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(10, 75, ArmorHudWidth-20, 16));
 
 
  
@@ -713,11 +722,24 @@ namespace GearFoundry
  
             
         }
+
+        private void btnInventoryArmor_Hit(object sender, EventArgs e)
+        {
+            doGetArmor();
+
+        }
+
         private void DisposeArmorSettingsLayout()
         {
             try
             {
                 if (!ArmorSettingsTab) { return; }
+                btnInventoryArmor = null;
+                btnInventoryArmor.Hit -= (sender, index) => btnInventoryArmor_Hit(sender, index);
+                cboToonArmorName = null;
+
+                cboToonArmorName.Change -= (sender,index) => cboToonArmorName_Change(sender,index);
+
 
                 ArmorSettingsTab = false;
             }
@@ -770,7 +792,7 @@ namespace GearFoundry
                 string armorobjLevel = currentel.Element("ArmorWieldValue").Value;
                 int armorobjArmorSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
                 int armorobjCovers = Convert.ToInt32(currentel.Element("ArmorCovers").Value);
-                string objArmorSetName = ArmorSetsInvList[armorobjArmorSet].name;
+                string objArmorSetName = SetsIndex[armorobjArmorSet].name;
 
                 message = armorobjName + ", Al: " + armorobjAl + " , Work: " + armorobjWork + ", Tinks: " + armorobjTinks + ", Armor Wield Level: " + 
                     armorobjLevel + ", Set: " + objArmorSetName;

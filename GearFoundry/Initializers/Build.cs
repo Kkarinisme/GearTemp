@@ -30,7 +30,7 @@ namespace GearFoundry
 	{
 		DirectoryInfo pluginPersonalFolder = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Decal Plugins\");
 		bool writelists = false;
-
+        
         //From: Karin.  Lists for use with XDocuments composed of XElements
         private List<XElement> mSortedMobsList = new List<XElement>();
         private List<XElement> mSortedTrophiesList = new List<XElement>();
@@ -637,6 +637,7 @@ namespace GearFoundry
 			{
 				IDNameLoadable info = new IDNameLoadable(i++, load);
 				SetsIndex.Add(info);
+               
 			}
 			
 			if(writelists){
@@ -1301,7 +1302,7 @@ namespace GearFoundry
             ArmorSetsInvList = new List<IDNameLoadable>();
             IDNameLoadable info = new IDNameLoadable(0,"None");
             ArmorSetsInvList.Add(info);
-            //cmbArmorSet.Add(info.name);
+            cmbArmorSet.Add(info.name);
             var armors = from sets in SetsIndex
                          where !sets.name.Contains("Weave") && !sets.name.Contains("Unknown") && !sets.name.Contains("Sigil")
                             orderby sets.name
@@ -1309,7 +1310,7 @@ namespace GearFoundry
             foreach (var armorsets in armors)
             {
                 ArmorSetsInvList.Add(armorsets);
-                //cmbArmorSet.Add(armorsets.name);
+                cmbArmorSet.Add(armorsets.name);
             }
             var armors2 = from sets2 in SetsIndex
                          where sets2.name.Contains("Weave") 
@@ -1318,7 +1319,7 @@ namespace GearFoundry
             foreach (var armorsets2 in armors2)
             {
                 ArmorSetsInvList.Add(armorsets2);
-                //cmbArmorSet.Add(armorsets2.name);
+                cmbArmorSet.Add(armorsets2.name);
             }
 
 

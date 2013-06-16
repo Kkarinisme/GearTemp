@@ -244,8 +244,8 @@ namespace GearFoundry
             {
               //  objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
                 objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
-                objArmorSetName = ArmorSetsInvList[cmbArmorSet.Selected].name;
-                 GearFoundry.PluginCore.WriteToChat("ArmorSet index = " + cmbArmorSet.Selected); 
+               objArmorSetName = ArmorSetsInvList[cmbArmorSet.Selected].name;
+                GearFoundry.PluginCore.WriteToChat("ArmorSet index = " + cmbArmorSet.Selected); 
                  GearFoundry.PluginCore.WriteToChat("ArmorSet ID = " + ArmorSetsInvList[cmbArmorSet.Selected].ID); 
                  GearFoundry.PluginCore.WriteToChat("ArmorSet Name = " + ArmorSetsInvList[cmbArmorSet.Selected].name); 
            
@@ -1152,41 +1152,6 @@ namespace GearFoundry
                 try
                 {
                     objIcon = Convert.ToInt32(childElement.Element("ObjIcon").Value);
-
-                    //if (objClass == 4 || objClass == 5 || objClass == 6)
-                    //{
-                    //    objIcon = Convert.ToInt32(childElement.Element("ObjIcon").Value);
-                    //    Int32 objIconOverlay = Convert.ToInt32(childElement.Element("IconOverlay").Value);
-                    //    Int32 objIconUnderlay = Convert.ToInt32(childElement.Element("IconUnderlay").Value);
-
-                    //    ACImage mInventoryIcon;
-                    //    HudImageStack mInventoryIconStack = new HudImageStack();
-                    //    Rectangle rec = new Rectangle(0, 0, 20, 20);
-                    //    ACImage newIcon;
-                    //    try
-                    //    {
-
-                    //        //if (objIconUnderlay != 0)
-                    //        //{
-                    //        //    mInventoryIcon = new ACImage(objIconUnderlay,ACImage.eACImageDrawOptions.DrawTiled);
-                    //        //    mInventoryIconStack.Add(rec, mInventoryIcon);
-                    //        //}
-
-                    //       // mInventoryIcon = new ACImage(0x6000000 + objIcon +  0x6000000 + objIconOverlay, ACImage.eACImageDrawOptions.DrawTiled );
-                    //      //  mInventoryIconStack.Add(rec, mInventoryIcon);   
-
-                    //        //if (objIconOverlay != 0)
-                    //        //{
-                    //        //    mInventoryIcon = new ACImage(0x6000000 + objIconOverlay, ACImage.eACImageDrawOptions.DrawTiled);
-                    //        //    mInventoryIconStack.Add(rec, mInventoryIcon);
-                    //        //    //   Icon newIcon = 
-                    //        //}
-
-                    //        newIcon = (mInventoryIcon);
-                    //        //objIcon = newIcon;
-                    //    }
-                    //    catch (Exception ex) { LogError(ex); }
-                    //}
 
                     objName = childElement.Element("ObjName").Value;
                     if (objClassName.Contains("Salvage"))
