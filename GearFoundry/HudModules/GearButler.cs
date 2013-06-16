@@ -1373,7 +1373,6 @@ namespace GearFoundry
 			}
 		}
 		
-		//TODO:  This still seems buggy.  Convert it back to using the timer to do it.
 		private void MaidProcessRingKeys()
 		{
 			try

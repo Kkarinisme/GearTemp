@@ -19,12 +19,7 @@ using System.Xml;
 namespace GearFoundry
 {
 	public partial class PluginCore
-	{
-		
-
-		
-
-	 	
+	{ 	
 		private void Inspector_ActionComplete(object sender, System.EventArgs e)
 		{
 			try
