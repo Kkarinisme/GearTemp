@@ -128,16 +128,26 @@ namespace GearFoundry
 		{	
 			try
 			{
-				
-				
 				string namecheck = IOItem.Name;
 				var matches = from XTrophies in mSortedTrophiesListChecked
 					where (namecheck.ToLower().Contains((string)XTrophies.Element("key").Value.ToLower()) && !Convert.ToBoolean(XTrophies.Element("isexact").Value)) ||
-					(namecheck == (string)XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value))
-							  select XTrophies;
-					
+						   (namecheck == (string)XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value))
+						 select XTrophies;
+			
 				if(matches.Count() > 0)
 				{
+					int LootMaxCheck = Convert.ToInt32(matches.First().Element("Guid").Value);
+					int InventoryCount = 0;
+					if(Convert.ToBoolean(matches.First().Element("iseact").Value))
+					{
+						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name == (string)matches.First().Element("key").Value).Count();
+					}
+					else
+					{
+						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name.Contains((string)matches.First().Element("key").Value)).Count();
+					}
+					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) {return;}
+						 
 					IOItem.IOR = IOResult.trophy;
 				}				
 			} catch(Exception ex){LogError(ex);}
@@ -427,8 +437,6 @@ namespace GearFoundry
 								if(rule.RuleMcModAttack > ((IOItemWithID.DValue(DoubleValueKey.AttackBonus) - 1 ) * 100)) {RuleName = String.Empty; goto Next;}
 							}
 						}
-	//					//Irquk:  confirmed functional for Missile D bonus
-						//TODO:  Check magic D bonus
 						if(rule.RuleMagicD > 0)
 						{
 								if(IOItemWithID.DValue(DoubleValueKey.MagicDBonus) > 0)

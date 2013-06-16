@@ -291,10 +291,57 @@ namespace GearFoundry
     			ItemHudUstList.AddColumn(typeof(HudStaticText), 200, null);
     			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
     			ItemHudUstLayout.AddControl(ItemHudUstList, new Rectangle(0,30,ItemHudWidth,ItemHudHeight));
-		
     			
+    			ItemHudUstList.Click += ItemHudUstList_Click;
+    			ItemHudUstButton.Hit += ItemHudUstButton_Hit;
+				
     			InspectorUstTab = true;
+    			
+    			UpdateItemHud();
+    			
+    			
     		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void ItemHudUstButton_Hit(object sender, EventArgs e)
+    	{
+    		try
+    		{
+    			foreach(LootObject item in SalvageItemsList)
+    			{
+    				SalvageObjectQueue.Enqueue(item);
+    			}
+    			SalvageItems();
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+
+    	
+    	private void ItemHudUstList_Click(object sender, int row, int col)
+    	{
+    		try
+    		{
+    			//Salvage
+    			if(col == 0)
+    			{
+    				Core.Actions.SalvagePanelAdd(SalvageItemsList[row].Id);
+    				Core.Actions.SalvagePanelSalvage();
+    			}
+    			//Report
+    			if(col == 1)
+    			{
+    				HudToChat(SalvageItemsList[row].GSReportString(), 1);
+    			}
+    			//Remove
+    			if(col == 2)
+    			{
+    				SalvageItemsList.RemoveAt(row);
+    			}
+    			
+    			UpdateItemHud();
+    			
+    		}catch(Exception ex){LogError(ex);}
+    		
     	}
     	
     	private void DisposeItemHudUstTab()
@@ -575,9 +622,7 @@ namespace GearFoundry
     			{
     				Core.Actions.MoveItem(ItemTrackingList[row].Id,Core.CharacterFilter.Id,0,true);  
     				ItemHudMoveId = ItemTrackingList[row].Id;
-    				ItemTrackingList.RemoveAll(x => x.Id == ItemTrackingList[row].Id);
-    				
-    				
+    				ItemTrackingList.RemoveAll(x => x.Id == ItemTrackingList[row].Id);	
     			}
     			if(col == 1)
     			{

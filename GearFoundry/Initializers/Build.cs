@@ -560,8 +560,6 @@ namespace GearFoundry
 
 		private void CreateImbueList()
 		{
-			// Flags suck....
-			// TODO:  Spend a fortune finishing this list....
 			IDNameLoadable info;
 			info = new IDNameLoadable(0x1 ,"Critical Strike");
 			ImbueList.Add(info);

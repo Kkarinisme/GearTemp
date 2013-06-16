@@ -23,9 +23,6 @@ namespace GearFoundry
 	/// </summary>
 	public partial class PluginCore
 	{
-		
-		private List<int> LootedCorpsesList = new List<int>();
-		
 		private void SubscribeItemTrackerLooterEvents()
 		{
 			try
@@ -52,7 +49,6 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(LootedCorpsesList.Contains(e.ItemGuid)) {LootedCorpsesList.RemoveAll(x => x == e.ItemGuid);}
 				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.ItemGuid)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.ItemGuid);}
 				if(WaitingVTIOs.Any(x => x.Id == e.ItemGuid)){WaitingVTIOs.RemoveAll(x => x.Id == e.ItemGuid);}
 			}catch(Exception ex){LogError(ex);}
@@ -62,7 +58,6 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(LootedCorpsesList.Contains(e.Released.Id)) {LootedCorpsesList.RemoveAll(x => x == e.Released.Id);}
 				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.Released.Id)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.Released.Id);}
 				if(WaitingVTIOs.Any(x => x.Id == e.Released.Id)){WaitingVTIOs.RemoveAll(x => x.Id == e.Released.Id);}			
 			}catch(Exception ex){LogError(ex);}
@@ -117,8 +112,6 @@ namespace GearFoundry
 //					}
 					else
 					{
-						if(LootedCorpsesList.Contains(container.Id)) {return;}
-						LootedCorpsesList.Add(container.Id);
 						CheckContainer(container);
 					}
 				}

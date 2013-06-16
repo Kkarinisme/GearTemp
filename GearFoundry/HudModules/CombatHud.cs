@@ -249,7 +249,7 @@ namespace GearFoundry
 				AnimationList.Add(new SpellMapLoadable("Cruath Qualoi",100668344,50,2162));  //Olthoi's Gift
 				AnimationList.Add(new SpellMapLoadable("Cruath Quaguz",100668348,48,2164));  //Swordsman's Gift
 				AnimationList.Add(new SpellMapLoadable("Cruath Quareth",100668345,56,2166));  //Tusker's Gift
-				AnimationList.Add(new SpellMapLoadable("Cruath Quavik",100668292,164,2168));  //Gelidite's Gift
+				AnimationList.Add(new SpellMapLoadable("Cruath Quavik",100668292,52,2168));  //Gelidite's Gift
 				AnimationList.Add(new SpellMapLoadable("Yanoi Zhavik",100668299,42,2176));  //Enervation
 				AnimationList.Add(new SpellMapLoadable("Yanoi Zhapaj",100668279,38,2178));  //Decrepitude's Grasp
 				AnimationList.Add(new SpellMapLoadable("Cruath Quatak",100668291,44,2170));  //Inferno's Gift
