@@ -18,9 +18,6 @@ using System.Xml;
 
 namespace GearFoundry
 {
-	/// <summary>
-	/// Description of ItemTrackerLooter.
-	/// </summary>
 	public partial class PluginCore
 	{
 		private void SubscribeItemTrackerLooterEvents()
@@ -31,6 +28,7 @@ namespace GearFoundry
 				Core.WorldFilter.ChangeObject += new EventHandler<ChangeObjectEventArgs>(ItemHud_ChangeObject);
 				Core.ItemDestroyed += ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased; 
+				Core.WorldFilter.CreateObject += ItemTrackerActions_ObjectCreated;
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -40,10 +38,39 @@ namespace GearFoundry
 			{
 				Core.ContainerOpened -= LootContainerOpened;
 				Core.WorldFilter.ChangeObject -= new EventHandler<ChangeObjectEventArgs>(ItemHud_ChangeObject);
-				Core.ItemDestroyed += ItemTracker_ItemDestroyed;
-				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased;
+				Core.ItemDestroyed -= ItemTracker_ItemDestroyed;
+				Core.WorldFilter.ReleaseObject -= ItemTracker_ObjectReleased;
+				Core.WorldFilter.CreateObject -= ItemTrackerActions_ObjectCreated;
 			}catch(Exception ex){LogError(ex);}
 		}
+		
+		private void ItemTrackerActions_ObjectCreated(object sender, CreateObjectEventArgs e)
+		{
+			try
+			{
+				if(e.New.ObjectClass == ObjectClass.Salvage)
+				{
+					dtInspectorLastAction = DateTime.Now;
+					Core.RenderFrame += RenderFrame_InspectorCombineAction;
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		
+		private void RenderFrame_InspectorCombineAction(object sender, EventArgs e)
+		{
+			try
+			{
+				if((DateTime.Now - dtInspectorLastAction).TotalMilliseconds < 100) {return;}
+				else
+				{
+					dtInspectorLastAction = DateTime.Now;
+					Core.RenderFrame -= RenderFrame_InspectorCombineAction;
+				}
+				//TODO:  Combine Salvage Here
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		
 		private void ItemTracker_ItemDestroyed(object sender, ItemDestroyedEventArgs e)
 		{
@@ -51,6 +78,7 @@ namespace GearFoundry
 			{
 				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.ItemGuid)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.ItemGuid);}
 				if(WaitingVTIOs.Any(x => x.Id == e.ItemGuid)){WaitingVTIOs.RemoveAll(x => x.Id == e.ItemGuid);}
+				if(SalvageItemsList.First().Id == e.ItemGuid){SalvageItemsList.RemoveAt(0);}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -77,13 +105,54 @@ namespace GearFoundry
 	 		try
 	 		{
 	 			if(ItemTrackingList.Any(x => x.Id == e.Changed.Id)){ItemTrackingList.RemoveAll(x => x.Id == e.Changed.Id);}
-	 			UpdateItemHud();
-
-	 			
+	 			if(ItemHudMoveQueue.ElementAt(0).Id == e.Changed.Id) 
+	 			{
+	 				LootObject JustMovedItem = ItemHudMoveQueue.Dequeue();	
+	 				//Now that it is in inventory, keep track of it for further processing.
+	 				if(JustMovedItem.IOR == IOResult.salvage)
+	 				{
+	 					SalvageItemsList.Add(JustMovedItem);
+	 					if(GISettings.AutoSalvage)
+	 					{
+	 						Core.RenderFrame += RenderFrame_InspectorSalvageAction;	
+	 					}
+	 				}
+	 				if(JustMovedItem.IOR == IOResult.manatank)
+	 				{
+	 					ManaTankItems.Add(JustMovedItem.Id);
+	 				}
+	 				
+	 				//This *should* chain loot with a 100ms delay between loots.
+	 				//FIXME:  Add additional render frame timers here following looting.
+	 				if(ItemHudMoveQueue.Count > 0)
+	 				{
+	 					dtInspectorLastAction = DateTime.Now;
+	 					Core.RenderFrame += RenderFrame_InspectorMoveAction;
+	 				}
+	 			}
+	 			UpdateItemHud();	
 	 		}catch(Exception ex){LogError(ex);}
 	 	}
 		
-
+		
+		private void RenderFrame_InspectorSalvageAction(object sender, EventArgs e)
+		{
+			try
+			{
+				if((DateTime.Now - dtInspectorLastAction).TotalMilliseconds < 100) {return;}
+				else
+				{
+					Core.RenderFrame -= RenderFrame_InspectorSalvageAction;	
+					dtInspectorLastAction = DateTime.Now;
+				}
+				Core.Actions.SalvagePanelAdd(SalvageItemsList.First().Id);
+				Core.Actions.SalvagePanelSalvage();
+				
+				//Listen in ItemDestroyed, clear from list
+				//Listen in CreateObject, combine salvage action
+			}catch(Exception ex){LogError(ex);}
+			
+		}
 		
 		private void LootContainerOpened(object sender, ContainerOpenedEventArgs e)
 		{
@@ -91,6 +160,15 @@ namespace GearFoundry
 			{					
 				
 				WorldObject container = Core.WorldFilter[e.ItemGuid];
+				
+				//If an item was queued for looting from a closed container, listen for the open			
+				if(container.Id == ContainerWaiting)
+				{
+					ContainerWaiting = 0;
+					dtInspectorLastAction = DateTime.Now;
+					Core.RenderFrame += RenderFrame_InspectorMoveAction;
+					return;
+				}
 				
 				if(container.Name.Contains("Storage")) {return;}
 				if(container == null) {return;}
@@ -152,7 +230,7 @@ namespace GearFoundry
 			try
 			{
 				mOpenContainer.ContainerIsLooting = true;
-				CoreManager.Current.RenderFrame += new EventHandler<EventArgs>(RenderFrame_LootingCheck);					
+				Core.RenderFrame += new EventHandler<EventArgs>(RenderFrame_LootingCheck);					
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -186,7 +264,7 @@ namespace GearFoundry
 				mOpenContainer.ContainerIsLooting = false;
 				mOpenContainer.ContainerGUID = 0;
 				mOpenContainer.ContainerIOs.Clear();
-				CoreManager.Current.RenderFrame -= new EventHandler<EventArgs>(RenderFrame_LootingCheck);					
+				Core.RenderFrame -= RenderFrame_LootingCheck;					
 			}catch(Exception ex){LogError(ex);}
 		}
 			
@@ -342,7 +420,6 @@ namespace GearFoundry
 						return;
 					case IOResult.salvage:
 						ItemTrackingList.Add(IOItem);
-						SalvageItemsList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
 						if(mOpenContainer.ContainerIOs.Any(x => x.Id == IOItem.Id)) {mOpenContainer.ContainerIOs.RemoveAll(x =>x.Id == IOItem.Id);}
 						UpdateItemHud();
@@ -365,7 +442,7 @@ namespace GearFoundry
 					case IOResult.val:
 						ItemTrackingList.Add(IOItem);
 						ItemExclusionList.Add(IOItem.Id);
-						if(GISettings.SalvageHighValue) {SalvageItemsList.Add(IOItem);}
+						if(GISettings.SalvageHighValue) {IOItem.IOR = IOResult.salvage;}
 						if(mOpenContainer.ContainerIOs.Any(x => x.Id == IOItem.Id)) {mOpenContainer.ContainerIOs.RemoveAll(x =>x.Id == IOItem.Id);}
 						UpdateItemHud();
 						//PlaySound?
@@ -377,7 +454,51 @@ namespace GearFoundry
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
+		
+		private void FireInspectorActions()
+		{
+			if(!Looting) 
+			{
+				dtInspectorLastAction = DateTime.Now;
+				Core.RenderFrame += new EventHandler<EventArgs>(RenderFrame_InspectorMoveAction);
+			}
+		}
+		
+		
+		private DateTime dtInspectorLastAction;
+		private int ContainerWaiting = 0;
+		private void RenderFrame_InspectorMoveAction(object sender, System.EventArgs e)
+		{
+			//Fire every 100ms
+			if((DateTime.Now - dtInspectorLastAction).TotalMilliseconds < 100){return;}
+			else{dtInspectorLastAction = DateTime.Now;}
 			
+			//Shut down if move queue is empty.
+			if(ItemHudMoveQueue.Count == 0)
+			{
+				Core.RenderFrame -= RenderFrame_InspectorMoveAction;
+				return;
+			}
+			
+			//Open the container if it has been closed.  Move to "open container" to listen.
+			if(mOpenContainer.ContainerGUID != ItemHudMoveQueue.ElementAt(0).Container)
+			{
+				Core.RenderFrame -= RenderFrame_InspectorMoveAction;
+				Core.Actions.UseItem(ItemHudMoveQueue.ElementAt(0).Container, 0);
+				ContainerWaiting = ItemHudMoveQueue.ElementAt(0).Container;
+			}
+			
+			//Turn it off so that we don't spam the server with move actions.
+			Core.RenderFrame -= RenderFrame_InspectorMoveAction;
+			//Try to move it, listen in change object
+			Core.Actions.MoveItem(ItemHudMoveQueue.ElementAt(0).Id,Core.CharacterFilter.Id,0,true);
+			
+			return;			
+		}
+		
+		
+		
+		//Virindi Tank Looting..............................................................................................	
 		private List<LootObject> WaitingVTIOs = new List<LootObject>();
 		public int VTLinkDecision(int id, int reserved1, int reserved2)
 		{
@@ -483,6 +604,8 @@ namespace GearFoundry
 			
 			
 		}
+		
+
 
 	}
 }

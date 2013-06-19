@@ -136,17 +136,18 @@ namespace GearFoundry
 			
 				if(matches.Count() > 0)
 				{
-					int LootMaxCheck = Convert.ToInt32(matches.First().Element("Guid").Value);
-					int InventoryCount = 0;
-					if(Convert.ToBoolean(matches.First().Element("iseact").Value))
-					{
-						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name == (string)matches.First().Element("key").Value).Count();
-					}
-					else
-					{
-						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name.Contains((string)matches.First().Element("key").Value)).Count();
-					}
-					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) {return;}
+//					int LootMaxCheck;
+//					if(!Int32.TryParse(matches.First().Element("Guid").Value, out LootMaxCheck)) {LootMaxCheck = 0;}
+//					int InventoryCount = 0;
+//					if(Convert.ToBoolean(matches.First().Element("iseact").Value))
+//					{
+//						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name == (string)matches.First().Element("key").Value).Count();
+//					}
+//					else
+//					{
+//						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name.Contains((string)matches.First().Element("key").Value)).Count();
+//					}
+//					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) {return;}
 						 
 					IOItem.IOR = IOResult.trophy;
 				}				

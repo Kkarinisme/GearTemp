@@ -32,9 +32,12 @@ namespace GearFoundry
 		
 		private List<int> ManaTankItems = new List<int>();
 		private List<LootObject> ItemTrackingList = new List<LootObject>();
-		private List<LootObject> SalvageItemsList = new  List<LootObject>();
 		
-		private int ItemHudMoveId = 0;
+		
+		private Queue<LootObject> ItemHudMoveQueue = new Queue<LootObject>();
+		private List<LootObject> SalvageItemsList = new List<LootObject>();
+		private List<LootObject> KeyItemsQueue = new List<LootObject>();
+		private bool Looting = false;
  		
 		private GearInspectorSettings GISettings = new GearInspectorSettings();
 			
@@ -50,6 +53,7 @@ namespace GearFoundry
 			public bool GearScore;
 			public bool CheckForL7Scrolls;
 			public bool SalvageHighValue = false;
+			public bool AutoRingKeys;
             public int ItemHudWidth;
             public int ItemHudHeight;
 			public int LootByValue = 0;
@@ -66,6 +70,7 @@ namespace GearFoundry
              	Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
              	Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
              	Core.CharacterFilter.ActionComplete += Inspector_ActionComplete;
+             	
              	
              	
              	SubscribeItemTrackerLooterEvents();
@@ -103,7 +108,6 @@ namespace GearFoundry
 				if(ItemTrackingList.Any(x => x.Id == e.ItemGuid)){ItemTrackingList.RemoveAll(x => x.Id == e.ItemGuid);}
 				if(ItemIDListenList.Any(x => x == e.ItemGuid)){ItemIDListenList.RemoveAll(x => x == e.ItemGuid);}
 				if(ManaTankItems.Any(x => x == e.ItemGuid)){ManaTankItems.RemoveAll(x => x == e.ItemGuid);}
-				if(SalvageItemsList.Any(x => x.Id == e.ItemGuid)){SalvageItemsList.RemoveAll(x => x.Id == e.ItemGuid);}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -119,7 +123,6 @@ namespace GearFoundry
 				if(ItemTrackingList.Any(x => x.Id == e.Released.Id)){ItemTrackingList.RemoveAll(x => x.Id == e.Released.Id);}
 				if(ItemIDListenList.Any(x => x == e.Released.Id)){ItemIDListenList.RemoveAll(x => x == e.Released.Id);}
 				if(ManaTankItems.Any(x => x == e.Released.Id)){ManaTankItems.RemoveAll(x => x == e.Released.Id);}
-				if(SalvageItemsList.Any(x => x.Id == e.Released.Id)){SalvageItemsList.RemoveAll(x => x.Id == e.Released.Id);}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -307,11 +310,11 @@ namespace GearFoundry
     	{
     		try
     		{
-    			foreach(LootObject item in SalvageItemsList)
-    			{
-    				SalvageObjectQueue.Enqueue(item);
-    			}
-    			SalvageItems();
+//    			foreach(LootObject item in SalvageItemsList)
+//    			{
+//    				SalvageObjectQueue.Enqueue(item);
+//    			}
+//    			SalvageItems();
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -324,13 +327,13 @@ namespace GearFoundry
     			//Salvage
     			if(col == 0)
     			{
-    				Core.Actions.SalvagePanelAdd(SalvageItemsList[row].Id);
+    				Core.Actions.SalvagePanelAdd(SalvageItemsList.ElementAt(0).Id);
     				Core.Actions.SalvagePanelSalvage();
     			}
     			//Report
     			if(col == 1)
     			{
-    				HudToChat(SalvageItemsList[row].GSReportString(), 1);
+    				HudToChat(SalvageItemsList.ElementAt(row).GSReportString(), 1);
     			}
     			//Remove
     			if(col == 2)
@@ -620,9 +623,10 @@ namespace GearFoundry
 			{
     			if(col == 0)
     			{
-    				Core.Actions.MoveItem(ItemTrackingList[row].Id,Core.CharacterFilter.Id,0,true);  
-    				ItemHudMoveId = ItemTrackingList[row].Id;
-    				ItemTrackingList.RemoveAll(x => x.Id == ItemTrackingList[row].Id);	
+    				
+//    				Core.Actions.MoveItem(ItemTrackingList[row].Id,Core.CharacterFilter.Id,0,true);  
+					ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
+					FireInspectorActions();
     			}
     			if(col == 1)
     			{
