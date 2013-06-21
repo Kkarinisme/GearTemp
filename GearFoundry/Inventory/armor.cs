@@ -12,7 +12,6 @@ using WindowsTimer = System.Windows.Forms.Timer;
 using Decal.Adapter;
 using Decal.Filters;
 using Decal.Adapter.Wrappers;
-using System.Xml.Linq;
 using System.IO;
 using VirindiViewService;
 using MyClasses.MetaViewWrappers;

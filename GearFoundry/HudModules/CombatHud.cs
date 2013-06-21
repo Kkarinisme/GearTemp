@@ -176,7 +176,7 @@ namespace GearFoundry
 				Core.CharacterFilter.ChangePortalMode += new EventHandler<ChangePortalModeEventArgs>(CombatHud_ChangePortalMode);
 				Core.ItemSelected += new EventHandler<ItemSelectedEventArgs>(CombatHud_ItemSelected);
 
-				WriteToChat("@unfilter -spellcasting");
+				//TODO:  WriteToChat("@unfilter -spellcasting");
 				FillCombatHudRegex();
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -834,10 +834,7 @@ namespace GearFoundry
         {
         	if((DateTime.Now - CombatHudResizeTime).TotalMilliseconds > 500)
         	{
-	        	Core.RenderFrame -= CombatHudResizeWait;
-	        	WriteToChat("H:" + gtSettings.CombatHudHeight.ToString());
-	        	WriteToChat("W:" + gtSettings.CombatHudWidth.ToString());
-        	
+	        	Core.RenderFrame -= CombatHudResizeWait;       	
 
            		CombatHudReadWriteSettings(false);
             	AlterCombatHud();

@@ -25,7 +25,6 @@ namespace GearFoundry
 			try
 			{
 				Core.ContainerOpened += LootContainerOpened;
-				Core.WorldFilter.ChangeObject += new EventHandler<ChangeObjectEventArgs>(ItemHud_ChangeObject);
 				Core.ItemDestroyed += ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased; 
 				Core.WorldFilter.CreateObject += ItemTrackerActions_ObjectCreated;
@@ -37,12 +36,14 @@ namespace GearFoundry
 			try
 			{
 				Core.ContainerOpened -= LootContainerOpened;
-				Core.WorldFilter.ChangeObject -= new EventHandler<ChangeObjectEventArgs>(ItemHud_ChangeObject);
 				Core.ItemDestroyed -= ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject -= ItemTracker_ObjectReleased;
 				Core.WorldFilter.CreateObject -= ItemTrackerActions_ObjectCreated;
 			}catch(Exception ex){LogError(ex);}
 		}
+		
+		private Queue<WorldObject> SalvageCreatedQueue = new Queue<WorldObject>();
+		private List<int> CombineSalvageWOList = new List<int>();
 		
 		private void ItemTrackerActions_ObjectCreated(object sender, CreateObjectEventArgs e)
 		{
@@ -51,12 +52,12 @@ namespace GearFoundry
 				if(e.New.ObjectClass == ObjectClass.Salvage)
 				{
 					dtInspectorLastAction = DateTime.Now;
+					SalvageCreatedQueue.Enqueue(e.New);
 					Core.RenderFrame += RenderFrame_InspectorCombineAction;
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
-		
-		
+
 		private void RenderFrame_InspectorCombineAction(object sender, EventArgs e)
 		{
 			try
@@ -67,7 +68,100 @@ namespace GearFoundry
 					dtInspectorLastAction = DateTime.Now;
 					Core.RenderFrame -= RenderFrame_InspectorCombineAction;
 				}
-				//TODO:  Combine Salvage Here
+				LooterCombineSalvage();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		
+		private void LooterCombineSalvage()
+		{
+			try
+			{
+						
+				ScanInventoryForSalvageBags();
+				//Find an applicable material rule.
+				var materialrules = from allrules in SalvageRulesList
+					where (allrules.material == SalvageCreatedQueue.First().Values(LongValueKey.Material)) &&
+					       (SalvageCreatedQueue.First().Values(DoubleValueKey.SalvageWorkmanship) >= allrules.minwork) && 
+						   (SalvageCreatedQueue.First().Values(DoubleValueKey.SalvageWorkmanship) <= (allrules.maxwork +0.99))
+						   select allrules;					
+					
+				if(materialrules.Count() > 0)
+				{
+					var sr = materialrules.First();
+					
+					var partbagslinq = from bags in InventorySalvage
+								  where bags.Values(LongValueKey.UsesRemaining) < 100  &&
+							      	bags.Values(LongValueKey.Material) == sr.material  &&
+								  	bags.Values(DoubleValueKey.SalvageWorkmanship) >= sr.minwork &&
+								 	 bags.Values(DoubleValueKey.SalvageWorkmanship) <= (sr.maxwork + 0.99)
+								  select new PartialBags{ SalvBagID = bags.Id, SalvBagUses = bags.Values(LongValueKey.UsesRemaining), 
+					             	 SalvBagWork = bags.Values(DoubleValueKey.SalvageWorkmanship), SalvBagMat = bags.Values(LongValueKey.Material)};
+				
+					PartialBags[] partbags = partbagslinq.ToArray();
+					
+					CombineSalvageWOList.Clear();
+					
+					int salvagesum = 0;
+					salvagesum += SalvageCreatedQueue.First().Values(LongValueKey.UsesRemaining);
+					CombineSalvageWOList.Add(SalvageCreatedQueue.Dequeue().Id);
+				
+					for(int i = 0; i < partbags.Count(); i++)
+					{
+						if(salvagesum < 100)
+						{
+							if(salvagesum + partbags[i].SalvBagUses < 110)
+							{
+								if(!CombineSalvageWOList.Contains(partbags[i].SalvBagID))
+							    {
+									salvagesum += partbags[i].SalvBagUses;
+									CombineSalvageWOList.Add(partbags[i].SalvBagID);
+								}
+							}
+						}		
+					}
+					WriteToChat("Salvage List Count" + CombineSalvageWOList.Count);
+					foreach(var salvagebg in CombineSalvageWOList)
+					{
+						WriteToChat("SvBag ID: " + salvagebg);
+					}
+					if(CombineSalvageWOList.Count > 1)
+					{
+						Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").First().Id, 0);
+						foreach(int salvageid in CombineSalvageWOList)
+						{
+							Core.Actions.SalvagePanelAdd(salvageid);
+						}
+						Core.Actions.SalvagePanelSalvage();
+					}
+					CombineSalvageWOList.Clear();	
+				}
+				if(SalvageItemsQueue.Count > 0)
+				{
+					dtInspectorLastAction = DateTime.Now;
+					Core.RenderFrame += RenderFrame_InspectorSalvageAction;
+				}
+				else if(ItemHudMoveQueue.Count > 0)
+				{
+					dtInspectorLastAction = DateTime.Now;
+					Core.RenderFrame += RenderFrame_ReopenContainer;
+				}
+			}
+			catch(Exception ex){LogError(ex);}
+		}
+		
+		private void RenderFrame_ReopenContainer(object sender, EventArgs e)
+		{
+			try
+			{
+				if((DateTime.Now - dtInspectorLastAction).TotalMilliseconds < 100) {return;}
+				else
+				{
+					Core.RenderFrame -= RenderFrame_ReopenContainer;
+					dtInspectorLastAction = DateTime.Now;
+				}
+				
+				Core.Actions.UseItem(LastContainer, 0);
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -76,9 +170,21 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.ItemGuid)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.ItemGuid);}
-				if(WaitingVTIOs.Any(x => x.Id == e.ItemGuid)){WaitingVTIOs.RemoveAll(x => x.Id == e.ItemGuid);}
-				if(SalvageItemsList.First().Id == e.ItemGuid){SalvageItemsList.RemoveAt(0);}
+				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.ItemGuid))
+				{
+					mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.ItemGuid);
+					UpdateItemHud();
+				}
+				if(WaitingVTIOs.Any(x => x.Id == e.ItemGuid))
+				{
+					WaitingVTIOs.RemoveAll(x => x.Id == e.ItemGuid);
+					UpdateItemHud();
+				}
+				if(SalvageItemsList.Any(x => x.Id == e.ItemGuid))
+				{
+				   	SalvageItemsList.RemoveAll(x => x.Id == e.ItemGuid);
+					UpdateItemHud();
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -86,8 +192,16 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.Released.Id)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.Released.Id);}
-				if(WaitingVTIOs.Any(x => x.Id == e.Released.Id)){WaitingVTIOs.RemoveAll(x => x.Id == e.Released.Id);}			
+				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.Released.Id))
+				{
+					mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.Released.Id);
+					UpdateItemHud();
+				}
+				if(WaitingVTIOs.Any(x => x.Id == e.Released.Id))
+				{
+					WaitingVTIOs.RemoveAll(x => x.Id == e.Released.Id);
+					UpdateItemHud();
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 				
@@ -100,56 +214,48 @@ namespace GearFoundry
 			public List<LootObject> ContainerIOs = new List<PluginCore.LootObject>();
 		}
 		
-		private void ItemHud_ChangeObject(object sender, ChangeObjectEventArgs e)
-	 	{
-	 		try
-	 		{
-	 			if(ItemTrackingList.Any(x => x.Id == e.Changed.Id)){ItemTrackingList.RemoveAll(x => x.Id == e.Changed.Id);}
-	 			if(ItemHudMoveQueue.ElementAt(0).Id == e.Changed.Id) 
-	 			{
-	 				LootObject JustMovedItem = ItemHudMoveQueue.Dequeue();	
-	 				//Now that it is in inventory, keep track of it for further processing.
-	 				if(JustMovedItem.IOR == IOResult.salvage)
-	 				{
-	 					SalvageItemsList.Add(JustMovedItem);
-	 					if(GISettings.AutoSalvage)
-	 					{
-	 						Core.RenderFrame += RenderFrame_InspectorSalvageAction;	
-	 					}
-	 				}
-	 				if(JustMovedItem.IOR == IOResult.manatank)
-	 				{
-	 					ManaTankItems.Add(JustMovedItem.Id);
-	 				}
-	 				
-	 				//This *should* chain loot with a 100ms delay between loots.
-	 				//FIXME:  Add additional render frame timers here following looting.
-	 				if(ItemHudMoveQueue.Count > 0)
-	 				{
-	 					dtInspectorLastAction = DateTime.Now;
-	 					Core.RenderFrame += RenderFrame_InspectorMoveAction;
-	 				}
-	 			}
-	 			UpdateItemHud();	
-	 		}catch(Exception ex){LogError(ex);}
-	 	}
 		
-		
-		private void RenderFrame_InspectorSalvageAction(object sender, EventArgs e)
+		private int LastContainer = 0;		
+		private void RenderFrame_InspectorOpenUst(object sender, EventArgs e)
 		{
 			try
 			{
 				if((DateTime.Now - dtInspectorLastAction).TotalMilliseconds < 100) {return;}
 				else
 				{
+					Core.RenderFrame -= RenderFrame_InspectorOpenUst;	
+					dtInspectorLastAction = DateTime.Now;
+				}
+				
+				LastContainer = Core.Actions.OpenedContainer;
+				
+				Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").First().Id,0);
+				
+				dtInspectorLastAction = DateTime.Now;
+				Core.RenderFrame += RenderFrame_InspectorSalvageAction;
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void RenderFrame_InspectorSalvageAction(object sender, EventArgs e)
+		{
+			try
+			{
+				if((DateTime.Now - dtInspectorLastAction).TotalMilliseconds < 200) {return;}
+				else
+				{
 					Core.RenderFrame -= RenderFrame_InspectorSalvageAction;	
 					dtInspectorLastAction = DateTime.Now;
 				}
-				Core.Actions.SalvagePanelAdd(SalvageItemsList.First().Id);
-				Core.Actions.SalvagePanelSalvage();
 				
-				//Listen in ItemDestroyed, clear from list
-				//Listen in CreateObject, combine salvage action
+				if(SalvageItemsList.Any(x => x.Id == SalvageItemsQueue.First().Id))
+				{
+					SalvageItemsList.RemoveAll(x => x.Id == SalvageItemsQueue.First().Id);
+					UpdateItemHud();
+				}
+				Core.Actions.SalvagePanelAdd(SalvageItemsQueue.Dequeue().Id);
+				Core.Actions.SalvagePanelSalvage();
+			
 			}catch(Exception ex){LogError(ex);}
 			
 		}
@@ -157,62 +263,50 @@ namespace GearFoundry
 		private void LootContainerOpened(object sender, ContainerOpenedEventArgs e)
 		{
 			try
-			{					
+			{	
+				//FIXME:  Working properly.
 				
 				WorldObject container = Core.WorldFilter[e.ItemGuid];
 				
 				//If an item was queued for looting from a closed container, listen for the open			
-				if(container.Id == ContainerWaiting)
+				if(ItemHudMoveQueue.Count > 0)
 				{
-					ContainerWaiting = 0;
-					dtInspectorLastAction = DateTime.Now;
-					Core.RenderFrame += RenderFrame_InspectorMoveAction;
-					return;
+					if(container.Id == ItemHudMoveQueue.First().Container)
+					{
+						WriteToChat("Caught Closed container opening for loot pickup.");
+						dtInspectorLastAction = DateTime.Now;
+						Core.RenderFrame += RenderFrame_InspectorMoveAction;
+						return;
+					}
 				}
 				
 				if(container.Name.Contains("Storage")) {return;}
 				if(container == null) {return;}
+				
+				//UNDONE: Process DeadMes?
+				if(container.Name.Contains(Core.CharacterFilter.Name)){return;}
 
-				//this will currently ID items off other player's corpses.
-				if(container.ObjectClass == ObjectClass.Corpse)
+				if(container.Name.Contains("Chest") || container.Name.Contains("Vault") || container.Name.Contains("Reliquary") || container.ObjectClass == ObjectClass.Corpse)
 				{
-					if(container.Name.Contains(Core.CharacterFilter.Name))
-					{
-						//Should cross over and remove dead me's when addon completes
-						//for now will just prevent looting of own corpses.
-						//ghSettings.DeadMeList.RemoveAll(x => x.GUID == container.Id);
-						return;
-					}
-					//Don't loot out permitted corpses.....
-//					else if(PermittedCorpsesList.Count() > 0 && container.Name
-//					{
-//
-//					}
-					else
-					{
-						CheckContainer(container);
-					}
-				}
-				if(container.Name.Contains("Chest") || container.Name.Contains("Vault") || container.Name.Contains("Reliquary"))
-				{
-					CheckContainer(container);	
+					mOpenContainer.ContainerGUID = container.Id;
+					mOpenContainer.LootingStarted = DateTime.Now;
+					Core.RenderFrame += RenderFrame_CheckContainer;
 				}
 			}
 			catch(Exception ex){LogError(ex);}
 		}
 		
-		private void CheckContainer(WorldObject container)
+		private void RenderFrame_CheckContainer(object sender, EventArgs e)
 		{
 			try
 			{
 				
-				if(Core.WorldFilter.GetByContainer(container.Id).Count == 0) {return;}
+				if((DateTime.Now - mOpenContainer.LootingStarted).TotalMilliseconds < 100) {return;}
+				else{Core.RenderFrame -= RenderFrame_CheckContainer;}
 				
-				mOpenContainer.ContainerGUID = container.Id;
 				mOpenContainer.LastCheck = DateTime.Now;
-				mOpenContainer.LootingStarted = DateTime.Now;
 				
-				foreach(WorldObject wo in Core.WorldFilter.GetByContainer(container.Id))
+				foreach(WorldObject wo in Core.WorldFilter.GetByContainer(mOpenContainer.ContainerGUID))
 				{
 					if(!ItemExclusionList.Any(x => x == wo.Id))
 					{
@@ -262,7 +356,6 @@ namespace GearFoundry
 			try
 			{
 				mOpenContainer.ContainerIsLooting = false;
-				mOpenContainer.ContainerGUID = 0;
 				mOpenContainer.ContainerIOs.Clear();
 				Core.RenderFrame -= RenderFrame_LootingCheck;					
 			}catch(Exception ex){LogError(ex);}
@@ -317,7 +410,11 @@ namespace GearFoundry
         {
         	int iEvent = 0;
             try
-            {                   	
+            {    
+            	if(e.Message.Type == AC_ADJUST_STACK)
+            	{
+            		ItemHud_OnAdjustStack(e.Message);
+            	}
             	if(e.Message.Type == AC_GAME_EVENT)
             	{	
             		try
@@ -327,9 +424,12 @@ namespace GearFoundry
                     catch{}
                     if(iEvent == GE_IDENTIFY_OBJECT)
                     {
-                    	 OnIdentItem(e.Message);
+                    	ItemHud_OnIdentItem(e.Message);
                     }
-                    
+                    if(iEvent == GE_INSERT_INVENTORY_ITEM)
+                    {
+                    	ItemHud_OnInsertInventory(e.Message);
+                    }                      
             	}
             }
             catch (Exception ex)
@@ -338,14 +438,80 @@ namespace GearFoundry
             }
         } 
 		
-		private void OnIdentItem(Decal.Adapter.Message pMsg)
+		private void ItemHud_OnAdjustStack(Decal.Adapter.Message pMsg)
 		{
 			try
 			{
-				if(!bItemHudEnabled) {return;}
+				int PossibleMovedItem = Convert.ToInt32(pMsg["item"]);
+				if(ItemTrackingList.Any(x => x.Name == Core.WorldFilter[PossibleMovedItem].Name))
+        		{
+        			ItemTrackingList.RemoveAll(x => x.Name == Core.WorldFilter[PossibleMovedItem].Name);
+        			if(ItemHudMoveQueue.First().Name ==  Core.WorldFilter[PossibleMovedItem].Name) 
+        			{
+        				ItemHudMoveQueue.Dequeue();
+        			}
+        			
+        			UpdateItemHud();
+        			
+        			if(ItemHudMoveQueue.Count > 0)
+        			{
+        				FireInspectorActions();
+        			}
+        		}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void ItemHud_OnInsertInventory(Decal.Adapter.Message pMsg)
+		{
+			try
+			{
+    	   		int PossibleMovedItem = Convert.ToInt32(pMsg["item"]);		
+        		if(ItemTrackingList.Any(x => x.Id == PossibleMovedItem))
+        		{
+        			if(ItemTrackingList.Find(x => x.Id == PossibleMovedItem).IOR == IOResult.salvage)
+        			{
+        				SalvageItemsList.Add(ItemTrackingList.Find(x => x.Id == PossibleMovedItem));
+        				ItemTrackingList.RemoveAll(x => x.Id == PossibleMovedItem);
+        				if(ItemHudMoveQueue.First().Id == PossibleMovedItem)
+        				{
+        					ItemHudMoveQueue.Dequeue();
+        				}
+        				UpdateItemHud();
+        				if(GISettings.AutoSalvage)
+        				{
+        					dtInspectorLastAction = DateTime.Now;
+        					SalvageItemsQueue.Enqueue(SalvageItemsList.Find(x => x.Id == PossibleMovedItem));
+        					Core.RenderFrame += RenderFrame_InspectorOpenUst;	
+        				}
+        			}
+        			else
+        			{
+	        			ItemTrackingList.RemoveAll(x => x.Id == PossibleMovedItem);
+	        			if(ItemHudMoveQueue.First().Id == PossibleMovedItem)
+	        			{
+	        				ItemHudMoveQueue.Dequeue();
+	        			}
+	        			UpdateItemHud();
+	        			
+	        			if(ItemHudMoveQueue.Count > 0)
+	        			{
+	        				FireInspectorActions();
+	        			}
+        			}
+        		}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		
+		private void ItemHud_OnIdentItem(Decal.Adapter.Message pMsg)
+		{
+			try
+			{
     	   		int PossibleItemID = Convert.ToInt32(pMsg["object"]);		
         		//Bypass looter and use manual ID feature
-        		if(PossibleItemID == Host.Actions.CurrentSelection && bReportItemStrings)
+        		if(PossibleItemID == Host.Actions.CurrentSelection)
         		{
         			ManualCheckItemForMatches(new LootObject(Core.WorldFilter[PossibleItemID]));
         		}  		
@@ -457,43 +623,47 @@ namespace GearFoundry
 		
 		private void FireInspectorActions()
 		{
-			if(!Looting) 
+			try
 			{
 				dtInspectorLastAction = DateTime.Now;
-				Core.RenderFrame += new EventHandler<EventArgs>(RenderFrame_InspectorMoveAction);
-			}
+				Core.RenderFrame += RenderFrame_InspectorMoveAction;
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		
 		private DateTime dtInspectorLastAction;
-		private int ContainerWaiting = 0;
 		private void RenderFrame_InspectorMoveAction(object sender, System.EventArgs e)
 		{
-			//Fire every 100ms
-			if((DateTime.Now - dtInspectorLastAction).TotalMilliseconds < 100){return;}
-			else{dtInspectorLastAction = DateTime.Now;}
-			
-			//Shut down if move queue is empty.
-			if(ItemHudMoveQueue.Count == 0)
+			try
 			{
-				Core.RenderFrame -= RenderFrame_InspectorMoveAction;
-				return;
-			}
-			
-			//Open the container if it has been closed.  Move to "open container" to listen.
-			if(mOpenContainer.ContainerGUID != ItemHudMoveQueue.ElementAt(0).Container)
-			{
-				Core.RenderFrame -= RenderFrame_InspectorMoveAction;
-				Core.Actions.UseItem(ItemHudMoveQueue.ElementAt(0).Container, 0);
-				ContainerWaiting = ItemHudMoveQueue.ElementAt(0).Container;
-			}
-			
-			//Turn it off so that we don't spam the server with move actions.
-			Core.RenderFrame -= RenderFrame_InspectorMoveAction;
-			//Try to move it, listen in change object
-			Core.Actions.MoveItem(ItemHudMoveQueue.ElementAt(0).Id,Core.CharacterFilter.Id,0,true);
-			
-			return;			
+				//Fire every 100ms
+				if((DateTime.Now - dtInspectorLastAction).TotalMilliseconds < 100){return;}
+				else
+				{
+					Core.RenderFrame -= RenderFrame_InspectorMoveAction;
+					dtInspectorLastAction = DateTime.Now;
+					WriteToChat("Inspector Move Action initiated");
+				}
+				
+				//Shut down if move queue is empty.
+				if(ItemHudMoveQueue.Count == 0)
+				{
+					return;
+				}
+				
+				//Open the container if it has been closed.  Move to "open container" to listen.
+//				if(Core.Actions.OpenedContainer != ItemHudMoveQueue.ElementAt(0).Container)
+//				{
+//					WriteToChat("Blocked Container, Listen started");
+//					Core.Actions.UseItem(ItemHudMoveQueue.ElementAt(0).Container, 0);
+//					ContainerWaiting = ItemHudMoveQueue.ElementAt(0).Container;
+//					return;
+//				}
+				
+				//Try to move it, listen in moved object
+				Core.Actions.UseItem(ItemHudMoveQueue.ElementAt(0).Id, 0);
+				return;	
+			}catch(Exception ex){LogError(ex);}			
 		}
 		
 		
@@ -609,3 +779,111 @@ namespace GearFoundry
 
 	}
 }
+
+
+//ess, Wield Lvl 150, Lore 275
+//(Trophy) Ancient Falatacot Trinket
+//(Trophy) Quill of Introspection (102.0S, 102.0W)
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 6/20/2013 7:21 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 6/20/2013 7:21 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] ID: 88657F88
+//[VTank] ObjectClass: CraftedAlchemy
+//[VTank] (S) Name: Quill of Introspection
+//[VTank] (S) SecondaryName: Quills of Introspection
+//[VTank] (I) CreateFlags1: 2650137
+//[VTank] (I) Type: 37364
+//[VTank] (I) Icon: 26901
+//[VTank] (I) Category: 67108864
+//[VTank] (I) Behavior: 16
+//[VTank] (I) Value: 30000
+//[VTank] (I) Unknown10: 524296
+//[VTank] (I) UsageMask: 4201088
+//[VTank] (I) StackCount: 1
+//[VTank] (I) StackMax: 1000
+//[VTank] (I) Container: -2006493254
+//[VTank] (I) Burden: 4
+//[VTank] (I) PhysicsDataFlags: 131073
+//(Trophy) Quill of Introspection (102.0S, 102.0W)
+//(Trophy) Quill of Introspection (102.0S, 102.0W)
+//Pack (102.0S, 102.0W)
+//Pack (102.0S, 102.0W)
+//Pack (102.0S, 102.0W)
+//Pack (102.0S, 102.0W)
+//(Trophy) Quill of Introspection (102.0S, 102.0W)
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 6/20/2013 7:20 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 6/20/2013 7:21 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] ID: 8769AE8F
+//[VTank] ObjectClass: CraftedAlchemy
+//[VTank] (S) Name: Quill of Introspection
+//[VTank] (S) SecondaryName: Quills of Introspection
+//[VTank] (I) CreateFlags1: 2650137
+//[VTank] (I) Type: 37364
+//[VTank] (I) Icon: 26901
+//[VTank] (I) Category: 67108864
+//[VTank] (I) Behavior: 16
+//[VTank] (I) Value: 270000
+//[VTank] (I) Unknown10: 524296
+//[VTank] (I) UsageMask: 4201088
+//[VTank] (I) StackCount: 9
+//[VTank] (I) StackMax: 1000
+//[VTank] (I) Container: -2139809713
+//[VTank] (I) Burden: 36
+//[VTank] (I) PhysicsDataFlags: 131073
+
+//before
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 6/20/2013 7:29 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 6/20/2013 7:29 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] ID: 88687EBF
+//[VTank] ObjectClass: CraftedAlchemy
+//[VTank] (S) Name: Quill of Infliction
+//[VTank] (S) SecondaryName: Quills of Infliction
+//[VTank] (I) CreateFlags1: 2650137
+//[VTank] (I) Type: 37363
+//[VTank] (I) Icon: 26900
+//[VTank] (I) Category: 67108864
+//[VTank] (I) Behavior: 16
+//[VTank] (I) Value: 30000
+//[VTank] (I) Unknown10: 524296
+//[VTank] (I) UsageMask: 4201088
+//[VTank] (I) StackCount: 1
+//[VTank] (I) StackMax: 1000
+//[VTank] (I) Container: -2006417734
+//[VTank] (I) Burden: 4
+//[VTank] (I) PhysicsDataFlags: 131073
+//
+//after	
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 6/20/2013 7:29 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 6/20/2013 7:30 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] ID: 8768E53B
+//[VTank] ObjectClass: CraftedAlchemy
+//[VTank] (S) Name: Quill of Infliction
+//[VTank] (S) SecondaryName: Quills of Infliction
+//[VTank] (I) CreateFlags1: 2650137
+//[VTank] (I) Type: 37363
+//[VTank] (I) Icon: 26900
+//[VTank] (I) Category: 67108864
+//[VTank] (I) Behavior: 16
+//[VTank] (I) Value: 180000
+//[VTank] (I) Unknown10: 524296
+//[VTank] (I) UsageMask: 4201088
+//[VTank] (I) StackCount: 6
+//[VTank] (I) StackMax: 1000
+//[VTank] (I) Container: -2139809713
+//[VTank] (I) Burden: 24
+//[VTank] (I) PhysicsDataFlags: 131073

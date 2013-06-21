@@ -37,7 +37,7 @@ namespace GearFoundry
 		private Queue<LootObject> ItemHudMoveQueue = new Queue<LootObject>();
 		private List<LootObject> SalvageItemsList = new List<LootObject>();
 		private List<LootObject> KeyItemsQueue = new List<LootObject>();
-		private bool Looting = false;
+		private Queue<LootObject> SalvageItemsQueue = new Queue<LootObject>();
  		
 		private GearInspectorSettings GISettings = new GearInspectorSettings();
 			
@@ -47,8 +47,6 @@ namespace GearFoundry
 			public bool AutoLoot;
 			public bool AutoSalvage;
 			public bool AutoAetheria;
-			public bool AutoCombine;
-			public bool AutoStack;
 			public bool ModifiedLooting = true;
 			public bool GearScore;
 			public bool CheckForL7Scrolls;
@@ -153,8 +151,7 @@ namespace GearFoundry
 		private HudCheckBox InspectorIdentifySalvage = null;
 		private HudCheckBox InspectorAutoLoot = null;
 		private HudCheckBox InspectorAutoAetheria = null;
-		private HudCheckBox InspectorAutoCombine = null;
-		private HudCheckBox InspectorAutoStack = null;
+		private HudCheckBox InspectorAutoSalvage = null;
 		private HudCheckBox InspectorModifiedLooting = null;
 		private HudCheckBox InspectorGearScore = null;
 		private HudCheckBox InspectorCheckForL7Scrolls = null;
@@ -266,11 +263,13 @@ namespace GearFoundry
     					DisposeItemHudUstTab();
     					DisposeItemHudSettingsTab();
     					RenderItemHudInspectorTab();
+    					UpdateItemHud();
     					return;
     				case 1:
     					DisposeItemHudInspectorTab();
     					DisposeItemHudSettingsTab();
     					RenderItemHudUstTab();
+    					UpdateItemHud();
     					return;
     				case 2:
     					DisposeItemHudInspectorTab();
@@ -310,11 +309,12 @@ namespace GearFoundry
     	{
     		try
     		{
-//    			foreach(LootObject item in SalvageItemsList)
-//    			{
-//    				SalvageObjectQueue.Enqueue(item);
-//    			}
-//    			SalvageItems();
+    			foreach(LootObject item in SalvageItemsList)
+    			{
+    				SalvageItemsQueue.Enqueue(item);
+    				Core.RenderFrame += RenderFrame_InspectorOpenUst;
+    			}
+
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -327,8 +327,8 @@ namespace GearFoundry
     			//Salvage
     			if(col == 0)
     			{
-    				Core.Actions.SalvagePanelAdd(SalvageItemsList.ElementAt(0).Id);
-    				Core.Actions.SalvagePanelSalvage();
+    				SalvageItemsQueue.Enqueue(SalvageItemsList.ElementAt(row));
+    				Core.RenderFrame += RenderFrame_InspectorOpenUst;
     			}
     			//Report
     			if(col == 1)
@@ -344,6 +344,11 @@ namespace GearFoundry
     			UpdateItemHud();
     			
     		}catch(Exception ex){LogError(ex);}
+    		
+    	}
+    	
+    	private void RenderFrame_ManualSalvage(object sender, EventArgs e)
+    	{
     		
     	}
     	
@@ -381,15 +386,10 @@ namespace GearFoundry
                 ItemHudSettingsLayout.AddControl(InspectorAutoAetheria, new Rectangle(0, 36, 200, 16));
     			InspectorAutoAetheria.Checked = GISettings.AutoAetheria;
     			
-    			InspectorAutoCombine = new HudCheckBox();
-    			InspectorAutoCombine.Text = "AutoCombine Looted Salvage";
-                ItemHudSettingsLayout.AddControl(InspectorAutoCombine, new Rectangle(0, 54, 200, 16));
-    			InspectorAutoCombine.Checked = GISettings.AutoCombine;
-    			
-    			InspectorAutoStack = new HudCheckBox();
-    			InspectorAutoStack.Text = "AutoStack Looted Items";
-                ItemHudSettingsLayout.AddControl(InspectorAutoStack, new Rectangle(0, 72, 200, 16));
-    			InspectorAutoStack.Checked = GISettings.AutoStack;
+    			InspectorAutoSalvage = new HudCheckBox();
+    			InspectorAutoSalvage.Text = "Auto Salvage";
+                ItemHudSettingsLayout.AddControl(InspectorAutoSalvage, new Rectangle(0, 54, 200, 16));
+    			InspectorAutoSalvage.Checked = GISettings.AutoSalvage;
     			
     			InspectorModifiedLooting = new HudCheckBox();
     			InspectorModifiedLooting.Text = "Enabled Modified Looting";
@@ -425,8 +425,7 @@ namespace GearFoundry
     			InspectorIdentifySalvage.Change += InspectorIdentifySalvage_Change;
     			InspectorAutoLoot.Change += InspectorAutoLoot_Change;
     			InspectorAutoAetheria.Change += InspectorAutoAetheria_Change;
-    			InspectorAutoCombine.Change += InspectorAutoCombine_Change;
-    			InspectorAutoStack.Change += InspectorAutoStack_Change;
+    			InspectorAutoSalvage.Change += InspectorAutoSalvage_Change;
     			InspectorModifiedLooting.Change += InspectorModifiedLooting_Change;
     			InspectorGearScore.Change += InspectorGearScore_Change;
     			InspectorCheckForL7Scrolls.Change += InspectorCheckForL7Scrolls_Change;
@@ -486,24 +485,15 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
-    	private void InspectorAutoCombine_Change(object sender, System.EventArgs e)
+    	private void InspectorAutoSalvage_Change(object sender, System.EventArgs e)
     	{
     		try
     		{
-    			GISettings.AutoCombine = InspectorAutoCombine.Checked;
+    			GISettings.AutoSalvage = InspectorAutoSalvage.Checked;
 				GearInspectorReadWriteSettings(false);    			
     		}catch(Exception ex){LogError(ex);}
     	}
-    	
-    	private void InspectorAutoStack_Change(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			GISettings.AutoStack = InspectorAutoStack.Checked;
-    			GearInspectorReadWriteSettings(false);
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
+    	    	
     	private void InspectorModifiedLooting_Change(object sender, System.EventArgs e)
     	{
     		try
@@ -540,8 +530,7 @@ namespace GearFoundry
     			InspectorIdentifySalvage.Change -= InspectorIdentifySalvage_Change;
     			InspectorAutoLoot.Change -= InspectorAutoLoot_Change;
     			InspectorAutoAetheria.Change -= InspectorAutoAetheria_Change;
-    			InspectorAutoCombine.Change -= InspectorAutoCombine_Change;
-    			InspectorAutoStack.Change -= InspectorAutoStack_Change;
+    			InspectorAutoSalvage.Change -= InspectorAutoSalvage_Change;
     			InspectorModifiedLooting.Change -= InspectorModifiedLooting_Change;
     			InspectorGearScore.Change -= InspectorGearScore_Change;
     			InspectorCheckForL7Scrolls.Change -= InspectorCheckForL7Scrolls_Change;
@@ -552,8 +541,7 @@ namespace GearFoundry
     			InspectorIdentifySalvage.Dispose();
     			InspectorAutoLoot.Dispose();
     			InspectorAutoAetheria.Dispose();
-    			InspectorAutoCombine.Dispose();
-    			InspectorAutoStack.Dispose();
+    			InspectorAutoSalvage.Dispose();
     			InspectorModifiedLooting.Dispose();
     			InspectorGearScore.Dispose();
     			InspectorCheckForL7Scrolls.Dispose();
@@ -622,11 +610,16 @@ namespace GearFoundry
     		try
 			{
     			if(col == 0)
-    			{
-    				
-//    				Core.Actions.MoveItem(ItemTrackingList[row].Id,Core.CharacterFilter.Id,0,true);  
-					ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
-					FireInspectorActions();
+    			{  
+    				if(ItemHudMoveQueue.Count == 0)
+    				{
+						ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
+						FireInspectorActions();
+    				}
+    				else
+    				{
+    					ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
+    				}
     			}
     			if(col == 1)
     			{
@@ -647,16 +640,12 @@ namespace GearFoundry
 	    {  	
 	    	try
 	    	{    
-
-	    		
 	    		if(InspectorTab)
 	    		{
-		    		ItemHudInspectorList.ClearRows();
-		    		   	    		
+		    		ItemHudInspectorList.ClearRows();   	    		
 		    	    foreach(LootObject item in ItemTrackingList)
 		    	    {
-		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();
-		    	    	
+		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();	
 		    	    	((HudPictureBox)ItemHudListRow[0]).Image = item.Icon + 0x6000000;
 		    	    	((HudStaticText)ItemHudListRow[1]).Text = item.IORString() + item.Name;
 		    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Wheat;}
@@ -671,20 +660,17 @@ namespace GearFoundry
 	    		}
 	    		if(InspectorUstTab)
 	    		{
+	    			ItemHudUstList.ClearRows();
 	    			foreach(LootObject ustitem in SalvageItemsList)
 	    			{
 	    				ItemHudListRow = ItemHudUstList.AddRow();
 	    				((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;
 	    				((HudStaticText)ItemHudListRow[1]).Text = ustitem.IORString() + ustitem.Name;
-	    				((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;
-	    				
+	    				((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;	
 	    			}
-	    		}
-	    		
+	    		}	
 	    	}catch(Exception ex){LogError(ex);}
 	    	
 	    }
-		
-	
 	}
 }

@@ -24,7 +24,6 @@ Files I use in their entirety and should not be deleted:
                 //I am not using this code  Karin 4/16/13
                 MasterTimer.Interval = 500;
                 MasterTimer.Start();
-                //GearFoundry.PluginCore.WriteToChat("Master Timer Bypassed.");
                 startworker();
        InitializingFunctions.cs:  I use all code until function startworker()
                 From that point on I am not using that code and it could be deleted.

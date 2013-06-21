@@ -91,6 +91,7 @@ namespace GearFoundry
 			
 			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) evaded your attack.$"));
 			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell!$"));
+			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell$"));
 	
 			MyAttackMessages.Add(new Regex("^Critical hit!  You [\\w]+ (?<targetname>.*) for (?<points>.+) point.* of .+ damage.*$"));
 			MyAttackMessages.Add(new Regex("^You [\\w]+ (?<targetname>.*) for (?<points>.+) point.* of .+ damage.*$"));
