@@ -47,6 +47,7 @@ namespace GearFoundry
 		private const int AC_PLAYER_KILLED = 0x19E;
         private const int AC_SET_OBJECT_LINK = 0x2DA;
         private const int AC_GAME_EVENT = 0xF7B0;
+        private const int AC_GAME_ACTION = 0xF7B1;
         private const int AC_CREATE_OBJECT = 0xF745;
         private const int AC_SET_OBJECT_DWORD = 0x2CE;
         private const int AC_CLOSE_CONTAINER = 0x0052;
@@ -64,6 +65,8 @@ namespace GearFoundry
         private const int GE_EXIT_TRADE = 0x1FF;
         private const int GE_INSERT_INVENTORY_ITEM = 0x22;
         private const int GE_WEAR_ITEM = 0x23;
+        
+        private const int GA_USE_ITEM = 0x0036;
         
         
         //Fellowship Packets
@@ -299,12 +302,22 @@ namespace GearFoundry
         private static bool bquickSlotsvEnabled;
         private static bool bquickSlotshEnabled;
         
+<<<<<<< HEAD
 
       private static bool bvulnedIconsEnabled;
         
          private static bool btoonArmorEnabled;
 
         //Corpse Hud Flags
+=======
+        private static bool binventoryEnabled;
+        private static bool binventoryBurdenEnabled;
+        private static bool binventoryCompleteEnabled;
+        private static bool binventoryWaitingEnabled;
+        //private static bool bsalvageCombEnabled;
+        private static bool btoonStatsEnabled;
+        private static bool btoonArmorEnabled;
+>>>>>>> 35332c24f7da18c3f050082a0ec47d904f854b17
         private static bool bCorpseHudEnabled;
  
         //Loot Flags
@@ -325,14 +338,6 @@ namespace GearFoundry
   
 		//Landscape Tracker Flags
         private static bool bLandscapeHudEnabled;   
-        
-        //ItemTrackerFlags            
-        private static bool bItemHudEnabled = true;
-		private static bool bReportItemStrings = true;
-		private static int mLootManaMinimum = 5000;
-		private static int mLootValMinimum = 100000;
-		private static double mLootValBurdenRatioMinimum = 20;
-
 
 
         //gearmisc variables

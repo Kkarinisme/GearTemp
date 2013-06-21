@@ -84,11 +84,6 @@ namespace GearFoundry
 							
 						}
 					}
-				
-				
-				
-				
-			
 				}
 			} catch{}
 		}
@@ -109,10 +104,6 @@ namespace GearFoundry
 		 		InventorySalvage = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains("salvage")).OrderBy(x => x.Values(LongValueKey.Material)).ToList();
 			}catch{}
 		}
-		
-		
-		
-		
 		
 		private void SalvageItems()
 		{
@@ -146,9 +137,7 @@ namespace GearFoundry
 			try
 			{
 				//No sense trying to salvage if you can't....
-				
-				List<WorldObject> UstSearch = Core.WorldFilter.GetInventory().ToList();
-				
+				List<WorldObject> UstSearch = Core.WorldFilter.GetInventory().ToList();				
 				WorldObject MyUst = UstSearch[UstSearch.FindIndex(x => x.Name == "Ust")];
 				
 				if (MyUst == null)

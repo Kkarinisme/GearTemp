@@ -873,13 +873,7 @@ namespace GearFoundry
     				
     				if(UnchargedManaStones.Count > 0)
     				{
-    					WriteToChat("Uncharged Mana Stone ID = " + UnchargedManaStones.First().Id);
-    					Core.Actions.UseItem(UnchargedManaStones.Dequeue().Id,1);
-    					foreach(var stone in UnchargedManaStones)
-    					{
-    						WriteToChat("List Stones: " + stone.Id);
-    					}
-    					
+    					Core.Actions.UseItem(UnchargedManaStones.Dequeue().Id,1); 					
     				}
     				else
     				{

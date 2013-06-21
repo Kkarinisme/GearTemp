@@ -20,7 +20,8 @@ namespace GearFoundry
 //		bool b = ((IList<int>)new int[] { 3, 7, 12, 5 }).Contains(5);
 		private static int AetheriaSlots = 0x70000000;
 		private static int CloakSlot = 0x8000000;
-		
+		private static int UnderwearSlots = 0x6;
+
 		public class LootObject
 		{
 			private WorldObject wo;
@@ -69,6 +70,7 @@ namespace GearFoundry
 							if((wo.Values(LongValueKey.EquipableSlots) & AetheriaSlots) == wo.Values(LongValueKey.EquipableSlots)) 
 							{
 								gearscorereturn += (double)wo.Values((LongValueKey)NewLongKeys.MaxItemLevel);
+								break;
 							}
 							break;
 							
@@ -76,10 +78,17 @@ namespace GearFoundry
 							if((wo.Values(LongValueKey.EquipableSlots) & CloakSlot) == wo.Values(LongValueKey.EquipableSlots)) 
 							{
 								gearscorereturn += (double)wo.Values((LongValueKey)NewLongKeys.MaxItemLevel);
+								break;
 							}
-							if(wo.Values(LongValueKey.ArmorLevel) > 0) 
+							else if((wo.Values(LongValueKey.EquipableSlots) & UnderwearSlots) == wo.Values(LongValueKey.EquipableSlots))
+							{
+								gearscorereturn += 0;
+								break;
+							}
+							else if(wo.Values(LongValueKey.ArmorLevel) > 0) 
 							{
 								gearscorereturn += ArmorScore;
+								break;
 							}
 							break;
 		
@@ -142,7 +151,7 @@ namespace GearFoundry
 				}
 			}
 			
-			private double ArmorScore
+			public double ArmorScore
 			{
 				get
 				{
@@ -158,7 +167,6 @@ namespace GearFoundry
 						double cantripsteelbonus = 0;
 						double enchantmentpenalty = 0;
 						
-						WriteToChat("ASC " + wo.ActiveSpellCount.ToString());
 						//Determine the base, unenchanted steel tinks in the item.
 						if(wo.Values(LongValueKey.ActiveSpellCount) == 0) {basearmortinks = observedarmortinks;}
 						else
@@ -1049,7 +1057,7 @@ namespace GearFoundry
 			{
 				get
 				{
-					return Convert.ToBoolean(wo != null);
+					return host.Underlying.Hooks.IsValidObject(wo.Id);
 				}
 			}
 

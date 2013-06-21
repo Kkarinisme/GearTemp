@@ -237,7 +237,6 @@ namespace GearFoundry
 
         private void OnCharacterFilterLoginCompleted(object sender, System.EventArgs e)
         {
-            WriteToChat("Plugin now online. Server population: " + Core.CharacterFilter.ServerPopulation);
             try
             {
             	InitPaths();

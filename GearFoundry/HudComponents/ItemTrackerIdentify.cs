@@ -89,11 +89,7 @@ namespace GearFoundry
 				if(GISettings.LootByValue == 0){return;}
 				
 				double ratio = ((double)IOItemVal.LValue(LongValueKey.Value) / (double)IOItemVal.LValue(LongValueKey.Burden));
-				if(ratio >= mLootValBurdenRatioMinimum)
-				{
-					IOItemVal.IOR = IOResult.val;
-				}
-				else if(IOItemVal.LValue(LongValueKey.Value) >= GISettings.LootByValue)
+				if(IOItemVal.LValue(LongValueKey.Value) >= GISettings.LootByValue)
 				{
 					IOItemVal.IOR = IOResult.val;
 				}
@@ -136,17 +132,18 @@ namespace GearFoundry
 			
 				if(matches.Count() > 0)
 				{
-					int LootMaxCheck = Convert.ToInt32(matches.First().Element("Guid").Value);
-					int InventoryCount = 0;
-					if(Convert.ToBoolean(matches.First().Element("iseact").Value))
-					{
-						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name == (string)matches.First().Element("key").Value).Count();
-					}
-					else
-					{
-						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name.Contains((string)matches.First().Element("key").Value)).Count();
-					}
-					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) {return;}
+//					int LootMaxCheck;
+//					if(!Int32.TryParse(matches.First().Element("Guid").Value, out LootMaxCheck)) {LootMaxCheck = 0;}
+//					int InventoryCount = 0;
+//					if(Convert.ToBoolean(matches.First().Element("iseact").Value))
+//					{
+//						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name == (string)matches.First().Element("key").Value).Count();
+//					}
+//					else
+//					{
+//						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name.Contains((string)matches.First().Element("key").Value)).Count();
+//					}
+//					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) {return;}
 						 
 					IOItem.IOR = IOResult.trophy;
 				}				
@@ -182,15 +179,17 @@ namespace GearFoundry
 					switch(IOItemWithID.ObjectClass)
 					{					
 						case ObjectClass.Armor:
+							WriteToChat("Armor Type: " + IOItemWithID.ArmorType);
 							var reducedarmormatches = from ruls in AppliesToListMatches
-								where IOItemWithID.LValue(LongValueKey.ArmorLevel) >= ruls.RuleArmorLevel &&  
+								where (ruls.RuleArmorLevel == 0 || IOItemWithID.ArmorScore >= ruls.RuleArmorLevel) &&
 								(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
-								(ruls.RuleArmorTypes.Count() == 0 || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
+								(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
 								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
-								(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && 
+								(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && 
 								(!ruls.RuleUnenchantable || IOItemWithID.LValue(LongValueKey.Unenchantable) > 0)
 								orderby ruls.RulePriority
 								select ruls;
+							
 							if(reducedarmormatches.Count() > 0)
 							{
 								IOItemWithID.rulename = reducedarmormatches.First().RuleName; 
@@ -206,11 +205,11 @@ namespace GearFoundry
 							if(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)
 							{
 								var reducedarmorclothmatches = from ruls in AppliesToListMatches
-									where IOItemWithID.LValue(LongValueKey.ArmorLevel) >= ruls.RuleArmorLevel &&  
-									(ruls.RuleArmorTypes.Count() == 0 || ruls.RuleArmorTypes.Contains(25)) &&
+									where IOItemWithID.ArmorScore >= ruls.RuleArmorLevel &&  
+									(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(25)) &&
 									(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&  
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
-									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  
+									(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  
 									orderby ruls.RulePriority
 									select ruls;	
 								if(reducedarmorclothmatches.Count() > 0)
@@ -227,9 +226,9 @@ namespace GearFoundry
 							else if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
 							{
 								var reducedcloakmatches = from ruls in AppliesToListMatches
-									where IOItemWithID.LValue((LongValueKey)NewLongKeys.MaxItemLevel) >= ruls.RuleItemLevel &&
+									where IOItemWithID.GearScore >= ruls.RuleItemLevel &&
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
-									(ruls.RuleArmorSet.Count() == 0 || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))
+									(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))
 									orderby ruls.RulePriority
 									select ruls;
 								if(reducedcloakmatches.Count() > 0)
@@ -246,7 +245,8 @@ namespace GearFoundry
 							else
 							{
 								var reducedclothmatches = from ruls in AppliesToListMatches
-									where ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber
+									where ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
+									ruls.RuleArmorLevel == 0
 									orderby ruls.RulePriority
 									select ruls;
 								if(reducedclothmatches.Count() > 0)
@@ -494,12 +494,12 @@ namespace GearFoundry
 							if(rule.RuleArmorLevel > IOItemWithID.LValue(LongValueKey.ArmorLevel)) {RuleName = String.Empty; goto Next;}
 						}
 	//					//Irquk:  Modified, functionality untested
-						if(rule.RuleArmorTypes.Length > 0)
+						if(rule.RuleArmorTypes.Length != null)
 						{
 							if(!rule.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) {RuleName = String.Empty; goto Next;} 
 						}
 						//Irquk:  Confirmed Functional
-						if(rule.RuleArmorSet.Length > 0)
+						if(rule.RuleArmorSet != null)
 						{
 							if(!rule.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))){RuleName = String.Empty; goto Next;}
 						}
@@ -798,17 +798,25 @@ namespace GearFoundry
 						tRule.MSCleaveD = false; tRule.MaxDamageD = 0; tRule.VarianceD = 0;
 					}		
 					
-					CombineIntList.Clear();
-					splitstring = (XRule.Element("ArmorType").Value).Split(',');	
-					if(splitstring.Length > 0)
+					
+					if((string)XRule.Element("ArmorType").Value != String.Empty)
 					{
-						for(int j = 0; j < splitstring.Length; j++)
+						CombineIntList.Clear();
+						splitstring = (XRule.Element("ArmorType").Value).Split(',');				
+						if(splitstring.Length > 0)
 						{
-							tempint = -1;
-							Int32.TryParse(splitstring[j], out tempint);
-							if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
+							for(int j = 0; j < splitstring.Length; j++)
+							{
+								tempint = -1;
+								Int32.TryParse(splitstring[j], out tempint);
+								if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
+							}
+							tRule.RuleArmorTypes = CombineIntList.ToArray();
 						}
-						tRule.RuleArmorTypes = CombineIntList.ToArray();
+					}
+					else
+					{
+						tRule.RuleArmorTypes = null;
 					}
 					
 					
@@ -819,30 +827,36 @@ namespace GearFoundry
 						for(int j = 0; j < splitstring.Length; j++){if(!Int32.TryParse(splitstring[j], out sumarray[j])){sumarray[j] = 0;}}
 						tRule.RuleArmorCoverage = sumarray.Sum();
 					}
-					
-					CombineIntList.Clear();
-					splitstring = (XRule.Element("ArmorSet").Value).Split(',');
-					if(splitstring.Length > 0)
+					if((string)XRule.Element("ArmorSet").Value != String.Empty || (string)XRule.Element("CloakSets").Value != String.Empty)
 					{
-						for(int j = 0; j < splitstring.Length; j++)
+						CombineIntList.Clear();
+						splitstring = (XRule.Element("ArmorSet").Value).Split(',');
+						if(splitstring.Length > 0)
 						{
-							tempint = -1;
-							Int32.TryParse(splitstring[j], out tempint);
-							if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
+							for(int j = 0; j < splitstring.Length; j++)
+							{
+								tempint = -1;
+								Int32.TryParse(splitstring[j], out tempint);
+								if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
+							}
 						}
+						splitstring = (XRule.Element("CloakSets").Value).Split(',');
+						if(splitstring.Length > 0)
+						{
+							for(int j = 0; j < splitstring.Length; j++)
+							{
+								tempint = 0;
+								Int32.TryParse(splitstring[j], out tempint);
+								if(tempint > 0) {CombineIntList.Add(tempint); tempint = 0;}
+							}
+						}
+						tRule.RuleArmorSet = CombineIntList.ToArray();
+						CombineIntList.Clear();
 					}
-					splitstring = (XRule.Element("CloakSets").Value).Split(',');
-					if(splitstring.Length > 0)
+					else
 					{
-						for(int j = 0; j < splitstring.Length; j++)
-						{
-							tempint = 0;
-							Int32.TryParse(splitstring[j], out tempint);
-							if(tempint > 0) {CombineIntList.Add(tempint); tempint = 0;}
-						}
+						tRule.RuleArmorSet = null;
 					}
-					tRule.RuleArmorSet = CombineIntList.ToArray();
-					CombineIntList.Clear();
 					
 					if(!bool.TryParse((XRule.Element("Unenchantable").Value), out tRule.RuleUnenchantable)){tRule.RuleUnenchantable = false;}
 					if(!Int32.TryParse((XRule.Element("MinArmorLevel").Value), out tRule.RuleArmorLevel)){tRule.RuleArmorLevel = 0;}
