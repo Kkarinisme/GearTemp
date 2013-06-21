@@ -404,9 +404,10 @@
           <control progid="DecalControls.Checkbox" name="chkRemoteGearEnabled" left="380" top="120" width="150" height="16" textcolor="16777215" text="Enabled"/>
 
           <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="70" width="225" height="24" text="Gear"/>
-          <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="90" width="225" height="24" text="Inventory on Startup"/>
-          <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="10" top="110" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>
-          <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="10" top="130" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
+          <control progid="DecalControls.Checkbox" name="chkInventoryHudEnabled" left="10" top="90" width="225" height="24" text="Enable Inventory"/>
+          <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="110" width="225" height="24" text="Inventory on Startup"/>
+          <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="10" top="130" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>
+          <control progid="DecalControls.Checkbox" name="chkInventoryComplete" left="10" top="150" width="225" height="24" textcolor="16777215" text="Complete inventory on Startup"/>
 
 
           <Control progid="DecalControls.StaticText" name="lblGearFilters" left ="5" top="200" width="225" height="24" text="Gear Filters"/>

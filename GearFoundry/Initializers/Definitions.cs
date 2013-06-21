@@ -101,9 +101,6 @@ namespace GearFoundry
         private string switchGearSettingsFilename = null;
         private string genSettingsFilename = null;
         private string toonSettingsFilename = null;
-        private string inventoryFilename = null;
-        private string genInventoryFilename = null;
-        private string holdingInventoryFilename = null;
         private string holdingStatsFilename = null;
         private string statsFilename = null;
         private string allStatsFilename = null;
@@ -337,9 +334,6 @@ namespace GearFoundry
 		private static double mLootValBurdenRatioMinimum = 20;
 
 
-        //variables used in toon statistics program
-        private XDocument xDocStats = new XDocument();
-        private XDocument xDocAllStats = new XDocument();
 
         //gearmisc variables
         private static bool bMuteSounds = false;

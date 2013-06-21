@@ -655,6 +655,7 @@ namespace GearFoundry
 		    	    	
 		    	    	((HudPictureBox)ItemHudListRow[0]).Image = item.Icon + 0x6000000;
 		    	    	((HudStaticText)ItemHudListRow[1]).Text = item.IORString() + item.Name;
+                        ((HudStaticText)ItemHudListRow[1]).FontHeight = 10;
 		    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Wheat;}
 		    	    	if(item.IOR == IOResult.salvage) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleVioletRed;}
 		    	    	if(item.IOR == IOResult.val) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleGoldenrod;}

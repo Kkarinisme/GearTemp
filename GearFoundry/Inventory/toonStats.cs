@@ -23,7 +23,8 @@ namespace GearFoundry
 {
     public partial class PluginCore : PluginBase
     {
-
+        XDocument xdocStats;
+        XDocument xdocAllStats;
 
         void chkStats_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
@@ -80,7 +81,7 @@ namespace GearFoundry
 
 
 
-                xDocStats = new XDocument(new XElement("Toons",
+                xdocStats = new XDocument(new XElement("Toons",
                       new XElement("Toon",
                         new XElement("Statistics",
                           new XElement("ToonName", toonName),
@@ -104,14 +105,14 @@ namespace GearFoundry
                     int attrBase = Core.CharacterFilter.Attributes[attrib].Base;
                     int attrBuff = Core.CharacterFilter.Attributes[attrib].Buffed;
 
-                    xDocStats.Element("Toons").Element("Toon").Element("Attributes").Add(new XElement("Attribute",
+                    xdocStats.Element("Toons").Element("Toon").Element("Attributes").Add(new XElement("Attribute",
                        new XElement("AttrName", attrName),
                        new XElement("AttrBase", attrBase),
                        new XElement("AttrBuff", attrBuff)));
                 }
 
                 // Need to get skills
-                xDocStats.Element("Toons").Element("Toon").Add(new XElement("Skills",
+                xdocStats.Element("Toons").Element("Toon").Add(new XElement("Skills",
                     new XElement("Specialized"),
                     new XElement("Trained")));
 
@@ -128,7 +129,7 @@ namespace GearFoundry
 
                     if (sklltype == "eTrainSpecialized")
                     {
-                        xDocStats.Element("Toons").Element("Toon").Element("Skills").Element("Specialized")
+                        xdocStats.Element("Toons").Element("Toon").Element("Skills").Element("Specialized")
                            .Add(new XElement("SkllName", skllname,
                                new XElement("SkllBase", skllbs),
                                new XElement("SkllBuff", skllbf),
@@ -140,7 +141,7 @@ namespace GearFoundry
                     {
                         if (sklltype == "eTrainTrained")
                         {
-                            xDocStats.Element("Toons").Element("Toon").Element("Skills").Element("Trained")
+                            xdocStats.Element("Toons").Element("Toon").Element("Skills").Element("Trained")
                               .Add(new XElement("SkllName", skllname,
                                   new XElement("SkllBase", skllbs),
                                   new XElement("SkllBuff", skllbf),
@@ -159,7 +160,7 @@ namespace GearFoundry
 
                 // need to get spells toon does not have in own spell book
 
-                xDocStats.Element("Toons").Element("Toon").Add(new XElement("Spells",
+                xdocStats.Element("Toons").Element("Toon").Add(new XElement("Spells",
                     new XElement("Creature"),
                     new XElement("Life"),
                     new XElement("Item"),
@@ -194,27 +195,27 @@ namespace GearFoundry
 
                             if (spellSchool == "Creature Enchantment")
                             {
-                                xDocStats.Element("Toons").Element("Toon").Element("Spells").Element("Creature")
+                                xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("Creature")
                                  .Add(new XElement("Spell", spellName));
                             }
                             if (spellSchool == "Life Magic")
                             {
-                                xDocStats.Element("Toons").Element("Toon").Element("Spells").Element("Life")
+                                xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("Life")
                                  .Add(new XElement("Spell", spellName));
                             }
                             if (spellSchool == "Item Enchantment")
                             {
-                                xDocStats.Element("Toons").Element("Toon").Element("Spells").Element("Item")
+                                xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("Item")
                                  .Add(new XElement("Spell", spellName));
                             }
                             if (spellSchool == "War Magic")
                             {
-                                xDocStats.Element("Toons").Element("Toon").Element("Spells").Element("War")
+                                xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("War")
                                  .Add(new XElement("Spell", spellName));
                             }
                             if (spellSchool == "Void Magic")
                             {
-                                xDocStats.Element("Toons").Element("Toon").Element("Spells").Element("Void")
+                                xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("Void")
                                  .Add(new XElement("Spell", spellName));
                             }
                         } // if spellcomps[]
@@ -223,20 +224,20 @@ namespace GearFoundry
                 } // end of for
 
 
-                xDocStats.Save(statsFilename);
-                xDocStats = null;
+                xdocStats.Save(statsFilename);
+                xdocStats = null;
                 // removeToonfromFile();
 
-                xDocAllStats = XDocument.Load(allStatsFilename);
+                xdocAllStats = XDocument.Load(allStatsFilename);
 
-                xDocAllStats.Descendants("Toon").Where(x => x.Element("Statistics").Element("ToonName").Value == toonName).Remove();
+                xdocAllStats.Descendants("Toon").Where(x => x.Element("Statistics").Element("ToonName").Value == toonName).Remove();
                 GearFoundry.PluginCore.WriteToChat("I have just removed toon from allstats file");
 
-                xDocAllStats.Root.Add(XDocument.Load(statsFilename).Root.Elements());
+                xdocAllStats.Root.Add(XDocument.Load(statsFilename).Root.Elements());
                 GearFoundry.PluginCore.WriteToChat("I have just added toon to allstats file");
 
-                xDocAllStats.Save(allStatsFilename);
-                xDocAllStats = null;
+                xdocAllStats.Save(allStatsFilename);
+                xdocAllStats = null;
                 GearFoundry.PluginCore.WriteToChat("General statistics file has been saved. ");
             } //end of try
     

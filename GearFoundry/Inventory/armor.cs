@@ -29,7 +29,6 @@ namespace GearFoundry
         private XDocument xdocGenArmor;
         private XDocument xdocArmor;
         private XDocument xdocArmorSettings;
-        private XDocument xdocAllStats;
 
         private string armorFilename = null;
         private string genArmorFilename = null;
@@ -412,7 +411,7 @@ namespace GearFoundry
                 {
                     DisposeArmorHud();
                 }
-                if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = currDir + @"\ArmorSettings.xml"; }
+                if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = GearDir + @"\ArmorSettings.xml"; }
                 if (genArmorFilename == "" || genArmorFilename == null) { genArmorFilename = currDir + @"\allToonsArmor.xml"; }
                 xdocGenArmor = new XDocument();
                 xdocGenArmor = XDocument.Load(genArmorFilename);
@@ -483,28 +482,10 @@ namespace GearFoundry
             ArmorHudWidth = ArmorHudWidthNew;
             ArmorHudHeight = ArmorHudHeightNew;
             MasterTimer.Tick -= ArmorResizeTimerTick;
+            SaveArmorSettings();
             RenderArmorHud();
 
         }
-
-        private void SaveArmorSettings()
-        {
-         try
-
-
-            {
-                if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = currDir + @"\ArmorSettings.xml"; }
-                WriteToChat("I am in save armor settings and armor settings filename is " + armorSettingsFilename);
-                xdoc = new XDocument(new XElement("Settings"));
-                xdoc.Element("Settings").Add(new XElement("Setting",
-                    new XElement("ArmorHudWidth", ArmorHudWidth),
-                    new XElement("ArmorHudHeight", ArmorHudHeight)));
-                xdoc.Save(armorSettingsFilename);
-            }
-         catch (Exception ex) { LogError(ex); }
-
-        }
-
 
 
         private void ArmorHudTabView_OpenTabChange(object sender, System.EventArgs e)

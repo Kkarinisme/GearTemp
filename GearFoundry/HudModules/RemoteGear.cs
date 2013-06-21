@@ -23,7 +23,6 @@ namespace GearFoundry
     public partial class PluginCore : PluginBase
     {
         XDocument xdocRemoteGear = null;
-        int nRemoteGear = 0;
 
         private static VirindiViewService.HudView remoteGearHud = null;
         private static VirindiViewService.Controls.HudFixedLayout remoteGear_Head = null;
@@ -63,7 +62,7 @@ namespace GearFoundry
 
             xdocRemoteGear = XDocument.Load(remoteGearFilename);
 
-            remoteGearHud = new VirindiViewService.HudView("", 30, 165, new ACImage(Color.Transparent), false, "RemoteGear");
+            remoteGearHud = new VirindiViewService.HudView("", 30, 200, new ACImage(Color.Transparent), false, "RemoteGear");
             remoteGearHud.ShowInBar = false;
             remoteGearHud.UserAlphaChangeable = false;
             remoteGearHud.Visible = true;
@@ -77,7 +76,7 @@ namespace GearFoundry
             remoteGearTabView = new HudTabView();
             remoteGearTabFixedLayout = new HudFixedLayout();
 
-            remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 164));
+            remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 199));
             remoteGearTabView.AddTab(remoteGearTabFixedLayout, "");
 
             //Butler
@@ -112,8 +111,18 @@ namespace GearFoundry
             int GR_Combat_ICON = 0x6004D06;
             mRemoteGear4.Image = GR_Combat_ICON;
             remoteGearTabFixedLayout.AddControl(mRemoteGear4, new Rectangle(2, 125, 25, 25));
-            mRemoteGear4.Hit += (sender, obj) => mRemoteGear4_Hit(sender, obj); 
+            mRemoteGear4.Hit += (sender, obj) => mRemoteGear4_Hit(sender, obj);
+            try
+            {
+                //InventoryHud
+                mRemoteGear5 = new HudPictureBox();
+                int GR_Inventory_ICON = 0x600127E;
+                mRemoteGear5.Image = GR_Inventory_ICON;
+                remoteGearTabFixedLayout.AddControl(mRemoteGear5, new Rectangle(2, 155, 25, 25));
+                mRemoteGear5.Hit += (sender, obj) => mRemoteGear5_Hit(sender, obj);
 
+            }
+            catch (Exception ex) { LogError(ex); }
 
           }
 
@@ -133,7 +142,6 @@ namespace GearFoundry
 
             remoteGear_Head.Dispose();
             remoteGearHud.Dispose();
-            nRemoteGear = 0;
 
         }
 
@@ -264,6 +272,24 @@ namespace GearFoundry
         {
             try
             {
+                if (binventoryHudEnabled == true)
+                {
+                    WriteToChat("I am in remote gear hud and binventoryhudenabled");
+                    binventoryHudEnabled = false;
+                    DisposeInventoryHud();
+
+                }
+                else
+                {
+                    WriteToChat("I am in remote gear hud and binventoryhudenabled = false");
+
+                    binventoryHudEnabled = true;
+                    RenderInventoryHud();
+
+                }
+                chkInventoryHudEnabled.Checked = binventoryHudEnabled;
+                SaveSettings();
+
             }
             catch (Exception ex) { LogError(ex); }
 

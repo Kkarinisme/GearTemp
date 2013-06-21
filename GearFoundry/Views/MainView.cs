@@ -65,6 +65,7 @@ namespace GearFoundry
 
 
         //Gear
+        MyClasses.MetaViewWrappers.ICheckBox chkInventoryHudEnabled;
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryBurden;
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryComplete;
         MyClasses.MetaViewWrappers.ICheckBox chkInventory;
@@ -341,8 +342,9 @@ namespace GearFoundry
      			try
      			{
 
-                   chkInventory = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventory"];
-                   chkInventoryBurden = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryBurden"];
+                    chkInventory = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventory"];
+                    chkInventoryHudEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryHudEnabled"];
+                    chkInventoryBurden = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryBurden"];
                    chkInventoryComplete = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryComplete"];
                    chkToonStats = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonStats"];
                    chkToonArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonArmor"];
@@ -427,9 +429,10 @@ namespace GearFoundry
                   try
                   { 
                     //Inventory Control Section
-                    
-                    chkInventory.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventory_Change);
-                    chkInventoryBurden.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryBurden_Change);
+
+                      chkInventoryHudEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryHudEnabled_Change);
+                      chkInventory.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventory_Change);
+                      chkInventoryBurden.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryBurden_Change);
                     chkInventoryComplete.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryComplete_Change);
                     chkToonStats.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
                    chkToonArmor.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonArmor_Change);
@@ -844,14 +847,14 @@ namespace GearFoundry
 
                 txbSelect = (MyClasses.MetaViewWrappers.ITextBox)View["txbSelect"];
 
-                lstInventory.Selected += new EventHandler<MVListSelectEventArgs>(lstInventory_Selected);
+              //  lstInventory.Selected += new EventHandler<MVListSelectEventArgs>(lstInventory_Selected);
                 btnGetInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetInventory_Click);
                 btnUpdateInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateInventory_Click);
                 btnGetBurden.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetBurden_Click);
                 btnItemsWaiting.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnItemsWaiting_Click);
                 ////      btnGetToonArmor.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetToonArmor_Click);
-                btnLstInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnLstInventory_Click);
-                btnClrInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnClrInventory_Click);
+              //  btnLstInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnLstInventory_Click);
+              //  btnClrInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnClrInventory_Click);
                 cmbSelectClass.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbSelectClass_Change);
                 cmbSelectClass.Selected = 0;
                 cmbWieldAttrib.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbWieldAttrib_Change);
