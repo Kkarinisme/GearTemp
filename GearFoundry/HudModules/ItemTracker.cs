@@ -348,26 +348,27 @@ namespace GearFoundry
     		try
     		{
     			WriteToChat("Prepare for Warp Speed!  And CoreDumping!");
+    			WriteToChat("If the looter is 'hung' pressing this a lot will clear the queue for now");
     			
-    			foreach(LootObject lo in ProcessItemsList)
-    			{
-    				if(lo.IOR == IOResult.salvage)
-    				{
-    					SalvageItemsQueue.Enqueue(lo);
-    				}
-    				else if(lo.IOR == IOResult.dessicate)
-    				{
-    					DesiccateItemsQueue.Enqueue(lo);
-    				}
-    				else if(lo.IOR == IOResult.manatank)
-    				{
-    					ManaTankQueue.Enqueue(lo);
-    				}
-    				else if(lo.ObjectClass == ObjectClass.Key)
-    				{
-    					KeyItemsQueue.Enqueue(lo);
-    				}
-    			}
+//    			foreach(LootObject lo in ProcessItemsList)
+//    			{
+//    				if(lo.IOR == IOResult.salvage)
+//    				{
+//    					SalvageItemsQueue.Enqueue(lo);
+//    				}
+//    				else if(lo.IOR == IOResult.dessicate)
+//    				{
+//    					DesiccateItemsQueue.Enqueue(lo);
+//    				}
+//    				else if(lo.IOR == IOResult.manatank)
+//    				{
+//    					ManaTankQueue.Enqueue(lo);
+//    				}
+//    				else if(lo.ObjectClass == ObjectClass.Key)
+//    				{
+//    					KeyItemsQueue.Enqueue(lo);
+//    				}
+//    			}
 
     			FireInspectorActions();
 
