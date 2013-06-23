@@ -89,6 +89,7 @@ namespace GearFoundry
             if(LandscapeHudView != null) {DisposeLandscapeHud();}
             if(ItemHudView != null) {DisposeItemHud();}
             if(ButlerHudView != null){UnsubscribeButlerEvents();}
+            if(InventoryHudView != null){DisposeInventoryHud();}
 
         }
         

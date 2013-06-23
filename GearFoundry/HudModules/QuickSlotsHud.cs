@@ -163,7 +163,7 @@ namespace GearFoundry
 
             xdocQuickSlotsv = XDocument.Load(quickSlotsvFilename);
 
-            quickiesvHud = new VirindiViewService.HudView("", 30, 360, new ACImage(Color.Transparent),false,"quickiesvhud");
+            quickiesvHud = new VirindiViewService.HudView("", 30, 385, new ACImage(Color.Transparent),false,"quickiesvhud");
             quickiesvHud.ShowInBar = false;
             quickiesvHud.UserAlphaChangeable = false;
             quickiesvHud.Visible = true;
@@ -177,7 +177,7 @@ namespace GearFoundry
             quickiesvTabView = new HudTabView();
             quickiesvTabFixedLayout = new HudFixedLayout();
 
-            quickiesvHud_Head.AddControl(quickiesvTabView, new Rectangle(0, 0, 29, 359));
+            quickiesvHud_Head.AddControl(quickiesvTabView, new Rectangle(0, 0, 29, 384));
             quickiesvTabView.AddTab(quickiesvTabFixedLayout, "");       
 
                 btnQuickiesvAdd = new VirindiViewService.Controls.HudButton();
@@ -321,7 +321,7 @@ namespace GearFoundry
 
  
 
-                quickieshHud = new VirindiViewService.HudView("", 385, 40, new ACImage(Color.Transparent),false,"quickieshhud");
+                quickieshHud = new VirindiViewService.HudView("", 405, 40, new ACImage(Color.Transparent),false,"quickieshhud");
                 quickieshHud.ShowInBar = false;
                 quickieshHud.UserAlphaChangeable = false;
                 quickieshHud.Visible = true;
@@ -337,7 +337,7 @@ namespace GearFoundry
                 quickieshTabView = new HudTabView();
                 quickieshTabFixedLayout = new HudFixedLayout();
 
-                quickieshHud_Head.AddControl(quickieshTabView, new Rectangle(0, 0, 385, 40));
+                quickieshHud_Head.AddControl(quickieshTabView, new Rectangle(0, 0, 404, 40));
                 quickieshTabView.AddTab(quickieshTabFixedLayout, "Horizontal Switchgear");
 
                 btnQuickieshAdd = new VirindiViewService.Controls.HudButton();

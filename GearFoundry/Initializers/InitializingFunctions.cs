@@ -402,8 +402,8 @@ namespace GearFoundry
                 bRemoteGearEnabled = Convert.ToBoolean(mGenSettingsList[5].Value);
                 bquickSlotsvEnabled = Convert.ToBoolean(mGenSettingsList[6].Value);
                 bquickSlotshEnabled = Convert.ToBoolean(mGenSettingsList[7].Value);
-                binventoryEnabled = Convert.ToBoolean(mGenSettingsList[8].Value);
-                binventoryBurdenEnabled = Convert.ToBoolean(mGenSettingsList[9].Value);
+                binventoryHudEnabled = Convert.ToBoolean(mGenSettingsList[8].Value);
+                binventoryEnabled = Convert.ToBoolean(mGenSettingsList[9].Value);
                 binventoryCompleteEnabled = Convert.ToBoolean(mGenSettingsList[10].Value);
                 btoonStatsEnabled = Convert.ToBoolean(mGenSettingsList[11].Value);
                 btoonArmorEnabled = Convert.ToBoolean(mGenSettingsList[12].Value);
@@ -457,10 +457,8 @@ namespace GearFoundry
 
                    //Inventory Section
                    chkInventory.Checked = binventoryEnabled;
-                   chkInventoryBurden.Checked = binventoryBurdenEnabled;
-                   chkInventoryComplete.Checked = binventoryCompleteEnabled;
+                    chkInventoryComplete.Checked = binventoryCompleteEnabled;
                    chkToonStats.Checked = btoonStatsEnabled;
-                   chkToonArmor.Checked = btoonArmorEnabled;
                    chkArmorHud.Checked = bArmorHudEnabled;
 
  
@@ -542,6 +540,10 @@ namespace GearFoundry
             {
                 RenderArmorHud(); 
             }
+
+            if (binventoryHudEnabled)
+            { RenderInventoryHud(); }
+
 
 
             if (binventoryBurdenEnabled)
@@ -990,8 +992,6 @@ namespace GearFoundry
                 SaveSettings();
                 if (bArmorHudEnabled) 
                 {
-                   // if (File.Exists(armorSettingsFilename))
-                   // { getArmorHudSettings(); }
                     RenderArmorHud();
 
                 }
@@ -1007,18 +1007,77 @@ namespace GearFoundry
         {
 
             try{
-                WriteToChat("I am in function to get armorhud settings");
                     
                 xdocArmorSettings = XDocument.Load(armorSettingsFilename);
                 ArmorHudWidth = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudWidth").Value);
                  ArmorHudHeight = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudHeight").Value);
-                WriteToChat("ArmorHudWidth: " + ArmorHudWidth.ToString());
+                 InventoryHudWidth = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("InventoryHudWidth").Value);
+                 InventoryHudHeight = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("InventoryHudHeight").Value);
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
+        void chkInventoryHudEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                binventoryHudEnabled = e.Checked;
+
+                SaveSettings();
+                if (binventoryHudEnabled)
+                {
+                    if (File.Exists(armorSettingsFilename))
+                    { getInventoryHudSettings(); }
+                    RenderInventoryHud();
+
+                }
+                else { DisposeInventoryHud(); }
+
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
+
+        void getInventoryHudSettings()
+        {
+
+            try
+            {
+                xdocInventorySettings = XDocument.Load(armorSettingsFilename);
+                InventoryHudWidth = Convert.ToInt32(xdocInventorySettings.Element("Settings").Element("Setting").Element("InventoryHudWidth").Value);
+                InventoryHudHeight = Convert.ToInt32(xdocInventorySettings.Element("Settings").Element("Setting").Element("InventoryHudHeight").Value);
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
+
+       // settings are stored in ArmorSettings.xml for both Armor hud and Inventory hud
+
+        private void SaveArmorSettings()
+        {
+            try
+            {
+                if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = GearDir + @"\ArmorSettings.xml"; }
+                WriteToChat("I am in save armor settings and armor settings filename is " + armorSettingsFilename);
+                xdoc = new XDocument(new XElement("Settings"));
+                xdoc.Element("Settings").Add(new XElement("Setting",
+                    new XElement("ArmorHudWidth", ArmorHudWidth),
+                    new XElement("ArmorHudHeight", ArmorHudHeight),
+                    new XElement("InventoryHudWidth", InventoryHudWidth),
+                    new XElement("InventoryHudHeight", InventoryHudHeight)));
+
+
+                xdoc.Save(armorSettingsFilename);
             }
             catch (Exception ex) { LogError(ex); }
 
         }
 
         //Gear Filter Settings
+        
         void chkEnableTextFiltering_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
             try
@@ -1432,8 +1491,8 @@ namespace GearFoundry
                          new XElement("RemoteGearEnabled", bRemoteGearEnabled),
                          new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
                          new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
+                         new XElement("InventoryHudEnabled", binventoryHudEnabled),
                          new XElement("InventoryEnabled", binventoryEnabled),
-                         new XElement("InventoryBurdenEnabled", binventoryBurdenEnabled),
                          new XElement("InventoryCompleteEnabled", binventoryCompleteEnabled),
                          new XElement("ToonStatsEnabled", btoonStatsEnabled),
                          new XElement("ToonArmorEnabled", btoonArmorEnabled),

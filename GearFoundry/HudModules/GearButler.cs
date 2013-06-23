@@ -65,7 +65,7 @@ namespace GearFoundry
 		private HudButton ButlerHudClearSearchButton = null;
 		private HudStaticText ButlerHudCurrentSelectionLabel = null;
 		private HudStaticText ButlerHudCurrentSelectionText = null;
-		private HudPictureBox ButlerHudCurrentSelectionIcon = null;
+		private HudImageStack ButlerHudCurrentSelectionIcon = null;
 		private HudButton ButlerHudPickCurrentSelection = null;
 		private HudButton ButlerHudSalvageCurrentSelection = null;
 		private HudButton ButlerHudUseCurrentSelection = null;
@@ -323,12 +323,16 @@ namespace GearFoundry
     		{	
 				if(Core.WorldFilter[Core.Actions.CurrentSelection] != null)
 				{
-					ButlerHudCurrentSelectionIcon.Image = Core.WorldFilter[Core.Actions.CurrentSelection].Icon;
+					ButlerHudCurrentSelectionIcon.Clear();
+					
+					ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.Icon));
+					ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.IconOverlay));
+					                                  
 					ButlerHudCurrentSelectionText.Text = Core.WorldFilter[Core.Actions.CurrentSelection].Name;
 				}
 				else
 				{
-					ButlerHudCurrentSelectionIcon.Image = null;
+					ButlerHudCurrentSelectionIcon.Clear();
 					ButlerHudCurrentSelectionText.Text = "Nothing Selected";
 				}
 				UpdateButlerHudList();
@@ -560,7 +564,7 @@ namespace GearFoundry
     		return;
     	}
     	
-    	
+    	Rectangle CurrentSelectionRectangle = new Rectangle(0,0,25,25);
     	
     	
     	private void RenderButlerHudButlerLayout()
@@ -598,8 +602,7 @@ namespace GearFoundry
 	    			}
     			}catch(Exception ex){LogError(ex);}
     			    			    			
-    			ButlerHudCurrentSelectionIcon = new HudPictureBox();
-    			ButlerHudCurrentSelectionIcon.Image = null;
+    			ButlerHudCurrentSelectionIcon = new HudImageStack();
     			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionIcon, new Rectangle(136,20,25,25));
     			
     			ButlerHudCurrentSelectionText = new HudStaticText();

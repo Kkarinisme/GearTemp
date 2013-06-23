@@ -1267,7 +1267,6 @@ namespace GearFoundry
             {
                 IDNameLoadable info = new IDNameLoadable(i++, load);
                 ClassInvList.Add(info);
-                cmbSelectClass.Add(info.name);
             }
             if (writelists) { doWriteLists(ClassInvList); }
 
@@ -1281,15 +1280,15 @@ namespace GearFoundry
                 MeleeTypeInvList = new List<IDNameLoadable>();
 
                 info = new IDNameLoadable(0, "None");
-                addInfo(info,MeleeTypeInvList,cmbWieldAttrib);
+                MeleeTypeInvList.Add(info);
                info = new IDNameLoadable(41, "TwoHanded");
-               addInfo(info, MeleeTypeInvList, cmbWieldAttrib);
+               MeleeTypeInvList.Add(info);
                info = new IDNameLoadable(44, "Heavy");
-               addInfo(info, MeleeTypeInvList, cmbWieldAttrib);
+               MeleeTypeInvList.Add(info);
                info = new IDNameLoadable(45, "Light");
-               addInfo(info, MeleeTypeInvList, cmbWieldAttrib);
+               MeleeTypeInvList.Add(info);
                info = new IDNameLoadable(46, "Finesse");
-               addInfo(info, MeleeTypeInvList, cmbWieldAttrib);
+               MeleeTypeInvList.Add(info);
             }
             catch (Exception ex) { LogError(ex); }
             if (writelists) { doWriteLists(MeleeTypeInvList); }
@@ -1302,15 +1301,13 @@ namespace GearFoundry
             ArmorSetsInvList = new List<IDNameLoadable>();
             IDNameLoadable info = new IDNameLoadable(0,"None");
             ArmorSetsInvList.Add(info);
-            cmbArmorSet.Add(info.name);
-            var armors = from sets in SetsIndex
+           var armors = from sets in SetsIndex
                          where !sets.name.Contains("Weave") && !sets.name.Contains("Unknown") && !sets.name.Contains("Sigil")
                             orderby sets.name
                          select sets;
             foreach (var armorsets in armors)
             {
                 ArmorSetsInvList.Add(armorsets);
-                cmbArmorSet.Add(armorsets.name);
             }
             var armors2 = from sets2 in SetsIndex
                          where sets2.name.Contains("Weave") 
@@ -1319,8 +1316,7 @@ namespace GearFoundry
             foreach (var armorsets2 in armors2)
             {
                 ArmorSetsInvList.Add(armorsets2);
-                cmbArmorSet.Add(armorsets2.name);
-            }
+           }
 
 
         }
@@ -1334,12 +1330,10 @@ namespace GearFoundry
                            orderby mat.name
                            select mat;
             IDNameLoadable info = new IDNameLoadable(0, "None");
-            cmbMaterial.Add(info.name);
             MaterialInvList.Add(info);
             foreach (var material in materials)
             {
                 info = new IDNameLoadable(material.ID, material.name);
-                cmbMaterial.Add(material.name);
                 MaterialInvList.Add(info);
             }
             if (writelists) { doWriteLists(MaterialInvList); }
@@ -1354,25 +1348,25 @@ namespace GearFoundry
             //Again...Flags suck
 
             info = new IDNameLoadable(0, "None");
-            addInfo(info,ElementalInvList,cmbDamageType);
+            ElementalInvList.Add(info);
             info = new IDNameLoadable(1, "Slashing");
-            addInfo(info, ElementalInvList, cmbDamageType);
+            ElementalInvList.Add(info);
             info = new IDNameLoadable(2, "Piercing");
-            addInfo(info, ElementalInvList, cmbDamageType);
+            ElementalInvList.Add(info);
             info = new IDNameLoadable(3, "Slashing:Piercing");
-            addInfo(info, ElementalInvList, cmbDamageType);
+            ElementalInvList.Add(info);
             info = new IDNameLoadable(4, "Bludgeoning");
-            addInfo(info, ElementalInvList, cmbDamageType);
+            ElementalInvList.Add(info);
             info = new IDNameLoadable(8, "Cold");
-            addInfo(info, ElementalInvList, cmbDamageType);
+            ElementalInvList.Add(info);
             info = new IDNameLoadable(16, "Fire");
-            addInfo(info, ElementalInvList, cmbDamageType);
+            ElementalInvList.Add(info);
             info = new IDNameLoadable(32, "Acid");
-            addInfo(info, ElementalInvList, cmbDamageType);
+            ElementalInvList.Add(info);
             info = new IDNameLoadable(64, "Electric");
-            addInfo(info, ElementalInvList, cmbDamageType);
+            ElementalInvList.Add(info);
             info = new IDNameLoadable(1024, "Void");
-            addInfo(info, ElementalInvList, cmbDamageType);
+            ElementalInvList.Add(info);
             if (writelists) { doWriteLists(ElementalInvList); }
 
         }
@@ -1385,22 +1379,22 @@ namespace GearFoundry
                 ArmorLevelInvList = new List<IDNameLoadable>();
                 IDNameLoadable info;
                 info = new IDNameLoadable(0, "None");
-                addInfo(info,ArmorLevelInvList,cmbArmorLevel);
-                info = new IDNameLoadable(1, "No Wield");
-                addInfo(info, ArmorLevelInvList, cmbArmorLevel);
-                info = new IDNameLoadable(2, "60");
-                addInfo(info, ArmorLevelInvList, cmbArmorLevel);
-                info = new IDNameLoadable(3, "90");
-                addInfo(info, ArmorLevelInvList, cmbArmorLevel);
-                info = new IDNameLoadable(4, "100");
-                addInfo(info, ArmorLevelInvList, cmbArmorLevel);
-                info = new IDNameLoadable(5, "150");
-                addInfo(info, ArmorLevelInvList, cmbArmorLevel);
-                info = new IDNameLoadable(6, "180");
-                addInfo(info, ArmorLevelInvList, cmbArmorLevel);
-                info = new IDNameLoadable(7, "225");
-                addInfo(info, ArmorLevelInvList, cmbArmorLevel);
-   
+                ArmorLevelInvList.Add(info);
+               info = new IDNameLoadable(1, "No Wield");
+               ArmorLevelInvList.Add(info);
+               info = new IDNameLoadable(2, "60");
+               ArmorLevelInvList.Add(info);
+               info = new IDNameLoadable(3, "90");
+               ArmorLevelInvList.Add(info);
+               info = new IDNameLoadable(4, "100");
+               ArmorLevelInvList.Add(info);
+               info = new IDNameLoadable(5, "150");
+               ArmorLevelInvList.Add(info);
+               info = new IDNameLoadable(6, "180");
+               ArmorLevelInvList.Add(info);
+               info = new IDNameLoadable(7, "225");
+               ArmorLevelInvList.Add(info);
+  
             }
             catch (Exception ex) { LogError(ex); }
             if (writelists) { doWriteLists(ArmorLevelInvList); }
@@ -1414,15 +1408,15 @@ namespace GearFoundry
                 SalvageWorkInvList = new List<IDNameLoadable>();
                IDNameLoadable info;
                 info = new IDNameLoadable(0, "None");
-                addInfo(info,SalvageWorkInvList,cmbSalvWork);
+                SalvageWorkInvList.Add(info);
                 info = new IDNameLoadable(1, "1-6");
-                addInfo(info, SalvageWorkInvList, cmbSalvWork);
+                SalvageWorkInvList.Add(info);
                 info = new IDNameLoadable(2, "7-8");
-                addInfo(info, SalvageWorkInvList, cmbSalvWork);
+                SalvageWorkInvList.Add(info);
                 info = new IDNameLoadable(3, "9");
-                addInfo(info, SalvageWorkInvList, cmbSalvWork);
+                SalvageWorkInvList.Add(info);
                 info = new IDNameLoadable(4, "10");
-                addInfo(info, SalvageWorkInvList, cmbSalvWork);
+                SalvageWorkInvList.Add(info);
             }
             catch (Exception ex) { LogError(ex); }
             if (writelists) { doWriteLists(CloakSpellList); }
@@ -1436,98 +1430,51 @@ namespace GearFoundry
                 CoverageInvList = new List<IDNameLoadable>();
                 IDNameLoadable info;
                 info = new IDNameLoadable(0, "None");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(256, "Upper_Leg");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(512, "Lower_Leg");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(1024, "Chest");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(2048, "Abdomen");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(4096, "Upper_Arm");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(8192, "Lower_Arm");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(16384, "Head");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(32768, "Hands");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(65536, "Feet");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(768, "Upper_Lower_Legs");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(2304, "Abdomen_Upper_Legs");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(2816, "Abdomen_Upper_Lower_Legs");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(3072, "Chest_Abdomen");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(5120, "Chest_Upper_Arms");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(7168, "Chest_Abdomen_Upper_Arm");
-                addInfo(info, CoverageInvList, cmbCoverage);
-                 info = new IDNameLoadable(13312, "Chest_Upper_Lower_Arms");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
+                info = new IDNameLoadable(13312, "Chest_Upper_Lower_Arms");
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(15360, "Chest_Abdomen_Upper_Lower_Arms");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(8, "Underwear_Chest");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(19, "Underwear_Abdomen_Upper_Legs");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(22, "Underwear_Abdomen_Upper_Lower_Legs");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(40, "Underwear_Chest_UpperArm");
-                addInfo(info, CoverageInvList, cmbCoverage);
+                CoverageInvList.Add(info);
                 info = new IDNameLoadable(131072, "Underwear_Chest_Upper_LowerArms");
-                addInfo(info, CoverageInvList, cmbCoverage);
-                // case 0: objCovers = 0; break;
-                //case 1: objCovers = 256; Upper_Leg;
-                //case 2: objCovers = 512; Lower_Leg;
-                //case 3: objCovers = 1024; Chest;
-                //case 4: objCovers = 2048; Abdomen;
-                //case 5: objCovers = 4096; Upper_Arm;
-                //case 6: objCovers = 8192; Lower_Arm;
-                //case 7: objCovers = 16384; Head
-                //case 8: objCovers = 32768; Hands;
-                //case 9: objCovers = 65536; Feet
-                //case 10: objCovers = 768; Upper_Lower_Legs;
-                //case 11: objCovers = 2304; Abdomen_Upper_Legs;
-                //case 12: objCovers = 2816; Abdomen_Upper_Lower_Legs;
-                //case 13: objCovers = 3072; Chest_Abdomen;
-                //case 14: objCovers = 5120; Chest_Upper_Arms;
-                //case 15: objCovers = 7168; Chest_Abdomen_Upper_Arm;
-                //case 16: objCovers = 13312; Chest_Upper_Lower_Arms;
-                //case 17: objCovers = 15360; Chest_Abdomen_Upper_Lower_Arms;
-                //case 18: objCovers = 8; Underwear_Chest;
-                //case 19: objCovers = 19; Underwear_Abdomen_Upper_Legs;
-                //case 20: objCovers = 22; Underwear_Abdomen_Upper_Lower_Legs;
-                //case 21: objCovers = 40; Underwear_Chest_UpperArms;
-                //case 22: objCovers = 131072; Underwear_Chest_Upper_LowerArms;
-
-                    //                <option text="Upper_Leg" data="2"/>
-                    //<option text="Lower_Leg" data="3"/>
-                    //<option text="Chest" data="4"/>
-                    //<option text="Abdomen" data="5"/>
-                    //<option text="Upper_Arm" data="6"/>
-                    //<option text="Lower_Arm" data="7"/>
-                    //<option text="Head" data="8"/>
-                    //<option text="Hands" data="9"/>
-                    //<option text="Feet" data="10"/>
-                    //<option text="Upper_Lower_Legs" data="11"/>
-                    //<option text="Abdomen_Upper_Legs" data="12"/>
-                    //<option text="Abdomen_Upper_Lower_Legs" data="13"/>
-                    //<option text="Chest_Abdomen" data="14"/>
-                    //<option text="Chest_Upper_Arms" data="15"/>
-                    //<option text="Chest_Abdomen_Upper_Arm" data="16"/>
-                    //<option text="Chest_Upper_Lower_Arms" data="17"/>
-                    //<option text="Chest_Abdomen_Upper_Lower_Arms" data="18"/>
-                    //<option text="Underwear_Chest" data="19"/>
-                    //<option text="Underwear_Abdomen_Upper_Legs" data="20"/>
-                    //<option text="Underwear_Abdomen_Upper_Lower_Legs" data="21"/>
-                    //<option text="Underwear_Chest_UpperArms" data="22"/>
-                    //<option text="Underwear_Chest_Upper_LowerArms" data="23"/>-->
- 
+                CoverageInvList.Add(info);
                 }
             catch (Exception ex) { LogError(ex); }
             if (writelists) { doWriteLists(CoverageInvList); }
@@ -1541,57 +1488,30 @@ namespace GearFoundry
                 EmbueInvList = new List<IDNameLoadable>();
                 IDNameLoadable info;
                 info = new IDNameLoadable(0, "None");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(1, "Critical_Strike");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(2, "Crippling_Blow");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(4, "Armor");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(8, "Slashing");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(16, "Piercing");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(32, "Bludgeon");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(64, "Acid");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(128, "Frost");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(256, "Lightning");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(512, "Fire");
-                addInfo(info, EmbueInvList, cmbEmbue);
+                EmbueInvList.Add(info);
                 info = new IDNameLoadable(1000, "MagicD_PlusOne");
-                addInfo(info, EmbueInvList, cmbEmbue);
-
-
-                //                    <!--<option text="None" data="1"/>
-                //    <option text="Critical_Strike" data="1"/>
-                //    <option text="Crippling_Blow" data="2"/>
-                //    <option text="Armor" data="4"/>
-                //    <option text="Slashing" data="8"/>
-                //    <option text="Piercing" data="16"/>
-                //    <option text="Bludgeon" data="32"/>
-                //    <option text="Acid" data="64"/>
-                //    <option text="Frost" data="128"/>
-                //    <option text="Lightning" data="256"/>
-                //    <option text="Fire" data="512
-                //    <option text="MagicD_PlusOne" data="1000"/>-->
-
-                //         case 0: objEmbueTypeInt = 0; break;
-                //case 1: objEmbueTypeInt = 1; break;
-                //case 2: objEmbueTypeInt = 2; break;
-                //case 3: objEmbueTypeInt = 4; break;
-                //case 4: objEmbueTypeInt = 8; break;
-                //case 5: objEmbueTypeInt = 16; break;
-                //case 6: objEmbueTypeInt = 32; break;
-                //case 7: objEmbueTypeInt = 64; break;
-                //case 8: objEmbueTypeInt = 128; break;
-                //case 9: objEmbueTypeInt = 256; break;
-                //case 10: objEmbueTypeInt = 512; break;
-                //case 11: objEmbueTypeInt = 1000;
-
+                EmbueInvList.Add(info);
+ 
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -1615,7 +1535,6 @@ namespace GearFoundry
             {
                 IDNameLoadable info = new IDNameLoadable(i++, load);
                 WeaponWieldInvList.Add(info);
-                cmbLevel.Add(info.name);
             }
             if (writelists) { doWriteLists(CloakSpellList); }
 

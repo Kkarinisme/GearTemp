@@ -691,7 +691,6 @@ namespace GearFoundry
     			
     			LandscapeHudList = new HudList();
     			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0,LandscapeHudWidth,LandscapeHudHeight));
-
 				LandscapeHudList.ControlHeight = 16;	
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				LandscapeHudList.AddColumn(typeof(HudStaticText), 200, null);
@@ -1002,6 +1001,7 @@ namespace GearFoundry
 	    	    	
 	    	    	((HudPictureBox)LandscapeHudListRow[0]).Image = item.Icon + 0x6000000;
 	    	    	((HudStaticText)LandscapeHudListRow[1]).Text = item.IORString() + item.Name + item.DistanceString();
+                    ((HudStaticText)LandscapeHudListRow[1]).FontHeight = 10;
 	    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Gold;}
 	    	    	if(item.IOR == IOResult.lifestone) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.SkyBlue;}
 	    	    	if(item.IOR == IOResult.monster) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Orange;}

@@ -47,7 +47,6 @@ namespace GearFoundry
 		private const int AC_PLAYER_KILLED = 0x19E;
         private const int AC_SET_OBJECT_LINK = 0x2DA;
         private const int AC_GAME_EVENT = 0xF7B0;
-        private const int AC_GAME_ACTION = 0xF7B1;
         private const int AC_CREATE_OBJECT = 0xF745;
         private const int AC_SET_OBJECT_DWORD = 0x2CE;
         private const int AC_CLOSE_CONTAINER = 0x0052;
@@ -65,8 +64,6 @@ namespace GearFoundry
         private const int GE_EXIT_TRADE = 0x1FF;
         private const int GE_INSERT_INVENTORY_ITEM = 0x22;
         private const int GE_WEAR_ITEM = 0x23;
-        
-        private const int GA_USE_ITEM = 0x0036;
         
         
         //Fellowship Packets
@@ -104,14 +101,15 @@ namespace GearFoundry
         private string switchGearSettingsFilename = null;
         private string genSettingsFilename = null;
         private string toonSettingsFilename = null;
+        private string inventoryFilename = null;
+        private string genInventoryFilename = null;
+        private string holdingInventoryFilename = null;
         private string holdingStatsFilename = null;
         private string statsFilename = null;
         private string allStatsFilename = null;
         private string quickSlotsvFilename = null;
         private string quickSlotshFilename = null;
         private string remoteGearFilename = null;
-
-        private int itemFontHeight = 0;
 
 
 
@@ -270,8 +268,6 @@ namespace GearFoundry
         private static Int32 objIcon;
         private static long objArmorLevel = 1;
         private static long objArmorSet = 0;
-        private static long objSet = 0;
-        private static long objLore = 0;
         private static string objArmorSetName = null;
         private static long objMat = 0;
         private static long objMagicDamageInt = 0;
@@ -279,11 +275,6 @@ namespace GearFoundry
         private static double objDVar = 0;
         private static long objMaxDamLong = 0;
         private static string objMinDam = null;
-        private static string objEmbue = null;
-        private static string objDamBon = null;
-        private static string objElDam = null;
-        
-
 
         private static string objClassName = "None";
         private static int objClass = 0;
@@ -310,13 +301,17 @@ namespace GearFoundry
         private static bool bquickSlotsEnabled;
         private static bool bquickSlotsvEnabled;
         private static bool bquickSlotshEnabled;
- 
-        private static bool bvulnedIconsEnabled;
         
- 
-        //private static bool bsalvageCombEnabled;
 
-        //Corpsehud flag
+      private static bool bvulnedIconsEnabled;
+        
+        private static bool binventoryEnabled;
+        private static bool binventoryBurdenEnabled;
+        private static bool binventoryCompleteEnabled;
+        private static bool binventoryWaitingEnabled;
+        //private static bool bsalvageCombEnabled;
+        private static bool btoonStatsEnabled;
+        private static bool btoonArmorEnabled;
         private static bool bCorpseHudEnabled;
  
         //Loot Flags
@@ -329,21 +324,23 @@ namespace GearFoundry
 
         private static bool bRemoteGearEnabled;
 
-        //Inventory flags
+        //Misc flags
         private static bool bArmorHudEnabled;
-        private static bool binventoryHudEnabled;
-        private static bool btoonStatsEnabled;
-        private static bool binventoryEnabled;
-        private static bool binventoryBurdenEnabled;
-        private static bool binventoryCompleteEnabled;
-        private static bool binventoryWaitingEnabled;
-        private static bool btoonArmorEnabled;
-
-
   
 		//Landscape Tracker Flags
         private static bool bLandscapeHudEnabled;   
+        
+        //ItemTrackerFlags            
+        private static bool bItemHudEnabled = true;
+		private static bool bReportItemStrings = true;
+		private static int mLootManaMinimum = 5000;
+		private static int mLootValMinimum = 100000;
+		private static double mLootValBurdenRatioMinimum = 20;
 
+
+        //variables used in toon statistics program
+        private XDocument xDocStats = new XDocument();
+        private XDocument xDocAllStats = new XDocument();
 
         //gearmisc variables
         private static bool bMuteSounds = false;

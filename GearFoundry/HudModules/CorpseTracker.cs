@@ -791,6 +791,7 @@ namespace GearFoundry
 	    	    	
 	    	    	((HudPictureBox)CorpseHudListRow[0]).Image = corpse.Icon + 0x6000000;
 	    	    	((HudStaticText)CorpseHudListRow[1]).Text = corpse.Name + corpse.DistanceString();
+                    ((HudStaticText)CorpseHudListRow[1]).FontHeight = 10;
 	    	    	if(corpse.IOR == IOResult.corpseselfkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.AntiqueWhite;}
 	    	    	if(corpse.IOR == IOResult.corpsepermitted) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Cyan;}
 	    	    	if(corpse.IOR == IOResult.corpseofself) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Yellow;}
