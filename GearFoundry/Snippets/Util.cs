@@ -105,7 +105,7 @@ namespace GearFoundry
         {
             try{
           //  MasterTimer.Interval = 100;
-                arrowtimer = 20;
+                arrowtimer = 5;
                 MasterTimer.Tick += ArrowTimerTick;
             }
             catch (Exception ex) { LogError(ex); }

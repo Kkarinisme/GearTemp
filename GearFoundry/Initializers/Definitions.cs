@@ -111,6 +111,8 @@ namespace GearFoundry
         private string quickSlotshFilename = null;
         private string remoteGearFilename = null;
 
+        private int itemFontHeight = 0;
+
 
 
         int mitem;
@@ -268,6 +270,8 @@ namespace GearFoundry
         private static Int32 objIcon;
         private static long objArmorLevel = 1;
         private static long objArmorSet = 0;
+        private static long objSet = 0;
+        private static long objLore = 0;
         private static string objArmorSetName = null;
         private static long objMat = 0;
         private static long objMagicDamageInt = 0;
@@ -275,6 +279,11 @@ namespace GearFoundry
         private static double objDVar = 0;
         private static long objMaxDamLong = 0;
         private static string objMinDam = null;
+        private static string objEmbue = null;
+        private static string objDamBon = null;
+        private static string objElDam = null;
+        
+
 
         private static string objClassName = "None";
         private static int objClass = 0;
@@ -301,23 +310,13 @@ namespace GearFoundry
         private static bool bquickSlotsEnabled;
         private static bool bquickSlotsvEnabled;
         private static bool bquickSlotshEnabled;
+ 
+        private static bool bvulnedIconsEnabled;
         
-<<<<<<< HEAD
-
-      private static bool bvulnedIconsEnabled;
-        
-         private static bool btoonArmorEnabled;
-
-        //Corpse Hud Flags
-=======
-        private static bool binventoryEnabled;
-        private static bool binventoryBurdenEnabled;
-        private static bool binventoryCompleteEnabled;
-        private static bool binventoryWaitingEnabled;
+ 
         //private static bool bsalvageCombEnabled;
-        private static bool btoonStatsEnabled;
-        private static bool btoonArmorEnabled;
->>>>>>> 35332c24f7da18c3f050082a0ec47d904f854b17
+
+        //Corpsehud flag
         private static bool bCorpseHudEnabled;
  
         //Loot Flags
@@ -334,6 +333,12 @@ namespace GearFoundry
         private static bool bArmorHudEnabled;
         private static bool binventoryHudEnabled;
         private static bool btoonStatsEnabled;
+        private static bool binventoryEnabled;
+        private static bool binventoryBurdenEnabled;
+        private static bool binventoryCompleteEnabled;
+        private static bool binventoryWaitingEnabled;
+        private static bool btoonArmorEnabled;
+
 
   
 		//Landscape Tracker Flags

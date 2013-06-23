@@ -47,10 +47,6 @@ namespace GearFoundry
         private string inventoryFilename = null;
         private string genInventoryFilename = null;
         private string holdingInventoryFilename = null;
-        private static bool binventoryEnabled;
-        private static bool binventoryBurdenEnabled;
-        private static bool binventoryCompleteEnabled;
-        private static bool binventoryWaitingEnabled;
         private XDocument xdocInventorySettings;
 
         private HudButton btnInventoryUpdate;
@@ -109,7 +105,6 @@ namespace GearFoundry
                     try
                     {
                         getArmorHudSettings();
-                        WriteToChat("Inventoryhudwidth: " + InventoryHudWidth.ToString());
                     }
                     catch (Exception ex) { LogError(ex); }
  
@@ -244,6 +239,7 @@ namespace GearFoundry
                 lblMyChoice.Text = "Type preference:";
  
                 txtMyChoice = new HudTextBox();
+                
 
                 lblWeapons = new HudStaticText();
                 lblWeapons.FontHeight = 11;
@@ -261,7 +257,7 @@ namespace GearFoundry
                 lblMelee.Text = "Mel:";
                 ControlGroup WieldAttribTypes = new ControlGroup();
                 cboWieldAttrib = new HudCombo(WieldAttribTypes);
-                cboWieldAttrib.Change += (sender, index) => cboWieldAttrib_Change(sender, index);
+               cboWieldAttrib.Change += (sender, index) => cboWieldAttrib_Change(sender, index);
 
                 i = 0;
                 foreach (IDNameLoadable info in MeleeTypeInvList)
@@ -367,6 +363,7 @@ namespace GearFoundry
                 lblEmbues.Text = "Emb:";
                 ControlGroup EmbueChoices = new ControlGroup();
                 cboEmbues = new HudCombo(EmbueChoices);
+
                 cboEmbues.Change += (sender, index) => cboEmbues_Change(sender, index);
 
                 i = 0;
@@ -451,11 +448,33 @@ namespace GearFoundry
             {
                 if (!InventoryMainTab) { return; }
                 cboInventoryClasses.Change -= (sender, index) => cboInventoryClasses_Change(sender, index);
+                cboWieldAttrib.Change -= (sender, index) => cboWieldAttrib_Change(sender, index);
+                cboArmorSet.Change -= (sender, index) => cboArmorSet_Change(sender, index);
+                cboMaterial.Change -= (sender, index) => cboMaterial_Change(sender, index);
+                cboDamageType.Change -= (sender, index) => cboDamageType_Change(sender, index);
+                cboArmorLevel.Change -= (sender, index) => cboArmorLevel_Change(sender, index);
+                cboSalvWork.Change -= (sender, index) => cboSalvWork_Change(sender, index);
+                cboLevel.Change -= (sender, index) => cboLevel_Change(sender, index);
+                cboCoverage.Change -= (sender, index) => cboCoverage_Change(sender, index);
+                lstHudInventory.Click -= (sender, row, col) => lstHudInventory_Click(sender, row, col);
+                btnClrInv.Hit -= (sender, index) => btnClrInv_Hit(sender, index);
+                btnLstInv.Hit -= (sender, index) => btnLstInv_Hit(sender, index);
+                cboEmbues.Change -= (sender, index) => cboEmbues_Change(sender, index);
+
                 cboInventoryClasses = null;
-
-
-                //InventoryHudList.Click -= (sender, row, col) => InventoryHudList_Click(sender, row, col);
-                //InventoryHudList.Dispose();
+                cboWieldAttrib = null;
+                cboArmorSet = null;
+                cboMaterial = null;
+                cboDamageType = null;
+                cboArmorLevel = null;
+                cboSalvWork = null;
+                cboLevel = null;
+                cboCoverage = null;
+                lstHudInventory = null;
+                btnClrInv = null;
+                btnLstInv = null;
+                cboEmbues = null;
+               
 
                 InventoryMainTab = false;
 
@@ -639,8 +658,7 @@ namespace GearFoundry
         {
             try
             {
-                //  objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
-                objArmorSet = ArmorSetsInvList[cboArmorSet.Current].ID;
+               objArmorSet = ArmorSetsInvList[cboArmorSet.Current].ID;
                 objArmorSetName = ArmorSetsInvList[cboArmorSet.Current].name;
 
             }
@@ -653,6 +671,7 @@ namespace GearFoundry
             {
                 objMat = MaterialInvList[cboMaterial.Current].ID;
                 objMatName = MaterialInvList[cboMaterial.Current].name;
+
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -909,127 +928,127 @@ namespace GearFoundry
             doGetInventory();
         }
 
-        // The following code has to do with selection of inventory to display in listbox
-        // First it is necessary to choose the class of inventory; ie, weapons, armor etc. 
-        [MVControlEvent("cmbSelectClass", "Change")]
-        void cmbSelectClass_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-                objClass = ClassInvList[cmbSelectClass.Selected].ID;
-                 objClassName = ClassInvList[cmbSelectClass.Selected].name;
-               GearFoundry.PluginCore.WriteToChat("Class: " + objClassName.ToString() + "; objClass: " + objClass.ToString());
+        //// The following code has to do with selection of inventory to display in listbox
+        //// First it is necessary to choose the class of inventory; ie, weapons, armor etc. 
+        //[MVControlEvent("cmbSelectClass", "Change")]
+        //void cmbSelectClass_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try
+        //    {
+        //        objClass = ClassInvList[cmbSelectClass.Selected].ID;
+        //         objClassName = ClassInvList[cmbSelectClass.Selected].name;
+        //       GearFoundry.PluginCore.WriteToChat("Class: " + objClassName.ToString() + "; objClass: " + objClass.ToString());
 
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
 
-        // In case of  Weapons will want to find weapons of specific type; e.g., missile
-        [MVControlEvent("cmbWieldAttrib", "Change")]
-        void cmbWieldAttrib_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-                objWieldAttrInt = MeleeTypeInvList[cmbWieldAttrib.Selected].ID;
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //// In case of  Weapons will want to find weapons of specific type; e.g., missile
+        //[MVControlEvent("cmbWieldAttrib", "Change")]
+        //void cmbWieldAttrib_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try
+        //    {
+        //        objWieldAttrInt = MeleeTypeInvList[cmbWieldAttrib.Selected].ID;
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
-        // Need to determine damage type of weapon or wand
-        [MVControlEvent("cmbDamageType", "Change")]
-        void cmbDamageType_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-                objDamageType = ElementalInvList[cmbDamageType.Selected].name;
-                objDamageTypeInt = ElementalInvList[cmbDamageType.Selected].ID;
-            //    int tempeDamageTypeInt = cmbDamageType.Selected;
-            //    findDamageTypeInt(tempeDamageTypeInt);
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //// Need to determine damage type of weapon or wand
+        //[MVControlEvent("cmbDamageType", "Change")]
+        //void cmbDamageType_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try
+        //    {
+        //        objDamageType = ElementalInvList[cmbDamageType.Selected].name;
+        //        objDamageTypeInt = ElementalInvList[cmbDamageType.Selected].ID;
+        //    //    int tempeDamageTypeInt = cmbDamageType.Selected;
+        //    //    findDamageTypeInt(tempeDamageTypeInt);
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
-        void cmbLevel_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-                objLevelInt = Convert.ToInt32(WeaponWieldInvList[cmbLevel.Selected].name);
-                //int tempeLevelInt = cmbLevel.Selected;
-                //findLevelInt(tempeLevelInt);
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //void cmbLevel_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try
+        //    {
+        //        objLevelInt = Convert.ToInt32(WeaponWieldInvList[cmbLevel.Selected].name);
+        //        //int tempeLevelInt = cmbLevel.Selected;
+        //        //findLevelInt(tempeLevelInt);
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
-        void cmbArmorSet_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-              //  objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
-                objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
-                objArmorSetName = ArmorSetsInvList[cmbArmorSet.Selected].name;
+        //void cmbArmorSet_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try
+        //    {
+        //      //  objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
+        //        objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
+        //        objArmorSetName = ArmorSetsInvList[cmbArmorSet.Selected].name;
            
-             }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //     }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
-        void cmbArmorLevel_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-                objArmorLevel = Convert.ToInt16(ArmorLevelInvList[cmbArmorLevel.Selected].name);
-            //    int tempeArmorLevelInt = cmbArmorLevel.Selected;
-            //    findArmorLevelInt(tempeArmorLevelInt);
-                GearFoundry.PluginCore.WriteToChat("ArmorLevel = " + ArmorLevelInvList[cmbArmorLevel.Selected].name); 
+        //void cmbArmorLevel_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try
+        //    {
+        //        objArmorLevel = Convert.ToInt16(ArmorLevelInvList[cmbArmorLevel.Selected].name);
+        //    //    int tempeArmorLevelInt = cmbArmorLevel.Selected;
+        //    //    findArmorLevelInt(tempeArmorLevelInt);
+        //        GearFoundry.PluginCore.WriteToChat("ArmorLevel = " + ArmorLevelInvList[cmbArmorLevel.Selected].name); 
 
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
-        void cmbCoverage_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-                objCovers = CoverageInvList[cmbCoverage.Selected].ID;
-                objCoversName = CoverageInvList[cmbCoverage.Selected].name;
-                //int tempeCoverageInt = cmbCoverage.Selected;
-                //findArmorCoverage(tempeCoverageInt);
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //void cmbCoverage_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try
+        //    {
+        //        objCovers = CoverageInvList[cmbCoverage.Selected].ID;
+        //        objCoversName = CoverageInvList[cmbCoverage.Selected].name;
+        //        //int tempeCoverageInt = cmbCoverage.Selected;
+        //        //findArmorCoverage(tempeCoverageInt);
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
-        void cmbMaterial_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try{
-                             objMat = MaterialInvList[cmbMaterial.Selected].ID;
-                            objMatName = MaterialInvList[cmbMaterial.Selected].name;
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //void cmbMaterial_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try{
+        //                     objMat = MaterialInvList[cmbMaterial.Selected].ID;
+        //                    objMatName = MaterialInvList[cmbMaterial.Selected].name;
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
-        void cmbSalvWork_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-                objSalvWork = SalvageWorkInvList[cmbSalvWork.Selected].name;
-            ////    int tempeSalvWorkInt = cmbSalvWork.Selected;
-            ////    findobjSalvWork(tempeSalvWorkInt);
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //void cmbSalvWork_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try
+        //    {
+        //        objSalvWork = SalvageWorkInvList[cmbSalvWork.Selected].name;
+        //    ////    int tempeSalvWorkInt = cmbSalvWork.Selected;
+        //    ////    findobjSalvWork(tempeSalvWorkInt);
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
-        void cmbEmbue_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-                objEmbueTypeInt = EmbueInvList[cmbEmbue.Selected].ID;
-                objEmbueTypeStr = EmbueInvList[cmbEmbue.Selected].name;
+        //void cmbEmbue_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        //{
+        //    try
+        //    {
+        //        objEmbueTypeInt = EmbueInvList[cmbEmbue.Selected].ID;
+        //        objEmbueTypeStr = EmbueInvList[cmbEmbue.Selected].name;
 
-            //    int tempeEmbueInt = cmbEmbue.Selected;
-            //    findEmbueTypeInt(tempeEmbueInt);
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+        //    //    int tempeEmbueInt = cmbEmbue.Selected;
+        //    //    findEmbueTypeInt(tempeEmbueInt);
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
 
 
@@ -1038,16 +1057,17 @@ namespace GearFoundry
         //void btnLstInventory_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         private void btnLstInv_Hit(object sender, EventArgs e)
         {
+            WriteToChat("I am at button list inventory.");
             try
             {
                XDocument tempDoc = new XDocument(new XElement("Objs"));
                 tempDoc.Save(inventorySelect);
                 tempDoc = null;
                 mySelect = null;
-
-                if (txbSelect.Text != null)
+                
+                if (txtMyChoice.Text != null)
                 {
-                    mySelect = txbSelect.Text.Trim();
+                    mySelect = txtMyChoice.Text.Trim();
                     mySelect = mySelect.ToLower();
                 }
                 else
@@ -1060,25 +1080,26 @@ namespace GearFoundry
 
             try
             {
-                switch (objClass)
+                if (objClass < 1)
                 {
-
+                    objClass = 0; 
+                }
+ 
+                         
+              switch (objClass)
+                {
                     case 0:
-
-                        if (mySelect != null && mySelect != "")
+                        if (mySelect.Length > 0)
                         {
-
                             newDoc = new XDocument(new XElement("Objs",
-                             from p in xdoc.Element("Objs").Descendants("Obj")
-                             where p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                            p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect)
-                             select p));
-
+                              from p in xdoc.Element("Objs").Descendants("Obj")
+                              where p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
+                              p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect)
+                              select p));
                         }
-                        else if (mySelect == null || mySelect == "")
-                        { GearFoundry.PluginCore.WriteToChat("You must choose a class or type something inbox"); }
-
+                        else{ WriteToChat("You must either select a class or write something in textbox"); }
                         break;
+
                     case 1:
                     case 2:
                     case 11:
@@ -1781,8 +1802,10 @@ namespace GearFoundry
                         break;
 
                     case 7:
+
                         if ((objClassName.Contains("Salvage")) && (objSalvWork == "None"))
                         {
+
                             newDoc = new XDocument(new XElement("Objs",
                               from p in xdoc.Element("Objs").Descendants("Obj")
                               where p.Element("ObjClass").Value.Contains(objClassName) &&
@@ -1858,57 +1881,54 @@ namespace GearFoundry
 
             newDoc = XDocument.Load(inventorySelect);
 
-
-
-            IEnumerable<XElement> childElements = newDoc.Element("Objs").Descendants("Obj");
-            foreach (XElement childElement in childElements)
+            try
             {
-                try
+
+                IEnumerable<XElement> childElements = newDoc.Element("Objs").Descendants("Obj");
+
+                foreach (XElement childElement in childElements)
                 {
-                    objIcon = Convert.ToInt32(childElement.Element("ObjIcon").Value);
-
-                    objName = childElement.Element("ObjName").Value;
-                    if (objClassName.Contains("Salvage"))
+                    try
                     {
-                        int objMaterial = Convert.ToInt32(childElement.Element("ObjMaterial").Value);
-                        string objMaterialName = "";
-                        WriteToChat("objName: " + objName); // + "; //objMaterialName " + objMaterialName);
-                        foreach (IDNameLoadable item in MaterialInvList)
+                        objIcon = Convert.ToInt32(childElement.Element("ObjIcon").Value);
+
+                        objName = childElement.Element("ObjName").Value;
+                        if (objClassName.Contains("Salvage"))
                         {
-                            if (item.ID == objMaterial)
+                            int objMaterial = Convert.ToInt32(childElement.Element("ObjMaterial").Value);
+                            string objMaterialName = "";
+                            WriteToChat("objName: " + objName); // + "; //objMaterialName " + objMaterialName);
+                            foreach (IDNameLoadable item in MaterialInvList)
                             {
-                                objMaterialName = item.name;
-                                break;
+                                if (item.ID == objMaterial)
+                                {
+                                    objMaterialName = item.name;
+                                    break;
+                                }
                             }
+
+                            objName = objMaterialName + " " + objName;
                         }
-
-                        objName = objMaterialName + " " + objName;
+                        toonInvName = childElement.Element("ToonName").Value.ToString();
+                        long objID = Convert.ToInt32(childElement.Element("ObjID").Value);
+                        string objIDstr = objID.ToString();
+                        InventoryHudListRow = lstHudInventory.AddRow();
+                        ((HudPictureBox)InventoryHudListRow[0]).Image = objIcon + 0x6000000;
+                        ((HudStaticText)InventoryHudListRow[1]).FontHeight = 10;
+                        ((HudStaticText)InventoryHudListRow[1]).Text = objName;
+                        ((HudStaticText)InventoryHudListRow[2]).FontHeight = 10;
+                        ((HudStaticText)InventoryHudListRow[2]).Text = toonInvName;
+                        ((HudStaticText)InventoryHudListRow[3]).Text = objIDstr;
                     }
-                    toonInvName = childElement.Element("ToonName").Value.ToString();
-                    WriteToChat(toonInvName);
-                    long objID = Convert.ToInt32(childElement.Element("ObjID").Value);
-                    string objIDstr = objID.ToString();
-                    InventoryHudListRow = lstHudInventory.AddRow();
-                    ((HudPictureBox)InventoryHudListRow[0]).Image = objIcon + 0x6000000;
-                    ((HudStaticText)InventoryHudListRow[1]).FontHeight = 10;
-                    ((HudStaticText)InventoryHudListRow[1]).Text = objName;
-                    ((HudStaticText)InventoryHudListRow[2]).FontHeight = 10;
-                    ((HudStaticText)InventoryHudListRow[2]).Text = toonInvName;
-                    ((HudStaticText)InventoryHudListRow[3]).Text = objIDstr;
+
+
+                     catch (Exception ex) { LogError(ex); }
+
                 }
-
-
-                //    IListRow newRow = lstInventory.AddRow();
-                //   // newRow[0][1] = objIcon;
-                //    newRow[0][1] = objIcon;
-                //    newRow[1][0] = objName;
-                //    newRow[2][0] = toonInvName;
-                //    newRow[3][0] = objIDstr;
-                //}
-                catch (Exception ex) { LogError(ex); }
-
+                newDoc = null;
             }
-            newDoc = null;
+            catch (Exception ex) { LogError(ex); }
+
         }// end of btnlist
 
         //[MVControlEvent("lstInventory", "Selected")]
@@ -1926,81 +1946,182 @@ namespace GearFoundry
                inventorySelectList.AddRange(lst);
                 XElement element = inventorySelectList[row];
 
-               // int mrow = row;
-               // IListRow row = lstInventory[e.Row];
-
-                // the object name is included in the text file on this row
-               // objID = Convert.ToInt32(row[3][0]);
-              //  int mcol = 3;
- 
-         //       objID = Convert.ToInt32(lstHudInventory[row][3]);
-
-                // objID = Convert.ToInt32(myelements[row]
-                //elements = xdoc.Element("Objs").Descendants("Obj");
-                //element = new XElement(new XElement("Objs",
-                //    from p in xdoc.Element("Objs").Descendants("Obj")
-                //    where (p.Element("ObjID").Value.ToLower().Contains(objID.ToString()))
-                //    select p));
-
                 xdoc = null;
-              //  List<XElement> ElementsList = new List<XElement>();
-
-
-                //childElements = element.Descendants();
-                //foreach (XElement childElement in childElements)
-
-                //{ ElementsList.Add(childElement); }
-
-                //objName = ElementsList[1].Value;
-                //toonInvName = ElementsList[3].Value;
 
                 objName = element.Element("ObjName").Value;
+                objID = Convert.ToInt32(element.Element("ObjID").Value);
                 toonInvName = element.Element("ToonName").Value;
+                objClassName = element.Element("ObjClass").Value;
+                objWork = element.Element("ObjWork").Value;
+                objTinks = element.Element("ObjTink").Value;
+                objSpellXml = element.Element("ObjSpellXml").Value;
+                objBurden = element.Element("ObjBurden").Value;
+                objStack = element.Element("ObjStackCount").Value;
+
+ 
+                int temp = Convert.ToInt16(element.Element("ObjMaterial").Value);
+                if (temp > 0)
+                {
+                    objMatName = MaterialIndex[Convert.ToInt16(element.Element("ObjMaterial").Value)].name;
+               }
+                             long objWieldValue = Convert.ToInt32(element.Element("ObjWieldValue").Value);
+             objLevel = objWieldValue.ToString();
+
+             int nobjEmbue = Convert.ToInt32(element.Element("ObjEmbue").Value);
+                WriteToChat("nobjEmbue " + nobjEmbue.ToString());
+              if (nobjEmbue > 0)
+              {
+                  foreach (IDNameLoadable piece in EmbueInvList)
+                  {
+                      if (piece.ID == nobjEmbue)
+                      {
+                          objEmbue = piece.name;
+                          WriteToChat("objEmbue = " + objEmbue);
+                          break;
+                     }
+                  }
+              }
+
+              int nobjDamageType = Convert.ToInt32(element.Element("ObjDamage").Value);
+              if (nobjDamageType > 0)
+              {
+                  foreach (IDNameLoadable piece in ElementalInvList)
+                  {
+                      if (piece.ID == nobjDamageType)
+                      {
+                          objDamageType = piece.name;
+                          break;
+                      }
+                  }
+              }
+
+
+                if(objClassName.Contains("Armor") || objClassName.Contains("Clothing"))
+                {
+                   objSet = Convert.ToInt32(element.Element("ObjSet").Value);
+                   WriteToChat("objset " + objSet.ToString());
+                   if (Convert.ToInt32(element.Element("ObjSet").Value) > 0)
+                   { objArmorSetName = SetsIndex[Convert.ToInt32(element.Element("ObjSet").Value)].name; }
+                    else { objArmorSetName = "None"; 
+                   }
+
+                   objCovers = (Convert.ToInt32(element.Element("ObjCovers").Value));
+                  if(objCovers > 0)
+                   {
+                       WriteToChat("Object covers " + objCovers.ToString());
+                      foreach(IDNameLoadable piece in CoverageInvList)
+                      {
+                         if(piece.ID == objCovers)
+                         {
+                           objCoversName = piece.name;
+                           break;
+                         }
+                      }
+                    }
+                    else {objCoversName = "Not found";}
+                }
+
+                if(objClassName.Contains("Armor"))
+                {
+                    objAl = element.Element("ObjAl").Value;
+
+                //   if (Convert.ToInt32(element.Element("ObjAcid").Value) > 0)
+                //  {
+                //    string objAcid = ((Math.Round(Convert.ToDouble(element.Element("ObjAcid").Value), 4))).ToString();
+                //    string objLight = ((Math.Round(Convert.ToDouble(element.Element("ObjLight").Value), 4))).ToString();
+                //    string objFire = ((Math.Round(Convert.ToDouble(element.Element("ObjFire").Value), 4))).ToString();
+                //    string objCold = ((Math.Round(Convert.ToDouble(element.Element("ObjCold").Value), 4))).ToString();
+                //    string objBludg = ((Math.Round(Convert.ToDouble(element.Element("ObjBludg").Value), 4))).ToString();
+                //    string objSlash = ((Math.Round(Convert.ToDouble(element.Element("ObjSlash").Value), 4))).ToString();
+                //    string objPierce = ((Math.Round(Convert.ToDouble(element.Element("ObjPierce").Value), 4))).ToString();
+
+                //     objProts = objSlash + "/" + objPierce + "/" + objBludg + "/" + objFire + "/" + objCold + "/" + objAcid + "/" + objLight;
+                //  }
+                //  else { objProts = ""; }
+                    objProts = "";
+                }
+
+
+              if (objClassName.Contains("Missile"))
+              {
+                  objElDam = element.Element("ObjElemDmg").Value;
+                  objDamBon = ((Math.Round(Convert.ToDouble(element.Element("ObjDamageBonus").Value), 2) - 1) * 100).ToString();
+                  ////  objMissType = element.Element("ObjMissType").Value;
+
+              }
+
+             if(objClassName.Contains("Wands"))
+             {
+             if (Convert.ToDouble(element.Element("ObjElemvsMons").Value) > 0)
+             {
+                 objElemvsMons = Math.Round(((Convert.ToDouble(element.Element("ObjElemvsMons").Value) - 1) * 100), 2).ToString();
+                 if (Convert.ToDouble(objElemvsMons) < 0) { objElemvsMons = "0"; }
+             }
+             }
+             if (Convert.ToDouble(element.Element("ObjMelD").Value) > 0)
+             {
+                 objMelD = ((Math.Round(Convert.ToDouble(element.Element("ObjMelD").Value), 2) - 1) * 100).ToString();
+                 if (Convert.ToDouble(objMelD) < 0) { objMelD = "0"; }
+             }
+              if (Convert.ToDouble(element.Element("ObjMagicD").Value) > 0)
+              {
+                  objMagicD = ((Math.Round(Convert.ToDouble(element.Element("ObjMagicD").Value), 2) - 1) * 100).ToString();
+                  if (Convert.ToDouble(objMagicD) < 0) { objMagicD = "0"; }
+              }
+                if (Convert.ToDouble(element.Element("ObjManaC").Value) > 0)
+                {
+                    objManaC = (Math.Round(Convert.ToDouble(element.Element("ObjManaC").Value), 2) * 100).ToString();
+                    if (Convert.ToDouble(objManaC) < 0) { objManaC = "0"; }
+                }
+             if (Convert.ToDouble(element.Element("ObjMissileD").Value) > 0)
+             {
+                 objMissD = ((Math.Round(Convert.ToDouble(element.Element("ObjMissileD").Value), 2) - 1) * 100).ToString();
+                 if (Convert.ToDouble(objMissD) < 0) { objMissD = "0"; }
+             }
+             if (Convert.ToDouble(element.Element("ObjSalvWork").Value) > 0)
+             {
+                 objSalvWork = ((Math.Round(Convert.ToDouble(element.Element("ObjSalvWork").Value), 2) - 1)).ToString();
+                 if (Convert.ToDouble(objSalvWork) < 0) { objSalvWork = "0"; }
+
+             }
+                if(objClassName.Contains("Melee"))
+                {
+ 
+                  objAttack = Math.Round((Convert.ToDouble(element.Element("ObjAttack").Value) - 1) * 100).ToString();
+
+                   if (Convert.ToDouble(element.Element("ObjVariance").Value) > 0)
+                   {
+                      objDVar = Convert.ToDouble(element.Element("ObjVariance").Value);
+                   }
+
+
+                   objMaxDam = element.Element("ObjMaxDamage").Value;
+                   WriteToChat("objMaxDam " + objMaxDam);
+                   objMaxDamLong = Convert.ToInt32(objMaxDam);
+                   objMinDam = Math.Round(objMaxDamLong - ((objDVar) * (objMaxDamLong)), 2).ToString();
+
+                }
+
+
+                //  objToonLevel = element.Element("ObjToonLevel").Value;
+                //   objLore = Convert.ToInt32(element.Element("ObjLoreReq").Value);
+                //   string objSkillLevReq = element.Element("ObjSkillLevReq").Value;
+                ////  objCatType = element.Element("ObjCatType").Value;
+                ////  objCleaveType  = element.Element("ObjCleaveType").Value;
+                ////  objType = element.Element("ObjType").Value;
+
+                //  objAtt = element.Element("ObjAtt").Value;
+                // objBnd = element.Element("ObjBnd").Value;
+                // //  objSlayer = element.Element("ObjSlayer").Value;
+                // objWieldAttrInt = Convert.ToInt32(element.Element("ObjWieldAttr").Value);
+                // //  objWieldType = element.Element("ObjWieldType").Value;
+ 
+
                 message = objName + ", " + toonInvName;
-                WriteToChat("Objclass: " + objClass.ToString());
+                WriteToChat(message + "Objclass: " + objClass.ToString());
                 switch (objClass)
                 {
                     //case 0:
-                    //    objAl = element.Element("ObjAl").Value;
-                    //    objWork = element.Element("ObjWork").Value;
-                    //    objTinks = element.Element("ObjTinks").Value;
-                    //    objLevel = element.Element("ObjLevel").Value;
-                    //    objArmorSet = Convert.ToInt32(element.Element("ObjSet").Value);
-                    //    objCovers = Convert.ToInt32(element.Element("ObjCovers").Value);
-                    //    objSpells = element.Element("ObjSpellXml").Value.ToString();
-                    //    //findArmorSetName(objArmorSet);
-                    //    //findCoversName(objCovers);
-                    //    objMissD = ((Math.Round(Convert.ToDouble(element.Element("ObjMissD").Value), 2) - 1) * 100).ToString();
-                    //    if (Convert.ToDouble(objMissD) < 0) { objMissD = "0"; }
-                    //    objManaC = (Math.Round(Convert.ToDouble(element.Element("ObjMana").Value), 2) * 100).ToString();
-                    //    objMagicD = ((Math.Round(Convert.ToDouble(element.Element("ObjMagicD").Value), 2) - 1) * 100).ToString();
-                    //    if (Convert.ToDouble(objMagicD) < 0) { objMagicD = "0"; }
-                    //    objMelD = Math.Round(((Convert.ToDouble(element.Element("ObjMelD").Value) - 1) * 100), 2).ToString();
-                    //    if (Convert.ToDouble(objMelD) < 0) { objMelD = "0"; }
-                    //    objElemvsMons = Math.Round(((Convert.ToDouble(element.Element("ObjElemvsMons").Value) - 1) * 100), 2).ToString();
-                    //    if (Convert.ToDouble(objElemvsMons) < 0) { objElemvsMons = "0"; }
-                    //    objEmbueTypeInt = Convert.ToInt32(element.Element("ObjEmbue").Value);
-                    //    objAttack = Math.Round((Convert.ToDouble(element.Element("ObjAttack").Value) - 1) * 100).ToString();
-                    //    if (Convert.ToDouble(objAttack) < 0) { objAttack = "0"; }
-                    //    objMaxDam = element.Element("ObjMaxDam").Value.ToString();
-                    //    objVar = Math.Round(Convert.ToDouble(element.Element("ObjVar").Value), 2).ToString();
-                    //    objBurden = element.Element("ObjBurden").Value;
-                    //    objStack = element.Element("ObjStackCount").Value;
-                    //    if (element.Element("ObjAcid").Value != "0")
-                    //    {
-                    //        string objAcid = ((Math.Round(Convert.ToDouble(element.Element("ObjAcid").Value), 4))).ToString();
-                    //        string objLight = ((Math.Round(Convert.ToDouble(element.Element("ObjLight").Value), 4))).ToString();
-                    //        string objFire = ((Math.Round(Convert.ToDouble(element.Element("ObjFire").Value), 4))).ToString();
-                    //        string objCold = ((Math.Round(Convert.ToDouble(element.Element("ObjCold").Value), 4))).ToString();
-                    //        string objBludg = ((Math.Round(Convert.ToDouble(element.Element("ObjBludg").Value), 4))).ToString();
-                    //        string objSlash = ((Math.Round(Convert.ToDouble(element.Element("ObjSlash").Value), 4))).ToString();
-                    //        string objPierce = ((Math.Round(Convert.ToDouble(element.Element("ObjPierce").Value), 4))).ToString();
-
-                    //        objProts = objSlash + "/" + objPierce + "/" + objBludg + "/" + objFire + "/" + objCold + "/" + objAcid + "/" + objLight;
-                    //    }
-                    //    else
-                    //    { objProts = ""; }
-
                     //    if (objProts != "")
                     //    {
                     //        message = message + ", Al: " + objAl + ", Prots: " + objProts + ", Work: " + objWork + ", Burden: " + objBurden +
@@ -2026,165 +2147,72 @@ namespace GearFoundry
                     //    break;
 
                     // *                
-                    //case 1:
-                    //case 2:
-                    //case 11:
-                    //    if (objClass == 1)
-                    //    {
-                    //        objAl = element.Element("ObjAl").Value;
-                    //        objWork = element.Element("ObjWork").Value;
-                    //        objTinks = element.Element("ObjTinks").Value;
+                    case 1:
+                    case 2:
+                    case 11:
+                        if (objClass == 1)
+                        {
+                            message = ", Al: " + objAl + ", Work: " + objWork +
+                                   ", Tinks: " + objTinks;
+                            if (objProts != "")
+                            {
 
+                                message = message + " " + objProts;
+                            }
+                        }
+                      if (objClass == 1 || objClass == 2)
+                        {
+                         message = message + ", Covers: " + objCoversName;
+                       }
+                          if (objClass == 1 || objClass == 2 || objName.Contains("Aetheria"))
+                          {
+ 
+                            message = message + ", Level: " + objLevel + ", Set: " + objArmorSetName
+                                + ", Spells: " + objSpellXml;
+                        }
+                       
+                        if (objClass == 11 && !objName.Contains("Aetheria"))
+                        {
+                            message = message + ", # in Stack: " + objStack;
+                        }
+                        break;
+                    case 3:
+                        message = message + ", Level: " + objLevel + ", " + objSpellXml;
+                        break;
 
-                    //        //if (element.Element("ObjAcid").Value != "0")
-                    //        //{
-                    //        //    string objAcid = ((Math.Round(Convert.ToDouble(element.Element("ObjAcid").Value), 4))).ToString();
-                    //        //    string objLight = ((Math.Round(Convert.ToDouble(element.Element("ObjLight").Value), 4))).ToString();
-                    //        //    string objFire = ((Math.Round(Convert.ToDouble(element.Element("ObjFire").Value), 4))).ToString();
-                    //        //    string objCold = ((Math.Round(Convert.ToDouble(element.Element("ObjCold").Value), 4))).ToString();
-                    //        //    string objBludg = ((Math.Round(Convert.ToDouble(element.Element("ObjBludg").Value), 4))).ToString();
-                    //        //    string objSlash = ((Math.Round(Convert.ToDouble(element.Element("ObjSlash").Value), 4))).ToString();
-                    //        //    string objPierce = ((Math.Round(Convert.ToDouble(element.Element("ObjPierce").Value), 4))).ToString();
+                    case 4:
 
-                    //        //    objProts = objSlash + "/" + objPierce + "/" + objBludg + "/" + objFire + "/" + objCold + "/" + objAcid + "/" + objLight;
-                    //        //}
-                    //        //else
-                    //        { objProts = ""; }
-                    //        message = ", Al: " + objAl + ", Work: " + objWork +
-                    //               ", Tinks: " + objTinks;
-                    //    //    if (objProts != "")
-                    //    //    {
-
-                    //    //        message = message + ", Al: " + objAl + " " + objProts + ", Work: " + objWork +
-                    //    //           ", Tinks: " + objTinks;
-                    //    //    }
-                    //    //    else
-                    //    //    {
-                    //    //        message = message + ", Al: " + objAl + ", Work: " + objWork +
-                    //    //           ", Tinks: " + objTinks;
-                    //    //    }
-                    //    //}
-                    ////    if (objClass == 1 || objClass == 2)
-                    ////    {
-                    ////        objCovers = Convert.ToInt32(element.Element("ObjCovers").Value);
-                    ////        // findCoversName(objCovers);
-                    ////        message = message + ", Covers: " + objCoversName;
-                    ////    }
-                    ////    if (objClass == 1 || objClass == 2 || objName.Contains("Aetheria"))
-                    ////    {
-                    ////        objLevel = element.Element("ObjLevel").Value;
-                    ////        objArmorSet = Convert.ToInt32(element.Element("ObjSet").Value);
-                    ////        objSpells = element.Element("ObjSpellsXml").Value.ToString();
-                    ////        // findArmorSetName(objArmorSet);
-                    ////        objBurden = element.Element("ObjBurden").Value;
-
-                    ////        message = message + ", Level: " + objLevel + ", Set: " + objArmorSetName
-                    ////            + ", Spells: " + objSpells;
-                    ////    }
-                    //    break;
-                    ////    if (objClass == 11 && !objName.Contains("Aetheria"))
-                    //    {
-                    //        objStack = element.Element("ObjStackCount").Value;
-                    //        message = message + ", # in Stack: " + objStack;
-                    //    }
-
-                    //case 3:
-                    //    objLevel = element.Element("ObjLevel").Value;
-                    //    objSpells = element.Element("ObjSpellXml").Value.ToString();
-                    //    message = message + ", Level: " + objLevel + ", " + objSpells;
-                    //    break;
-
-                    //case 4:
-                    //    objWork = element.Element("ObjWork").Value;
-                    //    objTinks = element.Element("ObjTinks").Value;
-                    //    objLevel = element.Element("ObjLevel").Value;
-                    //    objDamageTypeInt = Convert.ToInt32(element.Element("ObjDamage").Value);
-                    //    objMissD = ((Math.Round(Convert.ToDouble(element.Element("ObjMissD").Value), 2) - 1) * 100).ToString();
-                    //    if (Convert.ToDouble(objMissD) < 0) { objMissD = "0"; }
-                    //    objManaC = (Math.Round(Convert.ToDouble(element.Element("ObjManaC").Value), 2) * 100).ToString();
-                    //    objMagicD = ((Math.Round(Convert.ToDouble(element.Element("MagicD").Value), 2) - 1) * 100).ToString();
-                    //    if (Convert.ToDouble(objMagicD) < 0) { objMagicD = "0"; }
-                    //    objMelD = Math.Round(((Convert.ToDouble(element.Element("ObjMelD").Value) - 1) * 100), 2).ToString();
-                    //    objElemvsMons = Math.Round(((Convert.ToDouble(element.Element("ObjElemvsMons").Value) - 1) * 100), 2).ToString();
-                    //    objEmbueTypeInt = Convert.ToInt32(element.Element("ObjEmbue").Value);
-                    //    //findEmbueTypeStr(objEmbueTypeInt);
-                    //    //findDamageType();
-                    //    objSpells = element.Element("ObjSpellXml").Value.ToString();
-
-                    //    message = message + ", Damage: " + objDamageType + ", Wield Level: " + objLevel +
-                    //        ", ElemVsMonster: " + objElemvsMons +
-                    //        ", ManaC: " + objManaC + ", MeleeD: " + objMelD + ", MagicD: " + objMagicD +
-                    //        ", MissileD: " + objMissD + ", Embue: " + objEmbueTypeStr +
-                    //        ", Work: " + objWork + ", Tinks: " + objTinks + ", " + objSpells;
-                    //    break;
-                    //case 5:
-                    //    objDamageTypeInt = Convert.ToInt32(element.Element("ObjDamage").Value);
-                    //    //findDamageType();
-                    //    objAttack = Math.Round((Convert.ToDouble(element.Element("ObjAttack").Value) - 1) * 100).ToString();
-                    //    if (Convert.ToDouble(objAttack) < 0) { objAttack = "0"; }
-                    //    objMaxDam = element.Element("ObjMaxDam").Value.ToString();
-                    //    objMaxDamLong = Convert.ToInt32(objMaxDam);
-                    //    objDVar = (Convert.ToDouble(element.Element("ObjVariance").Value));
-                    //    objMinDam = Math.Round(objMaxDamLong - ((objDVar) * (objMaxDamLong)), 2).ToString();
-                    //    objEmbueTypeInt = Convert.ToInt32(element.Element("ObjEmbue").Value);
-                    //    //findEmbueTypeStr(objEmbueTypeInt);
-                    //    objWork = element.Element("ObjWork").Value.ToString();
-                    //    objTinks = element.Element("ObjTinks").Value.ToString();
-                    //    objLevel = element.Element("ObjLevel").Value.ToString();
-                    //    objMissD = ((Math.Round(Convert.ToDouble(element.Element("ObjMissD").Value), 2) - 1) * 100).ToString();
-                    //    if (Convert.ToDouble(objMissD) < 0) { objMissD = "0"; }
-                    //    objMagicD = ((Math.Round(Convert.ToDouble(element.Element("ObjMagicD").Value), 2) - 1) * 100).ToString();
-                    //    if (Convert.ToDouble(objMagicD) < 0) { objMagicD = "0"; }
-                    //    objMelD = Math.Round(((Convert.ToDouble(element.Element("ObjMelD").Value) - 1) * 100), 2).ToString();
-                    //    objSpells = element.Element("ObjSpellXml").Value.ToString();
-                    //    message = message + " , Damage: " + objDamageType + ", WieldLevel: " + objLevel +
-                    //        ", Attack: " + objAttack + ", MeleeD: " + objMelD +
-                    //        " Min-Max Damage: " + objMinDam + "-" + objMaxDam +
-                    //        " , Embue: " + objEmbueTypeStr + ", Work: " + objWork + ", Tinks: " + objTinks +
-                    //        ", MissD: " + objMissD + ", MagicD " + objMagicD + ", " + objSpells;
-                    //    break;
+                        message = message + ", Damage: " + objDamageType + 
+                            ", Wield Level: " + objLevel +
+                            ", ElemVsMonster: " + objElemvsMons +
+                            ", ManaC: " + objManaC + ", MeleeD: " + objMelD + ", MagicD: " + objMagicD +
+                            ", MissileD: " + objMissD + ", Embue: " + objEmbue +
+                            ", Work: " + objWork + ", Tinks: " + objTinks + ", " + objSpellXml;
+                        break;
+                    case 5:
+ 
+                        message = message + " , Damage: " + objDamageType +
+                            ", WieldLevel: " + objLevel +
+                            ", Attack: " + objAttack + ", MeleeD: " + objMelD +
+                            " Min-Max Damage: " + objMinDam + "-" + objMaxDam +
+                            " , Embue: " + objEmbue + ", Work: " + objWork + ", Tinks: " + objTinks +
+                            ", MissD: " + objMissD + ", MagicD " + objMagicD + ", " + objSpellXml;
+                        break;
                     case 6:
-                        objDamageTypeInt = Convert.ToInt32(element.Element("ObjDamage").Value);
-                        //findDamageType();
-                        objWork = element.Element("ObjWork").Value.ToString();
-                        objTinks = element.Element("ObjTink").Value.ToString();
-                        objLevel = element.Element("ObjWieldValue").Value.ToString();
-                        string objElDam = element.Element("ObjElemDmg").Value.ToString();
-                        string objDamBon = ((Math.Round(Convert.ToDouble(element.Element("ObjDamageBonus").Value), 2) - 1) * 100).ToString();
-                        objMissD = ((Math.Round(Convert.ToDouble(element.Element("ObjMissD").Value), 2) - 1) * 100).ToString();
-                        if (Convert.ToDouble(objMissD) < 0) { objMissD = "0"; }
-                        objMagicD = ((Math.Round(Convert.ToDouble(element.Element("ObjMagicD").Value), 2) - 1) * 100).ToString();
-                        if (Convert.ToDouble(objMagicD) < 0) { objMagicD = "0"; }
-                        objMelD = Math.Round(((Convert.ToDouble(element.Element("ObjMelD").Value) - 1) * 100), 2).ToString();
 
-                        if (Convert.ToDouble(objDamBon) < 0) { objDamBon = "0"; }
-
-                        objSpells = element.Element("ObjSpellXml").Value.ToString();
-                        //message = message + ", Work: " + objWork + ", Tinks: " + objTinks + ", " + objSpells;
-
-                        message = message + ", Damage Type: " + objDamageType + ", WieldLevel: " + objLevel +
+                        message = message + ", Damage: " + objDamageType + ", WieldLevel: " + objLevel +
                             ", Elem Dmg: " + objElDam +
-                            ", Damage Bonus: " + objDamBon + "MelD: " + objMelD +
+                            ", Damage Bonus: " + objDamBon + ", MelD: " + objMelD +
                             ", MissD: " + objMissD + ", MagicD: " + objMagicD +
-                            ", Work: " + objWork + ", Tinks: " + objTinks + ", " + objSpells;
+                            ", Work: " + objWork + ", Tinks: " + objTinks + ", " + objSpellXml;
                         break;
                     case 7:
-                        string objSalvWork = element.Element("ObjSalvWork").Value.ToString();
-                        objBurden = element.Element("ObjBurden").Value;
-
-                        //long objMat = Convert.ToInt32(element.Element("ObjSalvMat").Value);
-                        //objMatName = 
-                        //     findMaterialName(objMat);
                         message = message + ", Material: " + objMatName + ", Work: " + objSalvWork + ", Burden: " + objBurden;
 
                         break;
 
                     default:
-                        objBurden = element.Element("ObjBurden").Value;
-                        objStack = element.Element("ObjStackCount").Value;
-                        objSpells = element.Element("ObjSpellXml").Value.ToString();
-
-                        message = message + ", Burden: " + objBurden + ", Number: " + objStack + ", Spells: " + objSpells;
+                        message = message + ", Burden: " + objBurden + ", Number: " + objStack + ", Spells: " + objSpellXml;
                         break;
 
 
@@ -2213,16 +2241,16 @@ namespace GearFoundry
     {
            // lstInventory.Clear();
             lstHudInventory.ClearRows();
-            cmbSelectClass.Selected = 0;
-            cmbWieldAttrib.Selected = 0;
-            cmbDamageType.Selected = 0;
-            cmbLevel.Selected = 0;
-            cmbArmorSet.Selected = 0;
-            cmbMaterial.Selected = 0;
-            cmbCoverage.Selected = 0;
-            cmbArmorLevel.Selected = 0;
-            cmbSalvWork.Selected = 0;
-            cmbEmbue.Selected = 0;
+            cboInventoryClasses.Current = 0;
+            cboWieldAttrib.Current = 0;
+            cboDamageType.Current = 0;
+            cboLevel.Current = 0;
+            cboArmorSet.Current = 0;
+            cboMaterial.Current = 0;
+            cboCoverage.Current = 0;
+            cboArmorLevel.Current = 0;
+            cboSalvWork.Current = 0;
+            cboEmbues.Current = 0;
             objEmbueTypeInt = 0;
             objDamageTypeInt = 0;
             objLevelInt = 1;
@@ -2231,14 +2259,15 @@ namespace GearFoundry
             objClassName = null;
             objMat = 0;
             objCovers = 0;
+            objCoversName = "";
             objArmorLevel = 1;
-            objArmorSet = 0;
+            objSet = 0;
             newDoc = null;
             xdoc = null;
             childElements = null;
             elements = null;
-            txbSelect.Text = "";
             mySelect = "";
+            objClass = 0;
         }
 
     } // end of partial class

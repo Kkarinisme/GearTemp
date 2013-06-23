@@ -306,7 +306,7 @@
 				</control>
 			</control>
 		</page>
-			<page label="Inventory">
+			<!--<page label="Inventory">
       <control progid="DecalControls.FixedLayout" clipped="">
         <control progid="DecalControls.PushButton" name="btnGetInventory" left="5" top="5" width="110" height="24" textcolor="16777215" text="Complete Inventory "/>
         <control progid="DecalControls.PushButton" name="btnUpdateInventory" left="125" top="5" width="110" height="24" textcolor="16777215" text="Update Inventory"/>
@@ -377,7 +377,7 @@
                     <column progid="DecalControls.TextColumn" name="colGUID" />
                   </control>
                 </control>
-              </page>
+              </page>-->
     <page label="Settings">
       <control progid="DecalControls.FixedLayout" clipped="">
         <control progid="DecalControls.FixedLayout" clipped="" left="0" top="0" width="500" height="500">

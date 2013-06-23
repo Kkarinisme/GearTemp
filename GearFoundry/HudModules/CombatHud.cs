@@ -1311,7 +1311,7 @@ namespace GearFoundry
 					{
 						CombatHudTargetHealth.Min = 0;
 						CombatHudTargetHealth.Max = 100;
-						CombatHudTargetHealth.PreText = CHTargetIO.HealthCurrent + "/" + CHTargetIO.HealthMax;
+						CombatHudTargetHealth.PreText = CHTargetIO.HealthCurrent.ToString(); //+ "/" + CHTargetIO.HealthMax;
 						if(CHTargetIO.Id == CombatHudFocusTargetGUID) {CombatHudTargetHealth.ProgressFilled = FocusBar;}
 						else if(CHTargetIO.Id == CombatHudFocusTargetGUID) {CombatHudTargetHealth.ProgressFilled = CurrentBar;}
 						else{CombatHudTargetHealth.ProgressFilled =  RedBar;}
@@ -1475,7 +1475,7 @@ namespace GearFoundry
 					
 					CombatHudTargetHealth.Min = 0;
 					CombatHudTargetHealth.Max = 100;
-					CombatHudTargetHealth.PreText = CHTargetIO.HealthCurrent + "/" + CHTargetIO.HealthMax;
+                    CombatHudTargetHealth.PreText = CHTargetIO.HealthCurrent.ToString(); //+ "/" + CHTargetIO.HealthMax;
 					if(CHTargetIO.HealthCurrent < CHTargetIO.HealthMax)
 					{
 						CombatHudTargetHealth.Position = Convert.ToInt32(((double)CHTargetIO.HealthCurrent / (double)CHTargetIO.HealthMax)*100);

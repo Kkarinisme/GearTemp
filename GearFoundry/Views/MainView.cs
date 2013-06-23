@@ -279,26 +279,26 @@ namespace GearFoundry
         // Variable name lblSettings001 was lblsettings001  
         MyClasses.MetaViewWrappers.IStaticText lblSettings001;
 
-        //Controls on Inventory Page
-        MyClasses.MetaViewWrappers.IButton btnGetInventory;
-        MyClasses.MetaViewWrappers.IButton btnUpdateInventory;
-        MyClasses.MetaViewWrappers.IButton btnGetBurden;
-        MyClasses.MetaViewWrappers.IButton btnItemsWaiting;
-        MyClasses.MetaViewWrappers.IButton btnLstInventory;
-        MyClasses.MetaViewWrappers.IButton btnClrInventory;
-        MyClasses.MetaViewWrappers.ICombo cmbSelectClass;
-        MyClasses.MetaViewWrappers.ICombo cmbWieldAttrib;
-        MyClasses.MetaViewWrappers.ICombo cmbDamageType;
-        MyClasses.MetaViewWrappers.ICombo cmbLevel;
-        MyClasses.MetaViewWrappers.ICombo cmbArmorSet;
-        MyClasses.MetaViewWrappers.ICombo cmbMaterial;
-        MyClasses.MetaViewWrappers.ICombo cmbCoverage;
-        MyClasses.MetaViewWrappers.ICombo cmbArmorLevel;
-        MyClasses.MetaViewWrappers.ICombo cmbSalvWork;
-        MyClasses.MetaViewWrappers.ICombo cmbEmbue;
+        ////Controls on Inventory Page
+        //MyClasses.MetaViewWrappers.IButton btnGetInventory;
+        //MyClasses.MetaViewWrappers.IButton btnUpdateInventory;
+        //MyClasses.MetaViewWrappers.IButton btnGetBurden;
+        //MyClasses.MetaViewWrappers.IButton btnItemsWaiting;
+        //MyClasses.MetaViewWrappers.IButton btnLstInventory;
+        //MyClasses.MetaViewWrappers.IButton btnClrInventory;
+        //MyClasses.MetaViewWrappers.ICombo cmbSelectClass;
+        //MyClasses.MetaViewWrappers.ICombo cmbWieldAttrib;
+        //MyClasses.MetaViewWrappers.ICombo cmbDamageType;
+        //MyClasses.MetaViewWrappers.ICombo cmbLevel;
+        //MyClasses.MetaViewWrappers.ICombo cmbArmorSet;
+        //MyClasses.MetaViewWrappers.ICombo cmbMaterial;
+        //MyClasses.MetaViewWrappers.ICombo cmbCoverage;
+        //MyClasses.MetaViewWrappers.ICombo cmbArmorLevel;
+        //MyClasses.MetaViewWrappers.ICombo cmbSalvWork;
+        //MyClasses.MetaViewWrappers.ICombo cmbEmbue;
 
-        MyClasses.MetaViewWrappers.IList lstInventory;
-        MyClasses.MetaViewWrappers.ITextBox txbSelect;
+        //MyClasses.MetaViewWrappers.IList lstInventory;
+        //MyClasses.MetaViewWrappers.ITextBox txbSelect;
 
 
 
@@ -808,64 +808,64 @@ namespace GearFoundry
 
             
 
-                //Controls on Inventory Page
-                btnGetInventory = (MyClasses.MetaViewWrappers.IButton)View["btnGetInventory"];
-                btnUpdateInventory = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateInventory"];
-                btnGetBurden = (MyClasses.MetaViewWrappers.IButton)View["btnGetBurden"];
-                btnItemsWaiting = (MyClasses.MetaViewWrappers.IButton)View["btnItemsWaiting"];
-                //      btnGetToonArmor = (MyClasses.MetaViewWrappers.IButton)View["btnGetToonArmor"];
-                btnLstInventory = (MyClasses.MetaViewWrappers.IButton)View["btnLstInventory"];
-                btnClrInventory = (MyClasses.MetaViewWrappers.IButton)View["btnClrInventory"];
-                }catch(Exception ex){LogError(ex);}
-                  try
-                  {
-                cmbSelectClass = (MyClasses.MetaViewWrappers.ICombo)View["cmbSelectClass"];
-                cmbSelectClass.Selected = 0;
-                cmbWieldAttrib = (MyClasses.MetaViewWrappers.ICombo)View["cmbWieldAttrib"];
-                cmbWieldAttrib.Selected = 0;
-                cmbDamageType = (MyClasses.MetaViewWrappers.ICombo)View["cmbDamageType"];
-                cmbDamageType.Selected = 0;
-                cmbLevel = (MyClasses.MetaViewWrappers.ICombo)View["cmbLevel"];
-                cmbLevel.Selected = 0;
-                cmbArmorSet = (MyClasses.MetaViewWrappers.ICombo)View["cmbArmorSet"];
-                cmbArmorSet.Selected = 0;
-                cmbMaterial = (MyClasses.MetaViewWrappers.ICombo)View["cmbMaterial"];
-                cmbMaterial.Selected = 0;
-                cmbCoverage = (MyClasses.MetaViewWrappers.ICombo)View["cmbCoverage"];
-                cmbCoverage.Selected = 0;
-                cmbArmorLevel = (MyClasses.MetaViewWrappers.ICombo)View["cmbArmorLevel"];
-                cmbArmorLevel.Selected = 0;
-                cmbSalvWork = (MyClasses.MetaViewWrappers.ICombo)View["cmbSalvWork"];
-                cmbSalvWork.Selected = 0;
-                cmbEmbue = (MyClasses.MetaViewWrappers.ICombo)View["cmbEmbue"];
-                cmbEmbue.Selected = 0;
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
+       //         //Controls on Inventory Page
+       //         btnGetInventory = (MyClasses.MetaViewWrappers.IButton)View["btnGetInventory"];
+       //         btnUpdateInventory = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateInventory"];
+       //         btnGetBurden = (MyClasses.MetaViewWrappers.IButton)View["btnGetBurden"];
+       //         btnItemsWaiting = (MyClasses.MetaViewWrappers.IButton)View["btnItemsWaiting"];
+       //         //      btnGetToonArmor = (MyClasses.MetaViewWrappers.IButton)View["btnGetToonArmor"];
+       //         btnLstInventory = (MyClasses.MetaViewWrappers.IButton)View["btnLstInventory"];
+       //         btnClrInventory = (MyClasses.MetaViewWrappers.IButton)View["btnClrInventory"];
+       //         }catch(Exception ex){LogError(ex);}
+       //           try
+       //           {
+       //         cmbSelectClass = (MyClasses.MetaViewWrappers.ICombo)View["cmbSelectClass"];
+       //         cmbSelectClass.Selected = 0;
+       //         cmbWieldAttrib = (MyClasses.MetaViewWrappers.ICombo)View["cmbWieldAttrib"];
+       //         cmbWieldAttrib.Selected = 0;
+       //         cmbDamageType = (MyClasses.MetaViewWrappers.ICombo)View["cmbDamageType"];
+       //         cmbDamageType.Selected = 0;
+       //         cmbLevel = (MyClasses.MetaViewWrappers.ICombo)View["cmbLevel"];
+       //         cmbLevel.Selected = 0;
+       //         cmbArmorSet = (MyClasses.MetaViewWrappers.ICombo)View["cmbArmorSet"];
+       //         cmbArmorSet.Selected = 0;
+       //         cmbMaterial = (MyClasses.MetaViewWrappers.ICombo)View["cmbMaterial"];
+       //         cmbMaterial.Selected = 0;
+       //         cmbCoverage = (MyClasses.MetaViewWrappers.ICombo)View["cmbCoverage"];
+       //         cmbCoverage.Selected = 0;
+       //         cmbArmorLevel = (MyClasses.MetaViewWrappers.ICombo)View["cmbArmorLevel"];
+       //         cmbArmorLevel.Selected = 0;
+       //         cmbSalvWork = (MyClasses.MetaViewWrappers.ICombo)View["cmbSalvWork"];
+       //         cmbSalvWork.Selected = 0;
+       //         cmbEmbue = (MyClasses.MetaViewWrappers.ICombo)View["cmbEmbue"];
+       //         cmbEmbue.Selected = 0;
+       //         }catch(Exception ex){LogError(ex);}
+       //           try
+       //           {
                 
-                lstInventory = (MyClasses.MetaViewWrappers.IList)View["lstInventory"];
+       //         lstInventory = (MyClasses.MetaViewWrappers.IList)View["lstInventory"];
 
-                txbSelect = (MyClasses.MetaViewWrappers.ITextBox)View["txbSelect"];
+       //         txbSelect = (MyClasses.MetaViewWrappers.ITextBox)View["txbSelect"];
 
-              //  lstInventory.Selected += new EventHandler<MVListSelectEventArgs>(lstInventory_Selected);
-                btnGetInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetInventory_Click);
-                btnUpdateInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateInventory_Click);
-                btnGetBurden.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetBurden_Click);
-                btnItemsWaiting.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnItemsWaiting_Click);
-                ////      btnGetToonArmor.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetToonArmor_Click);
-              //  btnLstInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnLstInventory_Click);
-              //  btnClrInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnClrInventory_Click);
-                cmbSelectClass.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbSelectClass_Change);
-                cmbSelectClass.Selected = 0;
-                cmbWieldAttrib.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbWieldAttrib_Change);
-                cmbDamageType.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbDamageType_Change);
-                cmbLevel.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbLevel_Change);
-                cmbMaterial.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbMaterial_Change);
-                cmbArmorSet.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbArmorSet_Change);
-                cmbArmorLevel.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbArmorLevel_Change);
-                cmbCoverage.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbCoverage_Change);
-                cmbSalvWork.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbSalvWork_Change);
-                cmbEmbue.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbEmbue_Change);
+       //       //  lstInventory.Selected += new EventHandler<MVListSelectEventArgs>(lstInventory_Selected);
+       //         btnGetInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetInventory_Click);
+       //         btnUpdateInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateInventory_Click);
+       //         btnGetBurden.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetBurden_Click);
+       //         btnItemsWaiting.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnItemsWaiting_Click);
+       //         ////      btnGetToonArmor.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetToonArmor_Click);
+       //       //  btnLstInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnLstInventory_Click);
+       //       //  btnClrInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnClrInventory_Click);
+       //         cmbSelectClass.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbSelectClass_Change);
+       //         cmbSelectClass.Selected = 0;
+       //         cmbWieldAttrib.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbWieldAttrib_Change);
+       //         cmbDamageType.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbDamageType_Change);
+       //         cmbLevel.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbLevel_Change);
+       //         cmbMaterial.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbMaterial_Change);
+       //         cmbArmorSet.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbArmorSet_Change);
+       //         cmbArmorLevel.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbArmorLevel_Change);
+       //         cmbCoverage.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbCoverage_Change);
+       //         cmbSalvWork.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbSalvWork_Change);
+       //         cmbEmbue.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbEmbue_Change);
        }
 
            catch (Exception ex) {LogError(ex);	}
