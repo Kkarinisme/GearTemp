@@ -257,12 +257,6 @@ namespace GearFoundry
                 Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
 
                 WriteToChat("Plugin now online. Server population: " + Core.CharacterFilter.ServerPopulation);
-                if(EssElementsList != null)
-                    WriteToChat("EssElementsList count: " + EssElementsList.Count);
-                else
-                    WriteToChat("EssElementsList does not exist." );
-
-
 
                 MasterTimer.Interval = 1000;
                 MasterTimer.Start();

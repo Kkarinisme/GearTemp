@@ -58,6 +58,7 @@ namespace GearFoundry
             fellowplayer,
             portal,
             lifestone,
+            dessicate,
             trophy,
             salvage,
             rare,

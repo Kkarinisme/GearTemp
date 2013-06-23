@@ -839,6 +839,8 @@ namespace GearFoundry
 						return "(NPC) ";
 					case IOResult.salvage:
 						return "(" + rulename + ") ";
+					case IOResult.dessicate:
+						return "(Dessicate) ";
 					default:
 						return String.Empty;
 				}  
@@ -1048,7 +1050,8 @@ namespace GearFoundry
 			{
 				get
 				{
-					if((wo.Values(LongValueKey.EquipableSlots) & AetheriaSlots) == wo.Values(LongValueKey.EquipableSlots)) {return true;}
+					if(wo.ObjectClass == ObjectClass.Gem && wo.LongKeys.Contains((int)LongValueKey.EquipableSlots) &&
+					   (wo.Values(LongValueKey.EquipableSlots) & AetheriaSlots) == wo.Values(LongValueKey.EquipableSlots)) {return true;}
 					else {return false;}
 				}
 			}

@@ -302,7 +302,6 @@ namespace GearFoundry
 
                 writeToXdocRules(xdocRules);
                 xdocRules.Save(rulesFilename);
-                GearFoundry.PluginCore.WriteToChat("xdocRules Updated file added.");
                 populateRulesListBox();
                 FillItemRules();
             }
@@ -717,10 +716,6 @@ namespace GearFoundry
             {
 
                 nRuleWieldAttribute = (WeaponTypeList[cboWeaponAppliesTo.Selected].ID);
-                GearFoundry.PluginCore.WriteToChat("Index of weaponappliesto: " + cboWeaponAppliesTo.Selected.ToString());
-                GearFoundry.PluginCore.WriteToChat("Guid of weaponappliesto: " + WeaponTypeList[cboWeaponAppliesTo.Selected].ID.ToString());
-                GearFoundry.PluginCore.WriteToChat("Name of weaponappliesto: " + WeaponTypeList[cboWeaponAppliesTo.Selected].name);
-
 
                 switch (nRuleWieldAttribute)
                 {
@@ -756,9 +751,6 @@ namespace GearFoundry
         private void cboMasteryType_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
             nRuleMasteryType = cboMasteryType.Selected;
-            GearFoundry.PluginCore.WriteToChat("Index of mastery: " + cboMasteryType.Selected.ToString());
-            GearFoundry.PluginCore.WriteToChat("Guid of mastery: " + MasteryIndex[cboMasteryType.Selected].ID.ToString());
-            GearFoundry.PluginCore.WriteToChat("Name of weaponappliesto: " + MasteryIndex[cboMasteryType.Selected].name);
 
         }
 
@@ -766,7 +758,6 @@ namespace GearFoundry
         private void cboRuleEssMastery_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
             nRuleEssMastery = EssMasteryList[cboRuleEssMastery.Selected].ID;
-            GearFoundry.PluginCore.WriteToChat("Index of mastery: " + cboRuleEssMastery.Selected.ToString());
 
         }
 
@@ -964,8 +955,6 @@ namespace GearFoundry
         //Creates a string of integers separated by columns in listviews in which more than one chosen
         private string mFindList(MyClasses.MetaViewWrappers.IList lstvue, List<IDNameLoadable> lst)
         {
-            WriteToChat("I am in the function MFindList with list " + lstvue.Name + "; the count of the lst is " + lst.Count.ToString());
-
             int id = 0;
             string var;
             bool @checked = false;
