@@ -1059,9 +1059,7 @@ namespace GearFoundry
 	    	    if(Core.CharacterFilter.Burden >= 100){ButlerBurden.TextColor = Color.Yellow;}
 	    	    if(Core.CharacterFilter.Burden >= 200){ButlerBurden.TextColor = Color.Red;}
 	    	    ButlerPackSpacesAvailable.Text = CalculateAvailableSpace();
-	    		
-	    		
-	    		
+	    			    		
 	    	    ButlerHudList.ClearRows();
 	    	    foreach(WorldObject wo in ButlerInventory)
 	    	    {

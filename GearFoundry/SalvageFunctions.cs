@@ -20,6 +20,26 @@ namespace GearFoundry
 	/// </summary>
 	public partial class PluginCore
 	{
+
+//[VI] [Vigeneral] Irquk says, "Got a guy here picking up a bounce house we had for my 4 year old's bday party.  I may go silent suddently but will return"
+//[VI] [Vigeneral] Virindi says, "I want a bouncy house for my birthday."
+//[VI] [Vigeneral] Irquk says, "If you use the loot addon with Vtank it works as a passive ID addon and gives all the work to Vtank."
+//[VI] [Vigeneral] Irquk says, "If you use the manual portions, only items from containers which are added to your inventory get ID'd because of using a listen list to check against."
+//[VI] [Vigeneral] Virindi says, "ah...I noticed it doesn't use the combine decision interfaces"
+//[VI] [Vigeneral] Irquk says, "How do I implement?"
+//[VI] [Vigeneral] Irquk says, "I'm still learning all the ins and outs."
+//[VI] [Vigeneral] Irquk says, "For now, it lets Vtank do it's thing.  LOL"
+//[VI] [Vigeneral] Virindi says, "when I implemented value salvaging I added ILootPluginCapability_SalvageCombineDecision2"
+//[VI] [Vigeneral] Virindi says, "your lootplugin object, just implements either ILootPluginCapability_SalvageCombineDecision or ILootPluginCapability_SalvageCombineDecision2 interface"
+//[VI] [Vigeneral] Irquk says, "I put in a button in another panel that will later do combining with code I wrote if you want to clean up inventory."
+//[VI] [Vigeneral] Virindi says, "if it implements either, vtank will query it to determine how to combine salvage."
+//[VI] [Vigeneral] Virindi says, "decision1 passes in pairs of bags and you return yes or no to combine"
+//[VI] [Vigeneral] Virindi says, "decision2 passes you a list of bags of the same material, and you return a list of what you want combined in one operation."
+//[VI] [Vigeneral] Virindi says, "vtclassic has an example of how to use them"
+
+//[VI] [Vigeneral] Virindi says, "http://www.virindi.net/repos/virindi_public/trunk/VirindiTankLootPlugins/"
+
+//[VI] [Vigeneral] Virindi says, "the lootpluginbase implementation is in http://www.virindi.net/repos/virindi_public/trunk/VirindiTankLootPlugins/VTClassic/VTClassic/LootCore.cs"
 	
 	    private List<SalvageRule> SalvageRulesList = new List<SalvageRule>();
         private List<WorldObject> InventorySalvage = new List<WorldObject>();

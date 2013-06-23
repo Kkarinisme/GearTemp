@@ -229,7 +229,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IList lstmyTrophies;
         MyClasses.MetaViewWrappers.ITextBox txtTrophyName;
         MyClasses.MetaViewWrappers.IStaticText lblAtr11;
-        MyClasses.MetaViewWrappers.IButton btnAttachTrophyItem;
+        //MyClasses.MetaViewWrappers.IButton btnAttachTrophyItem;
         MyClasses.MetaViewWrappers.IButton btnAddTrophyItem;
         MyClasses.MetaViewWrappers.ICheckBox chkTrophyExact;
         MyClasses.MetaViewWrappers.IStaticText lblMyItemsCountMax;
@@ -699,7 +699,7 @@ namespace GearFoundry
    
                 // Controls on Notify.NPC/Trophies Page
 
-                btnAttachTrophyItem = (MyClasses.MetaViewWrappers.IButton)View["btnAttachTrophyItem"];
+                //btnAttachTrophyItem = (MyClasses.MetaViewWrappers.IButton)View["btnAttachTrophyItem"];
                 btnAddTrophyItem = (MyClasses.MetaViewWrappers.IButton)View["btnAddTrophyItem"];
                 lstmyTrophies = (MyClasses.MetaViewWrappers.IList)View["lstmyTrophies"];
                 txtTrophyName = (MyClasses.MetaViewWrappers.ITextBox)View["txtTrophyName"];
@@ -714,7 +714,7 @@ namespace GearFoundry
                 //  // cboTrophysetupAlert.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cboTrophysetupAlert_Change);
                 txtTrophyName.End += new EventHandler<MVTextBoxEndEventArgs>(txtTrophyName_End);
                 txtTrophyMax.End += new EventHandler<MVTextBoxEndEventArgs>(txtTrophyMax_End);
-                btnAttachTrophyItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAttachTrophyItem_Click);
+                //btnAttachTrophyItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAttachTrophyItem_Click);
                 btnAddTrophyItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAddTrophyItem_Click);
                 }catch(Exception ex){LogError(ex);}
                   try
@@ -759,30 +759,30 @@ namespace GearFoundry
                   try
                   {
                  //Controls on Notify.Other Page
-               lstNotifyOptions = (MyClasses.MetaViewWrappers.IList)View["lstNotifyOptions"];
+               //lstNotifyOptions = (MyClasses.MetaViewWrappers.IList)View["lstNotifyOptions"];
                chkSalvageAll = (MyClasses.MetaViewWrappers.ICheckBox)View["chkmyMobExact"];
-               txtMaxMana = (MyClasses.MetaViewWrappers.ITextBox)View["txtMaxMana"];
-               txtMaxValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtMaxValue"];
-               txtVbratio = (MyClasses.MetaViewWrappers.ITextBox)View["txtVbratio"];
+              // txtMaxMana = (MyClasses.MetaViewWrappers.ITextBox)View["txtMaxMana"];
+               //txtMaxValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtMaxValue"];
+              // txtVbratio = (MyClasses.MetaViewWrappers.ITextBox)View["txtVbratio"];
                //lblMaxMana = (MyClasses.MetaViewWrappers.IStaticText)View["lblMaxMana"];
-               lblMaxValue = (MyClasses.MetaViewWrappers.IStaticText)View["lblMaxValue"];
-               lblVbratio = (MyClasses.MetaViewWrappers.IStaticText)View["lblVbratio"];
+              // lblMaxValue = (MyClasses.MetaViewWrappers.IStaticText)View["lblMaxValue"];
+               //lblVbratio = (MyClasses.MetaViewWrappers.IStaticText)View["lblVbratio"];
 				}catch(Exception ex){LogError(ex);}
                   try
                   {
              //  TODO: Add the functions in when obvious where would go and what should be done
               // lstNotifyOptions.Selected += new EventHandler<MVListSelectEventArgs>(lstNotifyOptions_Selected);
-               txtMaxMana.End += new EventHandler<MVTextBoxEndEventArgs>(txtMaxMana_End);
-               txtMaxValue.End += new EventHandler<MVTextBoxEndEventArgs>(txtMaxValue_End);
+               //txtMaxMana.End += new EventHandler<MVTextBoxEndEventArgs>(txtMaxMana_End);
+               //txtMaxValue.End += new EventHandler<MVTextBoxEndEventArgs>(txtMaxValue_End);
 				}catch(Exception ex){LogError(ex);}
                   try
                   {
                // Controls on Ust Page
-               lstUstList = (MyClasses.MetaViewWrappers.IList)View["lstUstList"];
-               btnUstItems = (MyClasses.MetaViewWrappers.IButton)View["btnUstItems"];
-               btnUstClear = (MyClasses.MetaViewWrappers.IButton)View["btnUstClear"];
-               btnUstSalvage = (MyClasses.MetaViewWrappers.IButton)View["btnUstSalvage"];
-               txtSalvageAug = (MyClasses.MetaViewWrappers.ITextBox)View["txtSalvageAug"];
+              // lstUstList = (MyClasses.MetaViewWrappers.IList)View["lstUstList"];
+              // btnUstItems = (MyClasses.MetaViewWrappers.IButton)View["btnUstItems"];
+               //btnUstClear = (MyClasses.MetaViewWrappers.IButton)View["btnUstClear"];
+               //btnUstSalvage = (MyClasses.MetaViewWrappers.IButton)View["btnUstSalvage"];
+               //txtSalvageAug = (MyClasses.MetaViewWrappers.ITextBox)View["txtSalvageAug"];
                //lblUst002 = (MyClasses.MetaViewWrappers.IStaticText)View["lblUst002"];
 				}catch(Exception ex){LogError(ex);}
                   try

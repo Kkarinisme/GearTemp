@@ -55,7 +55,7 @@ namespace GearFoundry
         {
             try
             {
-                Globals.Host.Actions.AddChatText("#" + Globals.PluginName + "#: " + message, 1);
+                Globals.Host.Actions.AddChatText("#" + Globals.PluginName + "#: " + message, 2);
             }
             catch (Exception ex) { LogError(ex); }
         }

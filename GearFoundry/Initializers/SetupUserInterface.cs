@@ -57,11 +57,11 @@ namespace GearFoundry
         }
 
 
-        [ControlEvent("btnAttachTrophyItem", "Click")]
-        private void btnAttachTrophyItem_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-
-        }
+//        [ControlEvent("btnAttachTrophyItem", "Click")]
+//        private void btnAttachTrophyItem_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+//        {
+//
+//        }
 
         private void lstSelect(XDocument xdoc, string filename, List<XElement> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.ITextBox mtxt, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
         {
@@ -676,7 +676,6 @@ namespace GearFoundry
             int mList = 1;
             MVListSelectEventArgs args = e;
             lstSelect(xdocTrophies, trophiesFilename, mSortedTrophiesList, lstmyTrophies, txtTrophyName, args, mList);
-
         }
 
         // [ControlEvent]("lstmyMobs", "Selected") 

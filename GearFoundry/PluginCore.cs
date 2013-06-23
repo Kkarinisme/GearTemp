@@ -201,7 +201,7 @@ namespace GearFoundry
                 //  // cboTrophysetupAlert.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cboTrophysetupAlert_Change);
                 txtTrophyName.End -= new EventHandler<MVTextBoxEndEventArgs>(txtTrophyName_End);
                 txtTrophyMax.End -= new EventHandler<MVTextBoxEndEventArgs>(txtTrophyMax_End);
-                btnAttachTrophyItem.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAttachTrophyItem_Click);
+                //btnAttachTrophyItem.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAttachTrophyItem_Click);
                 btnAddTrophyItem.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAddTrophyItem_Click);
                 lstmyMobs.Selected -= new EventHandler<MVListSelectEventArgs>(lstmyMobs_Selected);
                 chkmyMobExact.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkmyMobExact_Change);

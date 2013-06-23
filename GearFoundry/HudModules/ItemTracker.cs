@@ -347,6 +347,8 @@ namespace GearFoundry
     	{
     		try
     		{
+    			WriteToChat("Prepare for Warp Speed!  And CoreDumping!");
+    			
     			foreach(LootObject lo in ProcessItemsList)
     			{
     				if(lo.IOR == IOResult.salvage)
@@ -393,7 +395,10 @@ namespace GearFoundry
     				{
     					ManaTankQueue.Enqueue(ProcessItemsList.ElementAt(row));
     				}
-    				
+    				if(ProcessItemsList.ElementAt(row).ObjectClass == ObjectClass.Key)
+    				{
+    					KeyItemsQueue.Enqueue(ProcessItemsList.ElementAt(row));
+    				}
     				FireInspectorActions();
     			}
     			//Report
@@ -662,11 +667,8 @@ namespace GearFoundry
     			{  
     				if(ItemHudMoveQueue.Count == 0)
     				{
-    					if(!ItemHudMoveQueue.Any(x => x.Id  == ItemTrackingList[row].Id))
-    					{
-    					 	ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
-    					}
-						FireInspectorActions();
+    					ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
+    					FireInspectorActions();
     				}
     				else
     				{

@@ -43,6 +43,33 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		private void CheckItemForMatches(LootObject IOItem)
+		{
+			try
+			{
+				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
+				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
+				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown && GISettings.IdentifySalvage) {CheckSalvageItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
+				
+				//Clean out no matches.
+				if(IOItem.IOR == IOResult.nomatch)
+				{
+					if(mOpenContainer.ContainerIOs.Any(x => x.Id == IOItem.Id)) {mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);}
+				}
+				else
+				{
+					if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.GSReportString());}
+					else {ReportStringToChat(IOItem.LinkString());}
+					EvaluateItemMatches(IOItem);
+				}
+								
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		
 		// Item Tracker ID functions begin here
 		private void CheckSalvageItem(ref LootObject IOItemSalvage)
@@ -119,9 +146,7 @@ namespace GearFoundry
 					IOScroll.IOR = IOResult.nomatch;
 					return;
 				}
-			
-			
-				if(!Core.CharacterFilter.IsSpellKnown(IOScroll.Spell(0)))
+				else if(!Core.CharacterFilter.IsSpellKnown(IOScroll.Spell(0)))
 				{
 					if(SpellIndex[IOScroll.Spell(0)].spelllevel == 7)
 					{
@@ -145,18 +170,42 @@ namespace GearFoundry
 			
 				if(matches.Count() > 0)
 				{
-//					int LootMaxCheck;
-//					if(!Int32.TryParse(matches.First().Element("Guid").Value, out LootMaxCheck)) {LootMaxCheck = 0;}
-//					int InventoryCount = 0;
-//					if(Convert.ToBoolean(matches.First().Element("iseact").Value))
-//					{
-//						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name == (string)matches.First().Element("key").Value).Count();
-//					}
-//					else
-//					{
-//						InventoryCount = Core.WorldFilter.GetInventory().Where(x => x.Name.Contains((string)matches.First().Element("key").Value)).Count();
-//					}
-//					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) {return;}
+					int LootMaxCheck;
+					if(!Int32.TryParse(matches.First().Element("Guid").Value, out LootMaxCheck)) {LootMaxCheck = 0;}
+					
+					int InventoryCount = 0;
+					if(Convert.ToBoolean(matches.First().Element("isexact").Value))
+					{
+						var inventorymatches = Core.WorldFilter.GetInventory().Where(x => x.Name == (string)matches.First().Element("key").Value);
+						if(inventorymatches.Count() == 0)
+						{
+							InventoryCount = 0;
+						}
+						else foreach(WorldObject inv in inventorymatches)
+						{
+							if(!inv.LongKeys.Contains((int)LongValueKey.StackCount)){InventoryCount++;}
+							else{InventoryCount += inv.Values(LongValueKey.StackCount);}
+						}
+						
+					}
+					else
+					{
+						var inventorymatches =  Core.WorldFilter.GetInventory().Where(x => x.Name.Contains((string)matches.First().Element("key").Value));
+						if(inventorymatches.Count() == 0)
+						{
+							InventoryCount = 0;
+						}
+						else foreach(WorldObject inv in inventorymatches)
+						{
+							if(!inv.LongKeys.Contains((int)LongValueKey.StackCount)){InventoryCount++;}
+							else{InventoryCount += inv.Values(LongValueKey.StackCount);}
+						}
+					}					
+					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) 
+					{
+						WriteToChat("Trophy Rected on LootMax Check");
+						return;
+					}
 						 
 					IOItem.IOR = IOResult.trophy;
 				}				
@@ -277,8 +326,8 @@ namespace GearFoundry
 						case ObjectClass.WandStaffOrb:
 							var reducedmeleematches = from ruls in AppliesToListMatches
 								where IOItemWithID.GearScore >= ruls.WeaponModSum &&
-								((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0) &&
-								ruls.RuleWieldAttribute == IOItemWithID.LValue(LongValueKey.WieldReqAttribute) &&
+								(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
+								(ruls.RuleWieldAttribute == 0 || ruls.RuleWieldAttribute == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
 								((ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
 								 (ruls.RuleWeaponEnabledB && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueB) ||
 								 (ruls.RuleWeaponEnabledC && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueC) ||

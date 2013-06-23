@@ -159,6 +159,7 @@ namespace GearFoundry
 			try 
 			{   
 				if(!bLandscapeHudEnabled) {return;}
+				if(e.New.ObjectClass == ObjectClass.Unknown){return;}
 				if(e.New.Container != 0 || LandscapeExclusionList.Contains(e.New.Id)) {return;}
 				else
 				{

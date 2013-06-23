@@ -120,6 +120,7 @@ namespace GearFoundry
 							break;
 		
 					}
+					if(wo.LongKeys.Contains((int)LongValueKey.Imbued)) {gearscorereturn += 1;}
 					gearscorereturn += RatingScore;
 					return gearscorereturn;	
 				}
@@ -855,7 +856,7 @@ namespace GearFoundry
 			
 			public string SkillString()
 			{
-				if(SkillScore > 0) {return " Skill Modifers: " + SkillScore.ToString("N1") + ",";}
+				if(SkillScore > 0) {return ", Skill Modifers: " + SkillScore.ToString("N0");}
 				else {return String.Empty;}
 				
 			}
@@ -888,14 +889,14 @@ namespace GearFoundry
 			
 			public string ArmorLevelComaparisonString()
 			{
-				return " ArmorScore: " + ArmorScore.ToString("N0") + ",";
+				return ", ArmorScore: " + ArmorScore.ToString("N0");
 			}
 
 			
 			
 			public string OffenseString()
 			{
-				return " Damage Score: " + OffenseScore.ToString("N0") + "," ;
+				return ", Damage Score: " + OffenseScore.ToString("N0");
 			}
 			
 			//Because of the need to read the icons from the essences for damage types, this can't be read directly from wo.  Combined all for for ease of reference
@@ -983,8 +984,6 @@ namespace GearFoundry
 				}
 			}
 			
-
-			//TODO:  This should be rolled into the matching function in identify
 			public int WeaponMaxDamage
 			{
 				get

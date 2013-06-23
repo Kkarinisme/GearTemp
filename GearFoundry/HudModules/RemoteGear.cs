@@ -40,6 +40,8 @@ namespace GearFoundry
         private HudPictureBox mRemoteGear7 = null;
         private HudPictureBox mRemoteGear8 = null;
         private HudPictureBox mRemoteGear9 = null;
+        
+        private int RemoteGearIcon = 0x6006E0A;
 
 
 
@@ -63,7 +65,7 @@ namespace GearFoundry
 
             xdocRemoteGear = XDocument.Load(remoteGearFilename);
 
-            remoteGearHud = new VirindiViewService.HudView("", 30, 165, new ACImage(Color.Transparent), false, "RemoteGear");
+            remoteGearHud = new VirindiViewService.HudView("", 30, 165, RemoteGearIcon, false, "RemoteGear");
             remoteGearHud.ShowInBar = false;
             remoteGearHud.UserAlphaChangeable = false;
             remoteGearHud.Visible = true;

@@ -23,6 +23,7 @@ namespace GearFoundry
 		private Queue<WorldObject> SalvageCreatedQueue = new Queue<WorldObject>();
 		private int LooterLastItemSelected = 0;
 		private string[] RingableKeysArray = {"legendary", "black marrow", "directive", "granite", "mana forge", "master", "marble", "singularity",	"skeletal falatacot"};
+		private List<int> AutoDeQueue = new List<int>();
 		
 		private void SubscribeItemTrackerLooterEvents()
 		{
@@ -34,6 +35,7 @@ namespace GearFoundry
 				Core.WorldFilter.CreateObject += ItemTrackerActions_ObjectCreated;
 				Core.WorldFilter.ChangeObject += ItemTrackerActions_ObjectChanged;
 				Core.ItemSelected += ItemTracker_ItemSelected;
+				Core.CharacterFilter.ActionComplete += ItemTracker_ActionComplete;
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -47,6 +49,7 @@ namespace GearFoundry
 				Core.WorldFilter.CreateObject -= ItemTrackerActions_ObjectCreated;
 				Core.WorldFilter.ChangeObject -= ItemTrackerActions_ObjectChanged;
 				Core.ItemSelected -= ItemTracker_ItemSelected;
+				Core.CharacterFilter.ActionComplete += ItemTracker_ActionComplete;
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -67,7 +70,9 @@ namespace GearFoundry
 		private void ItemTrackerActions_ObjectChanged(object sender, ChangeObjectEventArgs e)
 		{
 			try
-			{		
+			{	
+				if(e.Changed == null){return;}
+				
 				if(e.Change == WorldChangeType.IdentReceived)
 				{
 					if(e.Changed.Id == Host.Actions.CurrentSelection)
@@ -82,65 +87,112 @@ namespace GearFoundry
 				}
 				else if(e.Change == WorldChangeType.StorageChange)
 				{
-					if(ItemHudMoveQueue.Count > 0 && ItemHudMoveQueue.First().Id == e.Changed.Id)
+					if(ItemHudMoveQueue.Count > 0)
 	        		{
-	        			ItemJustChanged = ItemHudMoveQueue.Dequeue();
-	        			if(ItemTrackingList.Any(x => x.Id == ItemJustChanged.Id))
-	        			{
-	        				ItemTrackingList.RemoveAll(x => x.Id == e.Changed.Id);
-	        			}
-	        			UpdateItemHud();
+					   	if(ItemHudMoveQueue.First().Id == e.Changed.Id)
+					   	{
+					   		ItemJustChanged = ItemHudMoveQueue.Dequeue();
+					   	}	
+					   	if(ItemTrackingList.Any(x => x.Id == ItemJustChanged.Id))
+					   	{
+					   		ItemTrackingList.RemoveAll(x => x.Id == e.Changed.Id);  		
+					   	}
+					   	if(ItemJustChanged.IOR == IOResult.salvage || ItemJustChanged.IOR == IOResult.dessicate || ItemJustChanged.IOR == IOResult.manatank || ItemJustChanged.ObjectClass == ObjectClass.Key)
+	    				{
+	    					ProcessItemsList.Add(ItemJustChanged); 					  					
+		    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoSalvage)
+		    				{
+		    					SalvageItemsQueue.Enqueue(ItemJustChanged);
+		    				}
+		    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoSalvage)
+		    				{
+		    					DesiccateItemsQueue.Enqueue(ItemJustChanged);
+		    				}
+		    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoSalvage)
+		    				{
+		    					ManaTankQueue.Enqueue(ItemJustChanged);
+		    				}
+		    				else if(ItemJustChanged.ObjectClass == ObjectClass.Key)
+		    				{
+		    					if(RingableKeysArray.Any(x => ItemJustChanged.Name.ToLower().Contains(x)))
+		    					{
+		    						KeyItemsQueue.Enqueue(ItemJustChanged);
+		    					}
+		    				}
+	    				}
+					   	
+					   	UpdateItemHud();
+						FireInspectorActions();
+						return;
 	        		}	
 					else if(ItemTrackingList.Any(x => x.Id == e.Changed.Id))
 					{
 						ItemJustChanged = ItemTrackingList.Find(x => x.Id == e.Changed.Id);
 						ItemTrackingList.RemoveAll(x => x.Id == ItemJustChanged.Id);
+						AutoDeQueue.Add(ItemJustChanged.Id);
 						UpdateItemHud();
+						return;
 					}
 					else
 					{
 						return;
 					}
-					
-					if(ItemJustChanged.IOR == IOResult.salvage || ItemJustChanged.IOR == IOResult.dessicate || ItemJustChanged.IOR == IOResult.manatank || ItemJustChanged.ObjectClass == ObjectClass.Key)
-	    			{
-	    				ProcessItemsList.Add(ItemJustChanged); 					  					
-	    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoSalvage)
-	    				{
-	    					SalvageItemsQueue.Enqueue(ItemJustChanged);
-	    				}
-	    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoSalvage)
-	    				{
-	    					DesiccateItemsQueue.Enqueue(ItemJustChanged);
-	    				}
-	    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoSalvage)
-	    				{
-	    					ManaTankQueue.Enqueue(ItemJustChanged);
-	    				}
-	    				else if(ItemJustChanged.ObjectClass == ObjectClass.Key)
-	    				{
-	    					if(RingableKeysArray.Any(x => ItemJustChanged.Name.ToLower().Contains(x)))
-	    					{
-	    						KeyItemsQueue.Enqueue(ItemJustChanged);
-	    					}
-	    				}
-	    			}
 				}
 				else if(e.Change == WorldChangeType.SizeChange)
 				{
-					if(ItemTrackingList.Any(x => x.Name == e.Changed.Name))
+					if(ItemHudMoveQueue.Count > 0)
+					{	
+						if(ItemHudMoveQueue.First().Name == e.Changed.Name)
+						{
+							ItemJustChanged = ItemHudMoveQueue.Dequeue();
+							if(ItemTrackingList.Any(x => x.Id == ItemJustChanged.Id))
+							{
+								ItemTrackingList.RemoveAll(x => x.Id == ItemJustChanged.Id);
+							}
+							
+							if(ItemJustChanged.IOR == IOResult.salvage || ItemJustChanged.IOR == IOResult.dessicate || ItemJustChanged.IOR == IOResult.manatank || ItemJustChanged.ObjectClass == ObjectClass.Key)
+		    				{
+		    					ProcessItemsList.Add(ItemJustChanged); 					  					
+			    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoSalvage)
+			    				{
+			    					SalvageItemsQueue.Enqueue(ItemJustChanged);
+			    				}
+			    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoSalvage)
+			    				{
+			    					DesiccateItemsQueue.Enqueue(ItemJustChanged);
+			    				}
+			    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoSalvage)
+			    				{
+			    					ManaTankQueue.Enqueue(ItemJustChanged);
+			    				}
+			    				else if(ItemJustChanged.ObjectClass == ObjectClass.Key && GISettings.AutoRingKeys)
+			    				{
+			    					if(RingableKeysArray.Any(x => ItemJustChanged.Name.ToLower().Contains(x)))
+			    					{
+			    						KeyItemsQueue.Enqueue(ItemJustChanged);
+			    					}
+			    				}
+		    				}
+							
+							UpdateItemHud();
+							FireInspectorActions();
+							
+							return;
+						}
+					}
+					else if(ItemTrackingList.Any(x => x.Name == e.Changed.Name))
 	        		{
 						if(ItemTrackingList.FindAll(x => x.Name == e.Changed.Name).Count == 1)
 						{
 							ItemJustChanged = ItemTrackingList.Find(x => x.Name == e.Changed.Name);
+							AutoDeQueue.Add(ItemJustChanged.Id);	
 							ItemTrackingList.RemoveAll(x => x.Id == ItemJustChanged.Id);
-							UpdateItemHud();
 						}
 						else if(ItemTrackingList.Any(x => x.Id == LooterLastItemSelected))
 						{
 							ItemJustChanged = ItemTrackingList.Find(x => x.Id == LooterLastItemSelected);
+							AutoDeQueue.Add(ItemJustChanged.Id);	
 							ItemTrackingList.RemoveAll(x => x.Id == ItemJustChanged.Id);
-							UpdateItemHud();
 						}
 						else
 						{
@@ -148,32 +200,16 @@ namespace GearFoundry
 							UpdateItemHud();
 						}
 	        		}
+					UpdateItemHud();	
 				}
 				else
 				{
 					return;
-				}
-				
-				if(ItemJustChanged == null){return;}
-				
-
-
-    			FireInspectorActions();    			
-				
+				}	
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void ItemTrackerActions_ObjectCreated(object sender, CreateObjectEventArgs e)
-		{
-			try
-			{
-				if(e.New.ObjectClass == ObjectClass.Salvage)
-				{
-					SalvageCreatedQueue.Enqueue(e.New);
-					FireInspectorActions();
-				}
-			}catch(Exception ex){LogError(ex);}
-		}
+
 		
 		private void ItemTracker_ItemDestroyed(object sender, ItemDestroyedEventArgs e)
 		{
@@ -198,6 +234,14 @@ namespace GearFoundry
 				{
 					ItemTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
 					UpdateItemHud();
+				}
+				if(AutoDeQueue.Any(x => x == e.ItemGuid))
+				{
+					AutoDeQueue.RemoveAll(x => x == e.ItemGuid);
+				}
+				if(ItemExclusionList.Any(x => x == e.ItemGuid))
+				{
+					ItemExclusionList.RemoveAll(x => x == e.ItemGuid);
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -226,6 +270,14 @@ namespace GearFoundry
 					ItemTrackingList.RemoveAll(x => x.Id == e.Released.Id);
 					UpdateItemHud();
 				}
+				if(AutoDeQueue.Any(x => x == e.Released.Id))
+				{
+					AutoDeQueue.RemoveAll(x => x == e.Released.Id);
+				}
+				if(ItemExclusionList.Any(x => x == e.Released.Id))
+				{
+					ItemExclusionList.RemoveAll(x => x == e.Released.Id);
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 				
@@ -244,15 +296,25 @@ namespace GearFoundry
 			{	
 				if(!Host.Underlying.Hooks.IsValidObject(e.ItemGuid)){return;}
 				
+
+				
 				WorldObject container = Core.WorldFilter[e.ItemGuid];
-							
+				
+				mOpenContainer.ContainerGUID = container.Id;
+				mOpenContainer.LootingStarted = DateTime.Now;
+				
+//				if(mOpenContainer.ContainerGUID == ListenForContainerID)
+//				{
+//					ListenForContainerID = 0;
+//					InspectorActionPending = false;
+//					if(!InspectorRenderFrameActive){InitiateInspectorRenderFrame();}
+//					return;
+//				}
+				
 				if(ItemExclusionList.Count > 0 && ItemExclusionList.Contains(e.ItemGuid))
 				{
 					return;
 				}
-				
-				mOpenContainer.ContainerGUID = container.Id;
-				mOpenContainer.LootingStarted = DateTime.Now;
 				
 				Core.RenderFrame += RenderFrame_LootContainerOpened;
 			}
@@ -395,32 +457,7 @@ namespace GearFoundry
 				return;
 			}
 		
-		private void CheckItemForMatches(LootObject IOItem)
-		{
-			try
-			{
-				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
-				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown && GISettings.IdentifySalvage) {CheckSalvageItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
-				
-				//Clean out no matches.
-				if(IOItem.IOR == IOResult.nomatch)
-				{
-					if(mOpenContainer.ContainerIOs.Any(x => x.Id == IOItem.Id)) {mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);}
-				}
-				else
-				{
-					if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.GSReportString());}
-					else {ReportStringToChat(IOItem.LinkString());}
-					EvaluateItemMatches(IOItem);
-				}
-								
-			}catch(Exception ex){LogError(ex);}
-		}
+
 		
 		private void EvaluateItemMatches(LootObject IOItem)
 		{
