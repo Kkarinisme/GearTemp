@@ -29,10 +29,10 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
-				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
-				if(IOItem.IOR == IOResult.unknown) {CheckSalvageItem(ref IOItem);}
+				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
+				if(IOItem.HasIdData && IOItem.IOR == IOResult.unknown){CheckRulesItem(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown && GISettings.IdentifySalvage) {CheckSalvageItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
@@ -65,6 +65,11 @@ namespace GearFoundry
 						IOItemSalvage.rulename = salvagerulecheck.First().ruleid;
 					}
 				}
+				
+				if(IOItemSalvage.Aetheriacheck && GISettings.AutoDessicate)
+				{
+					IOItemSalvage.IOR = IOResult.dessicate;
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -75,9 +80,10 @@ namespace GearFoundry
 				if(GISettings.LootByMana == 0){return;}
 				if(IOItemMana.LValue(LongValueKey.CurrentMana) > GISettings.LootByMana)
 				{
-					//Irq:  TODO:  Cull manatanks when there is not a mana stone to eat them.  It's irritating.  Make a list of them for destruction as needed.
-					//Irq:  TODO:  Add mana value or find it....
-					IOItemMana.IOR = IOResult.manatank;
+					if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOverlay) == 0).Count() > 0)
+					{
+						IOItemMana.IOR = IOResult.manatank;
+					}
 				}
 			} catch(Exception ex){LogError(ex);}
 		}
@@ -88,10 +94,17 @@ namespace GearFoundry
 			{
 				if(GISettings.LootByValue == 0){return;}
 				
-				double ratio = ((double)IOItemVal.LValue(LongValueKey.Value) / (double)IOItemVal.LValue(LongValueKey.Burden));
 				if(IOItemVal.LValue(LongValueKey.Value) >= GISettings.LootByValue)
 				{
-					IOItemVal.IOR = IOResult.val;
+					if(GISettings.SalvageHighValue)
+					{
+						IOItemVal.IOR = IOResult.salvage;
+						IOItemVal.rulename = "Value";
+					}
+					else
+					{
+						IOItemVal.IOR = IOResult.val;
+					}
 				}
 			} catch(Exception ex){LogError(ex);}
 		}
@@ -179,7 +192,6 @@ namespace GearFoundry
 					switch(IOItemWithID.ObjectClass)
 					{					
 						case ObjectClass.Armor:
-							WriteToChat("Armor Type: " + IOItemWithID.ArmorType);
 							var reducedarmormatches = from ruls in AppliesToListMatches
 								where (ruls.RuleArmorLevel == 0 || IOItemWithID.ArmorScore >= ruls.RuleArmorLevel) &&
 								(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
@@ -260,7 +272,6 @@ namespace GearFoundry
 									return;
 								}										
 							}
-
 						case ObjectClass.MeleeWeapon:
 						case ObjectClass.MissileWeapon:
 						case ObjectClass.WandStaffOrb:
@@ -494,7 +505,7 @@ namespace GearFoundry
 							if(rule.RuleArmorLevel > IOItemWithID.LValue(LongValueKey.ArmorLevel)) {RuleName = String.Empty; goto Next;}
 						}
 	//					//Irquk:  Modified, functionality untested
-						if(rule.RuleArmorTypes.Length != null)
+						if(rule.RuleArmorTypes != null)
 						{
 							if(!rule.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) {RuleName = String.Empty; goto Next;} 
 						}
@@ -699,7 +710,7 @@ namespace GearFoundry
 					if(tRule.RuleWeaponEnabledA)
 					{
 						if(!Boolean.TryParse(splitstringMSCleave[0], out tRule.MSCleaveA)) {tRule.MSCleaveA = false;}
-						if(!Int32.TryParse(splitstringWield[0], out tRule.WieldReqValueA)) {tRule.WieldReqValueA = 0;}
+						if(!Int32.TryParse(splitstringWield[0], out tRule.WieldReqValueA)) {tRule.WieldReqValueA = -1;}
 						damagesplit = splitstringDamage[0].Split('-');
 						if(damagesplit.Length == 2)
 						{
@@ -724,7 +735,7 @@ namespace GearFoundry
 					if(tRule.RuleWeaponEnabledB)
 					{
 						if(!Boolean.TryParse(splitstringMSCleave[1], out tRule.MSCleaveB)) {tRule.MSCleaveB = false;}
-						if(!Int32.TryParse(splitstringWield[1], out tRule.WieldReqValueB)) {tRule.WieldReqValueB = 0;}
+						if(!Int32.TryParse(splitstringWield[1], out tRule.WieldReqValueB)) {tRule.WieldReqValueB = -1;}
 						damagesplit = splitstringDamage[1].Split('-');
 						if(damagesplit.Length == 2)
 						{
@@ -750,7 +761,7 @@ namespace GearFoundry
 					if(tRule.RuleWeaponEnabledC)
 					{
 						if(!Boolean.TryParse(splitstringMSCleave[2], out tRule.MSCleaveC)) {tRule.MSCleaveC = false;}
-						if(!Int32.TryParse(splitstringWield[2], out tRule.WieldReqValueC)) {tRule.WieldReqValueC = 0;}
+						if(!Int32.TryParse(splitstringWield[2], out tRule.WieldReqValueC)) {tRule.WieldReqValueC = -1;}
 						damagesplit = splitstringDamage[2].Split('-');
 						if(damagesplit.Length == 2)
 						{
@@ -776,7 +787,7 @@ namespace GearFoundry
 					if(tRule.RuleWeaponEnabledD)
 					{
 						if(!Boolean.TryParse(splitstringMSCleave[3], out tRule.MSCleaveD)) {tRule.MSCleaveD = false;}
-						if(!Int32.TryParse(splitstringWield[3], out tRule.WieldReqValueD)) {tRule.WieldReqValueD = 0;}
+						if(!Int32.TryParse(splitstringWield[3], out tRule.WieldReqValueD)) {tRule.WieldReqValueD = -1;}
 						damagesplit = splitstringDamage[3].Split('-');
 						if(damagesplit.Length == 2)
 						{

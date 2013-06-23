@@ -30,25 +30,24 @@ namespace GearFoundry
 		private List<int> ItemIDListenList = new List<int>();
 		private List<int> ModifiedIOSpells = new List<int>();
 		
-		private List<int> ManaTankItems = new List<int>();
+		private Queue<LootObject> ManaTankQueue = new Queue<LootObject>();
 		private List<LootObject> ItemTrackingList = new List<LootObject>();
 		
-		
 		private Queue<LootObject> ItemHudMoveQueue = new Queue<LootObject>();
-		private List<LootObject> SalvageItemsList = new List<LootObject>();
-		private List<LootObject> KeyItemsQueue = new List<LootObject>();
+		private List<LootObject> ProcessItemsList = new List<LootObject>();
+		private Queue<LootObject> KeyItemsQueue = new Queue<LootObject>();
 		private Queue<LootObject> SalvageItemsQueue = new Queue<LootObject>();
+		private Queue<LootObject> DesiccateItemsQueue = new Queue<LootObject>();
+		private Queue<LootObject> RingKeyQueue = new Queue<LootObject>();
  		
 		private GearInspectorSettings GISettings = new GearInspectorSettings();
 			
 		public class GearInspectorSettings
 		{
 			public bool IdentifySalvage;
-			public bool AutoLoot;
 			public bool AutoSalvage;
-			public bool AutoAetheria;
+			public bool AutoDessicate;
 			public bool ModifiedLooting = true;
-			public bool GearScore;
 			public bool CheckForL7Scrolls;
 			public bool SalvageHighValue = false;
 			public bool AutoRingKeys;
@@ -62,18 +61,10 @@ namespace GearFoundry
 		private void SubscribeItemEvents()
 		{
 			try
-			{
-				
-             	Core.EchoFilter.ServerDispatch += ServerDispatchItem;
+			{			
              	Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
-             	Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
-             	Core.CharacterFilter.ActionComplete += Inspector_ActionComplete;
-             	
-             	
-             	
-             	SubscribeItemTrackerLooterEvents();
-       			
-             	
+             	Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);             		           	
+             	SubscribeItemTrackerLooterEvents();           	
 			}
 			catch(Exception ex){LogError(ex);}
 		}
@@ -81,18 +72,67 @@ namespace GearFoundry
 		private void UnsubscribeItemEvents()
 		{
 			try
-			{
-				
-             	Core.EchoFilter.ServerDispatch -= ServerDispatchItem;
+			{				
              	Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
              	Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
-             	Core.CharacterFilter.ActionComplete -= Inspector_ActionComplete;
-                ItemHudView.Resize -= ItemHudView_Resize;
-             	
-             	
-             	UnSubscribeItemTrackerLooterEvents();
-             	
-             	
+             	UnSubscribeItemTrackerLooterEvents();         	         	
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		
+		private void GearInspectorReadWriteSettings(bool read)
+		{
+			try
+			{
+                FileInfo GearInspectorSettingsFile = new FileInfo(GearDir + @"\GearInspector.xml");
+								
+				if (read)
+				{
+					
+					try
+					{
+						if (!GearInspectorSettingsFile.Exists)
+		                {
+		                    try
+		                    {
+		                    	string filedefaults = GetResourceTextFile("GearInspector.xml");
+		                    	using (StreamWriter writedefaults = new StreamWriter(GearInspectorSettingsFile.ToString(), true))
+								{
+									writedefaults.Write(filedefaults);
+									writedefaults.Close();
+								}
+		                    }
+		                    catch (Exception ex) { LogError(ex); }
+		                }
+						
+						using (XmlReader reader = XmlReader.Create(GearInspectorSettingsFile.ToString()))
+						{	
+							XmlSerializer serializer = new XmlSerializer(typeof(GearInspectorSettings));
+							GISettings = (GearInspectorSettings)serializer.Deserialize(reader);
+							reader.Close();
+						}
+					}
+					catch
+					{
+						GISettings = new GearInspectorSettings();
+					}
+				}
+				
+				
+				if(!read)
+				{
+					if(GearInspectorSettingsFile.Exists)
+					{
+						GearInspectorSettingsFile.Delete();
+					}
+					
+					using (XmlWriter writer = XmlWriter.Create(GearInspectorSettingsFile.ToString()))
+					{
+			   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearInspectorSettings));
+			   			serializer2.Serialize(writer, GISettings);
+			   			writer.Close();
+					}
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -104,9 +144,7 @@ namespace GearFoundry
 				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.ItemGuid)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.ItemGuid);}
 				if(ItemExclusionList.Any(x => x == e.ItemGuid)){ItemExclusionList.RemoveAll(x => x == e.ItemGuid);}
 				if(ItemTrackingList.Any(x => x.Id == e.ItemGuid)){ItemTrackingList.RemoveAll(x => x.Id == e.ItemGuid);}
-				if(ItemIDListenList.Any(x => x == e.ItemGuid)){ItemIDListenList.RemoveAll(x => x == e.ItemGuid);}
-				if(ManaTankItems.Any(x => x == e.ItemGuid)){ManaTankItems.RemoveAll(x => x == e.ItemGuid);}
-				
+				if(ItemIDListenList.Any(x => x == e.ItemGuid)){ItemIDListenList.RemoveAll(x => x == e.ItemGuid);}				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -120,7 +158,6 @@ namespace GearFoundry
 				if(ItemExclusionList.Any(x => x == e.Released.Id)){ItemExclusionList.RemoveAll(x => x == e.Released.Id);}
 				if(ItemTrackingList.Any(x => x.Id == e.Released.Id)){ItemTrackingList.RemoveAll(x => x.Id == e.Released.Id);}
 				if(ItemIDListenList.Any(x => x == e.Released.Id)){ItemIDListenList.RemoveAll(x => x == e.Released.Id);}
-				if(ManaTankItems.Any(x => x == e.Released.Id)){ManaTankItems.RemoveAll(x => x == e.Released.Id);}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -147,13 +184,14 @@ namespace GearFoundry
 		
 		private const int ItemRemoveCircle = 0x60011F8;
 		private const int ItemUstIcon = 0x60026BA;
+		private const int ItemManaStoneIcon = 0x60032D4;
+		private const int ItemDesiccantIcon = 0x6006C0D;
 		
 		private HudCheckBox InspectorIdentifySalvage = null;
-		private HudCheckBox InspectorAutoLoot = null;
 		private HudCheckBox InspectorAutoAetheria = null;
 		private HudCheckBox InspectorAutoSalvage = null;
 		private HudCheckBox InspectorModifiedLooting = null;
-		private HudCheckBox InspectorGearScore = null;
+		private HudCheckBox InspectorSalvageHighValue = null;
 		private HudCheckBox InspectorCheckForL7Scrolls = null;
 		private HudStaticText InspectorHudValueLabel = null;
 		private HudTextBox InspectorLootByValue = null;
@@ -205,7 +243,7 @@ namespace GearFoundry
     			ItemHudTabView.AddTab(ItemHudInspectorLayout, "Inspector");
     			
     			ItemHudUstLayout = new HudFixedLayout();
-    			ItemHudTabView.AddTab(ItemHudUstLayout, "Ust");
+    			ItemHudTabView.AddTab(ItemHudUstLayout, "Process");
     			
     			ItemHudSettingsLayout = new HudFixedLayout();
     			ItemHudTabView.AddTab(ItemHudSettingsLayout, "Settings");
@@ -285,7 +323,7 @@ namespace GearFoundry
     		try
     		{
     			ItemHudUstButton = new HudButton();
-    			ItemHudUstButton.Text = "Salvage List";
+    			ItemHudUstButton.Text = "Process List";
     			ItemHudUstLayout.AddControl(ItemHudUstButton, new Rectangle(75,0,150,20));
     			
     			ItemHudUstList = new HudList();
@@ -309,11 +347,27 @@ namespace GearFoundry
     	{
     		try
     		{
-    			foreach(LootObject item in SalvageItemsList)
+    			foreach(LootObject lo in ProcessItemsList)
     			{
-    				SalvageItemsQueue.Enqueue(item);
-    				Core.RenderFrame += RenderFrame_InspectorOpenUst;
+    				if(lo.IOR == IOResult.salvage)
+    				{
+    					SalvageItemsQueue.Enqueue(lo);
+    				}
+    				else if(lo.IOR == IOResult.dessicate)
+    				{
+    					DesiccateItemsQueue.Enqueue(lo);
+    				}
+    				else if(lo.IOR == IOResult.manatank)
+    				{
+    					ManaTankQueue.Enqueue(lo);
+    				}
+    				else if(lo.ObjectClass == ObjectClass.Key)
+    				{
+    					KeyItemsQueue.Enqueue(lo);
+    				}
     			}
+
+    			FireInspectorActions();
 
     		}catch(Exception ex){LogError(ex);}
     	}
@@ -327,28 +381,36 @@ namespace GearFoundry
     			//Salvage
     			if(col == 0)
     			{
-    				SalvageItemsQueue.Enqueue(SalvageItemsList.ElementAt(row));
-    				Core.RenderFrame += RenderFrame_InspectorOpenUst;
+    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.salvage)
+    				{
+    					SalvageItemsQueue.Enqueue(ProcessItemsList.ElementAt(row));
+    				}
+    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.dessicate)
+    				{
+    					DesiccateItemsQueue.Enqueue(ProcessItemsList.ElementAt(row));
+    				}
+    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.manatank)
+    				{
+    					ManaTankQueue.Enqueue(ProcessItemsList.ElementAt(row));
+    				}
+    				
+    				FireInspectorActions();
     			}
     			//Report
     			if(col == 1)
     			{
-    				HudToChat(SalvageItemsList.ElementAt(row).GSReportString(), 1);
+    				if(GISettings.ModifiedLooting) {HudToChat(ProcessItemsList.ElementAt(row).GSReportString(), 1);}
+    				else{HudToChat(ProcessItemsList.ElementAt(row).LinkString(), 1);}
     			}
     			//Remove
     			if(col == 2)
     			{
-    				SalvageItemsList.RemoveAt(row);
+    				ProcessItemsList.RemoveAt(row);
     			}
     			
     			UpdateItemHud();
     			
     		}catch(Exception ex){LogError(ex);}
-    		
-    	}
-    	
-    	private void RenderFrame_ManualSalvage(object sender, EventArgs e)
-    	{
     		
     	}
     	
@@ -376,43 +438,42 @@ namespace GearFoundry
                 ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0, 0, 200, 16));
     			InspectorIdentifySalvage.Checked = GISettings.IdentifySalvage;
     			
-    			InspectorAutoLoot = new HudCheckBox();
-    			InspectorAutoLoot.Text = "Automatically Loot Items";
-    			ItemHudSettingsLayout.AddControl(InspectorAutoLoot, new Rectangle(0,18,200,16));
-    			InspectorAutoLoot.Checked = GISettings.AutoLoot;
-    			
+    			InspectorAutoSalvage = new HudCheckBox();
+    			InspectorAutoSalvage.Text = "Auto Salvage";
+                ItemHudSettingsLayout.AddControl(InspectorAutoSalvage, new Rectangle(0, 18, 200, 16));
+    			InspectorAutoSalvage.Checked = GISettings.AutoSalvage;
+    						
     			InspectorAutoAetheria = new HudCheckBox();
     			InspectorAutoAetheria.Text = "Loot and Dessicate Junk Aetheria";
                 ItemHudSettingsLayout.AddControl(InspectorAutoAetheria, new Rectangle(0, 36, 200, 16));
-    			InspectorAutoAetheria.Checked = GISettings.AutoAetheria;
+    			InspectorAutoAetheria.Checked = GISettings.AutoDessicate;
     			
-    			InspectorAutoSalvage = new HudCheckBox();
-    			InspectorAutoSalvage.Text = "Auto Salvage";
-                ItemHudSettingsLayout.AddControl(InspectorAutoSalvage, new Rectangle(0, 54, 200, 16));
-    			InspectorAutoSalvage.Checked = GISettings.AutoSalvage;
+    			InspectorLootByValue = new HudTextBox();
+    			ItemHudSettingsLayout.AddControl(InspectorLootByValue, new Rectangle(0,54,45,16));
+    			InspectorLootByValue.Text = GISettings.LootByValue.ToString();
     			
+    			InspectorHudValueLabel = new HudStaticText();
+    			InspectorHudValueLabel.Text = "High Value Loot.";
+    			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,54,200,16));
+    			
+    			InspectorSalvageHighValue = new HudCheckBox();
+    			InspectorSalvageHighValue.Text = "Salvage High Value Loot";
+    			ItemHudSettingsLayout.AddControl(InspectorSalvageHighValue, new Rectangle(0,72,200,16));
+    			InspectorSalvageHighValue.Checked = GISettings.SalvageHighValue;
+    					
     			InspectorModifiedLooting = new HudCheckBox();
     			InspectorModifiedLooting.Text = "Enabled Modified Looting";
                 ItemHudSettingsLayout.AddControl(InspectorModifiedLooting, new Rectangle(0, 90, 200, 16));
     			InspectorModifiedLooting.Checked = GISettings.ModifiedLooting;
-    			
-    			InspectorGearScore = new HudCheckBox();
-    			InspectorGearScore.Text = "Use GearScore Report Strings";
-                ItemHudSettingsLayout.AddControl(InspectorGearScore, new Rectangle(0, 108, 200, 16));
-    			InspectorGearScore.Checked = GISettings.GearScore;
     			
     			InspectorCheckForL7Scrolls = new HudCheckBox();
     			InspectorCheckForL7Scrolls.Text = "Loot Unknown L7 Spells";
                 ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0, 126, 200, 16));
     			InspectorCheckForL7Scrolls.Checked = GISettings.CheckForL7Scrolls;
     			
-    			InspectorHudValueLabel = new HudStaticText();
-    			InspectorHudValueLabel.Text = "High Value Loot.";
-    			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,142,200,16));
+
     			
-    			InspectorLootByValue = new HudTextBox();
-    			ItemHudSettingsLayout.AddControl(InspectorLootByValue, new Rectangle(0,142,45,16));
-    			InspectorLootByValue.Text = GISettings.LootByValue.ToString();
+
     			
     			InspectorHudManaLabel = new HudStaticText();
     			InspectorHudManaLabel.Text = "Mana Value Loot.";
@@ -423,13 +484,12 @@ namespace GearFoundry
     			InspectorLootByMana.Text = GISettings.LootByMana.ToString();
     			
     			InspectorIdentifySalvage.Change += InspectorIdentifySalvage_Change;
-    			InspectorAutoLoot.Change += InspectorAutoLoot_Change;
     			InspectorAutoAetheria.Change += InspectorAutoAetheria_Change;
     			InspectorAutoSalvage.Change += InspectorAutoSalvage_Change;
     			InspectorModifiedLooting.Change += InspectorModifiedLooting_Change;
-    			InspectorGearScore.Change += InspectorGearScore_Change;
     			InspectorCheckForL7Scrolls.Change += InspectorCheckForL7Scrolls_Change;
     			InspectorLootByValue.LostFocus += InspectorLootByValue_LostFocus;
+    			InspectorSalvageHighValue.Change += InspectorSalvageHighValue_Change;
     			InspectorLootByMana.LostFocus += InspectorLootByMana_LostFocus;	
     			  			
     			InspectorSettingsTab = true;
@@ -457,6 +517,15 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
+    	private void InspectorSalvageHighValue_Change(object sender, EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.SalvageHighValue = InspectorSalvageHighValue.Checked;
+    			GearInspectorReadWriteSettings(false);
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
     	private void InspectorIdentifySalvage_Change(object sender, System.EventArgs e)
     	{
     		try
@@ -466,21 +535,11 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
-
-    	private void InspectorAutoLoot_Change(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			GISettings.AutoLoot = InspectorAutoLoot.Checked;
-    			GearInspectorReadWriteSettings(false);
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
     	private void InspectorAutoAetheria_Change(object sender, System.EventArgs e)
     	{
     		try
     		{
-    			GISettings.AutoAetheria = InspectorAutoAetheria.Checked;
+    			GISettings.AutoDessicate = InspectorAutoAetheria.Checked;
     			GearInspectorReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
@@ -503,15 +562,6 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
-    	private void InspectorGearScore_Change(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			GISettings.GearScore = InspectorGearScore.Checked;
-    			GearInspectorReadWriteSettings(false);
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
     	private void InspectorCheckForL7Scrolls_Change(object sender, System.EventArgs e)
     	{
     		try
@@ -528,22 +578,19 @@ namespace GearFoundry
     			if(!InspectorSettingsTab){return;}
     			
     			InspectorIdentifySalvage.Change -= InspectorIdentifySalvage_Change;
-    			InspectorAutoLoot.Change -= InspectorAutoLoot_Change;
     			InspectorAutoAetheria.Change -= InspectorAutoAetheria_Change;
     			InspectorAutoSalvage.Change -= InspectorAutoSalvage_Change;
     			InspectorModifiedLooting.Change -= InspectorModifiedLooting_Change;
-    			InspectorGearScore.Change -= InspectorGearScore_Change;
     			InspectorCheckForL7Scrolls.Change -= InspectorCheckForL7Scrolls_Change;
     			InspectorLootByValue.LostFocus -= InspectorLootByValue_LostFocus;
     			InspectorLootByMana.LostFocus -= InspectorLootByMana_LostFocus;
+    			InspectorSalvageHighValue.Change -= InspectorSalvageHighValue_Change;
     			
     			
     			InspectorIdentifySalvage.Dispose();
-    			InspectorAutoLoot.Dispose();
     			InspectorAutoAetheria.Dispose();
     			InspectorAutoSalvage.Dispose();
     			InspectorModifiedLooting.Dispose();
-    			InspectorGearScore.Dispose();
     			InspectorCheckForL7Scrolls.Dispose();
     			InspectorLootByMana.Dispose();
     			InspectorLootByValue.Dispose();
@@ -595,6 +642,8 @@ namespace GearFoundry
     		{
     			UnsubscribeItemEvents();
     			
+    			ItemHudView.Resize -= ItemHudView_Resize;
+    			
     			ItemHudSettingsLayout.Dispose();
     			ItemHudUstLayout.Dispose();
     			ItemHudInspectorLayout.Dispose();   			
@@ -602,7 +651,7 @@ namespace GearFoundry
     			ItemHudLayout.Dispose();
     			ItemHudView.Dispose();
     		}	
-    		catch{}
+    		catch(Exception ex){LogError(ex);}
     	}
     		
     	private void ItemHudInspectorList_Click(object sender, int row, int col)
@@ -613,7 +662,10 @@ namespace GearFoundry
     			{  
     				if(ItemHudMoveQueue.Count == 0)
     				{
-						ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
+    					if(!ItemHudMoveQueue.Any(x => x.Id  == ItemTrackingList[row].Id))
+    					{
+    					 	ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
+    					}
 						FireInspectorActions();
     				}
     				else
@@ -661,10 +713,12 @@ namespace GearFoundry
 	    		if(InspectorUstTab)
 	    		{
 	    			ItemHudUstList.ClearRows();
-	    			foreach(LootObject ustitem in SalvageItemsList)
+	    			foreach(LootObject ustitem in ProcessItemsList)
 	    			{
 	    				ItemHudListRow = ItemHudUstList.AddRow();
-	    				((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;
+	    				if(ustitem.IOR == IOResult.salvage) {((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;}
+	    				if(ustitem.IOR == IOResult.dessicate) {((HudPictureBox)ItemHudListRow[0]).Image = ItemDesiccantIcon;}
+	    				if(ustitem.IOR == IOResult.manatank) {((HudPictureBox)ItemHudListRow[0]).Image = ItemManaStoneIcon;}
 	    				((HudStaticText)ItemHudListRow[1]).Text = ustitem.IORString() + ustitem.Name;
 	    				((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;	
 	    			}

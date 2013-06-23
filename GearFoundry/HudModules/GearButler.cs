@@ -375,7 +375,7 @@ namespace GearFoundry
     			ButlerHudView = new HudView("GearButler", ButlerHudWidth, ButlerHudHeight, new ACImage(0x6AA3));
     		//	ButlerHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
     			ButlerHudView.UserAlphaChangeable = false;
-    			ButlerHudView.ShowInBar = true;
+    			ButlerHudView.ShowInBar = false;
     			ButlerHudView.Visible = true;
                 ButlerHudView.UserClickThroughable = false;
                 ButlerHudView.UserMinimizable = false;

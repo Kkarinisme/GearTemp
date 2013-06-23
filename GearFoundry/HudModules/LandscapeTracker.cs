@@ -40,6 +40,7 @@ namespace GearFoundry
 			public bool bShowLifeStones = true;
 			public bool bShowAllPortals = true;
 			public bool bShowAllNPCs = true;
+			public int LandscapeForgetDistance = 100;
             public int LandscapeHudWidth;
             public int LandscapeHudHeight;
 
@@ -448,7 +449,7 @@ namespace GearFoundry
      				if(LandscapeTrackingList[i].isvalid)
      				{
 	     				LandscapeTrackingList[i].DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, LandscapeTrackingList[i].Id);
-	     				if(LandscapeTrackingList[i].DistanceAway > 5) {LandscapeTrackingList.RemoveAt(i);}
+	     				if(LandscapeTrackingList[i].DistanceAway > ((double)gsSettings.LandscapeForgetDistance/(double)100)) {LandscapeTrackingList.RemoveAt(i);}
      				}
      				else
      				{
@@ -552,8 +553,9 @@ namespace GearFoundry
 		private HudCheckBox ShowLifeStones;
 		private HudCheckBox ShowAllPortals;
 		private HudCheckBox ShowAllNPCs;
+		private HudStaticText ForgetLabel;
+		private HudTextBox LandscapeForgetDistance;
 		
-		private HudStaticText txtLSS1;
 		private HudStaticText txtLSS2;
 		
 		private bool LandscapeMainTab;
@@ -766,12 +768,19 @@ namespace GearFoundry
     			LandscapeHudSettings.AddControl(ShowAllPortals, new Rectangle(0,144,150,16));
     			ShowAllPortals.Checked = gsSettings.bShowAllPortals;
     			
-    			txtLSS1 = new HudStaticText();
-    			txtLSS1.Text = "Player tracking funtions do not request player IDs.";
+    			LandscapeForgetDistance = new HudTextBox();
+    			ForgetLabel = new HudStaticText();
+    			ForgetLabel.Text = "Forget distance.";
+    			LandscapeForgetDistance.Text = gsSettings.LandscapeForgetDistance.ToString();
+    			LandscapeHudSettings.AddControl(LandscapeForgetDistance, new Rectangle(0,162,45,16));
+    			LandscapeHudSettings.AddControl(ForgetLabel, new Rectangle(50,162,150,16));
+    		
     			txtLSS2 = new HudStaticText();
-    			txtLSS2.Text = "Players will not track until ID'd another way.";		
-    			LandscapeHudSettings.AddControl(txtLSS1, new Rectangle(0,162,300,16));
+    			txtLSS2.Text = "Player ID info is passive.";		
+
     			LandscapeHudSettings.AddControl(txtLSS2, new Rectangle(0,180,300,16));
+    			
+    			
     			
     			ShowAllMobs.Change += ShowAllMobs_Change;
     			ShowSelectedMobs.Change += ShowSelectedMobs_Change;
@@ -782,6 +791,7 @@ namespace GearFoundry
     			ShowTrophies.Change += ShowTrophies_Change;
     			ShowLifeStones.Change += ShowLifeStones_Change;
     			ShowAllPortals.Change += ShowAllPortals_Change;
+    			LandscapeForgetDistance.LostFocus += LandscapeForgetDistance_LostFocus;
     			
     			LandscapeSettingsTab = true;
     		}catch{}
@@ -802,9 +812,11 @@ namespace GearFoundry
     			ShowTrophies.Change -= ShowTrophies_Change;
     			ShowLifeStones.Change -= ShowLifeStones_Change;
     			ShowAllPortals.Change -= ShowAllPortals_Change;
+    			LandscapeForgetDistance.LostFocus -= LandscapeForgetDistance_LostFocus;
     			
+    			ForgetLabel.Dispose();
+    			LandscapeForgetDistance.Dispose();
     			txtLSS2.Dispose();
-    			txtLSS1.Dispose();
     			ShowAllPortals.Dispose();
     			ShowLifeStones.Dispose();
     			ShowTrophies.Dispose();
@@ -895,6 +907,15 @@ namespace GearFoundry
     		try
     		{
     			gsSettings.bShowAllPortals = ShowAllPortals.Checked;
+    			GearSenseReadWriteSettings(false);
+    		}catch{}
+    	}
+    	
+    	private void LandscapeForgetDistance_LostFocus(object sender, EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.LandscapeForgetDistance = Convert.ToInt32(LandscapeForgetDistance.Text);
     			GearSenseReadWriteSettings(false);
     		}catch{}
     	}

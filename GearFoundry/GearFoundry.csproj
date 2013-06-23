@@ -120,7 +120,7 @@
     <None Include="Documents\Files Karin is using.txt" />
     <None Include="Documents\GuidetoVariablesandFunctions.txt" />
     <None Include="Documents\IrquksStatusList" />
-    <Compile Include="HudComponents\ItemTrackerComponents.cs" />
+    <Compile Include="HudComponents\ItemTrackerActions.cs" />
     <Compile Include="HudComponents\ItemTrackerIdentify.cs" />
     <Compile Include="HudComponents\ItemTrackerLooter.cs" />
     <Compile Include="HudModules\CombatHud.cs" />
