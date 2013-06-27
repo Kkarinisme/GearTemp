@@ -971,8 +971,8 @@ namespace GearFoundry
     				}
 					HudToChat(LandscapeTrackingList[row].LinkString(), textcolor);
                     nusearrowid = LandscapeTrackingList[row].Id;
-                    useArrow();
-    			}
+                    ArrowInitiator();
+                }
     			if(col == 2)
     			{    				
     				LandscapeExclusionList.Add(LandscapeTrackingList[row].Id);

@@ -567,21 +567,20 @@ namespace GearFoundry
                         string armorpiece = el.Element("ArmorName").Value;
                         string spells = el.Element("ArmorSpellXml").Value;
                         string armorclass = el.Element("ArmorClass").Value;
-                        int nset = Convert.ToInt32(el.Element("ArmorSet").Value);
-                        string SetName = "";
-                       // if (armorclass == "Armor") { SetName = ArmorSetsInvList[nset].name; }
-                        if (armorclass == "Armor") { SetName = SetsIndex[nset].name; }
-                        
-                        //int armorobjArmorSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
-                        //string objArmorSetName = ArmorSetsInvList[armorobjArmorSet].name;
-
+                        if (armorclass == "Armor") 
+                        {
+                            if (Convert.ToInt32(el.Element("ObjSet").Value) > 0)
+                            { objArmorSetName = SetsIndex[Convert.ToInt32(el.Element("ObjSet").Value)].name; }
+                            else { objArmorSetName = "None"; }
+                        }
+           
 
  
                         ArmorHudListRow = ArmorHudList.AddRow();
 
                         ((HudPictureBox)ArmorHudListRow[0]).Image = icon + 0x6000000;
                         ((HudStaticText)ArmorHudListRow[1]).Text = armorpiece;
-                        ((HudStaticText)ArmorHudListRow[2]).Text = SetName;
+                        ((HudStaticText)ArmorHudListRow[2]).Text = objArmorSetName;
                         ((HudStaticText)ArmorHudListRow[3]).Text = spells;
 
                     }

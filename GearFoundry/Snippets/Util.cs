@@ -101,36 +101,31 @@ namespace GearFoundry
 		}
 
 
-        private void useArrow()
+        DateTime ArrowKill = DateTime.MinValue;
+
+
+        private void ArrowInitiator()
         {
-            try{
-          //  MasterTimer.Interval = 100;
-                arrowtimer = 5;
-                MasterTimer.Tick += ArrowTimerTick;
-            }
-            catch (Exception ex) { LogError(ex); }
- 
+            ArrowKill = DateTime.Now;
+            Core.RenderFrame += new EventHandler<EventArgs>(FireTheArrow);
+
         }
 
-        private void ArrowTimerTick(object sender, EventArgs e)
+        void FireTheArrow(object sender, EventArgs e)
         {
-            try
+            if ((DateTime.Now - ArrowKill).TotalSeconds > 3)
             {
-                   arrowtimer = arrowtimer - 1;
-                    MasterTimer.Tick -= ArrowTimerTick;
-                   DoShowArrow();
- 
+                Core.RenderFrame -= FireTheArrow;
             }
-            catch (Exception ex) { LogError(ex); }
-        
+            else
+            {
+                DoShowArrow();
+            }
         }
-
         private void DoShowArrow()
         {
             Decal.Adapter.Wrappers.D3DObj mMarkObject;
             mMarkObject = Core.D3DService.PointToObject(nusearrowid, (unchecked((int)0xFFBB0000)));
-            if (arrowtimer != 0) { MasterTimer.Tick += ArrowTimerTick; }
-            else { return; }
         }
         
 

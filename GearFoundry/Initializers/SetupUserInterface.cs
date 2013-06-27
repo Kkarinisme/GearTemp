@@ -313,8 +313,8 @@ namespace GearFoundry
             lstRuleSpellsEnabled.Clear();
             EnabledSpellsList.Clear();
             initRulesCtrls();
-            //lstRuleCloakSets.Clear();
-            //lstRuleCloakSpells.Clear();
+            lstRuleCloakSets.Clear();
+            lstRuleCloakSpells.Clear();
         }
 
         //Loads the controls with the values of the current rules and clears values of previous rule in the rules listview
