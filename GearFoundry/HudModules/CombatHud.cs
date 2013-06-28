@@ -924,7 +924,7 @@ namespace GearFoundry
 					CombatHudTargetHealth = new HudProgressBar();
 	                CombatHudTargetHealth.ProgressEmpty = EmptyBar;
 					CombatHudTargetHealth.ProgressFilled = RedBar;
-                    CombatHudTargetHealth.FontHeight = 10;
+                    CombatHudTargetHealth.FontHeight = nitemFontHeight;
 					CombatHudTargetHealth.Min = 0;
 					CombatHudTargetHealth.Max = 100;
 					CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(44,0,86,16));
@@ -939,8 +939,8 @@ namespace GearFoundry
 				else
 				{
 					CombatHudTargetName = new HudStaticText();
-					CombatHudTargetName.TextAlignment = VirindiViewService.WriteTextFormats.Center;
-                    CombatHudTargetName.FontHeight = 10;
+                    CombatHudTargetName.TextAlignment = VirindiViewService.WriteTextFormats.Center;
+                    CombatHudTargetName.FontHeight = nitemFontHeight;
 					CombatHudMainTab.AddControl(CombatHudTargetName, new Rectangle(0,0,130,16));
 
 					CombatHudTargetImage = new HudImageStack();
@@ -948,7 +948,7 @@ namespace GearFoundry
                     CombatHudMainTab.AddControl(CombatHudTargetImage, new Rectangle(25, 20, 50, 50));
                     //Moved to new position by Mish
                     CombatHudFocusSet = new HudButton();
-                    CombatHudFocusSet.Text = "Focus";
+                    CombatHudFocusSet.Text = "Focus";          
                     CombatHudMainTab.AddControl(CombatHudFocusSet, new Rectangle(5, 75, 35, 16));
 
                     CombatHudFocusClear = new HudButton();
@@ -959,7 +959,7 @@ namespace GearFoundry
 	                CombatHudTargetHealth.ProgressEmpty = EmptyBar;
 					CombatHudTargetHealth.ProgressFilled = RedBar;
                     //Added by Mish 
-                    CombatHudTargetHealth.FontHeight = 10;
+                    CombatHudTargetHealth.FontHeight = nitemFontHeight;
 					CombatHudTargetHealth.Min = 0;
 					CombatHudTargetHealth.Max = 100;
 					CombatHudMainTab.AddControl(CombatHudTargetHealth, new Rectangle(5,115,95,16));
@@ -990,13 +990,6 @@ namespace GearFoundry
 						}
 					}
 
-                    //CombatHudFocusSet = new HudButton();
-                    //CombatHudFocusSet.Text = "Focus";
-                    //CombatHudMainTab.AddControl(CombatHudFocusSet, new Rectangle(5,190,35,16));
-
-                    //CombatHudFocusClear = new HudButton();
-                    //CombatHudFocusClear.Text = "Reset";
-                    //CombatHudMainTab.AddControl(CombatHudFocusClear, new Rectangle(45,190,35,16));
 
 					CombatHudDebuffTrackerList = new HudList();
  					CombatHudMainTab.AddControl(CombatHudDebuffTrackerList, new Rectangle(110,0,CombatHudView.Width - 110,CombatHudView.Height));
@@ -1365,7 +1358,7 @@ namespace GearFoundry
 					{
 						MonsterObject FocusIO = CombatHudMobTrackingList.Find(x => x.Id == CombatHudFocusTargetGUID);
 						CombatHudRow = CombatHudDebuffTrackerList.AddRow();
-						((HudProgressBar)CombatHudRow[0]).FontHeight = 10;
+                        ((HudProgressBar)CombatHudRow[0]).FontHeight = nitemFontHeight;
 						((HudProgressBar)CombatHudRow[0]).PreText = FocusIO.Name;	
 						((HudProgressBar)CombatHudRow[0]).Min = 0;
 						((HudProgressBar)CombatHudRow[0]).Max = 100;
@@ -1412,7 +1405,7 @@ namespace GearFoundry
 						if((CombatHudMobTrackingList[i].DebuffSpellList.Count > 0 || gtSettings.bShowAll) && CombatHudMobTrackingList[i].Id != CombatHudFocusTargetGUID)
 						{
 							CombatHudRow = CombatHudDebuffTrackerList.AddRow();
-							((HudProgressBar)CombatHudRow[0]).FontHeight = 10;
+                            ((HudProgressBar)CombatHudRow[0]).FontHeight = nitemFontHeight;
 							((HudProgressBar)CombatHudRow[0]).PreText = CombatHudMobTrackingList[i].Name;	
 							((HudProgressBar)CombatHudRow[0]).Min = 0;
 							((HudProgressBar)CombatHudRow[0]).Max = 100;
@@ -1541,7 +1534,7 @@ namespace GearFoundry
 					if(CombatHudMobTrackingList[i].DebuffSpellList.Count > 0 || gtSettings.bShowAll)
 					{
 						CombatHudRow = CombatHudDebuffTrackerList.AddRow();
-						((HudProgressBar)CombatHudRow[0]).FontHeight = 10;
+                        ((HudProgressBar)CombatHudRow[0]).FontHeight = nitemFontHeight;
 						((HudProgressBar)CombatHudRow[0]).PreText = CombatHudMobTrackingList[i].Name;	
 						((HudProgressBar)CombatHudRow[0]).Min = 0;
 						((HudProgressBar)CombatHudRow[0]).Max = 100;

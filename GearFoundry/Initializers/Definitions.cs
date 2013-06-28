@@ -111,7 +111,8 @@ namespace GearFoundry
         private string quickSlotshFilename = null;
         private string remoteGearFilename = null;
 
-        private int itemFontHeight = 0;
+        private int nitemFontHeight = 0;
+        private int nmenuFontHeight = 0;
 
 
 

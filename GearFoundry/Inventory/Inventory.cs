@@ -127,6 +127,7 @@ namespace GearFoundry
                 InventoryHudTabView = new HudTabView();
                 InventoryHudLayout.AddControl(InventoryHudTabView, new Rectangle(0, 0, InventoryHudWidth, InventoryHudHeight));
 
+                
                 InventoryHudTabLayout = new HudFixedLayout();
                 InventoryHudTabView.AddTab(InventoryHudTabLayout, "Inventory");
 
@@ -223,6 +224,7 @@ namespace GearFoundry
             try
             {
                 lblInventoryClass = new HudStaticText();
+                lblInventoryClass.FontHeight = nmenuFontHeight;
                 lblInventoryClass.Text = "Class";
                 ControlGroup InventoryClasses = new ControlGroup();
                 cboInventoryClasses = new HudCombo(InventoryClasses);
@@ -234,7 +236,8 @@ namespace GearFoundry
                     i++;
                 }
                 lblMyChoice = new HudStaticText();
-                lblMyChoice.Text = "Type preference:";
+                lblMyChoice.FontHeight = nmenuFontHeight;
+                lblMyChoice.Text = "Search:";
  
                 txtMyChoice = new HudTextBox();
                 
@@ -252,6 +255,7 @@ namespace GearFoundry
                 lblSalvage.Text = "Salvage";
                 lblSalvage.TextAlignment = VirindiViewService.WriteTextFormats.Center;
                 lblMelee = new HudStaticText();
+                lblMelee.FontHeight = nmenuFontHeight;
                 lblMelee.Text = "Mel:";
                 ControlGroup WieldAttribTypes = new ControlGroup();
                 cboWieldAttrib = new HudCombo(WieldAttribTypes);
@@ -265,6 +269,7 @@ namespace GearFoundry
                 }
 
                 lblSet = new HudStaticText();
+                lblSet.FontHeight = nmenuFontHeight;
                 lblSet.Text = "Set:";
                 ControlGroup SetChoices = new ControlGroup();
                 cboArmorSet = new HudCombo(SetChoices);
@@ -278,6 +283,7 @@ namespace GearFoundry
                 }
 
                 lblMaterial = new HudStaticText();
+                lblMaterial.FontHeight = nmenuFontHeight;
                 lblMaterial.Text = "Mat:";
                 ControlGroup MaterialChoices = new ControlGroup();
                 cboMaterial = new HudCombo(MaterialChoices);
@@ -291,6 +297,7 @@ namespace GearFoundry
                 }
 
                 lblDamage = new HudStaticText();
+                lblDamage.FontHeight = nmenuFontHeight;
                 lblDamage.Text = "Dam:";
                 ControlGroup DamageTypes = new ControlGroup();
                 cboDamageType = new HudCombo(DamageTypes);
@@ -304,6 +311,7 @@ namespace GearFoundry
                 }
 
                 lblArmorWield = new HudStaticText();
+                lblArmorWield.FontHeight = nmenuFontHeight;
                 lblArmorWield.Text = "Lev:";
                 ControlGroup ArmorLevels = new ControlGroup();
                 cboArmorLevel = new HudCombo(ArmorLevels);
@@ -318,6 +326,7 @@ namespace GearFoundry
 
 
                 lblWork = new HudStaticText();
+                lblWork.FontHeight = nmenuFontHeight;
                 lblWork.Text = "Work:";
                 ControlGroup WorkChoices = new ControlGroup();
                 cboSalvWork = new HudCombo(WorkChoices);
@@ -331,6 +340,7 @@ namespace GearFoundry
                 }
 
                 lblWield = new HudStaticText();
+                lblWield.FontHeight = nmenuFontHeight;
                 lblWield.Text = "Lev:";
                 ControlGroup WieldLevels = new ControlGroup();
                 cboLevel = new HudCombo(WieldLevels);
@@ -345,6 +355,7 @@ namespace GearFoundry
 
 
                 lblCovers = new HudStaticText();
+                lblCovers.FontHeight = nmenuFontHeight;
                 lblCovers.Text = "Cov:";
                 ControlGroup CoverageChoices = new ControlGroup();
                 cboCoverage = new HudCombo(CoverageChoices);
@@ -358,6 +369,7 @@ namespace GearFoundry
                 }
 
                 lblEmbues = new HudStaticText();
+                lblEmbues.FontHeight = nmenuFontHeight;
                 lblEmbues.Text = "Emb:";
                 ControlGroup EmbueChoices = new ControlGroup();
                 cboEmbues = new HudCombo(EmbueChoices);
@@ -1735,9 +1747,9 @@ namespace GearFoundry
                         string objIDstr = objID.ToString();
                         InventoryHudListRow = lstHudInventory.AddRow();
                         ((HudPictureBox)InventoryHudListRow[0]).Image = objIcon + 0x6000000;
-                        ((HudStaticText)InventoryHudListRow[1]).FontHeight = 10;
+                        ((HudStaticText)InventoryHudListRow[1]).FontHeight = nitemFontHeight;
                         ((HudStaticText)InventoryHudListRow[1]).Text = objName;
-                        ((HudStaticText)InventoryHudListRow[2]).FontHeight = 10;
+                        ((HudStaticText)InventoryHudListRow[2]).FontHeight = nitemFontHeight;
                         ((HudStaticText)InventoryHudListRow[2]).Text = toonInvName;
                         ((HudStaticText)InventoryHudListRow[3]).Text = objIDstr;
                     }

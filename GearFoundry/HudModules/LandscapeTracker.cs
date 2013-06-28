@@ -724,7 +724,7 @@ namespace GearFoundry
     		try
     		{
     			ShowAllMobs = new HudCheckBox();
-    			ShowAllMobs.Text = "Track All Mobs";
+    			ShowAllMobs.Text = "Track All Mobs";                
     			LandscapeHudSettings.AddControl(ShowAllMobs, new Rectangle(0,0,150,16));
     			ShowAllMobs.Checked = gsSettings.bShowAllMobs;
     			
@@ -758,7 +758,7 @@ namespace GearFoundry
     			LandscapeHudSettings.AddControl(ShowTrophies, new Rectangle(0,108,150,16));
     			ShowTrophies.Checked = gsSettings.bShowTrophies;
     				
-    			ShowLifeStones = new HudCheckBox();
+    			ShowLifeStones = new HudCheckBox();              
     			ShowLifeStones.Text = "Track Lifestones";
     			LandscapeHudSettings.AddControl(ShowLifeStones, new Rectangle(0,126,150,16));
     			ShowLifeStones.Checked = gsSettings.bShowLifeStones;
@@ -770,12 +770,14 @@ namespace GearFoundry
     			
     			LandscapeForgetDistance = new HudTextBox();
     			ForgetLabel = new HudStaticText();
+                ForgetLabel.FontHeight = nmenuFontHeight;
     			ForgetLabel.Text = "Forget distance.";
     			LandscapeForgetDistance.Text = gsSettings.LandscapeForgetDistance.ToString();
     			LandscapeHudSettings.AddControl(LandscapeForgetDistance, new Rectangle(0,162,45,16));
     			LandscapeHudSettings.AddControl(ForgetLabel, new Rectangle(50,162,150,16));
     		
     			txtLSS2 = new HudStaticText();
+                txtLSS2.FontHeight = nmenuFontHeight;
     			txtLSS2.Text = "Player ID info is passive.";		
 
     			LandscapeHudSettings.AddControl(txtLSS2, new Rectangle(0,180,300,16));
@@ -1001,7 +1003,7 @@ namespace GearFoundry
 	    	    	
 	    	    	((HudPictureBox)LandscapeHudListRow[0]).Image = item.Icon + 0x6000000;
 	    	    	((HudStaticText)LandscapeHudListRow[1]).Text = item.IORString() + item.Name + item.DistanceString();
-                    ((HudStaticText)LandscapeHudListRow[1]).FontHeight = 10;
+                    ((HudStaticText)LandscapeHudListRow[1]).FontHeight = nitemFontHeight;
 	    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Gold;}
 	    	    	if(item.IOR == IOResult.lifestone) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.SkyBlue;}
 	    	    	if(item.IOR == IOResult.monster) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Orange;}

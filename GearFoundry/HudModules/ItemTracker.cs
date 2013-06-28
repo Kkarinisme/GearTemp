@@ -459,6 +459,7 @@ namespace GearFoundry
     			InspectorLootByValue.Text = GISettings.LootByValue.ToString();
     			
     			InspectorHudValueLabel = new HudStaticText();
+                InspectorHudValueLabel.FontHeight = nmenuFontHeight;
     			InspectorHudValueLabel.Text = "High Value Loot.";
     			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,54,200,16));
     			
@@ -482,6 +483,7 @@ namespace GearFoundry
 
     			
     			InspectorHudManaLabel = new HudStaticText();
+                InspectorHudManaLabel.FontHeight = nmenuFontHeight;
     			InspectorHudManaLabel.Text = "Mana Value Loot.";
     			ItemHudSettingsLayout.AddControl(InspectorHudManaLabel, new Rectangle(50,158,200,16));		
     			
@@ -703,7 +705,7 @@ namespace GearFoundry
 		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();	
 		    	    	((HudPictureBox)ItemHudListRow[0]).Image = item.Icon + 0x6000000;
 		    	    	((HudStaticText)ItemHudListRow[1]).Text = item.IORString() + item.Name;
-                        ((HudStaticText)ItemHudListRow[1]).FontHeight = 10;
+                        ((HudStaticText)ItemHudListRow[1]).FontHeight = nitemFontHeight;
 		    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Wheat;}
 		    	    	if(item.IOR == IOResult.salvage) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleVioletRed;}
 		    	    	if(item.IOR == IOResult.val) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleGoldenrod;}
@@ -723,8 +725,9 @@ namespace GearFoundry
 	    				if(ustitem.IOR == IOResult.salvage) {((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;}
 	    				if(ustitem.IOR == IOResult.dessicate) {((HudPictureBox)ItemHudListRow[0]).Image = ItemDesiccantIcon;}
 	    				if(ustitem.IOR == IOResult.manatank) {((HudPictureBox)ItemHudListRow[0]).Image = ItemManaStoneIcon;}
-	    				((HudStaticText)ItemHudListRow[1]).Text = ustitem.IORString() + ustitem.Name;
-	    				((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;	
+                        ((HudStaticText)ItemHudListRow[1]).Text = ustitem.IORString() + ustitem.Name;
+                        ((HudStaticText)ItemHudListRow[1]).FontHeight = nmenuFontHeight;
+                        ((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;	
 	    			}
 	    		}	
 	    	}catch(Exception ex){LogError(ex);}

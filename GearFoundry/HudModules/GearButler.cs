@@ -573,6 +573,7 @@ namespace GearFoundry
     		{
     			
     			ButlerHudCurrentSelectionLabel = new HudStaticText();
+                ButlerHudCurrentSelectionLabel.FontHeight = nmenuFontHeight;
     			ButlerHudCurrentSelectionLabel.Text = "Current Selection";
     			ButlerHudCurrentSelectionLabel.TextAlignment = VirindiViewService.WriteTextFormats.Center;
     		 //	ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionLabel, new Rectangle(75,0,150,16));
@@ -604,9 +605,10 @@ namespace GearFoundry
     			    			    			
     			ButlerHudCurrentSelectionIcon = new HudImageStack();
     			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionIcon, new Rectangle(136,20,25,25));
-    			
-    			ButlerHudCurrentSelectionText = new HudStaticText();
-    			ButlerHudCurrentSelectionText.Text = null;
+
+                ButlerHudCurrentSelectionText = new HudStaticText();
+                ButlerHudCurrentSelectionText.FontHeight = nmenuFontHeight; 
+                ButlerHudCurrentSelectionText.Text = null;
     			ButlerHudCurrentSelectionText.TextAlignment = VirindiViewService.WriteTextFormats.Center;
     			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionText, new Rectangle(0,50,300,16));
     			  			
@@ -623,6 +625,7 @@ namespace GearFoundry
     			ButlerHudTabLayout.AddControl(ButlerHudClearSearchButton, new Rectangle(250,80,40,20));
     			
     			ButlerQuickSortLabel = new HudStaticText();
+                ButlerQuickSortLabel.FontHeight = nmenuFontHeight;
     			ButlerQuickSortLabel.Text = "QuickSort: ";
     			ButlerHudTabLayout.AddControl(ButlerQuickSortLabel, new Rectangle(0,110,50,16));
     			
@@ -685,21 +688,27 @@ namespace GearFoundry
 				ButlerHudLayout.AddControl(ButlerHudList, new Rectangle(0,150,300,375));
 								
 				ButlerHudSelectedLabel = new HudStaticText();
+                ButlerHudSelectedLabel.FontHeight = nmenuFontHeight;
 				ButlerHudSelectedLabel.Text = "Items Selected: ";
 				ButlerHudSelectedCount = new HudStaticText();
+                ButlerHudSelectedCount.FontHeight = nmenuFontHeight;
 				ButlerHudTabLayout.AddControl(ButlerHudSelectedLabel, new Rectangle(0,520,100,16));
 				ButlerHudTabLayout.AddControl(ButlerHudSelectedCount, new Rectangle(110,520,150,16));
-				
-				ButlerPackSpacesAvailable = new HudStaticText();
-				ButlerPackSpaceAvailableLabel = new HudStaticText();
+
+                ButlerPackSpacesAvailable = new HudStaticText();
+                ButlerPackSpacesAvailable.FontHeight = nmenuFontHeight;
+                ButlerPackSpaceAvailableLabel = new HudStaticText();
+                ButlerPackSpaceAvailableLabel.FontHeight = nmenuFontHeight;
 				ButlerPackSpaceAvailableLabel.Text = "Inventory status: ";
 				ButlerHudTabLayout.AddControl(ButlerPackSpaceAvailableLabel, new Rectangle(0,540,100,16));
 				ButlerHudTabLayout.AddControl(ButlerPackSpacesAvailable, new Rectangle(110,540,150,16));
 				
 				ButlerBurdenLabel = new HudStaticText();
+                ButlerBurdenLabel.FontHeight = nmenuFontHeight;
 				ButlerBurdenLabel.Text = "Current Burden: ";
-				ButlerBurden = new HudStaticText();
-				ButlerHudTabLayout.AddControl(ButlerBurdenLabel, new Rectangle(0,560,100,16));
+                ButlerBurden = new HudStaticText();
+                ButlerBurden.FontHeight = nmenuFontHeight;
+                ButlerHudTabLayout.AddControl(ButlerBurdenLabel, new Rectangle(0, 560, 100, 16));
 				ButlerHudTabLayout.AddControl(ButlerBurden, new Rectangle(110,560, 150, 16));
 				
 				if(ButlerHudPickCurrentSelection != null) {ButlerHudPickCurrentSelection.Hit += ButlerHudPickCurrentSelection_Hit;}
@@ -1069,12 +1078,14 @@ namespace GearFoundry
 	    	    	ButlerHudListRow = ButlerHudList.AddRow();
 	    	    	
 	    	    	((HudPictureBox)ButlerHudListRow[0]).Image = wo.Icon + 0x6000000;
-	    	    	((HudStaticText)ButlerHudListRow[1]).Text = wo.Name;
-	    	    	if(wo.Id == Core.Actions.CurrentSelection)
+                    ((HudStaticText)ButlerHudListRow[1]).FontHeight = nitemFontHeight;
+                    ((HudStaticText)ButlerHudListRow[1]).Text = wo.Name;
+                    if (wo.Id == Core.Actions.CurrentSelection)
 	    	    	{
 	    	    		((HudPictureBox)ButlerHudListRow[0]).Image = 0x6006119;
-	    	    		((HudStaticText)ButlerHudListRow[1]).TextColor = Color.Red;
-	    	    	}
+                        ((HudStaticText)ButlerHudListRow[1]).TextColor = Color.Red;
+                        ((HudStaticText)ButlerHudListRow[1]).FontHeight = nitemFontHeight;
+                    }
 	    	    	
 	    	    	if(wo.Values(LongValueKey.EquippedSlots) > 0 || wo.Values(LongValueKey.Unknown10) == 56) {((HudPictureBox)ButlerHudListRow[2]).Image = GB_EQUIPPED_ICON;}
 	    	    	
@@ -1934,21 +1945,24 @@ namespace GearFoundry
 					{
 						ValetRow = ValetSuit1List.AddRow();
 						((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon;
-						((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
-					}
+                        ((HudStaticText)ValetRow[1]).FontHeight = nitemFontHeight;
+                        ((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
+                    }
 					
 					foreach(ValetTicket vt in GearButlerSettings.SuitList2)
 					{
 						ValetRow = ValetSuit2List.AddRow();
 						((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon;
-						((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
-					}
+                        ((HudStaticText)ValetRow[1]).FontHeight = nitemFontHeight;
+                        ((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
+                    }
 					
 					foreach(ValetTicket vt in GearButlerSettings.SuitList3)
 					{
 						ValetRow = ValetSuit3List.AddRow();
 						((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon;
-						((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
+                        ((HudStaticText)ValetRow[1]).FontHeight = nitemFontHeight;
+                        ((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
 					}
 					
 					foreach(ValetTicket vt in GearButlerSettings.SuitList0)
@@ -1956,7 +1970,8 @@ namespace GearFoundry
 						ValetRow = ValetSuit0List.AddRow();
 						((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon;
 						((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
-					}
+                        ((HudStaticText)ValetRow[1]).FontHeight = nitemFontHeight;
+                    }
 					
 				}catch(Exception ex){LogError(ex);}
 			}
