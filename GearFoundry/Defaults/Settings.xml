@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings>
   <Setting>
     <CorpseHudEnabled>false</CorpseHudEnabled>
@@ -7,12 +7,12 @@
     <ButlerHudEnabled>false</ButlerHudEnabled>
     <CombatHudEnabled>false</CombatHudEnabled>
     <RemoteGearEnabled>true</RemoteGearEnabled>
-    <QuickSlotsvEnabled>false</QuickSlotsvEnabled>
-    <QuickSlotshEnabled>false</QuickSlotshEnabled>
+    <QuickSlotsvEnabled>true</QuickSlotsvEnabled>
+    <QuickSlotshEnabled>true</QuickSlotshEnabled>
     <InventoryHudEnabled>false</InventoryHudEnabled>
     <InventoryEnabled>false</InventoryEnabled>
     <InventoryCompleteEnabled>false</InventoryCompleteEnabled>
-    <ToonStatsEnabled>true</ToonStatsEnabled>
+    <ToonStatsEnabled>false</ToonStatsEnabled>
     <ToonArmorEnabled>false</ToonArmorEnabled>
     <ArmorHudEnabled>false</ArmorHudEnabled>
     <MuteSounds>false</MuteSounds>
@@ -31,11 +31,13 @@
     <TextFilterManaStoneMessages>false</TextFilterManaStoneMessages>
     <TextFilterHealingMessages>false</TextFilterHealingMessages>
     <TextFilterSalvageMessages>false</TextFilterSalvageMessages>
-    <TextFilterBotSpam>flse</TextFilterBotSpam>
+    <TextFilterBotSpam>false</TextFilterBotSpam>
     <TextFilterIdentFailures>false</TextFilterIdentFailures>
     <TextFilterKillTaskComplete>false</TextFilterKillTaskComplete>
     <TextFilterVendorTells>false</TextFilterVendorTells>
     <TextFilterMonsterTells>false</TextFilterMonsterTells>
     <TextFilterNPCChatter>false</TextFilterNPCChatter>
+    <ItemFontHeight>12</ItemFontHeight>
+    <MenuFontHeight>10</MenuFontHeight>
   </Setting>
 </Settings>

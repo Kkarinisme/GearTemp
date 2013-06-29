@@ -14,6 +14,7 @@ using Decal.Interop;
 using System.Runtime.InteropServices;
 using Decal.Adapter.Wrappers;
 using System.Drawing;
+using System.Xml;
 using System.Xml.Linq;
 using System.ComponentModel;
 using VirindiViewService;
@@ -394,9 +395,16 @@ namespace GearFoundry
         {
             try
             {
+                xdoc = XDocument.Load(genSettingsFilename);
+                
+                XElement el = xdoc.Root.Element("Setting");
+
                 bCorpseHudEnabled = Convert.ToBoolean(mGenSettingsList[0].Value);
+             //   bCorpseHudEnabled = Convert.ToBoolean(el.Element("CorpseHudEnabled").Value);
                 bLandscapeHudEnabled = Convert.ToBoolean(mGenSettingsList[1].Value);
+             //   bLandscapeHudEnabled = Convert.ToBoolean(el.Element("LandscapeHudEnabled").Value);
                 bGearInspectorEnabled = Convert.ToBoolean(mGenSettingsList[2].Value);
+                bGearInspectorEnabled = Convert.ToBoolean(el.Element("InspectorHudEnabled").Value);
                 bGearButlerEnabled = Convert.ToBoolean(mGenSettingsList[3].Value);
                 bCombatHudEnabled = Convert.ToBoolean(mGenSettingsList[4].Value);
                 bRemoteGearEnabled = Convert.ToBoolean(mGenSettingsList[5].Value);
