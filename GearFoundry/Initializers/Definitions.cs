@@ -65,6 +65,7 @@ namespace GearFoundry
         private const int GE_EXIT_TRADE = 0x1FF;
         private const int GE_INSERT_INVENTORY_ITEM = 0x22;
         private const int GE_WEAR_ITEM = 0x23;
+        private const int GE_UPDATE_HEALTH = 0x01C0;
         
         private const int GA_USE_ITEM = 0x0036;
         

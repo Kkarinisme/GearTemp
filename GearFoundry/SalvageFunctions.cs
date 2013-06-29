@@ -67,14 +67,14 @@ namespace GearFoundry
 							splstr = splitstring[0].Split('-');
 							   	bool success0 = Double.TryParse(splstr[0], out sr.minwork);
 							   	bool success1 = Double.TryParse(splstr[1], out sr.maxwork);
-							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N") + "-" + sr.maxwork.ToString("N");
+							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
 							   	if(success0 && success1) {SalvageRulesList.Add(sr);}
 						}
 						else
 						{
 							bool success0 = Double.TryParse(splitstring[0], out sr.minwork);
 							sr.maxwork = 10;
-							sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N") + "-" + sr.maxwork.ToString("N");
+							sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
 							if(success0) {SalvageRulesList.Add(sr);}
 						}
 					}
@@ -90,14 +90,14 @@ namespace GearFoundry
 							   	string[] splstr = salvstring.Split('-');
 							   	bool success0 = Double.TryParse(splstr[0], out sr.minwork);
 							   	bool success1 = Double.TryParse(splstr[1], out sr.maxwork);
-							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N") + "-" + sr.maxwork.ToString("N");
+							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
 							   	if(success0 && success1) {SalvageRulesList.Add(sr);}
 							}
 							else
 							{
 								bool success = Double.TryParse(salvstring, out sr.minwork);
 								sr.maxwork = sr.minwork;
-								sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N") + "-" + sr.maxwork.ToString("N");
+								sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
 								if(success) {SalvageRulesList.Add(sr);}
 							}
 							
@@ -229,14 +229,7 @@ namespace GearFoundry
 			}
 			catch{}
 			
-		}
-
-		//Irquk:  TODO: Feature
-		private void AutoCrushAetheria()
-		{
-			
-		}
-		
+		}		
 
 	}
 }

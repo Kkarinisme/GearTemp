@@ -159,8 +159,8 @@ namespace GearFoundry
             if (lstmyTrophies != null) { lstmyTrophies.Clear(); }
             if (lstmyMobs != null) { lstmyMobs.Clear(); }
             if (lstNotifySalvage != null) { lstNotifySalvage.Clear(); }
-            if (lstNotifyOptions != null) { lstNotifyOptions.Clear(); }
-            if (lstUstList != null) { lstUstList.Clear(); }
+//            if (lstNotifyOptions != null) { lstNotifyOptions.Clear(); }
+//            if (lstUstList != null) { lstUstList.Clear(); }
 
         }
 
@@ -248,7 +248,7 @@ namespace GearFoundry
             populateSpellListBox();
             populateCloakSetsListBox();
             populateCloakSpellsListBox();
-            populateUstListBox();
+//            populateUstListBox();
             populateEssElementsListBox();
 
         }

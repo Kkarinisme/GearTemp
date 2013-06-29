@@ -21,12 +21,16 @@ namespace GearFoundry
 
 	public partial class PluginCore
 	{
-		//UNDONE:  Need to complete logging and verify functionality of DEADME
-		private List<string> FellowMemberTrackingList = new List<string>();
-		private List<int> CorpseExclusionList = new List<int>();
-		private List<LandscapeObject> CorpseTrackingList = new List<LandscapeObject>();
+		//IRQUK:  06/24/2013.  I'm declaring this done unless bugs need to be squashed later.
+		//Need to complete logging and verify functionality of DEADME
+		//DeadMe Status:  Not really sure if this functionality matters.  Enabling it is under review.
+		
+		private List<string> FellowMemberTrackingList;
+		private List<int> CorpseExclusionList;
+		private List<LandscapeObject> CorpseTrackingList;
+		private List<string> PermittedCorpsesList; 
+		
 		private bool mCorpseTrackerInPoralSpace = true;
-		private List<string> PermittedCorpsesList = new List<string>(); 
 		public GearVisectionSettings ghSettings;	
 		public DateTime LastCorpseHudUpdate;			
 		
@@ -111,6 +115,12 @@ namespace GearFoundry
 		{
 			try
 			{
+				FellowMemberTrackingList = new List<string>();
+				CorpseExclusionList = new List<int>();
+				CorpseTrackingList = new List<LandscapeObject>();
+				PermittedCorpsesList = new List<string>(); 	
+				LastCorpseHudUpdate = DateTime.Now;
+	
 				MasterTimer.Tick += CorpseCheckerTick;
 				Core.WorldFilter.CreateObject += new EventHandler<CreateObjectEventArgs>(OnWorldFilterCreateCorpse);
              	Core.EchoFilter.ServerDispatch += new EventHandler<NetworkMessageEventArgs>(ServerDispatchCorpse);
@@ -138,6 +148,11 @@ namespace GearFoundry
                 Core.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxCorpse);
                 Core.ContainerOpened -= new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
                 CorpseHudView.Resize -= CorpseHudView_Resize; 
+                
+                FellowMemberTrackingList = null; 
+				CorpseExclusionList = null;
+				CorpseTrackingList = null;
+				PermittedCorpsesList = null; 	
 
 			}
 			catch(Exception ex){LogError(ex);}
@@ -790,7 +805,8 @@ namespace GearFoundry
 	    	    	CorpseHudListRow = CorpseHudList.AddRow();
 	    	    	
 	    	    	((HudPictureBox)CorpseHudListRow[0]).Image = corpse.Icon + 0x6000000;
-	    	    	((HudStaticText)CorpseHudListRow[1]).Text = corpse.Name + corpse.DistanceString();
+	    	    	((HudStaticText)CorpseHudListRow[1]).FontName = "Arial";
+	    	    	((HudStaticText)CorpseHudListRow[1]).Text = corpse.HudString();
                     ((HudStaticText)CorpseHudListRow[1]).FontHeight = 10;
 	    	    	if(corpse.IOR == IOResult.corpseselfkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.AntiqueWhite;}
 	    	    	if(corpse.IOR == IOResult.corpsepermitted) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Cyan;}

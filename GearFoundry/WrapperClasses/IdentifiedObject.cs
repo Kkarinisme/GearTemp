@@ -276,7 +276,7 @@ namespace GearFoundry
 							{
 								for(int i = 0; i <= wo.SpellCount -1; i++)
 								{				
-									//Armor Level modifers
+									//Armor Level Modifiers
 									if(wo.Spell(i) == 6095 && cantripsteelbonus < 4){cantripsteelbonus = 4;}
 									else if(wo.Spell(i) == 4667 && cantripsteelbonus < 3){cantripsteelbonus = 3;}
 									else if(wo.Spell(i) == 2592 && cantripsteelbonus < 2){cantripsteelbonus = 2;}
@@ -306,7 +306,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2594 && scbonus < 0.15){scbonus = 0.15;}
 									else if(wo.Spell(i) == 2606 && scbonus < 0.1){scbonus = 0.1;}	
 									
-									//Pierce modifers
+									//Pierce Modifiers
 									if(wo.Spell(i) == 4212 && pebonus < 2){pebonus = 2;}
 									else if(wo.Spell(i) == 2113 && pebonus < 1.70){pebonus = 1.7;}
 									else if(wo.Spell(i) == 1574 && pebonus < 1.50){pebonus = 1.5;}
@@ -320,7 +320,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2593 && pcbonus < 0.15){pcbonus = 0.15;}
 									else if(wo.Spell(i) == 2605 && pcbonus < 0.1){pcbonus = 0.1;}								
 									
-									//Bludgeon  modifers
+									//Bludgeon  Modifiers
 									if(wo.Spell(i) == 4397 && bebonus < 2){bebonus = 2;}
 									else if(wo.Spell(i) == 2098 && bebonus < 1.70){bebonus = 1.7;}
 									else if(wo.Spell(i) == 1516 && bebonus < 1.50){bebonus = 1.5;}
@@ -334,7 +334,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2587 && bcbonus < 0.15){bcbonus = 0.15;}
 									else if(wo.Spell(i) == 2599 && bcbonus < 0.1){bcbonus = 0.1;}
 									
-									//Acid modifers
+									//Acid Modifiers
 									if(wo.Spell(i) == 4391 && aebonus < 2){aebonus = 2;}
 									else if(wo.Spell(i) == 2092 && aebonus < 1.70){aebonus = 1.7;}
 									else if(wo.Spell(i) == 1498 && aebonus < 1.50){aebonus = 1.5;}
@@ -348,7 +348,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2585 && acbonus < 0.15){acbonus = 0.15;}
 									else if(wo.Spell(i) == 2597 && acbonus < 0.1){acbonus = 0.1;}
 									
-									//Fire modifers
+									//Fire Modifiers
 									if(wo.Spell(i) == 4401 && febonus < 2){febonus = 2;}
 									else if(wo.Spell(i) == 2102 && febonus < 1.70){febonus = 1.7;}
 									else if(wo.Spell(i) == 1552 && febonus < 1.50){febonus = 1.5;}
@@ -362,7 +362,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2589 && fcbonus < 0.15){fcbonus = 0.15;}
 									else if(wo.Spell(i) == 2601 && fcbonus < 0.1){fcbonus = 0.1;}
 									
-									//Cold modifers
+									//Cold Modifiers
 									if(wo.Spell(i) == 4403 && cebonus < 2){cebonus = 2;}
 									else if(wo.Spell(i) == 2104 && cebonus < 1.70){cebonus = 1.7;}
 									else if(wo.Spell(i) == 1528 && cebonus < 1.50){cebonus = 1.5;}
@@ -376,7 +376,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2590 && ccbonus < 0.15){ccbonus = 0.15;}
 									else if(wo.Spell(i) == 2602 && ccbonus < 0.1){ccbonus = 0.1;}
 									
-									//Lightning modifers
+									//Lightning Modifiers
 									if(wo.Spell(i) == 4409 && lebonus < 2){lebonus = 2;}
 									else if(wo.Spell(i) == 2110 && lebonus < 1.70){lebonus = 1.7;}
 									else if(wo.Spell(i) == 1540 && lebonus < 1.50){lebonus = 1.5;}
@@ -625,7 +625,7 @@ namespace GearFoundry
 						{
 							for(int i = 0; i <= wo.SpellCount -1; i++)
 							{				
-								//Armor Level modifers
+								//Armor Level Modifiers
 								if(wo.Spell(i) == 6095 && cantripsteelbonus < 4){cantripsteelbonus = 4;}
 								else if(wo.Spell(i) == 4667 && cantripsteelbonus < 3){cantripsteelbonus = 3;}
 								else if(wo.Spell(i) == 2592 && cantripsteelbonus < 2){cantripsteelbonus = 2;}
@@ -655,7 +655,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2594 && scbonus < 0.15){scbonus = 0.15;}
 								else if(wo.Spell(i) == 2606 && scbonus < 0.1){scbonus = 0.1;}	
 								
-								//Pierce modifers
+								//Pierce Modifiers
 								if(wo.Spell(i) == 4212 && pebonus < 2){pebonus = 2;}
 								else if(wo.Spell(i) == 2113 && pebonus < 1.70){pebonus = 1.7;}
 								else if(wo.Spell(i) == 1574 && pebonus < 1.50){pebonus = 1.5;}
@@ -669,7 +669,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2593 && pcbonus < 0.15){pcbonus = 0.15;}
 								else if(wo.Spell(i) == 2605 && pcbonus < 0.1){pcbonus = 0.1;}								
 								
-								//Bludgeon  modifers
+								//Bludgeon  Modifiers
 								if(wo.Spell(i) == 4397 && bebonus < 2){bebonus = 2;}
 								else if(wo.Spell(i) == 2098 && bebonus < 1.70){bebonus = 1.7;}
 								else if(wo.Spell(i) == 1516 && bebonus < 1.50){bebonus = 1.5;}
@@ -683,7 +683,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2587 && bcbonus < 0.15){bcbonus = 0.15;}
 								else if(wo.Spell(i) == 2599 && bcbonus < 0.1){bcbonus = 0.1;}
 								
-								//Acid modifers
+								//Acid Modifiers
 								if(wo.Spell(i) == 4391 && aebonus < 2){aebonus = 2;}
 								else if(wo.Spell(i) == 2092 && aebonus < 1.70){aebonus = 1.7;}
 								else if(wo.Spell(i) == 1498 && aebonus < 1.50){aebonus = 1.5;}
@@ -697,7 +697,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2585 && acbonus < 0.15){acbonus = 0.15;}
 								else if(wo.Spell(i) == 2597 && acbonus < 0.1){acbonus = 0.1;}
 								
-								//Fire modifers
+								//Fire Modifiers
 								if(wo.Spell(i) == 4401 && febonus < 2){febonus = 2;}
 								else if(wo.Spell(i) == 2102 && febonus < 1.70){febonus = 1.7;}
 								else if(wo.Spell(i) == 1552 && febonus < 1.50){febonus = 1.5;}
@@ -711,7 +711,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2589 && fcbonus < 0.15){fcbonus = 0.15;}
 								else if(wo.Spell(i) == 2601 && fcbonus < 0.1){fcbonus = 0.1;}
 								
-								//Cold modifers
+								//Cold Modifiers
 								if(wo.Spell(i) == 4403 && cebonus < 2){cebonus = 2;}
 								else if(wo.Spell(i) == 2104 && cebonus < 1.70){cebonus = 1.7;}
 								else if(wo.Spell(i) == 1528 && cebonus < 1.50){cebonus = 1.5;}
@@ -725,7 +725,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2590 && ccbonus < 0.15){ccbonus = 0.15;}
 								else if(wo.Spell(i) == 2602 && ccbonus < 0.1){ccbonus = 0.1;}
 								
-								//Lightning modifers
+								//Lightning Modifiers
 								if(wo.Spell(i) == 4409 && lebonus < 2){lebonus = 2;}
 								else if(wo.Spell(i) == 2110 && lebonus < 1.70){lebonus = 1.7;}
 								else if(wo.Spell(i) == 1540 && lebonus < 1.50){lebonus = 1.5;}
@@ -1104,7 +1104,7 @@ namespace GearFoundry
 			{
 				get
 				{
-					return Convert.ToBoolean(wo != null);
+					return host.Underlying.Hooks.IsValidObject(wo.Id);
 				}
 			}
 

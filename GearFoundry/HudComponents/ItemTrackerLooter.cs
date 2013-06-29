@@ -20,22 +20,21 @@ namespace GearFoundry
 {
 	public partial class PluginCore
 	{
-		private Queue<WorldObject> SalvageCreatedQueue = new Queue<WorldObject>();
-		private int LooterLastItemSelected = 0;
+		private int LooterLastItemSelected;
 		private string[] RingableKeysArray = {"legendary", "black marrow", "directive", "granite", "mana forge", "master", "marble", "singularity",	"skeletal falatacot"};
-		private List<int> AutoDeQueue = new List<int>();
 		
 		private void SubscribeItemTrackerLooterEvents()
 		{
 			try
 			{
+				LooterLastItemSelected = 0;
+				
 				Core.ContainerOpened += LootContainerOpened;
 				Core.ItemDestroyed += ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased; 
 				Core.WorldFilter.CreateObject += ItemTrackerActions_ObjectCreated;
 				Core.WorldFilter.ChangeObject += ItemTrackerActions_ObjectChanged;
 				Core.ItemSelected += ItemTracker_ItemSelected;
-				Core.CharacterFilter.ActionComplete += ItemTracker_ActionComplete;
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -43,13 +42,13 @@ namespace GearFoundry
 		{
 			try
 			{
+				
 				Core.ContainerOpened -= LootContainerOpened;
 				Core.ItemDestroyed -= ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject -= ItemTracker_ObjectReleased;
 				Core.WorldFilter.CreateObject -= ItemTrackerActions_ObjectCreated;
 				Core.WorldFilter.ChangeObject -= ItemTrackerActions_ObjectChanged;
 				Core.ItemSelected -= ItemTracker_ItemSelected;
-				Core.CharacterFilter.ActionComplete += ItemTracker_ActionComplete;
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -87,11 +86,12 @@ namespace GearFoundry
 				}
 				else if(e.Change == WorldChangeType.StorageChange)
 				{
-					if(ItemHudMoveQueue.Count > 0)
+					if(InspectorActionQueue.Count > 0 && InspectorActionQueue.First().Action == IAction.MoveItem)
 	        		{
-					   	if(ItemHudMoveQueue.First().Id == e.Changed.Id)
+						if(InspectorActionQueue.First().LootItem.Id == e.Changed.Id)
 					   	{
-					   		ItemJustChanged = ItemHudMoveQueue.Dequeue();
+							ItemJustChanged = InspectorActionQueue.First().LootItem;
+					   		InspectorActionQueue.Dequeue();
 					   	}	
 					   	if(ItemTrackingList.Any(x => x.Id == ItemJustChanged.Id))
 					   	{
@@ -102,36 +102,82 @@ namespace GearFoundry
 	    					ProcessItemsList.Add(ItemJustChanged); 					  					
 		    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoSalvage)
 		    				{
-		    					SalvageItemsQueue.Enqueue(ItemJustChanged);
+		    					PendingActions nextaction = new PendingActions();
+		    					nextaction.Action = IAction.SalvageItem;
+		    					nextaction.LootItem = ItemJustChanged;
+		    					InspectorActionQueue.Enqueue(nextaction);
 		    				}
 		    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoSalvage)
 		    				{
-		    					DesiccateItemsQueue.Enqueue(ItemJustChanged);
+		    					PendingActions nextaction = new PendingActions();
+		    					nextaction.Action = IAction.Desiccate;
+		    					nextaction.LootItem = ItemJustChanged;
+		    					InspectorActionQueue.Enqueue(nextaction);
 		    				}
 		    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoSalvage)
 		    				{
-		    					ManaTankQueue.Enqueue(ItemJustChanged);
+		    					PendingActions nextaction = new PendingActions();
+		    					nextaction.Action = IAction.ManaStone;
+		    					nextaction.LootItem = ItemJustChanged;
+		    					InspectorActionQueue.Enqueue(nextaction);
 		    				}
-		    				else if(ItemJustChanged.ObjectClass == ObjectClass.Key)
+		    				else if(ItemJustChanged.ObjectClass == ObjectClass.Key && GISettings.AutoRingKeys)
 		    				{
 		    					if(RingableKeysArray.Any(x => ItemJustChanged.Name.ToLower().Contains(x)))
 		    					{
-		    						KeyItemsQueue.Enqueue(ItemJustChanged);
+		    						PendingActions nextaction = new PendingActions();
+		    						nextaction.Action = IAction.RingKey;
+		    						nextaction.LootItem = ItemJustChanged;
+		    						InspectorActionQueue.Enqueue(nextaction);
 		    					}
 		    				}
-	    				}
-					   	
+	    				}					   	
 					   	UpdateItemHud();
-						FireInspectorActions();
+					   	//Action Complete should now FIA
 						return;
 	        		}	
 					else if(ItemTrackingList.Any(x => x.Id == e.Changed.Id))
 					{
 						ItemJustChanged = ItemTrackingList.Find(x => x.Id == e.Changed.Id);
 						ItemTrackingList.RemoveAll(x => x.Id == ItemJustChanged.Id);
-						AutoDeQueue.Add(ItemJustChanged.Id);
+											
+						if(ItemJustChanged.IOR == IOResult.salvage || ItemJustChanged.IOR == IOResult.dessicate || ItemJustChanged.IOR == IOResult.manatank || ItemJustChanged.ObjectClass == ObjectClass.Key)
+	    				{
+		    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoSalvage)
+		    				{
+		    					PendingActions nextaction = new PendingActions();
+		    					nextaction.Action = IAction.SalvageItem;
+		    					nextaction.LootItem = ItemJustChanged;
+		    					InspectorActionQueue.Enqueue(nextaction);
+		    				}
+		    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoSalvage)
+		    				{
+		    					PendingActions nextaction = new PendingActions();
+		    					nextaction.Action = IAction.Desiccate;
+		    					nextaction.LootItem = ItemJustChanged;
+		    					InspectorActionQueue.Enqueue(nextaction);
+		    				}
+		    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoSalvage)
+		    				{
+		    					PendingActions nextaction = new PendingActions();
+		    					nextaction.Action = IAction.ManaStone;
+		    					nextaction.LootItem = ItemJustChanged;
+		    					InspectorActionQueue.Enqueue(nextaction);
+		    				}
+		    				else if(ItemJustChanged.ObjectClass == ObjectClass.Key && GISettings.AutoRingKeys)
+		    				{
+		    					if(RingableKeysArray.Any(x => ItemJustChanged.Name.ToLower().Contains(x)))
+		    					{
+		    						PendingActions nextaction = new PendingActions();
+		    						nextaction.Action = IAction.RingKey;
+		    						nextaction.LootItem = ItemJustChanged;
+		    						InspectorActionQueue.Enqueue(nextaction);
+		    					}
+		    				}
+		    				if(!ActionsPending) {InitiateInspectorActionSequence();}
+						}
+
 						UpdateItemHud();
-						return;
 					}
 					else
 					{
@@ -140,42 +186,18 @@ namespace GearFoundry
 				}
 				else if(e.Change == WorldChangeType.SizeChange)
 				{
-					if(ItemHudMoveQueue.Count > 0)
+					if(InspectorActionQueue.Count > 0)
 					{	
-						if(ItemHudMoveQueue.First().Name == e.Changed.Name)
+						if(InspectorActionQueue.First().LootItem.Name == e.Changed.Name)
 						{
-							ItemJustChanged = ItemHudMoveQueue.Dequeue();
+							ItemJustChanged = InspectorActionQueue.First().LootItem;
 							if(ItemTrackingList.Any(x => x.Id == ItemJustChanged.Id))
 							{
 								ItemTrackingList.RemoveAll(x => x.Id == ItemJustChanged.Id);
 							}
-							
-							if(ItemJustChanged.IOR == IOResult.salvage || ItemJustChanged.IOR == IOResult.dessicate || ItemJustChanged.IOR == IOResult.manatank || ItemJustChanged.ObjectClass == ObjectClass.Key)
-		    				{
-		    					ProcessItemsList.Add(ItemJustChanged); 					  					
-			    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoSalvage)
-			    				{
-			    					SalvageItemsQueue.Enqueue(ItemJustChanged);
-			    				}
-			    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoSalvage)
-			    				{
-			    					DesiccateItemsQueue.Enqueue(ItemJustChanged);
-			    				}
-			    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoSalvage)
-			    				{
-			    					ManaTankQueue.Enqueue(ItemJustChanged);
-			    				}
-			    				else if(ItemJustChanged.ObjectClass == ObjectClass.Key && GISettings.AutoRingKeys)
-			    				{
-			    					if(RingableKeysArray.Any(x => ItemJustChanged.Name.ToLower().Contains(x)))
-			    					{
-			    						KeyItemsQueue.Enqueue(ItemJustChanged);
-			    					}
-			    				}
-		    				}
+							InspectorActionQueue.Dequeue();
 							
 							UpdateItemHud();
-							FireInspectorActions();
 							
 							return;
 						}
@@ -185,13 +207,11 @@ namespace GearFoundry
 						if(ItemTrackingList.FindAll(x => x.Name == e.Changed.Name).Count == 1)
 						{
 							ItemJustChanged = ItemTrackingList.Find(x => x.Name == e.Changed.Name);
-							AutoDeQueue.Add(ItemJustChanged.Id);	
 							ItemTrackingList.RemoveAll(x => x.Id == ItemJustChanged.Id);
 						}
 						else if(ItemTrackingList.Any(x => x.Id == LooterLastItemSelected))
 						{
 							ItemJustChanged = ItemTrackingList.Find(x => x.Id == LooterLastItemSelected);
-							AutoDeQueue.Add(ItemJustChanged.Id);	
 							ItemTrackingList.RemoveAll(x => x.Id == ItemJustChanged.Id);
 						}
 						else
@@ -225,24 +245,39 @@ namespace GearFoundry
 					WaitingVTIOs.RemoveAll(x => x.Id == e.ItemGuid);
 					UpdateItemHud();
 				}
-				if(ProcessItemsList.Any(x => x.Id == e.ItemGuid))
-				{
-				   	ProcessItemsList.RemoveAll(x => x.Id == e.ItemGuid);
-					UpdateItemHud();
-				}
 				if(ItemTrackingList.Any(x => x.Id == e.ItemGuid))
 				{
 					ItemTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
 					UpdateItemHud();
 				}
-				if(AutoDeQueue.Any(x => x == e.ItemGuid))
-				{
-					AutoDeQueue.RemoveAll(x => x == e.ItemGuid);
-				}
 				if(ItemExclusionList.Any(x => x == e.ItemGuid))
 				{
 					ItemExclusionList.RemoveAll(x => x == e.ItemGuid);
 				}
+				if(ProcessItemsList.Any(x => x.Id == e.ItemGuid))
+				{
+				   	ProcessItemsList.RemoveAll(x => x.Id == e.ItemGuid);
+				}
+				if(ItemIDListenList.Any(x => x == e.ItemGuid))
+				{
+					ItemIDListenList.RemoveAll(x => x == e.ItemGuid);
+				}
+				if(InspectorActionQueue.Count > 0)
+				{
+					if(InspectorActionQueue.First().LootItem.Id == e.ItemGuid)
+					{
+						InspectorActionQueue.Dequeue();
+					}	
+					else
+					{
+						if(InspectorActionQueue.Any(x => x.LootItem.Id == e.ItemGuid))
+						{
+							InspectorActionQueue.First(x => x.LootItem.Id == e.ItemGuid).Action = IAction.DeQueue;
+						}
+					}
+				}
+				UpdateItemHud();
+
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -265,18 +300,32 @@ namespace GearFoundry
 				   	ProcessItemsList.RemoveAll(x => x.Id == e.Released.Id);
 					UpdateItemHud();
 				}
+				if(ItemIDListenList.Any(x => x == e.Released.Id))
+				{
+					ItemIDListenList.RemoveAll(x => x == e.Released.Id);
+				}
 				if(ItemTrackingList.Any(x => x.Id == e.Released.Id))
 				{
 					ItemTrackingList.RemoveAll(x => x.Id == e.Released.Id);
 					UpdateItemHud();
 				}
-				if(AutoDeQueue.Any(x => x == e.Released.Id))
-				{
-					AutoDeQueue.RemoveAll(x => x == e.Released.Id);
-				}
 				if(ItemExclusionList.Any(x => x == e.Released.Id))
 				{
 					ItemExclusionList.RemoveAll(x => x == e.Released.Id);
+				}
+				if(InspectorActionQueue.Count > 0)
+				{
+					if(InspectorActionQueue.First().LootItem.Id == e.Released.Id)
+					{
+						InspectorActionQueue.Dequeue();
+					}	
+					else
+					{
+						if(InspectorActionQueue.Any(x => x.LootItem.Id == e.Released.Id))
+						{
+							InspectorActionQueue.First(x => x.LootItem.Id == e.Released.Id).Action = IAction.DeQueue;
+						}
+					}
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -295,28 +344,22 @@ namespace GearFoundry
 			try
 			{	
 				if(!Host.Underlying.Hooks.IsValidObject(e.ItemGuid)){return;}
-				
-
-				
+							
 				WorldObject container = Core.WorldFilter[e.ItemGuid];
 				
 				mOpenContainer.ContainerGUID = container.Id;
 				mOpenContainer.LootingStarted = DateTime.Now;
 				
-//				if(mOpenContainer.ContainerGUID == ListenForContainerID)
-//				{
-//					ListenForContainerID = 0;
-//					InspectorActionPending = false;
-//					if(!InspectorRenderFrameActive){InitiateInspectorRenderFrame();}
-//					return;
-//				}
-				
-				if(ItemExclusionList.Count > 0 && ItemExclusionList.Contains(e.ItemGuid))
+				if(InspectorActionQueue.Count > 0 && InspectorActionQueue.First().Action == IAction.OpenContainer)
 				{
+					InspectorActionQueue.Dequeue();
 					return;
 				}
-				
-				Core.RenderFrame += RenderFrame_LootContainerOpened;
+				else
+				{
+					if(ItemExclusionList.Contains(mOpenContainer.ContainerGUID)){return;}
+					Core.RenderFrame += RenderFrame_LootContainerOpened;
+				}
 			}
 			catch(Exception ex){LogError(ex);}
 		}
@@ -434,8 +477,23 @@ namespace GearFoundry
 						{
 							case ObjectClass.Armor:
 							case ObjectClass.Clothing:
-							case ObjectClass.Gem:
 							case ObjectClass.Jewelry:
+								if(IOItem.LValue(LongValueKey.IconOutline) > 0)
+								{
+									IdqueueAdd(IOItem.Id);
+									ItemIDListenList.Add(IOItem.Id);
+									return;	
+								}
+								break;	
+							case ObjectClass.Gem:
+								if(IOItem.Aetheriacheck)
+								{
+									IdqueueAdd(IOItem.Id);
+									ItemIDListenList.Add(IOItem.Id);
+									return;	
+								}
+								break;
+							case ObjectClass.Scroll:
 							case ObjectClass.MeleeWeapon:
 							case ObjectClass.MissileWeapon:
 							case ObjectClass.WandStaffOrb:								
@@ -591,20 +649,20 @@ namespace GearFoundry
 						return 1;
 					default:
 						return 0;
-				}
-
-
-						
+				}						
 			}catch(Exception ex){LogError(ex); return 0;}
 		}
 		
 		private void SendVTIOtoCallBack(LootObject VTIO)
 		{	
-			if(WaitingVTIOs.Count == 0) 
+			try
 			{
-				Core.RenderFrame -= new EventHandler<EventArgs>(DoesVTIOHaveID);
-				return;
-			}
+				if(WaitingVTIOs.Count == 0) 
+				{
+					Core.RenderFrame -= new EventHandler<EventArgs>(DoesVTIOHaveID);
+					return;
+				}
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void DoesVTIOHaveID(object sender, EventArgs e)
@@ -614,19 +672,5 @@ namespace GearFoundry
 				if(WaitingVTIOs.Any(x => x.HasIdData == true)){WaitingVTIOs.RemoveAll(x => x.HasIdData == true);}
 			}catch(Exception ex){LogError(ex);}
 		}
-		
-		
-		private void IDChecker(object sender, System.EventArgs e)
-		{
-			try
-			{
-					
-			}catch(Exception ex){LogError(ex);}
-			
-			
-		}
-		
-
-
 	}
 }

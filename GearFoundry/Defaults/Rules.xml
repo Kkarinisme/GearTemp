@@ -1382,4 +1382,59 @@
     <Spells>6080,6040,6041,6102,6042,6081,6045,6103,6046,6048,6049,6050,6104,6051,6047,6082,6052,6105,6083,6053,6077,6072,6087,6054,6055,6056,6057,6058,6059,6060,6043,6061,6062,6063,6064,6078,6044,6065,6066,6084,6106,6067,6068,6069,6085,6070,6071,6076,6079,6107,6125,6073,6074,6075,6039,6101</Spells>
     <NumSpells>1</NumSpells>
   </Rule>
+  <Rule>
+    <RuleNum>30</RuleNum>
+    <Enabled>true</Enabled>
+    <Priority>1</Priority>
+    <AppliesToFlag>32768</AppliesToFlag>
+    <Name>GS35 0Wand</Name>
+    <NameContains></NameContains>
+    <NameNotContains></NameNotContains>
+    <Descr></Descr>
+    <ArcaneLore>0</ArcaneLore>
+    <Value>0</Value>
+    <Burden>0</Burden>
+    <Work>0</Work>
+    <WieldReqValue>0</WieldReqValue>
+    <WieldLevel>0</WieldLevel>
+    <ItemLevel>0</ItemLevel>
+    <MinArmorLevel>0</MinArmorLevel>
+    <WieldAttribute>0</WieldAttribute>
+    <MasteryType>0</MasteryType>
+    <DamageType></DamageType>
+    <McModAttack>25</McModAttack>
+    <MeleeDef>0</MeleeDef>
+    <MagicDef>0</MagicDef>
+    <WieldEnabled>true,true,true,false</WieldEnabled>
+    <ReqSkill>0,150,180,</ReqSkill>
+    <MinMax>,,,</MinMax>
+    <MSCleave>false,false,false,false</MSCleave>
+    <Coverage></Coverage>
+    <ArmorType></ArmorType>
+    <ArmorSet></ArmorSet>
+    <Unenchantable>false</Unenchantable>
+    <CloakSets></CloakSets>
+    <CloakSpells></CloakSpells>
+    <CloakMustHaveSpell>false</CloakMustHaveSpell>
+    <Red>false</Red>
+    <Yellow>false</Yellow>
+    <Blue>false</Blue>
+    <EssMastery>0</EssMastery>
+    <EssElements></EssElements>
+    <EssLevel>0</EssLevel>
+    <EssDamageLevel>0</EssDamageLevel>
+    <EssCDLevel>0</EssCDLevel>
+    <EssCRLevel>0</EssCRLevel>
+    <EssDRLevel>0</EssDRLevel>
+    <EssCritLevel>0</EssCritLevel>
+    <EssCritDamRes>0</EssCritDamRes>
+    <FilterLegend>true</FilterLegend>
+    <FilterEpic>true</FilterEpic>
+    <FilterMajor>true</FilterMajor>
+    <FilterLvl8>true</FilterLvl8>
+    <FilterLvl7>true</FilterLvl7>
+    <FilterLvl6>true</FilterLvl6>
+    <Spells></Spells>
+    <NumSpells>0</NumSpells>
+  </Rule>
 </Rules>

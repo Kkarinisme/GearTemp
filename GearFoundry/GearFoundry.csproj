@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HudComponents\CombatHudMechanics.cs" />
     <Compile Include="Initializers\Enums.cs" />
     <Compile Include="WrapperClasses\LandscapeObject.cs" />
     <Compile Include="WrapperClasses\LootObject.cs" />

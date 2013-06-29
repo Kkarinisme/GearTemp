@@ -50,7 +50,7 @@ namespace GearFoundry
 			{
 				get
 				{
-					return Convert.ToBoolean(wo != null);
+					return host.Underlying.Hooks.IsValidObject(wo.Id);
 				}
 			}
 			
@@ -64,9 +64,15 @@ namespace GearFoundry
 				public DateTime SpellCastTime = DateTime.Now;
 				public double SecondsRemaining = 0;
 			}
-			private int mHealthMax;
-			private int mHealthCurrent;
-
+			private int mHealthMax = 0;
+			private int mHealthCurrent= 0;
+			private int mHealthRemaining = 100;
+			
+			public int HealthRemaining
+			{
+				get {return mHealthRemaining;}
+				set {mHealthRemaining = value;}
+			}
 			
 			public int HealthMax {
 				get { return mHealthMax; }

@@ -68,7 +68,7 @@ namespace GearFoundry
 					case IOResult.trophy:
 						return "(Trophy) ";
 					case IOResult.rare:
-						return "(Rare) ";
+						return "(Rrare) ";
 					case IOResult.spell:
 						return "(Spell) ";
 					case IOResult.rule:
@@ -90,7 +90,7 @@ namespace GearFoundry
 					case IOResult.manatank:
 						return "(Manatank) ";
 					case IOResult.allegplayers:
-						return "(Allegiance) ";
+						return "(Allegence) ";
 					case IOResult.npc:
 						return "(NPC) ";
 					case IOResult.salvage:
@@ -102,7 +102,7 @@ namespace GearFoundry
 			
 			public string DistanceString()
 			{
-				return " <" + (DistanceAway * 100).ToString("0") + ">";
+				return " <" + (DistanceAway * 100).ToString("N0") + ">";
 			}
 				
 			public int SpellCount 
@@ -138,7 +138,7 @@ namespace GearFoundry
 			{
 				get
 				{
-					return Convert.ToBoolean(wo != null);
+					return host.Underlying.Hooks.IsValidObject(wo.Id);
 				}
 			}
 			
@@ -176,6 +176,37 @@ namespace GearFoundry
 					LogError(ex);
 				}
 				return result;
+			}
+			
+			public string HudString()
+			{
+				try
+				{
+					if(wo.Name.Contains("Corpse of"))
+					{
+						return wo.Name.Replace("Corpse of", "") + DistanceString();
+					}
+					else
+					{
+						return wo.Name + DistanceString();
+					}
+//					if(splitstring.Count() == 1)
+//					{
+//						return wo.Name + DistanceString();
+//					}
+//					else
+//					{
+//						string returnstring = String.Empty;
+//						foreach(string piece in splitstring)
+//						{
+//							if(piece != "Corpse" || piece != "of")
+//							{
+//								returnstring += piece[0];
+//							}
+//						}
+//						return returnstring + DistanceString();
+//					}
+				}catch(Exception ex){LogError(ex); return String.Empty;}
 			}
 		}
 	}

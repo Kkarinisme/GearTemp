@@ -438,7 +438,6 @@ namespace GearFoundry
 
         private void ButlerHudResizeTimerTick(object sender, EventArgs e)
         {
-//            MasterTimer.Stop();
             ButlerHudWidth = ButlerHudWidthNew;
             ButlerHudHeight = ButlerHudHeightNew;
             GearButlerSettings.ButlerHudWidth = ButlerHudWidth;

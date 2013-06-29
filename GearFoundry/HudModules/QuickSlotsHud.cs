@@ -123,10 +123,10 @@ namespace GearFoundry
         int nquickiev = 0;
         int nquickieh = 0;
         QuickSlotData thisQuickie = null;
-        Point vpt;
-        Point hpt;
-        VirindiViewService.HudViewDrawStyle mvtheme = null;
-        VirindiViewService.HudViewDrawStyle mhtheme = null;
+//        Point vpt;
+//        Point hpt;
+//        VirindiViewService.HudViewDrawStyle mvtheme = null;
+//        VirindiViewService.HudViewDrawStyle mhtheme = null;
        
 
         List<Int32> vID = new List<Int32>();

@@ -120,7 +120,7 @@ namespace GearFoundry
 							break;
 		
 					}
-					if(wo.LongKeys.Contains((int)LongValueKey.Imbued)) {gearscorereturn += 1;}
+					if(wo.LongKeys.Contains((int)LongValueKey.Imbued)) {gearscorereturn++;}
 					gearscorereturn += RatingScore;
 					return gearscorereturn;	
 				}
@@ -158,6 +158,12 @@ namespace GearFoundry
 				{
 
 					//Enchantable Armors
+					if((wo.Values(LongValueKey.EquipableSlots) & UnderwearSlots) == wo.Values(LongValueKey.EquipableSlots) ||
+					   (wo.Values(LongValueKey.EquipableSlots) & CloakSlot) == wo.Values(LongValueKey.EquipableSlots))
+					{
+						return 0;
+					}
+					
 					if(wo.Values(LongValueKey.Unenchantable) == 0)
 					{
 						double observedarmortinks = 0;
@@ -167,6 +173,7 @@ namespace GearFoundry
 						double cantrippenality = 0;
 						double cantripsteelbonus = 0;
 						double enchantmentpenalty = 0;
+						double impen7or8 = 12;
 						
 						//Determine the base, unenchanted steel tinks in the item.
 						if(wo.Values(LongValueKey.ActiveSpellCount) == 0) {basearmortinks = observedarmortinks;}
@@ -205,7 +212,7 @@ namespace GearFoundry
 							}
 						}
 
-						return basearmortinks + cantripsteelbonus + availabletinks;
+						return basearmortinks + cantripsteelbonus + availabletinks + impen7or8;
 					}
 					//Calculation for unenchantable armor.  
 					else 
@@ -254,7 +261,7 @@ namespace GearFoundry
 							{
 								for(int i = 0; i <= wo.SpellCount -1; i++)
 								{				
-									//Armor Level modifers
+									//Armor Level Modifiers
 									if(wo.Spell(i) == 6095 && cantripsteelbonus < 4){cantripsteelbonus = 4;}
 									else if(wo.Spell(i) == 4667 && cantripsteelbonus < 3){cantripsteelbonus = 3;}
 									else if(wo.Spell(i) == 2592 && cantripsteelbonus < 2){cantripsteelbonus = 2;}
@@ -284,7 +291,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2594 && scbonus < 0.15){scbonus = 0.15;}
 									else if(wo.Spell(i) == 2606 && scbonus < 0.1){scbonus = 0.1;}	
 									
-									//Pierce modifers
+									//Pierce Modifiers
 									if(wo.Spell(i) == 4212 && pebonus < 2){pebonus = 2;}
 									else if(wo.Spell(i) == 2113 && pebonus < 1.70){pebonus = 1.7;}
 									else if(wo.Spell(i) == 1574 && pebonus < 1.50){pebonus = 1.5;}
@@ -298,7 +305,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2593 && pcbonus < 0.15){pcbonus = 0.15;}
 									else if(wo.Spell(i) == 2605 && pcbonus < 0.1){pcbonus = 0.1;}								
 									
-									//Bludgeon  modifers
+									//Bludgeon  Modifiers
 									if(wo.Spell(i) == 4397 && bebonus < 2){bebonus = 2;}
 									else if(wo.Spell(i) == 2098 && bebonus < 1.70){bebonus = 1.7;}
 									else if(wo.Spell(i) == 1516 && bebonus < 1.50){bebonus = 1.5;}
@@ -312,7 +319,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2587 && bcbonus < 0.15){bcbonus = 0.15;}
 									else if(wo.Spell(i) == 2599 && bcbonus < 0.1){bcbonus = 0.1;}
 									
-									//Acid modifers
+									//Acid Modifiers
 									if(wo.Spell(i) == 4391 && aebonus < 2){aebonus = 2;}
 									else if(wo.Spell(i) == 2092 && aebonus < 1.70){aebonus = 1.7;}
 									else if(wo.Spell(i) == 1498 && aebonus < 1.50){aebonus = 1.5;}
@@ -326,7 +333,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2585 && acbonus < 0.15){acbonus = 0.15;}
 									else if(wo.Spell(i) == 2597 && acbonus < 0.1){acbonus = 0.1;}
 									
-									//Fire modifers
+									//Fire Modifiers
 									if(wo.Spell(i) == 4401 && febonus < 2){febonus = 2;}
 									else if(wo.Spell(i) == 2102 && febonus < 1.70){febonus = 1.7;}
 									else if(wo.Spell(i) == 1552 && febonus < 1.50){febonus = 1.5;}
@@ -340,7 +347,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2589 && fcbonus < 0.15){fcbonus = 0.15;}
 									else if(wo.Spell(i) == 2601 && fcbonus < 0.1){fcbonus = 0.1;}
 									
-									//Cold modifers
+									//Cold Modifiers
 									if(wo.Spell(i) == 4403 && cebonus < 2){cebonus = 2;}
 									else if(wo.Spell(i) == 2104 && cebonus < 1.70){cebonus = 1.7;}
 									else if(wo.Spell(i) == 1528 && cebonus < 1.50){cebonus = 1.5;}
@@ -354,7 +361,7 @@ namespace GearFoundry
 									else if(wo.Spell(i) == 2590 && ccbonus < 0.15){ccbonus = 0.15;}
 									else if(wo.Spell(i) == 2602 && ccbonus < 0.1){ccbonus = 0.1;}
 									
-									//Lightning modifers
+									//Lightning Modifiers
 									if(wo.Spell(i) == 4409 && lebonus < 2){lebonus = 2;}
 									else if(wo.Spell(i) == 2110 && lebonus < 1.70){lebonus = 1.7;}
 									else if(wo.Spell(i) == 1540 && lebonus < 1.50){lebonus = 1.5;}
@@ -466,6 +473,7 @@ namespace GearFoundry
 						manacbase = manacobs;
 						attackbase = attackobs;
 						basesum = meleedbase + missiledbase + magicdbase + manacbase + attackbase;
+						if(basesum == 0) {return 0;}
 					} //Calculate the base values if not enchanted.
 					else
 					{
@@ -695,6 +703,7 @@ namespace GearFoundry
 					
 					if(wo.ObjectClass == ObjectClass.MissileWeapon)
 					{
+						if(!wo.DoubleKeys.Contains((int)DoubleValueKey.DamageBonus)){return 0;}
 						double availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);
 						double mahoganytinks = 0;
 						if(wo.DoubleKeys.Contains((int)DoubleValueKey.DamageBonus)){mahoganytinks = ((wo.Values(DoubleValueKey.DamageBonus) - 1) / 0.04);}
@@ -856,9 +865,15 @@ namespace GearFoundry
 			
 			public string SkillString()
 			{
-				if(SkillScore > 0) {return ", Skill Modifers: " + SkillScore.ToString("N0");}
+				if(SkillScore > 0) {return ", Skill Modifiers: " + SkillScore.ToString("N0");}
 				else {return String.Empty;}
 				
+			}
+			
+			public string RatingString()
+			{
+				if(RatingScore > 0) {return ", Rating Score: " + RatingScore.ToString("N0");}
+				else {return String.Empty;}
 			}
 			
 			public int ArmorType
@@ -1345,6 +1360,21 @@ namespace GearFoundry
 				}
 				return result;
 			}
+			private string ShortWieldString()
+			{
+				string result = string.Empty;
+				if (wo.Values(LongValueKey.WieldReqType) > 0) 
+				{
+					if (wo.Values(LongValueKey.WieldReqType) == 7) 
+					{
+						result = " (L" + wo.Values(LongValueKey.WieldReqValue).ToString() + ")";
+					} else if (wo.Values(LongValueKey.WieldReqValue) > 0) 
+					{
+						result = "(" + wo.Values(LongValueKey.WieldReqValue).ToString() +")";
+					}
+				}
+				return result;
+			}
 			private string SalvageString()
 			{
 				string result = string.Empty;
@@ -1401,17 +1431,17 @@ namespace GearFoundry
 						switch(wo.ObjectClass)
 						{
 							case ObjectClass.Armor:
-								result = IORString() +  GearScoreString() + wo.Name + SetString() +  ArmorLevelComaparisonString() + SpellDescriptions();
+								result = IORString() +  GearScoreString() + wo.Name + SetString() +  ArmorLevelComaparisonString() + RatingString() + SpellDescriptions();
 								break;
 							case ObjectClass.Clothing:
 								if(wo.Values(LongValueKey.ArmorLevel) > 0 || wo.Values(LongValueKey.EquipableSlots) == 0x8000000)
 								{
-									result = IORString() +  GearScoreString() + wo.Name + SetString() +  ArmorLevelComaparisonString() + SpellDescriptions();
+									result = IORString() +  GearScoreString() + wo.Name + SetString() +  ArmorLevelComaparisonString() + RatingString() + SpellDescriptions();
 									break;
 								}
 								else
 								{
-									result = IORString() + GearScoreString() +  wo.Name + SpellDescriptions();
+									result = IORString() + GearScoreString() +  wo.Name + RatingString() + SpellDescriptions();
 									break;
 								}
 							case ObjectClass.Gem:
@@ -1422,16 +1452,16 @@ namespace GearFoundry
 								}
 								else
 								{
-									result = IORString() + GearScoreString() + wo.Name + SetString() + SpellDescriptions();
+									result = IORString() + GearScoreString() + wo.Name + SpellDescriptions();
 									break;
 								}
 							case ObjectClass.Jewelry:
-								result = IORString() + GearScoreString() + wo.Name + SetString() + ImbueString() + SpellDescriptions() + WieldString() + LoreString();
+								result = IORString() + GearScoreString() + wo.Name + SetString() + RatingString() + SpellDescriptions() + WieldString() + LoreString();
 								break;
 							case ObjectClass.MeleeWeapon:
 							case ObjectClass.MissileWeapon:
 							case ObjectClass.WandStaffOrb:
-								result = IORString() + GearScoreString() + wo.Name + OffenseString() + SkillString() +SpellDescriptions() + WieldString();
+								result = IORString() + GearScoreString() + wo.Name + OffenseString() + SkillString() + RatingString() + SpellDescriptions() + WieldString();
 								break;
 							case ObjectClass.Salvage:
 								result = SalvageString();
@@ -1439,7 +1469,7 @@ namespace GearFoundry
 							case ObjectClass.Misc:
 								if(EssenceLevel > 0)
 								{
-									result = IORString() + GearScoreString() + "L" + EssenceLevel + " " + wo.Name;
+									result = IORString() + GearScoreString() + "L" + EssenceLevel + " " + wo.Name + RatingString();
 									break;
 								}
 								else goto default;
