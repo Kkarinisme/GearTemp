@@ -465,8 +465,7 @@ namespace GearFoundry
 	        		MonsterObject UpdateMonster = CombatHudMobTrackingList.First(x => x.Id == PossibleMobID);
 	        		
         			if((pMsg.Value<int>("flags") & 0x100) == 0x100)
-        			{
- 						
+        			{       				
         				if(pMsg.Value<int>(11) > 0) {UpdateMonster.HealthMax = pMsg.Value<int>(11);}
 	      				if(pMsg.Value<int>(10) > 0) {UpdateMonster.HealthCurrent = pMsg.Value<int>(10);}
 //        				if(pMsg.Value<int>(20) > 0){CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).StaminaMax = pMsg.Value<int>(20);}
@@ -597,6 +596,8 @@ namespace GearFoundry
 				else
 				{
 					if(CombatHudMobTrackingList.Count == 0) {return;}
+					
+					CombatHudMobTrackingList.RemoveAll(x => x.ObjectClass != ObjectClass.Monster);
 					
 					for(int i = CombatHudMobTrackingList.Count -1; i >= 0; i--)
 					{

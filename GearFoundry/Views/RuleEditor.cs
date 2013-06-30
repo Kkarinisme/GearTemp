@@ -216,7 +216,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in function to getVariables");
                 nRuleNum = Convert.ToInt32(el.Element("RuleNum").Value);
                 bRuleEnabled = Convert.ToBoolean(el.Element("Enabled").Value);
                 nRulePriority = Convert.ToInt32(el.Element("Priority").Value);

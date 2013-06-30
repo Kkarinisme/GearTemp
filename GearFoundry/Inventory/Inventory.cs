@@ -92,8 +92,7 @@ namespace GearFoundry
             try
             {
 
-                WriteToChat("I am in Render Inventory hud");
-                if (InventoryHudView != null)
+               if (InventoryHudView != null)
                 {
                     DisposeInventoryHud();
                 }
@@ -128,6 +127,7 @@ namespace GearFoundry
                 InventoryHudTabView = new HudTabView();
                 InventoryHudLayout.AddControl(InventoryHudTabView, new Rectangle(0, 0, InventoryHudWidth, InventoryHudHeight));
 
+                
                 InventoryHudTabLayout = new HudFixedLayout();
                 InventoryHudTabView.AddTab(InventoryHudTabLayout, "Inventory");
 
@@ -181,7 +181,6 @@ namespace GearFoundry
             try
             {
                 if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = GearDir + @"\ArmorSettings.xml"; }
-                WriteToChat("I am in save inventory settings and inventory settings filename is " + armorSettingsFilename);
                 xdoc = new XDocument(new XElement("Settings"));
                 xdoc.Element("Settings").Add(new XElement("Setting",
                     new XElement("ArmorHudWidth", ArmorHudWidth),
@@ -225,6 +224,7 @@ namespace GearFoundry
             try
             {
                 lblInventoryClass = new HudStaticText();
+                lblInventoryClass.FontHeight = nmenuFontHeight;
                 lblInventoryClass.Text = "Class";
                 ControlGroup InventoryClasses = new ControlGroup();
                 cboInventoryClasses = new HudCombo(InventoryClasses);
@@ -236,7 +236,8 @@ namespace GearFoundry
                     i++;
                 }
                 lblMyChoice = new HudStaticText();
-                lblMyChoice.Text = "Type preference:";
+                lblMyChoice.FontHeight = nmenuFontHeight;
+                lblMyChoice.Text = "Search:";
  
                 txtMyChoice = new HudTextBox();
                 
@@ -254,6 +255,7 @@ namespace GearFoundry
                 lblSalvage.Text = "Salvage";
                 lblSalvage.TextAlignment = VirindiViewService.WriteTextFormats.Center;
                 lblMelee = new HudStaticText();
+                lblMelee.FontHeight = nmenuFontHeight;
                 lblMelee.Text = "Mel:";
                 ControlGroup WieldAttribTypes = new ControlGroup();
                 cboWieldAttrib = new HudCombo(WieldAttribTypes);
@@ -267,6 +269,7 @@ namespace GearFoundry
                 }
 
                 lblSet = new HudStaticText();
+                lblSet.FontHeight = nmenuFontHeight;
                 lblSet.Text = "Set:";
                 ControlGroup SetChoices = new ControlGroup();
                 cboArmorSet = new HudCombo(SetChoices);
@@ -280,6 +283,7 @@ namespace GearFoundry
                 }
 
                 lblMaterial = new HudStaticText();
+                lblMaterial.FontHeight = nmenuFontHeight;
                 lblMaterial.Text = "Mat:";
                 ControlGroup MaterialChoices = new ControlGroup();
                 cboMaterial = new HudCombo(MaterialChoices);
@@ -293,6 +297,7 @@ namespace GearFoundry
                 }
 
                 lblDamage = new HudStaticText();
+                lblDamage.FontHeight = nmenuFontHeight;
                 lblDamage.Text = "Dam:";
                 ControlGroup DamageTypes = new ControlGroup();
                 cboDamageType = new HudCombo(DamageTypes);
@@ -306,6 +311,7 @@ namespace GearFoundry
                 }
 
                 lblArmorWield = new HudStaticText();
+                lblArmorWield.FontHeight = nmenuFontHeight;
                 lblArmorWield.Text = "Lev:";
                 ControlGroup ArmorLevels = new ControlGroup();
                 cboArmorLevel = new HudCombo(ArmorLevels);
@@ -320,6 +326,7 @@ namespace GearFoundry
 
 
                 lblWork = new HudStaticText();
+                lblWork.FontHeight = nmenuFontHeight;
                 lblWork.Text = "Work:";
                 ControlGroup WorkChoices = new ControlGroup();
                 cboSalvWork = new HudCombo(WorkChoices);
@@ -333,6 +340,7 @@ namespace GearFoundry
                 }
 
                 lblWield = new HudStaticText();
+                lblWield.FontHeight = nmenuFontHeight;
                 lblWield.Text = "Lev:";
                 ControlGroup WieldLevels = new ControlGroup();
                 cboLevel = new HudCombo(WieldLevels);
@@ -347,6 +355,7 @@ namespace GearFoundry
 
 
                 lblCovers = new HudStaticText();
+                lblCovers.FontHeight = nmenuFontHeight;
                 lblCovers.Text = "Cov:";
                 ControlGroup CoverageChoices = new ControlGroup();
                 cboCoverage = new HudCombo(CoverageChoices);
@@ -360,6 +369,7 @@ namespace GearFoundry
                 }
 
                 lblEmbues = new HudStaticText();
+                lblEmbues.FontHeight = nmenuFontHeight;
                 lblEmbues.Text = "Emb:";
                 ControlGroup EmbueChoices = new ControlGroup();
                 cboEmbues = new HudCombo(EmbueChoices);
@@ -505,39 +515,7 @@ namespace GearFoundry
 
 
 
-                //lstAllToonName = new List<string>();
-                //try
-                //{
-                //    string name = "";
-                //    foreach (XElement el in names)
-                //    {
-                //        name = el.Element("ToonName").Value;
-                //        int i = 0;
-                //        if (!lstAllToonName.Contains(name))
-                //        {
-                //            try
-                //            {
-                //                lstAllToonName.Add(name);
-                //                cboToonArmorName.AddItem(name, i);
-                //                i++;
-                //            }
-                //            catch (Exception ex) { LogError(ex); }
-
-                //        }
-                //    }
-                //}
-                //catch (Exception ex) { LogError(ex); }
-
-
-                //lblToonArmorNameInfo = new HudStaticText();
-                //lblToonArmorNameInfo.Text = "Name of toon whose armor is being studied:";
-
-                //ArmorHudSettings.AddControl(btnInventoryArmor, new Rectangle(5, 20, 100, 20));
-
-                //ArmorHudSettings.AddControl(lblToonArmorNameInfo, new Rectangle(5, 60, ArmorHudWidth, 16));
-
-                //ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(10, 75, ArmorHudWidth - 20, 16));
-
+ 
 
 
                 InventorySettingsTab = true;
@@ -545,14 +523,6 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
         }
 
-        //private void cboToonArmorName_Change(object sender, EventArgs e)
-        //{
-        //    toonArmorName = lstAllToonName[cboToonArmorName.Current];
-        //    //  WriteToChat(toonArmorName + "has been selected");
-        //    lblToonArmorName.Text = toonArmorName;
-
-
-        //}
 
 
         private void DisposeInventorySettingsLayout()
@@ -637,7 +607,6 @@ namespace GearFoundry
  
                 objClass = ClassInvList[cboInventoryClasses.Current].ID;
                 objClassName = ClassInvList[cboInventoryClasses.Current].name;
-                GearFoundry.PluginCore.WriteToChat("Class: " + objClassName.ToString() + "; objClass: " + objClass.ToString());
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -738,47 +707,15 @@ namespace GearFoundry
 
 
 
-
-
-
-        //private void ArmorHudList_Click(object sender, int row, int col)
-        //{
-        //    try
-        //    {
-        //        int mrow = row;
-        //        currentel = myChoice[row];
-        //        string armorobjName = currentel.Element("ArmorName").Value;
-        //        string armorobjAl = currentel.Element("ArmorAl").Value;
-        //        string armorobjWork = currentel.Element("ArmorWork").Value;
-        //        string armorobjTinks = currentel.Element("ArmorTink").Value;
-        //        string armorobjLevel = currentel.Element("ArmorWieldValue").Value;
-        //        int armorobjArmorSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
-        //        int armorobjCovers = Convert.ToInt32(currentel.Element("ArmorCovers").Value);
-        //        string objArmorSetName = SetsIndex[armorobjArmorSet].name;
-
-        //        message = armorobjName + ", Al: " + armorobjAl + " , Work: " + armorobjWork + ", Tinks: " + armorobjTinks + ", Armor Wield Level: " +
-        //            armorobjLevel + ", Set: " + objArmorSetName;
-        //        WriteToChat(message);
-
-
-        //        UpdateLandscapeHud();
-
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //    return;
-        //}
-
-        
+ 
         
         void btnUpdateInventory_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
-            GearFoundry.PluginCore.WriteToChat("The button to update inventory was clicked");
             doUpdateInventory();
         }
 
         void btnGetBurden_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
-            GearFoundry.PluginCore.WriteToChat("The button to update burden was clicked");
             getBurden = true;
             doUpdateInventory();
         }
@@ -849,12 +786,10 @@ namespace GearFoundry
                                       select o;
                             obj.Remove();
                             int newCount = (int)(xdocToonInventory.Element("Objs").Elements("Obj").Count());
-                           // xdocToonInventory.Save(inventoryFilename);
 
 
                             GearFoundry.PluginCore.WriteToChat("Count before removal = " + oldCount + ".  Count after removal = " + newCount);
                         }
-                      //  xdoc = XDocument.Load(inventoryFilename);
 
                         IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("ObjID");
                         foreach (XElement element in elements)
@@ -928,137 +863,11 @@ namespace GearFoundry
             doGetInventory();
         }
 
-        //// The following code has to do with selection of inventory to display in listbox
-        //// First it is necessary to choose the class of inventory; ie, weapons, armor etc. 
-        //[MVControlEvent("cmbSelectClass", "Change")]
-        //void cmbSelectClass_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try
-        //    {
-        //        objClass = ClassInvList[cmbSelectClass.Selected].ID;
-        //         objClassName = ClassInvList[cmbSelectClass.Selected].name;
-        //       GearFoundry.PluginCore.WriteToChat("Class: " + objClassName.ToString() + "; objClass: " + objClass.ToString());
-
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-
-        //// In case of  Weapons will want to find weapons of specific type; e.g., missile
-        //[MVControlEvent("cmbWieldAttrib", "Change")]
-        //void cmbWieldAttrib_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try
-        //    {
-        //        objWieldAttrInt = MeleeTypeInvList[cmbWieldAttrib.Selected].ID;
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-        //// Need to determine damage type of weapon or wand
-        //[MVControlEvent("cmbDamageType", "Change")]
-        //void cmbDamageType_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try
-        //    {
-        //        objDamageType = ElementalInvList[cmbDamageType.Selected].name;
-        //        objDamageTypeInt = ElementalInvList[cmbDamageType.Selected].ID;
-        //    //    int tempeDamageTypeInt = cmbDamageType.Selected;
-        //    //    findDamageTypeInt(tempeDamageTypeInt);
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-        //void cmbLevel_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try
-        //    {
-        //        objLevelInt = Convert.ToInt32(WeaponWieldInvList[cmbLevel.Selected].name);
-        //        //int tempeLevelInt = cmbLevel.Selected;
-        //        //findLevelInt(tempeLevelInt);
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-        //void cmbArmorSet_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try
-        //    {
-        //      //  objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
-        //        objArmorSet = ArmorSetsInvList[cmbArmorSet.Selected].ID;
-        //        objArmorSetName = ArmorSetsInvList[cmbArmorSet.Selected].name;
-           
-        //     }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-        //void cmbArmorLevel_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try
-        //    {
-        //        objArmorLevel = Convert.ToInt16(ArmorLevelInvList[cmbArmorLevel.Selected].name);
-        //    //    int tempeArmorLevelInt = cmbArmorLevel.Selected;
-        //    //    findArmorLevelInt(tempeArmorLevelInt);
-        //        GearFoundry.PluginCore.WriteToChat("ArmorLevel = " + ArmorLevelInvList[cmbArmorLevel.Selected].name); 
-
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-        //void cmbCoverage_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try
-        //    {
-        //        objCovers = CoverageInvList[cmbCoverage.Selected].ID;
-        //        objCoversName = CoverageInvList[cmbCoverage.Selected].name;
-        //        //int tempeCoverageInt = cmbCoverage.Selected;
-        //        //findArmorCoverage(tempeCoverageInt);
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-        //void cmbMaterial_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try{
-        //                     objMat = MaterialInvList[cmbMaterial.Selected].ID;
-        //                    objMatName = MaterialInvList[cmbMaterial.Selected].name;
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-        //void cmbSalvWork_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try
-        //    {
-        //        objSalvWork = SalvageWorkInvList[cmbSalvWork.Selected].name;
-        //    ////    int tempeSalvWorkInt = cmbSalvWork.Selected;
-        //    ////    findobjSalvWork(tempeSalvWorkInt);
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-        //void cmbEmbue_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        //{
-        //    try
-        //    {
-        //        objEmbueTypeInt = EmbueInvList[cmbEmbue.Selected].ID;
-        //        objEmbueTypeStr = EmbueInvList[cmbEmbue.Selected].name;
-
-        //    //    int tempeEmbueInt = cmbEmbue.Selected;
-        //    //    findEmbueTypeInt(tempeEmbueInt);
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-        //}
-
-
-
+ 
         // items selected need to be added to listview: lstinventory
-        //[MVControlEvent("btnLstInventory", "Click")]
-        //void btnLstInventory_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         private void btnLstInv_Hit(object sender, EventArgs e)
         {
-            WriteToChat("I am at button list inventory.");
-            try
+           try
             {
                XDocument tempDoc = new XDocument(new XElement("Objs"));
                 tempDoc.Save(inventorySelect);
@@ -1091,6 +900,8 @@ namespace GearFoundry
                     case 0:
                         if (mySelect.Length > 0)
                         {
+                            WriteToChat("length  of myselect: " + mySelect.Length.ToString());
+
                             newDoc = new XDocument(new XElement("Objs",
                               from p in xdoc.Element("Objs").Descendants("Obj")
                               where p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -1813,13 +1624,35 @@ namespace GearFoundry
                               select p));
                         }
 
-                        else if ((objClassName.Contains("Salvage")) && ((objSalvWork == "1-6") || (objSalvWork == "7-8") || (objSalvWork == "9")))
+                        else if ((objClassName.Contains("Salvage")) && ((objSalvWork == "1-6"))) // || (objSalvWork == "7-8") || (objSalvWork == "9")))
                         {
                             newDoc = new XDocument(new XElement("Objs",
                               from p in xdoc.Element("Objs").Descendants("Obj")
                               where p.Element("ObjClass").Value.Contains(objClassName) &&
                               p.Element("ObjMaterial").Value == objMat.ToString() &&
-                              objSalvWork.Contains(p.Element("ObjWork").Value.Substring(0, 1))
+                         //     objSalvWork.Contains(p.Element("ObjWork").Value.Substring(0, 1))
+                               Convert.ToInt16(p.Element("ObjWork").Value) < 7
+                              select p));
+                        }
+
+                        else if ((objClassName.Contains("Salvage")) && (objSalvWork == "7-8")) //|| (objSalvWork == "9")))
+                        {
+                            newDoc = new XDocument(new XElement("Objs",
+                              from p in xdoc.Element("Objs").Descendants("Obj")
+                              where p.Element("ObjClass").Value.Contains(objClassName) &&
+                              p.Element("ObjMaterial").Value == objMat.ToString() &&
+                                  //     objSalvWork.Contains(p.Element("ObjWork").Value.Substring(0, 1))
+                               Convert.ToInt16(p.Element("ObjWork").Value) > 6 && Convert.ToInt16(p.Element("ObjWork").Value) < 9
+                              select p));
+                        }
+
+                        else if ((objClassName.Contains("Salvage")) && (objSalvWork == "9"))
+                        {
+                            newDoc = new XDocument(new XElement("Objs",
+                              from p in xdoc.Element("Objs").Descendants("Obj")
+                              where p.Element("ObjClass").Value.Contains(objClassName) &&
+                              p.Element("ObjMaterial").Value == objMat.ToString() &&
+                                Convert.ToInt16(p.Element("ObjWork").Value) == 9
                               select p));
                         }
 
@@ -1861,14 +1694,14 @@ namespace GearFoundry
 
 
                 } //end of switch
-                if ((mySelect != null || mySelect.Trim() != "") && objClassName != "None")
-                {
+                //{
 
                     xdoc = null;
                     newDoc.Save(inventorySelect);
                     newDoc = null;
-                }
-                else
+                //}
+                //else
+                if ((mySelect == null || mySelect.Trim() == "") && objClassName == "None")
 
                 { GearFoundry.PluginCore.WriteToChat("You must choose a class or type something inbox"); }
 
@@ -1907,16 +1740,16 @@ namespace GearFoundry
                                 }
                             }
 
-                            objName = objMaterialName + " " + objName;
+                       //     objName = objMaterialName + " " + objName;
                         }
                         toonInvName = childElement.Element("ToonName").Value.ToString();
                         long objID = Convert.ToInt32(childElement.Element("ObjID").Value);
                         string objIDstr = objID.ToString();
                         InventoryHudListRow = lstHudInventory.AddRow();
                         ((HudPictureBox)InventoryHudListRow[0]).Image = objIcon + 0x6000000;
-                        ((HudStaticText)InventoryHudListRow[1]).FontHeight = 10;
+                        ((HudStaticText)InventoryHudListRow[1]).FontHeight = nitemFontHeight;
                         ((HudStaticText)InventoryHudListRow[1]).Text = objName;
-                        ((HudStaticText)InventoryHudListRow[2]).FontHeight = 10;
+                        ((HudStaticText)InventoryHudListRow[2]).FontHeight = nitemFontHeight;
                         ((HudStaticText)InventoryHudListRow[2]).Text = toonInvName;
                         ((HudStaticText)InventoryHudListRow[3]).Text = objIDstr;
                     }
@@ -1964,6 +1797,7 @@ namespace GearFoundry
                 {
                     objMatName = MaterialIndex[Convert.ToInt16(element.Element("ObjMaterial").Value)].name;
                }
+                objName = objMatName + objName;
                              long objWieldValue = Convert.ToInt32(element.Element("ObjWieldValue").Value);
              objLevel = objWieldValue.ToString();
 
@@ -2241,6 +2075,7 @@ namespace GearFoundry
     {
            // lstInventory.Clear();
             lstHudInventory.ClearRows();
+            txtMyChoice.Text = "";
             cboInventoryClasses.Current = 0;
             cboWieldAttrib.Current = 0;
             cboDamageType.Current = 0;

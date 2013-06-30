@@ -14,6 +14,7 @@ using Decal.Interop;
 using System.Runtime.InteropServices;
 using Decal.Adapter.Wrappers;
 using System.Drawing;
+using System.Xml;
 using System.Xml.Linq;
 using System.ComponentModel;
 using VirindiViewService;
@@ -394,9 +395,16 @@ namespace GearFoundry
         {
             try
             {
+                xdoc = XDocument.Load(genSettingsFilename);
+                
+                XElement el = xdoc.Root.Element("Setting");
+
                 bCorpseHudEnabled = Convert.ToBoolean(mGenSettingsList[0].Value);
+             //   bCorpseHudEnabled = Convert.ToBoolean(el.Element("CorpseHudEnabled").Value);
                 bLandscapeHudEnabled = Convert.ToBoolean(mGenSettingsList[1].Value);
+             //   bLandscapeHudEnabled = Convert.ToBoolean(el.Element("LandscapeHudEnabled").Value);
                 bGearInspectorEnabled = Convert.ToBoolean(mGenSettingsList[2].Value);
+                bGearInspectorEnabled = Convert.ToBoolean(el.Element("InspectorHudEnabled").Value);
                 bGearButlerEnabled = Convert.ToBoolean(mGenSettingsList[3].Value);
                 bCombatHudEnabled = Convert.ToBoolean(mGenSettingsList[4].Value);
                 bRemoteGearEnabled = Convert.ToBoolean(mGenSettingsList[5].Value);
@@ -430,6 +438,12 @@ namespace GearFoundry
                 bTextFilterVendorTells = Convert.ToBoolean(mGenSettingsList[33].Value);
                 bTextFilterMonsterTells = Convert.ToBoolean(mGenSettingsList[34].Value);
                 bTextFilterNPCChatter = Convert.ToBoolean(mGenSettingsList[35].Value);
+                nitemFontHeight = Convert.ToInt32(mGenSettingsList[36].Value);
+                nmenuFontHeight = Convert.ToInt32(mGenSettingsList[37].Value);
+                if (nitemFontHeight == 0) { nitemFontHeight = 10; }
+                txtItemFontHeight.Text = nitemFontHeight.ToString();
+                if (nmenuFontHeight == 0) { nmenuFontHeight = 10; }
+                txtMenuFontHeight.Text = nmenuFontHeight.ToString();
 
  
                     chkQuickSlotsv.Checked = bquickSlotsvEnabled;
@@ -1475,6 +1489,45 @@ namespace GearFoundry
             catch { }
         }
 
+        void txtItemFontHeight_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+            nitemFontHeight = Convert.ToInt32(txtItemFontHeight.Text);
+            if (binventoryHudEnabled)
+                RenderInventoryHud();
+            if (bCombatHudEnabled)
+                RenderCombatHud();
+            if (bCorpseHudEnabled)
+                RenderCorpseHud();
+            if (bLandscapeHudEnabled)
+                RenderLandscapeHud();
+            if (bGearInspectorEnabled)
+                RenderItemHud();
+            if (bGearButlerEnabled)
+                RenderButlerHud();
+            if (bArmorHudEnabled)
+                RenderArmorHud();
+            SaveSettings();
+        }
+
+        void txtMenuFontHeight_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+            nmenuFontHeight = Convert.ToInt32(txtMenuFontHeight.Text);
+            if (binventoryHudEnabled)
+                RenderInventoryHud();
+            if (bCombatHudEnabled)
+                RenderCombatHud();
+            if (bCorpseHudEnabled)
+                RenderCorpseHud();
+            if (bLandscapeHudEnabled)
+                RenderLandscapeHud();
+            if (bGearInspectorEnabled)
+                RenderItemHud();
+            if (bGearButlerEnabled)
+                RenderButlerHud();
+            if (bArmorHudEnabled)
+                RenderArmorHud();
+            SaveSettings();
+        }
 
 
         private void SaveSettings()
@@ -1483,7 +1536,7 @@ namespace GearFoundry
             {
                 xdoc = new XDocument(new XElement("Settings"));
                 xdoc.Element("Settings").Add(new XElement("Setting",
-                         new XElement("CorpseHudEnabled", bCorpseHudEnabled),
+                        new XElement("CorpseHudEnabled", bCorpseHudEnabled),
                          new XElement("LandscapeHudEnabled", bLandscapeHudEnabled),
                          new XElement("InspectorHudEnabled", bGearInspectorEnabled),
                          new XElement("ButlerHudEnabled", bGearButlerEnabled),
@@ -1518,7 +1571,9 @@ namespace GearFoundry
                          new XElement("TextFilterKillTaskComplete", bTextFilterKillTaskComplete),
                          new XElement("TextFilterVendorTells", bTextFilterVendorTells),
                          new XElement("TextFilterMonsterTells", bTextFilterMonsterTells),
-                         new XElement("TextFilterNPCChatter", bTextFilterNPCChatter)));
+                         new XElement("TextFilterNPCChatter", bTextFilterNPCChatter),
+                         new XElement("ItemFontHeight", nitemFontHeight),
+                         new XElement("MenuFontHeight", nmenuFontHeight)));
 
                xdoc.Save(genSettingsFilename);
 

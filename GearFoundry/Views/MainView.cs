@@ -99,6 +99,8 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkTextFilterVendorTells;
         MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMonsterTells;
         MyClasses.MetaViewWrappers.ICheckBox chkTextFilterNPCChatter;
+        MyClasses.MetaViewWrappers.ITextBox txtItemFontHeight;
+        MyClasses.MetaViewWrappers.ITextBox txtMenuFontHeight;
 
 
         // Controls on Notify.SearchRules Page
@@ -107,7 +109,6 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IButton btnRuleUpdate;
         MyClasses.MetaViewWrappers.IList lstRules;
 
-       // MyClasses.MetaViewWrappers.IStaticText lblRuleName;
 
         // Controls on Notify.SearchRules.Main Page
         MyClasses.MetaViewWrappers.ICheckBox chkRuleEnabled;
@@ -124,9 +125,6 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ITextBox txtRuleKeyWordsNot;
         MyClasses.MetaViewWrappers.ITextBox txtRuleWieldReqValue;
         MyClasses.MetaViewWrappers.ITextBox txtRuleWieldLevel;
-        //MyClasses.MetaViewWrappers.ITextBox txtRuleAlertName;
-        //MyClasses.MetaViewWrappers.ICheckBox chkRuleTradeBot;
-        //MyClasses.MetaViewWrappers.ICheckBox chkRuleTradeBotOnly;
  
         MyClasses.MetaViewWrappers.IStaticText lblRuleInfo;
          MyClasses.MetaViewWrappers.IStaticText lblRuleWork;
@@ -183,9 +181,6 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IStaticText lblRuleArmorTypes;
         MyClasses.MetaViewWrappers.ITextBox txtRuleMinArmorLevel;
         MyClasses.MetaViewWrappers.IList lstRuleSets;
-        //MyClasses.MetaViewWrappers.ICheckBox chkRuleMustBeSet;
-        //MyClasses.MetaViewWrappers.ICheckBox chkRuleAnySet;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleMustBeSet;
 
         // Controls on Notify.SearchRules.Cloaks/Aetheria
         MyClasses.MetaViewWrappers.IList lstRuleCloakSets;
@@ -279,29 +274,6 @@ namespace GearFoundry
         // Variable name lblSettings001 was lblsettings001  
         MyClasses.MetaViewWrappers.IStaticText lblSettings001;
 
-        ////Controls on Inventory Page
-        //MyClasses.MetaViewWrappers.IButton btnGetInventory;
-        //MyClasses.MetaViewWrappers.IButton btnUpdateInventory;
-        //MyClasses.MetaViewWrappers.IButton btnGetBurden;
-        //MyClasses.MetaViewWrappers.IButton btnItemsWaiting;
-        //MyClasses.MetaViewWrappers.IButton btnLstInventory;
-        //MyClasses.MetaViewWrappers.IButton btnClrInventory;
-        //MyClasses.MetaViewWrappers.ICombo cmbSelectClass;
-        //MyClasses.MetaViewWrappers.ICombo cmbWieldAttrib;
-        //MyClasses.MetaViewWrappers.ICombo cmbDamageType;
-        //MyClasses.MetaViewWrappers.ICombo cmbLevel;
-        //MyClasses.MetaViewWrappers.ICombo cmbArmorSet;
-        //MyClasses.MetaViewWrappers.ICombo cmbMaterial;
-        //MyClasses.MetaViewWrappers.ICombo cmbCoverage;
-        //MyClasses.MetaViewWrappers.ICombo cmbArmorLevel;
-        //MyClasses.MetaViewWrappers.ICombo cmbSalvWork;
-        //MyClasses.MetaViewWrappers.ICombo cmbEmbue;
-
-        //MyClasses.MetaViewWrappers.IList lstInventory;
-        //MyClasses.MetaViewWrappers.ITextBox txbSelect;
-
-
-
 
 
        void ViewInit()
@@ -382,6 +354,8 @@ namespace GearFoundry
                 chkTextFilterVendorTells = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterVendorTells"];
                 chkTextFilterMonsterTells = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMonsterTells"];
                 chkTextFilterNPCChatter = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterNPCChatter"];
+                txtItemFontHeight = (MyClasses.MetaViewWrappers.ITextBox)View["txtItemFontHeight"];
+                txtMenuFontHeight = (MyClasses.MetaViewWrappers.ITextBox)View["txtMenuFontHeight"];
 
 
 				 try
@@ -473,6 +447,8 @@ namespace GearFoundry
                       chkTextFilterVendorTells.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterVendorTells_Change);
                       chkTextFilterMonsterTells.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMonsterTells_Change);
                       chkTextFilterNPCChatter.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterNPCChatter_Change);
+                      txtItemFontHeight.End += new EventHandler<MVTextBoxEndEventArgs>(txtItemFontHeight_End);
+                      txtMenuFontHeight.End += new EventHandler<MVTextBoxEndEventArgs>(txtMenuFontHeight_End);
 
                   }
                   catch (Exception ex) { LogError(ex); }
