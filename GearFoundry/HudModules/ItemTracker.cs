@@ -378,9 +378,7 @@ namespace GearFoundry
     					InspectorActionQueue.Enqueue(nextaction);
 	    			}		
     			}
-    			
-    			WriteToChat("Pending Actions = " + InspectorActionQueue.Count);
-    			
+    			    			
     			//InitiateInspectorActionSequence();
     			
     		}catch(Exception ex){LogError(ex);}

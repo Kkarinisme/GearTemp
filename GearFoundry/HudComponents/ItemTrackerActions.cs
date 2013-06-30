@@ -121,13 +121,6 @@ namespace GearFoundry
 				
 				InspectorActionQueue.First().StartAction = DateTime.Now;
 				InspectorActionQueue.First().pending = true;
-				WriteToChat("Time: " + DateTime.Now);
-				WriteToChat("Inspectoractionqueue.count = " + InspectorActionQueue.Count);	
-				WriteToChat("Pending Action " + InspectorActionQueue.First().Action.ToString());
-				if(InspectorActionQueue.First().LootItem != null)
-				{
-					WriteToChat(InspectorActionQueue.First().LootItem.Name);
-				}
 				
 				switch(InspectorActionQueue.First().Action)
 				{
