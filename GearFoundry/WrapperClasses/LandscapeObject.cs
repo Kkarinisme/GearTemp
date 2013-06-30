@@ -68,7 +68,7 @@ namespace GearFoundry
 					case IOResult.trophy:
 						return "(Trophy) ";
 					case IOResult.rare:
-						return "(Rrare) ";
+						return "(Rare) ";
 					case IOResult.spell:
 						return "(Spell) ";
 					case IOResult.rule:
@@ -99,6 +99,42 @@ namespace GearFoundry
 						return String.Empty;
 				}  
 			}
+			
+			public string MiniIORString()
+			{
+				switch(IOR)
+				{
+					case IOResult.portal:
+						return "(P) ";
+					case IOResult.players:
+						return "(Pl) ";
+					case IOResult.lifestone:
+						return "(L) ";
+					case IOResult.trophy:
+						return "(T) ";
+					case IOResult.rare:
+						return "(R) ";
+					case IOResult.monster:
+						return "(M) ";
+					case IOResult.corpseselfkill:
+						return "(C) ";
+					case IOResult.corpsepermitted:
+						return "(CP) ";
+					case IOResult.corpsewithrare:
+						return "(CR) ";
+					case IOResult.corpseofself:
+						return "(CS) ";
+					case IOResult.corpsefellowkill:
+						return "(CF) ";
+					case IOResult.allegplayers:
+						return "(A) ";
+					case IOResult.npc:
+						return "(N) ";
+					default:
+						return String.Empty;
+				}  
+			}
+			
 			
 			public string DistanceString()
 			{
@@ -178,6 +214,82 @@ namespace GearFoundry
 				return result;
 			}
 			
+			public string TruncateName()
+			{
+				try
+				{
+					if(wo.Name.Length > 8)
+					{
+						string ReturnString = wo.Name.Replace("Corpse of ", "");
+						if(ReturnString.Contains("of "))
+						{
+							ReturnString = ReturnString.Replace("of ","");
+						}
+						if(ReturnString.Length > 8)
+						{
+							if(ReturnString.Contains("a"))
+							{
+								ReturnString = ReturnString.Replace("a", "");
+							}
+							if(ReturnString.Contains("e"))
+							{
+								ReturnString = ReturnString.Replace("e", "");
+							}
+							if(ReturnString.Contains("i"))
+							{
+								ReturnString = ReturnString.Replace("i", "");
+							}
+							if(ReturnString.Contains("o"))
+							{
+								ReturnString = ReturnString.Replace("o", "");
+							}
+							if(ReturnString.Contains("u"))
+							{
+								ReturnString = ReturnString.Replace("u", "");
+							}
+							if(ReturnString.Length > 8)
+							{
+								if(ReturnString.Contains(" "))
+								{
+									
+									string[] splitstring = ReturnString.Split(' ');
+									ReturnString = String.Empty;
+									foreach(string piece in splitstring)
+									{
+										if(piece.Length > 2)
+										{
+											ReturnString += piece.Substring(0,2);
+										}
+										else
+										{
+											ReturnString += piece;
+										}
+									}
+									return ReturnString;
+								}
+								else
+								{
+									return ReturnString.Substring(0,10) + ".";
+								}
+							}
+							else
+							{
+								return ReturnString;
+							}	
+						}
+						else
+						{
+							return ReturnString;
+						}
+					}
+					else
+					{
+						return wo.Name;
+					}
+				}catch(Exception ex){LogError(ex); return String.Empty;}
+			}
+			
+			
 			public string HudString()
 			{
 				try
@@ -190,22 +302,14 @@ namespace GearFoundry
 					{
 						return wo.Name + DistanceString();
 					}
-//					if(splitstring.Count() == 1)
-//					{
-//						return wo.Name + DistanceString();
-//					}
-//					else
-//					{
-//						string returnstring = String.Empty;
-//						foreach(string piece in splitstring)
-//						{
-//							if(piece != "Corpse" || piece != "of")
-//							{
-//								returnstring += piece[0];
-//							}
-//						}
-//						return returnstring + DistanceString();
-//					}
+				}catch(Exception ex){LogError(ex); return String.Empty;}
+			}
+			
+			public string MiniHudString()
+			{
+				try
+				{
+					return TruncateName() + DistanceString();		
 				}catch(Exception ex){LogError(ex); return String.Empty;}
 			}
 		}

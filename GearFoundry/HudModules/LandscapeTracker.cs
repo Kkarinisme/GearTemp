@@ -40,9 +40,10 @@ namespace GearFoundry
 			public bool bShowLifeStones = true;
 			public bool bShowAllPortals = true;
 			public bool bShowAllNPCs = true;
+			public bool bRenderMini = false;
 			public int LandscapeForgetDistance = 100;
-            public int LandscapeHudWidth;
-            public int LandscapeHudHeight;
+            public int LandscapeHudWidth = 300;
+            public int LandscapeHudHeight = 220;
 
 		}
 		
@@ -62,11 +63,12 @@ namespace GearFoundry
 		                {
 		                    try
 		                    {
-		                    	string filedefaults = GetResourceTextFile("GearSense.xml");
-		                    	using (StreamWriter writedefaults = new StreamWriter(GearSenseSettingsFile.ToString(), true))
+		                    	gsSettings = new GearSenseSettings();
+		                    	using (XmlWriter writer = XmlWriter.Create(GearSenseSettingsFile.ToString()))
 								{
-									writedefaults.Write(filedefaults);
-									writedefaults.Close();
+						   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearSenseSettings));
+						   			serializer2.Serialize(writer, gsSettings);
+						   			writer.Close();
 								}
 		                    }
 		                    catch (Exception ex) { LogError(ex); }
@@ -570,20 +572,13 @@ namespace GearFoundry
 		private HudCheckBox ShowLifeStones;
 		private HudCheckBox ShowAllPortals;
 		private HudCheckBox ShowAllNPCs;
+		private HudCheckBox LandscapeRenderMini;
 		private HudStaticText ForgetLabel;
 		private HudTextBox LandscapeForgetDistance;
 		
-		private HudStaticText txtLSS2;
 		
 		private bool LandscapeMainTab;
 		private bool LandscapeSettingsTab;
-
-        private int LandscapeHudWidth;
-        private int LandscapeHudHeight;
-        private int LandscapeHudFirstWidth = 300;
-        private int LandscapeHudFirstHeight = 220;
-        private int LandscapeHudWidthNew;
-        private int LandscapeHudHeightNew;
 
 					
     	private void RenderLandscapeHud()
@@ -602,18 +597,12 @@ namespace GearFoundry
     				DisposeLandscapeHud();
     			}
 
-                if (gsSettings.LandscapeHudWidth == 0) { LandscapeHudWidth = LandscapeHudFirstWidth; }
-                else { LandscapeHudWidth = gsSettings.LandscapeHudWidth; }
-                if (gsSettings.LandscapeHudHeight == 0) { LandscapeHudHeight = LandscapeHudFirstHeight; }
-                else { LandscapeHudHeight = gsSettings.LandscapeHudHeight; }
 
 
 
-                LandscapeHudView = new HudView("GearSense", LandscapeHudWidth, LandscapeHudHeight, new ACImage(0x6AA5));
-    		//	LandscapeHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+                LandscapeHudView = new HudView("GearSense", gsSettings.LandscapeHudWidth, gsSettings.LandscapeHudHeight, new ACImage(0x6AA5));
     			LandscapeHudView.UserAlphaChangeable = false;
     			LandscapeHudView.ShowInBar = false;
-                LandscapeHudView.UserResizeable = false;
     			LandscapeHudView.Visible = true;
     			LandscapeHudView.Ghosted = false;
                 LandscapeHudView.UserMinimizable = false;
@@ -625,13 +614,13 @@ namespace GearFoundry
     			LandscapeHudView.Controls.HeadControl = LandscapeHudLayout;
     			
     			LandscapeHudTabView = new HudTabView();
-    			LandscapeHudLayout.AddControl(LandscapeHudTabView, new Rectangle(0,0,LandscapeHudWidth,LandscapeHudHeight));
+    			LandscapeHudLayout.AddControl(LandscapeHudTabView, new Rectangle(0,0,gsSettings.LandscapeHudWidth,gsSettings.LandscapeHudHeight));
     		
     			LandscapeHudTabLayout = new HudFixedLayout();
-    			LandscapeHudTabView.AddTab(LandscapeHudTabLayout, "GearSense");
+    			LandscapeHudTabView.AddTab(LandscapeHudTabLayout, "Sense");
     			
     			LandscapeHudSettings = new HudFixedLayout();
-    			LandscapeHudTabView.AddTab(LandscapeHudSettings, "Settings");
+    			LandscapeHudTabView.AddTab(LandscapeHudSettings, "Set");
     			
     			LandscapeHudTabView.OpenTabChange += LandscapeHudTabView_OpenTabChange;
                 LandscapeHudView.Resize += LandscapeHudView_Resize; 
@@ -651,12 +640,10 @@ namespace GearFoundry
         {
             try
             {
-                bool bw = Math.Abs(LandscapeHudView.Width - LandscapeHudWidth) > 20;
-                bool bh = Math.Abs(LandscapeHudView.Height - LandscapeHudHeight) > 20;
+                bool bw = Math.Abs(LandscapeHudView.Width - gsSettings.LandscapeHudWidth) > 20;
+                bool bh = Math.Abs(LandscapeHudView.Height - gsSettings.LandscapeHudHeight) > 20;
                 if (bh || bw)
                 {
-                    LandscapeHudWidthNew = LandscapeHudView.Width;
-                    LandscapeHudHeightNew = LandscapeHudView.Height;
                     MasterTimer.Tick += LandscapeHudResizeTimerTick;
                 }
             }
@@ -669,12 +656,10 @@ namespace GearFoundry
 
         private void LandscapeHudResizeTimerTick(object sender, EventArgs e)
         {
-            LandscapeHudWidth = LandscapeHudWidthNew;
-            LandscapeHudHeight = LandscapeHudHeightNew;
-            gsSettings.LandscapeHudWidth = LandscapeHudWidth;
-            gsSettings.LandscapeHudHeight = LandscapeHudHeight;
-            GearSenseReadWriteSettings(false);            
-            MasterTimer.Tick -= LandscapeHudResizeTimerTick;
+        	MasterTimer.Tick -= LandscapeHudResizeTimerTick;
+            gsSettings.LandscapeHudWidth = LandscapeHudView.Width;
+            gsSettings.LandscapeHudHeight = LandscapeHudView.Height;
+            GearSenseReadWriteSettings(false);                       
             RenderLandscapeHud();
 
         }
@@ -706,10 +691,10 @@ namespace GearFoundry
     		{
     			
     			LandscapeHudList = new HudList();
-    			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0,LandscapeHudWidth,LandscapeHudHeight));
+    			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0, gsSettings.LandscapeHudWidth,gsSettings.LandscapeHudHeight));
 				LandscapeHudList.ControlHeight = 16;	
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
-				LandscapeHudList.AddColumn(typeof(HudStaticText), 200, null);
+				LandscapeHudList.AddColumn(typeof(HudStaticText), gsSettings.LandscapeHudWidth - 60, null);
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
 				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col); 
@@ -740,63 +725,61 @@ namespace GearFoundry
     		try
     		{
     			ShowAllMobs = new HudCheckBox();
-    			ShowAllMobs.Text = "Track All Mobs";
+    			ShowAllMobs.Text = "Trk All Mobs";
     			LandscapeHudSettings.AddControl(ShowAllMobs, new Rectangle(0,0,150,16));
     			ShowAllMobs.Checked = gsSettings.bShowAllMobs;
     			
     			ShowSelectedMobs = new HudCheckBox();
-    			ShowSelectedMobs.Text = "Track Selected Mobs";
+    			ShowSelectedMobs.Text = "Trk Mob List";
     			LandscapeHudSettings.AddControl(ShowSelectedMobs, new Rectangle(0,18,150,16));
     			ShowSelectedMobs.Checked = gsSettings.bShowSelectedMobs;
     			
     			ShowAllPlayers = new HudCheckBox();
-    			ShowAllPlayers.Text = "Track All Players";
+    			ShowAllPlayers.Text = "Trk All Players";
     			LandscapeHudSettings.AddControl(ShowAllPlayers, new Rectangle(0,36,150,16));
     			ShowAllPlayers.Checked = gsSettings.bShowAllPlayers;
     			
     			ShowAllegancePlayers = new HudCheckBox();
-    			ShowAllegancePlayers.Text = "Track Allegiance Players";
+    			ShowAllegancePlayers.Text = "Trk Allegiance";
     			LandscapeHudSettings.AddControl(ShowAllegancePlayers, new Rectangle(0,54,150,16));
     			ShowAllegancePlayers.Checked = gsSettings.bShowAllegancePlayers;
     			
     			ShowFellowPlayers = new HudCheckBox();
-    			ShowFellowPlayers.Text = "Track Fellowship Players";
+    			ShowFellowPlayers.Text = "Trk Fellows";
     			LandscapeHudSettings.AddControl(ShowFellowPlayers, new Rectangle(0,72,150,16));
     			ShowFellowPlayers.Checked = gsSettings.bShowFellowPlayers;
     			    			
     			ShowAllNPCs= new HudCheckBox();
-    			ShowAllNPCs.Text = "Track All NPCs";
+    			ShowAllNPCs.Text = "Trk All NPCs";
     			LandscapeHudSettings.AddControl(ShowAllNPCs, new Rectangle(0,90,150,16));
     			ShowAllNPCs.Checked = gsSettings.bShowAllNPCs;
     			
     			ShowTrophies = new HudCheckBox();
-    			ShowTrophies.Text = "Track Selected NPCs and Trophies";
+    			ShowTrophies.Text = "Trk Trophy/NPC";
     			LandscapeHudSettings.AddControl(ShowTrophies, new Rectangle(0,108,150,16));
     			ShowTrophies.Checked = gsSettings.bShowTrophies;
     				
     			ShowLifeStones = new HudCheckBox();
-    			ShowLifeStones.Text = "Track Lifestones";
+    			ShowLifeStones.Text = "Trk LifeStones";
     			LandscapeHudSettings.AddControl(ShowLifeStones, new Rectangle(0,126,150,16));
     			ShowLifeStones.Checked = gsSettings.bShowLifeStones;
     			
     			ShowAllPortals= new HudCheckBox();
-    			ShowAllPortals.Text = "Track Portals";
+    			ShowAllPortals.Text = "Trk Portals";
     			LandscapeHudSettings.AddControl(ShowAllPortals, new Rectangle(0,144,150,16));
     			ShowAllPortals.Checked = gsSettings.bShowAllPortals;
     			
     			LandscapeForgetDistance = new HudTextBox();
     			ForgetLabel = new HudStaticText();
-    			ForgetLabel.Text = "Forget distance.";
+    			ForgetLabel.Text = "Forget Dist.";
     			LandscapeForgetDistance.Text = gsSettings.LandscapeForgetDistance.ToString();
     			LandscapeHudSettings.AddControl(LandscapeForgetDistance, new Rectangle(0,162,45,16));
     			LandscapeHudSettings.AddControl(ForgetLabel, new Rectangle(50,162,150,16));
     		
-    			txtLSS2 = new HudStaticText();
-    			txtLSS2.Text = "Player ID info is passive.";		
-
-    			LandscapeHudSettings.AddControl(txtLSS2, new Rectangle(0,180,300,16));
-    			
-    			
+				LandscapeRenderMini = new HudCheckBox();
+    			LandscapeRenderMini.Text = "R. Mini.";
+    			LandscapeHudSettings.AddControl(LandscapeRenderMini, new Rectangle(0,180,150,16));
+    			LandscapeRenderMini.Checked = gsSettings.bRenderMini;
     			
     			ShowAllMobs.Change += ShowAllMobs_Change;
     			ShowSelectedMobs.Change += ShowSelectedMobs_Change;
@@ -808,6 +791,7 @@ namespace GearFoundry
     			ShowLifeStones.Change += ShowLifeStones_Change;
     			ShowAllPortals.Change += ShowAllPortals_Change;
     			LandscapeForgetDistance.LostFocus += LandscapeForgetDistance_LostFocus;
+    			LandscapeRenderMini.Change += LandscapeRenderMini_Change;
     			
     			LandscapeSettingsTab = true;
     		}catch{}
@@ -829,10 +813,11 @@ namespace GearFoundry
     			ShowLifeStones.Change -= ShowLifeStones_Change;
     			ShowAllPortals.Change -= ShowAllPortals_Change;
     			LandscapeForgetDistance.LostFocus -= LandscapeForgetDistance_LostFocus;
+    			LandscapeRenderMini.Change -= LandscapeRenderMini_Change;
     			
+    			LandscapeRenderMini.Dispose();
     			ForgetLabel.Dispose();
     			LandscapeForgetDistance.Dispose();
-    			txtLSS2.Dispose();
     			ShowAllPortals.Dispose();
     			ShowLifeStones.Dispose();
     			ShowTrophies.Dispose();
@@ -845,6 +830,26 @@ namespace GearFoundry
     			
     			LandscapeSettingsTab = false;
     		}catch{}
+    	}
+    	
+    	private void LandscapeRenderMini_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			gsSettings.bRenderMini = LandscapeRenderMini.Checked;
+    			if(gsSettings.bRenderMini)
+    			{
+    				gsSettings.LandscapeHudHeight = 220;
+    				gsSettings.LandscapeHudWidth = 150;
+    			}
+    			else
+    			{
+    				gsSettings.LandscapeHudHeight = 220;
+    				gsSettings.LandscapeHudWidth = 300;
+    			}
+    			GearSenseReadWriteSettings(false);
+    			RenderLandscapeHud();
+    		}catch(Exception ex){LogError(ex);}
     	}
     
     	private void ShowAllMobs_Change(object sender, System.EventArgs e)
@@ -1016,7 +1021,8 @@ namespace GearFoundry
 	    	    	LandscapeHudListRow = LandscapeHudList.AddRow();
 	    	    	
 	    	    	((HudPictureBox)LandscapeHudListRow[0]).Image = item.Icon + 0x6000000;
-	    	    	((HudStaticText)LandscapeHudListRow[1]).Text = item.HudString();
+	    	    	if(gsSettings.bRenderMini) {((HudStaticText)LandscapeHudListRow[1]).Text = item.MiniHudString();}
+	    	    	else{((HudStaticText)LandscapeHudListRow[1]).Text = item.HudString();}
                     ((HudStaticText)LandscapeHudListRow[1]).FontHeight = 10;
 	    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Gold;}
 	    	    	if(item.IOR == IOResult.lifestone) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.SkyBlue;}

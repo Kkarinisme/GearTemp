@@ -856,6 +856,107 @@ namespace GearFoundry
 				}  
 			}
 			
+			public string MiniIORString()
+			{
+				switch(IOR)
+				{
+					case IOResult.trophy:
+						return "(T) ";
+					case IOResult.rare:
+						return "(R) ";
+					case IOResult.spell:
+						return "(7) ";
+					case IOResult.rule:
+						return "(" + GearScore + ") ";
+					case IOResult.val:
+						return "(V) ";
+					case IOResult.manatank:
+						return "(M) ";
+					case IOResult.salvage:
+						return "(S) ";
+					case IOResult.dessicate:
+						return "(D) ";
+					default:
+						return String.Empty;
+				}  
+			}
+			
+			public string TruncateName()
+			{
+				try
+				{	
+					if(wo.Name.Length > 8)
+					{
+						string ReturnString = wo.Name;
+						if(ReturnString.Contains("of "))
+						{
+							ReturnString = ReturnString.Replace("of ","");
+						}
+						if(ReturnString.Length > 8)
+						{
+							if(ReturnString.Contains("a"))
+							{
+								ReturnString = ReturnString.Replace("a", "");
+							}
+							if(ReturnString.Contains("e"))
+							{
+								ReturnString = ReturnString.Replace("e", "");
+							}
+							if(ReturnString.Contains("i"))
+							{
+								ReturnString = ReturnString.Replace("i", "");
+							}
+							if(ReturnString.Contains("o"))
+							{
+								ReturnString = ReturnString.Replace("o", "");
+							}
+							if(ReturnString.Contains("u"))
+							{
+								ReturnString = ReturnString.Replace("u", "");
+							}
+							if(ReturnString.Length > 8)
+							{
+								if(ReturnString.Contains(" "))
+								{
+									
+									string[] splitstring = ReturnString.Split(' ');
+									ReturnString = String.Empty;
+									foreach(string piece in splitstring)
+									{
+										if(piece.Length > 2)
+										{
+											ReturnString += piece.Substring(0,2);
+										}
+										else
+										{
+											ReturnString += piece;
+										}
+									}
+									return ReturnString;
+								}
+								else
+								{
+									return ReturnString.Substring(0,10) + ".";
+								}
+							}
+							else
+							{
+								return ReturnString;
+							}	
+						}
+						else
+						{
+							return ReturnString;
+						}
+					}
+					else
+					{
+						return wo.Name;
+					}
+				}catch(Exception ex){LogError(ex); return String.Empty;}
+			}
+			
+			
 			public string DistanceString()
 			{
 				return " <" + (DistanceAway * 100).ToString("0") + ">";

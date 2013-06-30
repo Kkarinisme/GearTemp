@@ -27,7 +27,7 @@ namespace GearFoundry
 		
 		public class PendingActions
 		{
-			public IAction Action = IAction.Nothing;
+			public IAction Action = IAction.DeQueue;
 			public LootObject LootItem = null;
 			public bool pending = false;
 			public DateTime StartAction = DateTime.MinValue;
@@ -36,10 +36,8 @@ namespace GearFoundry
 			
 		public enum IAction
 		{
-			Nothing,
 			PeaceMode,
 			OpenContainer,
-			SelectItem,
 			MoveItem,
 			SalvageItem,			
 			CombineSalvage,
@@ -103,7 +101,7 @@ namespace GearFoundry
 					return;
 				}
 				
-				if(Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count() == 102)
+				if(Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count() == 101)
 				{
 					ActionsPending = false;
 					InspectorActionTimer.Tick -= InspectorActionInitiator;
@@ -111,6 +109,11 @@ namespace GearFoundry
 					InspectorActionQueue.Clear();
 					WriteToChat("You are out of space in your main pack.  Looting disabled.");
 					return;
+				}
+				
+				if(InspectorActionQueue.First().Action != IAction.OpenContainer || InspectorActionQueue.First().Action != IAction.DeQueue)
+				{
+					if(!InspectorActionQueue.First().LootItem.isvalid) {InspectorActionQueue.First().Action = IAction.DeQueue;}
 				}
 				
 				//this will restart the queue if it fails.

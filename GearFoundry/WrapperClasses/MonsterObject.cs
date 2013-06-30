@@ -83,6 +83,81 @@ namespace GearFoundry
 				set { mHealthCurrent = value; }
 			}
 			
+				public string TruncateName()
+			{
+				try
+				{	
+					if(wo.Name.Length > 10)
+					{
+						string ReturnString = wo.Name;
+						if(ReturnString.Contains("of "))
+						{
+							ReturnString = ReturnString.Replace("of ","");
+						}
+						if(ReturnString.Length > 10)
+						{
+							if(ReturnString.Contains("a"))
+							{
+								ReturnString = ReturnString.Replace("a", "");
+							}
+							if(ReturnString.Contains("e"))
+							{
+								ReturnString = ReturnString.Replace("e", "");
+							}
+							if(ReturnString.Contains("i"))
+							{
+								ReturnString = ReturnString.Replace("i", "");
+							}
+							if(ReturnString.Contains("o"))
+							{
+								ReturnString = ReturnString.Replace("o", "");
+							}
+							if(ReturnString.Contains("u"))
+							{
+								ReturnString = ReturnString.Replace("u", "");
+							}
+							if(ReturnString.Length > 10)
+							{
+								if(ReturnString.Contains(" "))
+								{
+									
+									string[] splitstring = ReturnString.Split(' ');
+									ReturnString = String.Empty;
+									foreach(string piece in splitstring)
+									{
+										if(piece.Length > 3)
+										{
+											ReturnString += piece.Substring(0,3) + ". ";
+										}
+										else
+										{
+											ReturnString += piece + " ";
+										}
+									}
+									return ReturnString;
+								}
+								else
+								{
+									return ReturnString.Substring(0,10) + ".";
+								}
+							}
+							else
+							{
+								return ReturnString;
+							}	
+						}
+						else
+						{
+							return ReturnString;
+						}
+					}
+					else
+					{
+						return wo.Name;
+					}
+				}catch(Exception ex){LogError(ex); return String.Empty;}
+			}
+			
 
 		}
 	}

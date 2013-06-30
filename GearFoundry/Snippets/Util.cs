@@ -28,6 +28,12 @@ namespace GearFoundry
         {
             try
             {
+            	FileInfo ErrorLog = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Decal Plugins\" + Globals.PluginName + @"\" + Globals.PluginName + "errors.txt");
+            	if(ErrorLog.Exists)
+            	{
+            		if(ErrorLog.Length > 1000000) {ErrorLog.Delete();}
+            	}
+            	
                 using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Decal Plugins\" + Globals.PluginName + @"\" + Globals.PluginName + "errors.txt", true))
                 {
                     writer.WriteLine("============================================================================");

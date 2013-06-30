@@ -180,7 +180,6 @@ namespace GearFoundry
 		{
 			try
 			{
-				CombatHudMobTrackingList = null;
 				SpellCastBuffer = null;
 				OtherCastBuffer = null;				
 				OtherCastRegexList = null;;		
