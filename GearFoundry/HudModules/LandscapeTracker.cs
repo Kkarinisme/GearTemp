@@ -20,14 +20,14 @@ namespace GearFoundry
 {
 	public partial class PluginCore
 	{
-		private List<int> LandscapeExclusionList = new List<int>();
-		private List<LandscapeObject> LandscapeTrackingList = new List<LandscapeObject>();
-		private List<string> LandscapeFellowMemberTrackingList = new List<string>();
+		private List<int> LandscapeExclusionList;
+		private List<LandscapeObject> LandscapeTrackingList;
+		private List<string> LandscapeFellowMemberTrackingList;
 		private bool mLandscapeInPortalSpace = true;
 		
 		private DateTime LastGearSenseUpdate;
 		
-		public GearSenseSettings gsSettings = new GearSenseSettings();
+		public GearSenseSettings gsSettings;
 		
 		public class GearSenseSettings
 		{			
@@ -107,6 +107,11 @@ namespace GearFoundry
 		{
 			try
 			{
+				
+				LandscapeExclusionList = new List<int>();
+				LandscapeTrackingList = new List<LandscapeObject>();
+				LandscapeFellowMemberTrackingList = new List<string>();
+				
 				MasterTimer.Tick += LandscapeTimerTick;
 				Core.WorldFilter.CreateObject += OnWorldFilterCreateLandscape;
              	Core.EchoFilter.ServerDispatch += ServerDispatchLandscape;
@@ -125,6 +130,11 @@ namespace GearFoundry
 		{
 			try
 			{
+				
+				LandscapeExclusionList = null;
+				LandscapeTrackingList = null;
+				LandscapeFellowMemberTrackingList = null;
+				
 				MasterTimer.Tick -= LandscapeTimerTick;
 				Core.WorldFilter.CreateObject -= OnWorldFilterCreateLandscape;
              	Core.EchoFilter.ServerDispatch -= ServerDispatchLandscape;
@@ -309,8 +319,14 @@ namespace GearFoundry
 						if(IOLandscape.IOR ==IOResult.nomatch || IOLandscape.IOR == IOResult.unknown) {return;}
 						break;
 				}
-				
-				if(!LandscapeTrackingList.Any(x => x.Id == IOLandscape.Id))
+				//Exception here.  Not set to an instance of an object.
+				if(LandscapeTrackingList.Count == 0)
+				{
+					LandscapeTrackingList.Add(IOLandscape);
+					playSoundFromResource(1);
+					UpdateLandscapeHud();
+				}
+				else if(!LandscapeTrackingList.Any(x => x.Id == IOLandscape.Id))
 				{
 					LandscapeTrackingList.Add(IOLandscape);
 					playSoundFromResource(1);
@@ -724,7 +740,7 @@ namespace GearFoundry
     		try
     		{
     			ShowAllMobs = new HudCheckBox();
-    			ShowAllMobs.Text = "Track All Mobs";                
+    			ShowAllMobs.Text = "Track All Mobs";
     			LandscapeHudSettings.AddControl(ShowAllMobs, new Rectangle(0,0,150,16));
     			ShowAllMobs.Checked = gsSettings.bShowAllMobs;
     			
@@ -758,7 +774,7 @@ namespace GearFoundry
     			LandscapeHudSettings.AddControl(ShowTrophies, new Rectangle(0,108,150,16));
     			ShowTrophies.Checked = gsSettings.bShowTrophies;
     				
-    			ShowLifeStones = new HudCheckBox();              
+    			ShowLifeStones = new HudCheckBox();
     			ShowLifeStones.Text = "Track Lifestones";
     			LandscapeHudSettings.AddControl(ShowLifeStones, new Rectangle(0,126,150,16));
     			ShowLifeStones.Checked = gsSettings.bShowLifeStones;
@@ -770,14 +786,12 @@ namespace GearFoundry
     			
     			LandscapeForgetDistance = new HudTextBox();
     			ForgetLabel = new HudStaticText();
-                ForgetLabel.FontHeight = nmenuFontHeight;
     			ForgetLabel.Text = "Forget distance.";
     			LandscapeForgetDistance.Text = gsSettings.LandscapeForgetDistance.ToString();
     			LandscapeHudSettings.AddControl(LandscapeForgetDistance, new Rectangle(0,162,45,16));
     			LandscapeHudSettings.AddControl(ForgetLabel, new Rectangle(50,162,150,16));
     		
     			txtLSS2 = new HudStaticText();
-                txtLSS2.FontHeight = nmenuFontHeight;
     			txtLSS2.Text = "Player ID info is passive.";		
 
     			LandscapeHudSettings.AddControl(txtLSS2, new Rectangle(0,180,300,16));
@@ -974,7 +988,7 @@ namespace GearFoundry
 					HudToChat(LandscapeTrackingList[row].LinkString(), textcolor);
                     nusearrowid = LandscapeTrackingList[row].Id;
                     ArrowInitiator();
-                }
+    			}
     			if(col == 2)
     			{    				
     				LandscapeExclusionList.Add(LandscapeTrackingList[row].Id);
@@ -1002,8 +1016,8 @@ namespace GearFoundry
 	    	    	LandscapeHudListRow = LandscapeHudList.AddRow();
 	    	    	
 	    	    	((HudPictureBox)LandscapeHudListRow[0]).Image = item.Icon + 0x6000000;
-	    	    	((HudStaticText)LandscapeHudListRow[1]).Text = item.IORString() + item.Name + item.DistanceString();
-                    ((HudStaticText)LandscapeHudListRow[1]).FontHeight = nitemFontHeight;
+	    	    	((HudStaticText)LandscapeHudListRow[1]).Text = item.HudString();
+                    ((HudStaticText)LandscapeHudListRow[1]).FontHeight = 10;
 	    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Gold;}
 	    	    	if(item.IOR == IOResult.lifestone) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.SkyBlue;}
 	    	    	if(item.IOR == IOResult.monster) {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Orange;}

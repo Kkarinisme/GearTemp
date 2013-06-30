@@ -24,23 +24,17 @@ namespace GearFoundry
 	{		
 
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();
-		private OpenContainer mOpenContainer = new OpenContainer();
+		private OpenContainer mOpenContainer;
 		
-		private List<int> ItemExclusionList = new List<int>();
-		private List<int> ItemIDListenList = new List<int>();
-		private List<int> ModifiedIOSpells = new List<int>();
+		private List<int> ItemExclusionList;
+		private List<int> ItemIDListenList;
+		private List<int> ModifiedIOSpells;
 		
-		private Queue<LootObject> ManaTankQueue = new Queue<LootObject>();
-		private List<LootObject> ItemTrackingList = new List<LootObject>();
+		private List<LootObject> ItemTrackingList;
 		
-		private Queue<LootObject> ItemHudMoveQueue = new Queue<LootObject>();
-		private List<LootObject> ProcessItemsList = new List<LootObject>();
-		private Queue<LootObject> KeyItemsQueue = new Queue<LootObject>();
-		private Queue<LootObject> SalvageItemsQueue = new Queue<LootObject>();
-		private Queue<LootObject> DesiccateItemsQueue = new Queue<LootObject>();
-		private Queue<LootObject> RingKeyQueue = new Queue<LootObject>();
+		private List<LootObject> ProcessItemsList;
  		
-		private GearInspectorSettings GISettings = new GearInspectorSettings();
+		private GearInspectorSettings GISettings;
 			
 		public class GearInspectorSettings
 		{
@@ -61,9 +55,18 @@ namespace GearFoundry
 		private void SubscribeItemEvents()
 		{
 			try
-			{			
-             	Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
-             	Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);             		           	
+			{		
+				
+				mOpenContainer = new OpenContainer();
+				
+				ItemExclusionList = new List<int>();
+				ItemIDListenList = new List<int>();
+				ModifiedIOSpells = new List<int>();
+				
+				ItemTrackingList = new List<LootObject>();
+				
+				ProcessItemsList = new List<LootObject>();
+            		           	
              	SubscribeItemTrackerLooterEvents();           	
 			}
 			catch(Exception ex){LogError(ex);}
@@ -72,9 +75,18 @@ namespace GearFoundry
 		private void UnsubscribeItemEvents()
 		{
 			try
-			{				
-             	Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(InspectorItemDestroyed);
-             	Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(InspectorItemReleased);
+			{		
+				mOpenContainer = null;
+				
+				ItemExclusionList = null;
+				ItemIDListenList = null;
+				ModifiedIOSpells = null;
+				
+				ItemTrackingList = null;
+				
+				ProcessItemsList = null;
+
+				
              	UnSubscribeItemTrackerLooterEvents();         	         	
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -133,32 +145,6 @@ namespace GearFoundry
 			   			writer.Close();
 					}
 				}
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void InspectorItemDestroyed(object sender, ItemDestroyedEventArgs e)
-		{
-			try
-			{
-				if(e == null){return;}
-				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.ItemGuid)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.ItemGuid);}
-				if(ItemExclusionList.Any(x => x == e.ItemGuid)){ItemExclusionList.RemoveAll(x => x == e.ItemGuid);}
-				if(ItemTrackingList.Any(x => x.Id == e.ItemGuid)){ItemTrackingList.RemoveAll(x => x.Id == e.ItemGuid);}
-				if(ItemIDListenList.Any(x => x == e.ItemGuid)){ItemIDListenList.RemoveAll(x => x == e.ItemGuid);}				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void InspectorItemReleased(object sender, ReleaseObjectEventArgs e)
-		{
-			try
-			{
-				if(e == null) {return;}
-				
-				if(mOpenContainer.ContainerIOs.Any(x => x.Id == e.Released.Id)){mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == e.Released.Id);}
-				if(ItemExclusionList.Any(x => x == e.Released.Id)){ItemExclusionList.RemoveAll(x => x == e.Released.Id);}
-				if(ItemTrackingList.Any(x => x.Id == e.Released.Id)){ItemTrackingList.RemoveAll(x => x.Id == e.Released.Id);}
-				if(ItemIDListenList.Any(x => x == e.Released.Id)){ItemIDListenList.RemoveAll(x => x == e.Released.Id);}
-				
 			}catch(Exception ex){LogError(ex);}
 		}
 				
@@ -343,39 +329,62 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
+  
     	private void ItemHudUstButton_Hit(object sender, EventArgs e)
     	{
     		try
     		{
-    			WriteToChat("Prepare for Warp Speed!  And CoreDumping!");
-    			WriteToChat("If the looter is 'hung' pressing this a lot will clear the queue for now");
+    			if(InspectorActionQueue.Count > 0)
+    			{
+    				WriteToChat("Wait for it!");
+    				return;
+    			}
     			
-//    			foreach(LootObject lo in ProcessItemsList)
-//    			{
-//    				if(lo.IOR == IOResult.salvage)
-//    				{
-//    					SalvageItemsQueue.Enqueue(lo);
-//    				}
-//    				else if(lo.IOR == IOResult.dessicate)
-//    				{
-//    					DesiccateItemsQueue.Enqueue(lo);
-//    				}
-//    				else if(lo.IOR == IOResult.manatank)
-//    				{
-//    					ManaTankQueue.Enqueue(lo);
-//    				}
-//    				else if(lo.ObjectClass == ObjectClass.Key)
-//    				{
-//    					KeyItemsQueue.Enqueue(lo);
-//    				}
-//    			}
-
-    			FireInspectorActions();
-
+    			WriteToChat("Prosessing Queue.");
+    			
+    			if(Core.Actions.CombatMode != CombatState.Peace)
+				{
+    				PendingActions peaceaction = new PendingActions();
+		    		peaceaction.Action = IAction.PeaceMode;
+    				InspectorActionQueue.Enqueue(peaceaction);
+    			}
+    			
+    			foreach(LootObject proc in  ProcessItemsList)
+    			{
+     				PendingActions nextaction = new PendingActions();
+    				nextaction.LootItem = proc;
+    				
+    				nextaction.Action = IAction.SalvageItem;
+    				InspectorActionQueue.Enqueue(nextaction);
+	    				
+	    			if(proc.IOR == IOResult.salvage)
+	    			{
+	    				nextaction.Action = IAction.SalvageItem;
+    					InspectorActionQueue.Enqueue(nextaction);
+	    			}
+	    			else if(proc.IOR == IOResult.dessicate)
+	    			{
+	    				nextaction.Action = IAction.Desiccate;
+    					InspectorActionQueue.Enqueue(nextaction);
+	    			}
+	    			else if(proc.IOR == IOResult.manatank)
+	    			{
+	    				nextaction.Action = IAction.ManaStone;
+    					InspectorActionQueue.Enqueue(nextaction);
+	    			}
+	    			else if(proc.ObjectClass == ObjectClass.Key)
+	    			{
+	    				nextaction.Action = IAction.RingKey;
+    					InspectorActionQueue.Enqueue(nextaction);
+	    			}		
+    			}
+    			
+    			WriteToChat("Pending Actions = " + InspectorActionQueue.Count);
+    			
+    			//InitiateInspectorActionSequence();
+    			
     		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-
+    	}    
     	
     	private void ItemHudUstList_Click(object sender, int row, int col)
     	{
@@ -383,24 +392,43 @@ namespace GearFoundry
     		{
     			//Salvage
     			if(col == 0)
-    			{
-    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.salvage)
+    			{	
+    				if(InspectorActionQueue.Any(x => x.LootItem.Id == ProcessItemsList.ElementAt(row).Id))
     				{
-    					SalvageItemsQueue.Enqueue(ProcessItemsList.ElementAt(row));
+    					return;
     				}
-    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.dessicate)
+    				else
     				{
-    					DesiccateItemsQueue.Enqueue(ProcessItemsList.ElementAt(row));
+	    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.salvage)
+	    				{
+	    					PendingActions nextaction = new PendingActions();
+	    					nextaction.Action = IAction.SalvageItem;
+	    					nextaction.LootItem = ProcessItemsList.ElementAt(row);
+	    					InspectorActionQueue.Enqueue(nextaction);
+	    				}
+	    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.dessicate)
+	    				{
+	    					PendingActions nextaction = new PendingActions();
+	    					nextaction.Action = IAction.Desiccate;
+	    					nextaction.LootItem = ProcessItemsList.ElementAt(row);
+	    					InspectorActionQueue.Enqueue(nextaction);
+	    				}
+	    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.manatank)
+	    				{
+	    					PendingActions nextaction = new PendingActions();
+	    					nextaction.Action = IAction.ManaStone;
+	    					nextaction.LootItem = ProcessItemsList.ElementAt(row);
+	    					InspectorActionQueue.Enqueue(nextaction);
+	    				}
+	    				if(ProcessItemsList.ElementAt(row).ObjectClass == ObjectClass.Key)
+	    				{
+	    					PendingActions nextaction = new PendingActions();
+	    					nextaction.Action = IAction.RingKey;
+	    					nextaction.LootItem = ProcessItemsList.ElementAt(row);
+	    					InspectorActionQueue.Enqueue(nextaction);
+	    				}
+	    				InitiateInspectorActionSequence();
     				}
-    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.manatank)
-    				{
-    					ManaTankQueue.Enqueue(ProcessItemsList.ElementAt(row));
-    				}
-    				if(ProcessItemsList.ElementAt(row).ObjectClass == ObjectClass.Key)
-    				{
-    					KeyItemsQueue.Enqueue(ProcessItemsList.ElementAt(row));
-    				}
-    				FireInspectorActions();
     			}
     			//Report
     			if(col == 1)
@@ -477,10 +505,6 @@ namespace GearFoundry
     			InspectorCheckForL7Scrolls.Text = "Loot Unknown L7 Spells";
                 ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0, 126, 200, 16));
     			InspectorCheckForL7Scrolls.Checked = GISettings.CheckForL7Scrolls;
-    			
-
-    			
-
     			
     			InspectorHudManaLabel = new HudStaticText();
                 InspectorHudManaLabel.FontHeight = nmenuFontHeight;
@@ -668,14 +692,25 @@ namespace GearFoundry
 			{
     			if(col == 0)
     			{  
-    				if(ItemHudMoveQueue.Count == 0)
+    				if(!InspectorActionQueue.Any(x => x.LootItem.Id == ItemTrackingList.ElementAt(row).Id))
     				{
-    					ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
-    					FireInspectorActions();
+	    				if(Core.Actions.CombatMode != CombatState.Peace)
+						{
+	    					PendingActions peaceaction = new PendingActions();
+			    			peaceaction.Action = IAction.PeaceMode;
+	    					InspectorActionQueue.Enqueue(peaceaction);
+						}
+	    				
+	    				PendingActions nextaction = new PendingActions();
+			    		nextaction.Action = IAction.MoveItem;
+			    		nextaction.LootItem = ItemTrackingList.ElementAt(row);
+	    				InspectorActionQueue.Enqueue(nextaction);
+	    				
+	    				InitiateInspectorActionSequence();
     				}
     				else
     				{
-    					ItemHudMoveQueue.Enqueue(ItemTrackingList[row]);
+    					return;
     				}
     			}
     			if(col == 1)

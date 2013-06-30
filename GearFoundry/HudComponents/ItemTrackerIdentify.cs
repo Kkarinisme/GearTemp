@@ -105,12 +105,10 @@ namespace GearFoundry
 			try
 			{
 				if(GISettings.LootByMana == 0){return;}
+				if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOverlay) == 0).Count() > 0){return;}
 				if(IOItemMana.LValue(LongValueKey.CurrentMana) > GISettings.LootByMana)
 				{
-					if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOverlay) == 0).Count() > 0)
-					{
-						IOItemMana.IOR = IOResult.manatank;
-					}
+					IOItemMana.IOR = IOResult.manatank;
 				}
 			} catch(Exception ex){LogError(ex);}
 		}
@@ -138,20 +136,24 @@ namespace GearFoundry
 		
 		private void CheckUnknownScrolls(ref LootObject IOScroll)
 		{
-			//TODO:  Refine this to make more useful if there is a community request
 			try
 			{
-				if(!GISettings.CheckForL7Scrolls) 
-				{
-					IOScroll.IOR = IOResult.nomatch;
-					return;
-				}
-				else if(!Core.CharacterFilter.IsSpellKnown(IOScroll.Spell(0)))
-				{
-					if(SpellIndex[IOScroll.Spell(0)].spelllevel == 7)
+				if(GISettings.CheckForL7Scrolls && SpellIndex[IOScroll.Spell(0)].spelllevel == 7)
+				{	
+					if(!Core.CharacterFilter.IsSpellKnown(IOScroll.Spell(0)))
 					{
 						IOScroll.IOR = IOResult.spell;
 					}
+					else
+					{
+						IOScroll.IOR = IOResult.nomatch;
+						return;
+					}
+				}
+				else
+				{
+					IOScroll.IOR = IOResult.nomatch;
+					return;
 				}	
 			} catch(Exception ex){LogError(ex);}
 			return;

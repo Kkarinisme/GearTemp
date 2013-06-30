@@ -233,11 +233,11 @@ namespace GearFoundry
 
         // Controls on Notify.Mobs Page
         MyClasses.MetaViewWrappers.IList lstmyMobs;
-        MyClasses.MetaViewWrappers.ICombo cboMobsetupAlert;
+//        MyClasses.MetaViewWrappers.ICombo cboMobsetupAlert;
         MyClasses.MetaViewWrappers.IButton btnAddMobItem;
         MyClasses.MetaViewWrappers.ICheckBox chkmyMobExact;
         MyClasses.MetaViewWrappers.ITextBox txtmyMobName;
-        MyClasses.MetaViewWrappers.IStaticText lblatr121;
+//        MyClasses.MetaViewWrappers.IStaticText lblatr121;
 
         // Controls on Notify.Salvage Page
         MyClasses.MetaViewWrappers.IList lstNotifySalvage;
@@ -248,22 +248,22 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IStaticText lblSalvageString;
 
         // Controls on Notify.Other Page
-        MyClasses.MetaViewWrappers.IList lstNotifyOptions;
-        MyClasses.MetaViewWrappers.ICheckBox chkSalvageAll;
-        MyClasses.MetaViewWrappers.ITextBox txtMaxMana;
-        MyClasses.MetaViewWrappers.IStaticText lblMaxMana;
-        MyClasses.MetaViewWrappers.ITextBox txtMaxValue;
-        MyClasses.MetaViewWrappers.IStaticText lblMaxValue;
-        MyClasses.MetaViewWrappers.ITextBox txtVbratio;
-        MyClasses.MetaViewWrappers.IStaticText lblVbratio;
-
-        // Controls on Ust Page
-        MyClasses.MetaViewWrappers.IList lstUstList;
-        MyClasses.MetaViewWrappers.IButton btnUstItems;
-        MyClasses.MetaViewWrappers.IButton btnUstClear;
-        MyClasses.MetaViewWrappers.IButton btnUstSalvage;
-        MyClasses.MetaViewWrappers.ITextBox txtSalvageAug;
-        MyClasses.MetaViewWrappers.IStaticText lblUst002;
+//        MyClasses.MetaViewWrappers.IList lstNotifyOptions;
+//        MyClasses.MetaViewWrappers.ICheckBox chkSalvageAll;
+//        MyClasses.MetaViewWrappers.ITextBox txtMaxMana;
+//        MyClasses.MetaViewWrappers.IStaticText lblMaxMana;
+//        MyClasses.MetaViewWrappers.ITextBox txtMaxValue;
+//        MyClasses.MetaViewWrappers.IStaticText lblMaxValue;
+//        MyClasses.MetaViewWrappers.ITextBox txtVbratio;
+//        MyClasses.MetaViewWrappers.IStaticText lblVbratio;
+//
+//        // Controls on Ust Page
+//        MyClasses.MetaViewWrappers.IList lstUstList;
+//        MyClasses.MetaViewWrappers.IButton btnUstItems;
+//        MyClasses.MetaViewWrappers.IButton btnUstClear;
+//        MyClasses.MetaViewWrappers.IButton btnUstSalvage;
+//        MyClasses.MetaViewWrappers.ITextBox txtSalvageAug;
+//        MyClasses.MetaViewWrappers.IStaticText lblUst002;
 
         // Controls on Alerts Page
         // Controls on Inventory Page
@@ -739,7 +739,7 @@ namespace GearFoundry
                   {
                  //Controls on Notify.Other Page
                //lstNotifyOptions = (MyClasses.MetaViewWrappers.IList)View["lstNotifyOptions"];
-               chkSalvageAll = (MyClasses.MetaViewWrappers.ICheckBox)View["chkmyMobExact"];
+//               chkSalvageAll = (MyClasses.MetaViewWrappers.ICheckBox)View["chkmyMobExact"];
               // txtMaxMana = (MyClasses.MetaViewWrappers.ITextBox)View["txtMaxMana"];
                //txtMaxValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtMaxValue"];
               // txtVbratio = (MyClasses.MetaViewWrappers.ITextBox)View["txtVbratio"];
