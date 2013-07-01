@@ -44,8 +44,8 @@ namespace GearFoundry
 
 
 
-        List<Int32> remoteGearID = new List<Int32>();
-        List<HudPictureBox> remoteGearPB = new List<HudPictureBox>();
+//        List<Int32> remoteGearID = new List<Int32>();
+//        List<HudPictureBox> remoteGearPB = new List<HudPictureBox>();
 
         private void RenderRemoteGearHud()
         {
@@ -63,7 +63,7 @@ namespace GearFoundry
 
             xdocRemoteGear = XDocument.Load(remoteGearFilename);
 
-            remoteGearHud = new VirindiViewService.HudView("", 30, 200, RemoteGearIcon, false, "RemoteGear");
+            remoteGearHud = new VirindiViewService.HudView("", 30, 260, RemoteGearIcon, false, "RemoteGear");
             remoteGearHud.ShowInBar = false;
             remoteGearHud.UserAlphaChangeable = false;
             remoteGearHud.Visible = true;
@@ -76,8 +76,7 @@ namespace GearFoundry
             remoteGearHud.Controls.HeadControl = remoteGear_Head;
             remoteGearTabView = new HudTabView();
             remoteGearTabFixedLayout = new HudFixedLayout();
-
-            remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 199));
+            remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 259));
             remoteGearTabView.AddTab(remoteGearTabFixedLayout, "");
 
             //Butler
@@ -121,6 +120,42 @@ namespace GearFoundry
                 mRemoteGear5.Image = GR_Inventory_ICON;
                 remoteGearTabFixedLayout.AddControl(mRemoteGear5, new Rectangle(2, 155, 25, 25));
                 mRemoteGear5.Hit += (sender, obj) => mRemoteGear5_Hit(sender, obj);
+                WriteToChat("Inventory Hud has been added.");
+
+            }
+            catch (Exception ex) { LogError(ex); }
+
+
+            try
+            {
+                //Vertical Switch Gear
+
+                string vertImageFile = GearDir + @"\gearswapvert1.png";
+                Image gearswapvert = new Bitmap(vertImageFile);
+                mRemoteGear6 = new HudPictureBox();
+                //                int GR_Inventory_ICON = 0x600127E;
+                //                mRemoteGear5.Image = GR_Inventory_ICON;
+                mRemoteGear6.Image = (ACImage)gearswapvert;
+
+                remoteGearTabFixedLayout.AddControl(mRemoteGear6, new Rectangle(2, 185, 25, 25));
+                WriteToChat("Vertical switch gear has been added.");
+                mRemoteGear6.Hit += (sender, obj) => mRemoteGear6_Hit(sender, obj);
+
+            }
+            catch (Exception ex) { LogError(ex); }
+
+
+            try
+            {
+                //Horizontal Switch Gear
+                string horzImageFile = GearDir + @"\gearswaphorz1.png";
+                Image gearswaphoriz = new Bitmap(horzImageFile);
+                mRemoteGear7 = new HudPictureBox();
+                //  int GR_Inventory_ICON = 0x600127E;
+                //  mRemoteGear7.Image = GR_Inventory_ICON;
+                mRemoteGear7.Image = (ACImage)gearswaphoriz;
+                remoteGearTabFixedLayout.AddControl(mRemoteGear7, new Rectangle(2, 215, 25, 25));
+                mRemoteGear7.Hit += (sender, obj) => mRemoteGear7_Hit(sender, obj);
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -275,14 +310,12 @@ namespace GearFoundry
             {
                 if (binventoryHudEnabled == true)
                 {
-                    WriteToChat("I am in remote gear hud and binventoryhudenabled");
                     binventoryHudEnabled = false;
                     DisposeInventoryHud();
 
                 }
                 else
                 {
-                    WriteToChat("I am in remote gear hud and binventoryhudenabled = false");
 
                     binventoryHudEnabled = true;
                     RenderInventoryHud();
@@ -294,19 +327,50 @@ namespace GearFoundry
             }
             catch (Exception ex) { LogError(ex); }
 
+
         }
         private void mRemoteGear6_Hit(object sender, System.EventArgs e)
         {
             try
             {
+                if (bquickSlotsvEnabled == true)
+                {
+                    bquickSlotsvEnabled = false;
+                    DisposeVerticalQuickSlots();
+                }
+                else
+                {
+
+                    bquickSlotsvEnabled = true;
+                    RenderVerticalQuickSlots();
+
+                }
+                chkQuickSlotsv.Checked = bquickSlotsvEnabled;
+                SaveSettings();
+
             }
             catch (Exception ex) { LogError(ex); }
 
         }
         private void mRemoteGear7_Hit(object sender, System.EventArgs e)
         {
-            try
-            {
+            try{
+                if (bquickSlotshEnabled == true)
+                {
+                    bquickSlotshEnabled = false;
+                    DisposeHorizontalQuickSlots();
+                }
+                else
+                {
+
+                    bquickSlotshEnabled = true;
+                    RenderHorizontalQuickSlots();
+
+                }
+                chkQuickSlotsh.Checked = bquickSlotshEnabled;
+                SaveSettings();
+
+            
             }
             catch (Exception ex) { LogError(ex); }
 

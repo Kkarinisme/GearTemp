@@ -57,15 +57,16 @@ namespace GearFoundry
         WindowsTimer mWaitingForArmorIDTimer = new WindowsTimer();
 
 
-        void btnGetToonArmor_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            doGetArmor();
-        }
+//        void btnGetToonArmor_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+//        {
+//            doGetArmor();
+//        }
 
         private void doGetArmor()
         {
             try
             {
+            	WriteToChat("programinv: " + programinv);
             	if(programinv.Contains("inventory"))
             	   {
             	   	WriteToChat("Cannot run at this time because inventory program  is running.");
@@ -168,8 +169,8 @@ namespace GearFoundry
 
                          programinv = "";
                          m = 30;
-                         k = 0;
-                         n = 0;
+//                         k = 0;
+//                         n = 0;
                          mWaitingForID = null;
                          xdoc = null;
                      }
