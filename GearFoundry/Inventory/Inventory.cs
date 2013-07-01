@@ -580,12 +580,15 @@ namespace GearFoundry
 
         private void btnInventoryUpdate_Hit(object sender, EventArgs e)
         {
-
-            doUpdateInventory();
+        	if(!programinv.Contains("armor"))
+        	   {
+         	   doUpdateInventory();
+        	   }
         }
 
         private void btnInventoryComplete_Hit(object sender, EventArgs e)
         {
+        	if(!programinv.Contains("armor"))
             {
                 m = 500;
                 doGetInventory();
@@ -595,8 +598,11 @@ namespace GearFoundry
 
         void btnInventoryStacks_Hit(object sender, EventArgs e)
         {
-             getBurden = true;
-            doUpdateInventory();
+        	if(!programinv.Contains("armor"))
+        	{
+               getBurden = true;
+               doUpdateInventory();
+        	}
         }
 
         void cboInventoryClasses_Change(object sender, EventArgs index)
@@ -711,22 +717,30 @@ namespace GearFoundry
         
         void btnUpdateInventory_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
-            doUpdateInventory();
+        	if(!programinv.Contains("armor"))
+        	{
+ 	           doUpdateInventory();
+        	}
         }
 
         void btnGetBurden_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
-            getBurden = true;
-            doUpdateInventory();
+        	if(!programinv.Contains("armor"))
+        	{
+              getBurden = true;
+              doUpdateInventory();
+        	}
         }
 
         void btnItemsWaiting_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
-            if (!binventoryWaitingEnabled)
-            { binventoryWaitingEnabled = true; }
-            else
-            { binventoryWaitingEnabled = false; }
-            
+        	if(!programinv.Contains("armor"))
+        	{
+              if (!binventoryWaitingEnabled)
+                { binventoryWaitingEnabled = true; }
+              else
+                { binventoryWaitingEnabled = false; }
+        	}
         }
 
         private void doCheckFiles()
@@ -751,6 +765,7 @@ namespace GearFoundry
         {
             try
             {
+            	programinv = "inventory";
                 doCheckFiles();
                 //Need a timer for processing inventory
                 mWaitingForIDTimer = new WindowsTimer();

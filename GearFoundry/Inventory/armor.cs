@@ -66,6 +66,13 @@ namespace GearFoundry
         {
             try
             {
+            	if(programinv.Contains("inventory"))
+            	   {
+            	   	WriteToChat("Cannot run at this time because inventory program  is running.");
+            	   }
+            	else
+            	{
+                programinv = "armor";
                 mWaitingForArmorID = new List<WorldObject>();
 
                 armorFilename = toonDir + @"\" + toonName + "Armor.xml";
@@ -124,6 +131,7 @@ namespace GearFoundry
 
                 ProcessArmorDataInventory();
                 mArmorIsFinished();
+            	}
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -158,7 +166,7 @@ namespace GearFoundry
                          catch (Exception ex) { LogError(ex); }
 
 
-
+                         programinv = "";
                          m = 30;
                          k = 0;
                          n = 0;
