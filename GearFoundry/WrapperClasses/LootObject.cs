@@ -582,7 +582,7 @@ namespace GearFoundry
 							}
 						}
 					}
-					if(!wo.DoubleKeys.Contains((int)DoubleValueKey.ElementalDamageVersusMonsters))
+					if(wo.ObjectClass == ObjectClass.WandStaffOrb && !wo.DoubleKeys.Contains((int)DoubleValueKey.ElementalDamageVersusMonsters))
 					{
 						return basesum + cantripattackboosters + cantripdefenseboosters + manacbase * cantripmanaconversionboosters + 10 - wo.Values(LongValueKey.NumberTimesTinkered);
 					}
@@ -1175,7 +1175,8 @@ namespace GearFoundry
 			{
 				get
 				{
-					return host.Underlying.Hooks.IsValidObject(wo.Id);
+					if(wo != null) {return true;}
+					else{return false;}
 				}
 			}
 

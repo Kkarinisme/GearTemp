@@ -174,7 +174,8 @@ namespace GearFoundry
 			{
 				get
 				{
-					return host.Underlying.Hooks.IsValidObject(wo.Id);
+					if(wo != null) {return true;}
+					else{return false;}
 				}
 			}
 			

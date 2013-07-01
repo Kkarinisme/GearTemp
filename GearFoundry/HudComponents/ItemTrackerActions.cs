@@ -111,15 +111,16 @@ namespace GearFoundry
 					return;
 				}
 				
-				if(InspectorActionQueue.First().Action != IAction.OpenContainer || InspectorActionQueue.First().Action != IAction.DeQueue)
-				{
-					if(!InspectorActionQueue.First().LootItem.isvalid) {InspectorActionQueue.First().Action = IAction.DeQueue;}
-				}
+
 				
 				//this will restart the queue if it fails.
 				if(InspectorActionQueue.First().pending)
 				{
 					if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalSeconds < 3)	{return;}
+				}
+				else if(InspectorActionQueue.First().Action != IAction.PeaceMode || InspectorActionQueue.First().Action != IAction.DeQueue)
+				{
+					if(!InspectorActionQueue.First().LootItem.isvalid) {InspectorActionQueue.First().Action = IAction.DeQueue;}
 				}
 				
 				InspectorActionQueue.First().StartAction = DateTime.Now;
@@ -276,7 +277,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 300){return;}
+				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 150){return;}
 				else
 				{
 					Core.RenderFrame -= RenderFrame_InspectorSalvageAction;	
@@ -320,7 +321,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 300){return;}
+				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 150){return;}
 				else
 				{
 					Core.RenderFrame -= RenderFrame_InspectorCombineAction;

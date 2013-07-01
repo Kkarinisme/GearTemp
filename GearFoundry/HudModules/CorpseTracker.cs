@@ -392,10 +392,12 @@ namespace GearFoundry
         {
             try 
             {
+            	//WriteToChat("Echo line: " + e.Text.Substring(0,40) + " Color: " + e.Color.ToString());
             	//Line Feed Strip
+            	if(e.Color != 0) {return;}
         		string CBMessage = e.Text.Substring(0, e.Text.Length - 1);
                 
-                if(CBMessage.Contains("has given you permission to loot his or her kills."))
+                if(CBMessage.EndsWith("has given you permission to loot his or her kills."))
                 {
                		string FellowMemberName = CBMessage.Replace(" has given you permission to loot his or her kills.", "");
                    	FellowMemberTrackingList.Add(FellowMemberName);
