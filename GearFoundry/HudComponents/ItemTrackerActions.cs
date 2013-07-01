@@ -27,7 +27,7 @@ namespace GearFoundry
 		
 		public class PendingActions
 		{
-			public IAction Action = IAction.Nothing;
+			public IAction Action = IAction.DeQueue;
 			public LootObject LootItem = null;
 			public bool pending = false;
 			public DateTime StartAction = DateTime.MinValue;
@@ -36,10 +36,8 @@ namespace GearFoundry
 			
 		public enum IAction
 		{
-			Nothing,
 			PeaceMode,
 			OpenContainer,
-			SelectItem,
 			MoveItem,
 			SalvageItem,			
 			CombineSalvage,
@@ -103,7 +101,7 @@ namespace GearFoundry
 					return;
 				}
 				
-				if(Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count() == 102)
+				if(Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count() == 101)
 				{
 					ActionsPending = false;
 					InspectorActionTimer.Tick -= InspectorActionInitiator;
@@ -113,21 +111,20 @@ namespace GearFoundry
 					return;
 				}
 				
+
+				
 				//this will restart the queue if it fails.
 				if(InspectorActionQueue.First().pending)
 				{
 					if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalSeconds < 3)	{return;}
 				}
+				else if(InspectorActionQueue.First().Action != IAction.PeaceMode || InspectorActionQueue.First().Action != IAction.DeQueue)
+				{
+					if(!InspectorActionQueue.First().LootItem.isvalid) {InspectorActionQueue.First().Action = IAction.DeQueue;}
+				}
 				
 				InspectorActionQueue.First().StartAction = DateTime.Now;
 				InspectorActionQueue.First().pending = true;
-				WriteToChat("Time: " + DateTime.Now);
-				WriteToChat("Inspectoractionqueue.count = " + InspectorActionQueue.Count);	
-				WriteToChat("Pending Action " + InspectorActionQueue.First().Action.ToString());
-				if(InspectorActionQueue.First().LootItem != null)
-				{
-					WriteToChat(InspectorActionQueue.First().LootItem.Name);
-				}
 				
 				switch(InspectorActionQueue.First().Action)
 				{
@@ -280,7 +277,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 300){return;}
+				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 150){return;}
 				else
 				{
 					Core.RenderFrame -= RenderFrame_InspectorSalvageAction;	
@@ -324,7 +321,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 300){return;}
+				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 150){return;}
 				else
 				{
 					Core.RenderFrame -= RenderFrame_InspectorCombineAction;

@@ -91,6 +91,7 @@ namespace GearFoundry
 			
 			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) evaded your attack.$"));
 			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell!$"));
+			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell!$"));
 			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell$"));
 	
 			MyAttackMessages.Add(new Regex("^Critical hit!  You [\\w]+ (?<targetname>.*) for (?<points>.+) point.* of .+ damage.*$"));
@@ -180,97 +181,103 @@ namespace GearFoundry
 				if(e.Eat || string.IsNullOrEmpty(e.Text)) {return;}
 				if(!bEnableTextFiltering) {return;}
 				
-				if(ChatTypes.Any(x => x.IsMatch(e.Text)))
+				if(e.Color == 17)
 				{
+
 					if(bTextFilterMySpellCasting && e.Text.StartsWith("You say, "))
 					{
-						if(CastWords.Any(x => e.Text.Contains(x))){e.Eat = true;}
+						if(CastWords.Any(x => e.Text.Contains(x))){e.Eat = true; return;}
 					}
-					if (bTextFilterOthersSpellCasting && e.Text.Contains("says, "))
+					if (bTextFilterOthersSpellCasting && e.Text.Contains("says,"))
 					{
-					    if(CastWords.Any(x => e.Text.Contains(x))){e.Eat = true;}
+					    if(CastWords.Any(x => e.Text.Contains(x))){e.Eat = true; return;}
 					}
+				}
+				
+				if(ChatTypes.Any(x => x.IsMatch(e.Text)))
+				{
+					
 					if(bTextFilterBotSpam)
 					{
-						if(e.Text.Trim().EndsWith("-t-\"") || e.Text.Trim().EndsWith("-b-\"")) {e.Eat = true;}
+						if(e.Text.Trim().EndsWith("-t-\"") || e.Text.Trim().EndsWith("-b-\"")) {e.Eat = true; return;}
 					}
 					if(bTextFilterVendorTells)
 					{
-						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Vendor).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true;}
+						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Vendor).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true; return;}
 					}
 					if (bTextFilterMonsterTells)
 					{
-						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Monster).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true;}
+						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Monster).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true; return;}
 					}
 					if(bTextFilterNPCChatter)
 					{
-						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Npc).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true;}
+						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Npc).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true; return;}
 					}		
 				}
 				else
 				{
 					if(bTextFilterMobDefenseMessages)
 					{
-						if(MobDefenseMessages.Any(x => x.IsMatch(e.Text))) {e.Eat = true;}
+						if(MobDefenseMessages.Any(x => x.IsMatch(e.Text))) {e.Eat = true;  return;}
 					}
 					if(bTextFilterMyDefenseMessages)
 					{
-						if(MyDefenseMessages.Any(x => x.IsMatch(e.Text))) {e.Eat = true;}
+						if(MyDefenseMessages.Any(x => x.IsMatch(e.Text))) {e.Eat = true;  return;}
 					}
 					if(bTextFilterMyKillMessages)
 					{
-						if(TargetKilledByMe.Any(x => x.IsMatch(e.Text))) {e.Eat = true;}
+						if(TargetKilledByMe.Any(x => x.IsMatch(e.Text))) {e.Eat = true;  return;}
 					}
 					if(bTextFilterPKFails)
 					{
-						if(e.Text.StartsWith("You fail to affect ") && e.Text.Contains(" you are not a player killer!")){e.Eat = true;}
-						if(e.Text.Contains("fails to affect you") && e.Text.Contains(" is not a player killer!")) {e.Eat = true;}
+						if(e.Text.StartsWith("You fail to affect ") && e.Text.Contains(" you are not a player killer!")){e.Eat = true;  return;}
+						if(e.Text.Contains("fails to affect you") && e.Text.Contains(" is not a player killer!")) {e.Eat = true;  return;}
 					}
 					if(bTextFilterDirtyFighting)
 					{
-						if(e.Text.StartsWith("Dirty Fighting! ") && e.Text.Contains(" delivers a ")) {e.Eat = true;}
+						if(e.Text.StartsWith("Dirty Fighting! ") && e.Text.Contains(" delivers a ")) {e.Eat = true;  return;}
 					}
 					if(bTextFilterMySpellCasting)
 					{
-						if(e.Text.StartsWith("Your spell fizzled.")) {e.Eat = true;}
-						if (e.Text.StartsWith("The spell consumed the following components")) {e.Eat = true;}
+						if(e.Text.StartsWith("Your spell fizzled.")) {e.Eat = true;  return;}
+						if (e.Text.StartsWith("The spell consumed the following components")) {e.Eat = true;  return;}
 					}
 					if(bTextFilterSpellExpirations)
 					{
 						if (!e.Text.Contains("Brilliance") && !e.Text.Contains("Prodigal") && !e.Text.Contains("Spectral"))
 						{
-							if (e.Text.Contains("has expired.") || e.Text.Contains("have expired.")) {e.Eat = true;}
+							if (e.Text.Contains("has expired.") || e.Text.Contains("have expired.")) {e.Eat = true;  return;}
 						}
 					}
 					if(bTextFilterHealingMessages)
 					{
-						if(e.Text.StartsWith("You ") && e.Text.Contains(" heal yourself for ")) {e.Eat = true;}
-						if(e.Text.StartsWith("You fail to heal yourself. ")) {e.Eat = true;}
+						if(e.Text.StartsWith("You ") && e.Text.Contains(" heal yourself for ")) {e.Eat = true;  return;}
+						if(e.Text.StartsWith("You fail to heal yourself. ")) {e.Eat = true;  return;}
 					}
 					if(bTextFilterSalvageMessages)
 					{
-						if(e.Text.StartsWith("You obtain ") && e.Text.Contains(" using your knowledge of ")) {e.Eat = true;}
-						if (e.Text.StartsWith("Salvaging Failed!")) {e.Eat = true;}
-						if (e.Text.Contains("The following were not suitable for salvaging: ")) {e.Eat = true;}
+						if(e.Text.StartsWith("You obtain ") && e.Text.Contains(" using your knowledge of ")) {e.Eat = true;  return;}
+						if (e.Text.StartsWith("Salvaging Failed!")) {e.Eat = true;  return;}
+						if (e.Text.Contains("The following were not suitable for salvaging: ")) {e.Eat = true;  return;}
 					}
 					if(bTextFilterManaStoneMessages)
 					{
-						if(e.Text.StartsWith("The Mana Stone gives ")) {e.Eat = true;}
-						if(e.Text.StartsWith("You need ") && e.Text.Trim().EndsWith(" more mana to fully charge your items.")) {e.Eat = true;}
-						if(e.Text.StartsWith("The Mana Stone drains ")) {e.Eat = true;}
-						if(e.Text.StartsWith("The ") && e.Text.Trim().EndsWith(" is destroyed.")) {e.Eat = true;}
+						if(e.Text.StartsWith("The Mana Stone gives ")) {e.Eat = true;  return;}
+						if(e.Text.StartsWith("You need ") && e.Text.Trim().EndsWith(" more mana to fully charge your items.")) {e.Eat = true;  return;}
+						if(e.Text.StartsWith("The Mana Stone drains ")) {e.Eat = true;  return;}
+						if(e.Text.StartsWith("The ") && e.Text.Trim().EndsWith(" is destroyed.")) {e.Eat = true;  return;}
 					}
 					if(bTextFilterBotSpam)
 					{
-						if(e.Text.Trim().EndsWith("-t-") || e.Text.Trim().EndsWith("-b-")) {e.Eat = true;}
+						if(e.Text.Trim().EndsWith("-t-") || e.Text.Trim().EndsWith("-b-")) {e.Eat = true;  return;}
 					}
 					if(bTextFilterIdentFailures)
 					{
-						if(e.Text.Trim().EndsWith("tried and failed to assess you!")) {e.Eat = true;}
+						if(e.Text.Trim().EndsWith("tried and failed to assess you!")) {e.Eat = true;  return;}
 					}
 					if(bTextFilterKillTaskComplete)
 					{
-						if (e.Text.StartsWith("You have killed ") && e.Text.Trim().EndsWith("Your task is complete!")) {e.Eat = true;}
+						if (e.Text.StartsWith("You have killed ") && e.Text.Trim().EndsWith("Your task is complete!")) {e.Eat = true;  return;}
 					}	
 				}	
 			}catch(Exception ex){LogError(ex);}

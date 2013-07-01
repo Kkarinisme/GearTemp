@@ -38,15 +38,16 @@ namespace GearFoundry
 			
 		public class GearInspectorSettings
 		{
-			public bool IdentifySalvage;
-			public bool AutoSalvage;
-			public bool AutoDessicate;
+			public bool IdentifySalvage = true;
+			public bool AutoSalvage = false;
+			public bool AutoDessicate = false;
 			public bool ModifiedLooting = true;
-			public bool CheckForL7Scrolls;
+			public bool CheckForL7Scrolls = false;
 			public bool SalvageHighValue = false;
-			public bool AutoRingKeys;
-            public int ItemHudWidth;
-            public int ItemHudHeight;
+			public bool AutoRingKeys = false;
+			public bool RenderMini = false;
+            public int ItemHudWidth = 300;
+            public int ItemHudHeight = 220;
 			public int LootByValue = 0;
 			public int LootByMana = 0;
 			
@@ -57,14 +58,11 @@ namespace GearFoundry
 			try
 			{		
 				
-				mOpenContainer = new OpenContainer();
-				
+				mOpenContainer = new OpenContainer();	
 				ItemExclusionList = new List<int>();
 				ItemIDListenList = new List<int>();
-				ModifiedIOSpells = new List<int>();
-				
-				ItemTrackingList = new List<LootObject>();
-				
+				ModifiedIOSpells = new List<int>();				
+				ItemTrackingList = new List<LootObject>();			
 				ProcessItemsList = new List<LootObject>();
             		           	
              	SubscribeItemTrackerLooterEvents();           	
@@ -107,11 +105,13 @@ namespace GearFoundry
 		                {
 		                    try
 		                    {
-		                    	string filedefaults = GetResourceTextFile("GearInspector.xml");
-		                    	using (StreamWriter writedefaults = new StreamWriter(GearInspectorSettingsFile.ToString(), true))
+		                    	GISettings = new GearInspectorSettings();
+		                    	
+		                    	using (XmlWriter writer = XmlWriter.Create(GearInspectorSettingsFile.ToString()))
 								{
-									writedefaults.Write(filedefaults);
-									writedefaults.Close();
+						   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearInspectorSettings));
+						   			serializer2.Serialize(writer, GISettings);
+						   			writer.Close();
 								}
 		                    }
 		                    catch (Exception ex) { LogError(ex); }
@@ -157,14 +157,11 @@ namespace GearFoundry
 		private HudTabView ItemHudTabView = null;
 		private HudFixedLayout ItemHudInspectorLayout = null;
 		private HudFixedLayout ItemHudUstLayout = null;
-		private HudFixedLayout ItemHudSettingsLayout = null;
-		
-		
+		private HudFixedLayout ItemHudSettingsLayout = null;		
 		
 		private HudList ItemHudInspectorList = null;
 		private HudList.HudListRowAccessor ItemHudListRow = null;
-		
-		
+				
 		private HudList ItemHudUstList = null;
 		private HudButton ItemHudUstButton = null;
 		
@@ -183,13 +180,7 @@ namespace GearFoundry
 		private HudTextBox InspectorLootByValue = null;
 		private HudStaticText InspectorHudManaLabel = null;
 		private HudTextBox InspectorLootByMana = null;
-
-        private int ItemHudWidth;
-        private int ItemHudHeight;
-        private int ItemHudFirstWidth = 300;
-        private int ItemHudFirstHeight = 220;
-        private int ItemHudWidthNew;
-        private int ItemHudHeightNew;
+		private HudCheckBox InspectorRenderMini = null;
 	
     	private void RenderItemHud()
     	{
@@ -206,12 +197,8 @@ namespace GearFoundry
     			{
     				DisposeItemHud();
     			}
-                if (GISettings.ItemHudWidth == 0) { ItemHudWidth = ItemHudFirstWidth; }
-                else { ItemHudWidth = GISettings.ItemHudWidth; }
-                if (GISettings.ItemHudHeight == 0) { ItemHudHeight = ItemHudFirstHeight; }
-                else { ItemHudHeight = GISettings.ItemHudHeight; }
-                ItemHudView = new HudView("Inspector", ItemHudWidth, ItemHudHeight, new ACImage(0x6AA8));
-    		//	ItemHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+
+                ItemHudView = new HudView("Inspector", GISettings.ItemHudWidth, GISettings.ItemHudHeight, new ACImage(0x6AA8));
     			ItemHudView.UserAlphaChangeable = false;
     			ItemHudView.UserMinimizable = false;
     			ItemHudView.ShowInBar = false;
@@ -223,16 +210,16 @@ namespace GearFoundry
     			ItemHudView.Controls.HeadControl = ItemHudLayout;
     			
     			ItemHudTabView = new HudTabView();
-    			ItemHudLayout.AddControl(ItemHudTabView, new Rectangle(0,0,ItemHudWidth,ItemHudHeight));
+    			ItemHudLayout.AddControl(ItemHudTabView, new Rectangle(0,0, GISettings.ItemHudWidth, GISettings.ItemHudHeight));
     		
     			ItemHudInspectorLayout = new HudFixedLayout();
-    			ItemHudTabView.AddTab(ItemHudInspectorLayout, "Inspector");
+    			ItemHudTabView.AddTab(ItemHudInspectorLayout, "Inspect");
     			
     			ItemHudUstLayout = new HudFixedLayout();
     			ItemHudTabView.AddTab(ItemHudUstLayout, "Process");
     			
     			ItemHudSettingsLayout = new HudFixedLayout();
-    			ItemHudTabView.AddTab(ItemHudSettingsLayout, "Settings");
+    			ItemHudTabView.AddTab(ItemHudSettingsLayout, "Set");
     			
     			ItemHudTabView.OpenTabChange += ItemHudTabView_OpenTabChange;
                 ItemHudView.Resize += ItemHudView_Resize; 
@@ -251,12 +238,10 @@ namespace GearFoundry
         {
             try
             {
-               bool bw = Math.Abs(ItemHudView.Width - ItemHudWidth) > 20;
-                bool bh = Math.Abs(ItemHudView.Height - ItemHudHeight) > 20;
+               bool bw = Math.Abs(ItemHudView.Width - GISettings.ItemHudWidth) > 20;
+                bool bh = Math.Abs(ItemHudView.Height - GISettings.ItemHudHeight) > 20;
                 if (bh || bw)
                 {
-                   ItemHudWidthNew = ItemHudView.Width;
-                    ItemHudHeightNew = ItemHudView.Height;
                     MasterTimer.Tick += ItemHudResizeTimerTick;
                     return;
                 }
@@ -267,12 +252,10 @@ namespace GearFoundry
 
         private void ItemHudResizeTimerTick(object sender, EventArgs e)
         {
-            ItemHudWidth = ItemHudWidthNew;
-            ItemHudHeight = ItemHudHeightNew;
-            GISettings.ItemHudWidth = ItemHudWidth;
-            GISettings.ItemHudHeight = ItemHudHeight;
+        	MasterTimer.Tick -= ItemHudResizeTimerTick;
+            GISettings.ItemHudWidth = ItemHudView.Width;
+            GISettings.ItemHudHeight = ItemHudView.Height;
             GearInspectorReadWriteSettings(false);
-            MasterTimer.Tick -= ItemHudResizeTimerTick;
             RenderItemHud();
         }
 
@@ -309,14 +292,14 @@ namespace GearFoundry
     		try
     		{
     			ItemHudUstButton = new HudButton();
-    			ItemHudUstButton.Text = "Process List";
-    			ItemHudUstLayout.AddControl(ItemHudUstButton, new Rectangle(75,0,150,20));
+    			ItemHudUstButton.Text = "Proc. List";
+    			ItemHudUstLayout.AddControl(ItemHudUstButton, new Rectangle(Convert.ToInt32(((double)GISettings.ItemHudWidth - (double)100) /(double)2),0,100,20));
     			
     			ItemHudUstList = new HudList();
     			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
-    			ItemHudUstList.AddColumn(typeof(HudStaticText), 200, null);
+    			ItemHudUstList.AddColumn(typeof(HudStaticText), GISettings.ItemHudWidth - 60, null);
     			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
-    			ItemHudUstLayout.AddControl(ItemHudUstList, new Rectangle(0,30,ItemHudWidth,ItemHudHeight));
+    			ItemHudUstLayout.AddControl(ItemHudUstList, new Rectangle(0,30,GISettings.ItemHudWidth,GISettings.ItemHudHeight - 30));
     			
     			ItemHudUstList.Click += ItemHudUstList_Click;
     			ItemHudUstButton.Hit += ItemHudUstButton_Hit;
@@ -378,9 +361,7 @@ namespace GearFoundry
     					InspectorActionQueue.Enqueue(nextaction);
 	    			}		
     			}
-    			
-    			WriteToChat("Pending Actions = " + InspectorActionQueue.Count);
-    			
+    			    			
     			//InitiateInspectorActionSequence();
     			
     		}catch(Exception ex){LogError(ex);}
@@ -466,54 +447,59 @@ namespace GearFoundry
     	{
     		try
     		{
-
+    			InspectorModifiedLooting = new HudCheckBox();
+    			InspectorModifiedLooting.Text = "Enable GS Loot";
+                ItemHudSettingsLayout.AddControl(InspectorModifiedLooting, new Rectangle(0, 0, 100, 16));
+    			InspectorModifiedLooting.Checked = GISettings.ModifiedLooting;
     			InspectorIdentifySalvage = new HudCheckBox();
-    			InspectorIdentifySalvage.Text = "Identify Salvage";
-                ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0, 0, 200, 16));
+    			
+    			InspectorIdentifySalvage.Text = "Ident. Salv.";
+                ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0, 18, 100, 16));
     			InspectorIdentifySalvage.Checked = GISettings.IdentifySalvage;
     			
     			InspectorAutoSalvage = new HudCheckBox();
-    			InspectorAutoSalvage.Text = "Auto Salvage";
-                ItemHudSettingsLayout.AddControl(InspectorAutoSalvage, new Rectangle(0, 18, 200, 16));
+    			InspectorAutoSalvage.Text = "Auto Salv.";
+                ItemHudSettingsLayout.AddControl(InspectorAutoSalvage, new Rectangle(0, 36, 100, 16));
     			InspectorAutoSalvage.Checked = GISettings.AutoSalvage;
     						
     			InspectorAutoAetheria = new HudCheckBox();
-    			InspectorAutoAetheria.Text = "Loot and Dessicate Junk Aetheria";
-                ItemHudSettingsLayout.AddControl(InspectorAutoAetheria, new Rectangle(0, 36, 200, 16));
+    			InspectorAutoAetheria.Text = "Des. J. Aeth.";
+                ItemHudSettingsLayout.AddControl(InspectorAutoAetheria, new Rectangle(0, 54, 100, 16));
     			InspectorAutoAetheria.Checked = GISettings.AutoDessicate;
     			
+    			InspectorCheckForL7Scrolls = new HudCheckBox();
+    			InspectorCheckForL7Scrolls.Text = "Unk. L7 Spl.";
+                ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0, 72, 100, 16));
+    			InspectorCheckForL7Scrolls.Checked = GISettings.CheckForL7Scrolls;  			
+    			
     			InspectorLootByValue = new HudTextBox();
-    			ItemHudSettingsLayout.AddControl(InspectorLootByValue, new Rectangle(0,54,45,16));
+    			ItemHudSettingsLayout.AddControl(InspectorLootByValue, new Rectangle(0,90,45,16));
     			InspectorLootByValue.Text = GISettings.LootByValue.ToString();
     			
     			InspectorHudValueLabel = new HudStaticText();
                 InspectorHudValueLabel.FontHeight = nmenuFontHeight;
     			InspectorHudValueLabel.Text = "High Value Loot.";
-    			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,54,200,16));
+    			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,90,100,16));
     			
     			InspectorSalvageHighValue = new HudCheckBox();
-    			InspectorSalvageHighValue.Text = "Salvage High Value Loot";
-    			ItemHudSettingsLayout.AddControl(InspectorSalvageHighValue, new Rectangle(0,72,200,16));
+    			InspectorSalvageHighValue.Text = "Salv. HV";
+    			ItemHudSettingsLayout.AddControl(InspectorSalvageHighValue, new Rectangle(0,108,100,16));
     			InspectorSalvageHighValue.Checked = GISettings.SalvageHighValue;
     					
-    			InspectorModifiedLooting = new HudCheckBox();
-    			InspectorModifiedLooting.Text = "Enabled Modified Looting";
-                ItemHudSettingsLayout.AddControl(InspectorModifiedLooting, new Rectangle(0, 90, 200, 16));
-    			InspectorModifiedLooting.Checked = GISettings.ModifiedLooting;
-    			
-    			InspectorCheckForL7Scrolls = new HudCheckBox();
-    			InspectorCheckForL7Scrolls.Text = "Loot Unknown L7 Spells";
-                ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0, 126, 200, 16));
-    			InspectorCheckForL7Scrolls.Checked = GISettings.CheckForL7Scrolls;
-    			
     			InspectorHudManaLabel = new HudStaticText();
                 InspectorHudManaLabel.FontHeight = nmenuFontHeight;
-    			InspectorHudManaLabel.Text = "Mana Value Loot.";
-    			ItemHudSettingsLayout.AddControl(InspectorHudManaLabel, new Rectangle(50,158,200,16));		
+    			InspectorHudManaLabel.Text = "ManaTanks";
+    			ItemHudSettingsLayout.AddControl(InspectorHudManaLabel, new Rectangle(50,126,100,16));		
     			
     			InspectorLootByMana = new HudTextBox();
-    			ItemHudSettingsLayout.AddControl(InspectorLootByMana, new Rectangle(0,158,45,16));
+    			ItemHudSettingsLayout.AddControl(InspectorLootByMana, new Rectangle(0,126,45,16));
     			InspectorLootByMana.Text = GISettings.LootByMana.ToString();
+    			
+    			InspectorRenderMini = new HudCheckBox();
+    			InspectorRenderMini.Text = "R. Mini.";
+    			ItemHudSettingsLayout.AddControl(InspectorRenderMini, new Rectangle(0,144,60,16));
+    			InspectorRenderMini.Checked = GISettings.RenderMini;
+    			
     			
     			InspectorIdentifySalvage.Change += InspectorIdentifySalvage_Change;
     			InspectorAutoAetheria.Change += InspectorAutoAetheria_Change;
@@ -523,10 +509,31 @@ namespace GearFoundry
     			InspectorLootByValue.LostFocus += InspectorLootByValue_LostFocus;
     			InspectorSalvageHighValue.Change += InspectorSalvageHighValue_Change;
     			InspectorLootByMana.LostFocus += InspectorLootByMana_LostFocus;	
+    			InspectorRenderMini.Change += InspectorRenderMini_Change;
     			  			
     			InspectorSettingsTab = true;
     			
    
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void InspectorRenderMini_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.RenderMini = InspectorRenderMini.Checked;
+    			if(GISettings.RenderMini)
+    			{
+    				GISettings.ItemHudHeight = 220;
+    				GISettings.ItemHudWidth = 150;
+    			}
+    			else
+    			{
+    				GISettings.ItemHudHeight = 220;
+    				GISettings.ItemHudWidth = 300;
+    			}
+    			GearInspectorReadWriteSettings(false);
+    			RenderItemHud();
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -641,10 +648,10 @@ namespace GearFoundry
     		try
     		{
     			ItemHudInspectorList = new HudList();
-    			ItemHudInspectorLayout.AddControl(ItemHudInspectorList, new Rectangle(0,0,300,220));
+    			ItemHudInspectorLayout.AddControl(ItemHudInspectorList, new Rectangle(0,0,GISettings.ItemHudWidth,GISettings.ItemHudHeight));
 				ItemHudInspectorList.ControlHeight = 16;	
 				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
-				ItemHudInspectorList.AddColumn(typeof(HudStaticText), 230, null);
+				ItemHudInspectorList.AddColumn(typeof(HudStaticText), GISettings.ItemHudWidth - 60, null);
 				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
 				
 				ItemHudInspectorList.Click += (sender, row, col) => ItemHudInspectorList_Click(sender, row, col);	
@@ -739,7 +746,8 @@ namespace GearFoundry
 		    	    {
 		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();	
 		    	    	((HudPictureBox)ItemHudListRow[0]).Image = item.Icon + 0x6000000;
-		    	    	((HudStaticText)ItemHudListRow[1]).Text = item.IORString() + item.Name;
+		    	    	if(GISettings.RenderMini){((HudStaticText)ItemHudListRow[1]).Text = item.MiniIORString() + item.TruncateName();}
+		    	    	else{((HudStaticText)ItemHudListRow[1]).Text = item.IORString() + item.Name;}
                         ((HudStaticText)ItemHudListRow[1]).FontHeight = nitemFontHeight;
 		    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Wheat;}
 		    	    	if(item.IOR == IOResult.salvage) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleVioletRed;}
@@ -758,9 +766,11 @@ namespace GearFoundry
 	    			{
 	    				ItemHudListRow = ItemHudUstList.AddRow();
 	    				if(ustitem.IOR == IOResult.salvage) {((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;}
-	    				if(ustitem.IOR == IOResult.dessicate) {((HudPictureBox)ItemHudListRow[0]).Image = ItemDesiccantIcon;}
-	    				if(ustitem.IOR == IOResult.manatank) {((HudPictureBox)ItemHudListRow[0]).Image = ItemManaStoneIcon;}
-                        ((HudStaticText)ItemHudListRow[1]).Text = ustitem.IORString() + ustitem.Name;
+	    				else if(ustitem.IOR == IOResult.dessicate) {((HudPictureBox)ItemHudListRow[0]).Image = ItemDesiccantIcon;}
+	    				else if(ustitem.IOR == IOResult.manatank) {((HudPictureBox)ItemHudListRow[0]).Image = ItemManaStoneIcon;}
+	    				else {((HudPictureBox)ItemHudListRow[0]).Image = ustitem.Icon;}
+	    				if(GISettings.RenderMini) {((HudStaticText)ItemHudListRow[1]).Text = ustitem.MiniIORString() + ustitem.TruncateName();}
+	    				else{((HudStaticText)ItemHudListRow[1]).Text = ustitem.IORString() + ustitem.Name;}
                         ((HudStaticText)ItemHudListRow[1]).FontHeight = nmenuFontHeight;
                         ((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;	
 	    			}

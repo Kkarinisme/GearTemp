@@ -180,7 +180,6 @@ namespace GearFoundry
 		{
 			try
 			{
-				CombatHudMobTrackingList = null;
 				SpellCastBuffer = null;
 				OtherCastBuffer = null;				
 				OtherCastRegexList = null;;		
@@ -465,9 +464,13 @@ namespace GearFoundry
 	        		MonsterObject UpdateMonster = CombatHudMobTrackingList.First(x => x.Id == PossibleMobID);
 	        		
         			if((pMsg.Value<int>("flags") & 0x100) == 0x100)
-        			{       				
-        				if(pMsg.Value<int>(11) > 0) {UpdateMonster.HealthMax = pMsg.Value<int>(11);}
-	      				if(pMsg.Value<int>(10) > 0) {UpdateMonster.HealthCurrent = pMsg.Value<int>(10);}
+        			{       	
+						//Empty try/catch to deal with cast not valid error.  (infrequent)        				
+        				try
+        				{
+        					if(pMsg.Value<int>(11) > 0) {UpdateMonster.HealthMax = pMsg.Value<int>(11);}
+	      					if(pMsg.Value<int>(10) > 0) {UpdateMonster.HealthCurrent = pMsg.Value<int>(10);}
+        				}catch{}
 //        				if(pMsg.Value<int>(20) > 0){CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).StaminaMax = pMsg.Value<int>(20);}
 //        				if(pMsg.Value<int>(18) > 0) {CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).StaminaCurrent = pMsg.Value<int>(18);}
 //        				if(pMsg.Value<int>(21) > 0) {CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).ManaMax = pMsg.Value<int>(21);}
@@ -547,7 +550,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				if((DateTime.Now - SpellCastBuffer.First().CompleteTime).TotalMilliseconds < 500) {return;}
+				if((DateTime.Now - SpellCastBuffer.First().CompleteTime).TotalMilliseconds < 100) {return;}
 				else
 				{
 					Core.RenderFrame -= RenderFrame_CombatActionCompleteDelay;	
@@ -626,8 +629,11 @@ namespace GearFoundry
 		private void CombatHud_ChatBoxMessage(object sender, ChatTextInterceptEventArgs e)
 		{
 			try
-			{					
-				if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)) && e.Text.Contains("says, "))
+			{	
+				if(e.Color != 17){return;}
+				if(e.Text.StartsWith("You say, ") || e.Text.StartsWith("You cast")){return;}
+				
+				if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)))
 				{	
 					OtherDebuffCastInfo odci = new OtherDebuffCastInfo();
 					odci.HeardTime = DateTime.Now;

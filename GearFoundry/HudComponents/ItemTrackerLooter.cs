@@ -35,6 +35,7 @@ namespace GearFoundry
 				Core.WorldFilter.CreateObject += ItemTrackerActions_ObjectCreated;
 				Core.WorldFilter.ChangeObject += ItemTrackerActions_ObjectChanged;
 				Core.ItemSelected += ItemTracker_ItemSelected;
+				Host.Underlying.Hooks.StatusTextIntercept += new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(ErrorMessages);	
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -49,6 +50,26 @@ namespace GearFoundry
 				Core.WorldFilter.CreateObject -= ItemTrackerActions_ObjectCreated;
 				Core.WorldFilter.ChangeObject -= ItemTrackerActions_ObjectChanged;
 				Core.ItemSelected -= ItemTracker_ItemSelected;
+				Host.Underlying.Hooks.StatusTextIntercept -= new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(ErrorMessages);	
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void ErrorMessages(string StatusText, ref bool bEat)
+		{
+			try
+			{
+				if(StatusText == "You can only salvage items that you own!")
+				{
+					WriteToChat("caught salv error");
+					if(InspectorActionQueue.Count != 0) {InspectorActionQueue.First().Action = IAction.DeQueue;}
+					return;
+				}
+				if(StatusText == "Unable to move object!")
+				{
+					WriteToChat("caugt move err");
+					if(InspectorActionQueue.Count != 0) {InspectorActionQueue.First().Action = IAction.DeQueue;}   
+					return;
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		

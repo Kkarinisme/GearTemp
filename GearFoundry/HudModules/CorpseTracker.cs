@@ -49,9 +49,10 @@ namespace GearFoundry
 			public bool bKillsByFellows = true;
 			public bool bDeadMes = true;
 			public bool Permitteds = true;
+			public bool RenderMini = false;
 			public List<MyCorpses> DeadMeList = new List<PluginCore.MyCorpses>();
-            public int CorpseHudWidth;
-            public int CorpseHudHeight;
+            public int CorpseHudWidth = 300;
+            public int CorpseHudHeight = 220;
 
     	}
 		
@@ -70,11 +71,13 @@ namespace GearFoundry
 		                {
 		                    try
 		                    {
-		                    	string filedefaults = GetResourceTextFile("GearVisection.xml");
-		                    	using (StreamWriter writedefaults = new StreamWriter(GearVisectionSettingsFile.ToString(), true))
+		                    	ghSettings = new GearVisectionSettings();
+		                    	
+		                    	using (XmlWriter writer = XmlWriter.Create(GearVisectionSettingsFile.ToString()))
 								{
-									writedefaults.Write(filedefaults);
-									writedefaults.Close();
+						   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearVisectionSettings));
+						   			serializer2.Serialize(writer, ghSettings);
+						   			writer.Close();
 								}
 		                    }
 		                    catch (Exception ex) { LogError(ex); }
@@ -389,10 +392,12 @@ namespace GearFoundry
         {
             try 
             {
+            	//WriteToChat("Echo line: " + e.Text.Substring(0,40) + " Color: " + e.Color.ToString());
             	//Line Feed Strip
+            	if(e.Color != 0) {return;}
         		string CBMessage = e.Text.Substring(0, e.Text.Length - 1);
                 
-                if(CBMessage.Contains("has given you permission to loot his or her kills."))
+                if(CBMessage.EndsWith("has given you permission to loot his or her kills."))
                 {
                		string FellowMemberName = CBMessage.Replace(" has given you permission to loot his or her kills.", "");
                    	FellowMemberTrackingList.Add(FellowMemberName);
@@ -480,12 +485,6 @@ namespace GearFoundry
 		private bool CorpseSettingsTab;
 		
 		private const int CorpseRemoveCircle = 0x60011F8;
-        private int CorpseHudWidth;
-        private int CorpseHudHeight;
-        private int CorpseHudFirstWidth = 300;
-        private int CorpseHudFirstHeight = 220;
-        private int CorpseHudWidthNew;
-        private int CorpseHudHeightNew;
 
 			
     	private void RenderCorpseHud()
@@ -504,15 +503,8 @@ namespace GearFoundry
     			{
     				DisposeCorpseHud();
     			}
-                if (ghSettings.CorpseHudWidth == 0) { CorpseHudWidth = CorpseHudFirstWidth; }
-                else { CorpseHudWidth = ghSettings.CorpseHudWidth; }
-                if (ghSettings.CorpseHudHeight == 0) { CorpseHudHeight = CorpseHudFirstHeight; }
-                else { CorpseHudHeight = ghSettings.CorpseHudHeight; }
-
     			
-    		//	CorpseHudView = new HudView("GearVisection", 300, 220, new ACImage(0x6AA4));
-                CorpseHudView = new HudView("GearVisection", CorpseHudWidth, CorpseHudHeight, new ACImage(0x6AA4));
-              //  CorpseHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+                CorpseHudView = new HudView("GearVisection", ghSettings.CorpseHudWidth, ghSettings.CorpseHudHeight, new ACImage(0x6AA4));
     			CorpseHudView.UserAlphaChangeable = false;
     			CorpseHudView.ShowInBar = false;
     			CorpseHudView.UserResizeable = false;
@@ -526,13 +518,13 @@ namespace GearFoundry
     			CorpseHudView.Controls.HeadControl = CorpseHudLayout;
     			
     			CorpseHudTabView = new HudTabView();
-    			CorpseHudLayout.AddControl(CorpseHudTabView, new Rectangle(0,0,CorpseHudWidth,CorpseHudHeight));
+    			CorpseHudLayout.AddControl(CorpseHudTabView, new Rectangle(0,0,ghSettings.CorpseHudWidth,ghSettings.CorpseHudHeight));
     		
     			CorpseHudTabLayout = new HudFixedLayout();
-    			CorpseHudTabView.AddTab(CorpseHudTabLayout, "GearVisection");
+    			CorpseHudTabView.AddTab(CorpseHudTabLayout, "Corpses");
     			
     			CorpseHudSettingsTab = new HudFixedLayout();
-    			CorpseHudTabView.AddTab(CorpseHudSettingsTab, "Settings");
+    			CorpseHudTabView.AddTab(CorpseHudSettingsTab, "Set");
     			
     			CorpseHudTabView.OpenTabChange += CorpseHudTabView_OpenTabChange;
                 CorpseHudView.Resize += CorpseHudView_Resize; 
@@ -553,12 +545,10 @@ namespace GearFoundry
         {
             try
             {
-                bool bw = Math.Abs(CorpseHudView.Width - CorpseHudWidth) > 20;
-                bool bh = Math.Abs(CorpseHudView.Height - CorpseHudHeight) > 20;
+                bool bw = Math.Abs(CorpseHudView.Width - ghSettings.CorpseHudWidth) > 20;
+                bool bh = Math.Abs(CorpseHudView.Height - ghSettings.CorpseHudHeight) > 20;
                 if (bh || bw)
                 {
-                    CorpseHudWidthNew = CorpseHudView.Width;
-                    CorpseHudHeightNew = CorpseHudView.Height;
                     MasterTimer.Tick += CorpseHudResizeTimerTick;
                 }
             }
@@ -571,14 +561,11 @@ namespace GearFoundry
 
         private void CorpseHudResizeTimerTick(object sender, EventArgs e)
         {
-            CorpseHudWidth = CorpseHudWidthNew;
-            CorpseHudHeight = CorpseHudHeightNew;
-            ghSettings.CorpseHudWidth = CorpseHudWidth;
-            ghSettings.CorpseHudHeight = CorpseHudHeight;
+			MasterTimer.Tick -= CorpseHudResizeTimerTick;
+            ghSettings.CorpseHudWidth = CorpseHudView.Width;
+            ghSettings.CorpseHudHeight = CorpseHudView.Height;
             GearVisectionReadWriteSettings(false);            
-            MasterTimer.Tick -= CorpseHudResizeTimerTick;
             RenderCorpseHud();
-
         }
 
     	
@@ -608,10 +595,10 @@ namespace GearFoundry
     		try
     		{
     			CorpseHudList = new HudList();
-    			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0,CorpseHudWidth,CorpseHudHeight));
+    			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0,ghSettings.CorpseHudWidth,ghSettings.CorpseHudHeight));
 				CorpseHudList.ControlHeight = 16;	
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
-				CorpseHudList.AddColumn(typeof(HudStaticText), 200, null);
+				CorpseHudList.AddColumn(typeof(HudStaticText), ghSettings.CorpseHudWidth - 60, null);
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				
 				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);	
@@ -657,36 +644,44 @@ namespace GearFoundry
     	HudCheckBox KillsByFellows;
     	HudCheckBox DeadMes;
     	HudCheckBox Permitteds;
+    	HudCheckBox GVisRenderMini;
     	
     	private void RenderCorpseHudSettingsTab()
     	{
     		try
     		{
     			AllCorpses = new HudCheckBox();
-    			AllCorpses.Text = "Track All Corpses";
+    			AllCorpses.Text = "Trk All";
     			CorpseHudSettingsTab.AddControl(AllCorpses, new Rectangle(0,0,150,16));
     			AllCorpses.Checked = ghSettings.bAllCorpses;
     			
     			KillsBySelf = new HudCheckBox();
-    			KillsBySelf.Text = "Track Kills by Self";
+    			KillsBySelf.Text = "Trk Self";
     			CorpseHudSettingsTab.AddControl(KillsBySelf, new Rectangle(0,18,150,16));
     			KillsBySelf.Checked = ghSettings.bKillsBySelf;
     			
     			KillsByFellows = new HudCheckBox();
-    			KillsByFellows.Text = "Track Kills by Fellows";
+    			KillsByFellows.Text = "Trk Fellows";
     			CorpseHudSettingsTab.AddControl(KillsByFellows, new Rectangle(0,36,150,16));
     			KillsByFellows.Checked = ghSettings.bKillsByFellows;
     			
     			DeadMes = new HudCheckBox();
-    			DeadMes.Text = "Track Dead Me(s)";
+    			DeadMes.Text = "Trk DeadMe";
     			CorpseHudSettingsTab.AddControl(DeadMes, new Rectangle(0,54,150,16));
     			DeadMes.Checked = ghSettings.bDeadMes;
     			
     			Permitteds = new HudCheckBox();
-    			Permitteds.Text = "Track Permitted Corpses";
+    			Permitteds.Text = "Trk Permit";
     			CorpseHudSettingsTab.AddControl(Permitteds, new Rectangle(0,72,150,16));
     			Permitteds.Checked = ghSettings.Permitteds;
-    			    			
+    			
+    			GVisRenderMini = new HudCheckBox();
+    			GVisRenderMini.Text = "R. Mini";
+    			CorpseHudSettingsTab.AddControl(GVisRenderMini, new Rectangle(0,90,150,16));
+    			GVisRenderMini.Checked = ghSettings.RenderMini;
+    			
+    			
+    			GVisRenderMini.Change += GVisRenderMini_Change;    			
     			AllCorpses.Change += AllCorpses_Change;
     			KillsBySelf.Change += KillsBySelf_Change;
     			KillsByFellows.Change += KillsByFellows_Change;
@@ -708,8 +703,9 @@ namespace GearFoundry
     			KillsByFellows.Change -= KillsByFellows_Change;
     			DeadMes.Change -= DeadMes_Change;
     			Permitteds.Change -= Permitteds_Change;
+    			GVisRenderMini.Change -= GVisRenderMini_Change;  
     			
-    			
+    			GVisRenderMini.Dispose();
     			Permitteds.Dispose();
     			DeadMes.Dispose();
     			KillsByFellows.Dispose();
@@ -720,6 +716,28 @@ namespace GearFoundry
     			
     		}catch(Exception ex){LogError(ex);}
     	}
+    	
+    	
+    	private void GVisRenderMini_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			ghSettings.RenderMini = GVisRenderMini.Checked;
+    			if(ghSettings.RenderMini)
+    			{
+    				ghSettings.CorpseHudHeight = 220;
+    				ghSettings.CorpseHudWidth = 150;
+    			}
+    			else
+    			{
+    				ghSettings.CorpseHudHeight = 220;
+    				ghSettings.CorpseHudWidth = 300;
+    			}
+    			GearVisectionReadWriteSettings(false);
+    			RenderCorpseHud();
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
     	
     	void CorpseHudList_Click(object sender, int row, int col)
     	{
@@ -805,8 +823,8 @@ namespace GearFoundry
 	    	    	CorpseHudListRow = CorpseHudList.AddRow();
 	    	    	
 	    	    	((HudPictureBox)CorpseHudListRow[0]).Image = corpse.Icon + 0x6000000;
-	    	    	((HudStaticText)CorpseHudListRow[1]).FontName = "Arial";
-	    	    	((HudStaticText)CorpseHudListRow[1]).Text = corpse.HudString();
+	    	    	if(ghSettings.RenderMini){((HudStaticText)CorpseHudListRow[1]).Text = corpse.MiniHudString();}
+	    	    	else{((HudStaticText)CorpseHudListRow[1]).Text = corpse.HudString();}
                     ((HudStaticText)CorpseHudListRow[1]).FontHeight = 10;
 	    	    	if(corpse.IOR == IOResult.corpseselfkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.AntiqueWhite;}
 	    	    	if(corpse.IOR == IOResult.corpsepermitted) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Cyan;}

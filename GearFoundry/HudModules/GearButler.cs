@@ -898,6 +898,7 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
+    	private DateTime ButlerLastAction = DateTime.MinValue;
     	private void ButlerHudSalvageCurrentSelection_Hit(object sender, System.EventArgs e)
     	{
     		try
@@ -906,8 +907,9 @@ namespace GearFoundry
     			{
     				if(Core.WorldFilter.GetInventory().Any(x => x.Name.ToLower() == "ust"))
     				{
-	    				Core.Actions.SalvagePanelAdd(Core.WorldFilter[Core.Actions.CurrentSelection].Id);
-	    				Core.Actions.SalvagePanelSalvage();
+    					Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "ust").First().Id, 0);
+	    				ButlerLastAction = DateTime.Now;
+	    				Core.RenderFrame += RenderFrame_BulterSalvage;
     				}
     				else
     				{
@@ -917,6 +919,20 @@ namespace GearFoundry
     			UpdateButlerHudList();
     			
     		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	private void RenderFrame_BulterSalvage(object sender, EventArgs e)
+    	{
+    		try
+    		{
+	    		if((DateTime.Now - ButlerLastAction).TotalMilliseconds < 100) {return;}
+	    		else
+	    		{
+	    			Core.RenderFrame -= RenderFrame_BulterSalvage;	
+	    		}
+	    		Core.Actions.SalvagePanelAdd(Core.WorldFilter[Core.Actions.CurrentSelection].Id);
+		    	Core.Actions.SalvagePanelSalvage();
+    		}catch(Exception ex){LogError(ex);}    	
     	}
     	
     	private void ButlerHudSearchBox_Lostfocus(object sender, System.EventArgs e)

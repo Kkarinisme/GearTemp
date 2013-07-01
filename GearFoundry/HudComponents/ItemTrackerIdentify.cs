@@ -205,7 +205,7 @@ namespace GearFoundry
 					}					
 					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) 
 					{
-						WriteToChat("Trophy Rected on LootMax Check");
+						WriteToChat("Trophy Rejected on LootMax Check.");
 						return;
 					}
 						 
