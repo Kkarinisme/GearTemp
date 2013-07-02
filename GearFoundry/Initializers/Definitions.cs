@@ -78,7 +78,6 @@ namespace GearFoundry
 		private const int GE_DISBAND_FELLOWSHIP = 0x02BF;
 		        
         XDocument xdoc = null;
-        XDocument xdocToonSettings = null;
         XDocument xdocGenSettings = null;
         XDocument xdocSwitchGearSettings = null;
         XDocument xdocMobs = null;
@@ -94,14 +93,12 @@ namespace GearFoundry
 
         private string GearDir = null;
         private string currDir = null;
-        private string pathToToon = null;
         private string toonDir = null;
         private string mobsFilename = null;
         private string trophiesFilename = null;
         private string salvageFilename = null;
         private string rulesFilename = null;
         private string tempFilename = null;
-        private string spellsFilename = null;
         private string switchGearSettingsFilename = null;
         private string genSettingsFilename = null;
         private string toonSettingsFilename = null;
@@ -111,6 +108,7 @@ namespace GearFoundry
         private string quickSlotsvFilename = null;
         private string quickSlotshFilename = null;
         private string remoteGearFilename = null;
+        private string programinv = "";
 
         private int nitemFontHeight = 0;
         private int nmenuFontHeight = 0;
@@ -124,8 +122,7 @@ namespace GearFoundry
         private string sinput;
         private bool mexact = false;
         private bool mchecked = false;
-        private bool menabled = false;
-        bool mgoon;
+        private bool mgoon;
         bool mgoonInv;
 
         int nNextRuleNum;
@@ -207,7 +204,6 @@ namespace GearFoundry
         int nRuleNumSpells = 0;
         int nid;
         int nusearrowid;
-        int arrowtimer;
         int nspells;
 
 
@@ -230,9 +226,9 @@ namespace GearFoundry
         private string toonInvName;
         private string world;
 
-        private static XElement element = null;
-        private static IEnumerable<XElement> childElements = null;
-        private static IEnumerable<XElement> elements = null;
+//        private static XElement element = null;
+//        private static IEnumerable<XElement> childElements = null;
+//        private static IEnumerable<XElement> elements = null;
 
 
 
@@ -251,9 +247,9 @@ namespace GearFoundry
         private static WindowsTimer mWaitingForIDTimer = new WindowsTimer();
         private int m = 500;
         //ToMish:  Are you using these?  If not can they be removed?
-        private int k = 0;
-        private int n = 0;
-        private int mcount = 0;
+//        private int k = 0;
+//        private int n = 0;
+//        private int mcount = 0;
 
         //Used in inventory functions
         private static string objSpellXml = null;
@@ -268,12 +264,12 @@ namespace GearFoundry
         private static long objLevelInt = 1;
         private static long objCovers = 0;
         private static string objCoversName = null;
-        private static string objSpells = null;
+//        private static string objSpells = null;
         private static Int32 objIcon;
         private static long objArmorLevel = 1;
         private static long objArmorSet = 0;
         private static long objSet = 0;
-        private static long objLore = 0;
+//        private static long objLore = 0;
         private static string objArmorSetName = null;
         private static long objMat = 0;
         private static long objMagicDamageInt = 0;
@@ -303,17 +299,16 @@ namespace GearFoundry
         string objElemvsMons;
         string objMaxDam;
         string objAttack;
-        string objVar;
+//        string objVar;
         string objBurden;
         string objStack;
 
         
         //variables used to hold settings
-        private static bool bquickSlotsEnabled;
         private static bool bquickSlotsvEnabled;
         private static bool bquickSlotshEnabled;
  
-        private static bool bvulnedIconsEnabled;
+ //       private static bool bvulnedIconsEnabled;
         
  
         //private static bool bsalvageCombEnabled;

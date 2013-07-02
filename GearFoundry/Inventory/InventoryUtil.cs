@@ -26,6 +26,12 @@ namespace GearFoundry
         {
             try
             {
+            	if(programinv.Contains("armor"))
+            	{
+            		WriteToChat("Cannot run inventory until armor inventory is completed.");
+            	}
+            	else{
+            	programinv = "inventory";
                xdoc = new XDocument(new XElement("Objs"));
                 //Need a list to hold the inventory
                 mWaitingForIDTimer = new WindowsTimer();
@@ -69,7 +75,7 @@ namespace GearFoundry
 
                 //Now need to start routines that will continue to get data as becomes available or will end the search and save the files
                 mIsFinished();  
-
+            	}
             } //end of try
             catch (Exception ex) { LogError(ex); }
         } // end of dogetinventory
@@ -100,12 +106,13 @@ namespace GearFoundry
                         n = 0;
                         mWaitingForID = null;
                         xdoc = null;
+                        programinv = "";
                     }
                     catch (Exception ex) { LogError(ex); }
                  }
                  else if (n < m )
                  {
-                        GearFoundry.PluginCore.WriteToChat(s);
+                        GearFoundry.PluginCore.WriteToChat("Inventory remaining to be ID'd: " + s);
                         m = n;
                         string mname = null;
                         
