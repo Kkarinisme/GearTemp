@@ -58,7 +58,7 @@ namespace GearFoundry
 			public string rulename;
 			public double DistanceAway;
 			
-			public double GearScore
+			public int GearScore
 			{	
 				get
 				{
@@ -122,7 +122,7 @@ namespace GearFoundry
 					}
 					if(wo.LongKeys.Contains((int)LongValueKey.Imbued)) {gearscorereturn++;}
 					gearscorereturn += RatingScore;
-					return gearscorereturn;	
+					return Convert.ToInt32(gearscorereturn);
 				}
 			}
 			
@@ -152,7 +152,7 @@ namespace GearFoundry
 				}
 			}
 			
-			public double ArmorScore
+			public int ArmorScore
 			{
 				get
 				{
@@ -212,7 +212,7 @@ namespace GearFoundry
 							}
 						}
 
-						return basearmortinks + cantripsteelbonus + availabletinks + impen7or8;
+						return Convert.ToInt32(basearmortinks + cantripsteelbonus + availabletinks + impen7or8);
 					}
 					//Calculation for unenchantable armor.  
 					else 
@@ -393,7 +393,7 @@ namespace GearFoundry
 							if(lighttinksbonus < 5) {protectionpenatly += 5 - lighttinksbonus;}
 							if(coldtinksbonus < 5) {protectionpenatly += 5 - coldtinksbonus;}
 							
-							return steelvalue + cantripsteelbonus + enchantmentsteelbonus + tinkersavailable - protectionpenatly;
+							return Convert.ToInt32(steelvalue + cantripsteelbonus + enchantmentsteelbonus + tinkersavailable - protectionpenatly);
 							
 						}
 						//Calculation for unenchantable armor with enchants firing
@@ -419,24 +419,24 @@ namespace GearFoundry
 							if(firetinkspenalty > 0) {protectionspenalty += firetinkspenalty;}
 							if(lighttinkspentalty > 0) {protectionspenalty += lighttinkspentalty;}
 							
-							return steelvalue - protectionspenalty + tinkersavailable;				
+							return Convert.ToInt32(steelvalue - protectionspenalty + tinkersavailable);
 						}	
 					}
 				}
 			}
 			
-			public double RatingScore
+			public int RatingScore
 			{
 				get
 				{
-					return (double)wo.Values((LongValueKey)NewLongKeys.Crit) + (double)wo.Values((LongValueKey)NewLongKeys.CritResist) + 
-						(double)wo.Values((LongValueKey)NewLongKeys.CritDam) + (double)wo.Values((LongValueKey)NewLongKeys.CritDamResist) + 
-						(double)wo.Values((LongValueKey)NewLongKeys.Dam) + (double)wo.Values((LongValueKey)NewLongKeys.DamResist);
+					return wo.Values((LongValueKey)NewLongKeys.Crit) + wo.Values((LongValueKey)NewLongKeys.CritResist) + 
+						wo.Values((LongValueKey)NewLongKeys.CritDam) + wo.Values((LongValueKey)NewLongKeys.CritDamResist) + 
+						wo.Values((LongValueKey)NewLongKeys.Dam) + wo.Values((LongValueKey)NewLongKeys.DamResist);
 				}
 			}
 				
 			//Modified Looting Properties (calculated)
-			public double SkillScore
+			public int SkillScore
 			{
 				get
 				{	
@@ -584,17 +584,17 @@ namespace GearFoundry
 					}
 					if(wo.ObjectClass == ObjectClass.WandStaffOrb && !wo.DoubleKeys.Contains((int)DoubleValueKey.ElementalDamageVersusMonsters))
 					{
-						return basesum + cantripattackboosters + cantripdefenseboosters + manacbase * cantripmanaconversionboosters + 10 - wo.Values(LongValueKey.NumberTimesTinkered);
+						return Convert.ToInt32(basesum + cantripattackboosters + cantripdefenseboosters + manacbase * cantripmanaconversionboosters + 10 - wo.Values(LongValueKey.NumberTimesTinkered));
 					}
 					else
 					{
-						return basesum + cantripattackboosters + cantripdefenseboosters + manacbase * cantripmanaconversionboosters;
+						return Convert.ToInt32(basesum + cantripattackboosters + cantripdefenseboosters + manacbase * cantripmanaconversionboosters);
 					}
 				}
 					
 			}
 			
-			public double OffenseScore
+			public int OffenseScore
 			{
 				get
 				{
@@ -698,7 +698,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2486 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
 							}
 						}					
-						return (damagebase * fudgefactor * mscleaveadjust) + (availabletinks - granitetinks) + cantripdamageboosters;
+						return Convert.ToInt32((damagebase * fudgefactor * mscleaveadjust) + (availabletinks - granitetinks) + cantripdamageboosters);
 					}
 					
 					if(wo.ObjectClass == ObjectClass.MissileWeapon)
@@ -726,7 +726,7 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2486 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
 							}
 						}					
-						return mahoganytinks + availabletinks + cantripdamageboosters + elementaldamagebonus;										
+						return Convert.ToInt32(mahoganytinks + availabletinks + cantripdamageboosters + elementaldamagebonus);
 					}
 					
 					if(wo.ObjectClass == ObjectClass.WandStaffOrb)
@@ -786,7 +786,7 @@ namespace GearFoundry
 						}
 						if(wo.DoubleKeys.Contains((int)DoubleValueKey.ElementalDamageVersusMonsters))
 						{
-							return elementaldamagevsmonstersbase + cantripdamageboosters + availabletinks;
+							return Convert.ToInt32(elementaldamagevsmonstersbase + cantripdamageboosters + availabletinks);
 						}
 						else{return 0;}
 					}	

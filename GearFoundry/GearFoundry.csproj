@@ -99,6 +99,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HudComponents\CombatHudMechanics.cs" />
+    <Compile Include="HudModules\GearMaid.cs" />
+    <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="Initializers\Enums.cs" />
     <Compile Include="WrapperClasses\LandscapeObject.cs" />
     <Compile Include="WrapperClasses\LootObject.cs" />
