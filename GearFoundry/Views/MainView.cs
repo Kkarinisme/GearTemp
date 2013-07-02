@@ -126,15 +126,15 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ITextBox txtRuleWieldReqValue;
         MyClasses.MetaViewWrappers.ITextBox txtRuleWieldLevel;
  
-        MyClasses.MetaViewWrappers.IStaticText lblRuleInfo;
-         MyClasses.MetaViewWrappers.IStaticText lblRuleWork;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleNameMust;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleBurden;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleNameMustNot;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleValue;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleWieldLevel;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleWieldReqValue;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleItemLevel;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleInfo;
+        // MyClasses.MetaViewWrappers.IStaticText lblRuleWork;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleNameMust;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleBurden;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleNameMustNot;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleValue;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleWieldLevel;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleWieldReqValue;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleItemLevel;
        //  MyClasses.MetaViewWrappers.IStaticText lblRuleAlertName;
 
         // Controls on Notify.SearchRules.Weapon Page
@@ -162,23 +162,23 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkilld;
         MyClasses.MetaViewWrappers.ITextBox txtRuleMinMaxd;
 
-        MyClasses.MetaViewWrappers.IStaticText lblWeapCat;
-        MyClasses.MetaViewWrappers.IStaticText lblMastCat;
-        MyClasses.MetaViewWrappers.IStaticText lblDamageTypes;
+        //MyClasses.MetaViewWrappers.IStaticText lblWeapCat;
+        //MyClasses.MetaViewWrappers.IStaticText lblMastCat;
+        //MyClasses.MetaViewWrappers.IStaticText lblDamageTypes;
         MyClasses.MetaViewWrappers.IStaticText lblRuleMcModAttack;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleMeleeD;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleMagicD;
-        MyClasses.MetaViewWrappers.IStaticText lblEnabled10025;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleReqSkill;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleMeleeD;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleMagicD;
+        //MyClasses.MetaViewWrappers.IStaticText lblEnabled10025;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleReqSkill;
         MyClasses.MetaViewWrappers.IStaticText lblRuleMinMax_ElvsMons;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleMSCleave;
+//        MyClasses.MetaViewWrappers.IStaticText lblRuleMSCleave;
 
         // Controls on Notify.SearchRules.Armor Page
         MyClasses.MetaViewWrappers.IList lstRuleArmorCoverages;
         MyClasses.MetaViewWrappers.IList lstRuleArmorTypes;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleMustBeUnenchantable;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleArmorCoverage;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleArmorTypes;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleArmorCoverage;
+        //MyClasses.MetaViewWrappers.IStaticText lblRuleArmorTypes;
         MyClasses.MetaViewWrappers.ITextBox txtRuleMinArmorLevel;
         MyClasses.MetaViewWrappers.IList lstRuleSets;
 
@@ -216,19 +216,19 @@ namespace GearFoundry
 //        MyClasses.MetaViewWrappers.ITextBox txtRuleSpellMatches;
         MyClasses.MetaViewWrappers.ITextBox txtRuleNumSpells;
 
-        MyClasses.MetaViewWrappers.IStaticText lblRuleMustHaveSpells;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleMoreSpells;
+    //    MyClasses.MetaViewWrappers.IStaticText lblRuleMustHaveSpells;
+    //    MyClasses.MetaViewWrappers.IStaticText lblRuleMoreSpells;
 
 
         // Controls on Notify.NPC/Trophies Page
 
         MyClasses.MetaViewWrappers.IList lstmyTrophies;
         MyClasses.MetaViewWrappers.ITextBox txtTrophyName;
-        MyClasses.MetaViewWrappers.IStaticText lblAtr11;
+   //     MyClasses.MetaViewWrappers.IStaticText lblAtr11;
         //MyClasses.MetaViewWrappers.IButton btnAttachTrophyItem;
         MyClasses.MetaViewWrappers.IButton btnAddTrophyItem;
         MyClasses.MetaViewWrappers.ICheckBox chkTrophyExact;
-        MyClasses.MetaViewWrappers.IStaticText lblMyItemsCountMax;
+   //     MyClasses.MetaViewWrappers.IStaticText lblMyItemsCountMax;
         MyClasses.MetaViewWrappers.ITextBox txtTrophyMax;
 
         // Controls on Notify.Mobs Page
@@ -268,11 +268,11 @@ namespace GearFoundry
         // Controls on Alerts Page
         // Controls on Inventory Page
         // Controls on Settings Page
-        MyClasses.MetaViewWrappers.IList lstOtherOptions;
+      //  MyClasses.MetaViewWrappers.IList lstOtherOptions;
         // Variable name txtSettingsCW was txtsettingscw
-        MyClasses.MetaViewWrappers.ITextBox txtSettingsCW;
+     //   MyClasses.MetaViewWrappers.ITextBox txtSettingsCW;
         // Variable name lblSettings001 was lblsettings001  
-        MyClasses.MetaViewWrappers.IStaticText lblSettings001;
+      //  MyClasses.MetaViewWrappers.IStaticText lblSettings001;
 
 
 

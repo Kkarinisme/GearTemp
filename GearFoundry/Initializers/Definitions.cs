@@ -344,10 +344,10 @@ namespace GearFoundry
 
         //gearmisc variables
         private static bool bMuteSounds = false;
-        private static Decal.Interop.D3DService.CD3DObj mMarkObject;
-        private Decal.Interop.D3DService.ID3DService mD3DService;
+        //private static Decal.Interop.D3DService.CD3DObj mMarkObject;
+        //private Decal.Interop.D3DService.ID3DService mD3DService;
 
-        private static Decal.Interop.D3DService.eShape mArrow;
+        //private static Decal.Interop.D3DService.eShape mArrow;
 
         //used with switch in util for determining sound to play
         private static int mSound = 0;

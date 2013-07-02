@@ -28,7 +28,7 @@ namespace GearFoundry
             {
             	if(programinv.Contains("armor"))
             	{
-            		WriteToChat("Cannot run inventory until armor inventory is completed.");
+            		WriteToChat("Cannot run general inventory until armor inventory is completed.");
             	}
             	else{
             	programinv = "inventory";

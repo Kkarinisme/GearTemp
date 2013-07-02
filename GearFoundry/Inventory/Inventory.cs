@@ -815,7 +815,7 @@ namespace GearFoundry
  
 
                     }
-                    catch (Exception ex) {WriteToChat("I am in the catch exception"); mgoonInv = false; doGetInventory(); LogError(ex);}
+                    catch (Exception ex) {mgoonInv = false; doGetInventory(); LogError(ex);}
 
 
                 }
@@ -919,8 +919,6 @@ namespace GearFoundry
                         case 0:
                             if (mySelect.Length > 0)
                             {
-                                WriteToChat("length  of myselect: " + mySelect.Length.ToString());
-
                                 newDoc = new XDocument(new XElement("Objs",
                                   from p in xdoc.Element("Objs").Descendants("Obj")
                                   where p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -1749,7 +1747,6 @@ namespace GearFoundry
                             {
                                 int objMaterial = Convert.ToInt32(childElement.Element("ObjMaterial").Value);
                                 string objMaterialName = "";
-                                WriteToChat("objName: " + objName); // + "; //objMaterialName " + objMaterialName);
                                 foreach (IDNameLoadable item in MaterialInvList)
                                 {
                                     if (item.ID == objMaterial)
@@ -1792,7 +1789,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in function to write selected inventory to chat.");
                 xdoc = XDocument.Load(inventorySelect);
                 IEnumerable<XElement> myelements = xdoc.Element("Objs").Descendants("Obj");
                 List<XElement> inventorySelectList = new List<XElement>();
@@ -1824,7 +1820,6 @@ namespace GearFoundry
              objLevel = objWieldValue.ToString();
 
              int nobjEmbue = Convert.ToInt32(element.Element("ObjEmbue").Value);
-                WriteToChat("nobjEmbue " + nobjEmbue.ToString());
               if (nobjEmbue > 0)
               {
                   foreach (IDNameLoadable piece in EmbueInvList)
@@ -1832,7 +1827,6 @@ namespace GearFoundry
                       if (piece.ID == nobjEmbue)
                       {
                           objEmbue = piece.name;
-                          WriteToChat("objEmbue = " + objEmbue);
                           break;
                      }
                   }
@@ -1855,7 +1849,6 @@ namespace GearFoundry
                 if(objClassName.Contains("Armor") || objClassName.Contains("Clothing"))
                 {
                    objSet = Convert.ToInt32(element.Element("ObjSet").Value);
-                   WriteToChat("objset " + objSet.ToString());
                    if (Convert.ToInt32(element.Element("ObjSet").Value) > 0)
                    { objArmorSetName = SetsIndex[Convert.ToInt32(element.Element("ObjSet").Value)].name; }
                     else { objArmorSetName = "None"; 
@@ -1864,7 +1857,6 @@ namespace GearFoundry
                    objCovers = (Convert.ToInt32(element.Element("ObjCovers").Value));
                   if(objCovers > 0)
                    {
-                       WriteToChat("Object covers " + objCovers.ToString());
                       foreach(IDNameLoadable piece in CoverageInvList)
                       {
                          if(piece.ID == objCovers)
@@ -1952,7 +1944,6 @@ namespace GearFoundry
 
 
                    objMaxDam = element.Element("ObjMaxDamage").Value;
-                   WriteToChat("objMaxDam " + objMaxDam);
                    objMaxDamLong = Convert.ToInt32(objMaxDam);
                    objMinDam = Math.Round(objMaxDamLong - ((objDVar) * (objMaxDamLong)), 2).ToString();
 
@@ -1974,7 +1965,6 @@ namespace GearFoundry
  
 
                 message = objName + ", " + toonInvName;
-                WriteToChat(message + "Objclass: " + objClass.ToString());
                 switch (objClass)
                 {
                     //case 0:
@@ -2077,7 +2067,7 @@ namespace GearFoundry
 
 
                 GearFoundry.PluginCore.WriteToChat(message);
-//                message = null;
+                 message = null;
 //                elements = null;
 //                childElements = null;
 //                element = null;

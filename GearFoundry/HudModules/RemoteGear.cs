@@ -120,7 +120,6 @@ namespace GearFoundry
                 mRemoteGear5.Image = GR_Inventory_ICON;
                 remoteGearTabFixedLayout.AddControl(mRemoteGear5, new Rectangle(2, 155, 25, 25));
                 mRemoteGear5.Hit += (sender, obj) => mRemoteGear5_Hit(sender, obj);
-                WriteToChat("Inventory Hud has been added.");
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -138,7 +137,6 @@ namespace GearFoundry
                 mRemoteGear6.Image = (ACImage)gearswapvert;
 
                 remoteGearTabFixedLayout.AddControl(mRemoteGear6, new Rectangle(2, 185, 25, 25));
-                WriteToChat("Vertical switch gear has been added.");
                 mRemoteGear6.Hit += (sender, obj) => mRemoteGear6_Hit(sender, obj);
 
             }

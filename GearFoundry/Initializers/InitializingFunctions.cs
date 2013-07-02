@@ -1074,7 +1074,6 @@ namespace GearFoundry
             try
             {
                 if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = GearDir + @"\ArmorSettings.xml"; }
-                WriteToChat("I am in save armor settings and armor settings filename is " + armorSettingsFilename);
                 xdoc = new XDocument(new XElement("Settings"));
                 xdoc.Element("Settings").Add(new XElement("Setting",
                     new XElement("ArmorHudWidth", ArmorHudWidth),
