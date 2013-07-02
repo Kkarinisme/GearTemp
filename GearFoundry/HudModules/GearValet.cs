@@ -33,27 +33,23 @@ namespace GearFoundry
 		private HudStaticText ValetSuitListLabel = null;
 		private HudStaticText ValetSuitPiecesListLabel = null;
 		
-//		private HudButton ValetEquipSuit3 = null;
-//		private HudButton ValetEquipSuit0 = null;
-//		private HudButton ValetSuit1 = null;
-//		private HudButton ValetSuit2 = null;
-//		private HudButton ValetSuit3 = null;
-//		private HudButton ValetSuit0 = null;
-//		private HudButton ValetClearSuit1 = null;
-//		private HudButton ValetClearSuit2 = null;
-//		private HudButton ValetClearSuit3 = null;
-//		private HudButton ValetClearSuit0 = null;
-//		private HudList ValetSuit1List = null;
-//		private HudList ValetSuit2List= null;
-//		private HudList ValetSuit3List = null;
-//		private HudList ValetSuit0List = null;
 		private HudList.HudListRowAccessor ValetRow = null;
 		private HudTextBox ValetNameBox = null;
+		private const int GearValetRemoveCircle = 0x60011F8;
+		private int ValetCurrentSuit = 0;
 		
 		public class ValetTicket
 		{
 			public int ItemId = 0;
 			public int SlotId = 0;
+		}
+		
+		public class ValetSuit
+		{
+			public int TicketStub = 0;
+			public string SuitName = String.Empty;
+			public int Icon = 0;
+			public List<ValetTicket> SuitPieces = new List<ValetTicket>();
 		}
 		
 		private void RenderButlerHudValetTab()
@@ -75,121 +71,40 @@ namespace GearFoundry
 				ValetTabLayout.AddControl(ValetCreateSuit, new Rectangle(200,5,splithorizontal-20,20));
 				
 				ValetTextBoxLabel = new HudStaticText();
-				ValetTextBoxLabel.FontHeight = 8;
 				ValetTextBoxLabel.Text = "Suit Label:";
-				ValetTabLayout.AddControl(ValetTextBoxLabel, new Rectangle(0,30,50,10));
+				ValetTabLayout.AddControl(ValetTextBoxLabel, new Rectangle(0,30,50,16));
 				
 				ValetNameBox = new HudTextBox();
 				ValetNameBox.Text = String.Empty;
-				ValetTabLayout.AddControl(ValetNameBox, new Rectangle(10,40,GearButlerSettings.ButlerHudWidth -20, 20));
+				ValetTabLayout.AddControl(ValetNameBox, new Rectangle(10,55,GearButlerSettings.ButlerHudWidth -20, 20));
 				
-			
-				
-				
-//						
-//		private HudStaticText ValetSuitListLabel = null;
-//		private HudStaticText ValetSuitPiecesListLabel = null;
-				
-
-				
+				ValetSuitListLabel = new HudStaticText();
+				ValetSuitListLabel.Text = "Suits:";
+				ValetTabLayout.AddControl(ValetSuitListLabel, new Rectangle(0,80,50,16));			
+	
 				ValetSuitList = new HudList();
-				ValetSuitList.AddColumn(typeof(HudCheckBox), 16, null);
-				ValetSuitList.AddColumn(typeof(HudStaticText), GearButlerSettings.ButlerHudWidth - 60, null);
+				ValetSuitList.AddColumn(typeof(HudPictureBox), 16, null);
+				ValetSuitList.AddColumn(typeof(HudStaticText), GearButlerSettings.ButlerHudWidth - 80, null);
 				ValetSuitList.AddColumn(typeof(HudPictureBox), 16, null);
 				ValetSuitList.AddColumn(typeof(HudStaticText), 1, null);
-				ValetTabLayout.AddControl(ValetSuitList, new Rectangle(0,60,GearButlerSettings.ButlerHudWidth - 20,100));
+				ValetTabLayout.AddControl(ValetSuitList, new Rectangle(0,100,GearButlerSettings.ButlerHudWidth - 20,100));
+				
+				ValetSuitPiecesListLabel = new HudStaticText();
+				ValetSuitPiecesListLabel.Text = "Pieces:";
+				ValetTabLayout.AddControl(ValetSuitPiecesListLabel, new Rectangle(0,210,50,16));	
 				
 				ValetSuitPiecesList = new HudList();
 				ValetSuitPiecesList.AddColumn(typeof(HudPictureBox), 16, null);
-				ValetSuitPiecesList.AddColumn(typeof(HudStaticText), GearButlerSettings.ButlerHudWidth - 60, null);
+				ValetSuitPiecesList.AddColumn(typeof(HudStaticText), GearButlerSettings.ButlerHudWidth - 80, null);
 				ValetSuitPiecesList.AddColumn(typeof(HudPictureBox), 16, null);
 				ValetSuitPiecesList.AddColumn(typeof(HudStaticText), 1, null);
-				ValetTabLayout.AddControl(ValetSuitPiecesList, new Rectangle(0,GearButlerSettings.ButlerHudHeight - 180,GearButlerSettings.ButlerHudWidth - 20,100));
-				                        
-//				ValetSuit1List = new HudList();
-//				ValetSuit1List.AddColumn(typeof(HudPictureBox), 16, null);
-//				ValetSuit1List.AddColumn(typeof(HudStaticText),200,null);
-//				ValetTabLayout.AddControl(ValetSuit1List, new Rectangle(0,150,300,80));
-				
-				
-//				ValetEquipSuit3 = new HudButton();
-//				ValetEquipSuit3.Text = "Jump Suit";
-//				ValetTabLayout.AddControl(ValetEquipSuit3, new Rectangle(10,70,130,20));
-//				
-//				ValetEquipSuit0 = new HudButton();
-//				ValetEquipSuit0.Text = "Zoot Suit";
-//				ValetTabLayout.AddControl(ValetEquipSuit0, new Rectangle(160,70,130,20));
-//							
-//				ValetSuit1 = new HudButton();
-//				ValetSuit1.Text = "Set Business Suit";
-//				ValetTabLayout.AddControl(ValetSuit1, new Rectangle(10,120,130,20));
-//				
-//				ValetClearSuit1 = new HudButton();
-//				ValetClearSuit1.Text = "Clear Business Suit";
-//				ValetTabLayout.AddControl(ValetClearSuit1, new Rectangle(160,120,130,20));
-//				
-//				ValetSuit1List = new HudList();
-//				ValetSuit1List.AddColumn(typeof(HudPictureBox), 16, null);
-//				ValetSuit1List.AddColumn(typeof(HudStaticText),200,null);
-//				ValetTabLayout.AddControl(ValetSuit1List, new Rectangle(0,150,300,80));
-//				
-//				ValetSuit2 = new HudButton();
-//				ValetSuit2.Text = "Set Leisure Suit";
-//				ValetTabLayout.AddControl(ValetSuit2, new Rectangle(10,240,130,20));
-//				
-//				ValetClearSuit2 = new HudButton();
-//				ValetClearSuit2.Text = "Clear Leisure Suit";
-//				ValetTabLayout.AddControl(ValetClearSuit2, new Rectangle(160,240,130,20));
-//				
-//				ValetSuit2List = new HudList();
-//				ValetSuit2List.AddColumn(typeof(HudPictureBox), 16, null);
-//				ValetSuit2List.AddColumn(typeof(HudStaticText),200,null);
-//				ValetTabLayout.AddControl(ValetSuit2List, new Rectangle(0,270,300,80));
-//				
-//				ValetSuit3 = new HudButton();
-//				ValetSuit3.Text = "Set Jump Suit";
-//				ValetTabLayout.AddControl(ValetSuit3, new Rectangle(10,360,130,20));
-//				
-//				ValetClearSuit3 = new HudButton();
-//				ValetClearSuit3.Text = "Clear Jump Suit";
-//				ValetTabLayout.AddControl(ValetClearSuit3, new Rectangle(160,360,130,20));
-//				
-//				ValetSuit3List = new HudList();
-//				ValetSuit3List.AddColumn(typeof(HudPictureBox), 16, null);
-//				ValetSuit3List.AddColumn(typeof(HudStaticText),200,null);
-//				ValetTabLayout.AddControl(ValetSuit3List, new Rectangle(0,390,300,80));
-//				
-//				ValetSuit0 = new HudButton();
-//				ValetSuit0.Text = "Set Zoot Suit";
-//				ValetTabLayout.AddControl(ValetSuit0, new Rectangle(10,480,130,20));
-//				
-//				ValetClearSuit0 = new HudButton();
-//				ValetClearSuit0.Text = "Clear Zoot Suit";
-//				ValetTabLayout.AddControl(ValetClearSuit0, new Rectangle(160,480,130,20));
-//				
-//				ValetSuit0List = new HudList();
-//				ValetSuit0List.AddColumn(typeof(HudPictureBox), 16, null);
-//				ValetSuit0List.AddColumn(typeof(HudStaticText),200,null);
-//				ValetTabLayout.AddControl(ValetSuit0List, new Rectangle(0,510,300,80));
-				
+				ValetTabLayout.AddControl(ValetSuitPiecesList, new Rectangle(0,240,GearButlerSettings.ButlerHudWidth - 20,100));
 				
 				ValetDisrobe.Hit += ValetDisrobe_Hit;
 				ValetEquipSuit.Hit += ValetEquipSuit_Hit;
 				ValetCreateSuit.Hit += ValetCreateSuit_Hit;
-				
-//				ValetEquipSuit2.Hit += ValetEquipSuit2_Hit;
-//				ValetEquipSuit3.Hit += ValetEquipSuit3_Hit;
-//				ValetEquipSuit0.Hit += ValetEquipSuit0_Hit;
-//				
-//				ValetSuit1.Hit += ValetSuit1_Hit;
-//				ValetSuit2.Hit += ValetSuit2_Hit;
-//				ValetSuit3.Hit += ValetSuit3_Hit;
-//				ValetSuit0.Hit += ValetSuit0_Hit;
-//				
-//				ValetClearSuit1.Hit += ValetClearSuit1_Hit;
-//				ValetClearSuit2.Hit += ValetClearSuit2_Hit;
-//				ValetClearSuit3.Hit += ValetClearSuit3_Hit;
-//				ValetClearSuit0.Hit += ValetClearSuit0_Hit;
+				ValetSuitList.Click += ValetSuitList_Click;
+				ValetSuitPiecesList.Click += ValetSuitPiecesList_Click;
 				
 				ValetTab = true;
 				
@@ -208,93 +123,113 @@ namespace GearFoundry
 				ValetDisrobe.Hit -= ValetDisrobe_Hit;
 				ValetEquipSuit.Hit -= ValetEquipSuit_Hit;
 				ValetCreateSuit.Hit -= ValetCreateSuit_Hit;
+				ValetSuitList.Click -= ValetSuitList_Click;
+				ValetSuitPiecesList.Click -= ValetSuitPiecesList_Click;
 				
-//				ValetSuit1.Hit -= ValetSuit1_Hit;
-//				ValetSuit2.Hit -= ValetSuit2_Hit;
-//				ValetSuit3.Hit -= ValetSuit3_Hit;
-//				ValetSuit0.Hit -= ValetSuit0_Hit;
-//				
-//				ValetClearSuit1.Hit -= ValetClearSuit1_Hit;
-//				ValetClearSuit2.Hit -= ValetClearSuit2_Hit;
-//				ValetClearSuit3.Hit -= ValetClearSuit3_Hit;
-//				ValetClearSuit0.Hit -= ValetClearSuit0_Hit;
-//				
-				
-//				ValetDisrobe.Dispose();
-//				ValetEquipSuit.Dispose();
-//				ValetCreateSuit.Dispose();
-//				
-//				ValetSuit1.Dispose();
-//				ValetClearSuit1.Dispose();	
-//				ValetSuit1List.Dispose();
-//				ValetSuit1List = null;
-//				
-//				ValetSuit2.Dispose();
-//				ValetClearSuit2.Dispose();
-//				ValetSuit2List.Dispose();
-//				ValetSuit2List = null;
-//				
-//				ValetSuit3.Dispose();
-//				ValetClearSuit3.Dispose();
-//				ValetSuit3List.Dispose();
-//				ValetSuit3List = null;
-//				
-//				ValetSuit0.Dispose();
-//				ValetClearSuit0.Dispose();
-//				ValetSuit0List.Dispose();
-//				ValetSuit0List = null;
-//				
-//				ValetEquipSuit1.Dispose();
-//				ValetEquipSuit2.Dispose();
-//				ValetEquipSuit3.Dispose();
-//				ValetEquipSuit0.Dispose();
+				ValetDisrobe.Dispose();
+				ValetEquipSuit.Dispose();
+				ValetCreateSuit.Dispose();
+				ValetTextBoxLabel.Dispose();
+				ValetNameBox.Dispose();				
+				ValetSuitListLabel.Dispose();			
+				ValetSuitList.Dispose();				
+				ValetSuitPiecesListLabel.Dispose();				
+				ValetSuitPiecesList.Dispose();
 				
 				ValetTab = false;
 				
 			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void ValetSuitList_Click(object sender, int row, int col)
+		{
+			try
+			{
+				ValetRow = ValetSuitList[row];
+				if(col == 0 || col == 1)
+				{
+					
+					ValetCurrentSuit = Convert.ToInt32(((HudStaticText)ValetRow[3]).Text);
+					UpdateValetHud();
+				}
+				if(col == 2)
+				{
+					GearButlerSettings.ValetSuitList.RemoveAll(x => x.TicketStub == Convert.ToInt32(((HudStaticText)ValetRow[3]).Text));
+					if(GearButlerSettings.ValetSuitList.Count > 0 && !GearButlerSettings.ValetSuitList.Any(x => x.TicketStub == ValetCurrentSuit))
+					{
+						ValetCurrentSuit = GearButlerSettings.ValetSuitList.First().TicketStub;
+					}
+					else
+					{
+						ValetCurrentSuit = 0;
+					}
+					UpdateValetHud();
+				}				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void ValetSuitPiecesList_Click(object sender, int row, int col)
+		{
+			try
+			{
+				ValetRow = ValetSuitPiecesList[row];
+				if(col == 0)
+				{
+					Core.Actions.SelectItem(Convert.ToInt32(((HudStaticText)ValetRow[3]).Text));
+				}
+				if(col == 1)
+				{
+					LootObject tLootObj = new LootObject(Core.WorldFilter[Convert.ToInt32(((HudStaticText)ValetRow[3]).Text)]);
+					tLootObj.GSReportString();
+				}
+				if(col == 2)
+				{
+					GearButlerSettings.ValetSuitList[ValetCurrentSuit].SuitPieces.RemoveAll(x => x.ItemId == Convert.ToInt32(((HudStaticText)ValetRow[3]).Text));
+					if(GearButlerSettings.ValetSuitList[ValetCurrentSuit].SuitPieces.Count == 0)
+					{
+						GearButlerSettings.ValetSuitList.RemoveAll(x => x.TicketStub == ValetCurrentSuit);
+					}
+					if(GearButlerSettings.ValetSuitList.Count > 0 && !GearButlerSettings.ValetSuitList.Any(x => x.TicketStub == ValetCurrentSuit))
+					{
+						ValetCurrentSuit = GearButlerSettings.ValetSuitList.First().TicketStub;
+					}
+					else
+					{
+						ValetCurrentSuit = 0;
+					}
+				}
+				UpdateValetHud();
+				
+			}catch(Exception ex){LogError(ex);}		
 		}
 				
 		private void UpdateValetHud()
 		{
 			try
 			{
-//				ValetSuit0List.ClearRows();
-//				ValetSuit1List.ClearRows();
-//				ValetSuit2List.ClearRows();
-//				ValetSuit3List.ClearRows();
-//				
-//				foreach(ValetTicket vt in GearButlerSettings.SuitList1)
-//				{
-//					ValetRow = ValetSuit1List.AddRow();
-//					((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon;
-//                    ((HudStaticText)ValetRow[1]).FontHeight = nitemFontHeight;
-//                    ((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
-//                }
-//				
-//				foreach(ValetTicket vt in GearButlerSettings.SuitList2)
-//				{
-//					ValetRow = ValetSuit2List.AddRow();
-//					((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon;
-//                    ((HudStaticText)ValetRow[1]).FontHeight = nitemFontHeight;
-//                    ((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
-//                }
-//				
-//				foreach(ValetTicket vt in GearButlerSettings.SuitList3)
-//				{
-//					ValetRow = ValetSuit3List.AddRow();
-//					((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon;
-//                    ((HudStaticText)ValetRow[1]).FontHeight = nitemFontHeight;
-//                    ((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
-//				}
-//				
-//				foreach(ValetTicket vt in GearButlerSettings.SuitList0)
-//				{
-//					ValetRow = ValetSuit0List.AddRow();
-//					((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon;
-//					((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
-//                    ((HudStaticText)ValetRow[1]).FontHeight = nitemFontHeight;
-//                }
+				ValetSuitList.ClearRows();
 				
+				if(GearButlerSettings.ValetSuitList.Count == 0){return;}
+				
+				foreach(ValetSuit vs in GearButlerSettings.ValetSuitList)
+				{
+					ValetRow = ValetSuitList.AddRow();
+					((HudPictureBox)ValetRow[0]).Image = vs.Icon + 0x6000000;
+                    ((HudStaticText)ValetRow[1]).Text = vs.SuitName;
+                    if(vs.TicketStub == ValetCurrentSuit) {((HudStaticText)ValetRow[1]).TextColor = Color.Gold;}
+                    ((HudPictureBox)ValetRow[2]).Image = GearValetRemoveCircle;
+                    ((HudStaticText)ValetRow[3]).Text = vs.TicketStub.ToString();
+				}
+				
+				foreach(ValetTicket vt in GearButlerSettings.ValetSuitList[ValetCurrentSuit].SuitPieces)
+				{
+					ValetRow = ValetSuitPiecesList.AddRow();
+					((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon + 0x6000000;
+					((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
+					if(vt.ItemId == Core.Actions.CurrentSelection){((HudStaticText)ValetRow[1]).TextColor = Color.Gold;}
+                    ((HudPictureBox)ValetRow[2]).Image = GearValetRemoveCircle;
+                    ((HudStaticText)ValetRow[3]).Text = vt.ItemId.ToString();
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -312,18 +247,16 @@ namespace GearFoundry
 		{
 			try
 			{
-//				GearButlerSettings.SuitList1.Clear();
-//				
-//				List<WorldObject> vs = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();	
-//				foreach(WorldObject wo in vs)
-//				{
-//					ValetTicket vt = new ValetTicket();
-//					vt.ItemId = wo.Id;
-//					vt.SlotId = wo.Values(LongValueKey.EquippedSlots);
-//					GearButlerSettings.SuitList1.Add(vt);
-//				}
-//				GearButlerReadWriteSettings(false);
-//				UpdateValetHud();
+				if( GearButlerSettings.ValetSuitList.Count == 0)
+				{
+					WriteToChat("First create some suits.");
+					return;
+				}
+				
+				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
+				ValetEquipList = GearButlerSettings.ValetSuitList.Find(x => x.TicketStub == ValetCurrentSuit).SuitPieces.ToList();
+				
+				UpdateValetHud();
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -332,7 +265,55 @@ namespace GearFoundry
 		{
 			try
 			{
-//				GearButlerSettings.SuitList2.Clear();
+				if(ValetNameBox.Text == String.Empty)
+				{
+					WriteToChat("The suit needs a name.  Put a name in the box.");
+					return;
+				}
+				
+				if(Core.Actions.CurrentSelection == 0)
+				{
+					WriteToChat("Select an item to use as the icon for the suit.");
+					return;
+				}
+				
+				int nextsuitid = 0;
+				for(int i = 0; i < GearButlerSettings.ValetSuitList.Count; i++)
+				{
+					if(GearButlerSettings.ValetSuitList[i].TicketStub == nextsuitid)
+					{
+						nextsuitid = i + 1;
+					}	
+				}
+				
+				ValetSuit nValetSuit = new ValetSuit();
+				nValetSuit.TicketStub = nextsuitid;
+				nValetSuit.SuitName = ValetNameBox.Text;
+				nValetSuit.Icon = Core.WorldFilter[Core.Actions.CurrentSelection].Icon;				
+				
+				List<WorldObject> newsuitobjects = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
+
+				foreach(WorldObject wo in newsuitobjects)
+				{
+					ValetTicket vt = new ValetTicket();
+					vt.ItemId = wo.Id;
+					vt.SlotId = wo.Values(LongValueKey.EquippedSlots);
+					nValetSuit.SuitPieces.Add(vt);
+				}
+				
+				GearButlerSettings.ValetSuitList.Add(nValetSuit);
+				
+				GearButlerReadWriteSettings(false);
+				UpdateValetHud();
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+//		private void ValetSuit3_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				GearButlerSettings.SuitList3.Clear();
 //				
 //				List<WorldObject> vs = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();	
 //				foreach(WorldObject wo in vs)
@@ -340,129 +321,109 @@ namespace GearFoundry
 //					ValetTicket vt = new ValetTicket();
 //					vt.ItemId = wo.Id;
 //					vt.SlotId = wo.Values(LongValueKey.EquippedSlots);
-//					GearButlerSettings.SuitList2.Add(vt);
+//					GearButlerSettings.SuitList3.Add(vt);
 //				}
 //				GearButlerReadWriteSettings(false);
 //				UpdateValetHud();
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void ValetSuit3_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				GearButlerSettings.SuitList3.Clear();
-				
-				List<WorldObject> vs = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();	
-				foreach(WorldObject wo in vs)
-				{
-					ValetTicket vt = new ValetTicket();
-					vt.ItemId = wo.Id;
-					vt.SlotId = wo.Values(LongValueKey.EquippedSlots);
-					GearButlerSettings.SuitList3.Add(vt);
-				}
-				GearButlerReadWriteSettings(false);
-				UpdateValetHud();
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void ValetSuit0_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				GearButlerSettings.SuitList0.Clear();
-				
-				List<WorldObject> vs = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();	
-				foreach(WorldObject wo in vs)
-				{
-					ValetTicket vt = new ValetTicket();
-					vt.ItemId = wo.Id;
-					vt.SlotId = wo.Values(LongValueKey.EquippedSlots);
-					GearButlerSettings.SuitList0.Add(vt);
-				}
-				GearButlerReadWriteSettings(false);
-				UpdateValetHud();
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void ValetClearSuit1_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				GearButlerSettings.SuitList1.Clear();
-				GearButlerReadWriteSettings(false);
-				UpdateValetHud();
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void ValetClearSuit2_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				GearButlerSettings.SuitList2.Clear();
-				GearButlerReadWriteSettings(false);
-				UpdateValetHud();
-			}catch(Exception ex){LogError(ex);}
-		}
-				
-		private void ValetClearSuit3_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				GearButlerSettings.SuitList3.Clear();
-				GearButlerReadWriteSettings(false);
-				UpdateValetHud();
-			}catch(Exception ex){LogError(ex);}
-		}
-						
-		private void ValetClearSuit0_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				GearButlerSettings.SuitList0.Clear();
-				GearButlerReadWriteSettings(false);
-				UpdateValetHud();
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void ValetEquipSuit1_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
-				ValetEquipList = GearButlerSettings.SuitList1.ToList();
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void ValetEquipSuit2_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
-				ValetEquipList = GearButlerSettings.SuitList2.ToList();
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void ValetEquipSuit3_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
-				ValetEquipList = GearButlerSettings.SuitList3.ToList();
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void ValetEquipSuit0_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
-				ValetEquipList = GearButlerSettings.SuitList0.ToList();
-			}catch(Exception ex){LogError(ex);}
-		}
+//				
+//			}catch(Exception ex){LogError(ex);}
+//		}
+//		
+//		private void ValetSuit0_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				GearButlerSettings.SuitList0.Clear();
+//				
+//				List<WorldObject> vs = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();	
+//				foreach(WorldObject wo in vs)
+//				{
+//					ValetTicket vt = new ValetTicket();
+//					vt.ItemId = wo.Id;
+//					vt.SlotId = wo.Values(LongValueKey.EquippedSlots);
+//					GearButlerSettings.SuitList0.Add(vt);
+//				}
+//				GearButlerReadWriteSettings(false);
+//				UpdateValetHud();
+//				
+//			}catch(Exception ex){LogError(ex);}
+//		}
+//		
+//		private void ValetClearSuit1_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				GearButlerSettings.SuitList1.Clear();
+//				GearButlerReadWriteSettings(false);
+//				UpdateValetHud();
+//			}catch(Exception ex){LogError(ex);}
+//		}
+//		
+//		private void ValetClearSuit2_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				GearButlerSettings.SuitList2.Clear();
+//				GearButlerReadWriteSettings(false);
+//				UpdateValetHud();
+//			}catch(Exception ex){LogError(ex);}
+//		}
+//				
+//		private void ValetClearSuit3_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				GearButlerSettings.SuitList3.Clear();
+//				GearButlerReadWriteSettings(false);
+//				UpdateValetHud();
+//			}catch(Exception ex){LogError(ex);}
+//		}
+//						
+//		private void ValetClearSuit0_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				GearButlerSettings.SuitList0.Clear();
+//				GearButlerReadWriteSettings(false);
+//				UpdateValetHud();
+//			}catch(Exception ex){LogError(ex);}
+//		}
+//		
+//		private void ValetEquipSuit1_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
+//				ValetEquipList = GearButlerSettings.SuitList1.ToList();
+//			}catch(Exception ex){LogError(ex);}
+//		}
+//		
+//		private void ValetEquipSuit2_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
+//				ValetEquipList = GearButlerSettings.SuitList2.ToList();
+//			}catch(Exception ex){LogError(ex);}
+//		}
+//		
+//		private void ValetEquipSuit3_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
+//				ValetEquipList = GearButlerSettings.SuitList3.ToList();
+//			}catch(Exception ex){LogError(ex);}
+//		}
+//		
+//		private void ValetEquipSuit0_Hit(object sender, System.EventArgs e)
+//		{
+//			try
+//			{
+//				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
+//				ValetEquipList = GearButlerSettings.SuitList0.ToList();
+//			}catch(Exception ex){LogError(ex);}
+//		}
 			
 			private void ValetProcessRemove()
 			{

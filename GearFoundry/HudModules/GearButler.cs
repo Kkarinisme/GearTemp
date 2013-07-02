@@ -98,16 +98,13 @@ namespace GearFoundry
 		private bool ButlerTab = false;
 		private bool MaidTab = false;
 		private bool ValetTab = false;
-
 		
 		public class ButlerSettings
 		{
-			public List<ValetTicket> SuitList0 = new List<ValetTicket>();
-			public List<ValetTicket> SuitList1 = new List<ValetTicket>();
-			public List<ValetTicket> SuitList2 = new List<ValetTicket>();
-			public List<ValetTicket> SuitList3 = new List<ValetTicket>();
+			public List<ValetSuit> SuitList = new List<ValetSuit>();
             public int ButlerHudWidth = 300;
             public int ButlerHudHeight = 500;
+            public List<ValetSuit> ValetSuitList = new List<ValetSuit>();
 		}
 	
 		public ButlerSettings GearButlerSettings;
@@ -278,21 +275,28 @@ namespace GearFoundry
 		{
 			try
     		{	
-				if(Core.WorldFilter[Core.Actions.CurrentSelection] != null)
+				if(ButlerTab)
 				{
-					ButlerHudCurrentSelectionIcon.Clear();
-					
-					ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.Icon));
-					ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.IconOverlay));
-					                                  
-					ButlerHudCurrentSelectionText.Text = Core.WorldFilter[Core.Actions.CurrentSelection].Name;
+					if(Core.WorldFilter[Core.Actions.CurrentSelection] != null)
+					{
+						ButlerHudCurrentSelectionIcon.Clear();
+						
+						ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.Icon));
+						ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.IconOverlay));
+						                                  
+						ButlerHudCurrentSelectionText.Text = Core.WorldFilter[Core.Actions.CurrentSelection].Name;
+					}
+					else
+					{
+						ButlerHudCurrentSelectionIcon.Clear();
+						ButlerHudCurrentSelectionText.Text = "Nothing Selected";
+					}
+					UpdateButlerHudList();
 				}
-				else
+				if(ValetTab)
 				{
-					ButlerHudCurrentSelectionIcon.Clear();
-					ButlerHudCurrentSelectionText.Text = "Nothing Selected";
+					UpdateValetHud();
 				}
-				UpdateButlerHudList();
     		}catch(Exception ex){LogError(ex);}
 		}
 		

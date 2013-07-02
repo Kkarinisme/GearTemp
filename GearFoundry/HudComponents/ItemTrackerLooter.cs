@@ -107,7 +107,7 @@ namespace GearFoundry
 				}
 				else if(e.Change == WorldChangeType.StorageChange)
 				{
-					if(InspectorActionQueue.Count > 0 && InspectorActionQueue.First().Action == IAction.MoveItem)
+					if(InspectorActionQueue.Count > 0 && InspectorActionQueue.First().Action == IAction.MoveItem && InspectorActionQueue.First().pending)
 	        		{
 						if(InspectorActionQueue.First().LootItem.Id == e.Changed.Id)
 					   	{
@@ -373,7 +373,8 @@ namespace GearFoundry
 				
 				if(InspectorActionQueue.Count > 0 && InspectorActionQueue.First().Action == IAction.OpenContainer)
 				{
-					InspectorActionQueue.Dequeue();
+					InspectorActionQueue.First().StartAction = DateTime.Now;
+					Core.RenderFrame += RenderFrame_DelayedDequeue;		
 					return;
 				}
 				else
@@ -383,6 +384,22 @@ namespace GearFoundry
 				}
 			}
 			catch(Exception ex){LogError(ex);}
+		}
+		
+		private void RenderFrame_DelayedDequeue(object sender, EventArgs e)
+		{
+			try
+			{
+				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 150)  {return;}
+				else
+				{
+					Core.RenderFrame -= RenderFrame_DelayedDequeue;
+				}
+				
+				InspectorActionQueue.Dequeue();
+				return;
+				
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void RenderFrame_LootContainerOpened(object sender, EventArgs e)
