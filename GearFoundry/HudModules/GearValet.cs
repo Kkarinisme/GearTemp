@@ -55,19 +55,23 @@ namespace GearFoundry
 		{
 			try
 			{   
-				int splithorizontal = Convert.ToInt32((double)GearButlerSettings.ButlerHudWidth /(double)3);
+				int split3horizontal = Convert.ToInt32((double)GearButlerSettings.ButlerHudWidth /(double)3);
+				int splithalf = Convert.ToInt32((double)GearButlerSettings.ButlerHudWidth/(double)2);
+				int halfsplit3horizontal = Convert.ToInt32((double)split3horizontal/(double)2);
+				int splitbottomvertical = Convert.ToInt32(((double)100 - GearButlerSettings.ButlerHudHeight) /2);
+				
 				
 				ValetDisrobe = new HudButton();
 				ValetDisrobe.Text = "Disrobe";
-				ValetTabLayout.AddControl(ValetDisrobe, new Rectangle(10,5,splithorizontal-20,20));
+				ValetTabLayout.AddControl(ValetDisrobe, new Rectangle(10,5,split3horizontal-20,20));
 				
 				ValetEquipSuit = new HudButton();
 				ValetEquipSuit.Text = "Equip";
-				ValetTabLayout.AddControl(ValetEquipSuit, new Rectangle(100,5,splithorizontal-20,20));
+				ValetTabLayout.AddControl(ValetEquipSuit, new Rectangle(splithalf - halfsplit3horizontal ,5,split3horizontal-20,20));
 				
 				ValetCreateSuit = new HudButton();
 				ValetCreateSuit.Text = "Create";
-				ValetTabLayout.AddControl(ValetCreateSuit, new Rectangle(200,5,splithorizontal-20,20));
+				ValetTabLayout.AddControl(ValetCreateSuit, new Rectangle(splithalf + halfsplit3horizontal,5,split3horizontal-20,20));
 				
 				ValetTextBoxLabel = new HudStaticText();
 				ValetTextBoxLabel.Text = "Suit Label:";
@@ -97,7 +101,7 @@ namespace GearFoundry
 				ValetSuitPiecesList.AddColumn(typeof(HudStaticText), GearButlerSettings.ButlerHudWidth - 80, null);
 				ValetSuitPiecesList.AddColumn(typeof(HudPictureBox), 16, null);
 				ValetSuitPiecesList.AddColumn(typeof(HudStaticText), 1, null);
-				ValetTabLayout.AddControl(ValetSuitPiecesList, new Rectangle(0,240,GearButlerSettings.ButlerHudWidth - 20,100));
+				ValetTabLayout.AddControl(ValetSuitPiecesList, new Rectangle(0, 230 ,GearButlerSettings.ButlerHudWidth - 20,100));
 				
 				ValetDisrobe.Hit += ValetDisrobe_Hit;
 				ValetEquipSuit.Hit += ValetEquipSuit_Hit;

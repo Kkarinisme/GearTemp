@@ -179,11 +179,10 @@ namespace GearFoundry
 		{
 			try
 			{
-				SpellCastBuffer = null;
-				OtherCastBuffer = null;				
-				OtherCastRegexList = null;;		
-				bsiList = null;
-				bsi = null;
+				SpellCastBuffer.Clear();
+				OtherCastBuffer.Clear();
+				OtherCastRegexList.Clear();
+				bsiList.Clear();
 								
 				Core.CharacterFilter.SpellCast -= CombatHud_SpellCast;
 				Core.CharacterFilter.ActionComplete -= CombatHud_ActionComplete;

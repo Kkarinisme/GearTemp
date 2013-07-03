@@ -57,9 +57,9 @@ namespace GearFoundry
 //		private const int CombatHudFocusTargetBackground =  0x600335C;
 //		private const int CombatHudCurrentTargetBackground =  0x60011F4;
 //		private const int CombatHudNeutralBackground = 0x600109A;
-		private ACImage CombatHudGoodBackground = new ACImage(Color.LightSeaGreen);
-		private ACImage CombatHudWarningBackground = new ACImage(Color.LightYellow);
-		private ACImage CombatHudExpiringBackground = new ACImage(Color.OrangeRed);
+		private ACImage CombatHudGoodBackground = new ACImage(Color.Green);
+		private ACImage CombatHudWarningBackground = new ACImage(Color.Yellow);
+		private ACImage CombatHudExpiringBackground = new ACImage(Color.Red);
 		private ACImage CombatHudFocusTargetBackground =  new ACImage(Color.DarkRed);
 		private ACImage CombatHudCurrentTargetBackground =  new ACImage(Color.MediumVioletRed);
 		private ACImage CombatHudNeutralBackground = new ACImage(Color.Black);
