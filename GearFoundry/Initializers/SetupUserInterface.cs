@@ -68,7 +68,7 @@ namespace GearFoundry
             try
             {
                 // Variable initiations
-                bool mgoon = true;
+                mgoon = true;
                 string mcomb = "";
                 MyClasses.MetaViewWrappers.IListRow row = null;
                 string mID = "";
@@ -445,7 +445,7 @@ namespace GearFoundry
                 }
 
 
-                int id = 0;
+  //              int id = 0;
                 flag = sRuleSpells;
                 if (flag.Length != 0)
                 {
@@ -549,7 +549,6 @@ namespace GearFoundry
                         {
                             case 0:
                                 myvara = item;
-                                // GearFoundry.PluginCore.WriteToChat("I am in case enabled: Item = " + item.ToString());
 
                                 break;
                             case 1:
@@ -866,7 +865,7 @@ namespace GearFoundry
                 if (sname != null && sname.Trim().Length > 0)
                 {
 
-                    string mcomb = "";
+ //                   string mcomb = "";
                     mchecked = true;
                     int mList = 1;
                     bool mexact;
@@ -896,7 +895,7 @@ namespace GearFoundry
                 if (sname != null && sname.Trim().Length > 0)
                 {
 
-                    string mCombine = "";
+    //                string mCombine = "";
                     mchecked = true;
                     int mList = 1;
                     bool mexact;

@@ -40,7 +40,6 @@ namespace GearFoundry
         {
            try 
             {
-                WriteToChat("I have clicked button to add a new rule");
                 nRuleNum = nNextRuleNum;
                 nNextRuleNum++;
                 sRuleAppliesTo = mFindList(lstRuleApplies, AppliesToList);
@@ -63,7 +62,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am ready to create string for Weapons");
 
                 sRuleMinMaxa = txtRuleMinMaxa.Text.ToString().Trim();
                 sRuleReqSkilla = txtRuleReqSkilla.Text.ToString().Trim();
@@ -126,8 +124,7 @@ namespace GearFoundry
                 {
                     setDefaultReqSkill();
                 }
-                WriteToChat("String for weapons = " + sRuleReqSkill);
-
+ 
 
 
             }
@@ -272,9 +269,7 @@ namespace GearFoundry
                 bRuleFilterlvl8 = Convert.ToBoolean(el.Element("FilterLvl8").Value);
                 bRuleFilterlvl7 = Convert.ToBoolean(el.Element("FilterLvl7").Value);
                 bRuleFilterlvl6 = Convert.ToBoolean(el.Element("FilterLvl6").Value);
-                WriteToChat("sRuleSpells: " + sRuleSpells);
-             //   WriteToChat("nRuleMustHaveSpell: " + nRuleMustHaveSpell.ToString());
-
+ 
             }
             catch (Exception ex) { LogError(ex); }
 

@@ -56,16 +56,11 @@ namespace GearFoundry
         WindowsTimer mWaitingForArmorIDTimer = new WindowsTimer();
 
 
-//        void btnGetToonArmor_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-//        {
-//            doGetArmor();
-//        }
 
         private void doGetArmor()
         {
             try
             {
-            	WriteToChat("programinv: " + programinv);
             	if(programinv.Contains("inventory"))
             	   {
             	   	WriteToChat("Cannot run at this time because inventory program  is running.");
@@ -78,7 +73,7 @@ namespace GearFoundry
                 armorFilename = toonDir + @"\" + toonName + "Armor.xml";
                 armorSettingsFilename = currDir + @"\ArmorSettings.xml"; 
                 genArmorFilename = currDir + @"\allToonsArmor.xml";
-                holdingArmorFilename = world + @"\holdingArmor.xml";
+                holdingArmorFilename = currDir + @"\holdingArmor.xml";
                 allStatsFilename = currDir + @"\AllToonStats.xml";
                 
 
@@ -420,7 +415,7 @@ namespace GearFoundry
                 }
                 if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = GearDir + @"\ArmorSettings.xml"; }
                 if (genArmorFilename == "" || genArmorFilename == null) { genArmorFilename = currDir + @"\allToonsArmor.xml"; }
-                xdocGenArmor = new XDocument();
+           //     xdocGenArmor = new XDocument();
                 xdocGenArmor = XDocument.Load(genArmorFilename);
 
 
@@ -528,24 +523,27 @@ namespace GearFoundry
                 lblToonMaster = new HudStaticText();
                 lblToonMaster.FontHeight = nmenuFontHeight;
                 ArmorHudList = new HudList();
-                ArmorHudTabLayout.AddControl(lblToonArmorName, new Rectangle(0,0,ArmorHudWidth/2,16));
-                ArmorHudTabLayout.AddControl(lblToonLevel, new Rectangle(ArmorHudWidth/2 + 10,0,ArmorHudWidth/4,16));
-                ArmorHudTabLayout.AddControl(lblToonMaster, new Rectangle(ArmorHudWidth*3/4 + 10,0,ArmorHudWidth/4,16));
+                ArmorHudTabLayout.AddControl(lblToonArmorName, new Rectangle(0,0,100,16));
+                ArmorHudTabLayout.AddControl(lblToonLevel, new Rectangle(120,0,40,16));
+                ArmorHudTabLayout.AddControl(lblToonMaster, new Rectangle(150,0,60,16));
                 
-                ArmorHudTabLayout.AddControl(ArmorHudList, new Rectangle(0,20, ArmorHudWidth, ArmorHudHeight));
+                ArmorHudTabLayout.AddControl(ArmorHudList, new Rectangle(0,30, ArmorHudWidth, ArmorHudHeight-40));
 
                 //ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
-                ArmorHudList.AddColumn(typeof(HudPictureBox), Convert.ToInt32(.05*ArmorHudWidth), null);
+                ArmorHudList.AddColumn(typeof(HudPictureBox), 20, null);
                 ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.25 * ArmorHudWidth), null);
                 ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.18 * ArmorHudWidth), null);
                 ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.52 * ArmorHudWidth), null);
 
                 ArmorHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
 
-            //    UpdateArmorHud();
 
                 ArmorMainTab = true;
                 try{
+                    WriteToChat("Toonarmorname: " + toonArmorName);
+                    if (toonArmorName == "" || toonArmorName == "None") { toonArmorName = toonName; }
+                    lblToonArmorName.Text = toonArmorName;
+
                 FillArmorHudList();
                 }
 
@@ -563,7 +561,7 @@ namespace GearFoundry
         {
             try
             {
-                if (toonArmorName == "") { toonArmorName = toonName; }
+
                 myChoice = new List<XElement>();
 
                 IEnumerable<XElement> marmor = xdocGenArmor.Element("Objs").Descendants("Obj");
@@ -578,11 +576,11 @@ namespace GearFoundry
                         string armorpiece = el.Element("ArmorName").Value;
                         string spells = el.Element("ArmorSpellXml").Value;
                         string armorclass = el.Element("ArmorClass").Value;
+                        objArmorSetName = "";
                         if (armorclass == "Armor") 
                         {
-                            if (Convert.ToInt32(el.Element("ObjSet").Value) > 0)
-                            { objArmorSetName = SetsIndex[Convert.ToInt32(el.Element("ObjSet").Value)].name; }
-                            else { objArmorSetName = "None"; }
+                            if (Convert.ToInt32(el.Element("ArmorSet").Value) > 0)
+                            { objArmorSetName = SetsIndex[Convert.ToInt32(el.Element("ArmorSet").Value)].name; }
                         }
            
 
@@ -636,6 +634,9 @@ namespace GearFoundry
 
                 ArmorHudList.Click -= (sender, row, col) => ArmorHudList_Click(sender, row, col);
                 ArmorHudList.Dispose();
+                lblToonArmorName.Text = "";
+                lblToonArmorName = null;
+                toonArmorName = "";
 
                 ArmorMainTab = false;
 
@@ -650,7 +651,7 @@ namespace GearFoundry
             {
 
                 List<XElement> names = new List<XElement>();
-                IEnumerable<XElement> prenames = xdocGenArmor.Element("Objs").Descendants("Obj");
+                 IEnumerable<XElement> prenames = xdocGenArmor.Element("Objs").Descendants("Obj");
                 var lstsorted = from element in prenames
                                  orderby element.Element("ToonName").Value ascending
 
@@ -670,10 +671,12 @@ namespace GearFoundry
                lstAllToonName = new List<string>();
                 try{
                     string name = "";
-                    foreach (XElement el in names)
+                    lstAllToonName.Add("None");
+                    cboToonArmorName.AddItem("None", 0);
+                     foreach (XElement el in names)
                     { 
                         name = el.Element("ToonName").Value;
-                        int i = 0;
+                        int i = 1;
                         if (!lstAllToonName.Contains(name))
                         {
                             try
@@ -692,13 +695,13 @@ namespace GearFoundry
 
                 lblToonArmorNameInfo = new HudStaticText();
                 lblToonArmorNameInfo.FontHeight = nmenuFontHeight;
-                lblToonArmorNameInfo.Text = "Name of toon whose armor is being studied:";
+                lblToonArmorNameInfo.Text = "Name of toon whose armor to be studied:";
 
-                ArmorHudSettings.AddControl(btnInventoryArmor, new Rectangle(5, 20, 100, 20));
+                ArmorHudSettings.AddControl(btnInventoryArmor, new Rectangle(5, 30, 100, 20));
 
-                ArmorHudSettings.AddControl(lblToonArmorNameInfo,new Rectangle(5,60,ArmorHudWidth,16));
+                ArmorHudSettings.AddControl(lblToonArmorNameInfo,new Rectangle(5,60,400,16));
 
-               ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(10, 75, ArmorHudWidth-20, 16));
+               ArmorHudSettings.AddControl(cboToonArmorName, new Rectangle(10, 75, 150, 16));
 
 
  
@@ -710,10 +713,6 @@ namespace GearFoundry
         private void cboToonArmorName_Change(object sender, EventArgs e)
         {
             toonArmorName = lstAllToonName[cboToonArmorName.Current];
-          //  WriteToChat(toonArmorName + "has been selected");
-            lblToonArmorName.Text = toonArmorName;
- 
-            
         }
 
         private void btnInventoryArmor_Hit(object sender, EventArgs e)
@@ -727,12 +726,12 @@ namespace GearFoundry
             try
             {
                 if (!ArmorSettingsTab) { return; }
-                btnInventoryArmor = null;
                 btnInventoryArmor.Hit -= (sender, index) => btnInventoryArmor_Hit(sender, index);
-                cboToonArmorName = null;
 
                 cboToonArmorName.Change -= (sender,index) => cboToonArmorName_Change(sender,index);
+                btnInventoryArmor = null;
 
+                cboToonArmorName.Dispose();
 
                 ArmorSettingsTab = false;
             }
