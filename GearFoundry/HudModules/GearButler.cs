@@ -57,7 +57,7 @@ namespace GearFoundry
 		private static int GB_POTION_ICON = 0x60019FD;
 				
 	    private HudView ButlerHudView = null;
-		private HudFixedLayout ButlerHudLayout = null;
+		//private HudFixedLayout ButlerHudLayout = null;
 		private HudTabView ButlerHudTabView = null;
 		private HudFixedLayout ButlerHudTabLayout = null;
 		private HudList ButlerHudList = null;
@@ -133,6 +133,7 @@ namespace GearFoundry
         private int ButlerHudFirstHeight = 500;
         private int ButlerHudWidthNew;
         private int ButlerHudHeightNew;
+		private bool ButlerHudResizing = false;
 
 		
 		public class ButlerSettings
@@ -385,11 +386,12 @@ namespace GearFoundry
                 ButlerHudView.UserMinimizable = false;
                 ButlerHudView.LoadUserSettings();
     			
-    			ButlerHudLayout = new HudFixedLayout();
-    			ButlerHudView.Controls.HeadControl = ButlerHudLayout;
+    			//ButlerHudLayout = new HudFixedLayout();
+    			//ButlerHudView.Controls.HeadControl = ButlerHudLayout;
     			
     			ButlerHudTabView = new HudTabView();
-    			ButlerHudLayout.AddControl(ButlerHudTabView, new Rectangle(0,0,ButlerHudWidth,ButlerHudHeight));
+    			//ButlerHudLayout.AddControl(ButlerHudTabView, new Rectangle(0,0,ButlerHudWidth,ButlerHudHeight));
+                ButlerHudView.Controls.HeadControl = ButlerHudTabView;
     		
     			ButlerHudTabLayout = new HudFixedLayout();
     			ButlerHudTabView.AddTab(ButlerHudTabLayout, "Butler");
@@ -419,6 +421,16 @@ namespace GearFoundry
         {
             try
             {
+				if (!ButlerHudResizing && ((ButlerHudView.Width != ButlerHudWidth) || (ButlerHudView.Height != ButlerHudHeight)))
+				{
+					ButlerHudResizing = true;
+					MasterTimer.Tick += ButlerHudResizeTimerTick;
+				}
+
+				ButlerHudWidthNew = ButlerHudView.Width;
+				ButlerHudHeightNew = ButlerHudView.Height;
+
+				/*
                 bool bw = Math.Abs(ButlerHudView.Width - ButlerHudWidth) > 20;
                 bool bh = Math.Abs(ButlerHudView.Height - ButlerHudHeight) > 20;
                 if (bh || bw)
@@ -428,24 +440,25 @@ namespace GearFoundry
                     MasterTimer.Tick += ButlerHudResizeTimerTick;
                     return;
                 }
+				*/
             }
             catch (Exception ex) { LogError(ex); }
-            return;
-
-
-
         }
 
         private void ButlerHudResizeTimerTick(object sender, EventArgs e)
         {
+			//Commit the window size to the profile every so often
+
+			ButlerHudResizing = false;
+			MasterTimer.Tick -= ButlerHudResizeTimerTick;
+
             ButlerHudWidth = ButlerHudWidthNew;
             ButlerHudHeight = ButlerHudHeightNew;
             GearButlerSettings.ButlerHudWidth = ButlerHudWidth;
             GearButlerSettings.ButlerHudHeight = ButlerHudHeight;
-            GearButlerReadWriteSettings(false);
-            MasterTimer.Tick -= ButlerHudResizeTimerTick;
-            RenderButlerHud();
+			GearButlerReadWriteSettings(false);
 
+            //RenderButlerHud();
         }
 
  
@@ -556,7 +569,7 @@ namespace GearFoundry
     			MaidTabLayout.Dispose();
     			ButlerHudTabLayout.Dispose();
     			ButlerHudTabView.Dispose();
-    			ButlerHudLayout.Dispose();
+    			//ButlerHudLayout.Dispose();
     			ButlerHudView.Dispose();    									
   			
     		}catch(Exception ex) {LogError(ex);}
@@ -631,50 +644,62 @@ namespace GearFoundry
     			ButlerQuickSortEquipped = new HudImageButton();
     			ButlerQuickSortEquipped.Image_Up = GB_EQUIPPED_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortEquipped, new Rectangle(60,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortEquipped, "Equipped");
     			
     			ButlerQuickSortUnequipped = new HudImageButton();
     			ButlerQuickSortUnequipped.Image_Up = GB_UNEQUIPPED_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortUnequipped, new Rectangle(80,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortUnequipped, "Unequipped");
     			
     			ButlerQuickSortMelee = new HudImageButton();
     			ButlerQuickSortMelee.Image_Up = GB_MELEE_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortMelee, new Rectangle(100,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortMelee, "Melee Weapons");
     			
     			ButlerQuickSortMissile = new HudImageButton();
     			ButlerQuickSortMissile.Image_Up = GB_MISSILE_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortMissile, new Rectangle(120,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortMissile, "Missile Weapons");
     			
     			ButlerQuickSortCaster = new HudImageButton();
     			ButlerQuickSortCaster.Image_Up = GB_CASTER_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortCaster, new Rectangle(140,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortCaster, "Magical Casters");
     			
     			ButlerQuickSortArmor = new HudImageButton();
     			ButlerQuickSortArmor.Image_Up = GB_ARMOR_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortArmor, new Rectangle(160,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortArmor, "Armor");
     			
     			ButlerQuickSortKeys = new HudImageButton();
     			ButlerQuickSortKeys.Image_Up = GB_KEY_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortKeys, new Rectangle(180,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortKeys, "Keys");
     			
     			ButlerQuickSortKeyrings = new HudImageButton();
     			ButlerQuickSortKeyrings.Image_Up = GB_KEYRING_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortKeyrings, new Rectangle(200,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortKeyrings, "Keyrings");
     			
     			ButlerQuickSortLockpicks = new HudImageButton();
     			ButlerQuickSortLockpicks.Image_Up = GB_LOCKPICK_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortLockpicks, new Rectangle(220,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortLockpicks, "Lockpicks");
     			
     			ButlerQuickSortManastones = new HudImageButton();
     			ButlerQuickSortManastones.Image_Up = GB_MANASTONE_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortManastones, new Rectangle(240,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortManastones, "Mana Stones");
     			
     			ButlerQuickSortHealKit = new HudImageButton();
     			ButlerQuickSortHealKit.Image_Up = GB_HEALKIT_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortHealKit, new Rectangle(260,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortHealKit, "Healing Kits");
     			
     			ButlerQuickSortPotion = new HudImageButton();
     			ButlerQuickSortPotion.Image_Up = GB_POTION_ICON;
     			ButlerHudTabLayout.AddControl(ButlerQuickSortPotion, new Rectangle(280,110,16,16));
+				VirindiViewService.TooltipSystem.AssociateTooltip(ButlerQuickSortPotion, "Potions");
     			
     			ButlerHudList = new HudList();
 				ButlerHudList.ControlHeight = 16;	
@@ -683,8 +708,8 @@ namespace GearFoundry
 				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
 				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
 				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
-				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);		
-				ButlerHudLayout.AddControl(ButlerHudList, new Rectangle(0,150,300,375));
+				ButlerHudList.AddColumn(typeof(HudPictureBox), 15, null);
+                ButlerHudTabLayout.AddControl(ButlerHudList, new Rectangle(0, 150, 300, 375));
 								
 				ButlerHudSelectedLabel = new HudStaticText();
                 ButlerHudSelectedLabel.FontHeight = nmenuFontHeight;
