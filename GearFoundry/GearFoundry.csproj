@@ -90,9 +90,6 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="VirindiHUDs">
-      <HintPath>Repositories\Virindi\VirindiHUDs.dll</HintPath>
-    </Reference>
     <Reference Include="VirindiViewService">
       <HintPath>Repositories\Virindi\VirindiViewService.dll</HintPath>
     </Reference>

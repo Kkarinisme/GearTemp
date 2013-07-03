@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using VirindiViewService;
 using MyClasses.MetaViewWrappers;
 using VirindiViewService.Controls;
-using VirindiHUDs;
 using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using System.Xml.Serialization;
 using System.Xml;

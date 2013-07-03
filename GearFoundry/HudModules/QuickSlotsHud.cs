@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using VirindiViewService;
 using VirindiViewService.Controls;
-using VirindiHUDs;
 using MyClasses.MetaViewWrappers;
 using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using System.Drawing;

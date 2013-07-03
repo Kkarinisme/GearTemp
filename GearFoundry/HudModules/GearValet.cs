@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using VirindiViewService;
 using MyClasses.MetaViewWrappers;
 using VirindiViewService.Controls;
-using VirindiHUDs;
 using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using System.Xml.Serialization;
 using System.Xml;
@@ -238,6 +237,16 @@ namespace GearFoundry
 		{
 			try
 			{
+				int UsedInvCount = Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count();
+				int UnEquipItemsCount = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).Count();
+				int SlotsLeftOver = 102 - UnEquipItemsCount - UsedInvCount;
+				
+				if(SlotsLeftOver < 0)
+				{
+					WriteToChat("You need to clear " + SlotsLeftOver + " slots in your main pack.");
+					return;
+				}
+				
 				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();	
 				UpdateValetHud();
 			}catch(Exception ex){LogError(ex);}
@@ -247,11 +256,23 @@ namespace GearFoundry
 		{
 			try
 			{
+				int UsedInvCount = Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count();
+				int UnEquipItemsCount = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).Count();
+				int SlotsLeftOver = 102 - UnEquipItemsCount - UsedInvCount;
+				
 				if( GearButlerSettings.ValetSuitList.Count == 0)
 				{
 					WriteToChat("First create some suits.");
 					return;
 				}
+				
+				if(SlotsLeftOver < 0)
+				{
+					WriteToChat("You need to clear " + SlotsLeftOver + " slots in your main pack.");
+					return;
+				}
+				
+
 				
 				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
 				ValetEquipList = GearButlerSettings.ValetSuitList.Find(x => x.TicketStub == ValetCurrentSuit).SuitPieces.ToList();
