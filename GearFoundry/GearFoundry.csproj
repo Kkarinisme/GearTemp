@@ -102,6 +102,12 @@
     <Compile Include="WrapperClasses\LandscapeObject.cs" />
     <Compile Include="WrapperClasses\LootObject.cs" />
     <Compile Include="WrapperClasses\MonsterObject.cs" />
+    <EmbeddedResource Include="Graphics\gearswaphorz1.png">
+      <LogicalName>gearswaphorz1.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\gearswapvert1.png">
+      <LogicalName>gearswapvert1.png</LogicalName>
+    </EmbeddedResource>
     <None Include="WrapperClasses\IOMagToolsEcho.cs" />
     <EmbeddedResource Include="Defaults\Rules.xml">
       <LogicalName>Rules.xml</LogicalName>
@@ -206,7 +212,9 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Graphics" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

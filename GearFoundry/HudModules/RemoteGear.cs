@@ -127,9 +127,11 @@ namespace GearFoundry
             try
             {
                 //Vertical Switch Gear
+                Stream vertImageStream = this.GetType().Assembly.GetManifestResourceStream("gearswapvert1.png");
+                
 
-                string vertImageFile = GearDir + @"\gearswapvert1.png";
-                Image gearswapvert = new Bitmap(vertImageFile);
+                //string vertImageFile = GearDir + @"\gearswapvert1.png";
+                Image gearswapvert = new Bitmap(vertImageStream);
                 mRemoteGear6 = new HudPictureBox();
                 //                int GR_Inventory_ICON = 0x600127E;
                 //                mRemoteGear5.Image = GR_Inventory_ICON;
@@ -137,6 +139,15 @@ namespace GearFoundry
 
                 remoteGearTabFixedLayout.AddControl(mRemoteGear6, new Rectangle(2, 185, 25, 25));
                 mRemoteGear6.Hit += (sender, obj) => mRemoteGear6_Hit(sender, obj);
+                
+                
+//                Stream s = this.GetType().Assembly.GetManifestResourceStream("WindowsApplication1.filename.jpg");
+//				Bitmap bmp = new Bitmap( s );
+//				s.Close();
+//				Graphics g = CreateGraphics();
+//				g.DrawImage( bmp, 0, 0 );
+//				bmp.Dispose();
+//				g.Dispose();
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -145,8 +156,9 @@ namespace GearFoundry
             try
             {
                 //Horizontal Switch Gear
-                string horzImageFile = GearDir + @"\gearswaphorz1.png";
-                Image gearswaphoriz = new Bitmap(horzImageFile);
+                 Stream horzImageStream = this.GetType().Assembly.GetManifestResourceStream("gearswaphorz1.png");
+                //string horzImageFile = GearDir + @"\gearswaphorz1.png";
+                Image gearswaphoriz = new Bitmap(horzImageStream);
                 mRemoteGear7 = new HudPictureBox();
                 //  int GR_Inventory_ICON = 0x600127E;
                 //  mRemoteGear7.Image = GR_Inventory_ICON;
