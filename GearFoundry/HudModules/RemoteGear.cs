@@ -82,6 +82,8 @@ namespace GearFoundry
             mRemoteGear0 = new HudPictureBox();
             mRemoteGear0.Image = new ACImage(25907);
             remoteGearTabFixedLayout.AddControl(mRemoteGear0, new Rectangle(2, 5, 25, 25));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear0, "GearButler");
+
             mRemoteGear0.Hit += (sender, obj) => mRemoteGear0_Hit(sender, obj); 
 
             //CorpseHud
@@ -89,6 +91,8 @@ namespace GearFoundry
             int GR_Corpse_ICON = 0x6001070;
             mRemoteGear1.Image = GR_Corpse_ICON;
             remoteGearTabFixedLayout.AddControl(mRemoteGear1, new Rectangle(2, 35, 25, 25));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear1, "GearVisection");
+
             mRemoteGear1.Hit += (sender, obj) => mRemoteGear1_Hit(sender, obj); 
 
             //GearInspector
@@ -96,12 +100,14 @@ namespace GearFoundry
             int GR_Inspector_ICON = 0x600218D;
             mRemoteGear2.Image = GR_Inspector_ICON;
             remoteGearTabFixedLayout.AddControl(mRemoteGear2, new Rectangle(2, 65, 25, 25));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear2, "GearInspector");
             mRemoteGear2.Hit += (sender, obj) => mRemoteGear2_Hit(sender, obj); 
 
             //GearSense
             mRemoteGear3 = new HudPictureBox();
             mRemoteGear3.Image = new ACImage(4949);
             remoteGearTabFixedLayout.AddControl(mRemoteGear3, new Rectangle(2, 95, 25, 25));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear3, "GearSense");
             mRemoteGear3.Hit += (sender, obj) => mRemoteGear3_Hit(sender, obj); 
 
 
@@ -110,6 +116,7 @@ namespace GearFoundry
             int GR_Combat_ICON = 0x6004D06;
             mRemoteGear4.Image = GR_Combat_ICON;
             remoteGearTabFixedLayout.AddControl(mRemoteGear4, new Rectangle(2, 125, 25, 25));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear4, "GearTactician");
             mRemoteGear4.Hit += (sender, obj) => mRemoteGear4_Hit(sender, obj);
             try
             {
@@ -118,6 +125,7 @@ namespace GearFoundry
                 int GR_Inventory_ICON = 0x600127E;
                 mRemoteGear5.Image = GR_Inventory_ICON;
                 remoteGearTabFixedLayout.AddControl(mRemoteGear5, new Rectangle(2, 155, 25, 25));
+                VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear5, "Gear");
                 mRemoteGear5.Hit += (sender, obj) => mRemoteGear5_Hit(sender, obj);
 
             }
@@ -138,6 +146,7 @@ namespace GearFoundry
                 mRemoteGear6.Image = (ACImage)gearswapvert;
 
                 remoteGearTabFixedLayout.AddControl(mRemoteGear6, new Rectangle(2, 185, 25, 25));
+                VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear6, "Vertical SwitchGear");
                 mRemoteGear6.Hit += (sender, obj) => mRemoteGear6_Hit(sender, obj);
                 
                 
@@ -164,6 +173,7 @@ namespace GearFoundry
                 //  mRemoteGear7.Image = GR_Inventory_ICON;
                 mRemoteGear7.Image = (ACImage)gearswaphoriz;
                 remoteGearTabFixedLayout.AddControl(mRemoteGear7, new Rectangle(2, 215, 25, 25));
+                VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear7, "Horizontal SwitchGear");
                 mRemoteGear7.Hit += (sender, obj) => mRemoteGear7_Hit(sender, obj);
 
             }

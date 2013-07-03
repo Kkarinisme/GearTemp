@@ -111,7 +111,7 @@ namespace GearFoundry
                 if (InventoryHudWidth == 0) { InventoryHudWidth = InventoryHudFirstWidth;  }
                 if (InventoryHudHeight == 0) { InventoryHudHeight = InventoryHudFirstHeight; }
 
-                InventoryHudView = new HudView("Inventory", InventoryHudWidth, InventoryHudHeight, new ACImage(0x6AA5));
+                InventoryHudView = new HudView("Gear", InventoryHudWidth, InventoryHudHeight, new ACImage(0x6AA5));
                 InventoryHudView.UserAlphaChangeable = false;
                 InventoryHudView.ShowInBar = false;
                 InventoryHudView.UserResizeable = false;

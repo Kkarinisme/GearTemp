@@ -161,16 +161,12 @@ namespace GearFoundry
 
                 mWaitingForIDTimer.Stop();
 
-
-              //if (mWaitingForID != null) 
-              //{
                 for (int n = 0; n < mWaitingForID.Count; n++)
                 {
-
-                    if (mWaitingForID[n].HasIdData)
+ 
+                    if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData )
                     {
-                        //  bidentRecd = false;
-                        ProcessDataInventory();
+                       ProcessDataInventory();
                         mIsFinished();
                     }
                     else
@@ -202,7 +198,7 @@ namespace GearFoundry
             {
                 try
                 {
-                    if (mWaitingForID[n].HasIdData)
+                    if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData)
                     {
                         currentobj = mWaitingForID[n];
                         mWaitingForID.Remove(mWaitingForID[n]);
@@ -271,7 +267,6 @@ namespace GearFoundry
                         long objUnknown8000000 = currentobj.Values(LongValueKey.Unknown8000000);
                         long objUsageMask = currentobj.Values(LongValueKey.UsageMask);
 
-                      //  xdocToonInventory.Element("Objs").Add(new XElement("Obj",
                             xdocToonInventory.Element("Objs").Add(new XElement("Obj",
                             new XElement("ObjName", objName),
                             new XElement("ObjID", objID),
@@ -336,9 +331,6 @@ namespace GearFoundry
                             new XElement("ObjUnknown800000", objUnknown800000),
                             new XElement("ObjUnknown8000000", objUnknown8000000),
                             new XElement("ObjUsageMask", objUsageMask)));
-
-
-                            //  xdoc.Save(inventoryFilename);
 
 
                             currentobj = null;
