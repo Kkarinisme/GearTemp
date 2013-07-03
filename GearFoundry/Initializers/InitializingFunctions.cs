@@ -273,9 +273,6 @@ namespace GearFoundry
                 sorted.Clear();
                 enabled.Clear();
 
-                
-                //TODO:  Null reference?  Why?
-
                 IEnumerable<XElement> myelements = xdocRules.Element("Rules").Descendants("Rule");
                 int n = myelements.Count();
                 nNextRuleNum = n;

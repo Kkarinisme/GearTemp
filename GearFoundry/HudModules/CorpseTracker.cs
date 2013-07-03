@@ -564,7 +564,6 @@ namespace GearFoundry
             ghSettings.CorpseHudWidth = CorpseHudView.Width;
             ghSettings.CorpseHudHeight = CorpseHudView.Height;
             GearVisectionReadWriteSettings(false);            
-            RenderCorpseHud();
         }
 
     	
@@ -809,10 +808,7 @@ namespace GearFoundry
 	    private void UpdateCorpseHud()
 	    {  	
 	    	try
-	    	{    		
-	    		if((DateTime.Now - LastCorpseHudUpdate).TotalMilliseconds < 1000){return;}
-	    		else{LastCorpseHudUpdate = DateTime.Now;}
-	    		
+	    	{    			    		
 	    		if(!CorpseMainTab) {return;}
 	    		
 	    		CorpseHudList.ClearRows();

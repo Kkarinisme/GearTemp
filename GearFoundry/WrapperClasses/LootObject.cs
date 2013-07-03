@@ -1220,12 +1220,6 @@ namespace GearFoundry
 				}
 			}
 			
-			
-			
-
-			//wo.properites which require an ID to calculate (pushed from outside)
-			//This XP value is pushed in from notifyobject no.itemxp = value
-			//TODO:  Review how to automate the ID and improve this.....
 			private long mItemxp;
 			private long mnextitemlvlxp;
 			public long Itemxp {
@@ -1493,8 +1487,6 @@ namespace GearFoundry
 				//missle mods to string
 				if (x > 0) 
 				{
-					//TODO:  make this return formatted strings for doubles.
-					//return Math.Round(((wo.Values(DoubleValueKey.MeleeDefenseBonus) - 1) * 100), 2);
 					return ", " + x.ToString("0.") + " " + suffix;
 				}
 				return string.Empty;
@@ -1644,7 +1636,7 @@ namespace GearFoundry
 								}
 								else goto default;
 							default:
-								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
+								result = IORString() + wo.Name;
 								break;
 						}
 						

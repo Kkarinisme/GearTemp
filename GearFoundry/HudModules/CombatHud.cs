@@ -51,12 +51,6 @@ namespace GearFoundry
 		
 		private HudList.HudListRowAccessor CombatHudRow = null;
 		
-		//private const int CombatHudGoodBackground = 0x6003355;
-//		private const int CombatHudWarningBackground = 0x600335B;
-//		private const int CombatHudExpiringBackground = 0x6003359;	
-//		private const int CombatHudFocusTargetBackground =  0x600335C;
-//		private const int CombatHudCurrentTargetBackground =  0x60011F4;
-//		private const int CombatHudNeutralBackground = 0x600109A;
 		private ACImage CombatHudGoodBackground = new ACImage(Color.Green);
 		private ACImage CombatHudWarningBackground = new ACImage(Color.Yellow);
 		private ACImage CombatHudExpiringBackground = new ACImage(Color.Red);
@@ -193,7 +187,7 @@ namespace GearFoundry
         {
         	if((DateTime.Now - CombatHudResizeTime).TotalMilliseconds > 500)
         	{
-	        	Core.RenderFrame -= CombatHudResizeWait;       	
+	        	Core.RenderFrame -= CombatHudResizeWait;   
 
            		CombatHudReadWriteSettings(false);
             	AlterCombatHud();
@@ -645,7 +639,6 @@ namespace GearFoundry
 			try
 			{				
 				if(!bCombatHudMainTab) {return;}
-				if(((TimeSpan)(DateTime.Now - CombatHudLastUpdate)).TotalSeconds < 1){return;}
 				
 				if(CombatHudFocusTargetGUID != 0)
 				{

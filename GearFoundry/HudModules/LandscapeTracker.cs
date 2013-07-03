@@ -24,8 +24,6 @@ namespace GearFoundry
 		private List<string> LandscapeFellowMemberTrackingList;
 		private bool mLandscapeInPortalSpace = true;
 		
-		private DateTime LastGearSenseUpdate;
-		
 		public GearSenseSettings gsSettings;
 		
 		public class GearSenseSettings
@@ -596,9 +594,6 @@ namespace GearFoundry
     				DisposeLandscapeHud();
     			}
 
-
-
-
                 LandscapeHudView = new HudView("GearSense", gsSettings.LandscapeHudWidth, gsSettings.LandscapeHudHeight, new ACImage(0x6AA5));
     			LandscapeHudView.UserAlphaChangeable = false;
     			LandscapeHudView.ShowInBar = false;
@@ -648,9 +643,6 @@ namespace GearFoundry
             }
             catch (Exception ex) { LogError(ex); }
             return;
-
-
-
         }
 
         private void LandscapeHudResizeTimerTick(object sender, EventArgs e)
@@ -659,8 +651,6 @@ namespace GearFoundry
             gsSettings.LandscapeHudWidth = LandscapeHudView.Width;
             gsSettings.LandscapeHudHeight = LandscapeHudView.Height;
             GearSenseReadWriteSettings(false);                       
-            RenderLandscapeHud();
-
         }
    	
     	private void LandscapeHudTabView_OpenTabChange(object sender, System.EventArgs e)
@@ -695,6 +685,7 @@ namespace GearFoundry
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				LandscapeHudList.AddColumn(typeof(HudStaticText), gsSettings.LandscapeHudWidth - 60, null);
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
+				
 				
 				LandscapeHudList.Click += (sender, row, col) => LandscapeHudList_Click(sender, row, col); 
 
@@ -1007,10 +998,7 @@ namespace GearFoundry
 	    private void UpdateLandscapeHud()
 	    {  	
 	    	try
-	    	{       			    		
-	    		if((DateTime.Now - LastGearSenseUpdate).TotalMilliseconds < 1000){return;}
-	    		else{LastGearSenseUpdate = DateTime.Now;}
-	    		
+	    	{       			    			    		
 	    		if(!LandscapeMainTab) {return;}
 	    		
 	    		LandscapeHudList.ClearRows();

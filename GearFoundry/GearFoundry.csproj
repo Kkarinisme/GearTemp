@@ -108,7 +108,6 @@
     <EmbeddedResource Include="Graphics\gearswapvert1.png">
       <LogicalName>gearswapvert1.png</LogicalName>
     </EmbeddedResource>
-    <None Include="WrapperClasses\IOMagToolsEcho.cs" />
     <EmbeddedResource Include="Defaults\Rules.xml">
       <LogicalName>Rules.xml</LogicalName>
       <SubType>Designer</SubType>
@@ -117,9 +116,7 @@
       <LogicalName>Settings.xml</LogicalName>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Documents\Files Karin is using.txt" />
     <None Include="Documents\GuidetoVariablesandFunctions.txt" />
-    <None Include="Documents\IrquksStatusList" />
     <Compile Include="HudComponents\ItemTrackerActions.cs" />
     <Compile Include="HudComponents\ItemTrackerIdentify.cs" />
     <Compile Include="HudComponents\ItemTrackerLooter.cs" />
@@ -133,7 +130,6 @@
     <Compile Include="PluginCore.cs" />
     <Compile Include="HudModules\RemoteGear.cs" />
     <Compile Include="Views\MainView.cs" />
-    <None Include="WrapperClasses\IdentifiedObject.cs" />
     <Compile Include="HudModules\QuickSlotsHud.cs" />
     <Compile Include="Initializers\Definitions.cs" />
     <Compile Include="Initializers\Globals.cs" />

@@ -255,7 +255,6 @@ namespace GearFoundry
             GISettings.ItemHudWidth = ItemHudView.Width;
             GISettings.ItemHudHeight = ItemHudView.Height;
             GearInspectorReadWriteSettings(false);
-            RenderItemHud();
         }
 
     	

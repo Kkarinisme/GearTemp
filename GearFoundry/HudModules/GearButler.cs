@@ -37,7 +37,6 @@ namespace GearFoundry
 		private bool bButlerTradeOpen = false;
 		private int MaidKeyToRing = 0;
 		private int MatchedKeyRingId = 0;
-		private DateTime LastStoneUpdate;
 		
 		private static int GB_USE_ICON = 0x6000FB7;
 		private static int GB_GIVE_ICON = 0x60011F7;
@@ -56,7 +55,6 @@ namespace GearFoundry
 		private static int GB_POTION_ICON = 0x60019FD;
 				
 	    private HudView ButlerHudView = null;
-		//private HudFixedLayout ButlerHudLayout = null;
 		private HudTabView ButlerHudTabView = null;
 		private HudFixedLayout ButlerHudTabLayout = null;
 		private HudList ButlerHudList = null;
@@ -94,33 +92,10 @@ namespace GearFoundry
 		private HudImageButton ButlerQuickSortHealKit = null;
 		private HudImageButton ButlerQuickSortPotion = null;	
 		
-		private HudButton ValetEquipSuit1 = null;
-		private HudButton ValetEquipSuit2 = null;
-		private HudButton ValetEquipSuit3 = null;
-		private HudButton ValetEquipSuit0 = null;
-		private HudButton ValetSuit1 = null;
-		private HudButton ValetSuit2 = null;
-		private HudButton ValetSuit3 = null;
-		private HudButton ValetSuit0 = null;
-		private HudButton ValetClearSuit1 = null;
-		private HudButton ValetClearSuit2 = null;
-		private HudButton ValetClearSuit3 = null;
-		private HudButton ValetClearSuit0 = null;
-		private HudList ValetSuit1List = null;
-		private HudList ValetSuit2List= null;
-		private HudList ValetSuit3List = null;
-		private HudList ValetSuit0List = null;
-		
 		private bool ButlerTab = false;
 		private bool MaidTab = false;
 		private bool ValetTab = false;
 
-        private int ButlerHudWidth;
-        private int ButlerHudHeight;
-        private int ButlerHudFirstWidth = 300;
-        private int ButlerHudFirstHeight = 500;
-        private int ButlerHudWidthNew;
-        private int ButlerHudHeightNew;
 		private bool ButlerHudResizing = false;
 
 		
@@ -205,7 +180,6 @@ namespace GearFoundry
 				MasterTimer.Tick += ButlerTimerDo;
 				Core.EchoFilter.ServerDispatch += ButlerServerDispatch;
                 ButlerHudView.Resize += ButlerHudView_Resize; 
-				LastStoneUpdate = DateTime.Now;
 
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -223,8 +197,6 @@ namespace GearFoundry
 				MasterTimer.Tick -= ButlerTimerDo;
 				Core.EchoFilter.ServerDispatch -= ButlerServerDispatch;
                 ButlerHudView.Resize -= ButlerHudView_Resize; 
-
-
 			}
 			catch(Exception ex){LogError(ex);}
 		}	
@@ -348,15 +320,8 @@ namespace GearFoundry
     			{
     				DisposeButlerHud();
     			}
-
-                if (GearButlerSettings.ButlerHudWidth == 0) { ButlerHudWidth = ButlerHudFirstWidth; }
-                else { ButlerHudWidth = GearButlerSettings.ButlerHudWidth; }
-                if (GearButlerSettings.ButlerHudHeight == 0) { ButlerHudHeight = ButlerHudFirstHeight; }
-                else { ButlerHudHeight = GearButlerSettings.ButlerHudHeight; }
-
-    			
-    			ButlerHudView = new HudView("GearButler", ButlerHudWidth, ButlerHudHeight, new ACImage(0x6AA3));
-    		//	ButlerHudView.Theme = VirindiViewService.HudViewDrawStyle.GetThemeByName("Minimalist Transparent");
+ 			
+    			ButlerHudView = new HudView("GearButler", GearButlerSettings.ButlerHudWidth, GearButlerSettings.ButlerHudHeight, new ACImage(0x6AA3));
     			ButlerHudView.UserAlphaChangeable = false;
     			ButlerHudView.ShowInBar = false;
     			ButlerHudView.Visible = true;
@@ -364,11 +329,7 @@ namespace GearFoundry
                 ButlerHudView.UserMinimizable = false;
                 ButlerHudView.LoadUserSettings();
     			
-    			//ButlerHudLayout = new HudFixedLayout();
-    			//ButlerHudView.Controls.HeadControl = ButlerHudLayout;
-    			
     			ButlerHudTabView = new HudTabView();
-    			//ButlerHudLayout.AddControl(ButlerHudTabView, new Rectangle(0,0,ButlerHudWidth,ButlerHudHeight));
                 ButlerHudView.Controls.HeadControl = ButlerHudTabView;
     		
     			ButlerHudTabLayout = new HudFixedLayout();
@@ -399,44 +360,27 @@ namespace GearFoundry
         {
             try
             {
-				if (!ButlerHudResizing && ((ButlerHudView.Width != ButlerHudWidth) || (ButlerHudView.Height != ButlerHudHeight)))
+				if (!ButlerHudResizing && ((ButlerHudView.Width != GearButlerSettings.ButlerHudWidth) || (ButlerHudView.Height != GearButlerSettings.ButlerHudHeight)))
 				{
 					ButlerHudResizing = true;
 					MasterTimer.Tick += ButlerHudResizeTimerTick;
 				}
-
-				ButlerHudWidthNew = ButlerHudView.Width;
-				ButlerHudHeightNew = ButlerHudView.Height;
-
-				/*
-                bool bw = Math.Abs(ButlerHudView.Width - ButlerHudWidth) > 20;
-                bool bh = Math.Abs(ButlerHudView.Height - ButlerHudHeight) > 20;
-                if (bh || bw)
-                {
-                    ButlerHudWidthNew = ButlerHudView.Width;
-                    ButlerHudHeightNew = ButlerHudView.Height;
-                    MasterTimer.Tick += ButlerHudResizeTimerTick;
-                    return;
-                }
-				*/
             }
             catch (Exception ex) { LogError(ex); }
         }
 
         private void ButlerHudResizeTimerTick(object sender, EventArgs e)
         {
-			//Commit the window size to the profile every so often
-
-			ButlerHudResizing = false;
-			MasterTimer.Tick -= ButlerHudResizeTimerTick;
-
-            ButlerHudWidth = ButlerHudWidthNew;
-            ButlerHudHeight = ButlerHudHeightNew;
-            GearButlerSettings.ButlerHudWidth = ButlerHudWidth;
-            GearButlerSettings.ButlerHudHeight = ButlerHudHeight;
-			GearButlerReadWriteSettings(false);
-
-            //RenderButlerHud();
+        	try
+        	{
+				ButlerHudResizing = false;
+				MasterTimer.Tick -= ButlerHudResizeTimerTick;
+	
+	            GearButlerSettings.ButlerHudWidth = ButlerHudView.Width;
+	            GearButlerSettings.ButlerHudHeight = ButlerHudView.Height;
+				GearButlerReadWriteSettings(false);
+        	}
+			catch(Exception ex){LogError(ex);}
         }
 
  
@@ -883,7 +827,6 @@ namespace GearFoundry
     				{
     					if(!UnchargedManaStones.Any(x => x.Id == stone.Id)) {UnchargedManaStones.Enqueue(stone);}
     				}
-    				LastStoneUpdate = DateTime.Now;
     				
     				if(UnchargedManaStones.Count > 0)
     				{
@@ -1529,27 +1472,20 @@ namespace GearFoundry
 			{
 				try
 				{
-					if(ValetRemoveList != null)
-					{
-						if(ValetRemoveList.Count > 0) {
-							ValetProcessRemove();
-							return;
-						}
+
+					if(ValetRemoveList.Count > 0) {
+						ValetProcessRemove();
+						return;
 					}
-					if(ValetEquipList != null)
-					{
-						if(ValetEquipList.Count > 0) {
-							ValetProcessEquip();
-							return;
-						}
+					if(ValetEquipList.Count > 0) {
+						ValetProcessEquip();
+						return;
 					}
-					if(MaidStackList != null)
-					{
-						if(MaidStackList.Count > 0) {
-							MaidProcessStack();
-							return;
-						}
+					if(MaidStackList.Count > 0) {
+						MaidProcessStack();
+						return;
 					}		
+					
 				}catch(Exception ex){LogError(ex);}
 			}
     		

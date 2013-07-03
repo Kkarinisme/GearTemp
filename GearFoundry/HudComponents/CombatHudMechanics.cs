@@ -618,6 +618,7 @@ namespace GearFoundry
 						}
 					}
 					CombatHudMobTrackingList = CombatHudMobTrackingList.OrderBy(x => x.DistanceAway).ToList();	
+					CombatHudLastUpdate = DateTime.Now;
 					UpdateCombatHudMainTab();
 
 				}		
