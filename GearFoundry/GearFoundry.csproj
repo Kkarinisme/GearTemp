@@ -99,6 +99,7 @@
     <Compile Include="HudModules\GearMaid.cs" />
     <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="Initializers\Enums.cs" />
+    <Compile Include="PortalGear.cs" />
     <Compile Include="WrapperClasses\LandscapeObject.cs" />
     <Compile Include="WrapperClasses\LootObject.cs" />
     <Compile Include="WrapperClasses\MonsterObject.cs" />
@@ -208,9 +209,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Graphics" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

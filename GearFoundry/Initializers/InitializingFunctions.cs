@@ -67,6 +67,7 @@ namespace GearFoundry
                 quickSlotsvFilename = toonDir + @"\" + "QuickSlotsv.xml";
                 quickSlotshFilename = toonDir + @"\" + "QuickSlotsh.xml";
                 remoteGearFilename = GearDir + @"\" + "RemoteGear.xml";
+                portalGearFilename = GearDir + @"\" + "PortalGear.xml";
 
                 if (!File.Exists(rulesFilename))
                 {
@@ -400,7 +401,8 @@ namespace GearFoundry
                 bGearButlerEnabled = Convert.ToBoolean(el.Element("ButlerHudEnabled").Value);
                bCombatHudEnabled = Convert.ToBoolean(el.Element("CombatHudEnabled").Value);
                bRemoteGearEnabled = Convert.ToBoolean(el.Element("RemoteGearEnabled").Value);
-              bquickSlotsvEnabled = Convert.ToBoolean(el.Element("QuickSlotsvEnabled").Value);
+               bPortalGearEnabled = Convert.ToBoolean(el.Element("PortalGearEnabled").Value);
+               bquickSlotsvEnabled = Convert.ToBoolean(el.Element("QuickSlotsvEnabled").Value);
                 bquickSlotshEnabled = Convert.ToBoolean(el.Element("QuickSlotshEnabled").Value);
                 binventoryHudEnabled = Convert.ToBoolean(el.Element("InventoryHudEnabled").Value);
                 binventoryEnabled = Convert.ToBoolean(el.Element("InventoryEnabled").Value);
@@ -457,8 +459,11 @@ namespace GearFoundry
                    //Gear Tactician Section
                    chkCombatHudEnabled.Checked = bCombatHudEnabled;
 
-                  //RemoteGear 
+                   //RemoteGear 
                    chkRemoteGearEnabled.Checked = bRemoteGearEnabled;
+                   
+                   //PortalGear 
+                   chkPortalGearEnabled.Checked = bPortalGearEnabled;
   
                    //Misc Gears Section
                    chkMuteSounds.Checked = bMuteSounds;
@@ -530,6 +535,11 @@ namespace GearFoundry
             if (bRemoteGearEnabled)
             {
                 RenderRemoteGearHud();
+            }
+
+            if (bPortalGearEnabled)
+            {
+                RenderPortalGearHud();
             }
 
             if (binventoryCompleteEnabled)
@@ -949,7 +959,25 @@ namespace GearFoundry
             catch { }
         }
 
-         void chkToonStats_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkPortalGearEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bPortalGearEnabled = e.Checked;
+                SaveSettings();
+                if (bPortalGearEnabled)
+                {
+                    RenderPortalGearHud();
+                }
+                else
+                {
+                    DisposePortalGearHud();
+                }
+            }
+            catch { }
+        }
+
+        void chkToonStats_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
             try
             {
@@ -1533,6 +1561,7 @@ namespace GearFoundry
                          new XElement("ButlerHudEnabled", bGearButlerEnabled),
                          new XElement("CombatHudEnabled", bCombatHudEnabled),
                          new XElement("RemoteGearEnabled", bRemoteGearEnabled),
+                         new XElement("PortalGearEnabled", bPortalGearEnabled),
                          new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
                          new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
                          new XElement("InventoryHudEnabled", binventoryHudEnabled),

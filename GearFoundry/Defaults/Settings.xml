@@ -6,8 +6,9 @@
     <InspectorHudEnabled>false</InspectorHudEnabled>
     <ButlerHudEnabled>false</ButlerHudEnabled>
     <CombatHudEnabled>false</CombatHudEnabled>
-    <RemoteGearEnabled>true</RemoteGearEnabled>
-    <QuickSlotsvEnabled>true</QuickSlotsvEnabled>
+	  <RemoteGearEnabled>true</RemoteGearEnabled>
+	  <PortalGearEnabled>true</PortalGearEnabled>
+	  <QuickSlotsvEnabled>true</QuickSlotsvEnabled>
     <QuickSlotshEnabled>true</QuickSlotshEnabled>
     <InventoryHudEnabled>false</InventoryHudEnabled>
     <InventoryEnabled>false</InventoryEnabled>

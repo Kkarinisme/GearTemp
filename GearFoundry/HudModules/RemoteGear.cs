@@ -41,11 +41,6 @@ namespace GearFoundry
         private int RemoteGearIcon = 0x6006E0A;
 
 
-
-
-//        List<Int32> remoteGearID = new List<Int32>();
-//        List<HudPictureBox> remoteGearPB = new List<HudPictureBox>();
-
         private void RenderRemoteGearHud()
         {
 
@@ -62,7 +57,7 @@ namespace GearFoundry
 
             xdocRemoteGear = XDocument.Load(remoteGearFilename);
 
-            remoteGearHud = new VirindiViewService.HudView("", 30, 260, RemoteGearIcon, false, "RemoteGear");
+            remoteGearHud = new VirindiViewService.HudView("", 30, 290, RemoteGearIcon, false, "RemoteGear");
             remoteGearHud.ShowInBar = false;
             remoteGearHud.UserAlphaChangeable = false;
             remoteGearHud.Visible = true;
@@ -75,7 +70,7 @@ namespace GearFoundry
             remoteGearHud.Controls.HeadControl = remoteGear_Head;
             remoteGearTabView = new HudTabView();
             remoteGearTabFixedLayout = new HudFixedLayout();
-            remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 259));
+            remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 289));
             remoteGearTabView.AddTab(remoteGearTabFixedLayout, "");
 
             //Butler
@@ -178,6 +173,16 @@ namespace GearFoundry
 
             }
             catch (Exception ex) { LogError(ex); }
+
+            //GearSense
+            int GR_PORTAL_ICON = 0x60022BE;
+
+            mRemoteGear8 = new HudPictureBox();
+            mRemoteGear8.Image = GR_PORTAL_ICON;
+            remoteGearTabFixedLayout.AddControl(mRemoteGear8, new Rectangle(2, 235, 25, 25));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear8, "PortalGear");
+            mRemoteGear8.Hit += (sender, obj) => mRemoteGear8_Hit(sender, obj); 
+
 
           }
 
@@ -398,6 +403,20 @@ namespace GearFoundry
         {
             try
             {
+                if (bPortalGearEnabled == true)
+                {
+                    bPortalGearEnabled = false;
+                    DisposePortalGearHud();
+                }
+                else
+                {
+
+                    bPortalGearEnabled = true;
+                    RenderPortalGearHud();
+
+                }
+                chkPortalGearEnabled.Checked = bPortalGearEnabled;
+                SaveSettings();
             }
             catch (Exception ex) { LogError(ex); }
 
