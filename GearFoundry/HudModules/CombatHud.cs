@@ -1034,6 +1034,10 @@ namespace GearFoundry
 //AnimationList.Add("Drosta Ves",100691552,168,0);  //Festering Curse 
 //AnimationList.Add("Traku Ves",100691553,169,0);  //Weakening Curse
 //AnimationList.Add("Slavu Bor",100691551,167,0);  //Destructive Curse
+//Zojak Ves = nether arc
+//Tugak Ves = Blast
+//Zojak Ves = nether bolt
+//Jevak Ves = nether streak
 
 //Creature
 //AnimationList.Add("Equin Eatak",100670578,27,1);  //Bottle Breaker

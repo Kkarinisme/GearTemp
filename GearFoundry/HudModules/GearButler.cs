@@ -1388,7 +1388,7 @@ namespace GearFoundry
 		
 		private void MaidSalvageCombine_Hit(object sender, System.EventArgs e)
 		{
-			WriteToChat("works");
+			WriteToChat("Currently Disabled");
 		}
 		
 		private void SellSalvageBags(int bagtype)

@@ -360,7 +360,7 @@ namespace GearFoundry
 	    			}		
     			}
     			    			
-    			//InitiateInspectorActionSequence();
+    			InitiateInspectorActionSequence();
     			
     		}catch(Exception ex){LogError(ex);}
     	}    
