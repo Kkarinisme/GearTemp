@@ -114,16 +114,13 @@ namespace GearFoundry
 				InspectorActionQueue.First().StartAction = DateTime.Now;
 				InspectorActionQueue.First().pending = true;
 				
-				WriteToChat("Queue Count = " + InspectorActionQueue.Count);
-				foreach(var action in InspectorActionQueue)
+				if(InspectorActionQueue.First().Action == IAction.SalvageItem || InspectorActionQueue.First().Action == IAction.CombineSalvage ||
+				   InspectorActionQueue.First().Action == IAction.Desiccate || InspectorActionQueue.First().Action == IAction.RingKey ||
+				   InspectorActionQueue.First().Action == IAction.ManaStone)
 				{
-					WriteToChat("Action " + action.Action.ToString() + " Item " + action.LootItem.Name);
-				}
 				
-				if(Core.Actions.OpenedContainer != 0 && ItemTrackingList.Any(x => x.Container == Core.Actions.OpenedContainer))
-				{
-					if(InspectorActionQueue.First().Action != IAction.MoveItem && InspectorActionQueue.First().LootItem.Container != Core.Actions.OpenedContainer)
-				   	{
+					if(ItemTrackingList.Any(x => x.Container == Core.Actions.OpenedContainer))
+					{
 						if(InspectorActionQueue.Any(x => x.Action == IAction.MoveItem && x.LootItem.Container == Core.Actions.OpenedContainer))
 						{
 							InspectorActionQueue.First().StartAction = DateTime.MinValue;
@@ -141,13 +138,9 @@ namespace GearFoundry
 							{
 								InspectorActionQueue.Enqueue(pa);
 							}
-							return;
 						}
-						else
-						{
-							if(InspectorActionQueue.First().Action != IAction.DeQueue){return;}
-						}
-				   	}
+						return;
+					}
 				}
 				
 				switch(InspectorActionQueue.First().Action)
@@ -330,7 +323,7 @@ namespace GearFoundry
 					}
 				}
 				
-				if(!InspectorActionQueue.Any(x => x.LootItem.Id == e.New.Id))
+				if(InspectorActionQueue.Count == 0 || !InspectorActionQueue.Any(x => x.LootItem.Id == e.New.Id))
 				{
 					PendingActions nextaction = new PendingActions();
 					nextaction.Action = IAction.CombineSalvage;

@@ -59,13 +59,11 @@ namespace GearFoundry
 			{
 				if(StatusText == "You can only salvage items that you own!")
 				{
-					WriteToChat("caught salv error");
 					if(InspectorActionQueue.Count != 0) {InspectorActionQueue.First().Action = IAction.DeQueue;}
 					return;
 				}
 				if(StatusText == "Unable to move object!")
 				{
-					WriteToChat("caugt move err");
 					if(InspectorActionQueue.Count != 0) {InspectorActionQueue.First().Action = IAction.DeQueue;}   
 					return;
 				}
