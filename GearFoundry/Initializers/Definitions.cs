@@ -142,8 +142,6 @@ namespace GearFoundry
         int nRuleWieldLevel = 0;
         int nRuleItemLevel = 0;
         int nRuleMinArmorLevel = 0;
-        //bool bRuleTradeBotOnly = false;
-        //bool bRuleTradeBot = false;
         int nRuleWieldAttribute = 0;
         int nRuleMasteryType = 0;
         string sRuleDamageTypes = "";
@@ -199,7 +197,6 @@ namespace GearFoundry
         bool bRuleFilterlvl8 = true;
         bool bRuleFilterlvl7 = true;
         bool bRuleFilterlvl6 = true;
-      //  int nRuleMustHaveSpell = 0;
         string sRuleSpells = "";
         int nRuleNumSpells = 0;
         int nid;
@@ -226,10 +223,6 @@ namespace GearFoundry
         private string toonInvName;
         private string world;
 
-//        private static XElement element = null;
-//        private static IEnumerable<XElement> childElements = null;
-//        private static IEnumerable<XElement> elements = null;
-
 
 
         //used by both the inventory and armor programs to hold current object being processed
@@ -246,11 +239,7 @@ namespace GearFoundry
 
         private static WindowsTimer mWaitingForIDTimer = new WindowsTimer();
         private int m = 500;
-        //ToMish:  Are you using these?  If not can they be removed?
-//        private int k = 0;
-//        private int n = 0;
-//        private int mcount = 0;
-
+ 
         //Used in inventory functions
         private static string objSpellXml = null;
         private static string message = null;
@@ -264,12 +253,10 @@ namespace GearFoundry
         private static long objLevelInt = 1;
         private static long objCovers = 0;
         private static string objCoversName = null;
-//        private static string objSpells = null;
         private static Int32 objIcon;
         private static long objArmorLevel = 1;
         private static long objArmorSet = 0;
         private static long objSet = 0;
-//        private static long objLore = 0;
         private static string objArmorSetName = null;
         private static long objMat = 0;
         private static long objMagicDamageInt = 0;
@@ -299,7 +286,6 @@ namespace GearFoundry
         string objElemvsMons;
         string objMaxDam;
         string objAttack;
-//        string objVar;
         string objBurden;
         string objStack;
 
@@ -308,11 +294,7 @@ namespace GearFoundry
         private static bool bquickSlotsvEnabled;
         private static bool bquickSlotshEnabled;
  
- //       private static bool bvulnedIconsEnabled;
-        
  
-        //private static bool bsalvageCombEnabled;
-
         //Corpsehud flag
         private static bool bCorpseHudEnabled;
  
@@ -344,10 +326,6 @@ namespace GearFoundry
 
         //gearmisc variables
         private static bool bMuteSounds = false;
-        //private static Decal.Interop.D3DService.CD3DObj mMarkObject;
-        //private Decal.Interop.D3DService.ID3DService mD3DService;
-
-        //private static Decal.Interop.D3DService.eShape mArrow;
 
         //used with switch in util for determining sound to play
         private static int mSound = 0;

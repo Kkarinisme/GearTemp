@@ -245,8 +245,6 @@
 										</control>
 										<control progid="DecalControls.StaticText" name="lblRuleEssLevel" left="250" top="30" width="100" height="16" text="Essence Lvl: &lt;="/>
 										<control progid="DecalControls.Edit" name="txtRuleEssLevel" left="355" top="30" width="40" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
-										<!--<control progid="DecalControls.StaticText" name="lblRuleEssSummLevel" left="250" top="50" width="100" height="16" text="Summoning Lvl: &lt;="/>
-                      <control progid="DecalControls.Edit" name="txtRuleEssSummLevel" left="355" top="50" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>-->
 										<control progid="DecalControls.StaticText" name="lblRuleEssDamageLevel" left="250" top="70" width="100" height="16" text="Damage Lvl: =&gt;"/>
 										<control progid="DecalControls.Edit" name="txtRuleEssDamageLevel" left="355" top="70" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
 										<control progid="DecalControls.StaticText" name="lblRuleEssCDLevel" left="250" top="90" width="100" height="16" text="CritDam Lvl: =&gt;"/>
@@ -266,8 +264,6 @@
 
 								<page label="Req. Spells">
 									<control progid="DecalControls.FixedLayout" clipped="">
-										<!--<control progid="DecalControls.StaticText" name="lblRuleMustHaveSpell:" left="10" top="8" width="100" height="16" text="Number of spells must have: " />
-										<control progid="DecalControls.Edit" name="txtRuleSpellMatches" left="110" top="8" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text="" />-->
 										<control progid="DecalControls.StaticText" name="lblCurrentSpells" left="10" top="30" width="130" height="16" text="Current Spells Enabled:" />
 										<control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="10" top="50" width="200" height="100">
 											<column progid="DecalControls.TextColumn" fixedwidth="150" />
@@ -306,7 +302,6 @@
 								<column progid="DecalControls.IconColumn" fixedwidth ="10"/>
 							</control>
 							<control progid="DecalControls.Edit" name="txtTrophyName" left="8" top="228" width="150" height="16" imageportalsrc="4410" textcolor="16777215" text=""/>
-							<!--control progid="DecalControls.PushButton" name="btnAttachTrophyItem" left="190" top="248" width="60" height="18" text="Attach npc"/-->
 							<control progid="DecalControls.PushButton" name="btnAddTrophyItem" left="190" top="228" width="60" height="18" text="Add New"/>
 							<control progid="DecalControls.Checkbox" name="chkTrophyExact" left="8" top="268" width="80" height="16" text="Exact Match"/>
 							<control progid="DecalControls.Edit" name="txtTrophyMax" left="8" top="288" width="50" height="16" imageportalsrc="4410" textcolor="16777215" text=""/>
@@ -324,10 +319,6 @@
 							</control>
 							<control progid="DecalControls.Edit" name="txtmyMobName" left="8" top="248" width="150" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
 							<control progid="DecalControls.PushButton" name="btnAddMobItem" left="200" top="250" width="60" height="18" text="Add New" />
-							<!--control progid="DecalControls.StaticText" name="lblatr121" left="8" top="268" width="100" height="20" text="Alert" />
-              <control progid="DecalControls.Choice" left="38" top="266" width="120" height="20" name="cboMobsetupAlert">
-                <option text="Portalhub" />
-              </control-->
 							<control progid="DecalControls.Checkbox" name="chkmyMobExact" left="170" top="268" width="80" height="16" text="Exact Match" />
 						</control>
 					</page>

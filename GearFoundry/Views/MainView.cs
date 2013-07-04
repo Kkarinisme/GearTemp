@@ -126,17 +126,6 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ITextBox txtRuleWieldReqValue;
         MyClasses.MetaViewWrappers.ITextBox txtRuleWieldLevel;
  
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleInfo;
-        // MyClasses.MetaViewWrappers.IStaticText lblRuleWork;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleNameMust;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleBurden;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleNameMustNot;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleValue;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleWieldLevel;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleWieldReqValue;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleItemLevel;
-       //  MyClasses.MetaViewWrappers.IStaticText lblRuleAlertName;
-
         // Controls on Notify.SearchRules.Weapon Page
         MyClasses.MetaViewWrappers.ICombo cboWeaponAppliesTo;
         MyClasses.MetaViewWrappers.ICombo cboMasteryType;
@@ -162,23 +151,13 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkilld;
         MyClasses.MetaViewWrappers.ITextBox txtRuleMinMaxd;
 
-        //MyClasses.MetaViewWrappers.IStaticText lblWeapCat;
-        //MyClasses.MetaViewWrappers.IStaticText lblMastCat;
-        //MyClasses.MetaViewWrappers.IStaticText lblDamageTypes;
         MyClasses.MetaViewWrappers.IStaticText lblRuleMcModAttack;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleMeleeD;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleMagicD;
-        //MyClasses.MetaViewWrappers.IStaticText lblEnabled10025;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleReqSkill;
         MyClasses.MetaViewWrappers.IStaticText lblRuleMinMax_ElvsMons;
-//        MyClasses.MetaViewWrappers.IStaticText lblRuleMSCleave;
 
         // Controls on Notify.SearchRules.Armor Page
         MyClasses.MetaViewWrappers.IList lstRuleArmorCoverages;
         MyClasses.MetaViewWrappers.IList lstRuleArmorTypes;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleMustBeUnenchantable;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleArmorCoverage;
-        //MyClasses.MetaViewWrappers.IStaticText lblRuleArmorTypes;
         MyClasses.MetaViewWrappers.ITextBox txtRuleMinArmorLevel;
         MyClasses.MetaViewWrappers.IList lstRuleSets;
 
@@ -195,7 +174,6 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICombo cboRuleEssMastery;
         MyClasses.MetaViewWrappers.IList lstRuleEssElements;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssLevel;
-    //    MyClasses.MetaViewWrappers.ITextBox txtRuleEssSummLevel;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssDamageLevel;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssCDLevel;
         MyClasses.MetaViewWrappers.ITextBox txtRuleEssCRLevel;
@@ -213,31 +191,22 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl8;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl7;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl6;
-//        MyClasses.MetaViewWrappers.ITextBox txtRuleSpellMatches;
         MyClasses.MetaViewWrappers.ITextBox txtRuleNumSpells;
-
-    //    MyClasses.MetaViewWrappers.IStaticText lblRuleMustHaveSpells;
-    //    MyClasses.MetaViewWrappers.IStaticText lblRuleMoreSpells;
 
 
         // Controls on Notify.NPC/Trophies Page
 
         MyClasses.MetaViewWrappers.IList lstmyTrophies;
         MyClasses.MetaViewWrappers.ITextBox txtTrophyName;
-   //     MyClasses.MetaViewWrappers.IStaticText lblAtr11;
-        //MyClasses.MetaViewWrappers.IButton btnAttachTrophyItem;
         MyClasses.MetaViewWrappers.IButton btnAddTrophyItem;
         MyClasses.MetaViewWrappers.ICheckBox chkTrophyExact;
-   //     MyClasses.MetaViewWrappers.IStaticText lblMyItemsCountMax;
         MyClasses.MetaViewWrappers.ITextBox txtTrophyMax;
 
         // Controls on Notify.Mobs Page
         MyClasses.MetaViewWrappers.IList lstmyMobs;
-//        MyClasses.MetaViewWrappers.ICombo cboMobsetupAlert;
-        MyClasses.MetaViewWrappers.IButton btnAddMobItem;
+       MyClasses.MetaViewWrappers.IButton btnAddMobItem;
         MyClasses.MetaViewWrappers.ICheckBox chkmyMobExact;
         MyClasses.MetaViewWrappers.ITextBox txtmyMobName;
-//        MyClasses.MetaViewWrappers.IStaticText lblatr121;
 
         // Controls on Notify.Salvage Page
         MyClasses.MetaViewWrappers.IList lstNotifySalvage;
@@ -247,32 +216,6 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IStaticText lblSalvageName;
         MyClasses.MetaViewWrappers.IStaticText lblSalvageString;
 
-        // Controls on Notify.Other Page
-//        MyClasses.MetaViewWrappers.IList lstNotifyOptions;
-//        MyClasses.MetaViewWrappers.ICheckBox chkSalvageAll;
-//        MyClasses.MetaViewWrappers.ITextBox txtMaxMana;
-//        MyClasses.MetaViewWrappers.IStaticText lblMaxMana;
-//        MyClasses.MetaViewWrappers.ITextBox txtMaxValue;
-//        MyClasses.MetaViewWrappers.IStaticText lblMaxValue;
-//        MyClasses.MetaViewWrappers.ITextBox txtVbratio;
-//        MyClasses.MetaViewWrappers.IStaticText lblVbratio;
-//
-//        // Controls on Ust Page
-//        MyClasses.MetaViewWrappers.IList lstUstList;
-//        MyClasses.MetaViewWrappers.IButton btnUstItems;
-//        MyClasses.MetaViewWrappers.IButton btnUstClear;
-//        MyClasses.MetaViewWrappers.IButton btnUstSalvage;
-//        MyClasses.MetaViewWrappers.ITextBox txtSalvageAug;
-//        MyClasses.MetaViewWrappers.IStaticText lblUst002;
-
-        // Controls on Alerts Page
-        // Controls on Inventory Page
-        // Controls on Settings Page
-      //  MyClasses.MetaViewWrappers.IList lstOtherOptions;
-        // Variable name txtSettingsCW was txtsettingscw
-     //   MyClasses.MetaViewWrappers.ITextBox txtSettingsCW;
-        // Variable name lblSettings001 was lblsettings001  
-      //  MyClasses.MetaViewWrappers.IStaticText lblSettings001;
 
 
 
@@ -309,7 +252,6 @@ namespace GearFoundry
         			//GearButler Controls
         			chkGearButlerEnabled =(MyClasses.MetaViewWrappers.ICheckBox)View["chkGearButlerEnabled"];
         			chkGearInspectorEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkGearInspectorEnabled"];
-        		//	chkAutoRingKeys = (MyClasses.MetaViewWrappers.ICheckBox)View["chkAutoRingKeys"];
 				}catch(Exception ex){LogError(ex);}
      			try
      			{
@@ -378,7 +320,6 @@ namespace GearFoundry
                   {
 			        //GearButler Controls
 			        chkGearButlerEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkGearButlerEnabled_Change);
-			      //  chkAutoRingKeys.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkAutoRingKeys_Change);
                    }catch(Exception ex){LogError(ex);}
                   try
                   { 
@@ -617,8 +558,7 @@ namespace GearFoundry
                       cboRuleEssMastery.Selected = 0;
                       lstRuleEssElements = (MyClasses.MetaViewWrappers.IList)View["lstRuleEssElements"];
                       txtRuleEssLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssLevel"];
-                  //    txtRuleEssSummLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssSummLevel"];
-                      txtRuleEssDamageLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssDamageLevel"];
+                       txtRuleEssDamageLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssDamageLevel"];
                       txtRuleEssCDLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssCDLevel"];
                       txtRuleEssCRLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssCRLevel"];
                       txtRuleEssDRLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleEssDRLevel"];
@@ -627,7 +567,6 @@ namespace GearFoundry
 
                       cboRuleEssMastery.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cboRuleEssMastery_Change);
                       txtRuleEssLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssLevel_End);
-                  //    txtRuleEssSummLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssSummLevel_End);
                       txtRuleEssDamageLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssDamageLevel_End);
                       txtRuleEssCDLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssCDLevel_End);
                       txtRuleEssCRLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleEssCRLevel_End);
@@ -643,7 +582,6 @@ namespace GearFoundry
                 // Controls on Notify.SearchRules.Req Spells
                 lstRuleSpells = (MyClasses.MetaViewWrappers.IList)View["lstRuleSpells"];
                 lstRuleSpellsEnabled = (MyClasses.MetaViewWrappers.IList)View["lstRuleSpellsEnabled"];
-              //  lstRuleCloakSpells = (MyClasses.MetaViewWrappers.IList)View["lstRuleCloakSpells"];
                 chkRuleFilterLegend = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterLegend"];
                 chkRuleFilterLegend.Checked = bRuleFilterLegend;
                 chkRuleFilterEpic = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterEpic"];
@@ -656,21 +594,18 @@ namespace GearFoundry
                 chkRuleFilterlvl7.Checked = bRuleFilterlvl7;
                 chkRuleFilterlvl6 = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterlvl6"];
                 chkRuleFilterlvl6.Checked = bRuleFilterlvl6;
-//txtRuleSpellMatches = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleSpellMatches"];
                 txtRuleNumSpells = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleNumSpells"];
        			}catch(Exception ex){LogError(ex);}
                   try
                   {
                 lstRuleSpells.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleSpells_Selected); 
                 lstRuleSpellsEnabled.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleSpellsEnabled_Selected); 
-                //lstRuleCloakSpells.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleCloakSpells_Selected);
                 chkRuleFilterLegend.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterLegend_Change);
                 chkRuleFilterEpic.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterEpic_Change);
                 chkRuleFilterMajor.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterMajor_Change);
                 chkRuleFilterlvl8.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl8_Change);
                 chkRuleFilterlvl7.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl7_Change);
                 chkRuleFilterlvl6.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl6_Change);
-               // txtRuleSpellMatches.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleSpellMatches_End);
                 txtRuleNumSpells.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleNumSpells_End);
 				}catch(Exception ex){LogError(ex);}
                   try
@@ -678,22 +613,15 @@ namespace GearFoundry
    
                 // Controls on Notify.NPC/Trophies Page
 
-                //btnAttachTrophyItem = (MyClasses.MetaViewWrappers.IButton)View["btnAttachTrophyItem"];
                 btnAddTrophyItem = (MyClasses.MetaViewWrappers.IButton)View["btnAddTrophyItem"];
                 lstmyTrophies = (MyClasses.MetaViewWrappers.IList)View["lstmyTrophies"];
                 txtTrophyName = (MyClasses.MetaViewWrappers.ITextBox)View["txtTrophyName"];
-                //lblAtr11 = (MyClasses.MetaViewWrappers.IStaticText)View["lblAtr11"];
-                //cboTrophysetupAlert = (MyClasses.MetaViewWrappers.ICombo)View["cboTrophysetupAlert"];
-                //cboTrophysetupAlert.Selected = 0;
                 chkTrophyExact = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTrophyExact"];
-                //lblMyItemsCountMax = (MyClasses.MetaViewWrappers.IStaticText)View["lblMyItemsCountMax"];
                 txtTrophyMax = (MyClasses.MetaViewWrappers.ITextBox)View["txtTrophyMax"];
                 lstmyTrophies.Selected += new EventHandler<MVListSelectEventArgs>(lstmyTrophies_Selected);
                 chkTrophyExact.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTrophyExact_Change);
-                //  // cboTrophysetupAlert.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cboTrophysetupAlert_Change);
                 txtTrophyName.End += new EventHandler<MVTextBoxEndEventArgs>(txtTrophyName_End);
                 txtTrophyMax.End += new EventHandler<MVTextBoxEndEventArgs>(txtTrophyMax_End);
-                //btnAttachTrophyItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAttachTrophyItem_Click);
                 btnAddTrophyItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAddTrophyItem_Click);
                 }catch(Exception ex){LogError(ex);}
                   try
@@ -703,18 +631,14 @@ namespace GearFoundry
                 // Controls on Notify.Mobs Page
 
                 lstmyMobs = (MyClasses.MetaViewWrappers.IList)View["lstmyMobs"];
-                //  cboMobsetupAlert = (MyClasses.MetaViewWrappers.ICombo)View["cboMobsetupAlert"];
-                //  cboMobsetupAlert.Selected = 0;
                 btnAddMobItem = (MyClasses.MetaViewWrappers.IButton)View["btnAddMobItem"];
                 chkmyMobExact = (MyClasses.MetaViewWrappers.ICheckBox)View["chkmyMobExact"];
                 txtmyMobName = (MyClasses.MetaViewWrappers.ITextBox)View["txtmyMobName"];
-                // lblatr121 = (MyClasses.MetaViewWrappers.IStaticText)View["lblAtr121"];
 				}catch(Exception ex){LogError(ex);}
                   try
                   {
                 lstmyMobs.Selected += new EventHandler<MVListSelectEventArgs>(lstmyMobs_Selected);
                 chkmyMobExact.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkmyMobExact_Change);
-                //// cboMobsetupAlert.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cboMobsetupAlert_Change);
                 txtmyMobName.End += new EventHandler<MVTextBoxEndEventArgs>(txtmyMobName_End);
                 btnAddMobItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAddMobItem_Click);
 				}catch(Exception ex){LogError(ex);}
@@ -735,121 +659,11 @@ namespace GearFoundry
                 txtSalvageName.End += new EventHandler<MVTextBoxEndEventArgs>(txtSalvageName_End);
                 txtSalvageString.End += new EventHandler<MVTextBoxEndEventArgs>(txtSalvageString_End);
                 }catch(Exception ex){LogError(ex);}
-                  try
-                  {
-                 //Controls on Notify.Other Page
-               //lstNotifyOptions = (MyClasses.MetaViewWrappers.IList)View["lstNotifyOptions"];
-//               chkSalvageAll = (MyClasses.MetaViewWrappers.ICheckBox)View["chkmyMobExact"];
-              // txtMaxMana = (MyClasses.MetaViewWrappers.ITextBox)View["txtMaxMana"];
-               //txtMaxValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtMaxValue"];
-              // txtVbratio = (MyClasses.MetaViewWrappers.ITextBox)View["txtVbratio"];
-               //lblMaxMana = (MyClasses.MetaViewWrappers.IStaticText)View["lblMaxMana"];
-              // lblMaxValue = (MyClasses.MetaViewWrappers.IStaticText)View["lblMaxValue"];
-               //lblVbratio = (MyClasses.MetaViewWrappers.IStaticText)View["lblVbratio"];
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
-             //  TODO: Add the functions in when obvious where would go and what should be done
-              // lstNotifyOptions.Selected += new EventHandler<MVListSelectEventArgs>(lstNotifyOptions_Selected);
-               //txtMaxMana.End += new EventHandler<MVTextBoxEndEventArgs>(txtMaxMana_End);
-               //txtMaxValue.End += new EventHandler<MVTextBoxEndEventArgs>(txtMaxValue_End);
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
-               // Controls on Ust Page
-              // lstUstList = (MyClasses.MetaViewWrappers.IList)View["lstUstList"];
-              // btnUstItems = (MyClasses.MetaViewWrappers.IButton)View["btnUstItems"];
-               //btnUstClear = (MyClasses.MetaViewWrappers.IButton)View["btnUstClear"];
-               //btnUstSalvage = (MyClasses.MetaViewWrappers.IButton)View["btnUstSalvage"];
-               //txtSalvageAug = (MyClasses.MetaViewWrappers.ITextBox)View["txtSalvageAug"];
-               //lblUst002 = (MyClasses.MetaViewWrappers.IStaticText)View["lblUst002"];
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
-                ////lstUstList.Selected += new EventHandler<MVListSelectEventArgs>(lstUstList_Selected);
-                //btnUstItems.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUstItems_Click);
-                //btnUstClear.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUstClear_Click);
-                //btnUstSalvage.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUstSalvage_Click);
 
-                // Controls on Alerts Page
-                // Controls on Inventory Page
- 
-                // Controls on Settings Page
-                //lstOtherOptions = (MyClasses.MetaViewWrappers.IList)View["lstOtherOptions"];
-                //txtSettingsCW = (MyClasses.MetaViewWrappers.ITextBox)View["txtSettingsCW"];
-                ////lblSettings001 = (MyClasses.MetaViewWrappers.IStaticText)View["lblSettings001"];
-
-                //lstOtherOptions.Selected += new EventHandler<MVListSelectEventArgs>(lstOtherOptions_Selected);
-  
-
-            
-
-       //         //Controls on Inventory Page
-       //         btnGetInventory = (MyClasses.MetaViewWrappers.IButton)View["btnGetInventory"];
-       //         btnUpdateInventory = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateInventory"];
-       //         btnGetBurden = (MyClasses.MetaViewWrappers.IButton)View["btnGetBurden"];
-       //         btnItemsWaiting = (MyClasses.MetaViewWrappers.IButton)View["btnItemsWaiting"];
-       //         //      btnGetToonArmor = (MyClasses.MetaViewWrappers.IButton)View["btnGetToonArmor"];
-       //         btnLstInventory = (MyClasses.MetaViewWrappers.IButton)View["btnLstInventory"];
-       //         btnClrInventory = (MyClasses.MetaViewWrappers.IButton)View["btnClrInventory"];
-       //         }catch(Exception ex){LogError(ex);}
-       //           try
-       //           {
-       //         cmbSelectClass = (MyClasses.MetaViewWrappers.ICombo)View["cmbSelectClass"];
-       //         cmbSelectClass.Selected = 0;
-       //         cmbWieldAttrib = (MyClasses.MetaViewWrappers.ICombo)View["cmbWieldAttrib"];
-       //         cmbWieldAttrib.Selected = 0;
-       //         cmbDamageType = (MyClasses.MetaViewWrappers.ICombo)View["cmbDamageType"];
-       //         cmbDamageType.Selected = 0;
-       //         cmbLevel = (MyClasses.MetaViewWrappers.ICombo)View["cmbLevel"];
-       //         cmbLevel.Selected = 0;
-       //         cmbArmorSet = (MyClasses.MetaViewWrappers.ICombo)View["cmbArmorSet"];
-       //         cmbArmorSet.Selected = 0;
-       //         cmbMaterial = (MyClasses.MetaViewWrappers.ICombo)View["cmbMaterial"];
-       //         cmbMaterial.Selected = 0;
-       //         cmbCoverage = (MyClasses.MetaViewWrappers.ICombo)View["cmbCoverage"];
-       //         cmbCoverage.Selected = 0;
-       //         cmbArmorLevel = (MyClasses.MetaViewWrappers.ICombo)View["cmbArmorLevel"];
-       //         cmbArmorLevel.Selected = 0;
-       //         cmbSalvWork = (MyClasses.MetaViewWrappers.ICombo)View["cmbSalvWork"];
-       //         cmbSalvWork.Selected = 0;
-       //         cmbEmbue = (MyClasses.MetaViewWrappers.ICombo)View["cmbEmbue"];
-       //         cmbEmbue.Selected = 0;
-       //         }catch(Exception ex){LogError(ex);}
-       //           try
-       //           {
-                
-       //         lstInventory = (MyClasses.MetaViewWrappers.IList)View["lstInventory"];
-
-       //         txbSelect = (MyClasses.MetaViewWrappers.ITextBox)View["txbSelect"];
-
-       //       //  lstInventory.Selected += new EventHandler<MVListSelectEventArgs>(lstInventory_Selected);
-       //         btnGetInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetInventory_Click);
-       //         btnUpdateInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateInventory_Click);
-       //         btnGetBurden.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetBurden_Click);
-       //         btnItemsWaiting.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnItemsWaiting_Click);
-       //         ////      btnGetToonArmor.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnGetToonArmor_Click);
-       //       //  btnLstInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnLstInventory_Click);
-       //       //  btnClrInventory.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnClrInventory_Click);
-       //         cmbSelectClass.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbSelectClass_Change);
-       //         cmbSelectClass.Selected = 0;
-       //         cmbWieldAttrib.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbWieldAttrib_Change);
-       //         cmbDamageType.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbDamageType_Change);
-       //         cmbLevel.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbLevel_Change);
-       //         cmbMaterial.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbMaterial_Change);
-       //         cmbArmorSet.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbArmorSet_Change);
-       //         cmbArmorLevel.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbArmorLevel_Change);
-       //         cmbCoverage.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbCoverage_Change);
-       //         cmbSalvWork.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbSalvWork_Change);
-       //         cmbEmbue.Change += new EventHandler<MyClasses.MetaViewWrappers.MVIndexChangeEventArgs>(cmbEmbue_Change);
-       }
+        }
 
            catch (Exception ex) {LogError(ex);	}
-       }catch(Exception ex){LogError(ex);}
-
-      
-					 
-
+ 
 
             }
 	

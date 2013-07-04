@@ -360,7 +360,6 @@ namespace GearFoundry
             sRuleArmorSet = "";
             sRuleArmorCoverage = "";
             bRuleMustBeUnEnchantable = false;
-          //  nRuleMustHaveSpell = 0;
             sRuleCloakSets = "";
             sRuleCloakSpells = "";
             bRuleRed = false;
@@ -375,7 +374,6 @@ namespace GearFoundry
             nRuleEssDRLevel = 0;
             nRuleEssLevel = 0;
             nRuleEssMastery = 0;
-          //  nRuleEssSummLevel = 0;
             bRuleFilterLegend = false;
             bRuleFilterEpic = false;
             bRuleFilterMajor = false;
@@ -469,11 +467,12 @@ namespace GearFoundry
                    chkInventory.Checked = binventoryEnabled;
                     chkInventoryComplete.Checked = binventoryCompleteEnabled;
                    chkToonStats.Checked = btoonStatsEnabled;
+                   chkToonArmor.Checked = btoonArmorEnabled;
                    chkArmorHud.Checked = bArmorHudEnabled;
 
  
 
-                 //   //Filter Section
+                   //Filter Section
                    chkEnableTextFiltering.Checked = bEnableTextFiltering;
                    chkTextFilterAllStatus.Checked = bTextFilterAllStatus;
                    chkTextFilterBusyStatus.Checked = bTextFilterBusyStatus;
@@ -802,12 +801,10 @@ namespace GearFoundry
                 if (bquickSlotsvEnabled)
                 {
                 	RenderVerticalQuickSlots();
-                    //quickSlotsvEnabled();
                 }
                 else
                 {
                 	DisposeVerticalQuickSlots();
-//                    quickSlotsvNotEnabled();
                 }
 
             }
@@ -971,7 +968,6 @@ namespace GearFoundry
                
 
                 SaveSettings();
-//                if (btoonArmorEnabled) { doGetArmor(); }
 
             }
             catch (Exception ex) { LogError(ex); }

@@ -57,11 +57,6 @@ namespace GearFoundry
         }
 
 
-//        [ControlEvent("btnAttachTrophyItem", "Click")]
-//        private void btnAttachTrophyItem_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-//        {
-//
-//        }
 
         private void lstSelect(XDocument xdoc, string filename, List<XElement> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.ITextBox mtxt, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
         {
@@ -445,8 +440,7 @@ namespace GearFoundry
                 }
 
 
-  //              int id = 0;
-                flag = sRuleSpells;
+               flag = sRuleSpells;
                 if (flag.Length != 0)
                 {
                     try
@@ -1296,27 +1290,6 @@ namespace GearFoundry
             {
                 doSalvageUpdate();
             }
-            //    sname = txtSalvageName.Text.ToString().Trim();
-            //    sinput = txtSalvageString.Text.ToString().Trim();
-
-            //    //  IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("item");
-            //    var el = from item in mSortedSalvageList
-            //             where item.Element("key").Value.ToString().Contains(sname)
-            //             select item;
-            //    mintvalue = Convert.ToInt32(el.First().Element("intvalue").Value);
-            //}
-            //if (xdocSalvage != null)
-            //{
-
-            //    IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("item");
-            //    xdocSalvage.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Contains(sname.Trim())).Remove();
-            //}
-            //string mID = "";
-            //bool mexact = false;
-            //int mitem = 3;
-
-            //addMyItem(xdocSalvage, salvageFilename, mID, mexact, mitem);
-            //FillSalvageRules();
         }
 
         private void doSalvageUpdate()
