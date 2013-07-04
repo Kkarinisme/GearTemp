@@ -28,6 +28,7 @@ namespace GearFoundry
 
 		private List<Regex> CombatHudRegexEx;
 		private List<Regex> OtherCastRegexList = new List<Regex>();
+		private List<string> OtherCastQuickKeepString = new List<string>();
 		
 		private List<SpellMapLoadable> AnimationList;
 		
@@ -210,6 +211,14 @@ namespace GearFoundry
 				CombatHudRegexEx.Add(new Regex("You fail to affect (?<targetname>.+) because you are not a player killer!$"));	
 				CombatHudRegexEx.Add(new Regex("Your spell fizzled."));
 				
+				OtherCastQuickKeepString.Add("Bor");
+				OtherCastQuickKeepString.Add("Drosta");
+				OtherCastQuickKeepString.Add("Traku");
+				OtherCastQuickKeepString.Add("Slavu");
+				OtherCastQuickKeepString.Add("Equin");
+				OtherCastQuickKeepString.Add("Cruath");
+				OtherCastQuickKeepString.Add("Yanoi");
+										
 				AnimationList = new List<SpellMapLoadable>();
 				//void
 				AnimationList.Add(new SpellMapLoadable("Zojak Bor",100691559,4,5393));  //Corrosion
@@ -276,20 +285,21 @@ namespace GearFoundry
 				AnimationList.Add(new SpellMapLoadable("Cruath Quaril",100668347,46,2174));  //Archer's Gift
 				
 				//Item
-				AnimationList.Add(new SpellMapLoadable("Equin Qualoi",100673974,64,2093));  //Olthoi Bait
-				AnimationList.Add(new SpellMapLoadable("Equin Quaguz",100673980,62,2095));  //Swordman Bait
-				AnimationList.Add(new SpellMapLoadable("Equin Quareth",100673975,68,2099));  //Tusker Bait
+				//AnimationList.Add(new SpellMapLoadable("Equin Qualoi",100673974,64,2093));  //Olthoi Bait
+				//AnimationList.Add(new SpellMapLoadable("Equin Quaguz",100673980,62,2095));  //Swordman Bait
+				//AnimationList.Add(new SpellMapLoadable("Equin Quareth",100673975,68,2099));  //Tusker Bait
 				AnimationList.Add(new SpellMapLoadable("Equin Quasith",100673981,143,2100));  //Tattercoat
-				AnimationList.Add(new SpellMapLoadable("Equin Quatak",100673976,58,2103));  //Inferno Bait
-				AnimationList.Add(new SpellMapLoadable("Equin Quavik",100673977,66,2105));  //Gelidite Bait
-				AnimationList.Add(new SpellMapLoadable("Malar Aevik",100673983,68,2107));  //Cabalistic Ostracism
-				AnimationList.Add(new SpellMapLoadable("Equin Aetak",100673990,64,2109));  //Lugian's Speed
-				AnimationList.Add(new SpellMapLoadable("Equin Quafeth",100673978,68,2111));  //Astyrrian Bait
-				AnimationList.Add(new SpellMapLoadable("Equin Aeguz",100673985,62,2112));  //Wi's Folly
-				AnimationList.Add(new SpellMapLoadable("Equin Quaril",100673979,60,2114));  //Archer Bait
-				AnimationList.Add(new SpellMapLoadable("Equin Aeril",100676646,58,3266));  //Spirit Pacification
-				AnimationList.Add(new SpellMapLoadable("Equin Aereth",100673992,60,2118));  //Clouded Motives
-				AnimationList.Add(new SpellMapLoadable("Equin Aeti",100668401,60,2119));  //Vagabond's Gift
+				//AnimationList.Add(new SpellMapLoadable("Equin Quatak",100673976,58,2103));  //Inferno Bait
+				//AnimationList.Add(new SpellMapLoadable("Equin Quavik",100673977,66,2105));  //Gelidite Bait
+				//AnimationList.Add(new SpellMapLoadable("Malar Aevik",100673983,68,2107));  //Cabalistic Ostracism
+				//Lets be honest, you're not likely to worry about the debuff above on a mob....and dumping it lets you quit considering every buff being cast...
+				//AnimationList.Add(new SpellMapLoadable("Equin Aetak",100673990,64,2109));  //Lugian's Speed
+				//AnimationList.Add(new SpellMapLoadable("Equin Quafeth",100673978,68,2111));  //Astyrrian Bait
+				//AnimationList.Add(new SpellMapLoadable("Equin Aeguz",100673985,62,2112));  //Wi's Folly
+				//AnimationList.Add(new SpellMapLoadable("Equin Quaril",100673979,60,2114));  //Archer Bait
+				//AnimationList.Add(new SpellMapLoadable("Equin Aeril",100676646,58,3266));  //Spirit Pacification
+				//AnimationList.Add(new SpellMapLoadable("Equin Aereth",100673992,60,2118));  //Clouded Motives
+				//AnimationList.Add(new SpellMapLoadable("Equin Aeti",100668401,60,2119));  //Vagabond's Gift
 			}catch(Exception ex){LogError(ex);}
 		}
 	
@@ -631,12 +641,8 @@ namespace GearFoundry
 			{	
 				if(e.Color != 17){return;}
 				if(e.Text.StartsWith("You say, ") || e.Text.StartsWith("You cast")){return;}
-				
-//				// Fat Guy In A Little Coat says, "Zojak
-//				
-//				e.Text.LastIndexOf("says,");
-				
-				//TODO: Use index of to reduce the search overhead here.
+				if(!OtherCastQuickKeepString.Any(x => e.Text.Contains(x))) {return;}
+							
 				
 				if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)))
 				{	
@@ -648,8 +654,6 @@ namespace GearFoundry
 					odci.Animation = tanimation.SpellAnimation;
 					odci.SpellSchool = SpellIndex[odci.SpellId].spellschool;
 					
-					
-					//TODO: Not set to an instance of an object.  How?
 					switch(SpellIndex[odci.SpellId].spellschool.ToLower())
 					{
 						case "item enchantment":
