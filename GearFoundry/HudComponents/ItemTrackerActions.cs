@@ -46,11 +46,6 @@ namespace GearFoundry
 			DeQueue
 		}
 		
-		
-		//Entry points should be:
-		//1.  Item queued for move
-		//2.  Loot Object enters inventory which is an autoprocess type.
-		
 		private bool ActionsPending = false;
 		private void InitiateInspectorActionSequence()
 		{
@@ -96,7 +91,7 @@ namespace GearFoundry
 				{
 					ActionsPending = false;
 					InspectorActionTimer.Tick -= InspectorActionInitiator;
-					InspectorActionTimer.Stop();
+					InspectorActionTimer.Stop();				
 					return;
 				}
 				
@@ -109,21 +104,51 @@ namespace GearFoundry
 					WriteToChat("You are out of space in your main pack.  Looting disabled.");
 					return;
 				}
-				
+								
+				//this will restart the action attempt after 2 seconds if it fails.
+				if(InspectorActionQueue.First().pending && InspectorActionQueue.First().Action != IAction.DeQueue)
+				{
+					if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalSeconds < 2)	{return;}
+				}
 
-				
-				//this will restart the queue if it fails.
-				if(InspectorActionQueue.First().pending)
-				{
-					if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalSeconds < 3)	{return;}
-				}
-				else if(InspectorActionQueue.First().Action != IAction.PeaceMode || InspectorActionQueue.First().Action != IAction.DeQueue)
-				{
-					if(!InspectorActionQueue.First().LootItem.isvalid) {InspectorActionQueue.First().Action = IAction.DeQueue;}
-				}
-				
 				InspectorActionQueue.First().StartAction = DateTime.Now;
 				InspectorActionQueue.First().pending = true;
+				
+				WriteToChat("Queue Count = " + InspectorActionQueue.Count);
+				foreach(var action in InspectorActionQueue)
+				{
+					WriteToChat("Action " + action.Action.ToString() + " Item " + action.LootItem.Name);
+				}
+				
+				if(Core.Actions.OpenedContainer != 0 && ItemTrackingList.Any(x => x.Container == Core.Actions.OpenedContainer))
+				{
+					if(InspectorActionQueue.First().Action != IAction.MoveItem && InspectorActionQueue.First().LootItem.Container != Core.Actions.OpenedContainer)
+				   	{
+						if(InspectorActionQueue.Any(x => x.Action == IAction.MoveItem && x.LootItem.Container == Core.Actions.OpenedContainer))
+						{
+							InspectorActionQueue.First().StartAction = DateTime.MinValue;
+							InspectorActionQueue.First().pending = false;
+							
+							List<PendingActions> TempPendingActionsHolder = InspectorActionQueue.ToList();
+							int nextactioninex = TempPendingActionsHolder.FindIndex(x => x.Action == IAction.MoveItem && x.LootItem.Container == Core.Actions.OpenedContainer);
+							
+							InspectorActionQueue.Clear();
+													
+							InspectorActionQueue.Enqueue(TempPendingActionsHolder.ElementAt(nextactioninex));
+							TempPendingActionsHolder.RemoveAt(nextactioninex);
+							
+							foreach(PendingActions pa in TempPendingActionsHolder)
+							{
+								InspectorActionQueue.Enqueue(pa);
+							}
+							return;
+						}
+						else
+						{
+							if(InspectorActionQueue.First().Action != IAction.DeQueue){return;}
+						}
+				   	}
+				}
 				
 				switch(InspectorActionQueue.First().Action)
 				{
@@ -184,7 +209,7 @@ namespace GearFoundry
 				if(Core.Actions.CombatMode == CombatState.Peace && (DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds > 1000)
 				{
 					Core.RenderFrame -= RenderFrame_SwitchCombatWait;
-					InspectorActionQueue.Dequeue();
+					InspectorActionQueue.First().Action = IAction.DeQueue;
 					return;
 				}
 				else
@@ -297,11 +322,11 @@ namespace GearFoundry
 			{
 				if(e.New.ObjectClass != ObjectClass.Salvage) {return;}
 				
-				if(InspectorActionQueue.Count > 0)
+				if(InspectorActionQueue.Count > 0 && InspectorActionQueue.First().pending)
 				{
 					if(InspectorActionQueue.First().Action == IAction.SalvageItem || InspectorActionQueue.First().Action == IAction.CombineSalvage)
 					{
-						InspectorActionQueue.Dequeue();
+						InspectorActionQueue.First().Action = IAction.DeQueue;
 					}
 				}
 				
@@ -386,13 +411,13 @@ namespace GearFoundry
 					}
 					else
 					{
-						InspectorActionQueue.Dequeue();
+						InspectorActionQueue.First().Action = IAction.DeQueue;
 						return;
 					}
 				}
 				else
 				{
-					InspectorActionQueue.Dequeue();
+					InspectorActionQueue.First().Action = IAction.DeQueue;
 					return;
 				}
 				
@@ -413,7 +438,7 @@ namespace GearFoundry
 				if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0).Count() == 0)
 				{
 					WriteToChat("No empty manastones available!");
-					InspectorActionQueue.Dequeue();
+					InspectorActionQueue.First().Action = IAction.DeQueue;
 					return;
 				}
 				else
@@ -477,7 +502,7 @@ namespace GearFoundry
 				if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Aetheria Desiccant").Count() == 0) 
 				{
 					WriteToChat("No Aetheria Desiccant found.");
-					InspectorActionQueue.Dequeue();
+					InspectorActionQueue.First().Action = IAction.DeQueue;
 					return;
 				}
 				else	
@@ -552,7 +577,7 @@ namespace GearFoundry
 				if(MatchedKeyRingId == 0)
 				{
 					WriteToChat("No matching, empty keyrings found.");
-					InspectorActionQueue.Dequeue();
+					InspectorActionQueue.First().Action = IAction.DeQueue;
 					return;
 				}
 				else

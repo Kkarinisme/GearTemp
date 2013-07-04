@@ -75,11 +75,11 @@ namespace GearFoundry
 
 		public class OtherDebuffCastInfo
 		{
-			public string SpellWords;
-			public DateTime HeardTime;
-			public int SpellId;
-			public int Animation;
-			public string SpellSchool;
+			public string SpellWords = String.Empty;
+			public DateTime HeardTime = DateTime.MinValue;
+			public int SpellId = 0;
+			public int Animation = 0;
+			public string SpellSchool = String.Empty;
 		}
 		
 		private class SpellMapLoadable
@@ -415,7 +415,7 @@ namespace GearFoundry
 
 				int probablespellid = (from spels in OtherCastBuffer
 										where spels.Animation == pMsg.Value<int>(1)
-										select spels).First().SpellId;
+										select spels).FirstOrDefault().SpellId;
 				
 				if(probablespellid != 0)
 				{	
@@ -632,6 +632,12 @@ namespace GearFoundry
 				if(e.Color != 17){return;}
 				if(e.Text.StartsWith("You say, ") || e.Text.StartsWith("You cast")){return;}
 				
+//				// Fat Guy In A Little Coat says, "Zojak
+//				
+//				e.Text.LastIndexOf("says,");
+				
+				//TODO: Use index of to reduce the search overhead here.
+				
 				if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)))
 				{	
 					OtherDebuffCastInfo odci = new OtherDebuffCastInfo();
@@ -642,6 +648,8 @@ namespace GearFoundry
 					odci.Animation = tanimation.SpellAnimation;
 					odci.SpellSchool = SpellIndex[odci.SpellId].spellschool;
 					
+					
+					//TODO: Not set to an instance of an object.  How?
 					switch(SpellIndex[odci.SpellId].spellschool.ToLower())
 					{
 						case "item enchantment":

@@ -111,7 +111,7 @@ namespace GearFoundry
 						if(InspectorActionQueue.First().LootItem.Id == e.Changed.Id)
 					   	{
 							ItemJustChanged = InspectorActionQueue.First().LootItem;
-					   		InspectorActionQueue.Dequeue();
+							InspectorActionQueue.First().Action = IAction.DeQueue;
 					   	}	
 					   	if(ItemTrackingList.Any(x => x.Id == ItemJustChanged.Id))
 					   	{
@@ -208,14 +208,14 @@ namespace GearFoundry
 				{
 					if(InspectorActionQueue.Count > 0)
 					{	
-						if(InspectorActionQueue.First().LootItem.Name == e.Changed.Name)
+						if(InspectorActionQueue.First().LootItem.Name == e.Changed.Name && InspectorActionQueue.First().pending)
 						{
 							ItemJustChanged = InspectorActionQueue.First().LootItem;
 							if(ItemTrackingList.Any(x => x.Id == ItemJustChanged.Id))
 							{
 								ItemTrackingList.RemoveAll(x => x.Id == ItemJustChanged.Id);
 							}
-							InspectorActionQueue.Dequeue();
+							InspectorActionQueue.First().Action = IAction.DeQueue;
 							
 							UpdateItemHud();
 							
@@ -284,16 +284,9 @@ namespace GearFoundry
 				}
 				if(InspectorActionQueue.Count > 0)
 				{
-					if(InspectorActionQueue.First().LootItem.Id == e.ItemGuid)
+					if(InspectorActionQueue.Any(x => x.LootItem.Id == e.ItemGuid))
 					{
-						InspectorActionQueue.Dequeue();
-					}	
-					else
-					{
-						if(InspectorActionQueue.Any(x => x.LootItem.Id == e.ItemGuid))
-						{
-							InspectorActionQueue.First(x => x.LootItem.Id == e.ItemGuid).Action = IAction.DeQueue;
-						}
+						InspectorActionQueue.First(x => x.LootItem.Id == e.ItemGuid).Action = IAction.DeQueue;
 					}
 				}
 				UpdateItemHud();
@@ -335,16 +328,9 @@ namespace GearFoundry
 				}
 				if(InspectorActionQueue.Count > 0)
 				{
-					if(InspectorActionQueue.First().LootItem.Id == e.Released.Id)
+					if(InspectorActionQueue.Any(x => x.LootItem.Id == e.Released.Id))
 					{
-						InspectorActionQueue.Dequeue();
-					}	
-					else
-					{
-						if(InspectorActionQueue.Any(x => x.LootItem.Id == e.Released.Id))
-						{
-							InspectorActionQueue.First(x => x.LootItem.Id == e.Released.Id).Action = IAction.DeQueue;
-						}
+						InspectorActionQueue.First(x => x.LootItem.Id == e.Released.Id).Action = IAction.DeQueue;
 					}
 				}
 			}catch(Exception ex){LogError(ex);}
@@ -395,7 +381,7 @@ namespace GearFoundry
 					Core.RenderFrame -= RenderFrame_DelayedDequeue;
 				}
 				
-				InspectorActionQueue.Dequeue();
+				InspectorActionQueue.First().Action = IAction.DeQueue;
 				return;
 				
 			}catch(Exception ex){LogError(ex);}
