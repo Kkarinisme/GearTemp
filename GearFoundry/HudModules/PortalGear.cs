@@ -83,27 +83,24 @@ namespace GearFoundry
                 txtPortalGear.Text = strTime;
                 portalGearTabFixedLayout.AddControl(txtPortalGear, new Rectangle(0, 0, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(txtPortalGear, "Bedtime yet?");
-
-                //Portal Recall
-                //Stream recallPortalStream = this.GetType().Assembly.GetManifestResourceStream("recall.gif");
-                //Image PortalRecallImage = new Bitmap(recallPortalStream);
-                //mPortalGear0 = new HudPictureBox();
-                //mPortalGear0.Image = (ACImage)PortalRecallImage;
-                //portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(30, 0, 25, 39));
-                //VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal recall");
- 
-                string strPortalRecallImage = GearDir + @"\recall.gif";
-                Image PortalRecallImage = new Bitmap(strPortalRecallImage);
-
-                mPortalGear0 = new HudPictureBox();
-                mPortalGear0.Image = (ACImage)PortalRecallImage;
-
-                portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(2, 215, 25, 25));
-                VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
-                mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
+                try
+                {
+                    //Portal Recall
+                    //Stream recallPortalStream = this.GetType().Assembly.GetManifestResourceStream("recall.gif");
+                    //Image PortalRecallImage = new Bitmap(recallPortalStream);
+                    string strPortalRecallImage = GearDir + @"\recall.gif";
+                    Image PortalRecallImage = new Bitmap(strPortalRecallImage);
+                    mPortalGear0 = new HudPictureBox();
+                    mPortalGear0.Image = (ACImage)PortalRecallImage;
+                    portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(30, 2, 25, 39));
+                    VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
+                    mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
+                }
+                catch (Exception ex) { LogError(ex); }
 
              }
-            catch (Exception ex) { LogError(ex); }
+
+             catch (Exception ex) { LogError(ex); }
 
  
             //  Lifestone Recall
@@ -146,16 +143,11 @@ namespace GearFoundry
             //Recall lifestone via spell
             //Stream PortalLifestoneRecallStream = this.GetType().Assembly.GetManifestResourceStream("lsrecall.gif");
             //Image PortalLifestoneRecallImage = new Bitmap(PortalLifestoneRecallStream);
-            //mPortalGear5 = new HudPictureBox();
-            //mPortalGear5.Image = (ACImage)PortalLifestoneRecallIImage;
-            //portalGearTabFixedLayout.AddControl(mPortalGear5, new Rectangle(180, 0, 25, 39));
-            //VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear5, "Recall Spell Lifestone");
-
-            string strPortalLifestoneRecallImage = GearDir + @"\lsrecallP1.gif";
+            string strPortalLifestoneRecallImage = GearDir + @"\lsrecall.gif";
             Image PortalLifestoneRecallImage = new Bitmap(strPortalLifestoneRecallImage);
             mPortalGear5 = new HudPictureBox();
             mPortalGear5.Image = (ACImage)PortalLifestoneRecallImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear5, new Rectangle(2, 180, 25, 25));
+            portalGearTabFixedLayout.AddControl(mPortalGear5, new Rectangle(180,2, 25, 25));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear5, "Recall Spell Lifestone");
             mPortalGear5.Hit += (sender, obj) => mPortalGear5_Hit(sender, obj);
 
@@ -163,16 +155,11 @@ namespace GearFoundry
             //Recall Portal I
             //Stream recallPortalIStream = this.GetType().Assembly.GetManifestResourceStream("recallP1.gif");
             //Image PortalRecallIImage = new Bitmap(recallPortalIStream);
-            //mPortalGear6 = new HudPictureBox();
-            //mPortalGear6.Image = (ACImage)PortalRecallIImage;
-            //portalGearTabFixedLayout.AddControl(mPortalGear6, new Rectangle(210, 0, 25, 39));
-            //VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear6, "Recall Portal I");
-
             string strPortalRecallIImage = GearDir + @"\recallP1.gif";
             Image PortalRecallIImage = new Bitmap(strPortalRecallIImage);
             mPortalGear6 = new HudPictureBox();
             mPortalGear6.Image = (ACImage)PortalRecallIImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear6, new Rectangle(2, 210, 25, 25));
+            portalGearTabFixedLayout.AddControl(mPortalGear6, new Rectangle(210,2, 25, 25));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear6, "Recall Portal I");
             mPortalGear6.Hit += (sender, obj) => mPortalGear6_Hit(sender, obj);
 
@@ -180,32 +167,22 @@ namespace GearFoundry
             //Summon Portal I
             //Stream summonPortalIStream = this.GetType().Assembly.GetManifestResourceStream("summonP1.gif");
             //Image PortalSummonIImage = new Bitmap(summonPortalIStream);
-            //mPortalGear7 = new HudPictureBox();
-            //mPortalGear7.Image = (ACImage)PortalSummonIImage;
-            //portalGearTabFixedLayout.AddControl(mPortalGear7, new Rectangle(240, 0, 25, 39));
-            //VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear6, "Recall Portal I");
-
             string strPortalSummonIImage = GearDir + @"\summonP1.gif";
             Image PortalSummonIImage = new Bitmap(strPortalSummonIImage);
             mPortalGear7 = new HudPictureBox();
             mPortalGear7.Image = (ACImage)PortalSummonIImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear7, new Rectangle(2, 240, 25, 25));
+            portalGearTabFixedLayout.AddControl(mPortalGear7, new Rectangle(240,2, 25, 25));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear7, "Summon Portal I");
             mPortalGear7.Hit += (sender, obj) => mPortalGear7_Hit(sender, obj);
 
             //Recall Portal II
             //Stream recallPortalIIStream = this.GetType().Assembly.GetManifestResourceStream("recallP2.gif");
             //Image PortalRecallIIImage = new Bitmap(recallPortalIIStream);
-            //mPortalGear8 = new HudPictureBox();
-            //mPortalGear8.Image = (ACImage)PortalRecallIIImage;
-            //portalGearTabFixedLayout.AddControl(mPortalGear8, new Rectangle(270, 0, 25, 39));
-            //VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear8, "Recall Portal II");
-
             string strPortalRecallIIImage = GearDir + @"\recallP2.gif";
             Image PortalRecallIIImage = new Bitmap(strPortalRecallIIImage);
             mPortalGear8 = new HudPictureBox();
             mPortalGear8.Image = (ACImage)PortalRecallIIImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear8, new Rectangle(2, 270, 25, 25));
+            portalGearTabFixedLayout.AddControl(mPortalGear8, new Rectangle(270,2, 25, 25));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear8, "Recall Portal I");
             mPortalGear6.Hit += (sender, obj) => mPortalGear8_Hit(sender, obj);
 
@@ -213,20 +190,14 @@ namespace GearFoundry
             //Summon Portal II
             //Stream summonPortalIIStream = this.GetType().Assembly.GetManifestResourceStream("summonP2.gif");
             //Image PortalSummonIIImage = new Bitmap(summonPortalIIStream);
-            //mPortalGear9 = new HudPictureBox();
-            //mPortalGear9.Image = (ACImage)PortalSummonIIImage;
-            //portalGearTabFixedLayout.AddControl(mPortalGear9, new Rectangle(300, 0, 25, 39));
-            //VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear6, "Recall Portal I");
-
             string strPortalSummonIIImage = GearDir + @"\summonP2.gif";
             Image PortalSummonIIImage = new Bitmap(strPortalSummonIIImage);
             mPortalGear9 = new HudPictureBox();
-            mPortalGear9.Image = (ACImage)PortalSummonIImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear9, new Rectangle(2, 300, 25, 25));
+            mPortalGear9.Image = (ACImage)PortalSummonIIImage;
+            portalGearTabFixedLayout.AddControl(mPortalGear9, new Rectangle(300,2, 25, 25));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear9, "Summon Portal II");
             mPortalGear9.Hit += (sender, obj) => mPortalGear9_Hit(sender, obj);
  
-
         }
         private void DisposePortalGearHud()
         {
