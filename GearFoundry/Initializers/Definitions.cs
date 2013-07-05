@@ -108,6 +108,7 @@ namespace GearFoundry
         private string quickSlotsvFilename = null;
         private string quickSlotshFilename = null;
         private string remoteGearFilename = null;
+        private string portalGearFilename = null;
         private string programinv = "";
 
         private int nitemFontHeight = 0;
@@ -304,9 +305,14 @@ namespace GearFoundry
         //Butler Flags
         private static bool bGearButlerEnabled;
         
+        //CombatHud Flags
         private static bool bCombatHudEnabled;
 
+        //RemoteGear Flag
         private static bool bRemoteGearEnabled;
+
+        //PortalGear Flag
+        private static bool bPortalGearEnabled;
 
         //Inventory flags
         private static bool bArmorHudEnabled;

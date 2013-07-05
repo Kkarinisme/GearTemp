@@ -63,6 +63,8 @@ namespace GearFoundry
         //Remote Gear
         MyClasses.MetaViewWrappers.ICheckBox chkRemoteGearEnabled;
 
+        //Portal Gear
+        MyClasses.MetaViewWrappers.ICheckBox chkPortalGearEnabled;
 
         //Gear
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryHudEnabled;
@@ -270,6 +272,9 @@ namespace GearFoundry
                 //Remote Gear
                 chkRemoteGearEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRemoteGearEnabled"];
 
+                //Portal Gear
+                chkPortalGearEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkPortalGearEnabled"];
+
                 //Misc Gears
                 chkMuteSounds = (MyClasses.MetaViewWrappers.ICheckBox)View["chkMuteSounds"];
                 chkArmorHud = (MyClasses.MetaViewWrappers.ICheckBox)View["chkArmorHud"];
@@ -338,6 +343,12 @@ namespace GearFoundry
                   try
                   {
                       chkRemoteGearEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRemoteGearEnabled_Change);
+                  }
+                  catch (Exception ex) { LogError(ex); }
+
+                  try
+                  {
+                      chkPortalGearEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkPortalGearEnabled_Change);
                   }
                   catch (Exception ex) { LogError(ex); }
 
