@@ -104,6 +104,8 @@ namespace GearFoundry
                 portalGear_Head.AddControl(portalGearTabView, new Rectangle(0, 0, 340, 40));
                 portalGearTabView.AddTab(portalGearTabFixedLayout, "");
 
+ 
+
                 //Clock
                 txtPortalGear = new HudStaticText();
                 portalGearTabFixedLayout.AddControl(txtPortalGear, new Rectangle(0, 0, 55, 39));
@@ -137,7 +139,6 @@ namespace GearFoundry
             mPortalGear2.Image = GR_HouseRecall_ICON;
             portalGearTabFixedLayout.AddControl(mPortalGear2, new Rectangle(120, 2, 25, 39));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear2, "House Recall (/@hr)");
-
             mPortalGear2.Hit += (sender, obj) => mPortalGear2_Hit(sender, obj);
 
  
@@ -147,7 +148,6 @@ namespace GearFoundry
             mPortalGear3.Image = GR_MansionRecall_ICON;
             portalGearTabFixedLayout.AddControl(mPortalGear3, new Rectangle(150, 2, 25, 39));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear3, "Mansion recall (/@hom)");
-
             mPortalGear3.Hit += (sender, obj) => mPortalGear3_Hit(sender, obj);
 
             //Allegiance Hometown Recall
