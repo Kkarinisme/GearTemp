@@ -136,7 +136,7 @@ namespace GearFoundry
             int GR_HouseRecall_ICON = 0x6001A2A;
             mPortalGear2.Image = GR_HouseRecall_ICON;
             portalGearTabFixedLayout.AddControl(mPortalGear2, new Rectangle(120, 2, 25, 39));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear2, "House Recall (/@hr)");
+            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear2, "House Recall (/@hr)");
 
             mPortalGear2.Hit += (sender, obj) => mPortalGear2_Hit(sender, obj);
 
@@ -146,7 +146,7 @@ namespace GearFoundry
             int GR_MansionRecall_ICON = 0x60022DE;
             mPortalGear3.Image = GR_MansionRecall_ICON;
             portalGearTabFixedLayout.AddControl(mPortalGear3, new Rectangle(150, 2, 25, 39));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear3, "Mansion recall (/@hom)");
+            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear3, "Mansion recall (/@hom)");
 
             mPortalGear3.Hit += (sender, obj) => mPortalGear3_Hit(sender, obj);
 
@@ -155,7 +155,7 @@ namespace GearFoundry
             int GR_AHRecall_ICON = 0x60024DD;
             mPortalGear4.Image = GR_AHRecall_ICON;
             portalGearTabFixedLayout.AddControl(mPortalGear4, new Rectangle(180, 2, 25, 29));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear4, "Allegiance Hometown (/@ah)");
+            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear4, "Allegiance Hometown (/@ah)");
             mPortalGear4.Hit += (sender, obj) => mPortalGear4_Hit(sender, obj);
 
 //            //Recall lifestone via spell
