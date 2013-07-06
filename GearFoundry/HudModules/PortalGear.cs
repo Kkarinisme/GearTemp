@@ -106,27 +106,19 @@ namespace GearFoundry
 
                 //Clock
                 txtPortalGear = new HudStaticText();
-                portalGearTabFixedLayout.AddControl(txtPortalGear, new Rectangle(0, 0, 50, 39));
+                portalGearTabFixedLayout.AddControl(txtPortalGear, new Rectangle(0, 0, 55, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(txtPortalGear, "Bedtime yet?");                 
                 
-//                try
-//                {
-//                    //Portal Recall
-//                    //Stream recallPortalStream = this.GetType().Assembly.GetManifestResourceStream("recall.gif");
-//                    //Image PortalRecallImage = new Bitmap(recallPortalStream);
-//                    string strPortalRecallImage = GearDir + @"\recall.gif";
-//                    Image PortalRecallImage = new Bitmap(strPortalRecallImage);
-//                    mPortalGear0 = new HudPictureBox();
-//                    mPortalGear0.Image = (ACImage)PortalRecallImage;
-//                    portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(30, 2, 25, 39));
-//                    VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
-//                    mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
-//                }
-//                catch (Exception ex) { LogError(ex); }
+  
+//            //Portal Recall
+//            Stream recallPortalStream = this.GetType().Assembly.GetManifestResourceStream("recall.gif");
+//            Image PortalRecallImage = new Bitmap(recallPortalStream);
+//            mPortalGear0 = new HudPictureBox();
+//            mPortalGear0.Image = (ACImage)PortalRecallImage;
+//            portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(60, 2, 25, 39));
+//            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
+//            mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
 
-             }
-
-             catch (Exception ex) { LogError(ex); }
 
  
             //  Lifestone Recall
@@ -134,8 +126,8 @@ namespace GearFoundry
             int GR_LifestoneRecall_ICON = 0x60024E1;
             mPortalGear1.Image = GR_LifestoneRecall_ICON;
             mPortalGear1.Image = new ACImage(4949);
-            portalGearTabFixedLayout.AddControl(mPortalGear1, new Rectangle(60, 2, 25, 39));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear1, "Lifestone recall");
+            portalGearTabFixedLayout.AddControl(mPortalGear1, new Rectangle(90, 2, 25, 39));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear1, "Lifestone Recall (/@ls)");
 
             mPortalGear1.Hit += (sender, obj) => mPortalGear1_Hit(sender, obj);
 
@@ -143,8 +135,8 @@ namespace GearFoundry
             mPortalGear2 = new HudPictureBox();
             int GR_HouseRecall_ICON = 0x6001A2A;
             mPortalGear2.Image = GR_HouseRecall_ICON;
-            portalGearTabFixedLayout.AddControl(mPortalGear2, new Rectangle(90, 2, 25, 39));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear2, "House recall");
+            portalGearTabFixedLayout.AddControl(mPortalGear2, new Rectangle(120, 2, 25, 39));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear2, "House Recall (/@hr)");
 
             mPortalGear2.Hit += (sender, obj) => mPortalGear2_Hit(sender, obj);
 
@@ -153,8 +145,8 @@ namespace GearFoundry
             mPortalGear3 = new HudPictureBox();
             int GR_MansionRecall_ICON = 0x60022DE;
             mPortalGear3.Image = GR_MansionRecall_ICON;
-            portalGearTabFixedLayout.AddControl(mPortalGear3, new Rectangle(120, 2, 25, 39));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear3, "Mansion recall");
+            portalGearTabFixedLayout.AddControl(mPortalGear3, new Rectangle(150, 2, 25, 39));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear3, "Mansion recall (/@hom)");
 
             mPortalGear3.Hit += (sender, obj) => mPortalGear3_Hit(sender, obj);
 
@@ -162,8 +154,8 @@ namespace GearFoundry
             mPortalGear4 = new HudPictureBox();
             int GR_AHRecall_ICON = 0x60024DD;
             mPortalGear4.Image = GR_AHRecall_ICON;
-            portalGearTabFixedLayout.AddControl(mPortalGear4, new Rectangle(150, 2, 25, 29));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear4, "Allegiance Hometown");
+            portalGearTabFixedLayout.AddControl(mPortalGear4, new Rectangle(180, 2, 25, 29));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear4, "Allegiance Hometown (/@ah)");
             mPortalGear4.Hit += (sender, obj) => mPortalGear4_Hit(sender, obj);
 
 //            //Recall lifestone via spell
@@ -225,6 +217,7 @@ namespace GearFoundry
 //            mPortalGear9.Hit += (sender, obj) => mPortalGear9_Hit(sender, obj);
             
             MasterTimer.Tick += MasterTimer_UpdateClock;
+            }catch(Exception ex){LogError(ex);}
  
         }
         private void DisposePortalGearHud()
