@@ -39,8 +39,37 @@ namespace GearFoundry
         private HudPictureBox mPortalGear7 = null;
         private HudPictureBox mPortalGear8 = null;
         private HudPictureBox mPortalGear9 = null;
-
-
+        
+        private Queue<PortalActions> PortalActionQueue = new Queue<PortalActions>();
+        private System.Windows.Forms.Timer PortalActionTimer = new System.Windows.Forms.Timer();
+        
+     	private class PortalActions
+     	{
+     		public PAction Action = PAction.DeQueue;
+			public bool pending = false;
+			public DateTime StartAction = DateTime.MinValue;
+			public int ItemId = 0;	
+			public RecallTypes RecallSpell = RecallTypes.none;			
+     	}	
+			
+		public enum PAction
+		{
+			UnEquipWeapon,
+			PeaceMode,
+			EquipCaster,
+			CastMode,
+			Recall,		
+			DeQueue
+		}
+		
+		public enum RecallTypes
+		{
+			none,
+			portal,
+			lifestone,
+			primaryporal,
+			secondaryportal
+		}
 
         private void RenderPortalGearHud()
         {
@@ -77,26 +106,23 @@ namespace GearFoundry
 
                 //Clock
                 txtPortalGear = new HudStaticText();
-                DateTime dCurrent = new DateTime();
-                string strTime = dCurrent.ToString();
-                txtPortalGear.Text = strTime;
-                txtPortalGear.Text = strTime;
-                portalGearTabFixedLayout.AddControl(txtPortalGear, new Rectangle(0, 0, 25, 39));
-                VirindiViewService.TooltipSystem.AssociateTooltip(txtPortalGear, "Bedtime yet?");
-                try
-                {
-                    //Portal Recall
-                    //Stream recallPortalStream = this.GetType().Assembly.GetManifestResourceStream("recall.gif");
-                    //Image PortalRecallImage = new Bitmap(recallPortalStream);
-                    string strPortalRecallImage = GearDir + @"\recall.gif";
-                    Image PortalRecallImage = new Bitmap(strPortalRecallImage);
-                    mPortalGear0 = new HudPictureBox();
-                    mPortalGear0.Image = (ACImage)PortalRecallImage;
-                    portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(30, 2, 25, 39));
-                    VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
-                    mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
-                }
-                catch (Exception ex) { LogError(ex); }
+                portalGearTabFixedLayout.AddControl(txtPortalGear, new Rectangle(0, 0, 50, 39));
+                VirindiViewService.TooltipSystem.AssociateTooltip(txtPortalGear, "Bedtime yet?");                 
+                
+//                try
+//                {
+//                    //Portal Recall
+//                    //Stream recallPortalStream = this.GetType().Assembly.GetManifestResourceStream("recall.gif");
+//                    //Image PortalRecallImage = new Bitmap(recallPortalStream);
+//                    string strPortalRecallImage = GearDir + @"\recall.gif";
+//                    Image PortalRecallImage = new Bitmap(strPortalRecallImage);
+//                    mPortalGear0 = new HudPictureBox();
+//                    mPortalGear0.Image = (ACImage)PortalRecallImage;
+//                    portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(30, 2, 25, 39));
+//                    VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
+//                    mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
+//                }
+//                catch (Exception ex) { LogError(ex); }
 
              }
 
@@ -140,63 +166,65 @@ namespace GearFoundry
             VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear4, "Allegiance Hometown");
             mPortalGear4.Hit += (sender, obj) => mPortalGear4_Hit(sender, obj);
 
-            //Recall lifestone via spell
-            //Stream PortalLifestoneRecallStream = this.GetType().Assembly.GetManifestResourceStream("lsrecall.gif");
-            //Image PortalLifestoneRecallImage = new Bitmap(PortalLifestoneRecallStream);
-            string strPortalLifestoneRecallImage = GearDir + @"\lsrecall.gif";
-            Image PortalLifestoneRecallImage = new Bitmap(strPortalLifestoneRecallImage);
-            mPortalGear5 = new HudPictureBox();
-            mPortalGear5.Image = (ACImage)PortalLifestoneRecallImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear5, new Rectangle(180,2, 25, 25));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear5, "Recall Spell Lifestone");
-            mPortalGear5.Hit += (sender, obj) => mPortalGear5_Hit(sender, obj);
+//            //Recall lifestone via spell
+//            //Stream PortalLifestoneRecallStream = this.GetType().Assembly.GetManifestResourceStream("lsrecall.gif");
+//            //Image PortalLifestoneRecallImage = new Bitmap(PortalLifestoneRecallStream);
+//            string strPortalLifestoneRecallImage = GearDir + @"\lsrecall.gif";
+//            Image PortalLifestoneRecallImage = new Bitmap(strPortalLifestoneRecallImage);
+//            mPortalGear5 = new HudPictureBox();
+//            mPortalGear5.Image = (ACImage)PortalLifestoneRecallImage;
+//            portalGearTabFixedLayout.AddControl(mPortalGear5, new Rectangle(180,2, 25, 25));
+//            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear5, "Recall Spell Lifestone");
+//            mPortalGear5.Hit += (sender, obj) => mPortalGear5_Hit(sender, obj);
 
 
-            //Recall Portal I
-            //Stream recallPortalIStream = this.GetType().Assembly.GetManifestResourceStream("recallP1.gif");
-            //Image PortalRecallIImage = new Bitmap(recallPortalIStream);
-            string strPortalRecallIImage = GearDir + @"\recallP1.gif";
-            Image PortalRecallIImage = new Bitmap(strPortalRecallIImage);
-            mPortalGear6 = new HudPictureBox();
-            mPortalGear6.Image = (ACImage)PortalRecallIImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear6, new Rectangle(210,2, 25, 25));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear6, "Recall Portal I");
-            mPortalGear6.Hit += (sender, obj) => mPortalGear6_Hit(sender, obj);
-
-
-            //Summon Portal I
-            //Stream summonPortalIStream = this.GetType().Assembly.GetManifestResourceStream("summonP1.gif");
-            //Image PortalSummonIImage = new Bitmap(summonPortalIStream);
-            string strPortalSummonIImage = GearDir + @"\summonP1.gif";
-            Image PortalSummonIImage = new Bitmap(strPortalSummonIImage);
-            mPortalGear7 = new HudPictureBox();
-            mPortalGear7.Image = (ACImage)PortalSummonIImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear7, new Rectangle(240,2, 25, 25));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear7, "Summon Portal I");
-            mPortalGear7.Hit += (sender, obj) => mPortalGear7_Hit(sender, obj);
-
-            //Recall Portal II
-            //Stream recallPortalIIStream = this.GetType().Assembly.GetManifestResourceStream("recallP2.gif");
-            //Image PortalRecallIIImage = new Bitmap(recallPortalIIStream);
-            string strPortalRecallIIImage = GearDir + @"\recallP2.gif";
-            Image PortalRecallIIImage = new Bitmap(strPortalRecallIIImage);
-            mPortalGear8 = new HudPictureBox();
-            mPortalGear8.Image = (ACImage)PortalRecallIIImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear8, new Rectangle(270,2, 25, 25));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear8, "Recall Portal I");
-            mPortalGear6.Hit += (sender, obj) => mPortalGear8_Hit(sender, obj);
-
-
-            //Summon Portal II
-            //Stream summonPortalIIStream = this.GetType().Assembly.GetManifestResourceStream("summonP2.gif");
-            //Image PortalSummonIIImage = new Bitmap(summonPortalIIStream);
-            string strPortalSummonIIImage = GearDir + @"\summonP2.gif";
-            Image PortalSummonIIImage = new Bitmap(strPortalSummonIIImage);
-            mPortalGear9 = new HudPictureBox();
-            mPortalGear9.Image = (ACImage)PortalSummonIIImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear9, new Rectangle(300,2, 25, 25));
-            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear9, "Summon Portal II");
-            mPortalGear9.Hit += (sender, obj) => mPortalGear9_Hit(sender, obj);
+//            //Recall Portal I
+//            //Stream recallPortalIStream = this.GetType().Assembly.GetManifestResourceStream("recallP1.gif");
+//            //Image PortalRecallIImage = new Bitmap(recallPortalIStream);
+//            string strPortalRecallIImage = GearDir + @"\recallP1.gif";
+//            Image PortalRecallIImage = new Bitmap(strPortalRecallIImage);
+//            mPortalGear6 = new HudPictureBox();
+//            mPortalGear6.Image = (ACImage)PortalRecallIImage;
+//            portalGearTabFixedLayout.AddControl(mPortalGear6, new Rectangle(210,2, 25, 25));
+//            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear6, "Recall Portal I");
+//            mPortalGear6.Hit += (sender, obj) => mPortalGear6_Hit(sender, obj);
+//
+//
+//            //Summon Portal I
+//            //Stream summonPortalIStream = this.GetType().Assembly.GetManifestResourceStream("summonP1.gif");
+//            //Image PortalSummonIImage = new Bitmap(summonPortalIStream);
+//            string strPortalSummonIImage = GearDir + @"\summonP1.gif";
+//            Image PortalSummonIImage = new Bitmap(strPortalSummonIImage);
+//            mPortalGear7 = new HudPictureBox();
+//            mPortalGear7.Image = (ACImage)PortalSummonIImage;
+//            portalGearTabFixedLayout.AddControl(mPortalGear7, new Rectangle(240,2, 25, 25));
+//            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear7, "Summon Portal I");
+//            mPortalGear7.Hit += (sender, obj) => mPortalGear7_Hit(sender, obj);
+//
+//            //Recall Portal II
+//            //Stream recallPortalIIStream = this.GetType().Assembly.GetManifestResourceStream("recallP2.gif");
+//            //Image PortalRecallIIImage = new Bitmap(recallPortalIIStream);
+//            string strPortalRecallIIImage = GearDir + @"\recallP2.gif";
+//            Image PortalRecallIIImage = new Bitmap(strPortalRecallIIImage);
+//            mPortalGear8 = new HudPictureBox();
+//            mPortalGear8.Image = (ACImage)PortalRecallIIImage;
+//            portalGearTabFixedLayout.AddControl(mPortalGear8, new Rectangle(270,2, 25, 25));
+//            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear8, "Recall Portal I");
+//            mPortalGear6.Hit += (sender, obj) => mPortalGear8_Hit(sender, obj);
+//
+//
+//            //Summon Portal II
+//            //Stream summonPortalIIStream = this.GetType().Assembly.GetManifestResourceStream("summonP2.gif");
+//            //Image PortalSummonIIImage = new Bitmap(summonPortalIIStream);
+//            string strPortalSummonIIImage = GearDir + @"\summonP2.gif";
+//            Image PortalSummonIIImage = new Bitmap(strPortalSummonIIImage);
+//            mPortalGear9 = new HudPictureBox();
+//            mPortalGear9.Image = (ACImage)PortalSummonIIImage;
+//            portalGearTabFixedLayout.AddControl(mPortalGear9, new Rectangle(300,2, 25, 25));
+//            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear9, "Summon Portal II");
+//            mPortalGear9.Hit += (sender, obj) => mPortalGear9_Hit(sender, obj);
+            
+            MasterTimer.Tick += MasterTimer_UpdateClock;
  
         }
         private void DisposePortalGearHud()
@@ -218,7 +246,14 @@ namespace GearFoundry
 
         }
 
-
+      
+        private void MasterTimer_UpdateClock(object sender, EventArgs e)
+        {
+	    	try
+	        {
+          		txtPortalGear.Text = DateTime.Now.ToShortTimeString();
+         	}catch(Exception ex){LogError(ex);}
+       }
 
 
         private void mPortalGear0_Hit(object sender, System.EventArgs e)
@@ -228,9 +263,6 @@ namespace GearFoundry
                  
             }
             catch (Exception ex) { LogError(ex); }
-
-
-
         }
 
         private void mPortalGear1_Hit(object sender, System.EventArgs e)
@@ -283,8 +315,6 @@ namespace GearFoundry
 
             }
             catch (Exception ex) { LogError(ex); }
-
-
         }
         private void mPortalGear6_Hit(object sender, System.EventArgs e)
         {
@@ -293,8 +323,6 @@ namespace GearFoundry
 
             }
             catch (Exception ex) { LogError(ex); }
-
-
         }
         private void mPortalGear7_Hit(object sender, System.EventArgs e)
         {
@@ -303,8 +331,6 @@ namespace GearFoundry
 
             }
             catch (Exception ex) { LogError(ex); }
-
-
         }
         private void mPortalGear8_Hit(object sender, System.EventArgs e)
         {
@@ -313,8 +339,6 @@ namespace GearFoundry
 
             }
             catch (Exception ex) { LogError(ex); }
-
-
         }
         private void mPortalGear9_Hit(object sender, System.EventArgs e)
         {
@@ -323,9 +347,301 @@ namespace GearFoundry
 
             }
             catch (Exception ex) { LogError(ex); }
-
-
         }
+        
+        private void PortalActionsLoadQueue(RecallTypes recall)
+        {
+        	
+        	try
+        	{
+        		if(PortalActionsPending) 
+        		{
+        			WriteToChat("Portal action pending.  Please wait for completion.");
+        			return;
+        		}
+        		
+        		
+        		//Not holding a caster
+        		if(Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) > 0 && x.ObjectClass == ObjectClass.WandStaffOrb).Count() == 0)
+        		{
+        			if(Core.Actions.CombatMode != CombatState.Peace)
+        			{
+        				PortalActions peace = new PortalActions();
+        				peace.Action = PAction.PeaceMode;
+        				PortalActionQueue.Enqueue(peace);
+        			}
+        			
+        			if(Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) > 0 && 
+        			                                         (x.ObjectClass == ObjectClass.MeleeWeapon || x.ObjectClass == ObjectClass.MissileWeapon)).Count() > 0)
+        			{
+	        			PortalActions unequip = new PortalActions();
+    	    			unequip.Action = PAction.UnEquipWeapon;
+    	    			unequip.ItemId = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) > 0 && 
+    	    			                 (x.ObjectClass == ObjectClass.MeleeWeapon || x.ObjectClass == ObjectClass.MissileWeapon)).First().Id;
+    	    			PortalActionQueue.Enqueue(unequip);
+        			}
+        			
+        			PortalActions equip = new PortalActions();
+        			equip.Action = PAction.EquipCaster;
+        			PortalActionQueue.Enqueue(equip);
+        			
+        			PortalActions castmode = new PortalActions();
+        			castmode.Action = PAction.CastMode;
+        			equip.ItemId = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb).First().Id;
+        			PortalActionQueue.Enqueue(castmode);
+        		}
+        		else if(Core.Actions.CombatMode != CombatState.Magic)
+        		{
+        			PortalActions castmode = new PortalActions();
+        			castmode.Action = PAction.CastMode;
+        			PortalActionQueue.Enqueue(castmode);
+          		}
+        		
+        		PortalActions castwhat = new PortalActions();
+        		castwhat.Action = PAction.Recall;
+        		castwhat.RecallSpell = recall;
+        		PortalActionQueue.Enqueue(castwhat);    
+
+        		InitiatePortalActions();
+ 	
+        		
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
+        private bool PortalActionsPending = false;
+        private void InitiatePortalActions()
+        {
+        	try
+        	{
+        		if(!PortalActionsPending) 
+        		{
+        			PortalActionsPending = true;
+					PortalActionTimer.Interval = 100;
+					PortalActionTimer.Start();
+					
+					PortalActionTimer.Tick += PortalActionInitiator;
+					Core.WorldFilter.ChangeObject += ChangeObject_Portal;
+					Core.CharacterFilter.ActionComplete += PortalActionComplete;
+					return;
+        		}
+        		else
+        		{
+        			if(PortalActionQueue.Count > 0){return;}
+					else
+					{
+						PortalActionsPending = false;
+						PortalActionTimer.Tick -= PortalActionInitiator;
+						Core.WorldFilter.ChangeObject -= ChangeObject_Portal;
+						Core.CharacterFilter.ActionComplete -= PortalActionComplete;
+						
+						PortalActionTimer.Stop();
+						return;
+					}
+        		}
+        	}catch(Exception ex){LogError(ex);}
+        }
+
+        private void PortalActionInitiator(object sender, EventArgs e)
+		{
+			try
+			{
+				FirePortalActions();
+			}catch(Exception ex){LogError(ex);}
+		}
+        
+        
+        private void FirePortalActions()
+		{
+			try
+			{
+
+				if(PortalActionsPending && PortalActionQueue.Count == 0)
+				{
+					PortalActionsPending = false;
+					PortalActionTimer.Tick -= PortalActionInitiator;
+					Core.WorldFilter.ChangeObject -= ChangeObject_Portal;
+					Core.CharacterFilter.ActionComplete -= PortalActionComplete;
+					PortalActionTimer.Stop();
+					return;
+				}
+					
+				if(PortalActionQueue.First().pending && PortalActionQueue.First().Action != PAction.DeQueue)
+				{
+					if((DateTime.Now - PortalActionQueue.First().StartAction).TotalSeconds < 2)	{return;}
+				}
+
+				PortalActionQueue.First().StartAction = DateTime.Now;
+				PortalActionQueue.First().pending = true;
+				
+				switch(PortalActionQueue.First().Action)
+				{
+					case PAction.DeQueue:
+						PortalActionQueue.Dequeue();
+						return;
+					case PAction.PeaceMode:
+						Core.RenderFrame += RenderFramePortal_CombatMode;
+						return;
+					case PAction.UnEquipWeapon:
+						Core.RenderFrame += RenderFramePortal_UnEquip;
+						return;
+					case PAction.EquipCaster:
+						Core.RenderFrame += RenderFramePortal_Equip;
+						return;
+					case PAction.CastMode:
+						Core.RenderFrame += RenderFramePortal_CombatMode;
+						return;
+					default:
+						Core.RenderFrame += RenderFramePortal_CastSpell;
+						return;
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
+        
+        private void RenderFramePortal_CombatMode(object sender, EventArgs e)
+		{
+			try
+			{	
+				if((DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
+				else
+				{
+					Core.RenderFrame -= RenderFramePortal_CombatMode; 
+				}
+				
+				if(PortalActionQueue.First().Action == PAction.PeaceMode)
+				{
+					Core.Actions.SetCombatMode(CombatState.Peace);	
+				}
+				else if(PortalActionQueue.First().Action == PAction.CastMode)
+				{
+					Core.Actions.SetCombatMode(CombatState.Magic);	
+				}
+				
+				PortalActionQueue.First().StartAction = DateTime.Now;
+				Core.RenderFrame += RenderFramePortal_SwitchCombatWait;				
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+        
+        private void RenderFramePortal_SwitchCombatWait(object sender, EventArgs e)
+		{
+			try
+			{	
+				if(PortalActionQueue.First().Action == PAction.PeaceMode)
+				{
+					if(Core.Actions.CombatMode == CombatState.Peace && (DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds > 1000)
+					{
+						Core.RenderFrame -= RenderFramePortal_SwitchCombatWait;
+						PortalActionQueue.First().Action = PAction.DeQueue;
+						return;
+					}
+					else
+					{
+						return;
+					}
+				}
+				else if(PortalActionQueue.First().Action == PAction.CastMode)
+				{
+					if(Core.Actions.CombatMode == CombatState.Magic && (DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds > 1000)
+					{
+						Core.RenderFrame -= RenderFramePortal_SwitchCombatWait;
+						PortalActionQueue.First().Action = PAction.DeQueue;
+						return;
+					}
+					else
+					{
+						return;
+					}
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
+        
+        private void ChangeObject_Portal(object sender, ChangeObjectEventArgs e)
+        {
+        	try
+        	{
+        		if(e.Change == WorldChangeType.StorageChange)
+        		{
+	        		if(PortalActionQueue.First().ItemId == e.Changed.Id)
+	        		{
+						PortalActionQueue.First().Action = PAction.DeQueue;
+	        		}
+        		}	
+        	}catch(Exception ex){LogError(ex);}
+        }
+		
+        private void RenderFramePortal_UnEquip(object sender, EventArgs e)
+        {
+        	try
+			{	
+        		if((DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds < 100) {return;}
+				else
+        		{
+					Core.RenderFrame -= RenderFramePortal_UnEquip;
+					Core.Actions.UseItem(PortalActionQueue.First().ItemId, 0);
+					return;
+				}
+				//List in change item to flag for dequeue
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+        
+        private void RenderFramePortal_Equip(object sender, EventArgs e)
+        {
+        	try
+			{	
+        		if((DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds < 100) {return;}
+				else
+        		{
+					Core.RenderFrame -= RenderFramePortal_Equip;
+					Core.Actions.UseItem(PortalActionQueue.First().ItemId, 0);
+					return;
+				}
+				//List in change item to flag for dequeue	
+			}catch(Exception ex){LogError(ex);}
+		}
+        
+        private void RenderFramePortal_CastSpell(object sender, EventArgs e)
+        {
+        	try
+        	{
+        		if((DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds < 100) {return;}
+				else
+        		{
+					switch(PortalActionQueue.First().RecallSpell)
+					{
+						case RecallTypes.lifestone:
+							Core.Actions.CastSpell(1635, Core.CharacterFilter.Id);
+							return;
+						case RecallTypes.portal:
+							Core.Actions.CastSpell(2645, Core.CharacterFilter.Id);
+							return;
+						case RecallTypes.primaryporal:
+							Core.Actions.CastSpell(48, Core.CharacterFilter.Id);
+							return;
+						case RecallTypes.secondaryportal:
+							Core.Actions.CastSpell(2647, Core.CharacterFilter.Id);
+							return;
+						default:
+							return;
+														
+					}
+				}
+        		
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
+        private void PortalActionComplete(object sender, EventArgs e)
+        {
+        	try
+        	{
+        		if(PortalActionQueue.First().Action == PAction.Recall)
+        		{
+        			PortalActionQueue.First().Action = PAction.DeQueue;
+        		}
+        		
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
 
 
 
