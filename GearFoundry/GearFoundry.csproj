@@ -183,6 +183,24 @@
     <EmbeddedResource Include="Sounds\womp2.wav">
       <LogicalName>womp2.wav</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\lsrecall.gif">
+      <LogicalName>lsrecall.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\recall.gif">
+      <LogicalName>recall.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\recallP1.gif">
+      <LogicalName>recallP1.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\recallP2.gif">
+      <LogicalName>recallP2.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\summonP1.gif">
+      <LogicalName>summonP1.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\summonP2.gif">
+      <LogicalName>summonP2.gif</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Defaults\Mobs.xml">
