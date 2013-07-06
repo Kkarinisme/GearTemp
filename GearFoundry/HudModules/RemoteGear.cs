@@ -133,11 +133,9 @@ namespace GearFoundry
                 Stream vertImageStream = this.GetType().Assembly.GetManifestResourceStream("gearswapvert1.png");
                 
 
-                //string vertImageFile = GearDir + @"\gearswapvert1.png";
+                string vertImageFile = GearDir + @"\gearswapvert1.png";
                 Image gearswapvert = new Bitmap(vertImageStream);
                 mRemoteGear6 = new HudPictureBox();
-                //                int GR_Inventory_ICON = 0x600127E;
-                //                mRemoteGear5.Image = GR_Inventory_ICON;
                 mRemoteGear6.Image = (ACImage)gearswapvert;
 
                 remoteGearTabFixedLayout.AddControl(mRemoteGear6, new Rectangle(2, 185, 25, 25));
@@ -164,8 +162,6 @@ namespace GearFoundry
                 //string horzImageFile = GearDir + @"\gearswaphorz1.png";
                 Image gearswaphoriz = new Bitmap(horzImageStream);
                 mRemoteGear7 = new HudPictureBox();
-                //  int GR_Inventory_ICON = 0x600127E;
-                //  mRemoteGear7.Image = GR_Inventory_ICON;
                 mRemoteGear7.Image = (ACImage)gearswaphoriz;
                 remoteGearTabFixedLayout.AddControl(mRemoteGear7, new Rectangle(2, 215, 25, 25));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear7, "Horizontal SwitchGear");

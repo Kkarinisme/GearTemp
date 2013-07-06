@@ -101,8 +101,8 @@ namespace GearFoundry
 
                         xdocGenInventory.Save(genInventoryFilename);
                         GearFoundry.PluginCore.WriteToChat("General Inventory file has been saved. ");
-                         m = 500;
-                    //      k = 0;
+                        m = 500;
+                        //      k = 0;
                         n = 0;
                         mWaitingForID = null;
                         xdoc = null;
