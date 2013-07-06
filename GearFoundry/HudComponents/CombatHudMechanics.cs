@@ -538,64 +538,61 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(SpellCastBuffer.Count == 0) {return;}
-				else
+				if(SpellCastBuffer.Count > 0)
 				{
-					if((DateTime.Now - SpellCastBuffer.First().CastTime).TotalSeconds > 5)
+					if(SpellCastBuffer.First().AutoDequeue)
 					{
 						SpellCastBuffer.Dequeue();
-						return;
 					}
-					else
+					if(SpellCastBuffer.Count > 0)
 					{
 						SpellCastBuffer.First().CompleteTime = DateTime.Now;
+						if((SpellCastBuffer.First().CompleteTime - SpellCastBuffer.First().CastTime).TotalMilliseconds < 200)
+						{
+							SpellCastBuffer.First().AutoDequeue = true;
+						}
 						Core.RenderFrame += RenderFrame_CombatActionCompleteDelay;
 					}
 				}
+				else{return;}
 			}catch(Exception ex){LogError(ex);}
 		}
 		private void RenderFrame_CombatActionCompleteDelay(object sender, EventArgs e)
 		{
 			try
 			{
-				if((DateTime.Now - SpellCastBuffer.First().CompleteTime).TotalMilliseconds < 100) {return;}
+				if((DateTime.Now - SpellCastBuffer.First().CompleteTime).TotalMilliseconds < 2000) {return;}
 				else
 				{
 					Core.RenderFrame -= RenderFrame_CombatActionCompleteDelay;	
 				}
 				
-				if(SpellCastBuffer.First().AutoDequeue)
-				{
-					SpellCastBuffer.Dequeue();
-					return;
-				}
-				else
-				{
-					SpellCastInfo spellcast = SpellCastBuffer.Dequeue();
-					
-					if(CombatHudMobTrackingList.Any(x => x.Id == spellcast.SpellTargetId))
-					{
-						MonsterObject CastTarget = CombatHudMobTrackingList.First(x => x.Id == spellcast.SpellTargetId);
-							
-					   	if(CastTarget.DebuffSpellList.Any(x => x.SpellId == spellcast.SpellCastId))
-					   	{
-					   		CastTarget.DebuffSpellList.Find(x => x.SpellId == spellcast.SpellCastId).SpellCastTime = DateTime.Now;
-					   		CastTarget.DebuffSpellList.Find(x => x.SpellId == spellcast.SpellCastId).SecondsRemaining = 
-					   		Convert.ToInt32(SpellIndex[spellcast.SpellCastId].duration);
-					   	}
-					   	else
-					   	{
-					   		MonsterObject.DebuffSpell dbspellnew = new MonsterObject.DebuffSpell();
-					   		dbspellnew.SpellId = spellcast.SpellCastId;
-					   		dbspellnew.SpellCastTime = DateTime.Now;
-					   		dbspellnew.SecondsRemaining = Convert.ToInt32(SpellIndex[spellcast.SpellCastId].duration);
-					   		CastTarget.DebuffSpellList.Add(dbspellnew);	
-					   	}
-					}
-					UpdateCombatHudMainTab();
-				}
+				SpellCastInfo spellcast = SpellCastBuffer.Dequeue();
+				if(spellcast.AutoDequeue){return;}
 				
-			}catch(Exception ex){LogError(ex);}
+				if(CombatHudMobTrackingList.Any(x => x.Id == spellcast.SpellTargetId))
+				{
+					MonsterObject CastTarget = CombatHudMobTrackingList.First(x => x.Id == spellcast.SpellTargetId);
+						
+				   	if(CastTarget.DebuffSpellList.Any(x => x.SpellId == spellcast.SpellCastId))
+				   	{
+				   		CastTarget.DebuffSpellList.Find(x => x.SpellId == spellcast.SpellCastId).SpellCastTime = DateTime.Now;
+				   		CastTarget.DebuffSpellList.Find(x => x.SpellId == spellcast.SpellCastId).SecondsRemaining = 
+				   		Convert.ToInt32(SpellIndex[spellcast.SpellCastId].duration);
+				   	}
+				   	else
+				   	{
+				   		MonsterObject.DebuffSpell dbspellnew = new MonsterObject.DebuffSpell();
+				   		dbspellnew.SpellId = spellcast.SpellCastId;
+				   		dbspellnew.SpellCastTime = DateTime.Now;
+				   		dbspellnew.SecondsRemaining = Convert.ToInt32(SpellIndex[spellcast.SpellCastId].duration);
+				   		CastTarget.DebuffSpellList.Add(dbspellnew);	
+				   	}
+				}
+				UpdateCombatHudMainTab();
+
+				
+			}catch(Exception ex){Core.RenderFrame -= RenderFrame_CombatActionCompleteDelay; LogError(ex);}
 		}
 		                                         
 		
@@ -640,10 +637,15 @@ namespace GearFoundry
 			try
 			{	
 				if(e.Color != 17){return;}
-				if(e.Text.StartsWith("You say, ") || e.Text.StartsWith("You cast")){return;}
-				if(!OtherCastQuickKeepString.Any(x => e.Text.Contains(x))) {return;}
-							
+				if(e.Text.StartsWith("You cast")) {return;}
 				
+//				if(e.Text.StartsWith("You say, ") || e.Text.StartsWith("You cast"))
+//				{
+//					if(SpellCastBuffer.Count != 0 && CombatHudRegexEx.Any(x => x.IsMatch(e.Text)))
+//				}
+
+				
+				if(!OtherCastQuickKeepString.Any(x => e.Text.Contains(x))) {return;}			
 				if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)))
 				{	
 					OtherDebuffCastInfo odci = new OtherDebuffCastInfo();
@@ -672,13 +674,6 @@ namespace GearFoundry
 							return;	
 					}	
 					OtherCastBuffer.Add(odci);
-				}
-				else
-				{
-					if(CombatHudRegexEx.Any(x => x.IsMatch(e.Text)) && SpellCastBuffer.Count != 0)
-					{
-						SpellCastBuffer.First().AutoDequeue = true;
-					}
 				}
 			}catch(Exception ex){LogError(ex);}
 		}

@@ -23,17 +23,18 @@ namespace GearFoundry
 	{		
 
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();
-		private OpenContainer mOpenContainer;
+		private OpenContainer mOpenContainer = new OpenContainer();	
 		
-		private List<int> ItemExclusionList;
-		private List<int> ItemIDListenList;
-		private List<int> ModifiedIOSpells;
+		private List<int> ItemExclusionList = new List<int>();
+		private List<int> ItemIDListenList = new List<int>();
+		private List<int> ModifiedIOSpells  = new List<int>();		
 		
-		private List<LootObject> ItemTrackingList;
+		private List<LootObject> ItemTrackingList = new List<LootObject>();	
 		
-		private List<LootObject> ProcessItemsList;
+		private List<LootObject> ProcessItemsList = new List<LootObject>();
  		
 		private GearInspectorSettings GISettings;
+		
 			
 		public class GearInspectorSettings
 		{
@@ -55,14 +56,7 @@ namespace GearFoundry
 		private void SubscribeItemEvents()
 		{
 			try
-			{		
-				
-				mOpenContainer = new OpenContainer();	
-				ItemExclusionList = new List<int>();
-				ItemIDListenList = new List<int>();
-				ModifiedIOSpells = new List<int>();				
-				ItemTrackingList = new List<LootObject>();			
-				ProcessItemsList = new List<LootObject>();
+			{
             		           	
              	SubscribeItemTrackerLooterEvents();           	
 			}
@@ -315,7 +309,7 @@ namespace GearFoundry
     	{
     		try
     		{
-    			if(InspectorActionQueue.Count > 0)
+    			if(ActionsPending)
     			{
     				WriteToChat("Wait for it!");
     				return;
@@ -334,9 +328,6 @@ namespace GearFoundry
     			{
      				PendingActions nextaction = new PendingActions();
     				nextaction.LootItem = proc;
-    				
-    				nextaction.Action = IAction.SalvageItem;
-    				InspectorActionQueue.Enqueue(nextaction);
 	    				
 	    			if(proc.IOR == IOResult.salvage)
 	    			{
@@ -406,7 +397,7 @@ namespace GearFoundry
 	    					nextaction.LootItem = ProcessItemsList.ElementAt(row);
 	    					InspectorActionQueue.Enqueue(nextaction);
 	    				}
-	    				InitiateInspectorActionSequence();
+	    				if(!ActionsPending) {InitiateInspectorActionSequence();}
     				}
     			}
     			//Report
@@ -691,12 +682,14 @@ namespace GearFoundry
     		catch(Exception ex){LogError(ex);}
     	}
     		
+    	//TODO:  Need to add a 4th column to lists with GUIDs in them to prevent the hud list from desynching with the tracking list
+    	//(minor irritation)  Currently resolved on any update to the hud.
     	private void ItemHudInspectorList_Click(object sender, int row, int col)
     	{
     		try
 			{
     			if(col == 0)
-    			{  
+    			{  	
     				if(!InspectorActionQueue.Any(x => x.LootItem.Id == ItemTrackingList.ElementAt(row).Id))
     				{
 	    				if(Core.Actions.CombatMode != CombatState.Peace)
@@ -711,7 +704,7 @@ namespace GearFoundry
 			    		nextaction.LootItem = ItemTrackingList.ElementAt(row);
 	    				InspectorActionQueue.Enqueue(nextaction);
 	    				
-	    				InitiateInspectorActionSequence();
+	    				if(!ActionsPending) {InitiateInspectorActionSequence();}
     				}
     				else
     				{

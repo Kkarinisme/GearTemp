@@ -54,6 +54,13 @@ namespace GearFoundry
 				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
 				
+				if(MaidCannibalizeProcessList.Count > 0 && MaidCannibalizeProcessList.Contains(IOItem.Id))
+				{
+					MaidCannibalizeProcessList.RemoveAll(x => x == IOItem.Id);
+					EvaluateCannibalizeMatches(IOItem);
+					return;
+				}
+				
 				//Clean out no matches.
 				if(IOItem.IOR == IOResult.nomatch)
 				{
@@ -68,7 +75,6 @@ namespace GearFoundry
 								
 			}catch(Exception ex){LogError(ex);}
 		}
-		
 		
 		// Item Tracker ID functions begin here
 		private void CheckSalvageItem(ref LootObject IOItemSalvage)

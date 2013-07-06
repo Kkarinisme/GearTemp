@@ -21,15 +21,15 @@ namespace GearFoundry
 	public partial class PluginCore
 	{
 
-		private List<WorldObject> ButlerInventory;
-		private List<WorldObject> MaidKeyRings;
-		private List<WorldObject> MaidSalvage;
-		private List<WorldObject> MaidStackList;
-		private List<WorldObject> MaidKeyList;
+		private List<WorldObject> ButlerInventory = new List<WorldObject>();
+		private List<WorldObject> MaidKeyRings = new List<WorldObject>();
+		private List<WorldObject> MaidSalvage = new List<WorldObject>();
+		private List<WorldObject> MaidStackList = new List<WorldObject>();
+		private List<WorldObject> MaidKeyList = new List<WorldObject>();
 		private Queue<WorldObject> UnchargedManaStones = new Queue<WorldObject>();
 		
-		private List<ValetTicket> ValetEquipList;
-		private List<WorldObject> ValetRemoveList;
+		private List<ValetTicket> ValetEquipList = new List<ValetTicket>();
+		private List<WorldObject> ValetRemoveList = new List<WorldObject>();
 			
 		private WorldObject stackbase = null;
 		private WorldObject stackitem = null;
@@ -275,9 +275,19 @@ namespace GearFoundry
 				if(Core.WorldFilter[Core.Actions.CurrentSelection] != null)
 				{
 					ButlerHudCurrentSelectionIcon.Clear();
-					
+					if(Core.WorldFilter[Core.Actions.CurrentSelection].LongKeys.Contains((int)LongValueKey.IconOutline))
+					{
+						ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.IconOutline));
+					}
+					if(Core.WorldFilter[Core.Actions.CurrentSelection].LongKeys.Contains((int)LongValueKey.IconUnderlay))
+					{
+						ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.IconUnderlay));
+					}
+					if(Core.WorldFilter[Core.Actions.CurrentSelection].LongKeys.Contains((int)LongValueKey.IconOverlay))
+					{
+						ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.IconOverlay));
+					}
 					ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.Icon));
-					ButlerHudCurrentSelectionIcon.Add(CurrentSelectionRectangle, Core.WorldFilter[Core.Actions.CurrentSelection].Values(LongValueKey.IconOverlay));
 					                                  
 					ButlerHudCurrentSelectionText.Text = Core.WorldFilter[Core.Actions.CurrentSelection].Name;
 				}
@@ -411,69 +421,7 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
-    	private void RenderButlerHudMaidLayout()
-    	{
-    		try
-    		{	
-    			MaidStackInventory = new HudButton();
-    			MaidStackInventory.Text = "Stack Inventory";
-    			MaidTabLayout.AddControl(MaidStackInventory, new Rectangle(0,0,150,20));
-    			
-    			MaidRingKeys = new HudButton();
-    			MaidRingKeys.Text = "Ring Keys";
-    			MaidTabLayout.AddControl(MaidRingKeys, new Rectangle(0,30,150,20));
-    			
-    			MaidTradeAllSalvage = new HudButton();
-    			MaidTradeAllSalvage.Text = "Window All Salvage";    			
-    			MaidTabLayout.AddControl(MaidTradeAllSalvage, new Rectangle(0,60,150,20));
-    			
-    			MaidTradeFilledSalvage = new HudButton();
-    			MaidTradeFilledSalvage.Text = "Window Filled Salvage";
-    			MaidTabLayout.AddControl(MaidTradeFilledSalvage, new Rectangle(0,90,150,20));
-    			
-    			MaidTradeParialSalvage = new HudButton();
-    			MaidTradeParialSalvage.Text = "Window Partial Salvage";
-    			MaidTabLayout.AddControl(MaidTradeParialSalvage, new Rectangle(0,120,150,20));
-    			
-    			MaidSalvageCombine = new HudButton();
-    			MaidSalvageCombine.Text = "Combine Salvage Bags";
-    			MaidTabLayout.AddControl(MaidSalvageCombine, new Rectangle(0,150,150,20));
-    			
-    			MaidStackInventory.Hit += MaidStackInventory_Hit;
-    			MaidRingKeys.Hit += MaidRingKeys_Hit;
-    			MaidTradeAllSalvage.Hit += MaidTradeAllSalvage_Hit;
-    			MaidTradeFilledSalvage.Hit += MaidTradeFilledSalvage_Hit;
-    			MaidTradeParialSalvage.Hit += MaidTradeParialSalvage_Hit;
-    			MaidSalvageCombine.Hit += MaidSalvageCombine_Hit;
-    			
-    			MaidTab = true;
-    			
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-    	private void DisposeButlerHudMaidLayout()
-    	{
-    		try
-    		{
-    			if(!MaidTab) { return;}
-    			
-    			MaidStackInventory.Hit -= MaidStackInventory_Hit;
-    			MaidRingKeys.Hit -= MaidRingKeys_Hit;
-    			MaidTradeAllSalvage.Hit -= MaidTradeAllSalvage_Hit;
-    			MaidTradeFilledSalvage.Hit -= MaidTradeFilledSalvage_Hit;
-    			MaidTradeParialSalvage.Hit -= MaidTradeParialSalvage_Hit;
-    			MaidSalvageCombine.Hit -= MaidSalvageCombine_Hit;
-    			
-    			MaidSalvageCombine.Dispose();
-    			MaidTradeParialSalvage.Dispose();
-    			MaidTradeFilledSalvage.Dispose();
-    			MaidTradeAllSalvage.Dispose();
-    			MaidRingKeys.Dispose();
-    			MaidStackInventory.Dispose();	
-    			
-    			MaidTab = false;
-    		}catch(Exception ex){LogError(ex);}
-    	}
+   
     	
     	private void DisposeButlerHud()
     	{	
@@ -491,7 +439,6 @@ namespace GearFoundry
     			MaidTabLayout.Dispose();
     			ButlerHudTabLayout.Dispose();
     			ButlerHudTabView.Dispose();
-    			//ButlerHudLayout.Dispose();
     			ButlerHudView.Dispose();    									
   			
     		}catch(Exception ex) {LogError(ex);}
@@ -510,7 +457,6 @@ namespace GearFoundry
                 ButlerHudCurrentSelectionLabel.FontHeight = nmenuFontHeight;
     			ButlerHudCurrentSelectionLabel.Text = "Current Selection";
     			ButlerHudCurrentSelectionLabel.TextAlignment = VirindiViewService.WriteTextFormats.Center;
-    		 //	ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionLabel, new Rectangle(75,0,150,16));
                 ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionLabel, new Rectangle(75, 0, 150, 16));
 				
     			ButlerHudUseCurrentSelection = new HudButton();
@@ -1159,332 +1105,27 @@ namespace GearFoundry
 			catch (Exception ex) { LogError(ex); }
 			return;			
     	}
-		
-		private void MaidStackInventory_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				MaidStackList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.StackCount) < x.Values(LongValueKey.StackMax)).OrderBy(x => x.Name).ToList();
-				List<WorldObject> PurgeList = new List<WorldObject>();
-				foreach(WorldObject checkfortwo in MaidStackList)
-				{
-					if(MaidStackList.FindAll(x => x.Name == checkfortwo.Name).Count() == 1)
-					{
-						PurgeList.Add(checkfortwo);
-					}
-				}
-				foreach(WorldObject purgeitems in PurgeList)
-				{
-					MaidStackList.RemoveAll(x => x.Name == purgeitems.Name);
-				}			 
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void MaidProcessStack()
-		{
-			try
-			{
-				if(MaidStackList.Count() > 0)
-				{
-					if(stackbase == null || stackbase.Values(LongValueKey.StackCount) == stackbase.Values(LongValueKey.StackMax))
-					{
-						stackbase = MaidStackList.First();
-						MaidStackList.RemoveAll(x => x.Id == stackbase.Id);
-					}
-					else
-					{
-						if(MaidStackList.Any(x => x.Name == stackbase.Name))
-						{
-							stackitem = MaidStackList.First(x => x.Name == stackbase.Name);
-							MaidStackList.RemoveAll(x => x.Id == stackitem.Id);
-							Core.Actions.MoveItem(stackitem.Id, Core.CharacterFilter.Id, Core.WorldFilter[stackbase.Id].Values(LongValueKey.Slot), true);
-						}
-						else
-						{
-							stackbase = MaidStackList.First();
-							MaidStackList.RemoveAll(x => x.Id == stackbase.Id);
-						}
-						
-					}
-				}
-
 				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		
-		
-		private int MaidMatchKey(string keyname)
-		{
-			try
-			{
-					WorldObject matchedkeyring = null;
-					switch(keyname.ToLower())
-					{
-						case "legendary key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("burning sands"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "black marrow key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black marrow"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "directive key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("directive"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "granite key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("granite"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "mana forge key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black coral"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "master key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("master"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "marble key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("marble"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "singularity key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("singularity"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "skeletal falatacot key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("skeletal falatacot"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "sturdy iron key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy iron"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						case "sturdy steel key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy steel"));
-							if(matchedkeyring != null) {return matchedkeyring.Id;}
-							else{goto default;}
-						default:
-							return 0;
-					}		
-			}catch(Exception ex)
-			{
-				LogError(ex);
-				return 0;
-			}
-		}
-		
-		private void MaidProcessRingKeys()
-		{
-			try
-			{
-				if(MaidKeyList.Count() > 0)
-				{
-					MaidKeyToRing = MaidKeyList.First().Id;
-					MatchedKeyRingId = MaidMatchKey(Core.WorldFilter[MaidKeyToRing].Name);
-					
-					if(MatchedKeyRingId != 0)
-					{
-						Core.Actions.SelectItem(MaidKeyToRing);
-						Core.Actions.UseItem(MatchedKeyRingId,1);
-						if(Core.WorldFilter[MatchedKeyRingId].Values(LongValueKey.KeysHeld) == 24 || Core.WorldFilter[MatchedKeyRingId].Values(LongValueKey.UsesRemaining) == 0)
-						{
-							MaidKeyRings.RemoveAll(x => x.Id == MatchedKeyRingId);
-						}
-						return;
-					}
-					else
-					{
-						MaidKeyList.RemoveAll(x => x.Name == Core.WorldFilter[MaidKeyToRing].Name);
-						MaidProcessRingKeys();
-					}
-				}
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		
-		private void MaidRingKeys_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				string[] RingableKeysArray = {"legendary key", "black marrow key", "directive key", "granite key", "mana forge key", "master key", "marble key", "singularity key",	"skeletal falatacot key", "sturdy iron key", "sturdy steel key"};
-				string[] KeyringMatchingArray = {"burning sands", "black marrow", "directive", "granite", "black coral", "master", "marble", "singularity", "skeletal falatacot", "sturdy iron", "sturdy steel"};
-							
-				MaidKeyRings = (from keyrings in Core.WorldFilter.GetInventory()
-					where keyrings.Name.ToLower().Contains("keyring") && keyrings.Values(LongValueKey.UsesRemaining) > 0 && keyrings.Values(LongValueKey.KeysHeld) < 24
-					orderby keyrings.Values(LongValueKey.KeysHeld) descending
-					select keyrings).ToList();
-				
-				MaidKeyList = (from items in Core.WorldFilter.GetInventory()
-				    where items.ObjectClass == ObjectClass.Key && RingableKeysArray.Contains(items.Name.ToLower())
-					select items).ToList();
-				
-				MaidProcessRingKeys();
-
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void MaidTradeAllSalvage_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				ScanInventoryForSalvageBags();
-				if(bButlerTradeOpen)
-				{
-					TradeSalvageBags(1);
-					return;
-				}
-				else if(Core.Actions.VendorId != 0)
-				{
-					SellSalvageBags(1);
-				}
-				else
-				{
-					WriteToChat("Open a trade or vendor window.");
-				}
-			}catch(Exception ex){LogError(ex);}
-		}
-		private void MaidTradeFilledSalvage_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				ScanInventoryForSalvageBags();
-				if(bButlerTradeOpen)
-				{
-					TradeSalvageBags(0);
-					return;
-				}
-				else if(Core.Actions.VendorId != 0)
-				{
-					SellSalvageBags(0);
-				}
-				else
-				{
-					WriteToChat("Open a trade or vendor window.");
-				}
-			}catch(Exception ex){LogError(ex);}
-		}
-		private void MaidTradeParialSalvage_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				ScanInventoryForSalvageBags();
-				if(bButlerTradeOpen)
-				{
-					TradeSalvageBags(2);
-					return;
-				}
-				else if(Core.Actions.VendorId != 0)
-				{
-					SellSalvageBags(2);
-				}
-				else
-				{
-					WriteToChat("Open a trade or vendor window.");
-				}
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void MaidSalvageCombine_Hit(object sender, System.EventArgs e)
-		{
-			WriteToChat("Currently Disabled");
-		}
-		
-		private void SellSalvageBags(int bagtype)
-		{
-			try
-			{
-				MaidScanInventoryForSalvageBags();
-				
-				List <WorldObject> tradelist;
-				
-				if(bagtype == 0)
-				{
-					tradelist = MaidSalvage.Where(x => x.Values(LongValueKey.UsesRemaining) == 100).OrderBy(x => x.Name).ToList();
-				}
-				else if(bagtype == 1)
-				{
-					tradelist = MaidSalvage.ToList();
-				}
-				else if(bagtype == 2)
-				{
-					tradelist = MaidSalvage.Where(x => x.Values(LongValueKey.UsesRemaining) < 100).OrderBy(x => x.Name).ToList();
-				}
-				else
-				{
-					tradelist = new List<WorldObject>();
-				}	
-				foreach(WorldObject sb in tradelist)
-				{
-					Core.Actions.VendorAddSellList(sb.Id);
-				}
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void TradeSalvageBags(int bagtype)
-		{
-			try
-			{
-				
-				MaidScanInventoryForSalvageBags();
-				
-				List<WorldObject> tradelist;
-				
-				if(bagtype == 0)
-				{
-					tradelist = MaidSalvage.Where(x => x.Values(LongValueKey.UsesRemaining) == 100).OrderBy(x => x.Name).ToList();
-				}
-				else if(bagtype == 1)
-				{
-					tradelist = MaidSalvage.ToList();
-				}
-				else if(bagtype == 2)
-				{
-					tradelist = MaidSalvage.Where(x => x.Values(LongValueKey.UsesRemaining) < 100).OrderBy(x => x.Name).ToList();
-				}
-				else
-				{
-					tradelist = new List<WorldObject>();
-				}
-				
-				foreach(WorldObject bags in tradelist)
-				{
-					Core.Actions.TradeAdd(bags.Id);
-				}
-				
-
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		
-		private void MaidScanInventoryForSalvageBags()
-		{
-			try
-			{
-				MaidSalvage = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains("salvage")).ToList();
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-			
 			private void ButlerTimerDo(object sender, System.EventArgs e)
 			{
 				try
 				{
-
 					if(ValetRemoveList.Count > 0) {
 						ValetProcessRemove();
 						return;
 					}
-					if(ValetEquipList.Count > 0) {
+					else if(ValetEquipList.Count > 0) {
 						ValetProcessEquip();
 						return;
 					}
-					if(MaidStackList.Count > 0) {
+					else if(MaidStackList.Count > 0) {
 						MaidProcessStack();
 						return;
 					}		
+					else if(MaidCannibalizeQueue.Count > 0){
+						MaidProcessCannibalize();
+						return;
+					}
 					
 				}catch(Exception ex){LogError(ex);}
 			}

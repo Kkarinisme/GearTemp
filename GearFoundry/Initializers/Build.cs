@@ -1068,7 +1068,7 @@ namespace GearFoundry
 		{
 			// Irq:  Some spells are null in spellfilter, this exception puts spacers in the list when a NULL spell is returned
             //for (int spellid = 0; spellid <= FileService.SpellTable.Length; spellid++)
-             for (int spellid = 0; spellid < FileService.SpellTable.Length; spellid++)
+             for (int spellid = 0; spellid < 7000; spellid++)
             {
                 spellinfo tsinfo = new spellinfo();
                 try

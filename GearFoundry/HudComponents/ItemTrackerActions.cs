@@ -114,9 +114,9 @@ namespace GearFoundry
 				InspectorActionQueue.First().StartAction = DateTime.Now;
 				InspectorActionQueue.First().pending = true;
 				
-				if(InspectorActionQueue.First().Action == IAction.SalvageItem || InspectorActionQueue.First().Action == IAction.CombineSalvage ||
+				if((InspectorActionQueue.First().Action == IAction.SalvageItem || InspectorActionQueue.First().Action == IAction.CombineSalvage ||
 				   InspectorActionQueue.First().Action == IAction.Desiccate || InspectorActionQueue.First().Action == IAction.RingKey ||
-				   InspectorActionQueue.First().Action == IAction.ManaStone)
+				   InspectorActionQueue.First().Action == IAction.ManaStone) && ItemTrackingList != null)
 				{
 				
 					if(ItemTrackingList.Any(x => x.Container == Core.Actions.OpenedContainer))
@@ -167,10 +167,22 @@ namespace GearFoundry
 						Core.RenderFrame += RenderFrame_RingKeys;
 						return;						
 					case IAction.SalvageItem:
+						if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").Count() == 0)
+						{
+							WriteToChat("Character has no Ust.");
+							InspectorActionQueue.First().Action = IAction.DeQueue;
+							return;
+						}
 						Core.RenderFrame += RenderFrame_InspectorUseUst;
 						Core.RenderFrame += RenderFrame_InspectorSalvageAction;
 						return;
 					case IAction.CombineSalvage:
+						if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").Count() == 0)
+						{
+							WriteToChat("Character has no Ust.");
+							InspectorActionQueue.First().Action = IAction.DeQueue;
+							return;
+						}
 						Core.RenderFrame += RenderFrame_InspectorUseUst;
 						Core.RenderFrame += RenderFrame_InspectorCombineAction;
 						return;					
@@ -330,6 +342,8 @@ namespace GearFoundry
 					nextaction.LootItem = new LootObject(e.New);
 					InspectorActionQueue.Enqueue(nextaction);
 				}	
+				
+				if(!ActionsPending) {InitiateInspectorActionSequence();}
 				
 			}catch(Exception ex){LogError(ex);}
 		}

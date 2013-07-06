@@ -149,6 +149,7 @@ namespace GearFoundry
 		    						InspectorActionQueue.Enqueue(nextaction);
 		    					}
 		    				}
+		    				if(!ActionsPending) {InitiateInspectorActionSequence();}
 	    				}					   	
 					   	UpdateItemHud();
 					   	//Action Complete should now FIA

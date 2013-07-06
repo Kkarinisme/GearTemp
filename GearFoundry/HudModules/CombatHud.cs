@@ -646,7 +646,9 @@ namespace GearFoundry
 					{
 						CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[CombatHudFocusTargetGUID]));
 					}
+					//Null reference continues to derive from here.  Unsure of origin.  Unable to ID.  Empty try catch surrounding to stop logging.
 					CHTargetIO = CombatHudMobTrackingList.Find(x => x.Id == CombatHudFocusTargetGUID);
+					
 				}
 				else if(Core.Actions.CurrentSelection != 0 && Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.Monster)
 				{
@@ -660,7 +662,8 @@ namespace GearFoundry
 				{
 					CHTargetIO = null;
 				}
-			}catch(Exception ex){LogError(ex);}
+			}catch{//Empty to eliminate null error which continues to elude me.
+			}
 			try
 			{
 				//Updates to Target Panel Values
