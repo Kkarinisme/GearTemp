@@ -200,6 +200,12 @@ namespace GearFoundry
 					Core.RenderFrame -= RenderFrame_PeaceMode; 
 				}
 				
+				if(Core.Actions.CombatMode == CombatState.Peace)
+				{
+					InspectorActionQueue.First().Action = IAction.DeQueue;
+					return;
+				}
+				
 				Core.Actions.SetCombatMode(CombatState.Peace);	
 				InspectorActionQueue.First().StartAction = DateTime.Now;
 				Core.RenderFrame += RenderFrame_SwitchCombatWait;				
@@ -234,6 +240,12 @@ namespace GearFoundry
 					Core.RenderFrame -= RenderFrame_OpenContainer;
 				}
 				
+				if(Core.Actions.OpenedContainer == InspectorActionQueue.First().LootItem.Id || InspectorActionQueue.First().LootItem.Id == Core.CharacterFilter.Id)
+				{
+					InspectorActionQueue.First().Action = IAction.DeQueue;
+					return;
+				}
+				
 				Core.Actions.UseItem(InspectorActionQueue.First().LootItem.Id,0);
 				
 				return;
@@ -251,7 +263,13 @@ namespace GearFoundry
 					Core.RenderFrame -= RenderFrame_InspectorMoveAction;
 				}
 				
-				if(mOpenContainer.ContainerGUID != InspectorActionQueue.First().LootItem.Container)
+				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() > 0 || !InspectorActionQueue.First().LootItem.isvalid)
+				{
+					InspectorActionQueue.First().Action = IAction.DeQueue;
+					return;
+				}
+				
+				if(Core.Actions.OpenedContainer != InspectorActionQueue.First().LootItem.Container)
 				{
 					InspectorActionQueue.First().StartAction = DateTime.MinValue;
 					InspectorActionQueue.First().pending = false;
@@ -311,6 +329,12 @@ namespace GearFoundry
 				{
 					Core.RenderFrame -= RenderFrame_InspectorSalvageAction;	
 				}
+				
+				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0 || !InspectorActionQueue.First().LootItem.isvalid)
+				{
+					InspectorActionQueue.First().Action = IAction.DeQueue;
+					return;
+				}
 						
 				Core.Actions.SalvagePanelAdd(InspectorActionQueue.First().LootItem.Id);
 				Core.Actions.SalvagePanelSalvage();
@@ -326,22 +350,12 @@ namespace GearFoundry
 			try
 			{
 				if(e.New.ObjectClass != ObjectClass.Salvage) {return;}
-				
-				if(InspectorActionQueue.Count > 0 && InspectorActionQueue.First().pending)
-				{
-					if(InspectorActionQueue.First().Action == IAction.SalvageItem || InspectorActionQueue.First().Action == IAction.CombineSalvage)
-					{
-						InspectorActionQueue.First().Action = IAction.DeQueue;
-					}
-				}
-				
-				if(InspectorActionQueue.Count == 0 || !InspectorActionQueue.Any(x => x.LootItem.Id == e.New.Id))
 				{
 					PendingActions nextaction = new PendingActions();
 					nextaction.Action = IAction.CombineSalvage;
 					nextaction.LootItem = new LootObject(e.New);
-					InspectorActionQueue.Enqueue(nextaction);
-				}	
+					InspectorActionQueue.Enqueue(nextaction);	
+				}
 				
 				if(!ActionsPending) {InitiateInspectorActionSequence();}
 				
@@ -356,6 +370,13 @@ namespace GearFoundry
 				else
 				{
 					Core.RenderFrame -= RenderFrame_InspectorCombineAction;
+				}
+				
+				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0 || !InspectorActionQueue.First().LootItem.isvalid)
+				{
+					WriteToChat("Killed a combine.");
+					InspectorActionQueue.First().Action = IAction.DeQueue;
+					return;
 				}
 				
 				ScanInventoryForSalvageBags();
@@ -442,6 +463,12 @@ namespace GearFoundry
 					Core.RenderFrame -= RenderFrame_DrainManaTank;		
 				}
 				
+				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0  || !InspectorActionQueue.First().LootItem.isvalid)
+				{
+					InspectorActionQueue.First().Action = IAction.DeQueue;
+					return;
+				}
+				
 				if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0).Count() == 0)
 				{
 					WriteToChat("No empty manastones available!");
@@ -504,6 +531,12 @@ namespace GearFoundry
 				else
 				{
 					Core.RenderFrame -= RenderFrame_DesiccateItem;
+				}
+				
+				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0  || !InspectorActionQueue.First().LootItem.isvalid)
+				{
+					InspectorActionQueue.First().Action = IAction.DeQueue;
+					return;
 				}
 				
 				if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Aetheria Desiccant").Count() == 0) 
@@ -576,6 +609,12 @@ namespace GearFoundry
 				else
 				{
 					Core.RenderFrame -= RenderFrame_RingKeys;
+				}
+				
+				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0  || !InspectorActionQueue.First().LootItem.isvalid)
+				{
+					InspectorActionQueue.First().Action = IAction.DeQueue;
+					return;
 				}
 				
 				LootObject currentkey = InspectorActionQueue.First().LootItem;
@@ -700,48 +739,6 @@ namespace GearFoundry
 	}
 }
 
-//Green Garnet 9-9) {NO ID} Heavy Bracelet
-//(Trophy) Lesser Corrupted Essence (102.0S, 102.0W)
-//(Steel 10-10) {GS 94 1J} Katar, Damage Score: 53, Skill Modifiers: 41, Major Quickness, Light Weapons 400 to Wield
-//#GearFoundry#: Time: 6/28/2013 2:33:58 PM
-//#GearFoundry#: Inspectoractionqueue.count = 2
-//#GearFoundry#: Pending Action PeaceMode
-//(Silver 1-10) {GS 85} Lightning Assagai, Damage Score: 45, Skill Modifiers: 40, Two Handed Combat 400 to Wield
-//#GearFoundry#: Time: 6/28/2013 2:33:59 PM
-//#GearFoundry#: Inspectoractionqueue.count = 1
-//#GearFoundry#: Pending Action MoveItem
-//#GearFoundry#: Lesser Corrupted Essence
-//#GearFoundry#: Time: 6/28/2013 2:34:03 PM
-//#GearFoundry#: Inspectoractionqueue.count = 1
-//#GearFoundry#: Pending Action MoveItem
-//#GearFoundry#: Heavy Bracelet
-//#GearFoundry#: Time: 6/28/2013 2:34:08 PM
-//#GearFoundry#: Inspectoractionqueue.count = 2
-//#GearFoundry#: Pending Action SalvageItem
-//#GearFoundry#: Heavy Bracelet
-//You obtain 12 Green Garnet (ws 9.00) using your knowledge of Salvaging.
-//#GearFoundry#: Time: 6/28/2013 2:34:13 PM
-//#GearFoundry#: Inspectoractionqueue.count = 3
-//#GearFoundry#: Pending Action MoveItem
-//#GearFoundry#: Katar
-//(Silver 1-10) {NO ID} Bracelet
-//(Trophy) Glyph of Item Enchantment (102.0S, 102.0W)
-//#GearFoundry#: Time: 6/28/2013 2:34:20 PM
-//#GearFoundry#: Inspectoractionqueue.count = 4
-//#GearFoundry#: Pending Action CombineSalvage
-//#GearFoundry#: Salvage (12)
-//#GearFoundry#: Time: 6/28/2013 2:34:20 PM
-//#GearFoundry#: Inspectoractionqueue.count = 3
-//#GearFoundry#: Pending Action MoveItem
-//#GearFoundry#: Lightning Assagai
-//#GearFoundry#: Time: 6/28/2013 2:34:21 PM
-//#GearFoundry#: Inspectoractionqueue.count = 4
-//#GearFoundry#: Pending Action OpenContainer
-//#GearFoundry#: Corpse of Degenerate Shadow Commander
-//#GearFoundry#: Time: 6/28/2013 2:34:22 PM
-//#GearFoundry#: Inspectoractionqueue.count = 4
-//#GearFoundry#: Pending Action MoveItem
-//#GearFoundry#: Lightning Assagai
 
 
 

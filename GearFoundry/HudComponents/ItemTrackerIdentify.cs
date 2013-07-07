@@ -171,8 +171,8 @@ namespace GearFoundry
 			{
 				string namecheck = IOItem.Name;
 				var matches = from XTrophies in mSortedTrophiesListChecked
-					where (namecheck.ToLower().Contains((string)XTrophies.Element("key").Value.ToLower()) && !Convert.ToBoolean(XTrophies.Element("isexact").Value)) ||
-						   (namecheck == (string)XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value))
+					where (@namecheck.ToLower().Contains((string)@XTrophies.Element("key").Value.ToLower()) && !Convert.ToBoolean(XTrophies.Element("isexact").Value)) ||
+						   (@namecheck == (string)@XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value))
 						 select XTrophies;
 			
 				if(matches.Count() > 0)

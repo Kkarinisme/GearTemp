@@ -26,7 +26,7 @@ namespace GearFoundry
 		private Queue<SpellCastInfo> SpellCastBuffer = new Queue<SpellCastInfo>();
 		private List<OtherDebuffCastInfo> OtherCastBuffer = new List<OtherDebuffCastInfo>();
 
-		private List<Regex> CombatHudRegexEx;
+		private List<Regex> CastFailRegexEx = new List<Regex>();
 		private List<Regex> OtherCastRegexList = new List<Regex>();
 		private List<string> OtherCastQuickKeepString = new List<string>();
 		
@@ -170,8 +170,9 @@ namespace GearFoundry
 				Core.CharacterFilter.ChangePortalMode += CombatHud_ChangePortalMode;
 				Core.ItemDestroyed += CombatHud_ItemDestroyed;
 				Core.ItemSelected += CombatHud_ItemSelected;
+				
+				//Host.Actions.InvokeChatParser("@unfilter -spellcasting");
 
-				//TODO:  WriteToChat("@unfilter -spellcasting");
 				FillCombatHudLists();
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -203,13 +204,12 @@ namespace GearFoundry
 		{
 			try
 			{				
-				CombatHudRegexEx = new List<Regex>();
-				CombatHudRegexEx.Add(new Regex("^(?<targetname>.+) resists your spell$"));
-				CombatHudRegexEx.Add(new Regex("Target is out of range."));
-				CombatHudRegexEx.Add(new Regex("Your spell fizzled."));
-				CombatHudRegexEx.Add(new Regex("^(?<targetname>.+) has no appropriate targets equipped for this spell.$"));
-				CombatHudRegexEx.Add(new Regex("You fail to affect (?<targetname>.+) because you are not a player killer!$"));	
-				CombatHudRegexEx.Add(new Regex("Your spell fizzled."));
+				CastFailRegexEx.Add(new Regex("^(?<targetname>.+) resists your spell$"));
+				CastFailRegexEx.Add(new Regex("Target is out of range!"));
+				CastFailRegexEx.Add(new Regex("Your spell fizzled."));
+				CastFailRegexEx.Add(new Regex("^(?<targetname>.+) has no appropriate targets equipped for this spell.$"));
+				CastFailRegexEx.Add(new Regex("You fail to affect (?<targetname>.+) because you are not a player killer!$"));	
+				CastFailRegexEx.Add(new Regex("Your spell fizzled."));
 				
 				OtherCastQuickKeepString.Add("Bor");
 				OtherCastQuickKeepString.Add("Drosta");
@@ -398,31 +398,28 @@ namespace GearFoundry
 		private void OnVisualSound(Decal.Adapter.Message pMsg)
 		{
 			try
-			{				
-				if(OtherCastBuffer.Count > 0)
-				{
-					OtherCastBuffer.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 5);
-				}
-								
+			{	
+
 				if(OtherCastBuffer.Count == 0) {return;}
-	
-				//Will ignore debuffs under L6 (or there abouts).
-				if(pMsg.Value<double>(2) < 1) {
-					return;
-				}
-								
-				if(Core.WorldFilter[pMsg.Value<int>(0)].ObjectClass == ObjectClass.Monster)
+				
+				OtherCastBuffer.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 5);
+				if(OtherCastBuffer.Count == 0) {return;}
+				
+				if(Core.WorldFilter[pMsg.Value<int>(0)].ObjectClass != ObjectClass.Monster) {return;}
+				else
 				{
 					if(!CombatHudMobTrackingList.Any(x => x.Id == pMsg.Value<int>(0)))
 					{
 						CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[pMsg.Value<int>(0)]));
 					}
 				}
-				else
+	
+				//Will ignore debuffs under L6 (or there abouts).
+				if(pMsg.Value<double>(2) < 1) 
 				{
 					return;
 				}
-
+								
 				int probablespellid = (from spels in OtherCastBuffer
 										where spels.Animation == pMsg.Value<int>(1)
 										select spels).FirstOrDefault().SpellId;
@@ -534,23 +531,23 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 
+		private bool CombatActionCompleteDelayRunning = false;
 		private void CombatHud_ActionComplete(object sender, System.EventArgs e)
 		{
 			try
 			{
 				if(SpellCastBuffer.Count > 0)
 				{
-					if(SpellCastBuffer.First().AutoDequeue)
+					SpellCastBuffer.First().CompleteTime = DateTime.Now;
+					if((SpellCastBuffer.First().CompleteTime - SpellCastBuffer.First().CastTime).TotalMilliseconds < 200)
 					{
-						SpellCastBuffer.Dequeue();
+						SpellCastBuffer.First().AutoDequeue = true;
 					}
-					if(SpellCastBuffer.Count > 0)
+					
+					if(CombatActionCompleteDelayRunning) {return;}
+					else
 					{
-						SpellCastBuffer.First().CompleteTime = DateTime.Now;
-						if((SpellCastBuffer.First().CompleteTime - SpellCastBuffer.First().CastTime).TotalMilliseconds < 200)
-						{
-							SpellCastBuffer.First().AutoDequeue = true;
-						}
+						CombatActionCompleteDelayRunning  = true;
 						Core.RenderFrame += RenderFrame_CombatActionCompleteDelay;
 					}
 				}
@@ -565,10 +562,15 @@ namespace GearFoundry
 				else
 				{
 					Core.RenderFrame -= RenderFrame_CombatActionCompleteDelay;	
+					CombatActionCompleteDelayRunning  = false;
 				}
 				
+				if(SpellCastBuffer.First().AutoDequeue)
+				{
+					SpellCastBuffer.Dequeue();
+					return;
+				}
 				SpellCastInfo spellcast = SpellCastBuffer.Dequeue();
-				if(spellcast.AutoDequeue){return;}
 				
 				if(CombatHudMobTrackingList.Any(x => x.Id == spellcast.SpellTargetId))
 				{
@@ -636,14 +638,18 @@ namespace GearFoundry
 		{
 			try
 			{	
-				if(e.Color != 17){return;}
+				if(e.Color != 17 && e.Color != 7){return;}
 				if(e.Text.StartsWith("You cast")) {return;}
+				if(e.Text.StartsWith("You say,")) {return;}
 				
-//				if(e.Text.StartsWith("You say, ") || e.Text.StartsWith("You cast"))
-//				{
-//					if(SpellCastBuffer.Count != 0 && CombatHudRegexEx.Any(x => x.IsMatch(e.Text)))
-//				}
-
+				if(e.Color == 7)
+				{	
+					if(CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
+					{
+						SpellCastBuffer.First().AutoDequeue = true;
+					}
+					return;
+				}
 				
 				if(!OtherCastQuickKeepString.Any(x => e.Text.Contains(x))) {return;}			
 				if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)))

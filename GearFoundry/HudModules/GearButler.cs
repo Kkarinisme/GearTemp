@@ -839,7 +839,7 @@ namespace GearFoundry
     	{
     		try
     		{
-    			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains(ButlerHudSearchBox.Text.ToLower())).OrderBy(x => x.Name).ToList();
+    			ButlerInventory = Core.WorldFilter.GetInventory().Where(x => x.@Name.ToLower().Contains(@ButlerHudSearchBox.Text.ToLower())).OrderBy(x => x.@Name).ToList();
     			UpdateButlerHudList();
     		}catch(Exception ex){LogError(ex);}
     	}

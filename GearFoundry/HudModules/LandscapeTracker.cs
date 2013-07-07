@@ -344,8 +344,8 @@ namespace GearFoundry
 			{		
 				string namecheck = IOLandscape.Name;
 				var matches = from XMobs in mSortedMobsListChecked
-					where (namecheck.ToLower().Contains((string)XMobs.Element("key").Value.ToLower()) && !Convert.ToBoolean(XMobs.Element("isexact").Value)) ||
-					(namecheck == (string)XMobs.Element("key").Value && Convert.ToBoolean(XMobs.Element("isexact").Value))
+					where (@namecheck.ToLower().Contains((string)@XMobs.Element("key").Value.ToLower()) && !Convert.ToBoolean(XMobs.Element("isexact").Value)) ||
+					(@namecheck == (string)@XMobs.Element("key").Value && Convert.ToBoolean(XMobs.Element("isexact").Value))
 							  select XMobs;
 				
 				if(matches.Count() > 0)
@@ -366,8 +366,8 @@ namespace GearFoundry
 			{
 				string namecheck = IOLandscape.Name;
 				var matches = from XTrophies in mSortedTrophiesListChecked
-					where (namecheck.ToLower().Contains((string)XTrophies.Element("key").Value.ToLower()) && !Convert.ToBoolean(XTrophies.Element("isexact").Value)) ||
-					(namecheck == (string)XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value))
+					where (@namecheck.ToLower().Contains((string)@XTrophies.Element("key").Value.ToLower()) && !Convert.ToBoolean(XTrophies.Element("isexact").Value)) ||
+					(@namecheck == (string)@XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value))
 							  select XTrophies;
 				
 				if(matches.Count() > 0)

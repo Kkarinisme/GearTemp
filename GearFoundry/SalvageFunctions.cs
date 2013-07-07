@@ -153,7 +153,6 @@ namespace GearFoundry
 		List<PartialBags> CombineSalvageBagsList = new List<PartialBags>();
 		private void CombineSalvageBags()
 		{
-			//WriteToChat("CombineSalvageBagsFires");
 			try
 			{
 				//No sense trying to salvage if you can't....

@@ -683,6 +683,7 @@ namespace GearFoundry
 					{
 						for(int i = 0; i < 10; i++)
 						{
+							CombatHudMiniVulArray[i].Clear();
 							CombatHudMiniVulArray[i].Add(CombatHudTargetRectangle, CombatHudNeutralBackground);	
 						}
 					}
@@ -715,6 +716,7 @@ namespace GearFoundry
 							}
 							else
 							{
+								CombatHudMiniVulArray[i].Clear();
 								CombatHudMiniVulArray[i].Add(CombatHudTargetRectangle, CombatHudNeutralBackground);	
 							}
 						}
