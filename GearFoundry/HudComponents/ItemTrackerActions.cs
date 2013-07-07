@@ -374,7 +374,6 @@ namespace GearFoundry
 				
 				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0 || !InspectorActionQueue.First().LootItem.isvalid)
 				{
-					WriteToChat("Killed a combine.");
 					InspectorActionQueue.First().Action = IAction.DeQueue;
 					return;
 				}

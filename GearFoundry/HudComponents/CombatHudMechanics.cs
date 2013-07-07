@@ -644,7 +644,7 @@ namespace GearFoundry
 				
 				if(e.Color == 7)
 				{	
-					if(CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
+					if(SpellCastBuffer.Count != 0 && CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
 					{
 						SpellCastBuffer.First().AutoDequeue = true;
 					}

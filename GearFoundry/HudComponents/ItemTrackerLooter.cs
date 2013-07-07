@@ -694,5 +694,13 @@ namespace GearFoundry
 				if(WaitingVTIOs.Any(x => x.HasIdData == true)){WaitingVTIOs.RemoveAll(x => x.HasIdData == true);}
 			}catch(Exception ex){LogError(ex);}
 		}
+		
+		public bool VTSalvageCombineDesision(int id1, int id2)
+		{
+			try
+			{
+				return false;
+			}catch(Exception ex){LogError(ex); return  false;}
+		}
 	}
 }

@@ -1571,12 +1571,8 @@ namespace GearFoundry
                 writer0.Close();
 
        	 }
-         	
-
-       
-
-
-         private void doWriteLists(List<spellinfo> index)
+        
+             private void doWriteLists(List<spellinfo> index)
          {
              FileInfo logFile = new FileInfo(GearDir + @"\" + index + ".csv");
              if (logFile.Exists)

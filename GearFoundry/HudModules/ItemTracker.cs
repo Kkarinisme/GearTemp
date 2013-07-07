@@ -690,26 +690,31 @@ namespace GearFoundry
 			{
     			if(col == 0)
     			{  	
-    				if(!InspectorActionQueue.Any(x => x.LootItem.Id == ItemTrackingList.ElementAt(row).Id))
+    				try
     				{
-	    				if(Core.Actions.CombatMode != CombatState.Peace)
-						{
-	    					PendingActions peaceaction = new PendingActions();
-			    			peaceaction.Action = IAction.PeaceMode;
-	    					InspectorActionQueue.Enqueue(peaceaction);
-						}
+	    				if(!InspectorActionQueue.Any(x => x.LootItem.Id == ItemTrackingList.ElementAt(row).Id))
+	    				{
+		    				if(Core.Actions.CombatMode != CombatState.Peace)
+							{
+		    					PendingActions peaceaction = new PendingActions();
+				    			peaceaction.Action = IAction.PeaceMode;
+		    					InspectorActionQueue.Enqueue(peaceaction);
+							}
+		    				
+		    				PendingActions nextaction = new PendingActions();
+				    		nextaction.Action = IAction.MoveItem;
+				    		nextaction.LootItem = ItemTrackingList.ElementAt(row);
+		    				InspectorActionQueue.Enqueue(nextaction);
+		    				
+		    				if(!ActionsPending) {InitiateInspectorActionSequence();}
 	    				
-	    				PendingActions nextaction = new PendingActions();
-			    		nextaction.Action = IAction.MoveItem;
-			    		nextaction.LootItem = ItemTrackingList.ElementAt(row);
-	    				InspectorActionQueue.Enqueue(nextaction);
-	    				
-	    				if(!ActionsPending) {InitiateInspectorActionSequence();}
-    				}
-    				else
-    				{
-    					return;
-    				}
+    					}
+    					else
+    					{
+	    					return;
+    					}
+    				//Empty catch will eliminate the slow list update causing exceptions when clicked.  TODO:  Better solution with the item ID stored in the hud list.	
+    				}catch{}
     			}
     			if(col == 1)
     			{
