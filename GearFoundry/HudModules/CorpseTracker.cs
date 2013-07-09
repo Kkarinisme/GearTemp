@@ -471,7 +471,6 @@ namespace GearFoundry
     	}
 				
 	    private HudView CorpseHudView = null;
-		private HudFixedLayout CorpseHudLayout = null;
 		private HudTabView CorpseHudTabView = null;
 		private HudFixedLayout CorpseHudTabLayout = null;
 		private HudFixedLayout CorpseHudSettingsTab = null;
@@ -507,15 +506,11 @@ namespace GearFoundry
     			CorpseHudView.UserResizeable = false;
     			CorpseHudView.Visible = true;
     			CorpseHudView.Ghosted = false;
-                CorpseHudView.UserMinimizable = false;
+                CorpseHudView.UserMinimizable = true;
                 CorpseHudView.LoadUserSettings();
     			
-    			
-    			CorpseHudLayout = new HudFixedLayout();
-    			CorpseHudView.Controls.HeadControl = CorpseHudLayout;
-    			
     			CorpseHudTabView = new HudTabView();
-    			CorpseHudLayout.AddControl(CorpseHudTabView, new Rectangle(0,0,ghSettings.CorpseHudWidth,ghSettings.CorpseHudHeight));
+    			CorpseHudView.Controls.HeadControl = CorpseHudTabView;
     		
     			CorpseHudTabLayout = new HudFixedLayout();
     			CorpseHudTabView.AddTab(CorpseHudTabLayout, "Corpses");
@@ -628,7 +623,6 @@ namespace GearFoundry
     			CorpseHudSettingsTab.Dispose();
     			CorpseHudTabLayout.Dispose();
                 CorpseHudTabView.Dispose();
-                CorpseHudLayout.Dispose();
                 CorpseHudView.Dispose();
 				
     		}	

@@ -39,13 +39,15 @@ namespace GearFoundry
 		public class GearInspectorSettings
 		{
 			public bool IdentifySalvage = true;
-			public bool AutoSalvage = false;
+			public bool AutoProcess = false;
 			public bool AutoDessicate = false;
 			public bool ModifiedLooting = true;
 			public bool CheckForL7Scrolls = false;
 			public bool SalvageHighValue = false;
 			public bool AutoRingKeys = false;
 			public bool RenderMini = false;
+			public bool GSStrings = true;
+			public bool AlincoStrings = true;
             public int ItemHudWidth = 300;
             public int ItemHudHeight = 220;
 			public int LootByValue = 0;
@@ -67,14 +69,6 @@ namespace GearFoundry
 			try
 			{		
 				mOpenContainer = null;
-				
-				ItemExclusionList = null;
-				ItemIDListenList = null;
-				ModifiedIOSpells = null;
-				
-				ItemTrackingList = null;
-				
-				ProcessItemsList = null;
 
 				
              	UnSubscribeItemTrackerLooterEvents();         	         	
@@ -145,7 +139,6 @@ namespace GearFoundry
 		private bool InspectorSettingsTab = false;
 		
 		private HudView ItemHudView = null;
-		private HudFixedLayout ItemHudLayout = null;
 		private HudTabView ItemHudTabView = null;
 		private HudFixedLayout ItemHudInspectorLayout = null;
 		private HudFixedLayout ItemHudUstLayout = null;
@@ -164,7 +157,7 @@ namespace GearFoundry
 		
 		private HudCheckBox InspectorIdentifySalvage = null;
 		private HudCheckBox InspectorAutoAetheria = null;
-		private HudCheckBox InspectorAutoSalvage = null;
+		private HudCheckBox InspectorAutoProcess = null;
 		private HudCheckBox InspectorModifiedLooting = null;
 		private HudCheckBox InspectorSalvageHighValue = null;
 		private HudCheckBox InspectorCheckForL7Scrolls = null;
@@ -173,6 +166,8 @@ namespace GearFoundry
 		private HudStaticText InspectorHudManaLabel = null;
 		private HudTextBox InspectorLootByMana = null;
 		private HudCheckBox InspectorRenderMini = null;
+		private HudCheckBox InspectorGSStrings = null;
+		private HudCheckBox InspectorAlincoStrings = null;
 	
     	private void RenderItemHud()
     	{
@@ -192,17 +187,18 @@ namespace GearFoundry
 
                 ItemHudView = new HudView("Inspector", GISettings.ItemHudWidth, GISettings.ItemHudHeight, new ACImage(0x6AA8));
     			ItemHudView.UserAlphaChangeable = false;
-    			ItemHudView.UserMinimizable = false;
+    			ItemHudView.UserMinimizable = true;
     			ItemHudView.ShowInBar = false;
     			ItemHudView.Visible = true;
     			ItemHudView.UserResizeable = false;
     			ItemHudView.LoadUserSettings();
     			
-    			ItemHudLayout = new HudFixedLayout();
-    			ItemHudView.Controls.HeadControl = ItemHudLayout;
+    			//ItemHudLayout = new HudFixedLayout();
+    			//ItemHudView.Controls.HeadControl = ItemHudLayout;
     			
     			ItemHudTabView = new HudTabView();
-    			ItemHudLayout.AddControl(ItemHudTabView, new Rectangle(0,0, GISettings.ItemHudWidth, GISettings.ItemHudHeight));
+//    			ItemHudLayout.AddControl(ItemHudTabView, new Rectangle(0,0, GISettings.ItemHudWidth, GISettings.ItemHudHeight));
+    			ItemHudView.Controls.HeadControl = ItemHudTabView;
     		
     			ItemHudInspectorLayout = new HudFixedLayout();
     			ItemHudTabView.AddTab(ItemHudInspectorLayout, "Inspect");
@@ -402,8 +398,8 @@ namespace GearFoundry
     			//Report
     			if(col == 1)
     			{
-    				if(GISettings.ModifiedLooting) {HudToChat(ProcessItemsList.ElementAt(row).GSReportString(), 1);}
-    				else{HudToChat(ProcessItemsList.ElementAt(row).LinkString(), 1);}
+    				if(GISettings.GSStrings) {HudToChat(ProcessItemsList.ElementAt(row).GSReportString(), 1);}
+    				if(GISettings.AlincoStrings) {HudToChat(ProcessItemsList.ElementAt(row).LinkString(), 1);}
     			}
     			//Remove
     			if(col == 2)
@@ -436,7 +432,7 @@ namespace GearFoundry
     		try
     		{
     			InspectorModifiedLooting = new HudCheckBox();
-    			InspectorModifiedLooting.Text = "Enable GS Loot";
+    			InspectorModifiedLooting.Text = "GS Looting";
                 ItemHudSettingsLayout.AddControl(InspectorModifiedLooting, new Rectangle(0, 0, 100, 16));
     			InspectorModifiedLooting.Checked = GISettings.ModifiedLooting;
     			InspectorIdentifySalvage = new HudCheckBox();
@@ -445,10 +441,10 @@ namespace GearFoundry
                 ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0, 18, 100, 16));
     			InspectorIdentifySalvage.Checked = GISettings.IdentifySalvage;
     			
-    			InspectorAutoSalvage = new HudCheckBox();
-    			InspectorAutoSalvage.Text = "Auto Salv.";
-                ItemHudSettingsLayout.AddControl(InspectorAutoSalvage, new Rectangle(0, 36, 100, 16));
-    			InspectorAutoSalvage.Checked = GISettings.AutoSalvage;
+    			InspectorAutoProcess = new HudCheckBox();
+    			InspectorAutoProcess.Text = "Auto Proc.";
+                ItemHudSettingsLayout.AddControl(InspectorAutoProcess, new Rectangle(0, 36, 100, 16));
+    			InspectorAutoProcess.Checked = GISettings.AutoProcess;
     						
     			InspectorAutoAetheria = new HudCheckBox();
     			InspectorAutoAetheria.Text = "Des. J. Aeth.";
@@ -466,11 +462,11 @@ namespace GearFoundry
     			
     			InspectorHudValueLabel = new HudStaticText();
                 InspectorHudValueLabel.FontHeight = nmenuFontHeight;
-    			InspectorHudValueLabel.Text = "High Value Loot.";
+    			InspectorHudValueLabel.Text = "Value";
     			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,90,100,16));
     			
     			InspectorSalvageHighValue = new HudCheckBox();
-    			InspectorSalvageHighValue.Text = "Salv. HV";
+    			InspectorSalvageHighValue.Text = "Salv. Value";
     			ItemHudSettingsLayout.AddControl(InspectorSalvageHighValue, new Rectangle(0,108,100,16));
     			InspectorSalvageHighValue.Checked = GISettings.SalvageHighValue;
     					
@@ -485,23 +481,59 @@ namespace GearFoundry
     			
     			InspectorRenderMini = new HudCheckBox();
     			InspectorRenderMini.Text = "R. Mini.";
-    			ItemHudSettingsLayout.AddControl(InspectorRenderMini, new Rectangle(0,144,60,16));
+    			ItemHudSettingsLayout.AddControl(InspectorRenderMini, new Rectangle(0,144,100,16));
     			InspectorRenderMini.Checked = GISettings.RenderMini;
+    			
+    			InspectorGSStrings = new HudCheckBox();
+    			InspectorGSStrings.Text = "GS Str.";
+    			ItemHudSettingsLayout.AddControl(InspectorGSStrings, new Rectangle(0,162,100,16));
+    			InspectorGSStrings.Checked = GISettings.GSStrings;
+    			
+    			InspectorAlincoStrings = new HudCheckBox();
+    			InspectorAlincoStrings.Text = "Alinco Str.";
+    			ItemHudSettingsLayout.AddControl(InspectorAlincoStrings, new Rectangle(0,180,100,16));
+    			InspectorAlincoStrings.Checked = GISettings.AlincoStrings;
+    			
+    			
+    			
     			
     			
     			InspectorIdentifySalvage.Change += InspectorIdentifySalvage_Change;
     			InspectorAutoAetheria.Change += InspectorAutoAetheria_Change;
-    			InspectorAutoSalvage.Change += InspectorAutoSalvage_Change;
+    			InspectorAutoProcess.Change += InspectorAutoProcess_Change;
     			InspectorModifiedLooting.Change += InspectorModifiedLooting_Change;
     			InspectorCheckForL7Scrolls.Change += InspectorCheckForL7Scrolls_Change;
     			InspectorLootByValue.LostFocus += InspectorLootByValue_LostFocus;
     			InspectorSalvageHighValue.Change += InspectorSalvageHighValue_Change;
     			InspectorLootByMana.LostFocus += InspectorLootByMana_LostFocus;	
     			InspectorRenderMini.Change += InspectorRenderMini_Change;
+    			InspectorGSStrings.Change += InspectorGSStrings_Change;
+    			InspectorAlincoStrings.Change += InspectorAlincoStrings_Change;
     			  			
     			InspectorSettingsTab = true;
     			
    
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+//    	    			InspectorGSStrings.Change += InspectorGSStrings_Change;
+//    			InspectorAlincoStrings.Change += InspectorAlincoStrings_Change;
+    			
+    	private void InspectorGSStrings_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.GSStrings = InspectorGSStrings.Checked;
+    			GearInspectorReadWriteSettings(false);
+    		}catch(Exception ex){LogError(ex);}
+    	}
+    			
+    	private void InspectorAlincoStrings_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.AlincoStrings = InspectorAlincoStrings.Checked;
+    			GearInspectorReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -571,11 +603,11 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
-    	private void InspectorAutoSalvage_Change(object sender, System.EventArgs e)
+    	private void InspectorAutoProcess_Change(object sender, System.EventArgs e)
     	{
     		try
     		{
-    			GISettings.AutoSalvage = InspectorAutoSalvage.Checked;
+    			GISettings.AutoProcess = InspectorAutoProcess.Checked;
 				GearInspectorReadWriteSettings(false);    			
     		}catch(Exception ex){LogError(ex);}
     	}
@@ -606,7 +638,7 @@ namespace GearFoundry
     			
     			InspectorIdentifySalvage.Change -= InspectorIdentifySalvage_Change;
     			InspectorAutoAetheria.Change -= InspectorAutoAetheria_Change;
-    			InspectorAutoSalvage.Change -= InspectorAutoSalvage_Change;
+    			InspectorAutoProcess.Change -= InspectorAutoProcess_Change;
     			InspectorModifiedLooting.Change -= InspectorModifiedLooting_Change;
     			InspectorCheckForL7Scrolls.Change -= InspectorCheckForL7Scrolls_Change;
     			InspectorLootByValue.LostFocus -= InspectorLootByValue_LostFocus;
@@ -616,7 +648,7 @@ namespace GearFoundry
     			
     			InspectorIdentifySalvage.Dispose();
     			InspectorAutoAetheria.Dispose();
-    			InspectorAutoSalvage.Dispose();
+    			InspectorAutoProcess.Dispose();
     			InspectorModifiedLooting.Dispose();
     			InspectorCheckForL7Scrolls.Dispose();
     			InspectorLootByMana.Dispose();
@@ -671,11 +703,9 @@ namespace GearFoundry
     			
     			ItemHudView.Resize -= ItemHudView_Resize;
     			
-    			ItemHudSettingsLayout.Dispose();
     			ItemHudUstLayout.Dispose();
     			ItemHudInspectorLayout.Dispose();   			
     			ItemHudTabView.Dispose();
-    			ItemHudLayout.Dispose();
     			ItemHudView.Dispose();
     		}	
     		catch(Exception ex){LogError(ex);}
@@ -717,8 +747,8 @@ namespace GearFoundry
     			}
     			if(col == 1)
     			{
-    				if(GISettings.ModifiedLooting) {HudToChat(ItemTrackingList[row].GSReportString(), 1);}
-    				else{HudToChat(ItemTrackingList[row].LinkString(), 1);}
+    				if(GISettings.GSStrings) {HudToChat(ItemTrackingList[row].GSReportString(), 1);}
+    				if(GISettings.AlincoStrings){HudToChat(ItemTrackingList[row].LinkString(), 1);}
     			}
     			if(col == 2)
     			{    				

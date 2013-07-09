@@ -474,7 +474,6 @@ namespace GearFoundry
 					ItemExclusionList.Add(IOItem.Id);
 					UpdateItemHud();
 				}	
-				if(GISettings.AutoSalvage && !ActionsPending) {InitiateInspectorActionSequence();}
 				return;
 
 			}catch(Exception ex){LogError(ex);}

@@ -336,7 +336,7 @@ namespace GearFoundry
     			ButlerHudView.ShowInBar = false;
     			ButlerHudView.Visible = true;
                 ButlerHudView.UserClickThroughable = false;
-                ButlerHudView.UserMinimizable = false;
+                ButlerHudView.UserMinimizable = true;
                 ButlerHudView.LoadUserSettings();
     			
     			ButlerHudTabView = new HudTabView();
@@ -1041,7 +1041,11 @@ namespace GearFoundry
     			}
     			if(col == 1)
     			{
-    				try{HudToChat(new LootObject(ButlerInventory[row]).LinkString(), 2);}catch{}
+    				try
+    				{
+    					if(GISettings.GSStrings){HudToChat(new LootObject(ButlerInventory[row]).GSReportString(), 2);}
+    					if(GISettings.AlincoStrings){HudToChat(new LootObject(ButlerInventory[row]).LinkString(),2);}
+    				}catch{}
     			}
     			if(col == 3)
     			{    				

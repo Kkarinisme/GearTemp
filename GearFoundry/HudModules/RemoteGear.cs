@@ -24,7 +24,6 @@ namespace GearFoundry
         XDocument xdocRemoteGear = null;
 
         private static VirindiViewService.HudView remoteGearHud = null;
-        private static VirindiViewService.Controls.HudFixedLayout remoteGear_Head = null;
         private static VirindiViewService.Controls.HudTabView remoteGearTabView = null;
         private static VirindiViewService.Controls.HudFixedLayout remoteGearTabFixedLayout = null;
 
@@ -66,11 +65,12 @@ namespace GearFoundry
             remoteGearHud.UserMinimizable = false;
             remoteGearHud.UserResizeable = false;
             remoteGearHud.LoadUserSettings();
-            remoteGear_Head = new HudFixedLayout();
-            remoteGearHud.Controls.HeadControl = remoteGear_Head;
+//            remoteGear_Head = new HudFixedLayout();
+//            remoteGearHud.Controls.HeadControl = remoteGear_Head;
             remoteGearTabView = new HudTabView();
+            remoteGearHud.Controls.HeadControl = remoteGearTabView;
             remoteGearTabFixedLayout = new HudFixedLayout();
-            remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 289));
+ //           remoteGear_Head.AddControl(remoteGearTabView, new Rectangle(0, 0, 29, 289));
             remoteGearTabView.AddTab(remoteGearTabFixedLayout, "");
 
             //Butler
@@ -184,7 +184,7 @@ namespace GearFoundry
 
         private void DisposeRemoteGearHud()
         {
-
+        	
             if (mRemoteGear0 != null) { mRemoteGear0.Hit -= (sender, obj) => mRemoteGear0_Hit(sender, obj); mRemoteGear0.Dispose(); }
             if (mRemoteGear1 != null) { mRemoteGear1.Hit -= (sender, obj) => mRemoteGear1_Hit(sender, obj); mRemoteGear1.Dispose(); }
             if (mRemoteGear2 != null) { mRemoteGear2.Hit -= (sender, obj) => mRemoteGear2_Hit(sender, obj); mRemoteGear2.Dispose(); }
@@ -196,9 +196,9 @@ namespace GearFoundry
             if (mRemoteGear8 != null) { mRemoteGear8.Hit -= (sender, obj) => mRemoteGear8_Hit(sender, obj); mRemoteGear8.Dispose(); }
             if (mRemoteGear9 != null) { mRemoteGear9.Hit -= (sender, obj) => mRemoteGear9_Hit(sender, obj); mRemoteGear9.Dispose(); }
 
-            remoteGear_Head.Dispose();
+            remoteGearTabFixedLayout.Dispose();
+            remoteGearTabView.Dispose();
             remoteGearHud.Dispose();
-
         }
 
 

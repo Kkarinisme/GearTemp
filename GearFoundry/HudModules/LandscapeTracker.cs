@@ -559,7 +559,6 @@ namespace GearFoundry
 	    
 				
 	    private HudView LandscapeHudView = null;
-		private HudFixedLayout LandscapeHudLayout = null;
 		private HudTabView LandscapeHudTabView = null;
 		private HudFixedLayout LandscapeHudTabLayout = null;
 		private HudList LandscapeHudList = null;
@@ -606,16 +605,17 @@ namespace GearFoundry
     			LandscapeHudView.ShowInBar = false;
     			LandscapeHudView.Visible = true;
     			LandscapeHudView.Ghosted = false;
-                LandscapeHudView.UserMinimizable = false;
+                LandscapeHudView.UserMinimizable = true;
                 LandscapeHudView.UserClickThroughable = false;
                 LandscapeHudView.LoadUserSettings();
              
-    			
-    			LandscapeHudLayout = new HudFixedLayout();
-    			LandscapeHudView.Controls.HeadControl = LandscapeHudLayout;
+//    			
+//    			LandscapeHudLayout = new HudFixedLayout();
+//    			LandscapeHudView.Controls.HeadControl = LandscapeHudLayout;
     			
     			LandscapeHudTabView = new HudTabView();
-    			LandscapeHudLayout.AddControl(LandscapeHudTabView, new Rectangle(0,0,gsSettings.LandscapeHudWidth,gsSettings.LandscapeHudHeight));
+    			//LandscapeHudLayout.AddControl(LandscapeHudTabView, new Rectangle(0,0,gsSettings.LandscapeHudWidth,gsSettings.LandscapeHudHeight));
+    			LandscapeHudView.Controls.HeadControl = LandscapeHudTabView;
     		
     			LandscapeHudTabLayout = new HudFixedLayout();
     			LandscapeHudTabView.AddTab(LandscapeHudTabLayout, "Sense");
@@ -948,7 +948,6 @@ namespace GearFoundry
     			try{DisposeLandscapeSettingsLayout();}catch{}
     			
     			LandscapeHudSettings.Dispose();
-    			LandscapeHudLayout.Dispose();
     			LandscapeHudTabLayout.Dispose();
     			LandscapeHudTabView.Dispose();
     			LandscapeHudView.Dispose();		

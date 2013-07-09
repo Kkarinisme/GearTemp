@@ -87,17 +87,18 @@ namespace GearFoundry
 				CombatHudView.UserAlphaChangeable = false;
 				CombatHudView.ShowInBar = false;
 				CombatHudView.UserClickThroughable = false;
-				CombatHudView.UserMinimizable = false;
+				CombatHudView.UserMinimizable = true;
 				if(gtSettings.bCombatHudMinimal){CombatHudView.UserResizeable = false;}
 				else{CombatHudView.UserResizeable = true;}
 				
 				CombatHudView.LoadUserSettings();
 				
-				CombatHudLayout = new HudFixedLayout();
-				CombatHudView.Controls.HeadControl = CombatHudLayout;
+				//CombatHudLayout = new HudFixedLayout();
+				//CombatHudView.Controls.HeadControl = CombatHudLayout;
 				
 				CombatHudTabView = new HudTabView();
-				CombatHudLayout.AddControl(CombatHudTabView, new Rectangle(0,0, CombatHudView.Width, CombatHudView.Height));
+				CombatHudView.Controls.HeadControl = CombatHudTabView;
+				//CombatHudLayout.AddControl(CombatHudTabView, new Rectangle(0,0, CombatHudView.Width, CombatHudView.Height));
 				
 				CombatHudMainTab = new HudFixedLayout();
 				CombatHudTabView.AddTab(CombatHudMainTab, "GearTactician");
@@ -229,7 +230,6 @@ namespace GearFoundry
 				CombatHudSettingsTab.Dispose();
 				CombatHudMainTab.Dispose();
 				CombatHudTabView.Dispose();
-				CombatHudLayout.Dispose();
 				CombatHudView.Dispose();
 				
 			}catch(Exception ex){LogError(ex);}

@@ -40,8 +40,8 @@ namespace GearFoundry
 				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
 				
-				if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.GSReportString());}
-				else {ReportStringToChat(IOItem.LinkString());}
+				if(GISettings.GSStrings) {ReportStringToChat(IOItem.GSReportString());}
+				if(GISettings.AlincoStrings){ReportStringToChat(IOItem.LinkString());}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -72,8 +72,8 @@ namespace GearFoundry
 				}
 				else
 				{
-					if(GISettings.ModifiedLooting) {ReportStringToChat(IOItem.GSReportString());}
-					else {ReportStringToChat(IOItem.LinkString());}
+					if(GISettings.GSStrings) {ReportStringToChat(IOItem.GSReportString());}
+					if(GISettings.AlincoStrings){ReportStringToChat(IOItem.LinkString());}
 					EvaluateItemMatches(IOItem);
 				}
 								

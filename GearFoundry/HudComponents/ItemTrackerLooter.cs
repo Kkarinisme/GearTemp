@@ -118,21 +118,21 @@ namespace GearFoundry
 					   	if(ItemJustChanged.IOR == IOResult.salvage || ItemJustChanged.IOR == IOResult.dessicate || ItemJustChanged.IOR == IOResult.manatank || ItemJustChanged.ObjectClass == ObjectClass.Key)
 	    				{
 	    					ProcessItemsList.Add(ItemJustChanged); 					  					
-		    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoSalvage)
+		    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoProcess)
 		    				{
 		    					PendingActions nextaction = new PendingActions();
 		    					nextaction.Action = IAction.SalvageItem;
 		    					nextaction.LootItem = ItemJustChanged;
 		    					InspectorActionQueue.Enqueue(nextaction);
 		    				}
-		    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoSalvage)
+		    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoProcess)
 		    				{
 		    					PendingActions nextaction = new PendingActions();
 		    					nextaction.Action = IAction.Desiccate;
 		    					nextaction.LootItem = ItemJustChanged;
 		    					InspectorActionQueue.Enqueue(nextaction);
 		    				}
-		    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoSalvage)
+		    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoProcess)
 		    				{
 		    					PendingActions nextaction = new PendingActions();
 		    					nextaction.Action = IAction.ManaStone;
@@ -162,21 +162,21 @@ namespace GearFoundry
 											
 						if(ItemJustChanged.IOR == IOResult.salvage || ItemJustChanged.IOR == IOResult.dessicate || ItemJustChanged.IOR == IOResult.manatank || ItemJustChanged.ObjectClass == ObjectClass.Key)
 	    				{
-		    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoSalvage)
+		    				if(ItemJustChanged.IOR == IOResult.salvage && GISettings.AutoProcess)
 		    				{
 		    					PendingActions nextaction = new PendingActions();
 		    					nextaction.Action = IAction.SalvageItem;
 		    					nextaction.LootItem = ItemJustChanged;
 		    					InspectorActionQueue.Enqueue(nextaction);
 		    				}
-		    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoSalvage)
+		    				else if(ItemJustChanged.IOR == IOResult.dessicate && GISettings.AutoProcess)
 		    				{
 		    					PendingActions nextaction = new PendingActions();
 		    					nextaction.Action = IAction.Desiccate;
 		    					nextaction.LootItem = ItemJustChanged;
 		    					InspectorActionQueue.Enqueue(nextaction);
 		    				}
-		    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoSalvage)
+		    				else if(ItemJustChanged.IOR == IOResult.manatank && GISettings.AutoProcess)
 		    				{
 		    					PendingActions nextaction = new PendingActions();
 		    					nextaction.Action = IAction.ManaStone;

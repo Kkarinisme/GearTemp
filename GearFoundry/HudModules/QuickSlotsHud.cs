@@ -25,7 +25,6 @@ namespace GearFoundry
         XDocument xdocQuickSlotsh = null;
 
         private static VirindiViewService.HudView quickiesvHud = null;
-        private static VirindiViewService.Controls.HudFixedLayout quickiesvHud_Head = null;
         private static VirindiViewService.Controls.HudTabView quickiesvTabView = null;
         private static VirindiViewService.Controls.HudFixedLayout quickiesvTabFixedLayout = null;
 
@@ -71,7 +70,6 @@ namespace GearFoundry
 
 
         private static VirindiViewService.HudView quickieshHud = null;
-        private static VirindiViewService.Controls.HudFixedLayout quickieshHud_Head = null;
         private static VirindiViewService.Controls.HudTabView quickieshTabView = null;
         private static VirindiViewService.Controls.HudFixedLayout quickieshTabFixedLayout = null;
 
@@ -167,12 +165,10 @@ namespace GearFoundry
             quickiesvHud.UserMinimizable = false;
             quickiesvHud.UserResizeable =  false;
             quickiesvHud.LoadUserSettings();
-            quickiesvHud_Head = new HudFixedLayout();
-            quickiesvHud.Controls.HeadControl = quickiesvHud_Head;
             quickiesvTabView = new HudTabView();
+            quickiesvHud.Controls.HeadControl = quickiesvTabView;
             quickiesvTabFixedLayout = new HudFixedLayout();
 
-            quickiesvHud_Head.AddControl(quickiesvTabView, new Rectangle(0, 0, 29, 384));
             quickiesvTabView.AddTab(quickiesvTabFixedLayout, "");       
 
                 btnQuickiesvAdd = new VirindiViewService.Controls.HudButton();
@@ -275,7 +271,7 @@ namespace GearFoundry
             if (mQuickStackv13 != null) { mQuickStackv13.Hit -= (sender, obj) => mQuickStackv0_Hit(sender, obj); mQuickStackv13.Dispose(); }
             if (mQuickStackv14 != null) { mQuickStackv14.Hit -= (sender, obj) => mQuickStackv0_Hit(sender, obj); mQuickStackv14.Dispose(); }
             
-            quickiesvHud_Head.Dispose();
+            quickiesvTabView.Dispose();
             quickiesvHud.Dispose();
             nquickiev = 0;
             try
@@ -326,13 +322,10 @@ namespace GearFoundry
                 quickieshHud.UserResizeable = false;
                 quickieshHud.LoadUserSettings();
 
-                quickieshHud_Head = new HudFixedLayout();
-                quickieshHud.Controls.HeadControl = quickieshHud_Head;
-
                 quickieshTabView = new HudTabView();
+                quickieshHud.Controls.HeadControl = quickieshTabView;
                 quickieshTabFixedLayout = new HudFixedLayout();
-
-                quickieshHud_Head.AddControl(quickieshTabView, new Rectangle(0, 0, 404, 40));
+                
                 quickieshTabView.AddTab(quickieshTabFixedLayout, "Horizontal Switchgear");
 
                 btnQuickieshAdd = new VirindiViewService.Controls.HudButton();
@@ -437,7 +430,8 @@ namespace GearFoundry
             if (mQuickStackh12 != null) { mQuickStackh12.Hit -= (sender, obj) => mQuickStackh0_Hit(sender, obj); mQuickStackh12.Dispose(); }
             if (mQuickStackh13 != null) { mQuickStackh13.Hit -= (sender, obj) => mQuickStackh0_Hit(sender, obj); mQuickStackh13.Dispose(); }
             if (mQuickStackh14 != null) { mQuickStackh14.Hit -= (sender, obj) => mQuickStackh0_Hit(sender, obj); mQuickStackh14.Dispose(); }
-            quickieshHud_Head.Dispose();
+            
+            quickieshTabView.Dispose();
             quickieshHud.Dispose();
 
              nquickieh = 0;

@@ -24,7 +24,6 @@ namespace GearFoundry
         XDocument xdocPortalGear = null;
 
         private static VirindiViewService.HudView portalGearHud = null;
-        private static VirindiViewService.Controls.HudFixedLayout portalGear_Head = null;
         private static VirindiViewService.Controls.HudTabView portalGearTabView = null;
         private static VirindiViewService.Controls.HudFixedLayout portalGearTabFixedLayout = null;
 
@@ -94,14 +93,15 @@ namespace GearFoundry
                 portalGearHud.Visible = true;
                 portalGearHud.UserClickThroughable = false;
                 portalGearHud.UserGhostable = true;
-                portalGearHud.UserMinimizable = false;
+                portalGearHud.UserMinimizable = true;
                 portalGearHud.UserResizeable = false;
                 portalGearHud.LoadUserSettings();
-                portalGear_Head = new HudFixedLayout();
-                portalGearHud.Controls.HeadControl = portalGear_Head;
+                //portalGear_Head = new HudFixedLayout();
+                //portalGearHud.Controls.HeadControl = portalGear_Head;
                 portalGearTabView = new HudTabView();
+                portalGearHud.Controls.HeadControl = portalGearTabView;
                 portalGearTabFixedLayout = new HudFixedLayout();
-                portalGear_Head.AddControl(portalGearTabView, new Rectangle(0, 0, 340, 40));
+               // portalGear_Head.AddControl(portalGearTabView, new Rectangle(0, 0, 340, 40));
                 portalGearTabView.AddTab(portalGearTabFixedLayout, "");
 
  
@@ -234,7 +234,6 @@ namespace GearFoundry
             if (mPortalGear8 != null) { mPortalGear8.Hit -= (sender, obj) => mPortalGear8_Hit(sender, obj); mPortalGear8.Dispose(); }
             if (mPortalGear9 != null) { mPortalGear9.Hit -= (sender, obj) => mPortalGear9_Hit(sender, obj); mPortalGear9.Dispose(); }
 
-            portalGear_Head.Dispose();
             portalGearHud.Dispose();
 
         }
