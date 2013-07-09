@@ -82,8 +82,7 @@ namespace GearFoundry
 			{
 				 MasterTimer.Tick += MasterTimer_UpdateClock;
 
-                 Core.ItemSelected += PortalItemSelected;
-
+ 
 				 
 				 for(int i = 0; i < 5; i++)
 				 {
@@ -329,6 +328,7 @@ namespace GearFoundry
 
                     }
 
+                     Core.ItemSelected -= PortalItemSelected;
 
                 }
             }catch(Exception ex){LogError(ex);}
@@ -341,6 +341,8 @@ namespace GearFoundry
             try
             {
                 WriteToChat("Please select castor from pack that should be used for spell recalls if not holding a wand when call requested.");
+                 Core.ItemSelected += PortalItemSelected;
+
 
             }
             catch (Exception ex) { LogError(ex); }
