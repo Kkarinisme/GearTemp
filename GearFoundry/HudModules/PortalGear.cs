@@ -39,12 +39,13 @@ namespace GearFoundry
         private HudPictureBox mPortalGear8 = null;
         private HudPictureBox mPortalGear9 = null;
         
-        private Queue<PortalActions> PortalActionQueue = new Queue<PortalActions>();
+        private List<PortalActions> PortalActionList = new List<PortalActions>();
         private System.Windows.Forms.Timer PortalActionTimer = new System.Windows.Forms.Timer();
         
      	private class PortalActions
      	{
      		public PAction Action = PAction.DeQueue;
+     		public bool fireaction = false;
 			public bool pending = false;
 			public DateTime StartAction = DateTime.MinValue;
 			public int ItemId = 0;	
@@ -68,6 +69,32 @@ namespace GearFoundry
 			lifestone,
 			primaryporal,
 			secondaryportal
+		}
+		
+		private void SubscribePortalEvents()
+		{
+			try
+			{
+				 MasterTimer.Tick += MasterTimer_UpdateClock;
+				 
+				 for(int i = 0; i < 5; i++)
+				 {
+				 	PortalActionList.Add(new PortalActions());
+				 	if(i == 0) {PortalActionList[i].Action = PAction.PeaceMode;}
+				 	if(i == 1) {PortalActionList[i].Action = PAction.EquipCaster;}
+				 	if(i == 2) {PortalActionList[i].Action = PAction.CastMode;}
+				 	if(i == 3) {PortalActionList[i].Action = PAction.Recall;}
+				 }
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void UnsubscribePortalEvents()
+		{
+			try
+			{
+				 MasterTimer.Tick -= MasterTimer_UpdateClock;
+			}catch(Exception ex){LogError(ex);}
 		}
 
         private void RenderPortalGearHud()
@@ -96,12 +123,9 @@ namespace GearFoundry
                 portalGearHud.UserMinimizable = true;
                 portalGearHud.UserResizeable = false;
                 portalGearHud.LoadUserSettings();
-                //portalGear_Head = new HudFixedLayout();
-                //portalGearHud.Controls.HeadControl = portalGear_Head;
                 portalGearTabView = new HudTabView();
                 portalGearHud.Controls.HeadControl = portalGearTabView;
                 portalGearTabFixedLayout = new HudFixedLayout();
-               // portalGear_Head.AddControl(portalGearTabView, new Rectangle(0, 0, 340, 40));
                 portalGearTabView.AddTab(portalGearTabFixedLayout, "");
 
  
@@ -113,13 +137,13 @@ namespace GearFoundry
                 
   
 //            //Portal Recall
-//            Stream recallPortalStream = this.GetType().Assembly.GetManifestResourceStream("recall.gif");
-//            Image PortalRecallImage = new Bitmap(recallPortalStream);
-//            mPortalGear0 = new HudPictureBox();
-//            mPortalGear0.Image = (ACImage)PortalRecallImage;
-//            portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(60, 2, 25, 39));
-//            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
-//            mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
+            Stream recallPortalStream = this.GetType().Assembly.GetManifestResourceStream("recall.gif");
+            Image PortalRecallImage = new Bitmap(recallPortalStream);
+            mPortalGear0 = new HudPictureBox();
+            mPortalGear0.Image = (ACImage)PortalRecallImage;
+            portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(60, 2, 25, 39));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
+            mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
 
 
  
@@ -216,12 +240,15 @@ namespace GearFoundry
 //            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear9, "Summon Portal II");
 //            mPortalGear9.Hit += (sender, obj) => mPortalGear9_Hit(sender, obj);
             
-            MasterTimer.Tick += MasterTimer_UpdateClock;
+           
+            SubscribePortalEvents();
+            
             }catch(Exception ex){LogError(ex);}
  
         }
         private void DisposePortalGearHud()
         {
+        	UnsubscribePortalEvents();
 
             if (mPortalGear0 != null) { mPortalGear0.Hit -= (sender, obj) => mPortalGear0_Hit(sender, obj); mPortalGear0.Dispose(); }
             if (mPortalGear1 != null) { mPortalGear1.Hit -= (sender, obj) => mPortalGear1_Hit(sender, obj); mPortalGear1.Dispose(); }
@@ -252,7 +279,7 @@ namespace GearFoundry
         {
             try
             {
-                 
+            	PortalActionsLoad(RecallTypes.lifestone);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -341,7 +368,7 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
         }
         
-        private void PortalActionsLoadQueue(RecallTypes recall)
+        private void PortalActionsLoad(RecallTypes recall)
         {
         	
         	try
@@ -358,45 +385,20 @@ namespace GearFoundry
         		{
         			if(Core.Actions.CombatMode != CombatState.Peace)
         			{
-        				PortalActions peace = new PortalActions();
-        				peace.Action = PAction.PeaceMode;
-        				PortalActionQueue.Enqueue(peace);
+        				PortalActionList[0].fireaction = true;
         			}
-        			
-        			if(Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) > 0 && 
-        			                                         (x.ObjectClass == ObjectClass.MeleeWeapon || x.ObjectClass == ObjectClass.MissileWeapon)).Count() > 0)
-        			{
-	        			PortalActions unequip = new PortalActions();
-    	    			unequip.Action = PAction.UnEquipWeapon;
-    	    			unequip.ItemId = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) > 0 && 
-    	    			                 (x.ObjectClass == ObjectClass.MeleeWeapon || x.ObjectClass == ObjectClass.MissileWeapon)).First().Id;
-    	    			PortalActionQueue.Enqueue(unequip);
-        			}
-        			
-        			PortalActions equip = new PortalActions();
-        			equip.Action = PAction.EquipCaster;
-        			PortalActionQueue.Enqueue(equip);
-        			
-        			PortalActions castmode = new PortalActions();
-        			castmode.Action = PAction.CastMode;
-        			equip.ItemId = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb).First().Id;
-        			PortalActionQueue.Enqueue(castmode);
+        			PortalActionList[1].fireaction = true;
+        			PortalActionList[2].fireaction = true;
         		}
         		else if(Core.Actions.CombatMode != CombatState.Magic)
         		{
-        			PortalActions castmode = new PortalActions();
-        			castmode.Action = PAction.CastMode;
-        			PortalActionQueue.Enqueue(castmode);
+        			PortalActionList[2].fireaction = true;
           		}
-        		
-        		PortalActions castwhat = new PortalActions();
-        		castwhat.Action = PAction.Recall;
-        		castwhat.RecallSpell = recall;
-        		PortalActionQueue.Enqueue(castwhat);    
+        		PortalActionList[3].fireaction = true;
+        		PortalActionList[2].RecallSpell = recall;  
 
         		InitiatePortalActions();
- 	
-        		
+		
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -412,23 +414,7 @@ namespace GearFoundry
 					PortalActionTimer.Start();
 					
 					PortalActionTimer.Tick += PortalActionInitiator;
-					Core.WorldFilter.ChangeObject += ChangeObject_Portal;
-					Core.CharacterFilter.ActionComplete += PortalActionComplete;
 					return;
-        		}
-        		else
-        		{
-        			if(PortalActionQueue.Count > 0){return;}
-					else
-					{
-						PortalActionsPending = false;
-						PortalActionTimer.Tick -= PortalActionInitiator;
-						Core.WorldFilter.ChangeObject -= ChangeObject_Portal;
-						Core.CharacterFilter.ActionComplete -= PortalActionComplete;
-						
-						PortalActionTimer.Stop();
-						return;
-					}
         		}
         	}catch(Exception ex){LogError(ex);}
         }
@@ -446,45 +432,49 @@ namespace GearFoundry
 		{
 			try
 			{
-
-				if(PortalActionsPending && PortalActionQueue.Count == 0)
+				for(int i = 0; i < PortalActionList.Count; i++)
+				{
+					if(PortalActionList[i].pending)
+					{
+						if((DateTime.Now - PortalActionList[i].StartAction).TotalSeconds < 1){return;}
+						else{PortalActionList[i].pending = false; return;}
+					}
+				}
+				
+				if(PortalActionList[0].fireaction && ! PortalActionList[0].pending)
+				{
+					PortalActionList[0].pending = true;
+					PortalActionList[0].StartAction = DateTime.Now;
+					Core.RenderFrame += RenderFramePortal_CombatMode;
+					return;
+				}
+				else if(PortalActionList[1].fireaction)
+				{
+					PortalActionList[1].pending = true;
+					PortalActionList[1].StartAction = DateTime.Now;
+					Core.RenderFrame += RenderFramePortal_Equip;
+					return;
+				}
+				else if(PortalActionList[2].fireaction)
+				{
+					PortalActionList[2].pending = true;
+					PortalActionList[2].StartAction = DateTime.Now;
+					Core.RenderFrame += RenderFramePortal_CombatMode;
+					return;
+				}
+				else if(PortalActionList[3].fireaction)
+				{
+					PortalActionList[3].pending = true;
+					PortalActionList[3].StartAction = DateTime.Now;
+					Core.RenderFrame += RenderFramePortal_CastSpell;
+					return;
+				}
+				else
 				{
 					PortalActionsPending = false;
 					PortalActionTimer.Tick -= PortalActionInitiator;
-					Core.WorldFilter.ChangeObject -= ChangeObject_Portal;
-					Core.CharacterFilter.ActionComplete -= PortalActionComplete;
 					PortalActionTimer.Stop();
 					return;
-				}
-					
-				if(PortalActionQueue.First().pending && PortalActionQueue.First().Action != PAction.DeQueue)
-				{
-					if((DateTime.Now - PortalActionQueue.First().StartAction).TotalSeconds < 2)	{return;}
-				}
-
-				PortalActionQueue.First().StartAction = DateTime.Now;
-				PortalActionQueue.First().pending = true;
-				
-				switch(PortalActionQueue.First().Action)
-				{
-					case PAction.DeQueue:
-						PortalActionQueue.Dequeue();
-						return;
-					case PAction.PeaceMode:
-						Core.RenderFrame += RenderFramePortal_CombatMode;
-						return;
-					case PAction.UnEquipWeapon:
-						Core.RenderFrame += RenderFramePortal_UnEquip;
-						return;
-					case PAction.EquipCaster:
-						Core.RenderFrame += RenderFramePortal_Equip;
-						return;
-					case PAction.CastMode:
-						Core.RenderFrame += RenderFramePortal_CombatMode;
-						return;
-					default:
-						Core.RenderFrame += RenderFramePortal_CastSpell;
-						return;
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -492,24 +482,31 @@ namespace GearFoundry
         private void RenderFramePortal_CombatMode(object sender, EventArgs e)
 		{
 			try
-			{	
-				if((DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
-				else
+			{				
+				if(PortalActionList[0].fireaction)
 				{
-					Core.RenderFrame -= RenderFramePortal_CombatMode; 
-				}
-				
-				if(PortalActionQueue.First().Action == PAction.PeaceMode)
-				{
+					if((DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 100){return;}
+					else
+					{
+						Core.RenderFrame -= RenderFramePortal_CombatMode; 
+					}
+					
+					PortalActionList[0].StartAction = DateTime.Now;
 					Core.Actions.SetCombatMode(CombatState.Peace);	
 				}
-				else if(PortalActionQueue.First().Action == PAction.CastMode)
+				else if(PortalActionList[2].fireaction)
 				{
+					if((DateTime.Now - PortalActionList[2].StartAction).TotalMilliseconds < 100){return;}
+					else
+					{
+						Core.RenderFrame -= RenderFramePortal_CombatMode; 
+					}
+					
+					PortalActionList[2].StartAction = DateTime.Now;
 					Core.Actions.SetCombatMode(CombatState.Magic);	
 				}
-				
-				PortalActionQueue.First().StartAction = DateTime.Now;
 				Core.RenderFrame += RenderFramePortal_SwitchCombatWait;				
+				return;
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -518,12 +515,12 @@ namespace GearFoundry
 		{
 			try
 			{	
-				if(PortalActionQueue.First().Action == PAction.PeaceMode)
+				if(PortalActionList[0].fireaction)
 				{
-					if(Core.Actions.CombatMode == CombatState.Peace && (DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds > 1000)
+					if(Core.Actions.CombatMode == CombatState.Peace && (DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds > 1000)
 					{
 						Core.RenderFrame -= RenderFramePortal_SwitchCombatWait;
-						PortalActionQueue.First().Action = PAction.DeQueue;
+						PortalActionList[0].fireaction = false;
 						return;
 					}
 					else
@@ -531,12 +528,12 @@ namespace GearFoundry
 						return;
 					}
 				}
-				else if(PortalActionQueue.First().Action == PAction.CastMode)
+				else if(PortalActionList[2].fireaction)
 				{
-					if(Core.Actions.CombatMode == CombatState.Magic && (DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds > 1000)
+					if(Core.Actions.CombatMode == CombatState.Magic && (DateTime.Now - PortalActionList[2].StartAction).TotalMilliseconds > 1000)
 					{
 						Core.RenderFrame -= RenderFramePortal_SwitchCombatWait;
-						PortalActionQueue.First().Action = PAction.DeQueue;
+						PortalActionList[2].fireaction = false;
 						return;
 					}
 					else
@@ -544,36 +541,6 @@ namespace GearFoundry
 						return;
 					}
 				}
-			}catch(Exception ex){LogError(ex);}
-		}
-        
-        private void ChangeObject_Portal(object sender, ChangeObjectEventArgs e)
-        {
-        	try
-        	{
-        		if(e.Change == WorldChangeType.StorageChange)
-        		{
-	        		if(PortalActionQueue.First().ItemId == e.Changed.Id)
-	        		{
-						PortalActionQueue.First().Action = PAction.DeQueue;
-	        		}
-        		}	
-        	}catch(Exception ex){LogError(ex);}
-        }
-		
-        private void RenderFramePortal_UnEquip(object sender, EventArgs e)
-        {
-        	try
-			{	
-        		if((DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds < 100) {return;}
-				else
-        		{
-					Core.RenderFrame -= RenderFramePortal_UnEquip;
-					Core.Actions.UseItem(PortalActionQueue.First().ItemId, 0);
-					return;
-				}
-				//List in change item to flag for dequeue
-				
 			}catch(Exception ex){LogError(ex);}
 		}
         
@@ -581,11 +548,12 @@ namespace GearFoundry
         {
         	try
 			{	
-        		if((DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds < 100) {return;}
+        		if((DateTime.Now - PortalActionList[1].StartAction).TotalMilliseconds < 100) {return;}
 				else
         		{
 					Core.RenderFrame -= RenderFramePortal_Equip;
-					Core.Actions.UseItem(PortalActionQueue.First().ItemId, 0);
+					Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb).First().Id, 0);
+					PortalActionList[1].fireaction = false;
 					return;
 				}
 				//List in change item to flag for dequeue	
@@ -596,10 +564,10 @@ namespace GearFoundry
         {
         	try
         	{
-        		if((DateTime.Now - PortalActionQueue.First().StartAction).TotalMilliseconds < 100) {return;}
+        		if((DateTime.Now - PortalActionList[3].StartAction).TotalMilliseconds < 100) {return;}
 				else
         		{
-					switch(PortalActionQueue.First().RecallSpell)
+					switch(PortalActionList[3].RecallSpell)
 					{
 						case RecallTypes.lifestone:
 							Core.Actions.CastSpell(1635, Core.CharacterFilter.Id);
@@ -621,22 +589,6 @@ namespace GearFoundry
         		
         	}catch(Exception ex){LogError(ex);}
         }
-        
-        private void PortalActionComplete(object sender, EventArgs e)
-        {
-        	try
-        	{
-        		if(PortalActionQueue.First().Action == PAction.Recall)
-        		{
-        			PortalActionQueue.First().Action = PAction.DeQueue;
-        		}
-        		
-        	}catch(Exception ex){LogError(ex);}
-        }
-        
-
-
-
     }
 }//end of namespace
 
