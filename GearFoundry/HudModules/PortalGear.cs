@@ -81,6 +81,9 @@ namespace GearFoundry
 			try
 			{
 				 MasterTimer.Tick += MasterTimer_UpdateClock;
+
+                 Core.ItemSelected += PortalItemSelected;
+
 				 
 				 for(int i = 0; i < 5; i++)
 				 {
@@ -90,12 +93,6 @@ namespace GearFoundry
 				 	if(i == 2) {PortalActionList[i].Action = PAction.CastMode;}
 				 	if(i == 3) {PortalActionList[i].Action = PAction.Recall;}
 				 }
-<<<<<<< HEAD
-
-                Core.ItemSelected += PortalItemSelected;
-
-=======
->>>>>>> df97ff58bc05cc930e98475a4ec12067c6ce048a
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -104,6 +101,8 @@ namespace GearFoundry
 		{
 			try
 			{
+                Core.ItemSelected -= ButlerItemSelected;
+
 				 MasterTimer.Tick -= MasterTimer_UpdateClock;
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -169,16 +168,12 @@ namespace GearFoundry
 
                 
   
-//            //Portal Recall
+            //Portal Recall
             Stream recallPortalStream = this.GetType().Assembly.GetManifestResourceStream("recall.gif");
             Image PortalRecallImage = new Bitmap(recallPortalStream);
             mPortalGear0 = new HudPictureBox();
             mPortalGear0.Image = (ACImage)PortalRecallImage;
-<<<<<<< HEAD
             portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(90, 2, 25, 39));
-=======
-            portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(60, 2, 25, 39));
->>>>>>> df97ff58bc05cc930e98475a4ec12067c6ce048a
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
             mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
 
