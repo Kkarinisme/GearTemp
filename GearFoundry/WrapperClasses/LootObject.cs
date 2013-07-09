@@ -1484,12 +1484,9 @@ namespace GearFoundry
 			}
 			private string xModString(double x, string suffix)
 			{
-				//missle mods to string
-				if (x > 0) 
-				{
-					return ", " + x.ToString("0.") + " " + suffix;
-				}
-				return string.Empty;
+				if(x > 1) {return ", " + ((x - 1)*100).ToString("N0") + " " + suffix;}
+				else if(x > 0) {return ", " + (x*100).ToString("N0") + " " + suffix;}
+				else return String.Empty;				
 			}
 			private string ElementalDmgBonusString()
 			{
@@ -1618,14 +1615,14 @@ namespace GearFoundry
 								SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
 								break;
 							case ObjectClass.MissileWeapon:
-								result = IORString() + wo.Name + WeaponMasteryString() + ImbueString() + SlayerString() +  TinkersString() + xModString(wo.Values(DoubleValueKey.DamageBonus), string.Empty) + ElementalDmgBonusString()  +
+								result = IORString() + wo.Name + WeaponMasteryString() + ImbueString() + SlayerString() +  TinkersString() + xModString(wo.Values(DoubleValueKey.DamageBonus), "ele") + ElementalDmgBonusString()  +
 									xModString(wo.Values(DoubleValueKey.MeleeDefenseBonus), "md") + SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
 								break;
 							case ObjectClass.Salvage:
 								result = SalvageString();
 								break;
 							case ObjectClass.WandStaffOrb:
-								result = IORString() + wo.Name + ImbueString() + SlayerString() + TinkersString() + xModString(wo.Values(DoubleValueKey.DamageBonus), "vs. Monsters") + xModString(wo.Values(DoubleValueKey.MeleeDefenseBonus), "md") +
+								result = IORString() + wo.Name + ImbueString() + SlayerString() + TinkersString() + xModString(wo.Values(DoubleValueKey.DamageBonus), "ele") + xModString(wo.Values(DoubleValueKey.MeleeDefenseBonus), "md") +
 									xModString(wo.Values(DoubleValueKey.ManaCBonus), "mc") + SpellDescriptions() + WieldString() + LoreString() + RankString() + RaceString() + CraftString();
 								break;
 							case ObjectClass.Misc:

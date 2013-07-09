@@ -56,8 +56,7 @@ namespace GearFoundry
 		private void SubscribeItemEvents()
 		{
 			try
-			{
-            		           	
+			{		           	
              	SubscribeItemTrackerLooterEvents();           	
 			}
 			catch(Exception ex){LogError(ex);}

@@ -24,10 +24,14 @@ namespace GearFoundry
 	{
 		//Item Tracker Manual ID functions begin here
 		
+		private int LastReportGUID = 0;
 		private void ManualCheckItemForMatches(LootObject IOItem)
 		{
 			try
 			{
+				if(IOItem.Id == LastReportGUID) {return;}
+				else{LastReportGUID = IOItem.Id;}
+			
 				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
 				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
 				if(IOItem.HasIdData && IOItem.IOR == IOResult.unknown){CheckRulesItem(ref IOItem);}

@@ -177,6 +177,13 @@ namespace GearFoundry
 						Core.RenderFrame += RenderFrame_InspectorSalvageAction;
 						return;
 					case IAction.CombineSalvage:
+						if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0 ||
+						   InspectorActionQueue.First().LootItem.LValue(LongValueKey.UsesRemaining) == 100)
+						{
+							InspectorActionQueue.First().Action = IAction.DeQueue;
+							return;
+						}
+						
 						if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").Count() == 0)
 						{
 							WriteToChat("Character has no Ust.");
