@@ -28,6 +28,7 @@ namespace GearFoundry
         private static VirindiViewService.Controls.HudFixedLayout portalGearTabFixedLayout = null;
 
         private HudStaticText txtPortalGear = null;
+        private HudPictureBox mSelectCastor = null;
         private HudPictureBox mPortalGear0 = null;
         private HudPictureBox mPortalGear1 = null;
         private HudPictureBox mPortalGear2 = null;
@@ -38,6 +39,10 @@ namespace GearFoundry
         private HudPictureBox mPortalGear7 = null;
         private HudPictureBox mPortalGear8 = null;
         private HudPictureBox mPortalGear9 = null;
+
+
+        private int nOrbGuid = 0;
+        private int nOrbIcon = 0;
         
         private List<PortalActions> PortalActionList = new List<PortalActions>();
         private System.Windows.Forms.Timer PortalActionTimer = new System.Windows.Forms.Timer();
@@ -85,6 +90,9 @@ namespace GearFoundry
 				 	if(i == 2) {PortalActionList[i].Action = PAction.CastMode;}
 				 	if(i == 3) {PortalActionList[i].Action = PAction.Recall;}
 				 }
+
+                Core.ItemSelected += PortalItemSelected;
+
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -107,14 +115,27 @@ namespace GearFoundry
                 }
                 if (!File.Exists(portalGearFilename))
                 {
-                    XDocument tempDoc = new XDocument(new XElement("Portals"));
+                    WriteToChat("PortalGearfilename does not exist.");
+                    XDocument tempDoc = new XDocument(new XElement("Settings"));
                     tempDoc.Save(portalGearFilename);
                     tempDoc = null;
+                    nOrbGuid = 0;
+                    nOrbIcon = 10812;
+
+                }
+                else
+                {
+
+                    xdocPortalGear = XDocument.Load(portalGearFilename);
+
+                    XElement el = xdocPortalGear.Root.Element("Setting");
+
+                    nOrbGuid = Convert.ToInt32(el.Element("OrbGuid").Value);
+                    nOrbIcon = Convert.ToInt32(el.Element("OrbIcon").Value);
+                    WriteToChat("nOrbIcon = " + nOrbIcon);
                 }
 
-                xdocPortalGear = XDocument.Load(portalGearFilename);
-
-                portalGearHud = new VirindiViewService.HudView("", 340, 40, new ACImage(Color.Transparent), false, "PortalGear");
+                portalGearHud = new VirindiViewService.HudView("", 370, 40, new ACImage(Color.Transparent), false, "PortalGear");
                 portalGearHud.ShowInBar = false;
                 portalGearHud.UserAlphaChangeable = false;
                 portalGearHud.Visible = true;
@@ -133,7 +154,16 @@ namespace GearFoundry
                 //Clock
                 txtPortalGear = new HudStaticText();
                 portalGearTabFixedLayout.AddControl(txtPortalGear, new Rectangle(0, 0, 55, 39));
-                VirindiViewService.TooltipSystem.AssociateTooltip(txtPortalGear, "Bedtime yet?");                 
+                VirindiViewService.TooltipSystem.AssociateTooltip(txtPortalGear, "Bedtime yet?"); 
+                
+                //Select Wand
+                mSelectCastor = new HudPictureBox();
+                int GR_SelectCastor_ICON = nOrbIcon;
+                mSelectCastor.Image = (ACImage)GR_SelectCastor_ICON;
+                portalGearTabFixedLayout.AddControl(mSelectCastor, new Rectangle(60, 2, 25, 39));
+                VirindiViewService.TooltipSystem.AssociateTooltip(mSelectCastor, "Select Castor");
+                mSelectCastor.Hit += (sender, obj) => mSelectCastor_Hit(sender, obj);
+
                 
   
 //            //Portal Recall
@@ -141,7 +171,7 @@ namespace GearFoundry
             Image PortalRecallImage = new Bitmap(recallPortalStream);
             mPortalGear0 = new HudPictureBox();
             mPortalGear0.Image = (ACImage)PortalRecallImage;
-            portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(60, 2, 25, 39));
+            portalGearTabFixedLayout.AddControl(mPortalGear0, new Rectangle(90, 2, 25, 39));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Portal Recall");
             mPortalGear0.Hit += (sender, obj) => mPortalGear0_Hit(sender, obj);
 
@@ -152,7 +182,7 @@ namespace GearFoundry
             int GR_LifestoneRecall_ICON = 0x60024E1;
             mPortalGear1.Image = GR_LifestoneRecall_ICON;
             mPortalGear1.Image = new ACImage(4949);
-            portalGearTabFixedLayout.AddControl(mPortalGear1, new Rectangle(90, 2, 25, 39));
+            portalGearTabFixedLayout.AddControl(mPortalGear1, new Rectangle(120, 2, 25, 39));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear1, "Lifestone Recall (/@ls)");
 
             mPortalGear1.Hit += (sender, obj) => mPortalGear1_Hit(sender, obj);
@@ -161,7 +191,7 @@ namespace GearFoundry
             mPortalGear2 = new HudPictureBox();
             int GR_HouseRecall_ICON = 0x6001A2A;
             mPortalGear2.Image = GR_HouseRecall_ICON;
-            portalGearTabFixedLayout.AddControl(mPortalGear2, new Rectangle(120, 2, 25, 39));
+            portalGearTabFixedLayout.AddControl(mPortalGear2, new Rectangle(150, 2, 25, 39));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear2, "House Recall (/@hr)");
             mPortalGear2.Hit += (sender, obj) => mPortalGear2_Hit(sender, obj);
 
@@ -170,7 +200,7 @@ namespace GearFoundry
             mPortalGear3 = new HudPictureBox();
             int GR_MansionRecall_ICON = 0x60022DE;
             mPortalGear3.Image = GR_MansionRecall_ICON;
-            portalGearTabFixedLayout.AddControl(mPortalGear3, new Rectangle(150, 2, 25, 39));
+            portalGearTabFixedLayout.AddControl(mPortalGear3, new Rectangle(180, 2, 25, 39));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear3, "Mansion recall (/@hom)");
             mPortalGear3.Hit += (sender, obj) => mPortalGear3_Hit(sender, obj);
 
@@ -178,7 +208,7 @@ namespace GearFoundry
             mPortalGear4 = new HudPictureBox();
             int GR_AHRecall_ICON = 0x60024DD;
             mPortalGear4.Image = GR_AHRecall_ICON;
-            portalGearTabFixedLayout.AddControl(mPortalGear4, new Rectangle(180, 2, 25, 29));
+            portalGearTabFixedLayout.AddControl(mPortalGear4, new Rectangle(210, 2, 25, 29));
             VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear4, "Allegiance Hometown (/@ah)");
             mPortalGear4.Hit += (sender, obj) => mPortalGear4_Hit(sender, obj);
 
@@ -189,7 +219,7 @@ namespace GearFoundry
 //            Image PortalLifestoneRecallImage = new Bitmap(strPortalLifestoneRecallImage);
 //            mPortalGear5 = new HudPictureBox();
 //            mPortalGear5.Image = (ACImage)PortalLifestoneRecallImage;
-//            portalGearTabFixedLayout.AddControl(mPortalGear5, new Rectangle(180,2, 25, 25));
+//            portalGearTabFixedLayout.AddControl(mPortalGear5, new Rectangle(240,2, 25, 25));
 //            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear5, "Recall Spell Lifestone");
 //            mPortalGear5.Hit += (sender, obj) => mPortalGear5_Hit(sender, obj);
 
@@ -201,7 +231,7 @@ namespace GearFoundry
 //            Image PortalRecallIImage = new Bitmap(strPortalRecallIImage);
 //            mPortalGear6 = new HudPictureBox();
 //            mPortalGear6.Image = (ACImage)PortalRecallIImage;
-//            portalGearTabFixedLayout.AddControl(mPortalGear6, new Rectangle(210,2, 25, 25));
+//            portalGearTabFixedLayout.AddControl(mPortalGear6, new Rectangle(270,2, 25, 25));
 //            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear6, "Recall Portal I");
 //            mPortalGear6.Hit += (sender, obj) => mPortalGear6_Hit(sender, obj);
 //
@@ -213,7 +243,7 @@ namespace GearFoundry
 //            Image PortalSummonIImage = new Bitmap(strPortalSummonIImage);
 //            mPortalGear7 = new HudPictureBox();
 //            mPortalGear7.Image = (ACImage)PortalSummonIImage;
-//            portalGearTabFixedLayout.AddControl(mPortalGear7, new Rectangle(240,2, 25, 25));
+//            portalGearTabFixedLayout.AddControl(mPortalGear7, new Rectangle(300,2, 25, 25));
 //            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear7, "Summon Portal I");
 //            mPortalGear7.Hit += (sender, obj) => mPortalGear7_Hit(sender, obj);
 //
@@ -224,7 +254,7 @@ namespace GearFoundry
 //            Image PortalRecallIIImage = new Bitmap(strPortalRecallIIImage);
 //            mPortalGear8 = new HudPictureBox();
 //            mPortalGear8.Image = (ACImage)PortalRecallIIImage;
-//            portalGearTabFixedLayout.AddControl(mPortalGear8, new Rectangle(270,2, 25, 25));
+//            portalGearTabFixedLayout.AddControl(mPortalGear8, new Rectangle(330,2, 25, 25));
 //            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear8, "Recall Portal I");
 //            mPortalGear6.Hit += (sender, obj) => mPortalGear8_Hit(sender, obj);
 //
@@ -236,7 +266,7 @@ namespace GearFoundry
 //            Image PortalSummonIIImage = new Bitmap(strPortalSummonIIImage);
 //            mPortalGear9 = new HudPictureBox();
 //            mPortalGear9.Image = (ACImage)PortalSummonIIImage;
-//            portalGearTabFixedLayout.AddControl(mPortalGear9, new Rectangle(300,2, 25, 25));
+//            portalGearTabFixedLayout.AddControl(mPortalGear9, new Rectangle(360,2, 25, 25));
 //            VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear9, "Summon Portal II");
 //            mPortalGear9.Hit += (sender, obj) => mPortalGear9_Hit(sender, obj);
             
@@ -250,6 +280,7 @@ namespace GearFoundry
         {
         	UnsubscribePortalEvents();
 
+            if (mSelectCastor != null) { mSelectCastor.Hit -= (sender, obj) => mSelectCastor_Hit(sender, obj); mSelectCastor.Dispose(); }
             if (mPortalGear0 != null) { mPortalGear0.Hit -= (sender, obj) => mPortalGear0_Hit(sender, obj); mPortalGear0.Dispose(); }
             if (mPortalGear1 != null) { mPortalGear1.Hit -= (sender, obj) => mPortalGear1_Hit(sender, obj); mPortalGear1.Dispose(); }
             if (mPortalGear2 != null) { mPortalGear2.Hit -= (sender, obj) => mPortalGear2_Hit(sender, obj); mPortalGear2.Dispose(); }
@@ -274,6 +305,62 @@ namespace GearFoundry
          	}catch(Exception ex){LogError(ex);}
        }
 
+        private void PortalItemSelected(object sender, ItemSelectedEventArgs e)
+		{
+			try
+    		{	
+				if(Core.WorldFilter[Core.Actions.CurrentSelection] != null)
+				{
+                     int objSelectedID = e.ItemGuid;
+                     
+                     foreach (Decal.Adapter.Wrappers.WorldObject obj in Core.WorldFilter.GetInventory())
+                    {
+                        if (obj.Id == objSelectedID)
+                        {
+                            nOrbGuid = obj.Id;
+                            nOrbIcon = obj.Icon;
+                            savePortalSettings();
+                            RenderPortalGearHud();
+                            break;
+
+                        }
+
+                    }
+
+
+                }
+            }catch(Exception ex){LogError(ex);}
+        }
+
+
+
+        private void mSelectCastor_Hit(object sender, System.EventArgs e)
+        {
+            try
+            {
+                WriteToChat("Please select castor from pack that should be used for spell recalls if not holding a wand when call requested.");
+
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
+        private void savePortalSettings()
+        {
+           try
+           {
+                xdoc = new XDocument(new XElement("Settings"));
+                xdoc.Element("Settings").Add(new XElement("Setting",
+                        new XElement("OrbGuid", nOrbGuid),
+                         new XElement("OrbIcon", nOrbIcon)));
+                xdoc.Save(portalGearFilename);
+
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
+
+        
 
         private void mPortalGear0_Hit(object sender, System.EventArgs e)
         {

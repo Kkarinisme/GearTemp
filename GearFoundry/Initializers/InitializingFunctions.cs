@@ -67,7 +67,7 @@ namespace GearFoundry
                 quickSlotsvFilename = toonDir + @"\" + "QuickSlotsv.xml";
                 quickSlotshFilename = toonDir + @"\" + "QuickSlotsh.xml";
                 remoteGearFilename = GearDir + @"\" + "RemoteGear.xml";
-                portalGearFilename = GearDir + @"\" + "PortalGear.xml";
+                portalGearFilename = toonDir + @"\" + "PortalGear.xml";
 
                 if (!File.Exists(rulesFilename))
                 {
