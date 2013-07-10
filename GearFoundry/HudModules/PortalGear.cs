@@ -49,23 +49,12 @@ namespace GearFoundry
         
      	private class PortalActions
      	{
-     		public PAction Action = PAction.DeQueue;
      		public bool fireaction = false;
 			public bool pending = false;
 			public DateTime StartAction = DateTime.MinValue;
 			public int ItemId = 0;	
 			public RecallTypes RecallSpell = RecallTypes.none;			
      	}	
-			
-		public enum PAction
-		{
-			UnEquipWeapon,
-			PeaceMode,
-			EquipCaster,
-			CastMode,
-			Recall,		
-			DeQueue
-		}
 		
 		public enum RecallTypes
 		{
@@ -81,17 +70,6 @@ namespace GearFoundry
 			try
 			{
 				 MasterTimer.Tick += MasterTimer_UpdateClock;
-
- 
-				 
-				 for(int i = 0; i < 5; i++)
-				 {
-				 	PortalActionList.Add(new PortalActions());
-				 	if(i == 0) {PortalActionList[i].Action = PAction.PeaceMode;}
-				 	if(i == 1) {PortalActionList[i].Action = PAction.EquipCaster;}
-				 	if(i == 2) {PortalActionList[i].Action = PAction.CastMode;}
-				 	if(i == 3) {PortalActionList[i].Action = PAction.Recall;}
-				 }
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -100,8 +78,6 @@ namespace GearFoundry
 		{
 			try
 			{
-                Core.ItemSelected -= ButlerItemSelected;
-
 				 MasterTimer.Tick -= MasterTimer_UpdateClock;
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -120,8 +96,8 @@ namespace GearFoundry
                     XDocument tempDoc = new XDocument(new XElement("Settings"));
                     tempDoc.Save(portalGearFilename);
                     tempDoc = null;
-                    nOrbGuid = 0;
-                    nOrbIcon = 10812;
+                    nOrbGuid = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb).First().Id;
+                    nOrbIcon = 0x6002A3C;
 
                 }
                 else
@@ -370,7 +346,7 @@ namespace GearFoundry
         {
             try
             {
-            	PortalActionsLoad(RecallTypes.lifestone);
+            	PortalActionsLoad(RecallTypes.portal);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -470,10 +446,12 @@ namespace GearFoundry
         			return;
         		}
         		
+        		WriteToChat("Inventory = " + Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) == 0x1000000).Count().ToString());
         		
         		//Not holding a caster
-        		if(Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) > 0 && x.ObjectClass == ObjectClass.WandStaffOrb).Count() == 0)
+        		if(Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) == 0x1000000).Count() == 0)
         		{
+        			WriteToChat("CombatState = " + Core.Actions.CombatMode.ToString());
         			if(Core.Actions.CombatMode != CombatState.Peace)
         			{
         				PortalActionList[0].fireaction = true;
@@ -522,43 +500,96 @@ namespace GearFoundry
         private void FirePortalActions()
 		{
 			try
-			{
-				for(int i = 0; i < PortalActionList.Count; i++)
+			{				
+				if(PortalActionList[0].fireaction)
 				{
-					if(PortalActionList[i].pending)
+					if(PortalActionList[0].pending && (DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 1000)
 					{
-						if((DateTime.Now - PortalActionList[i].StartAction).TotalSeconds < 1){return;}
-						else{PortalActionList[i].pending = false; return;}
+						return;
 					}
-				}
-				
-				if(PortalActionList[0].fireaction && ! PortalActionList[0].pending)
-				{
-					PortalActionList[0].pending = true;
-					PortalActionList[0].StartAction = DateTime.Now;
-					Core.RenderFrame += RenderFramePortal_CombatMode;
-					return;
+					else if(Core.Actions.CombatMode != CombatState.Peace)
+					{
+						WriteToChat("Firing Peace State");
+						PortalActionList[0].pending = true;
+						PortalActionList[0].StartAction = DateTime.Now;
+						Core.RenderFrame += RenderFramePortal_PeaceMode;
+						return;
+					}
+					else
+					{
+						WriteToChat("Peace State Disabled");
+						PortalActionList[0].pending = false;
+						PortalActionList[0].StartAction = DateTime.MinValue;
+						PortalActionList[0].fireaction = false;
+					}
 				}
 				else if(PortalActionList[1].fireaction)
 				{
-					PortalActionList[1].pending = true;
-					PortalActionList[1].StartAction = DateTime.Now;
-					Core.RenderFrame += RenderFramePortal_Equip;
-					return;
+					if(PortalActionList[1].pending && (DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 300)
+					{
+						return;
+					}
+					else if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb && x.LongKeys.Contains((int)LongValueKey.EquippedSlots)).Count() == 0)
+					{	
+						WriteToChat("Changing Gear");
+						PortalActionList[1].pending = true;
+						PortalActionList[1].StartAction = DateTime.Now;
+						Core.RenderFrame += RenderFramePortal_Equip;
+						return;
+					}
+					else
+					{
+						WriteToChat("Gear Change Complete");
+						PortalActionList[1].pending = false;
+						PortalActionList[1].StartAction = DateTime.MinValue;
+						PortalActionList[1].pending = false;
+					}
 				}
 				else if(PortalActionList[2].fireaction)
 				{
-					PortalActionList[2].pending = true;
-					PortalActionList[2].StartAction = DateTime.Now;
-					Core.RenderFrame += RenderFramePortal_CombatMode;
-					return;
+					if(PortalActionList[2].pending && (DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 1000)
+					{
+						return;
+					}
+					else if(Core.Actions.CombatMode != CombatState.Magic)
+					{
+						WriteToChat("Entering Magic State");
+						PortalActionList[2].pending = true;
+						PortalActionList[2].StartAction = DateTime.Now;
+						Core.RenderFrame += RenderFramePortal_CastMode;
+						return;
+					}
+					else
+					{
+						WriteToChat("Magic State Complete");
+						PortalActionList[2].pending = false;
+						PortalActionList[2].StartAction = DateTime.MinValue;
+						PortalActionList[2].pending = false;
+					}
 				}
 				else if(PortalActionList[3].fireaction)
 				{
-					PortalActionList[3].pending = true;
-					PortalActionList[3].StartAction = DateTime.Now;
-					Core.RenderFrame += RenderFramePortal_CastSpell;
-					return;
+					if(PortalActionList[3].pending && (DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 1000)
+					{
+						return;
+					}
+					else if(!PortalCastSuccess && PortalActionList[3].RecallSpell != RecallTypes.none)
+					{
+						WriteToChat("Casting");
+						PortalActionList[3].pending = true;
+						PortalActionList[3].StartAction = DateTime.Now;
+						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
+						Core.RenderFrame += RenderFramePortal_CastSpell;
+						return;
+					}
+					else
+					{
+						WriteToChat("Cast Completed");
+						PortalActionList[3].pending = false;
+						PortalActionList[3].StartAction = DateTime.MinValue;
+						PortalActionList[3].pending = false;
+						PortalCastSuccess = false;
+					}	
 				}
 				else
 				{
@@ -570,71 +601,24 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
         
-        private void RenderFramePortal_CombatMode(object sender, EventArgs e)
+        private void RenderFramePortal_PeaceMode(object sender, EventArgs e)
 		{
 			try
 			{				
-				if(PortalActionList[0].fireaction)
+
+				if((DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 100){return;}
+				else
 				{
-					if((DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 100){return;}
-					else
-					{
-						Core.RenderFrame -= RenderFramePortal_CombatMode; 
-					}
-					
-					PortalActionList[0].StartAction = DateTime.Now;
-					Core.Actions.SetCombatMode(CombatState.Peace);	
+					Core.RenderFrame -= RenderFramePortal_PeaceMode; 
 				}
-				else if(PortalActionList[2].fireaction)
-				{
-					if((DateTime.Now - PortalActionList[2].StartAction).TotalMilliseconds < 100){return;}
-					else
-					{
-						Core.RenderFrame -= RenderFramePortal_CombatMode; 
-					}
-					
-					PortalActionList[2].StartAction = DateTime.Now;
-					Core.Actions.SetCombatMode(CombatState.Magic);	
-				}
-				Core.RenderFrame += RenderFramePortal_SwitchCombatWait;				
+				
+				PortalActionList[0].StartAction = DateTime.Now;
+				Core.Actions.SetCombatMode(CombatState.Peace);	
 				return;
 				
 			}catch(Exception ex){LogError(ex);}
 		}
-        
-        private void RenderFramePortal_SwitchCombatWait(object sender, EventArgs e)
-		{
-			try
-			{	
-				if(PortalActionList[0].fireaction)
-				{
-					if(Core.Actions.CombatMode == CombatState.Peace && (DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds > 1000)
-					{
-						Core.RenderFrame -= RenderFramePortal_SwitchCombatWait;
-						PortalActionList[0].fireaction = false;
-						return;
-					}
-					else
-					{
-						return;
-					}
-				}
-				else if(PortalActionList[2].fireaction)
-				{
-					if(Core.Actions.CombatMode == CombatState.Magic && (DateTime.Now - PortalActionList[2].StartAction).TotalMilliseconds > 1000)
-					{
-						Core.RenderFrame -= RenderFramePortal_SwitchCombatWait;
-						PortalActionList[2].fireaction = false;
-						return;
-					}
-					else
-					{
-						return;
-					}
-				}
-			}catch(Exception ex){LogError(ex);}
-		}
-        
+            
         private void RenderFramePortal_Equip(object sender, EventArgs e)
         {
         	try
@@ -643,11 +627,36 @@ namespace GearFoundry
 				else
         		{
 					Core.RenderFrame -= RenderFramePortal_Equip;
-					Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb).First().Id, 0);
-					PortalActionList[1].fireaction = false;
-					return;
+					if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).Count() > 0 &&
+					   Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.MeleeWeapon && x.LongKeys.Contains((int)LongValueKey.EquippedSlots)).Count() == 0)
+					{
+						Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).First().Id,0);
+						return;
+					}
+					else
+					{
+						Core.Actions.UseItem(nOrbGuid, 0);
+						return;
+					}
 				}
 				//List in change item to flag for dequeue	
+			}catch(Exception ex){LogError(ex);}
+		}
+        
+        private void RenderFramePortal_CastMode(object sender, EventArgs e)
+		{
+			try
+			{				
+				if((DateTime.Now - PortalActionList[2].StartAction).TotalMilliseconds < 100){return;}
+				else
+				{
+					Core.RenderFrame -= RenderFramePortal_CastMode; 
+				}
+					
+				PortalActionList[2].StartAction = DateTime.Now;
+				Core.Actions.SetCombatMode(CombatState.Magic);			
+				return;
+				
 			}catch(Exception ex){LogError(ex);}
 		}
         
@@ -658,12 +667,14 @@ namespace GearFoundry
         		if((DateTime.Now - PortalActionList[3].StartAction).TotalMilliseconds < 100) {return;}
 				else
         		{
+					WriteToChat("Cast Spell " + PortalActionList[3].RecallSpell.ToString());
 					switch(PortalActionList[3].RecallSpell)
 					{
 						case RecallTypes.lifestone:
 							Core.Actions.CastSpell(1635, Core.CharacterFilter.Id);
 							return;
 						case RecallTypes.portal:
+							WriteToChat("Hit recall type portal.");
 							Core.Actions.CastSpell(2645, Core.CharacterFilter.Id);
 							return;
 						case RecallTypes.primaryporal:
@@ -678,6 +689,16 @@ namespace GearFoundry
 					}
 				}
         		
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
+        private bool PortalCastSuccess = false;
+        private void PortalCast_Listen(object sender, EventArgs e)
+        {
+        	try
+        	{
+        		PortalCastSuccess = true;
+        		Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
         	}catch(Exception ex){LogError(ex);}
         }
     }
