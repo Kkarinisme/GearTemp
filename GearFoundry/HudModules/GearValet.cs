@@ -183,7 +183,8 @@ namespace GearFoundry
 				if(col == 1)
 				{
 					LootObject tLootObj = new LootObject(Core.WorldFilter[Convert.ToInt32(((HudStaticText)ValetRow[3]).Text)]);
-					tLootObj.GSReportString();
+					if(GISettings.GSStrings){tLootObj.GSReportString();}
+					if(GISettings.AlincoStrings){tLootObj.LinkString();}
 				}
 				if(col == 2)
 				{
@@ -223,6 +224,8 @@ namespace GearFoundry
                     ((HudPictureBox)ValetRow[2]).Image = GearValetRemoveCircle;
                     ((HudStaticText)ValetRow[3]).Text = vs.TicketStub.ToString();
 				}
+				
+				ValetSuitPiecesList.ClearRows();
 				
 				foreach(ValetTicket vt in GearButlerSettings.ValetSuitList[ValetCurrentSuit].SuitPieces)
 				{
@@ -275,9 +278,7 @@ namespace GearFoundry
 					WriteToChat("You need to clear " + SlotsLeftOver + " slots in your main pack.");
 					return;
 				}
-				
-
-				
+								
 				ValetRemoveList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
 				ValetEquipList = GearButlerSettings.ValetSuitList.Find(x => x.TicketStub == ValetCurrentSuit).SuitPieces.ToList();
 				
@@ -303,6 +304,7 @@ namespace GearFoundry
 				}
 				
 				int nextsuitid = 0;
+				
 				for(int i = 0; i < GearButlerSettings.ValetSuitList.Count; i++)
 				{
 					if(GearButlerSettings.ValetSuitList[i].TicketStub == nextsuitid)
@@ -315,10 +317,8 @@ namespace GearFoundry
 				nValetSuit.TicketStub = nextsuitid;
 				nValetSuit.SuitName = ValetNameBox.Text;
 				nValetSuit.Icon = Core.WorldFilter[Core.Actions.CurrentSelection].Icon;				
-				
-				List<WorldObject> newsuitobjects = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList();
 
-				foreach(WorldObject wo in newsuitobjects)
+				foreach(WorldObject wo in Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) !=  0).OrderBy(x => x.Name).ToList())
 				{
 					ValetTicket vt = new ValetTicket();
 					vt.ItemId = wo.Id;
