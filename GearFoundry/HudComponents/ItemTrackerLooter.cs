@@ -400,6 +400,10 @@ namespace GearFoundry
 							
 				if(Core.WorldFilter[mOpenContainer.ContainerGUID] == null) {return;}				
 				if(Core.WorldFilter[mOpenContainer.ContainerGUID].Name.Contains("Storage")) {return;}
+				if(Core.WorldFilter[mOpenContainer.ContainerGUID].Name.ToLower().Contains("pack") ||
+				   Core.WorldFilter[mOpenContainer.ContainerGUID].Name.ToLower().Contains("sack") ||
+				   Core.WorldFilter[mOpenContainer.ContainerGUID].Name.ToLower().Contains("pouch")) {return;}
+				
 				//UNDONE: Process DeadMes?
 				if(Core.WorldFilter[mOpenContainer.ContainerGUID].Name.Contains(Core.CharacterFilter.Name)){ItemExclusionList.Add(mOpenContainer.ContainerGUID); return;}
 
