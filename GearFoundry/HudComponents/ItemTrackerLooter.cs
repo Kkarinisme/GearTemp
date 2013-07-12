@@ -455,9 +455,9 @@ namespace GearFoundry
 			try
 			{
 				//Check every 300 ms
-				if((DateTime.Now - mOpenContainer.LastCheck).TotalMilliseconds < 300) {return;}	
+				if((DateTime.Now - mOpenContainer.LastCheck).TotalMilliseconds < 100) {return;}	
 				//if it's been at it 5s, it's not happening
-				if((DateTime.Now - mOpenContainer.LootingStarted).TotalSeconds > 3) {UnlockContainer();}
+				if((DateTime.Now - mOpenContainer.LootingStarted).TotalSeconds > 1000) {UnlockContainer();}
         		//ID function must clean these out to unlock container.  This will hold it open until all IDs complete.
 				if(mOpenContainer.ContainerIOs.Count > 0)
 				{

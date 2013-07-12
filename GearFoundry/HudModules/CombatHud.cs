@@ -25,7 +25,6 @@ namespace GearFoundry
 		public DateTime CombatHudLastUpdate = DateTime.MinValue;
 		
 		private HudView CombatHudView = null;
-		private HudFixedLayout CombatHudLayout = null;
 		private HudTabView CombatHudTabView = null;
 		private HudFixedLayout CombatHudMainTab = null;
 		private HudFixedLayout CombatHudSettingsTab = null;
@@ -127,7 +126,6 @@ namespace GearFoundry
 				DisposeCombatHudMainTab();
 				DisposeCombatHudSettingsTab();
 				CombatHudTabView.OpenTabChange -= CombatHudTabView_OpenTabChange;
-				CombatHudLayout.Dispose();
 				CombatHudTabView.Dispose();
 				CombatHudMainTab.Dispose();
 				CombatHudSettingsTab.Dispose();
@@ -138,11 +136,8 @@ namespace GearFoundry
 				if(gtSettings.bCombatHudMinimal){CombatHudView.UserResizeable = false;}
 				else{CombatHudView.UserResizeable = true;}			
 				
-				CombatHudLayout = new HudFixedLayout();
-				CombatHudView.Controls.HeadControl = CombatHudLayout;
-				
 				CombatHudTabView = new HudTabView();
-				CombatHudLayout.AddControl(CombatHudTabView, new Rectangle(0,0, CombatHudView.Width, CombatHudView.Height));
+				CombatHudView.Controls.HeadControl = CombatHudTabView;
 				
 				CombatHudMainTab = new HudFixedLayout();
 				CombatHudTabView.AddTab(CombatHudMainTab, "GearTactician");
