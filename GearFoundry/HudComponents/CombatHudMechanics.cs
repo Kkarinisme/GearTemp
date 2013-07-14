@@ -496,7 +496,9 @@ namespace GearFoundry
 		{
 			try
 			{
-				int PossibleMobID = Convert.ToInt32(pMsg["object"]);
+				int PossibleMobID = 0;
+				try {PossibleMobID = Convert.ToInt32(pMsg["object"]);}catch{}
+				if(PossibleMobID == 0){return;}
         		if(Core.WorldFilter[PossibleMobID].ObjectClass == ObjectClass.Monster)
 				{
         			if(CombatHudMobTrackingList.Count == 0)
@@ -558,7 +560,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				if((DateTime.Now - SpellCastBuffer.First().CompleteTime).TotalMilliseconds < 2000) {return;}
+				if((DateTime.Now - SpellCastBuffer.First().CompleteTime).TotalMilliseconds < 1500) {return;}
 				else
 				{
 					Core.RenderFrame -= RenderFrame_CombatActionCompleteDelay;	
@@ -646,6 +648,7 @@ namespace GearFoundry
 				{	
 					if(SpellCastBuffer.Count != 0 && CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
 					{
+						WriteToChat("Caught spell failure");
 						SpellCastBuffer.First().AutoDequeue = true;
 					}
 					return;

@@ -91,9 +91,9 @@ namespace GearFoundry
     			MaidTradeFilledSalvage.Hit -= MaidTradeFilledSalvage_Hit;
     			MaidTradeParialSalvage.Hit -= MaidTradeParialSalvage_Hit;
     			MaidSalvageCombine.Hit -= MaidSalvageCombine_Hit;
-    			MaidCannibalizeInventory.Hit -= MaidCannibalizeInventory_Hit;
+    			if(MaidCannibalizeInventory != null) {MaidCannibalizeInventory.Hit -= MaidCannibalizeInventory_Hit;}
     			
-    			if(MaidCannibalizeEnable != null){MaidCannibalizeInventory.Dispose();}
+    			if(MaidCannibalizeInventory != null){MaidCannibalizeInventory.Dispose();}
     			    			
     			MaidCannibalizeEnable.Dispose();
     			MaidSalvageCombine.Dispose();
@@ -113,10 +113,21 @@ namespace GearFoundry
     		{
     			WriteToChat("This will eat your stuff.  You were warned.");
     			
+    			if(MaidCannibalizeEnable.Checked)
+    			{
+    			
     				MaidCannibalizeInventory = new HudButton();
     				MaidCannibalizeInventory.Text = "Cannibalize Inventory";
     				MaidTabLayout.AddControl(MaidCannibalizeInventory, new Rectangle(0,210,150,20));
     				MaidCannibalizeInventory.Hit += MaidCannibalizeInventory_Hit;
+    			}
+    			else
+    			{
+    				  if(MaidCannibalizeInventory != null) {MaidCannibalizeInventory.Hit -= MaidCannibalizeInventory_Hit;}
+    			
+    				  if(MaidCannibalizeInventory != null){MaidCannibalizeInventory.Dispose();}
+    				
+    			}
 
     		}catch(Exception ex){LogError(ex);}
     	}
@@ -454,24 +465,30 @@ namespace GearFoundry
 			{
 				WriteToChat("Checking " + MaidCannibalizeQueue.First().Name + " for destruction.");
 				IdqueueAdd(MaidCannibalizeQueue.First().Id);
-				ItemIDListenList.Add(MaidCannibalizeQueue.First().Id);
+				LOList.Add(new LootObject(MaidCannibalizeQueue.First()));
 				MaidCannibalizeProcessList.Add(MaidCannibalizeQueue.Dequeue().Id);
 				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void EvaluateCannibalizeMatches(LootObject IOItem)
+		private void EvaluateCannibalizeMatches(int id)
 		{
 			try
-			{
-				//Keep those duplicates out
-				if(ProcessItemsList.Any(x => x.Id == IOItem.Id)) {return;}
+			{				
+				LootObject IOItem = LOList.Find(x => x.Id == id);
 				
 				if(IOItem.IOR != IOResult.rule && !IOItem.BValue(BoolValueKey.Retained))
 				{
 					IOItem.IOR = IOResult.salvage;
-					ProcessItemsList.Add(IOItem);
-					ItemExclusionList.Add(IOItem.Id);
+					IOItem.ProcessList = true;
+					IOItem.ProcessAction = IAction.Salvage;
+					
+					if(GISettings.AutoProcess)
+					{
+						IOItem.Process = true;
+						ToggleInspectorActions(2);
+						InitiateInspectorActionSequence();
+					}
 					UpdateItemHud();
 				}	
 				return;

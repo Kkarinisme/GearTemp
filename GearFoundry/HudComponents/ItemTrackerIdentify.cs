@@ -46,10 +46,12 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void CheckItemForMatches(LootObject IOItem)
+		private void CheckItemForMatches(int loId)
 		{
 			try
 			{
+				LootObject IOItem = LOList.Find(x => x.Id == loId);
+				
 				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
 				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
 				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
@@ -61,20 +63,19 @@ namespace GearFoundry
 				if(MaidCannibalizeProcessList.Count > 0 && MaidCannibalizeProcessList.Contains(IOItem.Id))
 				{
 					MaidCannibalizeProcessList.RemoveAll(x => x == IOItem.Id);
-					EvaluateCannibalizeMatches(IOItem);
+					EvaluateCannibalizeMatches(IOItem.Id);
 					return;
 				}
 				
-				//Clean out no matches.
 				if(IOItem.IOR == IOResult.nomatch)
 				{
-					if(mOpenContainer.ContainerIOs.Any(x => x.Id == IOItem.Id)) {mOpenContainer.ContainerIOs.RemoveAll(x => x.Id == IOItem.Id);}
+					return;
 				}
 				else
 				{
 					if(GISettings.GSStrings) {ReportStringToChat(IOItem.GSReportString());}
 					if(GISettings.AlincoStrings){ReportStringToChat(IOItem.LinkString());}
-					EvaluateItemMatches(IOItem);
+					EvaluateItemMatches(IOItem.Id);
 				}
 								
 			}catch(Exception ex){LogError(ex);}
@@ -114,7 +115,7 @@ namespace GearFoundry
 			try
 			{
 				if(GISettings.LootByMana == 0){return;}
-				if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOverlay) == 0).Count() > 0){return;}
+				if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0).Count() == 0){return;}
 				if(IOItemMana.LValue(LongValueKey.CurrentMana) > GISettings.LootByMana)
 				{
 					IOItemMana.IOR = IOResult.manatank;

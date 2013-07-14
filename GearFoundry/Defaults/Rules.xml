@@ -503,61 +503,6 @@
     <NumSpells>0</NumSpells>
   </Rule>
   <Rule>
-    <RuleNum>12</RuleNum>
-    <Enabled>true</Enabled>
-    <Priority>1</Priority>
-    <AppliesToFlag>1</AppliesToFlag>
-    <Name>GS99 2HW</Name>
-    <NameContains></NameContains>
-    <NameNotContains></NameNotContains>
-    <Descr></Descr>
-    <ArcaneLore>0</ArcaneLore>
-    <Value>0</Value>
-    <Burden>0</Burden>
-    <Work>0</Work>
-    <WieldReqValue>0</WieldReqValue>
-    <WieldLevel>0</WieldLevel>
-    <ItemLevel>0</ItemLevel>
-    <MinArmorLevel>0</MinArmorLevel>
-    <WieldAttribute>41</WieldAttribute>
-    <MasteryType>0</MasteryType>
-    <DamageType>1,2,4,8,16,32,64,1024</DamageType>
-    <McModAttack>99</McModAttack>
-    <MeleeDef>0</MeleeDef>
-    <MagicDef>0</MagicDef>
-    <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>430,430,400,</ReqSkill>
-    <MinMax>,,,</MinMax>
-    <MSCleave>false,false,false,false</MSCleave>
-    <Coverage></Coverage>
-    <ArmorType></ArmorType>
-    <ArmorSet></ArmorSet>
-    <Unenchantable>false</Unenchantable>
-    <CloakSets></CloakSets>
-    <CloakSpells>5754,5755,5756</CloakSpells>
-    <CloakMustHaveSpell>false</CloakMustHaveSpell>
-    <Red>false</Red>
-    <Yellow>false</Yellow>
-    <Blue>false</Blue>
-    <EssMastery>0</EssMastery>
-    <EssElements></EssElements>
-    <EssLevel>0</EssLevel>
-    <EssDamageLevel>0</EssDamageLevel>
-    <EssCDLevel>0</EssCDLevel>
-    <EssCRLevel>0</EssCRLevel>
-    <EssDRLevel>0</EssDRLevel>
-    <EssCritLevel>0</EssCritLevel>
-    <EssCritDamRes>0</EssCritDamRes>
-    <FilterLegend>false</FilterLegend>
-    <FilterEpic>false</FilterEpic>
-    <FilterMajor>false</FilterMajor>
-    <FilterLvl8>false</FilterLvl8>
-    <FilterLvl7>false</FilterLvl7>
-    <FilterLvl6>false</FilterLvl6>
-    <Spells></Spells>
-    <NumSpells>0</NumSpells>
-  </Rule>
-  <Rule>
     <RuleNum>14</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
@@ -1053,61 +998,6 @@
     <NumSpells>4</NumSpells>
   </Rule>
   <Rule>
-    <RuleNum>0</RuleNum>
-    <Enabled>true</Enabled>
-    <Priority>1</Priority>
-    <AppliesToFlag>4</AppliesToFlag>
-    <Name>GS4 Cloak</Name>
-    <NameContains>Cloak</NameContains>
-    <NameNotContains></NameNotContains>
-    <Descr></Descr>
-    <ArcaneLore>0</ArcaneLore>
-    <Value>0</Value>
-    <Burden>0</Burden>
-    <Work>0</Work>
-    <WieldReqValue>0</WieldReqValue>
-    <WieldLevel>0</WieldLevel>
-    <ItemLevel>5</ItemLevel>
-    <MinArmorLevel>0</MinArmorLevel>
-    <WieldAttribute>0</WieldAttribute>
-    <MasteryType>0</MasteryType>
-    <DamageType></DamageType>
-    <McModAttack>0</McModAttack>
-    <MeleeDef>0</MeleeDef>
-    <MagicDef>0</MagicDef>
-    <WieldEnabled>false,false,false,false</WieldEnabled>
-    <ReqSkill>,,,</ReqSkill>
-    <MinMax>,,,</MinMax>
-    <MSCleave>false,false,false,false</MSCleave>
-    <Coverage></Coverage>
-    <ArmorType></ArmorType>
-    <ArmorSet></ArmorSet>
-    <Unenchantable>false</Unenchantable>
-    <CloakSets>49,50,51,83,52,55,56,59,84,85,58,60,61,76,62,63,64,65,53,67,74,75,79,66,68,69,70,71,72,54,57,77,86,73,87,88,78,80,81,82</CloakSets>
-    <CloakSpells></CloakSpells>
-    <CloakMustHaveSpell>true</CloakMustHaveSpell>
-    <Red>false</Red>
-    <Yellow>false</Yellow>
-    <Blue>false</Blue>
-    <EssMastery>0</EssMastery>
-    <EssElements></EssElements>
-    <EssLevel>0</EssLevel>
-    <EssDamageLevel>0</EssDamageLevel>
-    <EssCDLevel>0</EssCDLevel>
-    <EssCRLevel>0</EssCRLevel>
-    <EssDRLevel>0</EssDRLevel>
-    <EssCritLevel>0</EssCritLevel>
-    <EssCritDamRes>0</EssCritDamRes>
-    <FilterLegend>true</FilterLegend>
-    <FilterEpic>true</FilterEpic>
-    <FilterMajor>true</FilterMajor>
-    <FilterLvl8>true</FilterLvl8>
-    <FilterLvl7>true</FilterLvl7>
-    <FilterLvl6>true</FilterLvl6>
-    <Spells></Spells>
-    <NumSpells>0</NumSpells>
-  </Rule>
-  <Rule>
     <RuleNum>21</RuleNum>
     <Enabled>true</Enabled>
     <Priority>2</Priority>
@@ -1383,6 +1273,116 @@
     <NumSpells>1</NumSpells>
   </Rule>
   <Rule>
+    <RuleNum>0</RuleNum>
+    <Enabled>true</Enabled>
+    <Priority>1</Priority>
+    <AppliesToFlag>4</AppliesToFlag>
+    <Name>GS4 Cloak</Name>
+    <NameContains>Cloak</NameContains>
+    <NameNotContains></NameNotContains>
+    <Descr></Descr>
+    <ArcaneLore>0</ArcaneLore>
+    <Value>0</Value>
+    <Burden>0</Burden>
+    <Work>0</Work>
+    <WieldReqValue>0</WieldReqValue>
+    <WieldLevel>0</WieldLevel>
+    <ItemLevel>4</ItemLevel>
+    <MinArmorLevel>0</MinArmorLevel>
+    <WieldAttribute>0</WieldAttribute>
+    <MasteryType>0</MasteryType>
+    <DamageType></DamageType>
+    <McModAttack>0</McModAttack>
+    <MeleeDef>0</MeleeDef>
+    <MagicDef>0</MagicDef>
+    <WieldEnabled>false,false,false,false</WieldEnabled>
+    <ReqSkill>,,,</ReqSkill>
+    <MinMax>,,,</MinMax>
+    <MSCleave>false,false,false,false</MSCleave>
+    <Coverage></Coverage>
+    <ArmorType></ArmorType>
+    <ArmorSet></ArmorSet>
+    <Unenchantable>false</Unenchantable>
+    <CloakSets>49,50,51,83,52,55,56,59,84,85,58,60,61,76,62,63,64,65,53,67,74,75,79,66,68,69,70,71,72,54,57,77,86,73,87,88,78,80,81,82</CloakSets>
+    <CloakSpells>1785,5753,5331,5361,1788,1787,1784,1786,1783,5754,5755,5756,1789,10000</CloakSpells>
+    <CloakMustHaveSpell>true</CloakMustHaveSpell>
+    <Red>false</Red>
+    <Yellow>false</Yellow>
+    <Blue>false</Blue>
+    <EssMastery>0</EssMastery>
+    <EssElements></EssElements>
+    <EssLevel>0</EssLevel>
+    <EssDamageLevel>0</EssDamageLevel>
+    <EssCDLevel>0</EssCDLevel>
+    <EssCRLevel>0</EssCRLevel>
+    <EssDRLevel>0</EssDRLevel>
+    <EssCritLevel>0</EssCritLevel>
+    <EssCritDamRes>0</EssCritDamRes>
+    <FilterLegend>true</FilterLegend>
+    <FilterEpic>true</FilterEpic>
+    <FilterMajor>true</FilterMajor>
+    <FilterLvl8>true</FilterLvl8>
+    <FilterLvl7>true</FilterLvl7>
+    <FilterLvl6>true</FilterLvl6>
+    <Spells></Spells>
+    <NumSpells>0</NumSpells>
+  </Rule>
+  <Rule>
+    <RuleNum>12</RuleNum>
+    <Enabled>true</Enabled>
+    <Priority>1</Priority>
+    <AppliesToFlag>1</AppliesToFlag>
+    <Name>GS99 2HW</Name>
+    <NameContains></NameContains>
+    <NameNotContains></NameNotContains>
+    <Descr></Descr>
+    <ArcaneLore>0</ArcaneLore>
+    <Value>0</Value>
+    <Burden>0</Burden>
+    <Work>0</Work>
+    <WieldReqValue>0</WieldReqValue>
+    <WieldLevel>0</WieldLevel>
+    <ItemLevel>0</ItemLevel>
+    <MinArmorLevel>0</MinArmorLevel>
+    <WieldAttribute>41</WieldAttribute>
+    <MasteryType>0</MasteryType>
+    <DamageType>1,2,4,8,16,32,64,1024</DamageType>
+    <McModAttack>99</McModAttack>
+    <MeleeDef>0</MeleeDef>
+    <MagicDef>0</MagicDef>
+    <WieldEnabled>true,true,true,false</WieldEnabled>
+    <ReqSkill>430,420,400,</ReqSkill>
+    <MinMax>,,,</MinMax>
+    <MSCleave>false,false,false,false</MSCleave>
+    <Coverage></Coverage>
+    <ArmorType></ArmorType>
+    <ArmorSet></ArmorSet>
+    <Unenchantable>false</Unenchantable>
+    <CloakSets></CloakSets>
+    <CloakSpells>5754,5755,5756</CloakSpells>
+    <CloakMustHaveSpell>false</CloakMustHaveSpell>
+    <Red>false</Red>
+    <Yellow>false</Yellow>
+    <Blue>false</Blue>
+    <EssMastery>0</EssMastery>
+    <EssElements></EssElements>
+    <EssLevel>0</EssLevel>
+    <EssDamageLevel>0</EssDamageLevel>
+    <EssCDLevel>0</EssCDLevel>
+    <EssCRLevel>0</EssCRLevel>
+    <EssDRLevel>0</EssDRLevel>
+    <EssCritLevel>0</EssCritLevel>
+    <EssCritDamRes>0</EssCritDamRes>
+    <FilterLegend>false</FilterLegend>
+    <FilterEpic>false</FilterEpic>
+    <FilterMajor>false</FilterMajor>
+    <FilterLvl8>false</FilterLvl8>
+    <FilterLvl7>false</FilterLvl7>
+    <FilterLvl6>false</FilterLvl6>
+    <Spells></Spells>
+    <NumSpells>0</NumSpells>
+  </Rule>
+  <Rule>
     <RuleNum>30</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
@@ -1402,7 +1402,7 @@
     <WieldAttribute>0</WieldAttribute>
     <MasteryType>0</MasteryType>
     <DamageType></DamageType>
-    <McModAttack>25</McModAttack>
+    <McModAttack>35</McModAttack>
     <MeleeDef>0</MeleeDef>
     <MagicDef>0</MagicDef>
     <WieldEnabled>true,true,true,false</WieldEnabled>

@@ -501,7 +501,7 @@ namespace GearFoundry
 			{				
 				if(PortalActionList[0].fireaction)
 				{
-					if(PortalActionList[0].pending && (DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 1000)
+					if(PortalActionList[0].pending && (DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 600)
 					{
 						return;
 					}
@@ -509,7 +509,7 @@ namespace GearFoundry
 					{
 						PortalActionList[0].pending = true;
 						PortalActionList[0].StartAction = DateTime.Now;
-						Core.RenderFrame += RenderFramePortal_PeaceMode;
+						Core.Actions.SetCombatMode(CombatState.Peace);
 						return;
 					}
 					else
@@ -529,7 +529,7 @@ namespace GearFoundry
 					{	
 						PortalActionList[1].pending = true;
 						PortalActionList[1].StartAction = DateTime.Now;
-						Core.RenderFrame += RenderFramePortal_Equip;
+						PortalActionEquip();
 						return;
 					}
 					else
@@ -541,7 +541,7 @@ namespace GearFoundry
 				}
 				else if(PortalActionList[2].fireaction)
 				{
-					if(PortalActionList[2].pending && (DateTime.Now - PortalActionList[2].StartAction).TotalMilliseconds < 1000)
+					if(PortalActionList[2].pending && (DateTime.Now - PortalActionList[2].StartAction).TotalMilliseconds < 600)
 					{
 						return;
 					}
@@ -549,7 +549,7 @@ namespace GearFoundry
 					{
 						PortalActionList[2].pending = true;
 						PortalActionList[2].StartAction = DateTime.Now;
-						Core.RenderFrame += RenderFramePortal_CastMode;
+						Core.Actions.SetCombatMode(CombatState.Magic);
 						return;
 					}
 					else
@@ -568,11 +568,9 @@ namespace GearFoundry
 					else if(!PortalCastSuccess && PortalActionList[3].Retries < 3)
 					{
 						PortalActionList[3].pending = true;
-						Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
-        				Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
 						PortalActionList[3].StartAction = DateTime.Now;
 						PortalActionList[3].Retries++;
-						Core.RenderFrame += RenderFramePortal_CastSpell;
+						PortalActionsCastSpell();
 						return;
 					}	
 					else
@@ -583,6 +581,8 @@ namespace GearFoundry
 						PortalActionList[3].fireaction = false;
 						PortalActionList[3].Retries = 0;	
 						PortalCastSuccess = false;
+						Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
+    					Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
 					}
 
 				}
@@ -595,148 +595,107 @@ namespace GearFoundry
 				}
 			}catch(Exception ex){LogError(ex);}
 		}     
-        
-        private void RenderFramePortal_PeaceMode(object sender, EventArgs e)
-		{
-			try
-			{				
-
-				if((DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 100){return;}
-				else
-				{
-					Core.RenderFrame -= RenderFramePortal_PeaceMode; 
-				}
-				
-				PortalActionList[0].StartAction = DateTime.Now;
-				Core.Actions.SetCombatMode(CombatState.Peace);	
-				return;
-				
-			}catch(Exception ex){LogError(ex);}
-		}
+     
             
-        private void RenderFramePortal_Equip(object sender, EventArgs e)
+        private void PortalActionEquip()
         {
         	try
 			{	
-        		if((DateTime.Now - PortalActionList[1].StartAction).TotalMilliseconds < 100) {return;}
-				else
-        		{
-					Core.RenderFrame -= RenderFramePortal_Equip;
-					if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).Count() > 0 &&
-					   Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.MeleeWeapon && x.LongKeys.Contains((int)LongValueKey.EquippedSlots)).Count() == 0)
-					{
-						Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).First().Id,0);
-						return;
-					}
-					else
-					{
-						Core.Actions.UseItem(nOrbGuid, 0);
-						return;
-					}
+
+				if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).Count() > 0 &&
+				   Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.MeleeWeapon && x.LongKeys.Contains((int)LongValueKey.EquippedSlots)).Count() == 0)
+				{
+					Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).First().Id,0);
+					return;
 				}
-				//List in change item to flag for dequeue	
-			}catch(Exception ex){LogError(ex);}
-		}
-        
-        private void RenderFramePortal_CastMode(object sender, EventArgs e)
-		{
-			try
-			{				
-				if((DateTime.Now - PortalActionList[2].StartAction).TotalMilliseconds < 100){return;}
 				else
 				{
-					Core.RenderFrame -= RenderFramePortal_CastMode; 
+					Core.Actions.UseItem(nOrbGuid, 0);
+					return;
 				}
 					
-				PortalActionList[2].StartAction = DateTime.Now;
-				Core.Actions.SetCombatMode(CombatState.Magic);			
-				return;
-				
 			}catch(Exception ex){LogError(ex);}
 		}
         
-        private void RenderFramePortal_CastSpell(object sender, EventArgs e)
+        private void PortalActionsCastSpell()
         {
         	try
         	{
-        		if((DateTime.Now - PortalActionList[3].StartAction).TotalMilliseconds < 100) {return;}
-				else
-        		{
-					Core.RenderFrame -= RenderFramePortal_CastSpell;
+        		//Clean up listens in cast
+				Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
+    			Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
 					
-					WriteToChat("Cast Spell " + PortalActionList[3].RecallSpell.ToString());
+				WriteToChat("Cast Spell " + PortalActionList[3].RecallSpell.ToString());
 					
-					switch(PortalActionList[3].RecallSpell)
-					{
-						case RecallTypes.lifestone:
-							if(!Core.CharacterFilter.IsSpellKnown(1635))
-							{
-								PortalActionList[3].fireaction = false;
-								WriteToChat("You do not know Lifestone Recall.  Action disabled.");
-								return;
-							}
-							Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
-							Core.Actions.CastSpell(1635, Core.CharacterFilter.Id);
+				switch(PortalActionList[3].RecallSpell)
+				{
+					case RecallTypes.lifestone:
+						if(!Core.CharacterFilter.IsSpellKnown(1635))
+						{
+							PortalActionList[3].fireaction = false;
+							WriteToChat("You do not know Lifestone Recall.  Action disabled.");
 							return;
-						case RecallTypes.portal:
-							if(!Core.CharacterFilter.IsSpellKnown(2645))
-							{
-								PortalActionList[3].fireaction = false;
-								WriteToChat("You do not know Portal Recall.  Action disabled.");
-								return;
-							}
-							Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
-							Core.Actions.CastSpell(2645, Core.CharacterFilter.Id);
+						}
+						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
+						Core.Actions.CastSpell(1635, Core.CharacterFilter.Id);
+						return;
+					case RecallTypes.portal:
+						if(!Core.CharacterFilter.IsSpellKnown(2645))
+						{
+							PortalActionList[3].fireaction = false;
+							WriteToChat("You do not know Portal Recall.  Action disabled.");
 							return;
-						case RecallTypes.primaryporal:
-							if(!Core.CharacterFilter.IsSpellKnown(48))
-							{
-								PortalActionList[3].fireaction = false;
-								WriteToChat("You do not know Primary Portal Recall.  Action disabled.");
-								return;
-							}
-							Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
-							Core.Actions.CastSpell(48, Core.CharacterFilter.Id);
+						}
+						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
+						Core.Actions.CastSpell(2645, Core.CharacterFilter.Id);
+						return;
+					case RecallTypes.primaryporal:
+						if(!Core.CharacterFilter.IsSpellKnown(48))
+						{
+							PortalActionList[3].fireaction = false;
+							WriteToChat("You do not know Primary Portal Recall.  Action disabled.");
 							return;
-						case RecallTypes.summonprimary:
-							if(!Core.CharacterFilter.IsSpellKnown(157))
-							{
-								PortalActionList[3].fireaction = false;
-								WriteToChat("You do not know Summon Primary Portal I.  Action disabled.");
-								return;
-							}
-							Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
-							Core.Actions.CastSpell(157, Core.CharacterFilter.Id);
+						}
+						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
+						Core.Actions.CastSpell(48, Core.CharacterFilter.Id);
+						return;
+					case RecallTypes.summonprimary:
+						if(!Core.CharacterFilter.IsSpellKnown(157))
+						{
+							PortalActionList[3].fireaction = false;
+							WriteToChat("You do not know Summon Primary Portal I.  Action disabled.");
 							return;
-						case RecallTypes.secondaryportal:
-							if(!Core.CharacterFilter.IsSpellKnown(2647))
-							{
-								PortalActionList[3].fireaction = false;
-								WriteToChat("You do not know Secondary Portal Recall.  Action disabled.");
-								return;
-							}
-							WriteToChat("Recalled secondary");
-							Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
-							Core.Actions.CastSpell(2647, Core.CharacterFilter.Id);
+						}
+						Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
+						Core.Actions.CastSpell(157, Core.CharacterFilter.Id);
+						return;
+					case RecallTypes.secondaryportal:
+						if(!Core.CharacterFilter.IsSpellKnown(2647))
+						{
+							PortalActionList[3].fireaction = false;
+							WriteToChat("You do not know Secondary Portal Recall.  Action disabled.");
 							return;
-						case RecallTypes.summonsecondary:
-							if(!Core.CharacterFilter.IsSpellKnown(2648))
-							{
-								PortalActionList[3].fireaction = false;
-								WriteToChat("You do not know Summon Secondary Portal I.  Action disabled.");
-								return;
-							}
-							WriteToChat("Summoned secondary");
-							Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
-							Core.Actions.CastSpell(2648, Core.CharacterFilter.Id);
-							return;	
-						
-						default:
+						}
+						WriteToChat("Recalled secondary");
+						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
+						Core.Actions.CastSpell(2647, Core.CharacterFilter.Id);
+						return;
+					case RecallTypes.summonsecondary:
+						if(!Core.CharacterFilter.IsSpellKnown(2648))
+						{
+							PortalActionList[3].fireaction = false;
+							WriteToChat("You do not know Summon Secondary Portal I.  Action disabled.");
 							return;
-														
-					}
-				}
-        		
+						}
+						WriteToChat("Summoned secondary");
+						Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
+						Core.Actions.CastSpell(2648, Core.CharacterFilter.Id);
+						return;	
+					
+					default:
+						return;
+													
+				}	
         	}catch(Exception ex){LogError(ex);}
         }
         

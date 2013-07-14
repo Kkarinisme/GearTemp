@@ -24,6 +24,22 @@ namespace GearFoundry
 
 		public class LootObject
 		{
+			
+			public bool InspectList = false;
+			public bool ProcessList = false;
+			
+			public bool Exclude = false;
+			public bool Listen = false;
+			public bool ActionTarget = false;
+			public bool Move = false;
+			public bool Process = false;
+			public bool Open = false;
+			
+			public IAction ProcessAction = IAction.None;
+			
+			public DateTime LastActionTime = DateTime.MinValue;
+			
+			
 			private WorldObject wo;
 		
 			public LootObject(WorldObject obj)
@@ -1504,13 +1520,7 @@ namespace GearFoundry
 					return ", " + Math.Round((WeaponMaxDamage - (WeaponMaxDamage * WeaponVariance)), 2).ToString("0.00") + "-" + WeaponMaxDamage.ToString();
 				}
 				else {return String.Empty;}
-			}	
-
-			public string CoordsStringLink(string inputcoords)
-			{
-				return " (" + "<Tell:IIDString:" + GOARROWLINK_ID + ":" + inputcoords + ">" + inputcoords + "<\\Tell>" + ")";
 			}
-
 			
 			public string GSReportString()
 			{
@@ -1565,7 +1575,7 @@ namespace GearFoundry
 								}
 								else goto default;
 							default:
-								result = IORString() + wo.Name + CoordsStringLink(wo.Coordinates().ToString());
+								result = IORString() + wo.Name;
 								break;
 						}
 						

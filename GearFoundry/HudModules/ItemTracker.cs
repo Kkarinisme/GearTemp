@@ -23,22 +23,17 @@ namespace GearFoundry
 	{		
 
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();
-		private OpenContainer mOpenContainer = new OpenContainer();	
 		
-		private List<int> ItemExclusionList = new List<int>();
-		private List<int> ItemIDListenList = new List<int>();
 		private List<int> ModifiedIOSpells  = new List<int>();		
-		
-		private List<LootObject> ItemTrackingList = new List<LootObject>();	
-		
-		private List<LootObject> ProcessItemsList = new List<LootObject>();
  		
 		private GearInspectorSettings GISettings;
 		
+		public List<LootObject> LOList = new List<LootObject>();
 			
 		public class GearInspectorSettings
 		{
 			public bool IdentifySalvage = true;
+			public bool AutoLoot = false;
 			public bool AutoProcess = false;
 			public bool AutoDessicate = false;
 			public bool ModifiedLooting = true;
@@ -58,7 +53,11 @@ namespace GearFoundry
 		private void SubscribeItemEvents()
 		{
 			try
-			{		           	
+			{	
+				for(int i = 0; i < 10; i++)
+				{
+					InspectorActionList.Add(new PendingActions());
+				}
              	SubscribeItemTrackerLooterEvents();           	
 			}
 			catch(Exception ex){LogError(ex);}
@@ -67,10 +66,7 @@ namespace GearFoundry
 		private void UnsubscribeItemEvents()
 		{
 			try
-			{		
-				mOpenContainer = null;
-
-				
+			{						
              	UnSubscribeItemTrackerLooterEvents();         	         	
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -158,6 +154,7 @@ namespace GearFoundry
 		private HudCheckBox InspectorIdentifySalvage = null;
 		private HudCheckBox InspectorAutoAetheria = null;
 		private HudCheckBox InspectorAutoProcess = null;
+		private HudCheckBox InspectorAutoLoot = null;
 		private HudCheckBox InspectorModifiedLooting = null;
 		private HudCheckBox InspectorSalvageHighValue = null;
 		private HudCheckBox InspectorCheckForL7Scrolls = null;
@@ -193,11 +190,7 @@ namespace GearFoundry
     			ItemHudView.UserResizeable = false;
     			ItemHudView.LoadUserSettings();
     			
-    			//ItemHudLayout = new HudFixedLayout();
-    			//ItemHudView.Controls.HeadControl = ItemHudLayout;
-    			
     			ItemHudTabView = new HudTabView();
-//    			ItemHudLayout.AddControl(ItemHudTabView, new Rectangle(0,0, GISettings.ItemHudWidth, GISettings.ItemHudHeight));
     			ItemHudView.Controls.HeadControl = ItemHudTabView;
     		
     			ItemHudInspectorLayout = new HudFixedLayout();
@@ -226,7 +219,7 @@ namespace GearFoundry
         {
             try
             {
-               bool bw = Math.Abs(ItemHudView.Width - GISettings.ItemHudWidth) > 20;
+                bool bw = Math.Abs(ItemHudView.Width - GISettings.ItemHudWidth) > 20;
                 bool bh = Math.Abs(ItemHudView.Height - GISettings.ItemHudHeight) > 20;
                 if (bh || bw)
                 {
@@ -286,7 +279,9 @@ namespace GearFoundry
     			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
     			ItemHudUstList.AddColumn(typeof(HudStaticText), GISettings.ItemHudWidth - 60, null);
     			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
+    			ItemHudUstList.AddColumn(typeof(HudStaticText), 1, null);
     			ItemHudUstLayout.AddControl(ItemHudUstList, new Rectangle(0,30,GISettings.ItemHudWidth,GISettings.ItemHudHeight - 30));
+    			
     			
     			ItemHudUstList.Click += ItemHudUstList_Click;
     			ItemHudUstButton.Hit += ItemHudUstButton_Hit;
@@ -310,101 +305,38 @@ namespace GearFoundry
     				return;
     			}
     			
-    			WriteToChat("Prosessing Queue.");
-    			
-    			if(Core.Actions.CombatMode != CombatState.Peace)
-				{
-    				PendingActions peaceaction = new PendingActions();
-		    		peaceaction.Action = IAction.PeaceMode;
-    				InspectorActionQueue.Enqueue(peaceaction);
-    			}
-    			
-    			foreach(LootObject proc in  ProcessItemsList)
+    			foreach(LootObject lo in  LOList.FindAll(x => x.ProcessList).ToList())
     			{
-     				PendingActions nextaction = new PendingActions();
-    				nextaction.LootItem = proc;
-	    				
-	    			if(proc.IOR == IOResult.salvage)
-	    			{
-	    				nextaction.Action = IAction.SalvageItem;
-    					InspectorActionQueue.Enqueue(nextaction);
-	    			}
-	    			else if(proc.IOR == IOResult.dessicate)
-	    			{
-	    				nextaction.Action = IAction.Desiccate;
-    					InspectorActionQueue.Enqueue(nextaction);
-	    			}
-	    			else if(proc.IOR == IOResult.manatank)
-	    			{
-	    				nextaction.Action = IAction.ManaStone;
-    					InspectorActionQueue.Enqueue(nextaction);
-	    			}
-	    			else if(proc.ObjectClass == ObjectClass.Key)
-	    			{
-	    				nextaction.Action = IAction.RingKey;
-    					InspectorActionQueue.Enqueue(nextaction);
-	    			}		
+    				lo.Process = true;
     			}
-    			    			
+    			ToggleInspectorActions(2);
     			InitiateInspectorActionSequence();
+    			WriteToChat("Prosessing List.");
     			
     		}catch(Exception ex){LogError(ex);}
     	}    
     	
+    	HudList.HudListRowAccessor UstListAcessor = null;
     	private void ItemHudUstList_Click(object sender, int row, int col)
     	{
     		try
     		{
-    			//Salvage
+    			UstListAcessor = ItemHudUstList[row];
+    			LootObject lo = LOList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)UstListAcessor[3]).Text));
     			if(col == 0)
-    			{	
-    				if(InspectorActionQueue.Any(x => x.LootItem.Id == ProcessItemsList.ElementAt(row).Id))
-    				{
-    					return;
-    				}
-    				else
-    				{
-	    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.salvage)
-	    				{
-	    					PendingActions nextaction = new PendingActions();
-	    					nextaction.Action = IAction.SalvageItem;
-	    					nextaction.LootItem = ProcessItemsList.ElementAt(row);
-	    					InspectorActionQueue.Enqueue(nextaction);
-	    				}
-	    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.dessicate)
-	    				{
-	    					PendingActions nextaction = new PendingActions();
-	    					nextaction.Action = IAction.Desiccate;
-	    					nextaction.LootItem = ProcessItemsList.ElementAt(row);
-	    					InspectorActionQueue.Enqueue(nextaction);
-	    				}
-	    				if(ProcessItemsList.ElementAt(row).IOR == IOResult.manatank)
-	    				{
-	    					PendingActions nextaction = new PendingActions();
-	    					nextaction.Action = IAction.ManaStone;
-	    					nextaction.LootItem = ProcessItemsList.ElementAt(row);
-	    					InspectorActionQueue.Enqueue(nextaction);
-	    				}
-	    				if(ProcessItemsList.ElementAt(row).ObjectClass == ObjectClass.Key)
-	    				{
-	    					PendingActions nextaction = new PendingActions();
-	    					nextaction.Action = IAction.RingKey;
-	    					nextaction.LootItem = ProcessItemsList.ElementAt(row);
-	    					InspectorActionQueue.Enqueue(nextaction);
-	    				}
-	    				if(!ActionsPending) {InitiateInspectorActionSequence();}
-    				}
+    			{  
+    				lo.Process = true;
+    				ToggleInspectorActions(2);
+	    			InitiateInspectorActionSequence();
     			}
-    			//Report
     			if(col == 1)
     			{
-    				if(GISettings.GSStrings) {HudToChat(ProcessItemsList.ElementAt(row).GSReportString(), 1);}
-    				if(GISettings.AlincoStrings) {HudToChat(ProcessItemsList.ElementAt(row).LinkString(), 1);}
+    				if(GISettings.GSStrings) {HudToChat(lo.GSReportString(), 1);}
+    				if(GISettings.AlincoStrings){HudToChat(lo.LinkString(), 1);}
     			}
-    			//Remove
     			if(col == 2)
-    			{
-    				ProcessItemsList.RemoveAt(row);
+    			{    				
+    				lo.ProcessList = false;
     			}
     			
     			UpdateItemHud();
@@ -438,69 +370,71 @@ namespace GearFoundry
     			InspectorIdentifySalvage = new HudCheckBox();
     			
     			InspectorIdentifySalvage.Text = "Ident. Salv.";
-                ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0, 18, 100, 16));
+                ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0, 17, 100, 16));
     			InspectorIdentifySalvage.Checked = GISettings.IdentifySalvage;
+    			
+    			InspectorAutoLoot = new HudCheckBox();
+    			InspectorAutoLoot.Text = "Auto Pickup";
+                ItemHudSettingsLayout.AddControl(InspectorAutoLoot, new Rectangle(0, 34, 100, 16));
+    			InspectorAutoLoot.Checked = GISettings.AutoLoot;
     			
     			InspectorAutoProcess = new HudCheckBox();
     			InspectorAutoProcess.Text = "Auto Proc.";
-                ItemHudSettingsLayout.AddControl(InspectorAutoProcess, new Rectangle(0, 36, 100, 16));
+                ItemHudSettingsLayout.AddControl(InspectorAutoProcess, new Rectangle(0, 51, 100, 16));
     			InspectorAutoProcess.Checked = GISettings.AutoProcess;
     						
     			InspectorAutoAetheria = new HudCheckBox();
     			InspectorAutoAetheria.Text = "Des. J. Aeth.";
-                ItemHudSettingsLayout.AddControl(InspectorAutoAetheria, new Rectangle(0, 54, 100, 16));
+                ItemHudSettingsLayout.AddControl(InspectorAutoAetheria, new Rectangle(0, 68, 100, 16));
     			InspectorAutoAetheria.Checked = GISettings.AutoDessicate;
     			
     			InspectorCheckForL7Scrolls = new HudCheckBox();
     			InspectorCheckForL7Scrolls.Text = "Unk. L7 Spl.";
-                ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0, 72, 100, 16));
+                ItemHudSettingsLayout.AddControl(InspectorCheckForL7Scrolls, new Rectangle(0, 85, 100, 16));
     			InspectorCheckForL7Scrolls.Checked = GISettings.CheckForL7Scrolls;  			
     			
     			InspectorLootByValue = new HudTextBox();
-    			ItemHudSettingsLayout.AddControl(InspectorLootByValue, new Rectangle(0,90,45,16));
+    			ItemHudSettingsLayout.AddControl(InspectorLootByValue, new Rectangle(0,102,45,16));
     			InspectorLootByValue.Text = GISettings.LootByValue.ToString();
     			
     			InspectorHudValueLabel = new HudStaticText();
                 InspectorHudValueLabel.FontHeight = nmenuFontHeight;
     			InspectorHudValueLabel.Text = "Value";
-    			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,90,100,16));
+    			ItemHudSettingsLayout.AddControl(InspectorHudValueLabel, new Rectangle(50,102,100,16));
     			
     			InspectorSalvageHighValue = new HudCheckBox();
     			InspectorSalvageHighValue.Text = "Salv. Value";
-    			ItemHudSettingsLayout.AddControl(InspectorSalvageHighValue, new Rectangle(0,108,100,16));
+    			ItemHudSettingsLayout.AddControl(InspectorSalvageHighValue, new Rectangle(0,119,100,16));
     			InspectorSalvageHighValue.Checked = GISettings.SalvageHighValue;
     					
     			InspectorHudManaLabel = new HudStaticText();
                 InspectorHudManaLabel.FontHeight = nmenuFontHeight;
     			InspectorHudManaLabel.Text = "ManaTanks";
-    			ItemHudSettingsLayout.AddControl(InspectorHudManaLabel, new Rectangle(50,126,100,16));		
+    			ItemHudSettingsLayout.AddControl(InspectorHudManaLabel, new Rectangle(50,136,100,16));		
     			
     			InspectorLootByMana = new HudTextBox();
-    			ItemHudSettingsLayout.AddControl(InspectorLootByMana, new Rectangle(0,126,45,16));
+    			ItemHudSettingsLayout.AddControl(InspectorLootByMana, new Rectangle(0,136,45,16));
     			InspectorLootByMana.Text = GISettings.LootByMana.ToString();
     			
     			InspectorRenderMini = new HudCheckBox();
     			InspectorRenderMini.Text = "R. Mini.";
-    			ItemHudSettingsLayout.AddControl(InspectorRenderMini, new Rectangle(0,144,100,16));
+    			ItemHudSettingsLayout.AddControl(InspectorRenderMini, new Rectangle(0,153,100,16));
     			InspectorRenderMini.Checked = GISettings.RenderMini;
     			
     			InspectorGSStrings = new HudCheckBox();
     			InspectorGSStrings.Text = "GS Str.";
-    			ItemHudSettingsLayout.AddControl(InspectorGSStrings, new Rectangle(0,162,100,16));
+    			ItemHudSettingsLayout.AddControl(InspectorGSStrings, new Rectangle(0,170,100,16));
     			InspectorGSStrings.Checked = GISettings.GSStrings;
     			
     			InspectorAlincoStrings = new HudCheckBox();
     			InspectorAlincoStrings.Text = "Alinco Str.";
-    			ItemHudSettingsLayout.AddControl(InspectorAlincoStrings, new Rectangle(0,180,100,16));
+    			ItemHudSettingsLayout.AddControl(InspectorAlincoStrings, new Rectangle(0,187,100,16));
     			InspectorAlincoStrings.Checked = GISettings.AlincoStrings;
-    			
-    			
-    			
-    			
-    			
+    				
     			InspectorIdentifySalvage.Change += InspectorIdentifySalvage_Change;
     			InspectorAutoAetheria.Change += InspectorAutoAetheria_Change;
     			InspectorAutoProcess.Change += InspectorAutoProcess_Change;
+    			InspectorAutoLoot.Change += InspectorAutoLoot_Change;
     			InspectorModifiedLooting.Change += InspectorModifiedLooting_Change;
     			InspectorCheckForL7Scrolls.Change += InspectorCheckForL7Scrolls_Change;
     			InspectorLootByValue.LostFocus += InspectorLootByValue_LostFocus;
@@ -515,9 +449,6 @@ namespace GearFoundry
    
     		}catch(Exception ex){LogError(ex);}
     	}
-    	
-//    	    			InspectorGSStrings.Change += InspectorGSStrings_Change;
-//    			InspectorAlincoStrings.Change += InspectorAlincoStrings_Change;
     			
     	private void InspectorGSStrings_Change(object sender, System.EventArgs e)
     	{
@@ -611,6 +542,15 @@ namespace GearFoundry
 				GearInspectorReadWriteSettings(false);    			
     		}catch(Exception ex){LogError(ex);}
     	}
+    	
+    	private void InspectorAutoLoot_Change(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			GISettings.AutoLoot = InspectorAutoLoot.Checked;
+				GearInspectorReadWriteSettings(false);    			
+    		}catch(Exception ex){LogError(ex);}
+    	}
     	    	
     	private void InspectorModifiedLooting_Change(object sender, System.EventArgs e)
     	{
@@ -644,8 +584,12 @@ namespace GearFoundry
     			InspectorLootByValue.LostFocus -= InspectorLootByValue_LostFocus;
     			InspectorLootByMana.LostFocus -= InspectorLootByMana_LostFocus;
     			InspectorSalvageHighValue.Change -= InspectorSalvageHighValue_Change;
+    			InspectorGSStrings.Change -= InspectorGSStrings_Change;
+    			InspectorAlincoStrings.Change -= InspectorAlincoStrings_Change;
+    			InspectorAutoLoot.Change -= InspectorAutoLoot_Change;
     			
-    			
+    			   			
+    			InspectorAutoLoot.Dispose();
     			InspectorIdentifySalvage.Dispose();
     			InspectorAutoAetheria.Dispose();
     			InspectorAutoProcess.Dispose();
@@ -655,14 +599,14 @@ namespace GearFoundry
     			InspectorLootByValue.Dispose();
     			InspectorHudManaLabel.Dispose();
     			InspectorHudValueLabel.Dispose();
+    			InspectorGSStrings.Dispose();
+    			InspectorAlincoStrings.Dispose();
     			  			
     			InspectorSettingsTab = false;
     			
     		}catch(Exception ex){LogError(ex);}
     	}
-    	
-    	
-    	
+    	   	
     	private void RenderItemHudInspectorTab()
     	{
     		try
@@ -673,6 +617,7 @@ namespace GearFoundry
 				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
 				ItemHudInspectorList.AddColumn(typeof(HudStaticText), GISettings.ItemHudWidth - 60, null);
 				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
+				ItemHudInspectorList.AddColumn(typeof(HudStaticText), 1, null);
 				
 				ItemHudInspectorList.Click += (sender, row, col) => ItemHudInspectorList_Click(sender, row, col);	
 
@@ -710,96 +655,81 @@ namespace GearFoundry
     		}	
     		catch(Exception ex){LogError(ex);}
     	}
-    		
-    	//TODO:  Need to add a 4th column to lists with GUIDs in them to prevent the hud list from desynching with the tracking list
-    	//(minor irritation)  Currently resolved on any update to the hud.
+    		    	
+    	HudList.HudListRowAccessor InspectorListRow = null;
     	private void ItemHudInspectorList_Click(object sender, int row, int col)
     	{
     		try
 			{
+    			InspectorListRow = ItemHudInspectorList[row];
+    			LootObject lo = LOList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)InspectorListRow[3]).Text));  //(HudStaticText)CombatHudRow[11]).Text
     			if(col == 0)
-    			{  	
-    				try
-    				{
-	    				if(!InspectorActionQueue.Any(x => x.LootItem.Id == ItemTrackingList.ElementAt(row).Id))
-	    				{
-		    				if(Core.Actions.CombatMode != CombatState.Peace)
-							{
-		    					PendingActions peaceaction = new PendingActions();
-				    			peaceaction.Action = IAction.PeaceMode;
-		    					InspectorActionQueue.Enqueue(peaceaction);
-							}
-		    				
-		    				PendingActions nextaction = new PendingActions();
-				    		nextaction.Action = IAction.MoveItem;
-				    		nextaction.LootItem = ItemTrackingList.ElementAt(row);
-		    				InspectorActionQueue.Enqueue(nextaction);
-		    				
-		    				if(!ActionsPending) {InitiateInspectorActionSequence();}
-	    				
-    					}
-    					else
-    					{
-	    					return;
-    					}
-    				//Empty catch will eliminate the slow list update causing exceptions when clicked.  TODO:  Better solution with the item ID stored in the hud list.	
-    				}catch{}
+    			{  
+    				lo.Move = true; 
+    				ToggleInspectorActions(1);
+	    			InitiateInspectorActionSequence();
     			}
     			if(col == 1)
     			{
-    				if(GISettings.GSStrings) {HudToChat(ItemTrackingList[row].GSReportString(), 1);}
-    				if(GISettings.AlincoStrings){HudToChat(ItemTrackingList[row].LinkString(), 1);}
+    				if(GISettings.GSStrings) {HudToChat(lo.GSReportString(), 1);}
+    				if(GISettings.AlincoStrings){HudToChat(lo.LinkString(), 1);}
     			}
     			if(col == 2)
     			{    				
-    				ItemExclusionList.Add(ItemTrackingList[row].Id);
-    				ItemTrackingList.RemoveAt(row);
+    				lo.InspectList = false;
     			}
 				UpdateItemHud();
 			}
 			catch (Exception ex) { LogError(ex); }	
     	}
     		
+    	LootObject LOListAcessor = null;
 	    private void UpdateItemHud()
 	    {  	
 	    	try
 	    	{    
-	    		if(InspectorTab)
+	    		if(InspectorTab){ItemHudInspectorList.ClearRows();}
+	    		if(InspectorUstTab){ItemHudUstList.ClearRows();}
+	    		
+	    		for(int i = LOList.Count - 1; i >= 0; i--)
 	    		{
-		    		ItemHudInspectorList.ClearRows();   	    		
-		    	    foreach(LootObject item in ItemTrackingList)
-		    	    {
-		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();	
-		    	    	((HudPictureBox)ItemHudListRow[0]).Image = item.Icon + 0x6000000;
-		    	    	if(GISettings.RenderMini){((HudStaticText)ItemHudListRow[1]).Text = item.MiniIORString() + item.TruncateName();}
-		    	    	else{((HudStaticText)ItemHudListRow[1]).Text = item.IORString() + item.Name;}
-                        ((HudStaticText)ItemHudListRow[1]).FontHeight = nitemFontHeight;
-		    	    	if(item.IOR == IOResult.trophy) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Wheat;}
-		    	    	if(item.IOR == IOResult.salvage) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleVioletRed;}
-		    	    	if(item.IOR == IOResult.val) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleGoldenrod;}
-		    	    	if(item.IOR == IOResult.spell) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Lavender;}
-		    	    	if(item.IOR == IOResult.rule)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.LightGreen;}
-		    	    	if(item.IOR == IOResult.rare)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.HotPink;}
-		    	    	if(item.IOR == IOResult.manatank)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.CornflowerBlue;}
-						((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;
-		    	    }
-	    		}
-	    		if(InspectorUstTab)
-	    		{
-	    			ItemHudUstList.ClearRows();
-	    			foreach(LootObject ustitem in ProcessItemsList)
+	    			LOListAcessor = LOList[i];
+	    			if(InspectorTab && LOListAcessor.InspectList)
 	    			{
+		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();	
+		    	    	((HudPictureBox)ItemHudListRow[0]).Image = LOListAcessor.Icon + 0x6000000;
+		    	    	if(GISettings.RenderMini){((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.MiniIORString() + LOListAcessor.TruncateName();}
+		    	    	else{((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.IORString() + LOListAcessor.Name;}
+                        ((HudStaticText)ItemHudListRow[1]).FontHeight = nitemFontHeight;
+		    	    	if(LOListAcessor.IOR == IOResult.trophy) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Wheat;}
+		    	    	if(LOListAcessor.IOR == IOResult.salvage) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleVioletRed;}
+		    	    	if(LOListAcessor.IOR == IOResult.val) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.PaleGoldenrod;}
+		    	    	if(LOListAcessor.IOR == IOResult.spell) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Lavender;}
+		    	    	if(LOListAcessor.IOR == IOResult.rule)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.LightGreen;}
+		    	    	if(LOListAcessor.IOR == IOResult.rare)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.HotPink;}
+		    	    	if(LOListAcessor.IOR == IOResult.manatank)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.CornflowerBlue;}
+						((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;
+						((HudStaticText)ItemHudListRow[3]).Text = LOListAcessor.Id.ToString();
+	    			}
+	    			
+	    			if(InspectorUstTab && LOListAcessor.ProcessList)
+		    		{
 	    				ItemHudListRow = ItemHudUstList.AddRow();
-	    				if(ustitem.IOR == IOResult.salvage) {((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;}
-	    				else if(ustitem.IOR == IOResult.dessicate) {((HudPictureBox)ItemHudListRow[0]).Image = ItemDesiccantIcon;}
-	    				else if(ustitem.IOR == IOResult.manatank) {((HudPictureBox)ItemHudListRow[0]).Image = ItemManaStoneIcon;}
-	    				else {((HudPictureBox)ItemHudListRow[0]).Image = ustitem.Icon;}
-	    				if(GISettings.RenderMini) {((HudStaticText)ItemHudListRow[1]).Text = ustitem.MiniIORString() + ustitem.TruncateName();}
-	    				else{((HudStaticText)ItemHudListRow[1]).Text = ustitem.IORString() + ustitem.Name;}
+	    				if(LOListAcessor.ProcessAction == IAction.Salvage) {((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;}
+	    				else if(LOListAcessor.ProcessAction == IAction.Desiccate) {((HudPictureBox)ItemHudListRow[0]).Image = ItemDesiccantIcon;}
+	    				else if(LOListAcessor.ProcessAction == IAction.ManaStone) {((HudPictureBox)ItemHudListRow[0]).Image = ItemManaStoneIcon;}
+	    				else {((HudPictureBox)ItemHudListRow[0]).Image = LOListAcessor.Icon;}
+	    				if(GISettings.RenderMini) {((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.MiniIORString() + LOListAcessor.TruncateName();}
+	    				else{((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.IORString() + LOListAcessor.Name;}
                         ((HudStaticText)ItemHudListRow[1]).FontHeight = nmenuFontHeight;
                         ((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;	
-	    			}
-	    		}	
+                        ((HudStaticText)ItemHudListRow[3]).Text = LOListAcessor.Id.ToString();
+		    		}
+	    			
+	    			
+	    	    }
+	   
+	
 	    	}catch(Exception ex){LogError(ex);}
 	    	
 	    }

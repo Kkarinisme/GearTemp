@@ -92,12 +92,8 @@ namespace GearFoundry
 				
 				CombatHudView.LoadUserSettings();
 				
-				//CombatHudLayout = new HudFixedLayout();
-				//CombatHudView.Controls.HeadControl = CombatHudLayout;
-				
 				CombatHudTabView = new HudTabView();
 				CombatHudView.Controls.HeadControl = CombatHudTabView;
-				//CombatHudLayout.AddControl(CombatHudTabView, new Rectangle(0,0, CombatHudView.Width, CombatHudView.Height));
 				
 				CombatHudMainTab = new HudFixedLayout();
 				CombatHudTabView.AddTab(CombatHudMainTab, "GearTactician");

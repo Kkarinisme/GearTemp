@@ -20,32 +20,83 @@ namespace GearFoundry
 	public partial class PluginCore
 	{ 		
 		private List<int> CombineSalvageWOList = new List<int>();
-		private Queue<PendingActions> InspectorActionQueue = new Queue<PendingActions>();
+		private List<PendingActions> InspectorActionList = new List<PendingActions>();
+		
 		private System.Windows.Forms.Timer InspectorActionTimer = new System.Windows.Forms.Timer();
 	
 		
 		public class PendingActions
 		{
-			public IAction Action = IAction.DeQueue;
-			public LootObject LootItem = null;
+			public bool fireaction = false;
 			public bool pending = false;
 			public DateTime StartAction = DateTime.MinValue;
 		}
 		
-			
 		public enum IAction
 		{
-			PeaceMode,
-			OpenContainer,
-			MoveItem,
-			SalvageItem,			
-			CombineSalvage,
-			ManaStone,
+			None,
 			Desiccate,
-			RingKey,
-			DeQueue
+			Ring,
+			Salvage,
+			Combine,
+			Read,
+			ManaStone
 		}
 		
+		private void ToggleInspectorActions(int toggle)
+		{
+			try
+			{
+				switch(toggle)
+				{
+					//Disable all
+					case 0:
+						for(int i = 0; i < InspectorActionList.Count; i++)
+						{
+							InspectorActionList[i].fireaction = false;
+						}
+						return;
+					//Peace then Move
+					case 1:
+						InspectorActionList[0].fireaction = true;
+						InspectorActionList[2].fireaction = true;
+						return;
+					//Peace, then process
+					case 2:
+						InspectorActionList[0].fireaction = true;
+						if(LOList.Any(x => x.ProcessAction == IAction.Read && x.Process))
+						{
+							InspectorActionList[3].fireaction = true;
+						}
+						if(LOList.Any(x => x.ProcessAction == IAction.Desiccate && x.Process))
+						{
+							InspectorActionList[4].fireaction = true;
+						}
+						if(LOList.Any(x => x.ProcessAction == IAction.ManaStone && x.Process))
+						{
+							InspectorActionList[5].fireaction = true;
+						}
+						if(LOList.Any(x => x.ProcessAction == IAction.Ring && x.Process))
+						{
+							InspectorActionList[6].fireaction = true;
+						}
+						if(LOList.Any(x => x.ProcessAction == IAction.Salvage && x.Process))
+						{
+							InspectorActionList[7].fireaction = true;
+						}
+						if(LOList.Any(x => x.ProcessAction == IAction.Combine && x.Process))
+						{
+							InspectorActionList[8].fireaction = true;
+						}
+				
+						return;
+						
+						
+				}
+			}catch(Exception ex){LogError(ex);}
+
+		}
+				
 		private bool ActionsPending = false;
 		private void InitiateInspectorActionSequence()
 		{
@@ -54,23 +105,12 @@ namespace GearFoundry
 				if(!ActionsPending)
 				{
 					ActionsPending = true;
-					InspectorActionTimer.Interval = 100;
+					InspectorActionTimer.Interval = 150;
 					InspectorActionTimer.Start();
 					
 					InspectorActionTimer.Tick += InspectorActionInitiator;
 					return;
-				}
-				else
-				{
-					if(InspectorActionQueue.Count > 0){return;}
-					else
-					{
-						ActionsPending = false;
-						InspectorActionTimer.Tick -= InspectorActionInitiator;
-						InspectorActionTimer.Stop();
-						return;
-					}
-				}				
+				}			
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -86,314 +126,406 @@ namespace GearFoundry
 		{
 			try
 			{
-
-				if(ActionsPending && InspectorActionQueue.Count == 0)
+				//Peace Mode
+				if(InspectorActionList[0].fireaction)
 				{
-					ActionsPending = false;
-					InspectorActionTimer.Tick -= InspectorActionInitiator;
-					InspectorActionTimer.Stop();				
-					return;
-				}
-				
-				if(Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count() == 101)
-				{
-					ActionsPending = false;
-					InspectorActionTimer.Tick -= InspectorActionInitiator;
-					InspectorActionTimer.Stop();
-					InspectorActionQueue.Clear();
-					WriteToChat("You are out of space in your main pack.  Looting disabled.");
-					return;
-				}
-								
-				//this will restart the action attempt after 2 seconds if it fails.
-				if(InspectorActionQueue.First().pending && InspectorActionQueue.First().Action != IAction.DeQueue)
-				{
-					if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalSeconds < 2)	{return;}
-				}
-
-				InspectorActionQueue.First().StartAction = DateTime.Now;
-				InspectorActionQueue.First().pending = true;
-				
-				if((InspectorActionQueue.First().Action == IAction.SalvageItem || InspectorActionQueue.First().Action == IAction.CombineSalvage ||
-				   InspectorActionQueue.First().Action == IAction.Desiccate || InspectorActionQueue.First().Action == IAction.RingKey ||
-				   InspectorActionQueue.First().Action == IAction.ManaStone) && ItemTrackingList != null)
-				{
-				
-					if(ItemTrackingList.Any(x => x.Container == Core.Actions.OpenedContainer))
+					if(InspectorActionList[0].pending && (DateTime.Now - InspectorActionList[0].StartAction).TotalMilliseconds < 750)
 					{
-						if(InspectorActionQueue.Any(x => x.Action == IAction.MoveItem && x.LootItem.Container == Core.Actions.OpenedContainer))
-						{
-							InspectorActionQueue.First().StartAction = DateTime.MinValue;
-							InspectorActionQueue.First().pending = false;
-							
-							List<PendingActions> TempPendingActionsHolder = InspectorActionQueue.ToList();
-							int nextactioninex = TempPendingActionsHolder.FindIndex(x => x.Action == IAction.MoveItem && x.LootItem.Container == Core.Actions.OpenedContainer);
-							
-							InspectorActionQueue.Clear();
-													
-							InspectorActionQueue.Enqueue(TempPendingActionsHolder.ElementAt(nextactioninex));
-							TempPendingActionsHolder.RemoveAt(nextactioninex);
-							
-							foreach(PendingActions pa in TempPendingActionsHolder)
-							{
-								InspectorActionQueue.Enqueue(pa);
-							}
-						}
 						return;
 					}
+					else if(Core.Actions.CombatMode != CombatState.Peace)
+					{
+						InspectorActionList[0].pending = true;
+						InspectorActionList[0].StartAction = DateTime.Now;
+						Core.Actions.SetCombatMode(CombatState.Peace);
+						return;
+					}
+					else
+					{
+						InspectorActionList[0].pending = false;
+						InspectorActionList[0].StartAction = DateTime.MinValue;
+						InspectorActionList[0].fireaction = false;
+					}
 				}
-				
-				switch(InspectorActionQueue.First().Action)
+				//OpenContainer
+				else if(InspectorActionList[1].fireaction)
 				{
-					case IAction.DeQueue:
-						InspectorActionQueue.Dequeue();
+					if(InspectorActionList[1].pending && (DateTime.Now - InspectorActionList[1].StartAction).TotalMilliseconds < 1000)
+					{
 						return;
-					case IAction.PeaceMode:
-						Core.RenderFrame += RenderFrame_PeaceMode;
+					}
+					else if(LOList.Any(x => x.Open))
+					{
+						InspectorActionList[1].pending = true;
+						InspectorActionList[1].StartAction = DateTime.Now;
+						
+						LootObject lo = LOList.Find(x => x.Open);
+						lo.ActionTarget = true;
+						lo.LastActionTime = DateTime.Now;
+						Core.Actions.UseItem(lo.Id,0);
+						
 						return;
-					case IAction.OpenContainer:
-						Core.RenderFrame += RenderFrame_OpenContainer;
+					}
+					else
+					{
+						InspectorActionList[1].pending = false;
+						InspectorActionList[1].StartAction = DateTime.MinValue;
+						InspectorActionList[1].fireaction = false;
+					}
+					
+				}
+				//MoveObject
+				else if(InspectorActionList[2].fireaction || LOList.Any(x => x.InspectList && x.Container == Core.Actions.OpenedContainer))
+				{
+					if(Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count() == 101)
+					{
+						ActionsPending = false;
+						InspectorActionTimer.Tick -= InspectorActionInitiator;
+						InspectorActionTimer.Stop();
+						ToggleInspectorActions(0);
+						WriteToChat("You are out of space in your main pack.  Looting disabled.");
 						return;
-					case IAction.MoveItem:
-						Core.RenderFrame += RenderFrame_InspectorMoveAction;
+					}
+					
+					if(InspectorActionList[2].pending && (DateTime.Now - InspectorActionList[2].StartAction).TotalMilliseconds < 450)
+					{
 						return;
-					case IAction.Desiccate:
-						Core.RenderFrame += RenderFrame_DesiccateItem;
-						return;
-					case  IAction.ManaStone:
-						Core.RenderFrame += RenderFrame_DrainManaTank;
-						return;
-					case IAction.RingKey:
-						Core.RenderFrame += RenderFrame_RingKeys;
-						return;						
-					case IAction.SalvageItem:
-						if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").Count() == 0)
+					}
+					else if(LOList.Any(x => x.Move))
+					{
+						LootObject lo = LOList.Find(x => x.Move);
+						if(!GISettings.AutoLoot && lo.Container != Core.Actions.OpenedContainer)
 						{
-							WriteToChat("Character has no Ust.");
-							InspectorActionQueue.First().Action = IAction.DeQueue;
+							LOList.Find(x => x.Id == lo.Container).Open = true;
+							InspectorActionList[1].fireaction = true;
 							return;
 						}
-						Core.RenderFrame += RenderFrame_InspectorUseUst;
-						Core.RenderFrame += RenderFrame_InspectorSalvageAction;
-						return;
-					case IAction.CombineSalvage:
-						if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0 ||
-						   InspectorActionQueue.First().LootItem.LValue(LongValueKey.UsesRemaining) == 100)
+						else
 						{
-							InspectorActionQueue.First().Action = IAction.DeQueue;
+							InspectorActionList[2].pending = true;
+							InspectorActionList[2].StartAction = DateTime.Now;
+							
+							lo.ActionTarget = true;
+							lo.LastActionTime = DateTime.Now;
+							Core.Actions.UseItem(lo.Id,0);							
+							return;
+						}
+					}
+					else if(LOList.Any(x => x.InspectList && x.Container == Core.Actions.OpenedContainer))
+					{
+						return;
+					}
+					else
+					{
+						InspectorActionList[2].pending = false;
+						InspectorActionList[2].StartAction = DateTime.MinValue;
+						InspectorActionList[2].fireaction = false;
+					}
+				}
+//				//Read
+				else if(InspectorActionList[3].fireaction)
+				{
+					if(InspectorActionList[3].pending && (DateTime.Now - InspectorActionList[3].StartAction).TotalMilliseconds < 450)
+					{
+						return;
+					}
+					else if(LOList.Any(x => x.Process && x.ProcessAction == IAction.Read))
+					{
+						InspectorActionList[3].pending = true;
+						InspectorActionList[3].StartAction = DateTime.Now;
+						Core.Actions.UseItem(LOList.Find(x => x.Process && x.ProcessAction == IAction.Read).Id,0);
+						return;
+					}
+					else
+					{
+						InspectorActionList[3].pending = false;
+						InspectorActionList[3].StartAction = DateTime.MinValue;
+						InspectorActionList[3].fireaction = false;
+					}
+					
+				}
+//				//Desiccate
+				else if(InspectorActionList[4].fireaction)
+				{
+					if(InspectorActionList[4].pending && (DateTime.Now - InspectorActionList[4].StartAction).TotalMilliseconds < 450)
+					{
+						return;
+					}
+					else if(LOList.Any(x => x.Process && x.ProcessAction == IAction.Desiccate))
+					{
+						if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Aetheria Desiccant").Count() == 0) 
+						{
+							WriteToChat("No Aetheria Desiccant found.");
+							InspectorActionList[4].fireaction = false;
+							LOList.Find(x => x.Process && x.ProcessAction == IAction.Desiccate).Process = false;
 							return;
 						}
 						
-						if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").Count() == 0)
+						InspectorActionList[4].pending = true;
+						InspectorActionList[4].StartAction = DateTime.Now;
+						Core.Actions.SelectItem(LOList.Find(x => x.Process && x.ProcessAction == IAction.Desiccate).Id);
+						Core.RenderFrame += InspectorDesiccate;
+						return;
+					}
+					else
+					{
+						InspectorActionList[4].pending = false;
+						InspectorActionList[4].StartAction = DateTime.MinValue;
+						InspectorActionList[4].fireaction = false;
+					}
+				}
+//				//ManaStone
+				else if(InspectorActionList[5].fireaction)
+				{
+					if(InspectorActionList[5].pending && (DateTime.Now - InspectorActionList[5].StartAction).TotalMilliseconds < 450)
+					{
+						return;
+					}
+					else if(LOList.Any(x => x.Process && x.ProcessAction == IAction.ManaStone))
+					{
+						if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0).Count() == 0) 
 						{
-							WriteToChat("Character has no Ust.");
-							InspectorActionQueue.First().Action = IAction.DeQueue;
+							WriteToChat("No empty mana stones available.");
+							InspectorActionList[5].fireaction = false;
+							LOList.Find(x => x.Process && x.ProcessAction == IAction.ManaStone).Process = false;
 							return;
 						}
-						Core.RenderFrame += RenderFrame_InspectorUseUst;
-						Core.RenderFrame += RenderFrame_InspectorCombineAction;
-						return;					
-				}
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void RenderFrame_PeaceMode(object sender, EventArgs e)
-		{
-			try
-			{	
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
-				else
-				{
-					Core.RenderFrame -= RenderFrame_PeaceMode; 
-				}
-				
-				if(Core.Actions.CombatMode == CombatState.Peace)
-				{
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				
-				Core.Actions.SetCombatMode(CombatState.Peace);	
-				InspectorActionQueue.First().StartAction = DateTime.Now;
-				Core.RenderFrame += RenderFrame_SwitchCombatWait;				
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void RenderFrame_SwitchCombatWait(object sender, EventArgs e)
-		{
-			try
-			{	
-				if(Core.Actions.CombatMode == CombatState.Peace && (DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds > 1000)
-				{
-					Core.RenderFrame -= RenderFrame_SwitchCombatWait;
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				else
-				{
-					return;
-				}	
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void RenderFrame_OpenContainer(object sender, EventArgs e)
-		{
-			try
-			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
-				else
-				{
-					Core.RenderFrame -= RenderFrame_OpenContainer;
-				}
-				
-				if(Core.Actions.OpenedContainer == InspectorActionQueue.First().LootItem.Id || InspectorActionQueue.First().LootItem.Id == Core.CharacterFilter.Id)
-				{
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				
-				Core.Actions.UseItem(InspectorActionQueue.First().LootItem.Id,0);
-				
-				return;
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-			
-		private void RenderFrame_InspectorMoveAction(object sender, System.EventArgs e)
-		{
-			try
-			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
-				else
-				{
-					Core.RenderFrame -= RenderFrame_InspectorMoveAction;
-				}
-				
-				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() > 0 || !InspectorActionQueue.First().LootItem.isvalid)
-				{
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				
-				if(Core.Actions.OpenedContainer != InspectorActionQueue.First().LootItem.Container)
-				{
-					InspectorActionQueue.First().StartAction = DateTime.MinValue;
-					InspectorActionQueue.First().pending = false;
-					
-					List<PendingActions> TempPendingActionsHolder = InspectorActionQueue.ToList();
-					
-					PendingActions nextaction = new PendingActions();
-					nextaction.Action = IAction.OpenContainer;
-					nextaction.LootItem = new LootObject(Core.WorldFilter[InspectorActionQueue.First().LootItem.Container]);
-					InspectorActionQueue.Enqueue(nextaction);
-					
-					TempPendingActionsHolder.Insert(0, nextaction);				
-					InspectorActionQueue.Clear();
-					
-					foreach(PendingActions pa in TempPendingActionsHolder)
+						
+						InspectorActionList[5].pending = true;
+						InspectorActionList[5].StartAction = DateTime.Now;
+						Core.Actions.SelectItem(LOList.Find(x => x.Process && x.ProcessAction == IAction.ManaStone).Id);
+						Core.RenderFrame += InspectorDrainMana;
+						return;
+					}
+					else
 					{
-						InspectorActionQueue.Enqueue(pa);
-					}					
-					TempPendingActionsHolder.Clear();
+						InspectorActionList[5].pending = false;
+						InspectorActionList[5].StartAction = DateTime.MinValue;
+						InspectorActionList[5].fireaction = false;
+					}
 					
-					return;
 				}
+//				//RingKeys
+				else if(InspectorActionList[6].fireaction)
+				{
+					if(InspectorActionList[6].pending && (DateTime.Now - InspectorActionList[6].StartAction).TotalMilliseconds < 450)
+					{
+						return;
+					}
+					else if(LOList.Any(x => x.Process && x.ProcessAction == IAction.Ring))
+					{
+						if(MatchKey(LOList.Find(x => x.Process && x.ProcessAction == IAction.Ring).Name) == 0)
+						{
+							WriteToChat("No matching, empty keyrings found.");
+							InspectorActionList[6].fireaction = false;
+							LOList.Find(x => x.Process && x.ProcessAction == IAction.Ring).Process = false;
+							return;
+						}
+						
+						InspectorActionList[6].pending = true;
+						InspectorActionList[6].StartAction = DateTime.Now;
+						Core.Actions.SelectItem(LOList.Find(x => x.Process && x.ProcessAction == IAction.Ring).Id);
+						Core.RenderFrame += InspectorRingKey;
+						return;
+					}
+					else
+					{
+						InspectorActionList[6].pending = false;
+						InspectorActionList[6].StartAction = DateTime.MinValue;
+						InspectorActionList[6].fireaction = false;
+					}	
+				}
+				//Salvage
+				else if(InspectorActionList[7].fireaction)
+				{		
+					if(InspectorActionList[7].pending && (DateTime.Now - InspectorActionList[7].StartAction).TotalMilliseconds < 300)
+					{
+						return;
+					}
+					else if(LOList.Any(x => x.Process && x.ProcessAction == IAction.Salvage))
+					{
+						InspectorActionList[7].pending = true;
+						InspectorActionList[7].StartAction = DateTime.Now;
+						InspectorUseUst();
+						Core.RenderFrame += InspectorSalvageAction;
+						return;
+					}
+					else
+					{
+						InspectorActionList[7].pending = false;
+						InspectorActionList[7].StartAction = DateTime.MinValue;
+						InspectorActionList[7].fireaction = false;
+					}	
+				}
+				//SalvageCombine
+				else if(InspectorActionList[8].fireaction)
+				{
+					if(InspectorActionList[8].pending && (DateTime.Now - InspectorActionList[7].StartAction).TotalMilliseconds < 300)
+					{
+						return;
+					}
+					else if(LOList.Any(x => x.Process && x.ProcessAction == IAction.Combine))
+					{
+						InspectorActionList[8].pending = true;
+						InspectorActionList[8].StartAction = DateTime.Now;
+						InspectorCombineAction();
+						return;
+					}
+					else
+					{
+						InspectorActionList[8].pending = false;
+						InspectorActionList[8].StartAction = DateTime.MinValue;
+						InspectorActionList[8].fireaction = false;
+					}
+					
+				}
+				//Stop
 				else
-				{				
-					Core.Actions.UseItem(InspectorActionQueue.First().LootItem.Id, 0);
-				}
-				
-				//Listens in Change object for itemchanged, dequeues, then fires inspector action
-				
-			}catch(Exception ex){LogError(ex);}			
+				{
+					InspectorActionTimer.Tick -= InspectorActionInitiator;
+					ActionsPending = false;
+					return;
+				}				
+			}catch(Exception ex){LogError(ex);}
 		}
 		
-		//Processing of Salvage			
-		private void RenderFrame_InspectorUseUst(object sender, EventArgs e)
+		private void InspectorMoveCheckBack(object sender, EventArgs e)
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 20){return;}
+				if(!LOList.Any(x => x.ActionTarget))
+				{
+					Core.RenderFrame -= InspectorMoveCheckBack;
+					return;
+				}
+				else if((DateTime.Now - LOList.Find(x => x.ActionTarget).LastActionTime).TotalMilliseconds < 100) {return;}
 				else
 				{
-					Core.RenderFrame -= RenderFrame_InspectorUseUst;		
+					Core.RenderFrame -= InspectorMoveCheckBack;
 				}
 				
-				Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").First().Id,0);	
+				LootObject lo = LOList.Find(x => x.ActionTarget);
 				
-				//this could listen in change view, but why bother.....
+				if(Core.WorldFilter.GetInventory().Where(x => x.Id == lo.Id).Count() > 0)
+				{
+					lo.Move = false;
+					lo.ActionTarget = false;
+					lo.InspectList = false;
+					
+					InspectorActionList[2].pending = false;
+					
+					if(lo.ProcessAction != IAction.None) 
+					{
+						lo.ProcessList = true;
+						if(GISettings.AutoProcess) 
+						{
+							lo.Process = true;
+							ToggleInspectorActions(2);
+							InitiateInspectorActionSequence();
+						}
+					}
+					UpdateItemHud();
+				}
+									
+			}catch(Exception ex){Core.RenderFrame -= InspectorMoveCheckBack; LogError(ex);}
+		}
+		
+		private void OpenContainerCheckback(object sender, EventArgs  e)
+		{
+			try
+			{
+				if(!LOList.Any(x => x.ActionTarget))
+				{
+					Core.RenderFrame -= OpenContainerCheckback;
+					return;
+				}
+				else if((DateTime.Now - LOList.Find(x => x.ActionTarget).LastActionTime).TotalMilliseconds < 100) {return;}
+				else
+				{
+					Core.RenderFrame -= OpenContainerCheckback;
+				}
+				
+				LootObject lo = LOList.Find(x => x.ActionTarget);
+				
+				if(Core.Actions.OpenedContainer == lo.Id)
+				{
+					InspectorActionList[1].fireaction = false;
+					InspectorActionList[1].pending = false;
+					
+					lo.Open = false;
+					lo.ActionTarget = false;	
+				}		
+			}catch(Exception ex){Core.RenderFrame -= OpenContainerCheckback;LogError(ex);}
+		}
+		
+		private void InspectorUseUst()
+		{
+			try
+			{				
+				WorldObject ust = Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").First();
+				
+				if(ust == null)
+				{
+					ToggleInspectorActions(0);
+					WriteToChat("Character Has no Ust. Actions disabled.");
+				}
+				
+				Core.Actions.UseItem(ust.Id,0);					
 				
 			}catch(Exception ex){LogError(ex);}		
 		}
 		
-		private void RenderFrame_InspectorSalvageAction(object sender, EventArgs e)
+		private void InspectorSalvageAction(object sender, EventArgs e)
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 150){return;}
+				if((DateTime.Now - InspectorActionList[7].StartAction).TotalMilliseconds < 50) {return;}
 				else
 				{
-					Core.RenderFrame -= RenderFrame_InspectorSalvageAction;	
+					Core.RenderFrame -= InspectorSalvageAction;
 				}
 				
-				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0 || !InspectorActionQueue.First().LootItem.isvalid)
-				{
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
+				LootObject so = LOList.Find(x => x.Process && x.ProcessAction == IAction.Salvage);
 						
-				Core.Actions.SalvagePanelAdd(InspectorActionQueue.First().LootItem.Id);
+				Core.Actions.SalvagePanelAdd(so.Id);
 				Core.Actions.SalvagePanelSalvage();
 			
-				//Listens in ObjectCreated for the creation of salvage, then fires InspectorAction
-				//Process Items List should remove from ItemDestroyed
-			
-			}catch(Exception ex){LogError(ex);}	
+			}catch(Exception ex){Core.RenderFrame -= InspectorSalvageAction;LogError(ex);}	
 		}		
 		
-		private void ItemTrackerActions_ObjectCreated(object sender, CreateObjectEventArgs e)
+		private void SalvageCreated(object sender, CreateObjectEventArgs e)
 		{
 			try
 			{
-				if(e.New.ObjectClass != ObjectClass.Salvage) {return;}
+				if(e.New.ObjectClass != ObjectClass.Salvage || e.New.Container != Core.CharacterFilter.Id) {return;}
+				
+				if(!LOList.Any(x => x.Id == e.New.Id))
 				{
-					PendingActions nextaction = new PendingActions();
-					nextaction.Action = IAction.CombineSalvage;
-					nextaction.LootItem = new LootObject(e.New);
-					InspectorActionQueue.Enqueue(nextaction);	
+					LootObject so = new LootObject(e.New);
+					so.ProcessAction = IAction.Combine;
+					so.Process = true;
+					LOList.Add(so);
 				}
 				
-				if(!ActionsPending) {InitiateInspectorActionSequence();}
+				ToggleInspectorActions(2);
+				InitiateInspectorActionSequence();
 				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void RenderFrame_InspectorCombineAction(object sender, EventArgs e)
+		private void InspectorCombineAction()
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 150){return;}
-				else
-				{
-					Core.RenderFrame -= RenderFrame_InspectorCombineAction;
-				}
-				
-				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0 || !InspectorActionQueue.First().LootItem.isvalid)
-				{
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				
+				LootObject co = LOList.Find(x => x.Process && x.ProcessAction == IAction.Combine);
+								
 				ScanInventoryForSalvageBags();
-				
-				WorldObject CurrentSalvage = Core.WorldFilter[InspectorActionQueue.First().LootItem.Id];
 				
 				//Find an applicable material rule.
 				var materialrules = from allrules in SalvageRulesList
-					where (allrules.material == CurrentSalvage.Values(LongValueKey.Material)) &&
-					       (CurrentSalvage.Values(DoubleValueKey.SalvageWorkmanship) >= allrules.minwork) && 
-						   (CurrentSalvage.Values(DoubleValueKey.SalvageWorkmanship) <= (allrules.maxwork +0.99))
+					where (allrules.material == co.LValue(LongValueKey.Material)) &&
+					       (co.DValue(DoubleValueKey.SalvageWorkmanship) >= allrules.minwork) && 
+						   (co.DValue(DoubleValueKey.SalvageWorkmanship) <= (allrules.maxwork +0.99))
 						   select allrules;		
 					
 				if(materialrules.Count() > 0)
@@ -413,8 +545,8 @@ namespace GearFoundry
 					CombineSalvageWOList.Clear();
 					
 					int salvagesum = 0;
-					salvagesum += CurrentSalvage.Values(LongValueKey.UsesRemaining);
-					CombineSalvageWOList.Add(CurrentSalvage.Id);
+					salvagesum += co.LValue(LongValueKey.UsesRemaining);
+					CombineSalvageWOList.Add(co.Id);
 				
 					for(int i = 0; i < partbags.Count(); i++)
 					{
@@ -431,9 +563,7 @@ namespace GearFoundry
 						}		
 					}
 					if(CombineSalvageWOList.Count() > 1)
-					{
-						//Now that it's committed to salvage something, check for the ust, otherwise, why bother?
-						
+					{						
 						foreach(int salvageid in CombineSalvageWOList)
 						{
 							Core.Actions.SalvagePanelAdd(salvageid);
@@ -441,239 +571,67 @@ namespace GearFoundry
 						Core.Actions.SalvagePanelSalvage();
 						CombineSalvageWOList.Clear();
 						return;
-						//If it combines, it will listen in ObjectCreated and FIA.  Else the FIA below will kick off the FIA again.
 					}
 					else
 					{
-						InspectorActionQueue.First().Action = IAction.DeQueue;
+						co.ProcessAction = IAction.None;
+						co.Process = false;
 						return;
 					}
 				}
 				else
 				{
-					InspectorActionQueue.First().Action = IAction.DeQueue;
+					co.ProcessAction = IAction.None;
+					co.Process = false;
 					return;
 				}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		//Processing of ManaTankQueue		
-		private void RenderFrame_DrainManaTank(object sender, System.EventArgs e)
+		private void InspectorDesiccate(object sender, EventArgs e)
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
-				else
-				{
-					Core.RenderFrame -= RenderFrame_DrainManaTank;		
-				}
-				
-				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0  || !InspectorActionQueue.First().LootItem.isvalid)
-				{
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				
-				if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0).Count() == 0)
-				{
-					WriteToChat("No empty manastones available!");
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				else
-				{
-					if(Core.Actions.CombatMode != CombatState.Peace)
-					{
-						InspectorActionQueue.First().StartAction = DateTime.MinValue;
-						InspectorActionQueue.First().pending = false;
-						
-						List<PendingActions> TempPendingActionsHolder = InspectorActionQueue.ToList();
-						InspectorActionQueue.Clear();
-						
-						PendingActions nextaction = new PendingActions();
-						nextaction.Action = IAction.PeaceMode;
-						InspectorActionQueue.Enqueue(nextaction);
-						
-						foreach(PendingActions pa in TempPendingActionsHolder)
-						{
-							InspectorActionQueue.Enqueue(pa);
-						}					
-						TempPendingActionsHolder.Clear();
-	
-						return;					
-					}
-					Core.Actions.SelectItem(InspectorActionQueue.First().LootItem.Id);
-					InspectorActionQueue.First().StartAction = DateTime.Now;
-					Core.RenderFrame += RenderFrame_UseManaStone;
-				}				
-			}catch(Exception ex){LogError(ex);}
-			
-		}
-		
-		private void RenderFrame_UseManaStone(object sender, System.EventArgs e)
-		{
-			try
-			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
-				else
-				{
-					Core.RenderFrame -= RenderFrame_UseManaStone;		
-				}
-				
-				Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0).First().Id,1);	
-
-				//Listen in ItemDestroyed to DeQueue and FireInspectorAction() if needed (done)				
-			
-			}catch(Exception ex){LogError(ex);}		
-		}
-		
-		//Processing of Desiccate Queue.
-		private void RenderFrame_DesiccateItem(object sender, EventArgs e)
-		{
-			try
-			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
-				else
-				{
-					Core.RenderFrame -= RenderFrame_DesiccateItem;
-				}
-				
-				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0  || !InspectorActionQueue.First().LootItem.isvalid)
-				{
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				
-				if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Aetheria Desiccant").Count() == 0) 
-				{
-					WriteToChat("No Aetheria Desiccant found.");
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				else	
-				{
-					if(Core.Actions.CombatMode != CombatState.Peace)
-					{
-						
-
-						InspectorActionQueue.First().StartAction = DateTime.MinValue;
-						InspectorActionQueue.First().pending = false;
-						
-						List<PendingActions> TempPendingActionsHolder = InspectorActionQueue.ToList();
-						
-						PendingActions nextaction = new PendingActions();
-						nextaction.Action = IAction.PeaceMode;
-						InspectorActionQueue.Enqueue(nextaction);
-						
-						TempPendingActionsHolder.Insert(0, nextaction);				
-						InspectorActionQueue.Clear();
-						
-						foreach(PendingActions pa in TempPendingActionsHolder)
-						{
-							InspectorActionQueue.Enqueue(pa);
-						}					
-						TempPendingActionsHolder.Clear();
-	
-						return;				
-					}
-					
-					Core.Actions.SelectItem(InspectorActionQueue.First().LootItem.Id);
-					InspectorActionQueue.First().StartAction = DateTime.Now;
-					Core.RenderFrame += RenderFrame_ApplyDesiccant;
-				}				
-	
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		
-		private void RenderFrame_ApplyDesiccant(object sender, EventArgs e)
-		{
-			try
-			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
+				if((DateTime.Now - InspectorActionList[4].StartAction).TotalMilliseconds < 100){return;}
 				else
 				{
 
-					Core.RenderFrame -= RenderFrame_ApplyDesiccant;
+					Core.RenderFrame -= InspectorDesiccate;
 				}
-				
-				
+								
 				Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.Name == "Aetheria Desiccant").First().Id, 1);
-	
-				//Listen in Item Destroyed then FIA if needed
 								                     
 			}catch(Exception ex){LogError(ex);}	
 		}
-
-		private int KeyRingMatchId = 0;
-		private void RenderFrame_RingKeys(object sender, EventArgs e)
+		
+		private void InspectorDrainMana(object sender, System.EventArgs e)
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
+				if((DateTime.Now - InspectorActionList[5].StartAction).TotalMilliseconds < 100){return;}
 				else
 				{
-					Core.RenderFrame -= RenderFrame_RingKeys;
+					Core.RenderFrame -= InspectorDrainMana;		
 				}
 				
-				if(Core.WorldFilter.GetInventory().Where(x => x.Id == InspectorActionQueue.First().LootItem.Id).Count() == 0  || !InspectorActionQueue.First().LootItem.isvalid)
-				{
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				
-				LootObject currentkey = InspectorActionQueue.First().LootItem;
-				
-				KeyRingMatchId = MatchKey(currentkey.Name);
-				if(MatchedKeyRingId == 0)
-				{
-					WriteToChat("No matching, empty keyrings found.");
-					InspectorActionQueue.First().Action = IAction.DeQueue;
-					return;
-				}
-				else
-				{	
-					if(Core.Actions.CombatMode != CombatState.Peace)
-					{
-						InspectorActionQueue.First().StartAction = DateTime.MinValue;
-						InspectorActionQueue.First().pending = false;
-						
-						List<PendingActions> TempPendingActionsHolder = InspectorActionQueue.ToList();
-						InspectorActionQueue.Clear();
-						
-						PendingActions nextaction = new PendingActions();
-						nextaction.Action = IAction.PeaceMode;
-						InspectorActionQueue.Enqueue(nextaction);
-						
-						foreach(PendingActions pa in TempPendingActionsHolder)
-						{
-							InspectorActionQueue.Enqueue(pa);
-						}					
-						TempPendingActionsHolder.Clear();
-	
-						return;					
-					}	
-					
-					Core.Actions.SelectItem(currentkey.Id);
-					InspectorActionQueue.First().StartAction = DateTime.Now;
-					Core.RenderFrame += RenderFrame_RingIt;
-				}
-	
-			}catch(Exception ex){LogError(ex);}
+				Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0).First().Id,1);	
+			
+			
+			}catch(Exception ex){Core.RenderFrame -= InspectorDrainMana;LogError(ex);}		
 		}
 		
-		private void RenderFrame_RingIt(object sender, EventArgs e)
+		private void InspectorRingKey(object sender, EventArgs e)
 		{
 			try
 			{
-				if((DateTime.Now - InspectorActionQueue.First().StartAction).TotalMilliseconds < 100){return;}
+				if((DateTime.Now - InspectorActionList[6].StartAction).TotalMilliseconds < 100){return;}
 				else
 				{
-					Core.RenderFrame -= RenderFrame_RingIt;
+					Core.RenderFrame -= InspectorRingKey;
 				}
 				
-				Core.Actions.UseItem(KeyRingMatchId,1);
+				Core.Actions.UseItem(MatchKey(LOList.Find(x => x.Process && x.ProcessAction == IAction.Ring).Name),1);
 				
 				//Listen in ObjectRelease (or destroyed?) to fire the next action if needed.
 			
@@ -689,47 +647,58 @@ namespace GearFoundry
 					switch(keyname.ToLower())
 					{
 						case "legendary key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("burning sands"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("burning sands") && 
+							                x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "black marrow key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black marrow"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black marrow") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "directive key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("directive"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("directive") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "granite key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("granite"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("granite") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "mana forge key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black coral"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black coral") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "master key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("master"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("master") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "marble key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("marble"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("marble") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "singularity key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("singularity"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("singularity") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "skeletal falatacot key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("skeletal falatacot"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("skeletal falatacot") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "sturdy iron key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy iron"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy iron") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						case "sturdy steel key":
-							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy steel"));
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy steel") &&
+							                x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
 							if(matchedkeyring != null) {return matchedkeyring.Id;}
 							else{goto default;}
 						default:
