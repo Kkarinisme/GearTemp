@@ -156,17 +156,25 @@ namespace GearFoundry
 					Core.RenderFrame += OpenContainerCheckback;
 					return;
 				}
-	
+
+				LootObject lo;
 				if(!LOList.Any(x => x.Id == e.ItemGuid))
 				{
-					LootObject lo = new LootObject(Core.WorldFilter[e.ItemGuid]);
-					lo.ActionTarget = true;
-					lo.LastActionTime = DateTime.Now;
+					lo = new LootObject(Core.WorldFilter[e.ItemGuid]);
 					LOList.Add(lo);
-					Core.RenderFrame += RenderFrame_LootContainerOpened;
-					return;
-				}				
+				}
+				else
+				{
+					lo = LOList.Find(x => x.Id == e.ItemGuid);
+				}
+				
+				lo.ActionTarget = true;
+				lo.LastActionTime = DateTime.Now;
+				
+				Core.RenderFrame += RenderFrame_LootContainerOpened;
 				return;
+								
+
 			}
 			catch(Exception ex){LogError(ex);}
 		}
@@ -188,11 +196,6 @@ namespace GearFoundry
 				
 				LootObject container= LOList.Find(x => x.ActionTarget);
 				container.ActionTarget = false;				
-				
-				//TODO:  Move to create object to fix salvage create problem
-//				if(container.Name.Contains("Storage") || container.Name.ToLower().Contains("pack") || 
-//				   container.Name.ToLower().Contains("sack") || container.Name.ToLower().Contains("pouch")) {return;}				
-				//UNDONE: Process DeadMes?
 				
 				if(container.Name.Contains(Core.CharacterFilter.Name)){container.Exclude = true; return;}
 

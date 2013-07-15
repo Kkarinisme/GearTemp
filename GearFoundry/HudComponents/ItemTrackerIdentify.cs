@@ -148,6 +148,21 @@ namespace GearFoundry
 		{
 			try
 			{
+				
+//				    			try
+//    			{
+//    				Decal.Interop.Filters.SkillInfo lockpickinfo = Core.CharacterFilter.Underlying.get_Skill((Decal.Interop.Filters.eSkillID)0x17);
+//    			
+//	    			if(lockpickinfo.Training.ToString() == "eTrainSpecialized" || lockpickinfo.Training.ToString() == "eTrainTrained")
+//	    			{
+//	    				ButlerHudPickCurrentSelection = new HudButton();
+//	    				ButlerHudPickCurrentSelection.Text = "Pick";
+//	    				ButlerHudTabLayout.AddControl(ButlerHudPickCurrentSelection, new Rectangle(5,30,50,20));
+//	    			}
+//    			}catch(Exception ex){LogError(ex);}
+
+				//Decal.Interop.Filters.SkillInfo warinfo = Core.CharacterFilter.Underlying.get_Skill(Decal.Interop.Filters.eSkillID)
+				
 				if(GISettings.CheckForL7Scrolls && SpellIndex[IOScroll.Spell(0)].spelllevel == 7)
 				{	
 					if(!Core.CharacterFilter.IsSpellKnown(IOScroll.Spell(0)))
