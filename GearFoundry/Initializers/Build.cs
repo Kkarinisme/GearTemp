@@ -1162,7 +1162,8 @@ namespace GearFoundry
           	    				  (spels1.spellid < 4647 || spels1.spellid > 4658) && (spels1.spellid < 4754 || spels1.spellid > 4759) &&
 								  (spels1.spellid < 4981 || spels1.spellid > 5026) && (spels1.spellid < 5137 || spels1.spellid > 5154) &&
          	    				  (spels1.spellid < 5184 || spels1.spellid > 5329) && (spels1.spellid < 5435 || spels1.spellid > 5779) &&
-         	    				  (spels1.spellid < 5897 || spels1.spellname.ToLower().Contains("legendary"))
+         	    				  (spels1.spellid < 5898 || spels1.spellid > 6038) && (spels1.spellid < 6108 || spels1.spellid > 6120) &&
+         	    	              spels1.spellid < 6127  
          	    			select spels1;
          	    
          	    foreach(var spel in spl2)

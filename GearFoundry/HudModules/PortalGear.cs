@@ -103,9 +103,7 @@ namespace GearFoundry
                     XDocument tempDoc = new XDocument(new XElement("Settings"));
                     tempDoc.Save(portalGearFilename);
                     tempDoc = null;
-                    nOrbGuid = 0;
-                    nOrbIcon = 0;
-
+                    //These are set to 0 in Init above.  There is no need to reset them
                 }
                 else
                 {
