@@ -26,6 +26,9 @@ namespace GearFoundry
         private static VirindiViewService.HudView portalGearHud = null;
         private static VirindiViewService.Controls.HudTabView portalGearTabView = null;
         private static VirindiViewService.Controls.HudFixedLayout portalGearTabFixedLayout = null;
+        private static VirindiViewService.HudView portalRecallGearHud = null;
+        private static VirindiViewService.Controls.HudTabView portalRecallGearTabView = null;
+        private static VirindiViewService.Controls.HudFixedLayout portalRecallGearTabFixedLayout = null;
 
         private HudStaticText txtPortalGear = null;
         private HudPictureBox mSelectCaster = null;
@@ -40,6 +43,16 @@ namespace GearFoundry
         private HudPictureBox mPortalGear8 = null;
         private HudPictureBox mPortalGear9 = null;
 
+        private HudPictureBox mPortalRecallGear0 = null;
+        private HudPictureBox mPortalRecallGear1 = null;
+        private HudPictureBox mPortalRecallGear2 = null;
+        private HudPictureBox mPortalRecallGear3 = null;
+        private HudPictureBox mPortalRecallGear4 = null;
+        private HudPictureBox mPortalRecallGear5 = null;
+        private HudPictureBox mPortalRecallGear6 = null;
+        private HudPictureBox mPortalRecallGear7 = null;
+        private HudPictureBox mPortalRecallGear8 = null;
+        private HudPictureBox mPortalRecallGear9 = null;
 
         private int nOrbGuid = 0;
         private int nOrbIcon = 0;
@@ -65,7 +78,9 @@ namespace GearFoundry
 			primaryporal,
 			summonprimary,
 			secondaryportal,
-			summonsecondary
+			summonsecondary,
+            sanctuary,
+            bananaland,
 		}
 		
 		private void SubscribePortalEvents()
@@ -99,7 +114,7 @@ namespace GearFoundry
                 }
                 if (!File.Exists(portalGearFilename))
                 {
-                    WriteToChat("PortalGearfilename does not exist.");
+                 //   WriteToChat("PortalGearfilename does not exist.");
                     XDocument tempDoc = new XDocument(new XElement("Settings"));
                     tempDoc.Save(portalGearFilename);
                     tempDoc = null;
@@ -245,7 +260,6 @@ namespace GearFoundry
             
            
             SubscribePortalEvents();
-            
             }catch(Exception ex){LogError(ex);}
  
         }
@@ -268,6 +282,79 @@ namespace GearFoundry
             portalGearHud.Dispose();
 
         }
+
+        private void RenderPortal2GearHud()
+        {
+            try
+            {
+                if (portalRecallGearHud != null)
+                {
+                    DisposePortalRecallGearHud();
+                }
+
+                portalRecallGearHud = new VirindiViewService.HudView("", 400, 40, new ACImage(0x6AA2), false, "PortalRecallGear");
+                portalRecallGearHud.ShowInBar = false;
+                portalRecallGearHud.UserAlphaChangeable = false;
+                portalRecallGearHud.Visible = true;
+                portalRecallGearHud.UserClickThroughable = false;
+                portalRecallGearHud.UserGhostable = true;
+                portalRecallGearHud.UserMinimizable = true;
+                portalRecallGearHud.UserResizeable = false;
+                portalRecallGearHud.LoadUserSettings();
+                portalRecallGearTabView = new HudTabView();
+                portalRecallGearHud.Controls.HeadControl = portalRecallGearTabView;
+                portalRecallGearTabFixedLayout = new HudFixedLayout();
+                portalRecallGearTabView.AddTab(portalRecallGearTabFixedLayout, "");
+
+
+               //Sanctuary Recall
+                string strSanctuaryRecallImage = GearDir + @"\sanctuary.gif";
+                Image SanctuaryRecallImage = new Bitmap(strSanctuaryRecallImage);
+           //    Stream recallSanctuaryStream = this.GetType().Assembly.GetManifestResourceStream("sanctuary.gif");
+            //    Image SanctuaryRecallImage = new Bitmap(recallSanctuaryStream);
+                mPortalRecallGear0 = new HudPictureBox();
+                mPortalRecallGear0.Image = (ACImage)SanctuaryRecallImage;
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear0, new Rectangle(2, 2, 25, 39));
+                VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "Sanctuary Recall");
+                mPortalRecallGear0.Hit += (sender, obj) => mPortalRecallGear0_Hit(sender, obj);
+
+                //  BananaLand Recall
+                //Stream recallBananaLandStream = this.GetType().Assembly.GetManifestResourceStream("BananaLand.gif");
+                //Image BananaLandRecallImage = new Bitmap(recallBananaLandStream);
+                string strBananaLandRecallImage = GearDir + @"\bananaland.gif";
+                Image BananaLandRecallImage = new Bitmap(strBananaLandRecallImage);
+                mPortalRecallGear1 = new HudPictureBox();
+                mPortalRecallGear1.Image = (ACImage)BananaLandRecallImage;
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear1, new Rectangle(30, 2, 25, 39));
+                VirindiViewService.TooltipSystem.AssociateTooltip(mPortalGear0, "BananaLand Recall");
+                mPortalRecallGear1.Hit += (sender, obj) => mPortalRecallGear1_Hit(sender, obj);
+
+
+                SubscribePortalEvents();
+
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+        private void DisposePortalRecallGearHud()
+        {
+            UnsubscribePortalEvents();
+
+            if (mPortalRecallGear0 != null) { mPortalRecallGear0.Hit -= (sender, obj) => mPortalRecallGear0_Hit(sender, obj); mPortalRecallGear0.Dispose(); }
+            if (mPortalRecallGear1 != null) { mPortalRecallGear1.Hit -= (sender, obj) => mPortalRecallGear1_Hit(sender, obj); mPortalRecallGear1.Dispose(); }
+            //if (mPortalRecallGear2 != null) { mPortalRecallGear2.Hit -= (sender, obj) => mPortalRecallGear2_Hit(sender, obj); mPortalRecallGear2.Dispose(); }
+            //if (mPortalRecallGear3 != null) { mPortalRecallGear3.Hit -= (sender, obj) => mPortalRecallGear3_Hit(sender, obj); mPortalRecallGear3.Dispose(); }
+            //if (mPortalRecallGear4 != null) { mPortalRecallGear4.Hit -= (sender, obj) => mPortalRecallGear4_Hit(sender, obj); mPortalRecallGear4.Dispose(); }
+            //if (mPortalRecallGear5 != null) { mPortalRecallGear5.Hit -= (sender, obj) => mPortalRecallGear5_Hit(sender, obj); mPortalRecallGear5.Dispose(); }
+            //if (mPortalRecallGear6 != null) { mPortalRecallGear6.Hit -= (sender, obj) => mPortalRecallGear6_Hit(sender, obj); mPortalRecallGear6.Dispose(); }
+            //if (mPortalRecallGear7 != null) { mPortalRecallGear7.Hit -= (sender, obj) => mPortalRecallGear7_Hit(sender, obj); mPortalRecallGear7.Dispose(); }
+            //if (mPortalRecallGear8 != null) { mPortalRecallGear8.Hit -= (sender, obj) => mPortalRecallGear8_Hit(sender, obj); mPortalRecallGear8.Dispose(); }
+            //if (mPortalRecallGear9 != null) { mPortalRecallGear9.Hit -= (sender, obj) => mPortalRecallGear9_Hit(sender, obj); mPortalRecallGear9.Dispose(); }
+
+            portalRecallGearHud.Dispose();
+
+        }
+
 
       
         private void MasterTimer_UpdateClock(object sender, EventArgs e)
@@ -418,6 +505,24 @@ namespace GearFoundry
             }
             catch (Exception ex) { LogError(ex); }
         }
+
+        private void mPortalRecallGear0_Hit(object sender, System.EventArgs e)
+        {
+            try
+            {
+                PortalActionsLoad(RecallTypes.sanctuary);
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+        private void mPortalRecallGear1_Hit(object sender, System.EventArgs e)
+        {
+            try
+            {
+                PortalActionsLoad(RecallTypes.bananaland);
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
         
         private void PortalActionsLoad(RecallTypes recall)
         {
@@ -690,7 +795,29 @@ namespace GearFoundry
 						WriteToChat("Summoned secondary");
 						Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
 						Core.Actions.CastSpell(2648, Core.CharacterFilter.Id);
-						return;	
+						return;
+                    case RecallTypes.sanctuary:
+                        if (!Core.CharacterFilter.IsSpellKnown(2023))
+                        {
+                            PortalActionList[3].fireaction = false;
+                            WriteToChat("You do not know Sanctuary Recall.  Action disabled.");
+                            return;
+                        }
+                        WriteToChat("Sanctuary Recalled");
+                        Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
+                        Core.Actions.CastSpell(2023, Core.CharacterFilter.Id);
+                        return;
+                    case RecallTypes.bananaland:
+                        if (!Core.CharacterFilter.IsSpellKnown(2931))
+                        {
+                            PortalActionList[3].fireaction = false;
+                            WriteToChat("You do not know BananaLand Recall.  Action disabled.");
+                            return;
+                        }
+                        WriteToChat("Summoned Bananaland");
+                        Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
+                        Core.Actions.CastSpell(2931, Core.CharacterFilter.Id);
+                        return;	
 					
 					default:
 						return;

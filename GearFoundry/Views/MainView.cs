@@ -213,6 +213,7 @@ namespace GearFoundry
         // Controls on Notify.Salvage Page
         MyClasses.MetaViewWrappers.IList lstNotifySalvage;
         MyClasses.MetaViewWrappers.IButton btnUpdateSalvage;
+     //   MyClasses.MetaViewWrappers.IButton btnNewSalvage;
         MyClasses.MetaViewWrappers.ITextBox txtSalvageName;
         MyClasses.MetaViewWrappers.ITextBox txtSalvageString;
         MyClasses.MetaViewWrappers.IStaticText lblSalvageName;
@@ -659,6 +660,7 @@ namespace GearFoundry
                 lstNotifySalvage = (MyClasses.MetaViewWrappers.IList)View["lstNotifySalvage"];
                 txtSalvageName = (MyClasses.MetaViewWrappers.ITextBox)View["txtSalvageName"];
                 txtSalvageString = (MyClasses.MetaViewWrappers.ITextBox)View["txtSalvageString"];
+         //       btnNewSalvage = (MyClasses.MetaViewWrappers.IButton)View["btnNewSalvage"];
                 btnUpdateSalvage = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateSalvage"];
                 lblSalvageName = (MyClasses.MetaViewWrappers.IStaticText)View["lblSalvageName"];
                 lblSalvageString = (MyClasses.MetaViewWrappers.IStaticText)View["lblSalvageString"];
@@ -666,6 +668,7 @@ namespace GearFoundry
                   try
                   {
                 lstNotifySalvage.Selected += new EventHandler<MVListSelectEventArgs>(lstNotifySalvage_Selected);
+              //  btnNewSalvage.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnNewSalvage_Click);
                 btnUpdateSalvage.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateSalvage_Click);
                 txtSalvageName.End += new EventHandler<MVTextBoxEndEventArgs>(txtSalvageName_End);
                 txtSalvageString.End += new EventHandler<MVTextBoxEndEventArgs>(txtSalvageString_End);

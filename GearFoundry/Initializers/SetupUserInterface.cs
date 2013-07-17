@@ -1275,6 +1275,45 @@ namespace GearFoundry
         }
 
 
+        //[ControlEvent("btnNewSalvage", "Click")]
+        //private void btnNewSalvage_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
+        //{
+
+        //    if (txtSalvageName == null || txtSalvageString == null)
+        //    {
+        //        GearFoundry.PluginCore.WriteToChat("Please type in name of new salvage to add to list");
+        //    }
+
+        //    else
+        //    {
+        //        doSalvageNew();
+        //    }
+        //}
+
+        //private void doSalvageNew()
+        //{
+        //    try
+        //    {
+        //        sname = txtSalvageName.Text.ToString().Trim();
+        //        sinput = txtSalvageString.Text.ToString().Trim();
+
+        //        if (sname != null && sname.Trim().Length > 0)
+        //        {
+
+        //            //string mCombine = "";
+        //            string mID = "";
+        //            bool mexact = false;
+        //            int mitem = 3;
+
+        //            addMyItem(xdocSalvage, salvageFilename, mID, mexact, mitem);
+        //            FillSalvageRules();
+
+        //        }
+        //        else { GearFoundry.PluginCore.WriteToChat("Please give the name of a mob to add"); }
+
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
 
         [ControlEvent("btnUpdateSalvage", "Click")]
@@ -1294,6 +1333,8 @@ namespace GearFoundry
 
         private void doSalvageUpdate()
         {
+            try
+            {
                 sname = txtSalvageName.Text.ToString().Trim();
                 sinput = txtSalvageString.Text.ToString().Trim();
 
@@ -1302,20 +1343,22 @@ namespace GearFoundry
                          where item.Element("key").Value.ToString().Contains(sname)
                          select item;
                 mintvalue = Convert.ToInt32(el.First().Element("intvalue").Value);
-          
-            if (xdocSalvage != null)
-            {
 
-                IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("item");
-                xdocSalvage.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Contains(sname.Trim())).Remove();
+                if (xdocSalvage != null)
+                {
+
+                    IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("item");
+                    xdocSalvage.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Contains(sname.Trim())).Remove();
+                }
+                string mID = "";
+                bool mexact = false;
+                int mitem = 3;
+
+                addMyItem(xdocSalvage, salvageFilename, mID, mexact, mitem);
+                FillSalvageRules();
             }
-            string mID = "";
-            bool mexact = false;
-            int mitem = 3;
-
-            addMyItem(xdocSalvage, salvageFilename, mID, mexact, mitem);
-            FillSalvageRules();
-
+            catch (Exception ex) { LogError(ex); }
+ 
         }
 
         private void txtMaxMana_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
