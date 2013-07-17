@@ -402,8 +402,8 @@ namespace GearFoundry
                 if (bPortalGearEnabled == true)
                 {
                     bPortalGearEnabled = false;
-                    DisposePortalGearHud();
-                    DisposePortalRecallGearHud();
+                    if (portalGearHud != null) { DisposePortalGearHud(); }
+                    if (portalRecallGearHud != null) { DisposePortalRecallGearHud(); }
                 }
                 else
                 {
