@@ -156,19 +156,29 @@ namespace GearFoundry
 		{
 			try
 			{
-				MaidStackList = Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.StackCount) < x.Values(LongValueKey.StackMax)).OrderBy(x => x.Name).ToList();
-				List<WorldObject> PurgeList = new List<WorldObject>();
-				foreach(WorldObject checkfortwo in MaidStackList)
+				FillMaidStackList();
+						 
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void FillMaidStackList()
+		{
+			try
+			{
+				MaidStackList.Clear();
+				
+				MaidStackList = (from allitems in Core.WorldFilter.GetInventory()
+					where allitems.Values(LongValueKey.StackMax) > 0 &&
+					(allitems.Values(LongValueKey.StackCount)) < (allitems.Values(LongValueKey.StackMax)) &&
+					Core.WorldFilter.GetInventory().Where(x => x.Name == allitems.Name && x.Values(LongValueKey.StackCount) < x.Values(LongValueKey.StackMax)).Count() > 1
+					select allitems).ToList();
+				WriteToChat("Maid Stack Count = " + MaidStackList.Count());
+				foreach(var item in MaidStackList)
 				{
-					if(MaidStackList.FindAll(x => x.Name == checkfortwo.Name).Count() == 1)
-					{
-						PurgeList.Add(checkfortwo);
-					}
+					WriteToChat(item.Name);
 				}
-				foreach(WorldObject purgeitems in PurgeList)
-				{
-					MaidStackList.RemoveAll(x => x.Name == purgeitems.Name);
-				}			 
+
+				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -176,30 +186,18 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(MaidStackList.Count() > 0)
-				{
-					if(stackbase == null || stackbase.Values(LongValueKey.StackCount) == stackbase.Values(LongValueKey.StackMax))
-					{
-						stackbase = MaidStackList.First();
-						MaidStackList.RemoveAll(x => x.Id == stackbase.Id);
-					}
-					else
-					{
-						if(MaidStackList.Any(x => x.Name == stackbase.Name))
-						{
-							stackitem = MaidStackList.First(x => x.Name == stackbase.Name);
-							MaidStackList.RemoveAll(x => x.Id == stackitem.Id);
-							Core.Actions.MoveItem(stackitem.Id, Core.CharacterFilter.Id, Core.WorldFilter[stackbase.Id].Values(LongValueKey.Slot), true);
-						}
-						else
-						{
-							stackbase = MaidStackList.First();
-							MaidStackList.RemoveAll(x => x.Id == stackbase.Id);
-						}
-						
-					}
-				}
+				List<WorldObject> stacklist = stacklist = MaidStackList.FindAll(x => x.Name == MaidStackList.First().Name);
 
+				WriteToChat("Stacking " + stacklist.Count());
+				//WriteToChat(stacklist[0].Name + "," + stacklist[1].Name);
+				
+				
+				if(stacklist.Count > 1)
+				{
+					Core.Actions.MoveItem(stacklist[0].Id, stacklist[1].Container, stacklist[1].Values(LongValueKey.Slot), true);
+				}
+				
+				FillMaidStackList();
 				
 			}catch(Exception ex){LogError(ex);}
 		}

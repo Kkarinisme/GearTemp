@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<view icon="28170" title="GearFoundry Beta v0.1.0.7" width="530" height="500">
+<view icon="28170" title="GearFoundry Beta v0.1.0.8" width="530" height="500">
 	<control progid="DecalControls.Notebook" name="mainTabs">
 		<!--settings-->
 	    <page label="Settings">

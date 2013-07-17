@@ -30,9 +30,6 @@ namespace GearFoundry
 		
 		private List<ValetTicket> ValetEquipList = new List<ValetTicket>();
 		private List<WorldObject> ValetRemoveList = new List<WorldObject>();
-			
-		private WorldObject stackbase = null;
-		private WorldObject stackitem = null;
 		
 		private bool bButlerTradeOpen = false;
 		private int MaidKeyToRing = 0;
