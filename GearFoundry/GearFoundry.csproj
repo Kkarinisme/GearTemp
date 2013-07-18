@@ -211,21 +211,43 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\olthoi_north.gif" />
-    <EmbeddedResource Include="Graphics\gearknight.gif" />
-    <EmbeddedResource Include="Graphics\mhoire.gif" />
+    <EmbeddedResource Include="Graphics\olthoi_north.gif">
+      <LogicalName>olthoi_north.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\gearknight.gif">
+      <LogicalName>gearknight.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\mhoire.gif">
+      <LogicalName>mhoire.gif</LogicalName>
+    </EmbeddedResource>
     <Content Include="olthoi_north.gif" />
-    <EmbeddedResource Include="Graphics\facility.gif" />
-    <EmbeddedResource Include="Graphics\neftet.gif" />
-    <EmbeddedResource Include="Graphics\sanctuary.gif" />
+    <EmbeddedResource Include="Graphics\facility.gif">
+      <LogicalName>facility.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\neftet.gif">
+      <LogicalName>neftet.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\sanctuary.gif">
+      <LogicalName>sanctuary.gif</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Defaults\Trophies.xml">
       <LogicalName>Trophies.xml</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\aerlinthe.gif" />
-    <EmbeddedResource Include="Graphics\bananaland.gif" />
-    <EmbeddedResource Include="Graphics\bur.gif" />
-    <EmbeddedResource Include="Graphics\caul.gif" />
-    <EmbeddedResource Include="Graphics\col.gif" />
+    <EmbeddedResource Include="Graphics\aerlinthe.gif">
+      <LogicalName>aerlinthe.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\bananaland.gif">
+      <LogicalName>bananaland.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\bur.gif">
+      <LogicalName>bur.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\caul.gif">
+      <LogicalName>caul.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\col.gif">
+      <LogicalName>col.gif</LogicalName>
+    </EmbeddedResource>
     <Content Include="Documents\GuidetoVariablesandFunctions.txt" />
   </ItemGroup>
   <ItemGroup>
