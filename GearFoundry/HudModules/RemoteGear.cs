@@ -402,15 +402,18 @@ namespace GearFoundry
                 if (bPortalGearEnabled == true)
                 {
                     bPortalGearEnabled = false;
-                    DisposePortalGearHud();
+                    if (portalGearHud != null) { DisposePortalGearHud(); }
+                    if (portalRecallGearHud != null) { DisposePortalRecallGearHud(); }
                 }
                 else
                 {
-
+                    
                     bPortalGearEnabled = true;
                     RenderPortalGearHud();
+                    RenderPortal2GearHud();
 
                 }
+
                 chkPortalGearEnabled.Checked = bPortalGearEnabled;
                 SaveSettings();
             }

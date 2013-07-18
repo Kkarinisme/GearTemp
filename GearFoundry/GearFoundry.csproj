@@ -211,9 +211,21 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Graphics\olthoi_north.gif" />
+    <EmbeddedResource Include="Graphics\gearknight.gif" />
+    <EmbeddedResource Include="Graphics\mhoire.gif" />
+    <Content Include="olthoi_north.gif" />
+    <EmbeddedResource Include="Graphics\facility.gif" />
+    <EmbeddedResource Include="Graphics\neftet.gif" />
+    <EmbeddedResource Include="Graphics\sanctuary.gif" />
     <EmbeddedResource Include="Defaults\Trophies.xml">
       <LogicalName>Trophies.xml</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\aerlinthe.gif" />
+    <EmbeddedResource Include="Graphics\bananaland.gif" />
+    <EmbeddedResource Include="Graphics\bur.gif" />
+    <EmbeddedResource Include="Graphics\caul.gif" />
+    <EmbeddedResource Include="Graphics\col.gif" />
     <Content Include="Documents\GuidetoVariablesandFunctions.txt" />
   </ItemGroup>
   <ItemGroup>

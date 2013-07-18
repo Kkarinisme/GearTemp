@@ -337,8 +337,9 @@
 							<control progid="DecalControls.Edit" name="txtSalvageName" left="8" top="265" width="250" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
 							<control progid="DecalControls.StaticText" name="lblSalvageString" left="8" top="285" width="150" height="16" text="Salvage Combine String: " />
 							<control progid="DecalControls.Edit" name="txtSalvageString" left="8" top="300" width="250" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
-							<control progid="DecalControls.PushButton" name="btnUpdateSalvage" left="8" top="325" width="60" height="18" text="Update" />
-						</control>
+              <!--<control progid="DecalControls.PushButton" name="btnNewSalvage" left="8" top="325" width="60" height="18" text="Add New Salvage" />-->
+              <control progid="DecalControls.PushButton" name="btnUpdateSalvage" left="8" top="350" width="60" height="18" text="Update Salvage" />
+            </control>
 					</page>
 				</control>
 				</control>

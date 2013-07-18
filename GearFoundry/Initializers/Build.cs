@@ -794,7 +794,40 @@ namespace GearFoundry
 			writer0.Close();
 			}
 		}
-		
+
+        private void RedoSalvageFile()
+        {
+         try{
+             IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("Item");
+             foreach (IDName idname in MaterialIndex)
+            {
+                foreach (XElement el in elements)
+                {
+                    if (idname.name == el.Element("key").Value)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        xdocSalvage.Element("GameItems").Add(new XElement("Item",
+                        new XElement("key", idname.name),
+                        new XElement("intvalue", idname.ID),
+                        new XElement("checked", true),
+                        new XElement("combine", ""),
+                        new XElement("GUID", "")));
+                        WriteToChat(idname.name + " added to salvage list.");
+                        setUpLists(xdocSalvage, mSortedSalvageList, mSortedSalvageListChecked);
+ 
+
+                    }
+                }
+
+
+            }
+         }
+         catch (Exception ex) { LogError(ex); }
+
+        }
 		
 		private void CreateAttribIndex()
 		{	
