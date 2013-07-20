@@ -146,7 +146,7 @@ namespace GearFoundry
 					
                
 
-                portalGearHud = new VirindiViewService.HudView("", 400, 40, new ACImage(0x6AA2), false, "PortalGear");
+                portalGearHud = new VirindiViewService.HudView("", 380, 40, new ACImage(0x6AA2), false, "PortalGear");
                 portalGearHud.ShowInBar = false;
                 portalGearHud.UserAlphaChangeable = false;
                 portalGearHud.Visible = true;
@@ -301,7 +301,7 @@ namespace GearFoundry
                     DisposePortalRecallGearHud();
                 }
 
-                portalRecallGearHud = new VirindiViewService.HudView("", 340, 40, new ACImage(0x6AA2), false, "PortalRecallGear");
+                portalRecallGearHud = new VirindiViewService.HudView("", 320, 40, new ACImage(0x6AA2), false, "PortalRecallGear");
                 portalRecallGearHud.ShowInBar = false;
                 portalRecallGearHud.UserAlphaChangeable = false;
                 portalRecallGearHud.Visible = true;
@@ -317,10 +317,8 @@ namespace GearFoundry
 
 
                //Sanctuary Recall
-                string strSanctuaryRecallImage = GearDir + @"\sanctuary.gif";
-                Image SanctuaryRecallImage = new Bitmap(strSanctuaryRecallImage);
-                //Stream recallSanctuaryStream = this.GetType().Assembly.GetManifestResourceStream("sanctuary.gif");
-                //Image SanctuaryRecallImage = new Bitmap(recallSanctuaryStream);
+                Stream recallSanctuaryStream = this.GetType().Assembly.GetManifestResourceStream("sanctuary.gif");
+                Image SanctuaryRecallImage = new Bitmap(recallSanctuaryStream);
                 mPortalRecallGear0 = new HudPictureBox();
                 mPortalRecallGear0.Image = (ACImage)SanctuaryRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear0, new Rectangle(2, 2, 25, 39));
@@ -328,10 +326,10 @@ namespace GearFoundry
                 mPortalRecallGear0.Hit += (sender, obj) => mPortalRecallGear0_Hit(sender, obj);
 
                 //  BananaLand Recall
-                //Stream recallBananaLandStream = this.GetType().Assembly.GetManifestResourceStream("bananaland.gif");
-                //Image BananaLandRecallImage = new Bitmap(recallBananaLandStream);
-                string strBananaLandRecallImage = GearDir + @"\bananaland.gif";
-                Image BananaLandRecallImage = new Bitmap(strBananaLandRecallImage);
+                Stream recallBananaLandStream = this.GetType().Assembly.GetManifestResourceStream("bananaland.gif");
+                Image BananaLandRecallImage = new Bitmap(recallBananaLandStream);
+                //string strBananaLandRecallImage = GearDir + @"\bananaland.gif";
+                //Image BananaLandRecallImage = new Bitmap(strBananaLandRecallImage);
                 mPortalRecallGear1 = new HudPictureBox();
                 mPortalRecallGear1.Image = (ACImage)BananaLandRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear1, new Rectangle(30, 2, 25, 39));
@@ -339,10 +337,8 @@ namespace GearFoundry
                 mPortalRecallGear1.Hit += (sender, obj) => mPortalRecallGear1_Hit(sender, obj);
 
                 //  Facility Hub Recall
-                //Stream recallFacilityStream = this.GetType().Assembly.GetManifestResourceStream("facility.gif");
-                //Image FacilityRecallImage = new Bitmap(recallFacilityStream);
-                string strFacilityHubRecallImage = GearDir + @"\facility.gif";
-                Image FacilityRecallImage = new Bitmap(strFacilityHubRecallImage);
+                Stream recallFacilityStream = this.GetType().Assembly.GetManifestResourceStream("facility.gif");
+                Image FacilityRecallImage = new Bitmap(recallFacilityStream);
                 mPortalRecallGear2 = new HudPictureBox();
                 mPortalRecallGear2.Image = (ACImage)FacilityRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear2, new Rectangle(60, 2, 25, 39));
@@ -350,10 +346,8 @@ namespace GearFoundry
                 mPortalRecallGear2.Hit += (sender, obj) => mPortalRecallGear2_Hit(sender, obj);
  
                 //  Colloseum Recall
-                //Stream recallColloseumStream = this.GetType().Assembly.GetManifestResourceStream("col.gif");
-                //Image ColloseumRecallImage = new Bitmap(recallColloseumStream);
-                string strColloseumRecallImage = GearDir + @"\col.gif";
-                Image ColloseumRecallImage = new Bitmap(strColloseumRecallImage);
+                Stream recallColloseumStream = this.GetType().Assembly.GetManifestResourceStream("col.gif");
+                Image ColloseumRecallImage = new Bitmap(recallColloseumStream);
                 mPortalRecallGear3 = new HudPictureBox();
                 mPortalRecallGear3.Image = (ACImage)ColloseumRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear3, new Rectangle(90, 2, 25, 39));
@@ -361,10 +355,8 @@ namespace GearFoundry
                 mPortalRecallGear3.Hit += (sender, obj) => mPortalRecallGear3_Hit(sender, obj);
 
                 //  Aerlinthe Recall
-                //Stream recallAerlintheStream = this.GetType().Assembly.GetManifestResourceStream("aerlinthe.gif");
-                //Image AerlintheRecallImage = new Bitmap(recallAerlintheStream);
-                string strAerlintheRecallImage = GearDir + @"\aerlinthe.gif";
-                Image AerlintheRecallImage = new Bitmap(strAerlintheRecallImage);
+                Stream recallAerlintheStream = this.GetType().Assembly.GetManifestResourceStream("aerlinthe.gif");
+                Image AerlintheRecallImage = new Bitmap(recallAerlintheStream);
                 mPortalRecallGear4 = new HudPictureBox();
                 mPortalRecallGear4.Image = (ACImage)AerlintheRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear4, new Rectangle(120, 2, 25, 39));
@@ -372,10 +364,8 @@ namespace GearFoundry
                 mPortalRecallGear4.Hit += (sender, obj) => mPortalRecallGear4_Hit(sender, obj);
 
                 //  Singularity Caul Recall
-                //Stream recallCaulStream = this.GetType().Assembly.GetManifestResourceStream("caul.gif");
-                //Image CaulRecallImage = new Bitmap(recallCaulStream);
-                string strCaulRecallImage = GearDir + @"\caul.gif";
-                Image CaulRecallImage = new Bitmap(strCaulRecallImage);
+                Stream recallCaulStream = this.GetType().Assembly.GetManifestResourceStream("caul.gif");
+                Image CaulRecallImage = new Bitmap(recallCaulStream);
                 mPortalRecallGear5 = new HudPictureBox();
                 mPortalRecallGear5.Image = (ACImage)CaulRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear5, new Rectangle(150, 2, 25, 39));
@@ -383,10 +373,8 @@ namespace GearFoundry
                 mPortalRecallGear5.Hit += (sender, obj) => mPortalRecallGear5_Hit(sender, obj);
 
                 //  Bur Recall
-                //Stream recallBurStream = this.GetType().Assembly.GetManifestResourceStream("bur.gif");
-                //Image BurRecallImage = new Bitmap(recallBurStream);
-                string strBurRecallImage = GearDir + @"\bur.gif";
-                Image BurRecallImage = new Bitmap(strBurRecallImage);
+                Stream recallBurStream = this.GetType().Assembly.GetManifestResourceStream("bur.gif");
+                Image BurRecallImage = new Bitmap(recallBurStream);
                 mPortalRecallGear6 = new HudPictureBox();
                 mPortalRecallGear6.Image = (ACImage)BurRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear6, new Rectangle(180, 2, 25, 39));
@@ -394,10 +382,8 @@ namespace GearFoundry
                 mPortalRecallGear6.Hit += (sender, obj) => mPortalRecallGear6_Hit(sender, obj);
 
                 //  Olthoi_North Recall
-                //Stream recallOlthoi_NorthStream = this.GetType().Assembly.GetManifestResourceStream("olthoi_north.gif");
-                //Image OlthoiRecallImage = new Bitmap(recallOlthoi_NorthStream);
-                string strOlthoiRecallImage = GearDir + @"\olthoi_north.gif";
-                Image OlthoiRecallImage = new Bitmap(strOlthoiRecallImage);
+                Stream recallOlthoi_NorthStream = this.GetType().Assembly.GetManifestResourceStream("olthoi_north.gif");
+                Image OlthoiRecallImage = new Bitmap(recallOlthoi_NorthStream);
                 mPortalRecallGear7 = new HudPictureBox();
                 mPortalRecallGear7.Image = (ACImage)OlthoiRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear7, new Rectangle(210, 2, 25, 39));
@@ -405,10 +391,8 @@ namespace GearFoundry
                 mPortalRecallGear7.Hit += (sender, obj) => mPortalRecallGear7_Hit(sender, obj);
 
                 //  Mhoire Recall
-                //Stream recallMhoireStream = this.GetType().Assembly.GetManifestResourceStream("mhoire.gif");
-                //Image MhoireRecallImage = new Bitmap(recallMhoireStream);
-                string strMhoireRecallImage = GearDir + @"\mhoire.gif";
-                Image MhoireRecallImage = new Bitmap(strMhoireRecallImage);
+                Stream recallMhoireStream = this.GetType().Assembly.GetManifestResourceStream("mhoire.gif");
+                Image MhoireRecallImage = new Bitmap(recallMhoireStream);
                 mPortalRecallGear8 = new HudPictureBox();
                 mPortalRecallGear8.Image = (ACImage)MhoireRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear8, new Rectangle(240, 2, 25, 39));
@@ -416,10 +400,8 @@ namespace GearFoundry
                 mPortalRecallGear8.Hit += (sender, obj) => mPortalRecallGear8_Hit(sender, obj);
 
                 //  GearKnight Recall
-                //Stream recallGearKnightStream = this.GetType().Assembly.GetManifestResourceStream("gearknight.gif");
-                //Image GearKnightRecallImage = new Bitmap(recallGearKnightStream);
-                string strGearKnightRecallImage = GearDir + @"\gearknight.gif";
-                Image GearKnightRecallImage = new Bitmap(strGearKnightRecallImage);
+                Stream recallGearKnightStream = this.GetType().Assembly.GetManifestResourceStream("gearknight.gif");
+                Image GearKnightRecallImage = new Bitmap(recallGearKnightStream);
                 mPortalRecallGear9 = new HudPictureBox();
                 mPortalRecallGear9.Image = (ACImage)GearKnightRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear9, new Rectangle(270, 2, 25, 39));
@@ -427,10 +409,8 @@ namespace GearFoundry
                 mPortalRecallGear9.Hit += (sender, obj) => mPortalRecallGear9_Hit(sender, obj);
 
                 //  Neftet Recall
-                //Stream recallNeftetStream = this.GetType().Assembly.GetManifestResourceStream("neftet.gif");
-                //Image NeftetRecallImage = new Bitmap(recallNeftetStream);
-                string strNeftetRecallImage = GearDir + @"\neftet.gif";
-                Image NeftetRecallImage = new Bitmap(strNeftetRecallImage);
+                Stream recallNeftetStream = this.GetType().Assembly.GetManifestResourceStream("neftet.gif");
+                Image NeftetRecallImage = new Bitmap(recallNeftetStream);
                 mPortalRecallGear10 = new HudPictureBox();
                 mPortalRecallGear10.Image = (ACImage)NeftetRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear10, new Rectangle(300, 2, 25, 39));
