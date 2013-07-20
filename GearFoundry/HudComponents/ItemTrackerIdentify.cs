@@ -269,7 +269,11 @@ namespace GearFoundry
 					{					
 						case ObjectClass.Armor:
 							var reducedarmormatches = from ruls in AppliesToListMatches
-								where (ruls.RuleArmorLevel == 0 || IOItemWithID.ArmorScore >= ruls.RuleArmorLevel) &&
+								where 
+								(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
+								(ruls.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= ruls.RuleWork) &&
+								(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)) &&
+								(ruls.RuleArmorLevel == 0 || IOItemWithID.ArmorScore >= ruls.RuleArmorLevel) &&
 								(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
 								(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
 								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
@@ -293,7 +297,11 @@ namespace GearFoundry
 							if(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)
 							{
 								var reducedarmorclothmatches = from ruls in AppliesToListMatches
-									where IOItemWithID.ArmorScore >= ruls.RuleArmorLevel &&  
+									where 
+									(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
+									(ruls.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= ruls.RuleWork) &&
+									(ruls.RuleWieldLevel == -1 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)) &&
+									IOItemWithID.ArmorScore >= ruls.RuleArmorLevel &&
 									(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(25)) &&
 									(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&  
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
@@ -352,7 +360,11 @@ namespace GearFoundry
 						case ObjectClass.MissileWeapon:
 						case ObjectClass.WandStaffOrb:
 							var reducedmeleematches = from ruls in AppliesToListMatches
-								where IOItemWithID.GearScore >= ruls.WeaponModSum &&
+								where 
+								(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
+								(ruls.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= ruls.RuleWork) &&
+								(ruls.RuleWieldLevel == -1 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)) &&
+								IOItemWithID.GearScore >= ruls.WeaponModSum &&
 								(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
 								(ruls.RuleWieldAttribute == 0 || ruls.RuleWieldAttribute == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
 								((ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
@@ -401,7 +413,10 @@ namespace GearFoundry
 							
 						case ObjectClass.Jewelry:
 							var reducedjewelrymatches = from ruls in AppliesToListMatches
-								where ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber
+								where 
+									(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
+									(ruls.RuleWieldLevel == -1 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)) &&
+									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber
 									orderby ruls.RulePriority
 									select ruls;
 								if(reducedjewelrymatches.Count() > 0)

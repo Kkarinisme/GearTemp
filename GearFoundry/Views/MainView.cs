@@ -125,7 +125,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ITextBox txtRulePrice;
         MyClasses.MetaViewWrappers.ITextBox txtRuleMaxBurden;
         MyClasses.MetaViewWrappers.ITextBox txtRuleKeyWordsNot;
-        MyClasses.MetaViewWrappers.ITextBox txtRuleWieldReqValue;
+//        MyClasses.MetaViewWrappers.ITextBox txtRuleWieldReqValue;
         MyClasses.MetaViewWrappers.ITextBox txtRuleWieldLevel;
  
         // Controls on Notify.SearchRules.Weapon Page
@@ -167,7 +167,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IList lstRuleCloakSets;
         MyClasses.MetaViewWrappers.IList lstRuleCloakSpells;
         MyClasses.MetaViewWrappers.ITextBox txtRuleItemLevel;
-        MyClasses.MetaViewWrappers.ICheckBox chkRuleCloakMustHaveSpell;
+//        MyClasses.MetaViewWrappers.ICheckBox chkRuleCloakMustHaveSpell;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleRed;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleYellow;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleBlue;
@@ -431,7 +431,7 @@ namespace GearFoundry
                 txtRulePrice = (MyClasses.MetaViewWrappers.ITextBox)View["txtRulePrice"];
                 txtRuleMaxBurden = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleMaxBurden"];
                 txtRuleKeyWordsNot = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleKeyWordsNot"];
-                txtRuleWieldReqValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleWieldReqValue"];
+//                txtRuleWieldReqValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleWieldReqValue"];
                 txtRuleWieldLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleWieldLevel"];
                 txtRuleItemLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleItemLevel"];
 				}catch(Exception ex){LogError(ex);}
@@ -455,7 +455,7 @@ namespace GearFoundry
                 txtRuleMaxCraft.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleMaxCraft_End);
                 txtRuleArcaneLore.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleArcaneLore_End);
                 txtRuleMaxBurden.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleMaxBurden_End);
-                txtRuleWieldReqValue.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleWieldReqValue_End);
+//                txtRuleWieldReqValue.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleWieldReqValue_End);
                 txtRuleWieldLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleWieldLevel_End);
                 txtRuleItemLevel.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleItemLevel_End);
                 txtRulePrice.End += new EventHandler<MVTextBoxEndEventArgs>(txtRulePrice_End);
@@ -549,14 +549,14 @@ namespace GearFoundry
                 lstRuleCloakSets = (MyClasses.MetaViewWrappers.IList)View["lstRuleCloakSets"];
                 lstRuleCloakSpells = (MyClasses.MetaViewWrappers.IList)View["lstRuleCloakSpells"];
                 txtRuleItemLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleItemLevel"];
-                chkRuleCloakMustHaveSpell = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleCloakMustHaveSpell"];
+//                chkRuleCloakMustHaveSpell = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleCloakMustHaveSpell"];
                 chkRuleRed = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleRed"];
                 chkRuleYellow = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleYellow"];
                 chkRuleBlue = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleBlue"];
 				}catch(Exception ex){LogError(ex);}
                   try
                   {
-                chkRuleCloakMustHaveSpell.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleCloakMustHaveSpell_Change);
+//                chkRuleCloakMustHaveSpell.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleCloakMustHaveSpell_Change);
                 chkRuleRed.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleRed_Change);
                 chkRuleYellow.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleYellow_Change);
                 chkRuleBlue.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleBlue_Change);

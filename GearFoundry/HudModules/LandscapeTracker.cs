@@ -247,7 +247,7 @@ namespace GearFoundry
 						
 					case ObjectClass.Player:
 						if(IOLandscape.Id == Core.CharacterFilter.Id) {return;}
-						if(gsSettings.bShowFellowPlayers)
+						if(IOLandscape.HasIdData && gsSettings.bShowFellowPlayers)
 						{
 							if(LandscapeFellowMemberTrackingList.Contains(IOLandscape.Name))
 							{
@@ -255,7 +255,7 @@ namespace GearFoundry
 								goto default;									
 							}
 						}
-						if (gsSettings.bShowAllegancePlayers && Core.CharacterFilter.Monarch != null && Core.CharacterFilter.Monarch.Id != 0) 
+						if (IOLandscape.HasIdData && gsSettings.bShowAllegancePlayers && Core.CharacterFilter.Monarch != null && Core.CharacterFilter.Monarch.Id != 0) 
 						{
 							if (Core.CharacterFilter.Monarch.Id == IOLandscape.LValue(LongValueKey.Monarch)) 
 							{
