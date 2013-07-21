@@ -62,6 +62,8 @@ namespace GearFoundry
         {
             try
             {
+                WriteToChat("I am in lstSelect with Filename = " + filename);
+
                 // Variable initiations
                 mgoon = true;
                 string mcomb = "";
@@ -76,6 +78,7 @@ namespace GearFoundry
 
                 if (lst != null && filename == salvageFilename)
                 {
+                  //  RedoSalvageFile();
                     mitem = 3;
                     mcomb = (Convert.ToString(row[2][0]));
                     txtSalvageString.Text = mcomb;

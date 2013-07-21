@@ -196,7 +196,7 @@ namespace GearFoundry
             xdocMobs = XDocument.Load(mobsFilename);
             xdocTrophies = XDocument.Load(trophiesFilename);
             xdocSalvage = XDocument.Load(salvageFilename);
-            RedoSalvageFile();
+          //  RedoSalvageFile();
             xdocRules = XDocument.Load(rulesFilename);
             xdocGenSettings = XDocument.Load(genSettingsFilename);
             xdocSwitchGearSettings = XDocument.Load(switchGearSettingsFilename);
