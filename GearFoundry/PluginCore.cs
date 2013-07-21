@@ -211,7 +211,7 @@ namespace GearFoundry
                 btnAddMobItem.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAddMobItem_Click);
                 lstNotifySalvage.Selected -= new EventHandler<MVListSelectEventArgs>(lstNotifySalvage_Selected);
                 btnUpdateSalvage.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateSalvage_Click);
-                txtSalvageName.End -= new EventHandler<MVTextBoxEndEventArgs>(txtSalvageName_End);
+             //   txtSalvageName.End -= new EventHandler<MVTextBoxEndEventArgs>(txtSalvageName_End);
                 txtSalvageString.End -= new EventHandler<MVTextBoxEndEventArgs>(txtSalvageString_End);
  	 
 
