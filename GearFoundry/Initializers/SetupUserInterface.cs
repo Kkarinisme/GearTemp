@@ -1135,21 +1135,6 @@ namespace GearFoundry
 
         }
 
-//        private void populateUstListBox()
-//        {
-//            try
-//            {
-//                int mList = 2;
-//                //setUpLists(xdocSalvage, mSortedSalvageList, mSortedSalvageListChecked);
-//                populateLst(lstUstList, mSortedSalvageList, mList);
-//
-//            }
-//
-//            catch (Exception ex) { LogError(ex); }
-//
-//        }
-
-
 
         private void populateWeaponDamageListBox()
         {

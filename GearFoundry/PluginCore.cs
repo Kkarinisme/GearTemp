@@ -153,7 +153,7 @@ namespace GearFoundry
                 txtRuleMaxCraft.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleMaxCraft_End);
                 txtRuleArcaneLore.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleArcaneLore_End);
                 txtRuleMaxBurden.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleMaxBurden_End);
-                txtRuleWieldReqValue.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleWieldReqValue_End);
+//                txtRuleWieldReqValue.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleWieldReqValue_End);
                 txtRuleWieldLevel.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleWieldLevel_End);
                 txtRuleItemLevel.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleItemLevel_End);
                 txtRulePrice.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRulePrice_End);
@@ -183,7 +183,7 @@ namespace GearFoundry
                 txtRuleMinMaxd.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleMinMaxd_End);
                 chkRuleMustBeUnenchantable.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleMustBeUnenchantable_Change);
                 txtRuleMinArmorLevel.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleMinArmorLevel_End);
-                chkRuleCloakMustHaveSpell.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleCloakMustHaveSpell_Change);
+//                chkRuleCloakMustHaveSpell.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleCloakMustHaveSpell_Change);
                 chkRuleRed.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleRed_Change);
                 chkRuleYellow.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleYellow_Change);
                 chkRuleBlue.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleBlue_Change);

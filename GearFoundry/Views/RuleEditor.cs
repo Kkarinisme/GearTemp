@@ -392,23 +392,23 @@ namespace GearFoundry
 
         }
 
+//
+//        [ControlEvent("txtRuleWieldReqValue", "End")]
+//        private void txtRuleWieldReqValue_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
+//        {
+//
+//            int result = 0;
+//            if (int.TryParse(txtRuleWieldReqValue.Text, out result))
+//            {
+//                nRuleWieldReqValue = result;
+//            }
+//            else
+//            {
+//                txtRuleWieldReqValue.Text = string.Empty;
+//                nRuleWieldReqValue = -1;
+//            }
 
-        [ControlEvent("txtRuleWieldReqValue", "End")]
-        private void txtRuleWieldReqValue_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-
-            int result = 0;
-            if (int.TryParse(txtRuleWieldReqValue.Text, out result))
-            {
-                nRuleWieldReqValue = result;
-            }
-            else
-            {
-                txtRuleWieldReqValue.Text = string.Empty;
-                nRuleWieldReqValue = -1;
-            }
-
-        }
+//        }
         [ControlEvent("txtRuleWieldLevel", "End")]
         private void txtRuleWieldLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
         {

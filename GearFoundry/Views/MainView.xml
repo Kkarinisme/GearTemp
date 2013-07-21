@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<view icon="28170" title="GearFoundry Beta v0.1.0.8" width="530" height="500">
+<view icon="28170" title="GearFoundry Beta v0.1.0.10" width="530" height="500">
 	<control progid="DecalControls.Notebook" name="mainTabs">
 		<!--settings-->
 	    <page label="Settings">
@@ -106,41 +106,41 @@
 										</control>
 										<control progid="DecalControls.Edit" name="txtRuleName" left="5" top="10" width="100" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
 										<control progid="DecalControls.StaticText" name="lblRuleName" left="105" top="10" width="90" height="16" text=" --Rule Name" />
-										<control progid="DecalControls.Checkbox" name="chkRuleEnabled" left="200" top="10" width="80" height="16" text="Rule Enabled" />
+										<control progid="DecalControls.Checkbox" name="chkRuleEnabled" left="200" top="10" width="80" height="16" text="Rule Enabled*" />
 										<control progid="DecalControls.Edit" name="txtRulePriority" left="310" top="10" width="30" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
-										<control progid="DecalControls.StaticText" name="lblRulePriority" left="340" top="10" width="90" height="16" text=" --Rule Priority" />
+										<control progid="DecalControls.StaticText" name="lblRulePriority" left="340" top="10" width="90" height="16" text=" --Rule Priority*" />
 										<control progid="DecalControls.Edit" name="txtRuleDescr" left="5" top="30" width="250" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
 										<control progid="DecalControls.StaticText" name="lblRuleInfo" left="270" top="30" width="85" height="16" text="--Description:" />
 										<control progid="DecalControls.Edit" name="txtRuleKeywords" left="180" top="80" width="100" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
 										<control progid="DecalControls.StaticText" name="lblNameMust" left="300" top="80" width="100" height="16" text="Name must contain:" />
 										<control progid="DecalControls.Edit" name="txtRuleKeyWordsNot" left="180" top="100" width="100" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
 										<control progid="DecalControls.StaticText" name="lblRuleNameMustNot" left="300" top="100" width="150" height="16" text="Name must not contain:" />
-										<control progid="DecalControls.StaticText" name="lblRuleArcaneLore" left="200" top="120" width="80" height="16" text="ArcaneLore &lt;=" />
+										<control progid="DecalControls.StaticText" name="lblRuleArcaneLore" left="200" top="120" width="80" height="16" text="ArcaneLore* &lt;=" />
 										<control progid="DecalControls.Edit" name="txtRuleArcaneLore" left="290" top="120" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
 										<control progid="DecalControls.StaticText" name="lblRulePrice" left="200" top="140" width="80" height="16" text="Value =&gt;" />
 										<control progid="DecalControls.Edit" name="txtRulePrice" left="290" top="140" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
-										<control progid="DecalControls.StaticText" name="lblRuleWork" left="200" top="160" width="80" height="16" text="Work &lt;=" />
+										<control progid="DecalControls.StaticText" name="lblRuleWork" left="200" top="160" width="80" height="16" text="Work* &lt;=" />
 										<control progid="DecalControls.Edit" name="txtRuleMaxCraft" left="290" top="160" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
 										<control progid="DecalControls.StaticText" name="lblRuleBurden" left="200" top="180" width="80" height="16" text="Burden &lt;="/>
 										<control progid="DecalControls.Edit" name="txtRuleMaxBurden" left="290" top="180" width="50" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
-										<control progid="DecalControls.StaticText" name="lblRuleWieldReqValue" left="200" top="200" width="80" height="16" text="Char Lvl Must Be =&gt;"/>
-										<control progid="DecalControls.Edit" name="txtRuleWieldReqValue" left="290" top="220" width="50" height="16"  text=""/>
-										<control progid="DecalControls.StaticText" name="lblRuleWieldLevel" left="200" top="220" width="80" height="16" text="Char Lvl &lt;="/>
-										<control progid="DecalControls.Edit" name="txtRuleWieldLevel" left="290" top="200" width="50" height="16"  text=""/>
+										<!--control progid="DecalControls.StaticText" name="lblRuleWieldReqValue" left="200" top="200" width="80" height="16" text="Wield Level =&gt;"/>
+										<control progid="DecalControls.Edit" name="txtRuleWieldReqValue" left="290" top="220" width="50" height="16"  text=""/-->
+										<control progid="DecalControls.StaticText" name="lblRuleWieldLevel" left="200" top="220" width="80" height="16" text="Char Lvl* &lt;="/>
+										<control progid="DecalControls.Edit" name="txtRuleWieldLevel" left="290" top="220" width="50" height="16"  text=""/>
 									</control>
 								</page>
 								<!--main-->
 								<page label="Weapon">
 									<control progid="DecalControls.FixedLayout" clipped="">
-										<control progid="DecalControls.StaticText" name="lblWeapCat" left="10" top="10" width="56" height="16" text="Weapon Category:" />
+										<control progid="DecalControls.StaticText" name="lblWeapCat" left="10" top="10" width="56" height="16" text="Weapon Category*:" />
 										<control progid="DecalControls.Choice" name="cboWeaponAppliesTo" left="10" top="25" width="125" height="20">
 										</control>
-										<control progid="DecalControls.StaticText" name="lblMastCat" left="145" top="10" width="56" height="16" text="Mastery Category:" />
+										<control progid="DecalControls.StaticText" name="lblMastCat" left="145" top="10" width="56" height="16" text="Mastery Category*:" />
 										<control progid="DecalControls.Choice" name="cboMasteryType" left="145" top="25" width="125" height="20">
 										</control>
-										<control progid="DecalControls.StaticText" name="lblDamageTypes" left="145" top="50" width="110" height="20" text="Damage Types:" />
+										<control progid="DecalControls.StaticText" name="lblDamageTypes" left="145" top="50" width="110" height="20" text="Damage Types*:" />
 										<control progid="DecalControls.Edit" name="txtRuleMcModAttack" left="10" top="65" width="25" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
-										<control progid="DecalControls.StaticText" name="lblRuleMcModAttack" left="40" top="65" width="100" height="20" text="mc/mod%/att. Bonus" />
+										<control progid="DecalControls.StaticText" name="lblRuleMcModAttack" left="40" top="65" width="100" height="20" text="mc/mod%/att. Bonus*" />
 										<control progid="DecalControls.List" name="lstDamageTypes" left="145" top="65" width="125" height="90">
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="110" />
@@ -153,8 +153,8 @@
 										<control progid="DecalControls.Edit" name="txtRuleMagicD" left="10" top="115" width="25" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
 										<control progid="DecalControls.StaticText" name="lblRuleMagicD" left="40" top="115" width="110" height="20" text="Mag./Mis. D. Bonus" />
 
-										<control progid="DecalControls.StaticText" name="lblEnabled10025" left="10" top="175" width="40" height="20" text="Enabled" />
-										<control progid="DecalControls.StaticText" name="lblRuleReqSkilla" left="75" top="175" width="75" height="20" text="Req. Skl." />
+										<control progid="DecalControls.StaticText" name="lblEnabled10025" left="10" top="175" width="40" height="20" text="Enabled*" />
+										<control progid="DecalControls.StaticText" name="lblRuleReqSkilla" left="75" top="175" width="75" height="20" text="Req. Skl.*" />
 										<control progid="DecalControls.StaticText" name="lblRuleMinMax_ElvsMons" left="150" top="175" width="75" height="20" text="Damage" />
 										<control progid="DecalControls.StaticText" name="lblRuleMSCleave" left="210" top="175" width="75" height="20" text="MS/Cleave" />
 
@@ -184,16 +184,16 @@
 
 								<page label="Armor">
 									<control progid="DecalControls.FixedLayout" clipped="">
-										<control progid="DecalControls.StaticText" name="lblMinArmorLevel" left="10" top="8" width="90" height="16" text="Armor Level =&gt;" />
+										<control progid="DecalControls.StaticText" name="lblMinArmorLevel" left="10" top="8" width="90" height="16" text="Armor Level* =&gt;" />
 										<control progid="DecalControls.Edit" name ="txtRuleMinArmorLevel" left="120" top ="8" width="60" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
-										<control progid="DecalControls.Checkbox" name="chkRuleMustBeUnenchantable" left="200" top="8" width="80" height="16" text="Unenchantable" />
-										<control progid="DecalControls.StaticText" name="lblRuleArmorCoverage" left="10" top="30" width="88" height="16" text="Coverage:" />
+										<control progid="DecalControls.Checkbox" name="chkRuleMustBeUnenchantable" left="200" top="8" width="80" height="16" text="Unenchantable*" />
+										<control progid="DecalControls.StaticText" name="lblRuleArmorCoverage" left="10" top="30" width="88" height="16" text="Coverage*:" />
 										<control progid="DecalControls.List" name="lstRuleArmorCoverages" left="10" top="50" width="135" height="240">
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="110" />
 											<column progid="DecalControls.TextColumn" />
 										</control>
-										<control progid="DecalControls.StaticText" name="lblRuleArmorTypes" left="155" top="30" width="80" height="16" text="Type:" />
+										<control progid="DecalControls.StaticText" name="lblRuleArmorTypes" left="155" top="30" width="80" height="16" text="Type*:" />
 										<control progid="DecalControls.List" name="lstRuleArmorTypes" left="155" top="50" width="110" height="240">
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="110" />
@@ -212,43 +212,43 @@
 								<!--Armor-->
 								<page label="Cloaks/Aetheria">
 									<control progid="DecalControls.FixedLayout" clipped="">
-										<control progid="DecalControls.StaticText" name="lblRuleCloakSets" left="10" top="30" width="88" height="16" text="Cloak Sets:" />
+										<control progid="DecalControls.StaticText" name="lblRuleCloakSets" left="10" top="30" width="88" height="16" text="Cloak Sets*:" />
 										<control progid="DecalControls.List" name="lstRuleCloakSets" left="10" top="50" width="200" height="100">
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="175" />
 											<column progid="DecalControls.TextColumn" />
 										</control>
-										<control progid="DecalControls.StaticText" name="lblRuleCloakSpells" left="10" top="150" width="88" height="16" text="Cloak Spells:" />
+										<control progid="DecalControls.StaticText" name="lblRuleCloakSpells" left="10" top="150" width="88" height="16" text="Cloak Spells*:" />
 										<control progid="DecalControls.List" name="lstRuleCloakSpells" left="10" top="170" width="200" height="70">
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="175" />
 											<column progid="DecalControls.TextColumn" />
 										</control>
-										<control progid="DecalControls.StaticText" name="lblRuleItemLevel" left="250" top="30" width="100" height="16" text="Item Lvl (1-5): =&gt;"/>
+										<control progid="DecalControls.StaticText" name="lblRuleItemLevel" left="250" top="30" width="100" height="16" text="Item Lvl (1-5)*: =&gt;"/>
 										<control progid="DecalControls.Edit" name="txtRuleItemLevel" left="355" top="30" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
-										<control progid="DecalControls.Checkbox" name="chkRuleCloakMustHaveSpell" left="250" top="60" width="150" height="16" text="Cloak must have a spell." />
+										<!--control progid="DecalControls.Checkbox" name="chkRuleCloakMustHaveSpell" left="250" top="60" width="150" height="16" text="Cloak must have a spell." /-->
 										<control progid="DecalControls.StaticText" name="lblRuleAetheria" left="250" top="90" width="120" height="16" text="Types of Aetheria"/>
-										<control progid="DecalControls.Checkbox" name="chkRuleRed" left="250" top="110" width="150" height="16" text="Red: " />
-										<control progid="DecalControls.Checkbox" name="chkRuleYellow" left="250" top="130" width="150" height="16" text="Yellow: " />
-										<control progid="DecalControls.Checkbox" name="chkRuleBlue" left="250" top="150" width="150" height="16" text="Blue: " />
+										<control progid="DecalControls.Checkbox" name="chkRuleRed" left="250" top="110" width="150" height="16" text="Red*: " />
+										<control progid="DecalControls.Checkbox" name="chkRuleYellow" left="250" top="130" width="150" height="16" text="Yellow*: " />
+										<control progid="DecalControls.Checkbox" name="chkRuleBlue" left="250" top="150" width="150" height="16" text="Blue*: " />
 									</control>
 								</page>
 								<!--Cloaks/Aetheria-->
 								<page label="Essences">
 
 									<control progid="DecalControls.FixedLayout" clipped="">
-										<control progid="DecalControls.StaticText" name="lblRuleEssMast" left="10" top="30" width="88" height="16" text="Mastery:" />
+										<control progid="DecalControls.StaticText" name="lblRuleEssMast" left="10" top="30" width="88" height="16" text="Mastery*:" />
 										<control progid="DecalControls.Choice" name="cboRuleEssMastery" left="10" top="50" width="200" height="100"></control>
 
-										<control progid="DecalControls.StaticText" name="lblRuleEssElements" left="10" top="150" width="88" height="16" text="Element:" />
+										<control progid="DecalControls.StaticText" name="lblRuleEssElements" left="10" top="150" width="88" height="16" text="Element*:" />
 										<control progid="DecalControls.List" name="lstRuleEssElements" left="10" top="140" width="200" height="100">
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="175" />
 											<column progid="DecalControls.TextColumn" />
 										</control>
-										<control progid="DecalControls.StaticText" name="lblRuleEssLevel" left="250" top="30" width="100" height="16" text="Essence Lvl: &lt;="/>
+										<control progid="DecalControls.StaticText" name="lblRuleEssLevel" left="250" top="30" width="100" height="16" text="Essence Lvl*: &lt;="/>
 										<control progid="DecalControls.Edit" name="txtRuleEssLevel" left="355" top="30" width="40" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
-										<control progid="DecalControls.StaticText" name="lblRuleEssDamageLevel" left="250" top="70" width="100" height="16" text="Damage Lvl: =&gt;"/>
+										<control progid="DecalControls.StaticText" name="lblRuleEssDamageLevel" left="250" top="70" width="100" height="16" text="Damage Lvl*: =&gt;"/>
 										<control progid="DecalControls.Edit" name="txtRuleEssDamageLevel" left="355" top="70" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
 										<control progid="DecalControls.StaticText" name="lblRuleEssCDLevel" left="250" top="90" width="100" height="16" text="CritDam Lvl: =&gt;"/>
 										<control progid="DecalControls.Edit" name="txtRuleEssCDLevel" left="355" top="90" width="20" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
@@ -267,7 +267,7 @@
 
 								<page label="Req. Spells">
 									<control progid="DecalControls.FixedLayout" clipped="">
-										<control progid="DecalControls.StaticText" name="lblCurrentSpells" left="10" top="30" width="130" height="16" text="Current Spells Enabled:" />
+										<control progid="DecalControls.StaticText" name="lblCurrentSpells" left="10" top="30" width="130" height="16" text="Current Spells Enabled*:" />
 										<control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="10" top="50" width="200" height="100">
 											<column progid="DecalControls.TextColumn" fixedwidth="150" />
 											<column progid="DecalControls.TextColumn"  />

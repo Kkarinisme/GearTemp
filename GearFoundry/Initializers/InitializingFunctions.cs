@@ -698,7 +698,7 @@ namespace GearFoundry
             txtRulePrice.Text = nRuleValue.ToString();
             txtRuleMaxBurden.Text = nRuleBurden.ToString();
             txtRuleMaxCraft.Text = nRuleWork.ToString();
-            txtRuleWieldReqValue.Text = nRuleWieldReqValue.ToString();
+//            txtRuleWieldReqValue.Text = nRuleWieldReqValue.ToString();
             txtRuleWieldLevel.Text = nRuleWieldLevel.ToString();
             txtRuleItemLevel.Text = nRuleItemLevel.ToString();
             try
@@ -742,7 +742,7 @@ namespace GearFoundry
             chkRuleRed.Checked = bRuleRed;
             chkRuleYellow.Checked = bRuleYellow;
             chkRuleBlue.Checked = bRuleBlue;
-            chkRuleCloakMustHaveSpell.Checked = bRuleCloakMustHaveSpell;
+//            chkRuleCloakMustHaveSpell.Checked = bRuleCloakMustHaveSpell;
             cboRuleEssMastery.Selected = nRuleEssMastery;
             txtRuleEssCDLevel.Text = nRuleEssCDLevel.ToString();
             txtRuleEssCritLevel.Text = nRuleEssCritLevel.ToString();

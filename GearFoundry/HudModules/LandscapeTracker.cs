@@ -247,7 +247,7 @@ namespace GearFoundry
 						
 					case ObjectClass.Player:
 						if(IOLandscape.Id == Core.CharacterFilter.Id) {return;}
-						if(gsSettings.bShowFellowPlayers)
+						if(IOLandscape.HasIdData && gsSettings.bShowFellowPlayers)
 						{
 							if(LandscapeFellowMemberTrackingList.Contains(IOLandscape.Name))
 							{
@@ -255,7 +255,7 @@ namespace GearFoundry
 								goto default;									
 							}
 						}
-						if (gsSettings.bShowAllegancePlayers && Core.CharacterFilter.Monarch != null && Core.CharacterFilter.Monarch.Id != 0) 
+						if (IOLandscape.HasIdData && gsSettings.bShowAllegancePlayers && Core.CharacterFilter.Monarch != null && Core.CharacterFilter.Monarch.Id != 0) 
 						{
 							if (Core.CharacterFilter.Monarch.Id == IOLandscape.LValue(LongValueKey.Monarch)) 
 							{
@@ -512,7 +512,7 @@ namespace GearFoundry
 //Stack:    at GearFoundry.PluginCore.<>c__DisplayClass293.<RemoveFellowLandscape>b__291(String x) in c:\Development\GearFoundry\GearFoundry\HudModules\LandscapeTracker.cs:line 508
 //   at System.Collections.Generic.List`1.RemoveAll(Predicate`1 match)
 //   at GearFoundry.PluginCore.RemoveFellowLandscape(NetworkMessageEventArgs e) in c:\Development\GearFoundry\GearFoundry\HudModules\LandscapeTracker.cs:line 508
-//	    			LandscapeFellowMemberTrackingList.RemoveAll(x => x == Core.WorldFilter[fellow].Name);
+	    			LandscapeFellowMemberTrackingList.RemoveAll(x => x == Core.WorldFilter[fellow].Name);
 	    		}	    
 	    	} catch(Exception ex){LogError(ex);}
 	    	return;
