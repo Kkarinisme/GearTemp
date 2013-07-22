@@ -56,12 +56,12 @@ namespace GearFoundry
 
         }
 
-
-
-        private void lstSelect(XDocument xdoc, string filename, List<XElement> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.ITextBox mtxt, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
+        private void lstSelect(XDocument xdoc, string filename, List<XElement> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.IStaticText mlbl, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
         {
             try
             {
+                WriteToChat("I am in lstSelect with Filename = " + filename);
+
                 // Variable initiations
                 mgoon = true;
                 string mcomb = "";
@@ -72,10 +72,11 @@ namespace GearFoundry
                 //If this function follows a click on the check box then mchecked will be different here from in the salvagelist (lst)
                 mchecked = Convert.ToBoolean(row[0][0]);
                 sname = (Convert.ToString(row[1][0]));
-                mtxt.Text = sname;
+                mlbl.Text = sname;
 
                 if (lst != null && filename == salvageFilename)
                 {
+                    //  RedoSalvageFile();
                     mitem = 3;
                     mcomb = (Convert.ToString(row[2][0]));
                     txtSalvageString.Text = mcomb;
@@ -88,7 +89,7 @@ namespace GearFoundry
                             break;
 
                         case 1:
-                            mtxt.Text = sname;
+                            mlbl.Text = sname;
                             break;
                         case 2:
                             txtSalvageString.Text = mcomb;
@@ -97,7 +98,32 @@ namespace GearFoundry
 
                     mchecked = Convert.ToBoolean(row[0][0]);
                 } //end of salvage selected
-                else if (xdoc != null && ((filename == mobsFilename) || (filename == trophiesFilename)))
+             }
+
+            catch (Exception ex) { LogError(ex); }
+        }
+
+
+
+        private void lstSelect(XDocument xdoc, string filename, List<XElement> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.ITextBox mtxt, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
+        {
+            try
+            {
+                WriteToChat("I am in lstSelect with Filename = " + filename);
+
+                // Variable initiations
+                mgoon = true;
+                string mcomb = "";
+                MyClasses.MetaViewWrappers.IListRow row = null;
+                string mID = "";
+                //This is gotten from the sender function which has identified event args and sent as a parameter
+                row = lstvue[margs.Row];
+                //If this function follows a click on the check box then mchecked will be different here from in the salvagelist (lst)
+                mchecked = Convert.ToBoolean(row[0][0]);
+                sname = (Convert.ToString(row[1][0]));
+                mtxt.Text = sname;
+
+               if (xdoc != null && ((filename == mobsFilename) || (filename == trophiesFilename)))
                 {
                     IEnumerable<XElement> elements = xdoc.Element("GameItems").Descendants("item");
                     var data = from item in lst
@@ -129,8 +155,6 @@ namespace GearFoundry
                     }
                     mchecked = Convert.ToBoolean(row[0][0]);
                 }  // end of trophies or mobs selected
-                if (mitem != 3)  //ie if not the salvage because don't want to totally remove salvage just enable or unenable it
-                {
                     //Need to remove object being worked on before adding it back so won't have a duplication of itme.
                     if (xdoc != null)
                     {
@@ -151,7 +175,7 @@ namespace GearFoundry
                         { populateMobsListBox(); }
                     }
                 }
-            }
+            
 
             catch (Exception ex) { LogError(ex); }
         }
@@ -745,7 +769,7 @@ namespace GearFoundry
         {
             int mList = 2;
             MVListSelectEventArgs args = e;
-            lstSelect(xdocSalvage, salvageFilename, mSortedSalvageList, lstNotifySalvage, txtSalvageName, args, mList);
+            lstSelect(xdocSalvage, salvageFilename, mSortedSalvageList, lstNotifySalvage, lblSalvageName, args, mList);
 
         }
 
@@ -786,16 +810,17 @@ namespace GearFoundry
             sname = txtmyMobName.Text.Trim();
         }
 
-        [ControlEvent("txtSalvageName", "End")]
-        private void txtSalvageName_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-            sname = txtSalvageName.Text.Trim();
-        }
+        //[ControlEvent("lblSalvageName", "End")]
+        //private void lblSalvageName_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        //{
+        //    sname = lblSalvageName.Text.Trim();
+        //}
 
         [ControlEvent("txtSalvageString", "End")]
         private void txtSalvageString_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
         {
             sinput = txtSalvageString.Text.Trim();
+            sname = lblSalvageName.Text.Trim();
         }
 
 
@@ -1264,7 +1289,7 @@ namespace GearFoundry
         //private void btnNewSalvage_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
         //{
 
-        //    if (txtSalvageName == null || txtSalvageString == null)
+        //    if (lblSalvageName == null || txtSalvageString == null)
         //    {
         //        GearFoundry.PluginCore.WriteToChat("Please type in name of new salvage to add to list");
         //    }
@@ -1279,7 +1304,7 @@ namespace GearFoundry
         //{
         //    try
         //    {
-        //        sname = txtSalvageName.Text.ToString().Trim();
+        //        sname = lblSalvageName.Text.ToString().Trim();
         //        sinput = txtSalvageString.Text.ToString().Trim();
 
         //        if (sname != null && sname.Trim().Length > 0)
@@ -1305,7 +1330,7 @@ namespace GearFoundry
         private void btnUpdateSalvage_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
         {
 
-            if (txtSalvageName == null || txtSalvageString == null)
+            if (lblSalvageName == null || txtSalvageString == null)
             {
                 GearFoundry.PluginCore.WriteToChat("Please select salvage from list to update");
             }
@@ -1320,7 +1345,7 @@ namespace GearFoundry
         {
             try
             {
-                sname = txtSalvageName.Text.ToString().Trim();
+                sname = lblSalvageName.Text.ToString().Trim();
                 sinput = txtSalvageString.Text.ToString().Trim();
 
                 //  IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("item");

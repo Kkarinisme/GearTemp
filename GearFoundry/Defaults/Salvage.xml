@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <GameItems>
   <item>
     <key>BlackGarnet</key>
@@ -94,7 +94,7 @@
   <item>
     <key>Zircon</key>
     <intvalue>50</intvalue>
-    <checked>false</checked>
+    <checked>true</checked>
     <combine>1</combine>
     <Guid></Guid>
   </item>

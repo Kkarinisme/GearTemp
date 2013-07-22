@@ -84,10 +84,10 @@
 				<control progid="DecalControls.Notebook" name="nbSetupsetup" left="0" top="0" width="490" height="450">
 					<page label="Search Rules">
 						<control progid="DecalControls.FixedLayout" clipped="">
-							<control progid="DecalControls.List" name="lstRules" left="5" top="5" width="350" height="90">
+							<control progid="DecalControls.List" name="lstRules" left="5" top="5" width="480" height="90">
 								<column progid="DecalControls.CheckColumn" />
 								<column progid="DecalControls.TextColumn" fixedwidth="20" />
-								<column progid="DecalControls.TextColumn" fixedwidth="100"/>
+								<column progid="DecalControls.TextColumn" fixedwidth="200"/>
 								<column progid="DecalControls.TextColumn" fixedwidth="160"/>
 								<column progid="DecalControls.IconColumn" fixedwidth="10"/>
 							</control>
@@ -104,11 +104,11 @@
 											<column progid="DecalControls.TextColumn" fixedwidth="110" />
 											<column progid="DecalControls.TextColumn" />
 										</control>
-										<control progid="DecalControls.Edit" name="txtRuleName" left="5" top="10" width="100" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
-										<control progid="DecalControls.StaticText" name="lblRuleName" left="105" top="10" width="90" height="16" text=" --Rule Name" />
-										<control progid="DecalControls.Checkbox" name="chkRuleEnabled" left="200" top="10" width="80" height="16" text="Rule Enabled*" />
-										<control progid="DecalControls.Edit" name="txtRulePriority" left="310" top="10" width="30" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
-										<control progid="DecalControls.StaticText" name="lblRulePriority" left="340" top="10" width="90" height="16" text=" --Rule Priority*" />
+										<control progid="DecalControls.Edit" name="txtRuleName" left="5" top="10" width="200" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
+										<control progid="DecalControls.StaticText" name="lblRuleName" left="210" top="10" width="90" height="16" text=" --Rule Name" />
+										<control progid="DecalControls.Checkbox" name="chkRuleEnabled" left="305" top="10" width="90" height="16" text="Rule Enabled*" />
+										<control progid="DecalControls.Edit" name="txtRulePriority" left="400" top="10" width="30" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
+										<control progid="DecalControls.StaticText" name="lblRulePriority" left="440" top="10" width="90" height="16" text=" --Rule Priority*" />
 										<control progid="DecalControls.Edit" name="txtRuleDescr" left="5" top="30" width="250" height="16" imageportalsrc="4410" textcolor="8716155" text="" />
 										<control progid="DecalControls.StaticText" name="lblRuleInfo" left="270" top="30" width="85" height="16" text="--Description:" />
 										<control progid="DecalControls.Edit" name="txtRuleKeywords" left="180" top="80" width="100" height="16" imageportalsrc="4410" textcolor="8716155" text=""/>
@@ -333,12 +333,12 @@
 								<column progid="DecalControls.TextColumn" fixedwidth="130" />
 								<column progid="DecalControls.TextColumn" fixedwidth="60" />
 							</control>
-							<control progid="DecalControls.StaticText" name="lblSalvageName" left="8" top="250" width="150" height="16" text="Salvage Material: " />
-							<control progid="DecalControls.Edit" name="txtSalvageName" left="8" top="265" width="250" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
+							<control progid="DecalControls.StaticText" name="lblSalvagelblName" left="8" top="250" width="150" height="16" text="Salvage Material: " />
+							<control progid="DecalControls.StaticText" name="lblSalvageName" left="8" top="265" width="250" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
 							<control progid="DecalControls.StaticText" name="lblSalvageString" left="8" top="285" width="150" height="16" text="Salvage Combine String: " />
 							<control progid="DecalControls.Edit" name="txtSalvageString" left="8" top="300" width="250" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
               <!--<control progid="DecalControls.PushButton" name="btnNewSalvage" left="8" top="325" width="60" height="18" text="Add New Salvage" />-->
-              <control progid="DecalControls.PushButton" name="btnUpdateSalvage" left="8" top="350" width="60" height="18" text="Update Salvage" />
+              <control progid="DecalControls.PushButton" name="btnUpdateSalvage" left="8" top="350" width="100" height="18" text="Update Salvage" />
             </control>
 					</page>
 				</control>

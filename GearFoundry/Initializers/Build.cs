@@ -795,39 +795,50 @@ namespace GearFoundry
 			}
 		}
 
-        private void RedoSalvageFile()
-        {
-         try{
-             IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("Item");
-             foreach (IDName idname in MaterialIndex)
-            {
-                foreach (XElement el in elements)
-                {
-                    if (idname.name == el.Element("key").Value)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        xdocSalvage.Element("GameItems").Add(new XElement("Item",
-                        new XElement("key", idname.name),
-                        new XElement("intvalue", idname.ID),
-                        new XElement("checked", true),
-                        new XElement("combine", ""),
-                        new XElement("GUID", "")));
-                        WriteToChat(idname.name + " added to salvage list.");
-                        setUpLists(xdocSalvage, mSortedSalvageList, mSortedSalvageListChecked);
- 
+        //private void RedoSalvageFile()
+        //{
+        // try{
+        //     WriteToChat("I am in routine to redoSalvagefile");
+        //     List<string> temp = new List<string>();
+        //     string tempname;
+        //     for (int n = 0; n < mSortedSalvageList.Count(); n++)
+        //     {
+        //         tempname = mSortedSalvageList[n].Element("key").Value;
+        //         temp.Add(tempname);
+        //     }
 
-                    }
-                }
+        //     foreach (IDName idname in MaterialIndex)
+        //    {
+        //         try
+        //         {
+        //             if(temp.Contains(idname.name))
+        //             {
+        //                 WriteToChat(idname.name + "is contained in file");
+                        
+        //             }
 
+        //                     else
+        //                    {
+        //                        xdocSalvage.Element("GameItems").Add(new XElement("Item",
+        //                        new XElement("key", idname.name),
+        //                        new XElement("intvalue", idname.ID),
+        //                        new XElement("checked", true),
+        //                        new XElement("combine", ""),
+        //                        new XElement("GUID", "")));
+        //                        WriteToChat(idname.name + " added to salvage list.");
+        //                    }
+        //                }
+             
+        //                catch (Exception ex) { LogError(ex); }
 
-            }
-         }
-         catch (Exception ex) { LogError(ex); }
+        //            }
+        //     setUpLists(xdocSalvage, mSortedSalvageList, mSortedSalvageListChecked);
 
-        }
+            
+        // }
+        // catch (Exception ex) { LogError(ex); }
+
+        //}
 		
 		private void CreateAttribIndex()
 		{	
