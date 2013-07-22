@@ -272,7 +272,8 @@ namespace GearFoundry
 								where 
 								(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
 								(ruls.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= ruls.RuleWork) &&
-								(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)) &&
+								(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
+								 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
 								(ruls.RuleArmorLevel == 0 || IOItemWithID.ArmorScore >= ruls.RuleArmorLevel) &&
 								(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
 								(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
@@ -300,7 +301,8 @@ namespace GearFoundry
 									where 
 									(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
 									(ruls.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= ruls.RuleWork) &&
-									(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)) &&
+									(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
+								 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
 									IOItemWithID.ArmorScore >= ruls.RuleArmorLevel &&
 									(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(25)) &&
 									(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&  
@@ -343,7 +345,8 @@ namespace GearFoundry
 								var reducedclothmatches = from ruls in AppliesToListMatches
 									where 
 									(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
-									(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)) &&
+									(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
+								 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
 									ruls.RuleArmorLevel == 0
 									orderby ruls.RulePriority
@@ -418,7 +421,8 @@ namespace GearFoundry
 							var reducedjewelrymatches = from ruls in AppliesToListMatches
 								where 
 									(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
-									(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)) &&
+									(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
+								 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber
 									orderby ruls.RulePriority
 									select ruls;
