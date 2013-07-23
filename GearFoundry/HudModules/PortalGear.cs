@@ -125,14 +125,18 @@ namespace GearFoundry
                 }
                 if (!File.Exists(portalGearFilename))
                 {
-                   WriteToChat("PortalGearfilename does not exist.");
-                    XDocument tempDoc = new XDocument(new XElement("Settings"));
-                    tempDoc.Element("Settings").Add(new XElement("Setting",
-                        new XElement("OrbGuid",nOrbGuid),
-                        new XElement("OrbIcond",nOrbIcon)));
-                    tempDoc.Save(portalGearFilename);
-                    tempDoc = null;
-                    //These are set to 0 in Init above.  There is no need to reset them
+                    try
+                    {
+                        XDocument tempDoc = new XDocument(new XElement("Settings"));
+                        tempDoc.Element("Settings").Add(new XElement("Setting",
+                            new XElement("OrbGuid", nOrbGuid),
+                            new XElement("OrbIcond", nOrbIcon)));
+                        tempDoc.Save(portalGearFilename);
+                        tempDoc = null;
+                        //These are set to 0 in Init above.  There is no need to reset them
+                    }
+					catch(Exception ex){LogError(ex); nOrbGuid = 0; nOrbIcon = 0;}
+
                 }
  					try
 					{
