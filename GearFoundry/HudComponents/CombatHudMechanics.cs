@@ -648,7 +648,7 @@ namespace GearFoundry
 				{	
 					if(SpellCastBuffer.Count != 0 && CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
 					{
-						WriteToChat("Caught spell failure");
+						//WriteToChat("Caught spell failure");
 						SpellCastBuffer.First().AutoDequeue = true;
 					}
 					return;

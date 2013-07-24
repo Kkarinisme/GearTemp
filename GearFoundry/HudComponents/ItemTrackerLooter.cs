@@ -342,25 +342,28 @@ namespace GearFoundry
 					}
 				}
 				
-				if(LOList.Any(x => x.Id == id && x.InspectList))
+				try
 				{
-					switch(LOList.Find(x => x.Id == id).IOR)
+					if(LOList.Any(x => x.Id == id && x.InspectList))
 					{
-						case IOResult.rule:
-						case IOResult.manatank:
-						case IOResult.rare:
-						case IOResult.spell:
-						case IOResult.trophy:								
-							return 1;						
-						case IOResult.salvage:
-							return 2;
-						case IOResult.val:
-							if(GISettings.SalvageHighValue) {return 2;}
-							else{return 1;}
-						default:
-							return 0;
+						switch(LOList.Find(x => x.Id == id).IOR)
+						{
+							case IOResult.rule:
+							case IOResult.manatank:
+							case IOResult.rare:
+							case IOResult.spell:
+							case IOResult.trophy:								
+								return 1;						
+							case IOResult.salvage:
+								return 2;
+							case IOResult.val:
+								if(GISettings.SalvageHighValue) {return 2;}
+								else{return 1;}
+							default:
+								return 0;
+						}
 					}
-				}
+				}catch(Exception ex){LogError(ex);}
 				
 				LootObject VTIO = new LootObject(Core.WorldFilter[id]);	
 				if(!VTIO.HasIdData)

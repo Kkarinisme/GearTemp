@@ -1346,8 +1346,8 @@ namespace GearFoundry
 				if (wo.Values(LongValueKey.ArmorSet) > 0)
 				{   //Could go directly to [ArmorSet] but this  won't throw an exception if it's not there
 					int idx = SetsIndex.FindIndex(x => x.ID == wo.Values(LongValueKey.ArmorSet));
-					if(idx > 0) {name = SetsIndex[idx].name;}
-					else { name = "Unknown Set " + wo.Values(LongValueKey.ArmorSet).ToString("0x");}
+					if(idx > 0) {name = ", " + SetsIndex[idx].name;}
+					else { name = ", Unknown Set " + wo.Values(LongValueKey.ArmorSet).ToString("0x");}
 				}
 				return name;
 			}

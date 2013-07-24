@@ -131,7 +131,6 @@ namespace GearFoundry
                         new XElement("OrbGuid",nOrbGuid),
                         new XElement("OrbIcond",nOrbIcon)));
                     tempDoc.Save(portalGearFilename);
-                    tempDoc = null;
                     //These are set to 0 in Init above.  There is no need to reset them
                 }
  					try
@@ -141,7 +140,7 @@ namespace GearFoundry
 	
 	                    nOrbGuid = Convert.ToInt32(el.Element("OrbGuid").Value);
 	                    nOrbIcon = Convert.ToInt32(el.Element("OrbIcon").Value);
-					}catch(Exception ex){LogError(ex); nOrbGuid = 0;; nOrbIcon = 0;}
+					}catch(Exception ex){LogError(ex); nOrbGuid = 0; nOrbIcon = 0;}
 	               
 					
                

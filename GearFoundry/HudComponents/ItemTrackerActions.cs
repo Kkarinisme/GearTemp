@@ -175,8 +175,9 @@ namespace GearFoundry
 					
 				}
 				//MoveObject
-				else if(InspectorActionList[2].fireaction || LOList.Any(x => x.InspectList && x.Container == Core.Actions.OpenedContainer))
+				else if(InspectorActionList[2].fireaction)
 				{
+					//Quit Actions if backpack is full
 					if(Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count() == 101)
 					{
 						ActionsPending = false;
@@ -187,36 +188,67 @@ namespace GearFoundry
 						return;
 					}
 					
+					//Delay next action check until 450ms has passed
 					if(InspectorActionList[2].pending && (DateTime.Now - InspectorActionList[2].StartAction).TotalMilliseconds < 450)
 					{
 						return;
 					}
-					else if(LOList.Any(x => x.Move))
+					//Check to see if an item is being moved from the open container
+					else if(Core.Actions.OpenedContainer != 0 && LOList.Any(x => x.Move && x.Container == Core.Actions.OpenedContainer))
 					{
-						LootObject lo = LOList.Find(x => x.Move);
-						if(!GISettings.AutoLoot && lo.Container != Core.Actions.OpenedContainer)
-						{
-							LOList.Find(x => x.Id == lo.Container).Open = true;
-							InspectorActionList[1].fireaction = true;
-							return;
-						}
-						else
-						{
-							InspectorActionList[2].pending = true;
-							InspectorActionList[2].StartAction = DateTime.Now;
+						LootObject lo = LOList.Find(x => x.Move && x.Container == Core.Actions.OpenedContainer);	
+						
+						InspectorActionList[2].pending = true;
+						InspectorActionList[2].StartAction = DateTime.Now;
 							
-							lo.ActionTarget = true;
-							lo.LastActionTime = DateTime.Now;
-							Core.Actions.UseItem(lo.Id,0);							
-							return;
-						}
+						lo.ActionTarget = true;
+						lo.LastActionTime = DateTime.Now;
+						Core.Actions.UseItem(lo.Id,0);							
+						return;
 					}
-					else if(LOList.Any(x => x.InspectList && x.Container == Core.Actions.OpenedContainer))
+					//Hold Chests until closed. or empty
+					else if(Core.Actions.OpenedContainer != 0 && ChestCheck(Core.WorldFilter[Core.Actions.OpenedContainer].Name) && Core.WorldFilter.GetByContainer(Core.Actions.OpenedContainer).Count() > 0)
 					{
 						return;
 					}
-					else
+					//Check to see if the open container has any more items pending
+					//TODO:  Determine why it faults.
+					else if(Core.Actions.OpenedContainer != 0 && LOList.Any(x => x.Container == Core.Actions.OpenedContainer && x.InspectList))
 					{
+						return;
+					}
+					//Check to see if items need looting from other containers
+					else if(LOList.Any(x => x.Move && x.Container != Core.Actions.OpenedContainer))
+					{
+						LootObject lo = LOList.Find(x => x.Move && x.Container != Core.Actions.OpenedContainer);	
+				
+						if(Core.WorldFilter.GetInventory().Where(x => x.Id == lo.Id).Count() > 0)
+						{
+							lo.Move = false;
+							lo.ActionTarget = false;
+							lo.InspectList = false;
+							
+							if(lo.ProcessAction != IAction.None) 
+							{
+								lo.ProcessList = true;
+								if(GISettings.AutoProcess) 
+								{
+									lo.Process = true;
+									ToggleInspectorActions(2);
+									InitiateInspectorActionSequence();
+								}
+							}
+							InspectorActionList[2].pending = false;
+							UpdateItemHud();
+							return;
+						}
+						
+						LOList.Find(x => x.Id == lo.Container).Open = true;
+						InspectorActionList[1].fireaction = true;
+						return;
+					}
+					else
+					{	
 						InspectorActionList[2].pending = false;
 						InspectorActionList[2].StartAction = DateTime.MinValue;
 						InspectorActionList[2].fireaction = false;
@@ -439,7 +471,7 @@ namespace GearFoundry
 					Core.RenderFrame -= OpenContainerCheckback;
 					return;
 				}
-				else if((DateTime.Now - LOList.Find(x => x.ActionTarget).LastActionTime).TotalMilliseconds < 100) {return;}
+				else if((DateTime.Now - LOList.Find(x => x.ActionTarget).LastActionTime).TotalMilliseconds < 200) {return;}
 				else
 				{
 					Core.RenderFrame -= OpenContainerCheckback;
@@ -498,7 +530,7 @@ namespace GearFoundry
 			try
 			{
 				if(e.New.ObjectClass != ObjectClass.Salvage || e.New.Container != Core.CharacterFilter.Id) {return;}
-				
+				if(e.New.Values(LongValueKey.UsesRemaining) ==  100) {return;}
 				if(!LOList.Any(x => x.Id == e.New.Id))
 				{
 					LootObject so = new LootObject(e.New);
@@ -710,7 +742,30 @@ namespace GearFoundry
 				return 0;
 			}
 		}
+		
+		private bool ChestCheck(string containername)
+		{
+			try
+			{
+				if(containername.Contains("Chest") || containername.Contains("Vault") ||  containername.Contains("Reliquary")) {return true;}
+				else{ return false;}
+				
+			}catch(Exception ex){LogError(ex);return false;}
+		}
+		
+		private bool CheckTheNull()
+		{
+			try
+			{
 
+				foreach(var item in LOList.Where(x => x.InspectList))
+				{
+					WriteToChat(item.Name);
+				}
+				return false;
+//					else if(LOList.Any(x => x.InspectList && x.Container == Core.Actions.OpenedContainer))
+			}catch(Exception ex){LogError(ex); return false;}
+		}
 	}
 }
 

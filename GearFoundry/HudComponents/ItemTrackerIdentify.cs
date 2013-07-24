@@ -14,6 +14,7 @@ using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using VirindiViewService.Themes;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace GearFoundry
 {
@@ -31,9 +32,10 @@ namespace GearFoundry
 			{
 				if(IOItem.Id == LastReportGUID) {return;}
 				else{LastReportGUID = IOItem.Id;}
-			
+		
+				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}	
+				if(IOItem.IOR == IOResult.unknown){CheckRare(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
-				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
 				if(IOItem.HasIdData && IOItem.IOR == IOResult.unknown){CheckRulesItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown && GISettings.IdentifySalvage) {CheckSalvageItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
@@ -52,8 +54,9 @@ namespace GearFoundry
 			{
 				LootObject IOItem = LOList.Find(x => x.Id == loId);
 				
-				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
 				if(IOItem.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown){CheckRare(ref IOItem);}
+				if(IOItem.IOR == IOResult.unknown) {TrophyListCheckItem(ref IOItem);}
 				if(IOItem.HasIdData){CheckRulesItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown && GISettings.IdentifySalvage) {CheckSalvageItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {CheckManaItem(ref IOItem);}
@@ -78,6 +81,17 @@ namespace GearFoundry
 					EvaluateItemMatches(IOItem.Id);
 				}
 								
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CheckRare(ref LootObject IOItemRare)
+		{
+			try
+			{
+				if(IOItemRare.LValue(LongValueKey.RareId) > 0)
+				{
+					IOItemRare.IOR = IOResult.rare;
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -190,10 +204,22 @@ namespace GearFoundry
 			try
 			{
 				string namecheck = IOItem.Name;
-				var matches = from XTrophies in mSortedTrophiesListChecked
+				List<XElement> matches;
+				
+				if(IOItem.ObjectClass == ObjectClass.Scroll)
+				{
+					matches = (from XTrophies in mSortedTrophiesListChecked
+					where @namecheck == (string)@XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value)
+					select XTrophies).ToList();
+				}
+				else
+				{
+					matches = (from XTrophies in mSortedTrophiesListChecked
 					where (@namecheck.ToLower().Contains((string)@XTrophies.Element("key").Value.ToLower()) && !Convert.ToBoolean(XTrophies.Element("isexact").Value)) ||
 						   (@namecheck == (string)@XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value))
-						 select XTrophies;
+						   select XTrophies).ToList();
+				}
+				
 			
 				if(matches.Count() > 0)
 				{
@@ -348,7 +374,7 @@ namespace GearFoundry
 									(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
 								 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
-									ruls.RuleArmorLevel == 0
+									ruls.RuleArmorLevel == 0 && ruls.RuleArmorSet.Count() == 0
 									orderby ruls.RulePriority
 									select ruls;
 								if(reducedclothmatches.Count() > 0)

@@ -629,7 +629,8 @@ namespace GearFoundry
 								"Weave of Magic Item Tinkering", "Weave of Mana Conversion", "Weave of Melee Defense", "Weave of Missile Defense", "Weave of Salvaging",
 								"Weave of Light Weapons", "Weave of Light Weapons", "Weave of Heavy Weapons", "Weave of Missile Weapons", "Weave of Two Handed Combat",
 								"Weave of Light Weapons", "Weave of Void Magic", "Weave of War Magic", "Weave of Weapon Tinkering", "Weave of Assess Creature",
-								"Weave of Dirty Fighting", "Weave of Dual Wield", "Weave of Recklessness", "Weave of Shield", "Weave of Sneak Attack"
+								"Weave of Dirty Fighting", "Weave of Dual Wield", "Weave of Recklessness", "Weave of Shield", "Weave of Sneak Attack", 
+								"Unknown Set 89","Weave of Summoning"
 			};
 			
 			int i = 0;
