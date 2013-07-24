@@ -499,7 +499,7 @@ namespace GearFoundry
                nspells = 0;
 
                 //Now resetup the variables nspells and sRuleSpells
-                foreach (IDNameLoadable spl in EnabledSpellsList)
+                foreach(IDNameLoadable spl in EnabledSpellsList)
                 {
                     string sid = spl.ID.ToString();
                     sRuleSpells = sRuleSpells + sid + ",";

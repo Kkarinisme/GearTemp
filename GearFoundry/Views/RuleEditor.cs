@@ -23,12 +23,14 @@ namespace GearFoundry
     	     
 
 
-        [ControlEvent("btnRuleClear", "Click")]
+       // [ControlEvent", "Click")]
         private void btnRuleClear_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
             try
             {
+                nRuleRow = lstRules.ScrollPosition;
                 clearRule();
+                lstRules.ScrollPosition = nRuleRow;
             }
 
             catch (Exception ex) { LogError(ex); }
@@ -40,23 +42,56 @@ namespace GearFoundry
         {
            try 
             {
+
                 nRuleNum = nNextRuleNum;
                 nNextRuleNum++;
-                sRuleAppliesTo = mFindList(lstRuleApplies, AppliesToList);
-                sRuleArmorSet = mFindList(lstRuleSets, ArmorSetsList);
-                sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);
-                sRuleArmorCoverage = mFindList(lstRuleArmorCoverages, ArmorCoverageList);
-                sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
-                sRuleEssElements = mFindList(lstRuleEssElements, EssElementsList);
-                sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
-                sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
-                mMakeStrings();
-                writeToXdocRules(xdocRules);
-                xdocRules.Save(rulesFilename);
+                setUpForFindingLists();
                 populateRulesListBox();
+                nRuleRow =  lstRules.RowCount;
+                lstRules.ScrollPosition = nRuleRow;
             }
             catch (Exception ex) { LogError(ex); }
         }
+
+               
+
+        private void setUpForFindingLists()
+        {
+            sRuleAppliesTo = mFindList(lstRuleApplies, AppliesToList);
+            sRuleArmorSet = mFindList(lstRuleSets, ArmorSetsList);
+            sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);
+            sRuleArmorCoverage = mFindList(lstRuleArmorCoverages, ArmorCoverageList);
+            sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
+            sRuleEssElements = mFindList(lstRuleEssElements, EssElementsList);
+            sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
+            sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
+            mMakeStrings();
+            writeToXdocRules(xdocRules);
+            xdocRules.Save(rulesFilename);
+
+
+        }
+
+
+
+        [ControlEvent("btnRuleupdate", "Click")]
+        private void btnRuleUpdate_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+            try
+            {
+                nRuleRow = lstRules.ScrollPosition;
+                IEnumerable<XElement> elements = xdocRules.Element("Rules").Descendants("Rule");
+                xdocRules.Descendants("Rule").Where(x => x.Element("RuleNum").Value.ToString().Equals(nRuleNum.ToString())).Remove();
+                setUpForFindingLists();
+
+                FillItemRules();
+                lstRules.ScrollPosition = nRuleRow;
+            }
+            catch (Exception ex) { LogError(ex); }
+
+
+        }
+
 
         private void mMakeStrings()
         {
@@ -275,36 +310,7 @@ namespace GearFoundry
 
         }
 
-
-
-        [ControlEvent("btnRuleupdate", "Click")]
-        private void btnRuleUpdate_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            try
-            {
-                IEnumerable<XElement> elements = xdocRules.Element("Rules").Descendants("Rule");
-                xdocRules.Descendants("Rule").Where(x => x.Element("RuleNum").Value.ToString().Equals(nRuleNum.ToString())).Remove();
-                sRuleAppliesTo = mFindList(lstRuleApplies, AppliesToList);
-                sRuleArmorSet = mFindList(lstRuleSets, ArmorSetsList);
-                sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);
-                sRuleArmorCoverage = mFindList(lstRuleArmorCoverages, ArmorCoverageList);
-                sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
-                sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
-                sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
-                sRuleEssElements = mFindList(lstRuleEssElements, EssElementsList);
-                mMakeStrings();
-
-                writeToXdocRules(xdocRules);
-                xdocRules.Save(rulesFilename);
-                populateRulesListBox();
-                FillItemRules();
-            }
-            catch (Exception ex) { LogError(ex); }
-
-
-        }
-
-        [ControlEvent("txtRuleName", "End")]
+         [ControlEvent("txtRuleName", "End")]
         private void txtRuleName_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
         {
             sRuleName = txtRuleName.Text.ToString().Trim();
@@ -963,22 +969,23 @@ namespace GearFoundry
 
             for (int i = 0; i < n; i++)
             {
-
-                row = lstvue[i];
-                @checked = Convert.ToBoolean(row[0][0]);
-                if (@checked)
-                {
-                    id = Convert.ToInt32(row[2][0]);
-                    sid = id.ToString();
-                    var = var + sid + ",";
-                }
-
+                   row = lstvue[i];
+                    @checked = Convert.ToBoolean(row[0][0]);
+                    if (@checked)
+                    {
+                        id = Convert.ToInt32(row[2][0]);
+                        sid = id.ToString();
+                        var = var + sid + ",";
+                    }
+ 
             }
 
             int mLength = var.Length;
 
             if (mLength > 0)
-            { var = var.Substring(0, mLength - 1); }
+            {
+                var = var.Substring(0, mLength - 1); 
+            }
 
 
             return var;

@@ -216,7 +216,7 @@ namespace GearFoundry
 
 
         //Provides a modified overload for lstSelect to display lists where  only purpose is to select an item for the rules part of the 
-        //program.  Left to do is to write code to put selected item in rule.
+        //program.  
         private string lstSelect(List<IDNameLoadable> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
         {
             try
@@ -235,6 +235,27 @@ namespace GearFoundry
             catch (Exception ex) {LogError(ex); return null; }
         }
 
+        //Provides a modified overload for lstSelect to display lists where  only purpose is to select an item for the rules part of the 
+        //program.  This overload uses spellinfo as opposed to IDNameLoadable list
+        private string lstSelect(List<spellinfo> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
+        {
+            try
+            {
+
+                MyClasses.MetaViewWrappers.IListRow row = null;
+                row = lstvue[margs.Row];
+                mchecked = Convert.ToBoolean(row[0][0]);
+                sname = (Convert.ToString(row[1][0]));
+                string snum = Convert.ToString(row[2][0]);
+                if (mchecked)
+                { return snum; }
+                else
+                { return ""; }
+            }
+            catch (Exception ex) { LogError(ex); return null; }
+        }
+
+
         // [ControlEvent]("lstRules", "Selected")
         private void lstRules_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
         {
@@ -243,6 +264,7 @@ namespace GearFoundry
             {
                 //First clear previous rule
                 clearRule();
+                nRuleRow = e.Row;
 
                 //Now add the information from the selected rule to  the various controls associated with the rules
                 bool mdelete = false;
@@ -276,6 +298,7 @@ namespace GearFoundry
                     }
 
                     loadControls(el);
+                    lstRules.ScrollPosition = nRuleRow;
                 }
                 catch (Exception ex) { LogError(ex); }
 
@@ -313,6 +336,7 @@ namespace GearFoundry
                             xdocRules.Save(rulesFilename);
                             populateRulesListBox();
                             clearRule();
+                            lstRules.ScrollPosition = nRuleRow;
                         }
                     }
                     catch (Exception ex) { LogError(ex); }
@@ -326,14 +350,18 @@ namespace GearFoundry
         //clears all associated controls of previous data when adding or selecting a new rule
         private void clearRule()
         {
-
-            initRulesVariables();
-            populateListBoxes();
-            lstRuleSpellsEnabled.Clear();
-            EnabledSpellsList.Clear();
-            initRulesCtrls();
-            lstRuleCloakSets.Clear();
-            lstRuleCloakSpells.Clear();
+            try
+            {
+                initRulesVariables();
+                lstRuleCloakSpells.Clear();
+                populateListBoxes();
+                lstRuleSpellsEnabled.Clear();
+                EnabledSpellsList.Clear();
+                initRulesCtrls();
+                
+            }
+                catch (Exception ex) { LogError(ex); }
+           
         }
 
         //Loads the controls with the values of the current rules and clears values of previous rule in the rules listview
@@ -705,7 +733,7 @@ namespace GearFoundry
         }
 
         // [ControlEvent]("lstRuleSpellsEnabled", "Selected") 
-        private void lstRuleSpellsEnabled_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
+        private void lstRuleSpellsEnabled_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  
         {
             try
             {
@@ -713,25 +741,49 @@ namespace GearFoundry
                 row = lstRuleSpellsEnabled[e.Row];
                 //sname = (Convert.ToString(row[0][0]));
                 int nID = (Convert.ToInt32(row[1][0]));
-
+                
                 if (e.Column == 2)
                 {
                     try
                     {
-                        EnabledSpellsList = EnabledSpellsList.Where(x => x.ID != nID).ToList();
+                        WriteToChat("I am at function to remove selected spell.");
+                        //foreach(IDNameLoadable name in EnabledSpellsList
+                        //xdocSalvage.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Contains(sname.Trim())).Remove();
+ 
+                        List<IDNameLoadable>EnabledSpellsListTemp = EnabledSpellsList.Where(x => x.ID != nID).ToList();
+                        
+                        EnabledSpellsList.Clear();
+                        EnabledSpellsList.AddRange(EnabledSpellsListTemp);
+                        EnabledSpellsListTemp.Clear();
 
                     }
                     catch (Exception ex) { LogError(ex); }
                     if (EnabledSpellsList.Count == 0)
                     { lstRuleSpellsEnabled.Clear(); }
-                    else { populateRuleSpellEnabledListBox(); }
+                    else 
+                    {
+                        sRuleSpells = "";
+                        nspells = 0;
+
+                        //Now resetup the variables nspells and sRuleSpells
+                        foreach (IDNameLoadable spl in EnabledSpellsList)
+                        {
+                            string sid = spl.ID.ToString();
+                            sRuleSpells = sRuleSpells + sid + ",";
+                            nspells++;
+                        }
+                        //Now remove the final comma from the variable
+                        sRuleSpells = sRuleSpells.Substring(0, sRuleSpells.Length - 1);
+
+                        populateRuleSpellEnabledListBox(); 
+                    }
                 }
             }
             catch (Exception ex) { LogError(ex); }
         }
 
         // [ControlEvent]("lstRuleSpells", "Selected") 
-        private void lstRuleSpells_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
+        private void lstRuleSpells_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e) 
         {
             try
             {
@@ -774,7 +826,7 @@ namespace GearFoundry
         }
 
         // [ControlEvent]("lstDamageTypes", "Selected")
-        private void lstDamageTypes_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
+        private void lstDamageTypes_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e) 
         {
 
             int mList = 3;
@@ -782,6 +834,22 @@ namespace GearFoundry
             string mDamageTypeNum = lstSelect(ElementalList, lstDamageTypes, args, mList);
         }
 
+        // [ControlEvent]("lstRuleCloakSets", "Selected")
+        private void lstRuleCloakSets_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  
+        {
+
+            int mList = 3;
+            MVListSelectEventArgs args = e;
+            string mCloakSetsNum = lstSelect(CloakSetsList,lstRuleCloakSets,args, mList);
+        }
+        //// [ControlEvent]("lstDamageTypes", "Selected")
+        private void lstRuleCloakSpells_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  
+        {
+
+            int mList = 3;
+            MVListSelectEventArgs args = e;
+            string mCloakSpellsNum = lstSelect(CloakSpellList, lstRuleCloakSpells, args, mList);
+        }
         [ControlEvent("txtTrophyMax", "End")]
         private void txtTrophyMax_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
         {

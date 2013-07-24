@@ -189,7 +189,8 @@ namespace GearFoundry
                 chkRuleBlue.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleBlue_Change);
                 lstRuleSpells.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleSpells_Selected);
                 lstRuleSpellsEnabled.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleSpellsEnabled_Selected);
-                //lstRuleCloakSpells.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleCloakSpells_Selected);
+                lstRuleCloakSpells.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleCloakSpells_Selected);
+                lstRuleCloakSets.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleCloakSets_Selected);
                 chkRuleFilterLegend.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterLegend_Change);
                 chkRuleFilterEpic.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterEpic_Change);
                 chkRuleFilterMajor.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterMajor_Change);

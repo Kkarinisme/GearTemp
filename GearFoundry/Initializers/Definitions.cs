@@ -203,6 +203,7 @@ namespace GearFoundry
         int nid;
         int nusearrowid;
         int nspells;
+        int nRuleRow;
 
 
 

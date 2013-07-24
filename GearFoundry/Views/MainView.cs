@@ -549,6 +549,8 @@ namespace GearFoundry
                 lstRuleCloakSpells = (MyClasses.MetaViewWrappers.IList)View["lstRuleCloakSpells"];
                 txtRuleItemLevel = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleItemLevel"];
 //                chkRuleCloakMustHaveSpell = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleCloakMustHaveSpell"];
+                lstRuleCloakSets.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleCloakSets_Selected);
+                lstRuleCloakSpells.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleCloakSpells_Selected);
                 chkRuleRed = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleRed"];
                 chkRuleYellow = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleYellow"];
                 chkRuleBlue = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleBlue"];
@@ -559,7 +561,8 @@ namespace GearFoundry
                 chkRuleRed.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleRed_Change);
                 chkRuleYellow.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleYellow_Change);
                 chkRuleBlue.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleBlue_Change);
-                }catch(Exception ex){LogError(ex);}
+                  }
+                  catch (Exception ex) { LogError(ex); }
 
                   try
                   {
