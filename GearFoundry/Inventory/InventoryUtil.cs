@@ -163,19 +163,17 @@ namespace GearFoundry
                 
                 for (int n = 0; n < mWaitingForID.Count; n++)
                 {
-                    WriteToChat("n: " + n.ToString() + " mWaitingForID[n]: " + mWaitingForID[n].Name);
-                    if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData )
+                    if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData)
                     {
-                        WriteToChat("Inside mwaitingforId fx.  n: " + n.ToString() + " mWaitingForID[n]: " + mWaitingForID[n].Name);
 
-                       ProcessDataInventory();
+                        ProcessDataInventory();
                         mIsFinished();
-                        break;
                     }
+                    else { mDoWait(); }
                 }
-                mDoWait();
+               
 
-          //  }
+          
             }
 
             catch (Exception ex) { LogError(ex); }
