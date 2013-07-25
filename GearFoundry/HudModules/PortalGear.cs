@@ -127,8 +127,11 @@ namespace GearFoundry
                 {
                    WriteToChat("PortalGearfilename does not exist.");
                     XDocument tempDoc = new XDocument(new XElement("Settings"));
+
                     tempDoc.Element("Settings").Add(new XElement("Setting",
+                        //Need to correct an early programming misspelling so will have two settings with norbicon
                         new XElement("OrbGuid",nOrbGuid),
+                        new XElement("OrbIcon",nOrbIcon),
                         new XElement("OrbIcond",nOrbIcon)));
                     tempDoc.Save(portalGearFilename);
                     //These are set to 0 in Init above.  There is no need to reset them
@@ -139,7 +142,10 @@ namespace GearFoundry
 	                    XElement el = xdocPortalGear.Root.Element("Setting");
 	
 	                    nOrbGuid = Convert.ToInt32(el.Element("OrbGuid").Value);
-	                    nOrbIcon = Convert.ToInt32(el.Element("OrbIcon").Value);
+                        if (el.Element("OrbIcon") != null)
+                        { nOrbIcon = Convert.ToInt32(el.Element("OrbIcon").Value); }
+                        else { nOrbIcon = Convert.ToInt32(el.Element("OrbIcond").Value); }
+
 					}catch(Exception ex){LogError(ex); nOrbGuid = 0; nOrbIcon = 0;}
 	               
 					

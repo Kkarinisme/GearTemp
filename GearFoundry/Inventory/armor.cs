@@ -36,7 +36,6 @@ namespace GearFoundry
 
         private List<String> lstAllToonName;
         private HudView ArmorHudView = null;
-        private HudFixedLayout ArmorHudLayout = null;
         private HudTabView ArmorHudTabView = null;
         private HudFixedLayout ArmorHudTabLayout = null;
         private HudList ArmorHudList = null;
@@ -436,11 +435,18 @@ namespace GearFoundry
                 ArmorHudView.UserClickThroughable = false;
                 ArmorHudView.LoadUserSettings();
 
-                ArmorHudLayout = new HudFixedLayout();
-                ArmorHudView.Controls.HeadControl = ArmorHudLayout;
+                //InventoryHudTabView = new HudTabView();
+                //InventoryHudView.Controls.HeadControl = InventoryHudTabView;
+
+                //InventoryHudTabLayout = new HudFixedLayout();
+                //InventoryHudTabView.AddTab(InventoryHudTabLayout, "Inventory");
+
+                //InventoryHudSettings = new HudFixedLayout();
+                //InventoryHudTabView.AddTab(InventoryHudSettings, "Settings");
+
 
                 ArmorHudTabView = new HudTabView();
-                ArmorHudLayout.AddControl(ArmorHudTabView, new Rectangle(0, 0, ArmorHudWidth, ArmorHudHeight));
+                ArmorHudView.Controls.HeadControl = ArmorHudTabView;
 
                 ArmorHudTabLayout = new HudFixedLayout();
                 ArmorHudTabView.AddTab(ArmorHudTabLayout, "Armor");
@@ -753,7 +759,6 @@ namespace GearFoundry
                 catch { }
 
                 ArmorHudSettings.Dispose();
-                ArmorHudLayout.Dispose();
                 ArmorHudTabLayout.Dispose();
                 ArmorHudTabView.Dispose();
                 ArmorHudView.Dispose();
