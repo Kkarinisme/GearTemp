@@ -81,6 +81,8 @@ namespace GearFoundry
         private HudButton btnLstInv;
         private HudList.HudListRowAccessor InventoryHudListRow = null;
         private HudList lstHudInventory;
+        private int nInventoryRow;
+
 
 
 

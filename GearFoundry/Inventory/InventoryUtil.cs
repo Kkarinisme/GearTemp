@@ -94,19 +94,18 @@ namespace GearFoundry
                     try
                     {
                         if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor); }
-                          removeExcessObjsfromFile();
-                          xdocGenInventory.Element("Objs").Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
+                           removeExcessObjsfromFile();
+                           xdocGenInventory.Element("Objs").Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
 
-                          xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
+                           xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
 
-                          xdocGenInventory.Save(genInventoryFilename);
-                          GearFoundry.PluginCore.WriteToChat("General Inventory file has been saved. ");
-                          m = 500;
-                          //      k = 0;
+                           xdocGenInventory.Save(genInventoryFilename);
+                           GearFoundry.PluginCore.WriteToChat("General Inventory file has been saved. ");
+                           m = 500;
                           n = 0;
-                          mWaitingForID = null;
-                          xdoc = null;
-                          programinv = "";
+                           mWaitingForID = null;
+                           xdoc = null;
+                           programinv = "";
                     }
                     catch (Exception ex) { LogError(ex); }
                  }
