@@ -134,19 +134,24 @@ namespace GearFoundry
 	                    xdocPortalGear = XDocument.Load(portalGearFilename);
                         XElement elem = xdocPortalGear.Root;
                         if(elem.Element("Setting") == null){ savePortalSettings();}
+                        WriteToChat("I just saved portal settings because Setting not in file");
                     }
                     catch(Exception ex){LogError(ex); nOrbGuid = 0; nOrbIcon = 0;}
                 }
-                try{
-	            XElement el = xdocPortalGear.Root.Element("Setting");
-                if(el.Element("OrbGuid") != null){nOrbGuid = Convert.ToInt32(el.Element("OrbGuid").Value);}
-                if (el.Element("OrbIcon") == null && el.Element("OrbGuid") != null)
+                try
                 {
-                    nOrbIcon = Convert.ToInt32(el.Element("OrbIcond").Value); savePortalSettings();
+                    XElement el = xdocPortalGear.Root.Element("Setting");
+                    if (el.Element("OrbGuid") != null) { nOrbGuid = Convert.ToInt32(el.Element("OrbGuid").Value); }
+                    WriteToChat("Just picked norbguid from file");
+                    if (el.Element("OrbIcon") == null && el.Element("OrbGuid") != null)
+                    {
+                        nOrbIcon = Convert.ToInt32(el.Element("OrbIcond").Value); savePortalSettings();
+                    }
+                    else { nOrbIcon = Convert.ToInt32(el.Element("OrbIcon").Value); }
+
+                    WriteToChat("Just picked norbicon from file");
                 }
-                else { nOrbIcon = Convert.ToInt32(el.Element("OrbIcon").Value); }
-                }
-                catch(Exception ex){LogError(ex); nOrbGuid = 0; nOrbIcon = 0;}
+                catch (Exception ex) { LogError(ex); nOrbGuid = 0; nOrbIcon = 0; }
  				
                
 
