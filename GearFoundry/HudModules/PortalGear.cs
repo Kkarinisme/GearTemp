@@ -44,6 +44,7 @@ namespace GearFoundry
         private HudPictureBox mPortalGear8 = null;
         private HudPictureBox mPortalGear9 = null;
 
+        private HudPictureBox mPortalRecallGear00 = null;
         private HudPictureBox mPortalRecallGear0 = null;
         private HudPictureBox mPortalRecallGear1 = null;
         private HudPictureBox mPortalRecallGear2 = null;
@@ -320,13 +321,24 @@ namespace GearFoundry
                 portalRecallGearTabFixedLayout = new HudFixedLayout();
                 portalRecallGearTabView.AddTab(portalRecallGearTabFixedLayout, "");
 
+                //FacilityHub Gem
+                string strFacilityHubGemImage = GearDir + @"\facilityhubgem.gif";
+                Image FacilityHubGemImage = new Bitmap(strFacilityHubGemImage);
+ 
+             //   Stream facilityHubGem = this.GetType().Assembly.GetManifestResourceStream("facilityhubgem.gif");
+             //  Image FacilityHubGemImage = new Bitmap(facilityHubGem);
+                mPortalRecallGear00 = new HudPictureBox();
+                mPortalRecallGear00.Image = (ACImage)FacilityHubGemImage;
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear00, new Rectangle(2, 2, 25, 39));
+                VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear00, "FacilityHub Quick Out.  Must have gem for it to work!!");
+                mPortalRecallGear00.Hit += (sender, obj) => mPortalRecallGear00_Hit(sender, obj);
 
                //Sanctuary Recall
                 Stream recallSanctuaryStream = this.GetType().Assembly.GetManifestResourceStream("sanctuary.gif");
                 Image SanctuaryRecallImage = new Bitmap(recallSanctuaryStream);
                 mPortalRecallGear0 = new HudPictureBox();
                 mPortalRecallGear0.Image = (ACImage)SanctuaryRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear0, new Rectangle(2, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear0, new Rectangle(30, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear0, "Sanctuary Recall");
                 mPortalRecallGear0.Hit += (sender, obj) => mPortalRecallGear0_Hit(sender, obj);
 
@@ -337,7 +349,7 @@ namespace GearFoundry
                 //Image BananaLandRecallImage = new Bitmap(strBananaLandRecallImage);
                 mPortalRecallGear1 = new HudPictureBox();
                 mPortalRecallGear1.Image = (ACImage)BananaLandRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear1, new Rectangle(30, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear1, new Rectangle(60, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear1, "BananaLand Recall");
                 mPortalRecallGear1.Hit += (sender, obj) => mPortalRecallGear1_Hit(sender, obj);
 
@@ -346,7 +358,7 @@ namespace GearFoundry
                 Image FacilityRecallImage = new Bitmap(recallFacilityStream);
                 mPortalRecallGear2 = new HudPictureBox();
                 mPortalRecallGear2.Image = (ACImage)FacilityRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear2, new Rectangle(60, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear2, new Rectangle(90, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear2, "Facility Hub Recall");
                 mPortalRecallGear2.Hit += (sender, obj) => mPortalRecallGear2_Hit(sender, obj);
  
@@ -355,7 +367,7 @@ namespace GearFoundry
                 Image ColloseumRecallImage = new Bitmap(recallColloseumStream);
                 mPortalRecallGear3 = new HudPictureBox();
                 mPortalRecallGear3.Image = (ACImage)ColloseumRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear3, new Rectangle(90, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear3, new Rectangle(120, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear3, "Colloseum Recall");
                 mPortalRecallGear3.Hit += (sender, obj) => mPortalRecallGear3_Hit(sender, obj);
 
@@ -364,7 +376,7 @@ namespace GearFoundry
                 Image AerlintheRecallImage = new Bitmap(recallAerlintheStream);
                 mPortalRecallGear4 = new HudPictureBox();
                 mPortalRecallGear4.Image = (ACImage)AerlintheRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear4, new Rectangle(120, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear4, new Rectangle(150, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear4, "Aerlinthe Recall");
                 mPortalRecallGear4.Hit += (sender, obj) => mPortalRecallGear4_Hit(sender, obj);
 
@@ -373,16 +385,16 @@ namespace GearFoundry
                 Image CaulRecallImage = new Bitmap(recallCaulStream);
                 mPortalRecallGear5 = new HudPictureBox();
                 mPortalRecallGear5.Image = (ACImage)CaulRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear5, new Rectangle(150, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear5, new Rectangle(180, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear5, "Singularity Caul Recall");
                 mPortalRecallGear5.Hit += (sender, obj) => mPortalRecallGear5_Hit(sender, obj);
 
                 //  Bur Recall
                 Stream recallBurStream = this.GetType().Assembly.GetManifestResourceStream("bur.gif");
-                Image BurRecallImage = new Bitmap(recallBurStream);
+                Image BurRecallImage = new Bitmap(recallBurStream);               
                 mPortalRecallGear6 = new HudPictureBox();
                 mPortalRecallGear6.Image = (ACImage)BurRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear6, new Rectangle(180, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear6, new Rectangle(210, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear6, "Bur Recall");
                 mPortalRecallGear6.Hit += (sender, obj) => mPortalRecallGear6_Hit(sender, obj);
 
@@ -391,7 +403,7 @@ namespace GearFoundry
                 Image OlthoiRecallImage = new Bitmap(recallOlthoi_NorthStream);
                 mPortalRecallGear7 = new HudPictureBox();
                 mPortalRecallGear7.Image = (ACImage)OlthoiRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear7, new Rectangle(210, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear7, new Rectangle(240, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear7, "Olthoi_north Recall");
                 mPortalRecallGear7.Hit += (sender, obj) => mPortalRecallGear7_Hit(sender, obj);
 
@@ -400,7 +412,7 @@ namespace GearFoundry
                 Image MhoireRecallImage = new Bitmap(recallMhoireStream);
                 mPortalRecallGear8 = new HudPictureBox();
                 mPortalRecallGear8.Image = (ACImage)MhoireRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear8, new Rectangle(240, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear8, new Rectangle(270, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear8, "Mhoire Recall");
                 mPortalRecallGear8.Hit += (sender, obj) => mPortalRecallGear8_Hit(sender, obj);
 
@@ -409,7 +421,7 @@ namespace GearFoundry
                 Image GearKnightRecallImage = new Bitmap(recallGearKnightStream);
                 mPortalRecallGear9 = new HudPictureBox();
                 mPortalRecallGear9.Image = (ACImage)GearKnightRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear9, new Rectangle(270, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear9, new Rectangle(300, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear9, "GearKnight Recall");
                 mPortalRecallGear9.Hit += (sender, obj) => mPortalRecallGear9_Hit(sender, obj);
 
@@ -418,7 +430,7 @@ namespace GearFoundry
                 Image NeftetRecallImage = new Bitmap(recallNeftetStream);
                 mPortalRecallGear10 = new HudPictureBox();
                 mPortalRecallGear10.Image = (ACImage)NeftetRecallImage;
-                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear10, new Rectangle(300, 2, 25, 39));
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear10, new Rectangle(330, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear10, "Neftet Recall");
                 mPortalRecallGear10.Hit += (sender, obj) => mPortalRecallGear10_Hit(sender, obj);
 
@@ -603,6 +615,15 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
         }
 
+        private void mPortalRecallGear00_Hit(object sender, System.EventArgs e)
+        {
+            try
+            {
+               CoreManager.Current.Actions.UseItem(-2070924399, 0);
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+     
         private void mPortalRecallGear0_Hit(object sender, System.EventArgs e)
         {
             try
