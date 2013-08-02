@@ -677,6 +677,7 @@ namespace GearFoundry
     			if(col == 2)
     			{    				
     				lo.InspectList = false;
+    				lo.Move = false;
     			}
 				UpdateItemHud();
 			}

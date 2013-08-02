@@ -302,8 +302,6 @@ namespace GearFoundry
 				//AnimationList.Add(new SpellMapLoadable("Equin Aeti",100668401,60,2119));  //Vagabond's Gift
 			}catch(Exception ex){LogError(ex);}
 		}
-	
-	
 		
 		private void CombatHud_ItemSelected(object sender, ItemSelectedEventArgs e)
 		{
@@ -372,7 +370,7 @@ namespace GearFoundry
             {
             	if(e.Message.Type == AC_APPLY_VISUALSOUND)
                 {
-                    	OnVisualSound(e.Message);
+                    OnVisualSound(e.Message);
                 }
             	if(e.Message.Type == AC_GAME_EVENT)
             	{

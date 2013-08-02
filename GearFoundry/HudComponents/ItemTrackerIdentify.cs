@@ -206,6 +206,15 @@ namespace GearFoundry
 				string namecheck = IOItem.Name;
 				List<XElement> matches;
 				
+				var exact = from XTrophies in mSortedTrophiesList
+					where XTrophies.Element("enabled").Value == "true" && 
+					XTrophies.Element("isexact").Value == "true"
+					select XTrophies;
+				
+			   	//TODO:  continue here.			
+				
+				
+				
 				if(IOItem.ObjectClass == ObjectClass.Scroll)
 				{
 					matches = (from XTrophies in mSortedTrophiesListChecked
@@ -229,7 +238,7 @@ namespace GearFoundry
 					int InventoryCount = 0;
 					if(Convert.ToBoolean(matches.First().Element("isexact").Value))
 					{
-						var inventorymatches = Core.WorldFilter.GetInventory().Where(x => x.Name == (string)matches.First().Element("key").Value);
+						var inventorymatches = Core.WorldFilter.GetInventory().Where(x => x.Name == (string)@matches.First().Element("key").Value);
 						if(inventorymatches.Count() == 0)
 						{
 							InventoryCount = 0;
@@ -243,7 +252,7 @@ namespace GearFoundry
 					}
 					else
 					{
-						var inventorymatches =  Core.WorldFilter.GetInventory().Where(x => x.Name.Contains((string)matches.First().Element("key").Value));
+						var inventorymatches =  Core.WorldFilter.GetInventory().Where(x => x.Name.Contains((string)@matches.First().Element("key").Value));
 						if(inventorymatches.Count() == 0)
 						{
 							InventoryCount = 0;
@@ -259,7 +268,7 @@ namespace GearFoundry
 						WriteToChat("Trophy Rejected on LootMax Check.");
 						return;
 					}
-						 
+			
 					IOItem.IOR = IOResult.trophy;
 				}				
 			} catch(Exception ex){LogError(ex);}
