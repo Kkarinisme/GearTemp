@@ -659,8 +659,9 @@ namespace GearFoundry
 
 
                     } // endof foreach world object
-
-                } 
+                    
+                }
+                CoreManager.Current.Actions.UseItem(nFacilityHubGemID, 0);
             }
             catch (Exception ex) { LogError(ex); }
         }
