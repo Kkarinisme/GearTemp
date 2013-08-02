@@ -322,13 +322,13 @@ namespace GearFoundry
                 portalRecallGearTabView.AddTab(portalRecallGearTabFixedLayout, "");
 
                 //FacilityHub Gem
-                string strFacilityHubGemImage = GearDir + @"\facilityhubgem.gif";
-                Image FacilityHubGemImage = new Bitmap(strFacilityHubGemImage);
+//                string strFacilityHubGemImage = GearDir + @"\facilityhubgem.gif";
+//                Image FacilityHubGemImage = new Bitmap(strFacilityHubGemImage);
  
              //   Stream facilityHubGem = this.GetType().Assembly.GetManifestResourceStream("facilityhubgem.gif");
              //  Image FacilityHubGemImage = new Bitmap(facilityHubGem);
                 mPortalRecallGear00 = new HudPictureBox();
-                mPortalRecallGear00.Image = (ACImage)FacilityHubGemImage;
+//                mPortalRecallGear00.Image = (ACImage)FacilityHubGemImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear00, new Rectangle(2, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear00, "FacilityHub Quick Out.  Must have gem for it to work!!");
                 mPortalRecallGear00.Hit += (sender, obj) => mPortalRecallGear00_Hit(sender, obj);

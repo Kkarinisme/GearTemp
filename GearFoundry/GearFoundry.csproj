@@ -220,9 +220,6 @@
     <EmbeddedResource Include="Graphics\mhoire.gif">
       <LogicalName>mhoire.gif</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\facilityhubgem.gif">
-      <LogicalName>facilityhubgem.gif</LogicalName>
-    </EmbeddedResource>
     <Content Include="olthoi_north.gif" />
     <EmbeddedResource Include="Graphics\facility.gif">
       <LogicalName>facility.gif</LogicalName>
