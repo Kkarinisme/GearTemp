@@ -52,6 +52,7 @@ namespace GearFoundry
                 {
                     try
                     {
+                        
                         objID = obj.Id;
                         string sobjID = objID.ToString();
                         mCurrID.Add(sobjID);
@@ -87,26 +88,27 @@ namespace GearFoundry
         {
             try
             {
-                int n = mWaitingForID.Count;
+                int n;
+                if (mWaitingForID != null){ n = mWaitingForID.Count; }
+                else {  n = 0; }
                 string s = n.ToString();
                 if (n == 0)
                 {
                     try
                     {
-                        mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor);
+                        if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor); mWaitingForIDTimer = null; }
                         removeExcessObjsfromFile();
-                        xdocGenInventory.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
+                        xdocGenInventory.Element("Objs").Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
 
                         xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
 
                         xdocGenInventory.Save(genInventoryFilename);
                         GearFoundry.PluginCore.WriteToChat("General Inventory file has been saved. ");
                         m = 500;
-                        //      k = 0;
-                        n = 0;
-                        mWaitingForID = null;
-                        xdoc = null;
-                        programinv = "";
+                        //    n = 0;
+                        if (mWaitingForID != null) { mWaitingForID = null; }
+                        if (xdoc != null) { xdoc = null; }
+                        if (programinv != null) { programinv = ""; }
                     }
                     catch (Exception ex) { LogError(ex); }
                  }
@@ -114,20 +116,20 @@ namespace GearFoundry
                  {
                         GearFoundry.PluginCore.WriteToChat("Inventory remaining to be ID'd: " + s);
                         m = n;
-                        string mname = null;
+                       // string mname = null;
                         
 
                         if (mWaitingForID.Count > 0)
                         {
-                            if (binventoryWaitingEnabled)
-                            {
-                                for (int i = 0; i < n; i++)
-                                {
-                                    mname = mWaitingForID[i].Name;
-                                    GearFoundry.PluginCore.WriteToChat(mname);
+                            //if (binventoryWaitingEnabled)
+                            //{
+                            //    for (int i = 0; i < n; i++)
+                            //    {
+                            //        mname = mWaitingForID[i].Name;
+                            //        GearFoundry.PluginCore.WriteToChat(mname);
 
-                                }
-                            }
+                            //    }
+                            //}
                             mDoWait();
                         }
                     }
@@ -160,35 +162,35 @@ namespace GearFoundry
 
 
                 mWaitingForIDTimer.Stop();
-
+                
                 for (int n = 0; n < mWaitingForID.Count; n++)
                 {
- 
-                    if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData )
+                    if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData)
                     {
-                       ProcessDataInventory();
+                        ProcessDataInventory();
                         mIsFinished();
+
                     }
-                    else
-                    { mDoWait(); }
+                    else { mDoWait(); }
                 }
+               
 
-          //  }
+          
             }
 
             catch (Exception ex) { LogError(ex); }
 
         }
 
-        public void mDoWaitMore()
-        {
-            try
-            {
-                mWaitingForIDTimer.Start();
-            }
-            catch (Exception ex) { LogError(ex); }
+        //public void mDoWaitMore()
+        //{
+        //    try
+        //    {
+        //        mWaitingForIDTimer.Start();
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
 
-        }
+        //}
 
         //This is routine that puts the data of an obj into the inventory file xml
         private void ProcessDataInventory()
@@ -447,24 +449,40 @@ namespace GearFoundry
         {
             try
             {
-                IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("Obj");
+                int oldCount = 0;
+                int newCount = 0;
+                if (xdocToonInventory.Element("Objs").Descendants("Obj") != null && xdocToonInventory.Element("Objs").Descendants("Obj").Count() > 0)
+                {
 
-                int oldCount = (int)(xdocToonInventory.Element("Objs").Elements("Obj").Count());
-                var obj = from o in xdocToonInventory.Descendants("Obj")
-                          where !mCurrID.Contains(o.Element("ObjID").Value)
-                          select o;
-                obj.Remove();
-                
-                 int newCount = (int)(xdocToonInventory.Element("Objs").Elements("Obj").Count());
-                int count = oldCount - newCount;
-                GearFoundry.PluginCore.WriteToChat(count + " objects removed from inventory of " + toonName);
-                xdocToonInventory.Save(inventoryFilename);
-                GearFoundry.PluginCore.WriteToChat(toonName + " inventory file has been saved.");
-                xdocToonInventory = null;
-                moldObjsID = null;
-                mWaitingForID = null;
-                mCurrID = null;
-            }
+                    IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("Obj");
+                    oldCount = elements.Count();
+                    WriteToChat("oldCount: " + oldCount.ToString());
+                    var obj = from o in xdocToonInventory.Descendants("Obj")
+                              where !mCurrID.Contains(o.Element("ObjID").Value)
+                              select o;
+                    obj.Remove();
+                }
+                else
+                {
+                    oldCount = 0;
+                }
+                if (xdocToonInventory.Element("Objs").Descendants("Obj") != null && xdocToonInventory.Element("Objs").Descendants("Obj").Count() > 0)
+                    {
+                        newCount = (int)(xdocToonInventory.Element("Objs").Elements("Obj").Count());
+                        WriteToChat("newCount: " + newCount.ToString());
+
+                    }
+                    else { newCount = 0; }
+                    int count = oldCount - newCount;
+                    GearFoundry.PluginCore.WriteToChat(count.ToString() + " objects removed from inventory of " + toonName);
+                    xdocToonInventory.Save(inventoryFilename);
+                    GearFoundry.PluginCore.WriteToChat(toonName + " inventory file has been saved.");
+                    if (xdocToonInventory != null) { xdocToonInventory = null; }
+                    if (moldObjsID != null) { moldObjsID = null; }
+                    if (mWaitingForID != null) { mWaitingForID = null; }
+                    if (mCurrID != null) { mCurrID = null; }
+                }
+            
             catch (Exception ex) { LogError(ex); }
 
 
@@ -473,22 +491,7 @@ namespace GearFoundry
 
 
 
-        //public void removeToonfromFile()
-        //{
-        //    try
-        //    {
 
-        //       // xdoc = XDocument.Load(genInventoryFilename);
-
-        //      // IEnumerable<XElement> elements = xdocGenInventory.Element("Objs").Descendants("Obj");
-        //        xdocGenInventory.Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
-        //       // xdocGenInventory.Save(genInventoryFilename);
-        //       // xdoc = null;
-
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-
-        //}
     }
 }// end of namespace
 

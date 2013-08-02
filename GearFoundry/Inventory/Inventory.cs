@@ -36,7 +36,7 @@ namespace GearFoundry
         private int InventoryHudFirstHeight = 500;
         private int InventoryHudWidthNew;
         private int InventoryHudHeightNew;
-        private HudFixedLayout InventoryHudLayout = null;
+ //       private HudFixedLayout InventoryHudLayout = null;
         private HudTabView InventoryHudTabView = null;
         private HudFixedLayout InventoryHudTabLayout = null;
         private const int InventoryRemoveCircle = 0x60011F8;
@@ -81,6 +81,8 @@ namespace GearFoundry
         private HudButton btnLstInv;
         private HudList.HudListRowAccessor InventoryHudListRow = null;
         private HudList lstHudInventory;
+        private int nInventoryRow;
+
 
 
 
@@ -121,13 +123,9 @@ namespace GearFoundry
                 InventoryHudView.UserClickThroughable = false;
                 InventoryHudView.LoadUserSettings();
 
-                InventoryHudLayout = new HudFixedLayout();
-                InventoryHudView.Controls.HeadControl = InventoryHudLayout;
-
                 InventoryHudTabView = new HudTabView();
-                InventoryHudLayout.AddControl(InventoryHudTabView, new Rectangle(0, 0, InventoryHudWidth, InventoryHudHeight));
-
-                
+                InventoryHudView.Controls.HeadControl = InventoryHudTabView;
+                 
                 InventoryHudTabLayout = new HudFixedLayout();
                 InventoryHudTabView.AddTab(InventoryHudTabLayout, "Inventory");
 
@@ -559,7 +557,7 @@ namespace GearFoundry
                 catch { }
 
                 InventoryHudSettings.Dispose();
-                InventoryHudLayout.Dispose();
+           //     InventoryHudLayout.Dispose();
                 InventoryHudTabLayout.Dispose();
                 InventoryHudTabView.Dispose();
                 InventoryHudView.Dispose();
