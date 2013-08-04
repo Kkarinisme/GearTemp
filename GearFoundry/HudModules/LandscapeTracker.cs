@@ -14,6 +14,7 @@ using VirindiViewService.Controls;
 using MyClasses.MetaViewWrappers.VirindiViewServiceHudControls;
 using System.Xml.Serialization;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace GearFoundry
 {
@@ -343,9 +344,10 @@ namespace GearFoundry
 			try 
 			{		
 				string namecheck = IOLandscape.Name;
-				var matches = from XMobs in mSortedMobsListChecked
-					where (@namecheck.ToLower().Contains((string)@XMobs.Element("key").Value.ToLower()) && !Convert.ToBoolean(XMobs.Element("isexact").Value)) ||
-					(@namecheck == (string)@XMobs.Element("key").Value && Convert.ToBoolean(XMobs.Element("isexact").Value))
+				var matches = from XMobs in mSortedMobsList
+					where XMobs.Element("checked").Value == "true" &&
+					(@namecheck.ToLower().Contains((string)@XMobs.Element("key").Value.ToLower()) && XMobs.Element("isexact").Value == "false") ||
+					(@namecheck == (string)@XMobs.Element("key").Value && XMobs.Element("isexact").Value == "true")
 							  select XMobs;
 				
 				if(matches.Count() > 0)
@@ -365,10 +367,28 @@ namespace GearFoundry
 			try
 			{
 				string namecheck = IOLandscape.Name;
-				var matches = from XTrophies in mSortedTrophiesListChecked
-					where (@namecheck.ToLower().Contains((string)@XTrophies.Element("key").Value.ToLower()) && !Convert.ToBoolean(XTrophies.Element("isexact").Value)) ||
-					(@namecheck == (string)@XTrophies.Element("key").Value && Convert.ToBoolean(XTrophies.Element("isexact").Value))
-							  select XTrophies;
+				List<XElement> matches;
+				
+				var exacttrophies = from XTrophies in mSortedTrophiesList
+					where XTrophies.Element("checked").Value == "true" && 
+					XTrophies.Element("isexact").Value == "true"
+					select XTrophies;
+				
+				matches = (from exTrophies in exacttrophies
+					where (string)@exTrophies.Element("key").Value == @namecheck
+					select exTrophies).ToList();
+				
+				if(matches.Count() == 0)
+				{
+					var notexacttrophies = from XTrophies in mSortedTrophiesList
+					where XTrophies.Element("checked").Value == "true" && 
+					XTrophies.Element("isexact").Value == "true"
+					select XTrophies;
+					
+					matches = (from nxTrophies in exacttrophies
+						where @namecheck.ToLower().Contains((string)@nxTrophies.Element("key").Value.ToLower())
+						select nxTrophies).ToList();
+				}
 				
 				if(matches.Count() > 0)
 				{
