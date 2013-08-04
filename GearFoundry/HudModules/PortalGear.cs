@@ -59,6 +59,8 @@ namespace GearFoundry
 
         private int nOrbGuid = 0;
         private int nOrbIcon = 0;
+        private int nFacilityHubGemID = 0;
+        private WorldObject oFacilityHubGem;
         
         private List<PortalActions> PortalActionList = new List<PortalActions>();
         private System.Windows.Forms.Timer PortalActionTimer = new System.Windows.Forms.Timer();
@@ -134,7 +136,7 @@ namespace GearFoundry
 					{
 	                    xdocPortalGear = XDocument.Load(portalGearFilename);
                         XElement elem = xdocPortalGear.Root;
-                        if(elem.Element("Setting") == null){ savePortalSettings();}
+                        if (elem.Element("Setting") == null || elem.Element("FacilityHubGemID") == null) { savePortalSettings(); }
                     }
                     catch(Exception ex){LogError(ex); nOrbGuid = 0; nOrbIcon = 0;}
                 }
@@ -147,6 +149,7 @@ namespace GearFoundry
                         nOrbIcon = Convert.ToInt32(el.Element("OrbIcond").Value); savePortalSettings();
                     }
                     else { nOrbIcon = Convert.ToInt32(el.Element("OrbIcon").Value); }
+                    if(Convert.ToInt32(el.Element("FacilityHubGemID").Value) > 0 ){nFacilityHubGemID = Convert.ToInt32(el.Element("FacilityHubGemID").Value);}
                 }
                 catch (Exception ex) { LogError(ex); nOrbGuid = 0; nOrbIcon = 0; }
  				
@@ -320,15 +323,31 @@ namespace GearFoundry
                 portalRecallGearHud.Controls.HeadControl = portalRecallGearTabView;
                 portalRecallGearTabFixedLayout = new HudFixedLayout();
                 portalRecallGearTabView.AddTab(portalRecallGearTabFixedLayout, "");
-
-                //FacilityHub Gem
-//                string strFacilityHubGemImage = GearDir + @"\facilityhubgem.gif";
-//                Image FacilityHubGemImage = new Bitmap(strFacilityHubGemImage);
+                WriteToChat("nFacilityHubGemID = " + nFacilityHubGemID.ToString());
  
-             //   Stream facilityHubGem = this.GetType().Assembly.GetManifestResourceStream("facilityhubgem.gif");
-             //  Image FacilityHubGemImage = new Bitmap(facilityHubGem);
+                //FacilityHub Gem
+                if (nFacilityHubGemID == 0)
+                {
+                  foreach (Decal.Adapter.Wrappers.WorldObject obj in Core.WorldFilter.GetInventory())
+                  {
+                    try
+                    {
+                        if (obj.Name.Contains("Facility Hub Portal Gem")) 
+                        {
+                            nFacilityHubGemID = obj.Id; 
+                            savePortalSettings();
+                            break;
+                        }
+                    }
+                    catch (Exception ex) { LogError(ex); }
+
+
+                } // endof foreach world object
+               }
+                 Stream facilityHubGem = this.GetType().Assembly.GetManifestResourceStream("facilityhubgem.gif");
+                Image FacilityHubGemImage = new Bitmap(facilityHubGem);
                 mPortalRecallGear00 = new HudPictureBox();
-//                mPortalRecallGear00.Image = (ACImage)FacilityHubGemImage;
+                mPortalRecallGear00.Image = (ACImage)FacilityHubGemImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear00, new Rectangle(2, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear00, "FacilityHub Quick Out.  Must have gem for it to work!!");
                 mPortalRecallGear00.Hit += (sender, obj) => mPortalRecallGear00_Hit(sender, obj);
@@ -509,7 +528,8 @@ namespace GearFoundry
                 xdoc = new XDocument(new XElement("Settings"));
                 xdoc.Element("Settings").Add(new XElement("Setting",
                         new XElement("OrbGuid", nOrbGuid),
-                         new XElement("OrbIcon", nOrbIcon)));
+                         new XElement("OrbIcon", nOrbIcon),
+                        new XElement("FacilityHubGemID",nFacilityHubGemID)));
                 xdoc.Save(portalGearFilename);
                 xdocPortalGear = XDocument.Load(portalGearFilename);
  
@@ -619,7 +639,29 @@ namespace GearFoundry
         {
             try
             {
-               CoreManager.Current.Actions.UseItem(-2070924399, 0);
+                if (nFacilityHubGemID == 0)
+                {
+                    foreach (Decal.Adapter.Wrappers.WorldObject obj in Core.WorldFilter.GetInventory())
+                    {
+                        try
+                        {
+                            if (obj.Name.Contains("Facility Hub Portal Gem"))
+                            {
+                                nFacilityHubGemID = obj.Id;
+                               CoreManager.Current.Actions.UseItem(nFacilityHubGemID, 0);
+                               savePortalSettings();
+ 
+                                break;
+                            }
+                            else { CoreManager.Current.Actions.UseItem(nFacilityHubGemID, 0); }
+                        }
+                        catch (Exception ex) { LogError(ex); }
+
+
+                    } // endof foreach world object
+                    
+                }
+                CoreManager.Current.Actions.UseItem(nFacilityHubGemID, 0);
             }
             catch (Exception ex) { LogError(ex); }
         }
