@@ -599,16 +599,13 @@ namespace GearFoundry
                                 break;
                             case 1:
                                 myvarab = item;
-                                // GearFoundry.PluginCore.WriteToChat("I am in case skill required: Item = " + item.ToString());
-
+ 
                                 break;
                             case 2:
                                 myvarac = item;
-                                // GearFoundry.PluginCore.WriteToChat("I am in case min-max: Item = " + item.ToString());
                                 break;
                             case 3:
                                 myvarad = item;
-                                //   GearFoundry.PluginCore.WriteToChat("I am in case cleaving: Item = " + item.ToString());
                                 break;
                         }
                     }
@@ -746,10 +743,7 @@ namespace GearFoundry
                 {
                     try
                     {
-                        WriteToChat("I am at function to remove selected spell.");
-                        //foreach(IDNameLoadable name in EnabledSpellsList
-                        //xdocSalvage.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Contains(sname.Trim())).Remove();
- 
+
                         List<IDNameLoadable>EnabledSpellsListTemp = EnabledSpellsList.Where(x => x.ID != nID).ToList();
                         
                         EnabledSpellsList.Clear();

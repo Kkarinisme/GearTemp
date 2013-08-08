@@ -77,7 +77,7 @@ namespace GearFoundry
 		private const int GE_CREATE_FELLOWSHIP = 0x02BE;
 		private const int GE_DISBAND_FELLOWSHIP = 0x02BF;
 		        
-        XDocument xdoc = null;
+      //  XDocument xdoc = null;
         XDocument xdocGenSettings = null;
         XDocument xdocSwitchGearSettings = null;
         XDocument xdocMobs = null;
@@ -211,14 +211,6 @@ namespace GearFoundry
         //  private string elname;
 
 
-        //used in inventory functions
-        private XDocument newDoc = new XDocument();
-
-        private static bool getBurden = false;
-
-        //used in inventory functions
-        private string inventorySelect;
-
         // Name of toon currently playing
         private string toonName;
         // Name of toon in inventory program whose inventory item is being identified
@@ -227,71 +219,7 @@ namespace GearFoundry
 
 
 
-        //used by both the inventory and armor programs to hold current object being processed
-        private WorldObject currentobj;
-
-        private List<string> moldObjsID = new List<string>();
-        private List<WorldObject> mWaitingForID;
-        private List<WorldObject> mWaitingForArmorID;
-
-        private List<WorldObject> mIdNotNeeded = new List<WorldObject>();
-        private List<long> mwaitingforChangedEvent = new List<long>();
-        private List<string> mCurrID = new List<string>();
-        private List<string> mIcons = new List<string>();
-
-        private static WindowsTimer mWaitingForIDTimer = new WindowsTimer();
-        private int m = 500;
- 
-        //Used in inventory functions
-        private static string objSpellXml = null;
-        private static string message = null;
-        private static string mySelect = null;
-        private static string objSalvWork = "None";
-        private static string objMatName = null;
-        private static long objEmbueTypeInt = 0;
-        private static string objEmbueTypeStr = null;
-        private static long objWieldAttrInt = 0;
-        private static long objDamageTypeInt = 0;
-        private static long objLevelInt = 1;
-        private static long objCovers = 0;
-        private static string objCoversName = null;
-        private static Int32 objIcon;
-        private static long objArmorLevel = 1;
-        private static long objArmorSet = 0;
-        private static long objSet = 0;
-        private static string objArmorSetName = null;
-        private static long objMat = 0;
-        private static long objMagicDamageInt = 0;
-        private static string objDamageType = null;
-        private static double objDVar = 0;
-        private static long objMaxDamLong = 0;
-        private static string objMinDam = null;
-        private static string objEmbue = null;
-        private static string objDamBon = null;
-        private static string objElDam = null;
-        
-
-
-        private static string objClassName = "None";
-        private static int objClass = 0;
-        private string objName = null;
-        private static int objID = 0;
-        string objProts;
-        string objAl;
-        string objWork;
-        string objTinks;
-        string objLevel;
-        string objMissD;
-        string objManaC;
-        string objMagicD;
-        string objMelD;
-        string objElemvsMons;
-        string objMaxDam;
-        string objAttack;
-        string objBurden;
-        string objStack;
-
-        
+         
         //variables used to hold settings
         private static bool bquickSlotsvEnabled;
         private static bool bquickSlotshEnabled;

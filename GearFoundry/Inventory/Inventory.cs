@@ -40,7 +40,7 @@ namespace GearFoundry
         private HudTabView InventoryHudTabView = null;
         private HudFixedLayout InventoryHudTabLayout = null;
         private const int InventoryRemoveCircle = 0x60011F8;
-
+            
         private HudFixedLayout InventoryHudSettings;
         private HudView InventoryHudView;
 
@@ -48,6 +48,13 @@ namespace GearFoundry
         private string genInventoryFilename = null;
         private string holdingInventoryFilename = null;
         private XDocument xdocInventorySettings;
+        
+        private XDocument newDoc = new XDocument();
+        private XDocument xdocListInv = new XDocument();
+        private static bool getBurden = false;
+        private string inventorySelect;
+
+
 
         private HudButton btnInventoryUpdate;
         private HudButton btnInventoryComplete;
@@ -82,6 +89,70 @@ namespace GearFoundry
         private HudList.HudListRowAccessor InventoryHudListRow = null;
         private HudList lstHudInventory;
         private int nInventoryRow;
+
+        //used by both the inventory and armor programs to hold current object being processed
+        private WorldObject currentobj;
+
+        private List<string> moldObjsID = new List<string>();
+        private List<WorldObject> mWaitingForID;
+        private List<WorldObject> mWaitingForArmorID;
+
+        private List<WorldObject> mIdNotNeeded = new List<WorldObject>();
+        private List<long> mwaitingforChangedEvent = new List<long>();
+        private List<string> mCurrID = new List<string>();
+        private List<string> mIcons = new List<string>();
+
+        private static WindowsTimer mWaitingForIDTimer = new WindowsTimer();
+        private int m = 500;
+
+        //Used in inventory functions
+        private static string objSpellXml = null;
+        private static string message = null;
+        private static string mySelect = null;
+        private static string objSalvWork = "None";
+        private static string objMatName = null;
+        private static long objEmbueTypeInt = 0;
+        private static string objEmbueTypeStr = null;
+        private static long objWieldAttrInt = 0;
+        private static long objDamageTypeInt = 0;
+        private static long objLevelInt = 1;
+        private static long objCovers = 0;
+        private static string objCoversName = null;
+        private static Int32 objIcon;
+        private static long objArmorLevel = 1;
+        private static long objArmorSet = 0;
+        private static long objSet = 0;
+        private static string objArmorSetName = null;
+        private static long objMat = 0;
+        private static long objMagicDamageInt = 0;
+        private static string objDamageType = null;
+        private static double objDVar = 0;
+        private static long objMaxDamLong = 0;
+        private static string objMinDam = null;
+        private static string objEmbue = null;
+        private static string objDamBon = null;
+        private static string objElDam = null;
+
+
+
+        private static string objClassName = "None";
+        private static int objClass = 0;
+        private string objName = null;
+        private static int objID = 0;
+        string objProts;
+        string objAl;
+        string objWork;
+        string objTinks;
+        string objLevel;
+        string objMissD;
+        string objManaC;
+        string objMagicD;
+        string objMelD;
+        string objElemvsMons;
+        string objMaxDam;
+        string objAttack;
+        string objBurden;
+        string objStack;
 
 
 
@@ -179,15 +250,15 @@ namespace GearFoundry
             try
             {
                 if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = GearDir + @"\ArmorSettings.xml"; }
-                xdoc = new XDocument(new XElement("Settings"));
-                xdoc.Element("Settings").Add(new XElement("Setting",
+                XDocument xdocInvenSet = new XDocument(new XElement("Settings"));
+                xdocInvenSet.Element("Settings").Add(new XElement("Setting",
                     new XElement("ArmorHudWidth", ArmorHudWidth),
                     new XElement("ArmorHudHeight", ArmorHudHeight),
                     new XElement("InventoryHudWidth", InventoryHudWidth),
                     new XElement("InventoryHudHeight", InventoryHudHeight)));
 
 
-                xdoc.Save(armorSettingsFilename);
+                xdocInvenSet.Save(armorSettingsFilename);
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -745,16 +816,16 @@ namespace GearFoundry
         {
             if(!File.Exists(genInventoryFilename))
             {
-                 XDocument tempDoc = new XDocument(new XElement("Objs"));
-                 tempDoc.Save(genInventoryFilename);
-                 tempDoc = null;
+                 XDocument tempGInvDoc = new XDocument(new XElement("Objs"));
+                 tempGInvDoc.Save(genInventoryFilename);
+                 tempGInvDoc = null;
 
             }
             if(!File.Exists(inventoryFilename))
             {
-                 XDocument tempDoc = new XDocument(new XElement("Objs"));
-                 tempDoc.Save(inventoryFilename);
-                 tempDoc = null;
+                 XDocument tempInvDoc = new XDocument(new XElement("Objs"));
+                 tempInvDoc.Save(inventoryFilename);
+                 tempInvDoc = null;
             }
          }
 
@@ -886,10 +957,10 @@ namespace GearFoundry
                  
                 try
                 {
-                    XDocument tempDoc = new XDocument(new XElement("Objs"));
-                    tempDoc.Save(inventorySelect);
-                    tempDoc = null;
-                    mySelect = null;
+                    XDocument tempGIDoc = new XDocument(new XElement("Objs"));
+                    tempGIDoc.Save(inventorySelect);
+                    tempGIDoc = null;
+              //      mySelect = "";
 
                     if (txtMyChoice.Text != null)
                     {
@@ -898,7 +969,7 @@ namespace GearFoundry
                     }
                     else
                     { mySelect = null; }
-                    xdoc = XDocument.Load(genInventoryFilename);
+                    xdocListInv = XDocument.Load(genInventoryFilename);
                 }//end of try //
 
                 catch (Exception ex) { LogError(ex); }
@@ -918,7 +989,7 @@ namespace GearFoundry
                             if (mySelect.Length > 0)
                             {
                                 newDoc = new XDocument(new XElement("Objs",
-                                  from p in xdoc.Element("Objs").Descendants("Obj")
+                                  from p in xdocListInv.Element("Objs").Descendants("Obj")
                                   where p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
                                   p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect)
                                   select p));
@@ -934,7 +1005,7 @@ namespace GearFoundry
                                 if (objArmorSet == 0 && objArmorLevel == 1 && objCovers == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
                                           p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
@@ -946,7 +1017,7 @@ namespace GearFoundry
                                 else if (objArmorSet > 0 && objArmorLevel == 1 && objCovers == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -957,7 +1028,7 @@ namespace GearFoundry
                                 else if ((objArmorLevel > 1 || objArmorLevel < 1) && objArmorSet == 0 && objCovers == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
                                           (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -967,7 +1038,7 @@ namespace GearFoundry
                                 else if (objCovers > 0 && objArmorSet == 0 && objArmorLevel == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                           p.Element("ObjCovers").Value == objCovers.ToString() &&
                                           (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -977,7 +1048,7 @@ namespace GearFoundry
                                 else if (objArmorSet > 0 && (objArmorLevel < 1 || objArmorLevel > 1) && objCovers == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                             p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                            p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
@@ -988,7 +1059,7 @@ namespace GearFoundry
                                 else if (objArmorSet > 0 && objCovers > 0 && objArmorLevel == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                           p.Element("ObjCovers").Value == objCovers.ToString() &&
@@ -999,7 +1070,7 @@ namespace GearFoundry
                                 else if (objArmorSet == 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                        p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
                                         p.Element("ObjCovers").Value == objCovers.ToString() &&
@@ -1010,7 +1081,7 @@ namespace GearFoundry
                                 else if (objArmorSet > 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                     from p in xdoc.Element("Objs").Descendants("Obj")
+                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                      where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                           p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
@@ -1027,7 +1098,7 @@ namespace GearFoundry
                                 {
 
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName)
                                     select p));
                                 }
@@ -1036,7 +1107,7 @@ namespace GearFoundry
                                 {
 
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjSet").Value == objArmorSet.ToString()
                                     select p));
@@ -1044,7 +1115,7 @@ namespace GearFoundry
                                 else if ((objArmorLevel > 1 || objArmorLevel < 1) && objArmorSet == 0 && objCovers == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                        p.Element("ObjWieldValue").Value == objArmorLevel.ToString()
                                     select p));
@@ -1052,7 +1123,7 @@ namespace GearFoundry
                                 else if (objCovers > 0 && objArmorSet == 0 && objArmorLevel == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                           p.Element("ObjCovers").Value == objCovers.ToString()
                                     select p));
@@ -1060,7 +1131,7 @@ namespace GearFoundry
                                 else if (objArmorSet > 0 && (objArmorLevel < 1 || objArmorLevel > 1) && objCovers == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                             p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                            p.Element("ObjWieldValue").Value == objArmorLevel.ToString()
@@ -1069,7 +1140,7 @@ namespace GearFoundry
                                 else if (objArmorSet > 0 && objCovers > 0 && objArmorLevel == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                           p.Element("ObjCovers").Value == objCovers.ToString()
@@ -1078,7 +1149,7 @@ namespace GearFoundry
                                 else if (objArmorSet == 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                    from p in xdoc.Element("Objs").Descendants("Obj")
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                        p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
                                         p.Element("ObjCovers").Value == objCovers.ToString()
@@ -1087,7 +1158,7 @@ namespace GearFoundry
                                 else if (objArmorSet > 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                     from p in xdoc.Element("Objs").Descendants("Obj")
+                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                      where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                           p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
@@ -1104,7 +1175,7 @@ namespace GearFoundry
                                 if (objWieldAttrInt == 0 && objDamageTypeInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
                                          p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
@@ -1115,7 +1186,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -1126,7 +1197,7 @@ namespace GearFoundry
                                 else if (objDamageTypeInt > 0 && objWieldAttrInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -1136,7 +1207,7 @@ namespace GearFoundry
                                 else if ((objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objDamageTypeInt == 0 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -1146,7 +1217,7 @@ namespace GearFoundry
                                 else if (objEmbueTypeInt > 0 && objWieldAttrInt == 0 && objDamageTypeInt == 1 && objLevelInt == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -1156,7 +1227,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
@@ -1167,7 +1238,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objDamageTypeInt == 0 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
@@ -1178,7 +1249,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objLevelInt == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
@@ -1189,7 +1260,7 @@ namespace GearFoundry
                                 else if (objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
@@ -1200,7 +1271,7 @@ namespace GearFoundry
                                 else if (objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
@@ -1211,7 +1282,7 @@ namespace GearFoundry
                                 else if (objDamageTypeInt > 0 && objEmbueTypeInt > 0 && objWieldAttrInt == 0 && (objLevelInt == 1))
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
@@ -1222,7 +1293,7 @@ namespace GearFoundry
                                 else if ((objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0 && objWieldAttrInt == 0 && objDamageTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
@@ -1233,7 +1304,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
@@ -1245,7 +1316,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && objEmbueTypeInt > 0 && objLevelInt == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
@@ -1257,7 +1328,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt == 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
@@ -1269,7 +1340,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt == 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
@@ -1281,7 +1352,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
@@ -1297,7 +1368,7 @@ namespace GearFoundry
                                 if (objWieldAttrInt == 0 && objDamageTypeInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName)
                                         select p));
                                 }
@@ -1306,7 +1377,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString()
                                         select p));
@@ -1315,7 +1386,7 @@ namespace GearFoundry
                                 else if (objDamageTypeInt > 0 && objWieldAttrInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString()
                                         select p));
@@ -1324,7 +1395,7 @@ namespace GearFoundry
                                 else if ((objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objDamageTypeInt == 0 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString()
                                         select p));
@@ -1332,7 +1403,7 @@ namespace GearFoundry
                                 else if (objEmbueTypeInt > 0 && objWieldAttrInt == 0 && objDamageTypeInt == 1 && objLevelInt == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString()
                                         select p));
@@ -1340,7 +1411,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString()
@@ -1349,7 +1420,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objDamageTypeInt == 0 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString()
@@ -1358,7 +1429,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objLevelInt == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString()
@@ -1367,7 +1438,7 @@ namespace GearFoundry
                                 else if (objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString()
@@ -1376,7 +1447,7 @@ namespace GearFoundry
                                 else if (objDamageTypeInt > 0 && objEmbueTypeInt > 0 && objWieldAttrInt == 0 && (objLevelInt == 1))
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString()
@@ -1386,7 +1457,7 @@ namespace GearFoundry
                                 else if ((objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0 && objWieldAttrInt == 0 && objDamageTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString()
@@ -1395,7 +1466,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
@@ -1405,7 +1476,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && objEmbueTypeInt > 0 && objLevelInt == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
@@ -1415,7 +1486,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt == 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
@@ -1425,7 +1496,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt == 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
@@ -1435,7 +1506,7 @@ namespace GearFoundry
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
@@ -1454,7 +1525,7 @@ namespace GearFoundry
                                 if (objDamageTypeInt == 0 && objMagicDamageInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
                                           p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
@@ -1465,7 +1536,7 @@ namespace GearFoundry
                                 if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt == 1) && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
@@ -1476,7 +1547,7 @@ namespace GearFoundry
                                 if ((objLevelInt < 1 || objLevelInt > 1) && objDamageTypeInt == 0 && objMagicDamageInt == 0 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -1486,7 +1557,7 @@ namespace GearFoundry
                                 if (objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0 && objLevelInt == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
@@ -1497,7 +1568,7 @@ namespace GearFoundry
                                 if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
@@ -1509,7 +1580,7 @@ namespace GearFoundry
                                 if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && objEmbueTypeInt > 0 && objLevelInt == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
@@ -1521,7 +1592,7 @@ namespace GearFoundry
                                 if ((objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                         p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
@@ -1533,7 +1604,7 @@ namespace GearFoundry
                                 if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
@@ -1550,7 +1621,7 @@ namespace GearFoundry
                                 if (objDamageTypeInt == 0 && objMagicDamageInt == 0 && (objLevelInt == 1) && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName)
                                         select p));
                                 }
@@ -1558,7 +1629,7 @@ namespace GearFoundry
                                 if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt == 1) && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString())
@@ -1567,7 +1638,7 @@ namespace GearFoundry
                                 if ((objLevelInt < 1 || objLevelInt > 1) && objDamageTypeInt == 0 && objMagicDamageInt == 0 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjWieldValue").Value == objLevelInt.ToString()
                                         select p));
@@ -1575,7 +1646,7 @@ namespace GearFoundry
                                 if (objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0 && (objLevelInt == 1))
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString()
                                         select p));
@@ -1583,7 +1654,7 @@ namespace GearFoundry
                                 if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
@@ -1594,7 +1665,7 @@ namespace GearFoundry
                                 if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && objEmbueTypeInt > 0 && objLevelInt == 1)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
@@ -1604,7 +1675,7 @@ namespace GearFoundry
                                 if ((objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                         p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString()
@@ -1615,7 +1686,7 @@ namespace GearFoundry
                                 if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdoc.Element("Objs").Descendants("Obj")
+                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
@@ -1633,7 +1704,7 @@ namespace GearFoundry
                             {
 
                                 newDoc = new XDocument(new XElement("Objs",
-                                  from p in xdoc.Element("Objs").Descendants("Obj")
+                                  from p in xdocListInv.Element("Objs").Descendants("Obj")
                                   where p.Element("ObjClass").Value.Contains(objClassName) &&
                                   p.Element("ObjMaterial").Value == objMat.ToString()
                                   select p));
@@ -1642,7 +1713,7 @@ namespace GearFoundry
                             else if ((objClassName.Contains("Salvage")) && ((objSalvWork == "1-6"))) // || (objSalvWork == "7-8") || (objSalvWork == "9")))
                             {
                                 newDoc = new XDocument(new XElement("Objs",
-                                  from p in xdoc.Element("Objs").Descendants("Obj")
+                                  from p in xdocListInv.Element("Objs").Descendants("Obj")
                                   where p.Element("ObjClass").Value.Contains(objClassName) &&
                                   p.Element("ObjMaterial").Value == objMat.ToString() &&
                                       //     objSalvWork.Contains(p.Element("ObjWork").Value.Substring(0, 1))
@@ -1653,7 +1724,7 @@ namespace GearFoundry
                             else if ((objClassName.Contains("Salvage")) && (objSalvWork == "7-8")) //|| (objSalvWork == "9")))
                             {
                                 newDoc = new XDocument(new XElement("Objs",
-                                  from p in xdoc.Element("Objs").Descendants("Obj")
+                                  from p in xdocListInv.Element("Objs").Descendants("Obj")
                                   where p.Element("ObjClass").Value.Contains(objClassName) &&
                                   p.Element("ObjMaterial").Value == objMat.ToString() &&
                                       //     objSalvWork.Contains(p.Element("ObjWork").Value.Substring(0, 1))
@@ -1664,7 +1735,7 @@ namespace GearFoundry
                             else if ((objClassName.Contains("Salvage")) && (objSalvWork == "9"))
                             {
                                 newDoc = new XDocument(new XElement("Objs",
-                                  from p in xdoc.Element("Objs").Descendants("Obj")
+                                  from p in xdocListInv.Element("Objs").Descendants("Obj")
                                   where p.Element("ObjClass").Value.Contains(objClassName) &&
                                   p.Element("ObjMaterial").Value == objMat.ToString() &&
                                     Convert.ToInt16(p.Element("ObjWork").Value) == 9
@@ -1674,7 +1745,7 @@ namespace GearFoundry
                             else if ((objClassName.Contains("Salvage")) && (objSalvWork == "10"))
                             {
                                 newDoc = new XDocument(new XElement("Objs",
-                                  from p in xdoc.Element("Objs").Descendants("Obj")
+                                  from p in xdocListInv.Element("Objs").Descendants("Obj")
                                   where p.Element("ObjClass").Value.Contains(objClassName) &&
                                   p.Element("ObjMaterial").Value == objMat.ToString() &&
                                   objSalvWork.ToString() == p.Element("ObjWork").Value
@@ -1688,7 +1759,7 @@ namespace GearFoundry
                             {
 
                                 newDoc = new XDocument(new XElement("Objs",
-                                     from p in xdoc.Element("Objs").Descendants("Obj")
+                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                      where p.Element("ObjClass").Value.Contains(objClassName) &&
                                             (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
@@ -1699,7 +1770,7 @@ namespace GearFoundry
                             {
 
                                 newDoc = new XDocument(new XElement("Objs",
-                                     from p in xdoc.Element("Objs").Descendants("Obj")
+                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                      where p.Element("ObjClass").Value.Contains(objClassName)
                                      select p));
                             }
@@ -1711,7 +1782,6 @@ namespace GearFoundry
                     } //end of switch
                     //{
 
-                    xdoc = null;
                     newDoc.Save(inventorySelect);
                     newDoc = null;
                     //}
@@ -1787,15 +1857,16 @@ namespace GearFoundry
         {
             try
             {
-                xdoc = XDocument.Load(inventorySelect);
-                IEnumerable<XElement> myelements = xdoc.Element("Objs").Descendants("Obj");
+
+                newDoc = XDocument.Load(inventorySelect);
+                IEnumerable<XElement> myelements = newDoc.Element("Objs").Descendants("Obj");
                 List<XElement> inventorySelectList = new List<XElement>();
                  var lst = from myelement in myelements
                           select myelement;
                inventorySelectList.AddRange(lst);
                 XElement element = inventorySelectList[row];
 
-                xdoc = null;
+                newDoc = null;
 
                 objName = element.Element("ObjName").Value;
                 objID = Convert.ToInt32(element.Element("ObjID").Value);
@@ -1965,30 +2036,30 @@ namespace GearFoundry
                 message = objName + ", " + toonInvName;
                 switch (objClass)
                 {
-                    //case 0:
-                    //    if (objProts != "")
-                    //    {
-                    //        message = message + ", Al: " + objAl + ", Prots: " + objProts + ", Work: " + objWork + ", Burden: " + objBurden +
-                    //            " , Number: " + objStack + " , Tinks: " + objTinks +
-                    //           ", Level: " + objLevel + ", " + objArmorSetName + " Set, " + objSpells +
-                    //           ", covers: " + objCoversName + ", ManaC: " + objManaC +
-                    //           ", MeleeD: " + objMelD + ", MagicD: " + objMagicD + ", MissileD: " + objMissD +
-                    //           ", ElemVsMonster: " + objElemvsMons + ", Attack: " + objAttack +
-                    //           ", MaxDam: " + objMaxDam + ", Variance: " + objVar + ", Embue: " + objEmbueTypeStr;
-                    //    }
-                    //    else
-                    //    {
+                    case 0:
+                        if (objProts != "")
+                        {
+                            message = message + ", Al: " + objAl + ", Prots: " + objProts + ", Work: " + objWork + ", Burden: " + objBurden +
+                                " , Number: " + objStack + " , Tinks: " + objTinks +
+                               ", Level: " + objLevel + ", " + objArmorSetName + " Set, " + objSpellXml +
+                               ", covers: " + objCoversName + ", ManaC: " + objManaC +
+                               ", MeleeD: " + objMelD + ", MagicD: " + objMagicD + ", MissileD: " + objMissD +
+                               ", ElemVsMonster: " + objElemvsMons + ", Attack: " + objAttack +
+                               ", MaxDam: " + objMaxDam + ", Variance: " + objDVar + ", Embue: " + objEmbueTypeStr;
+                        }
+                        else
+                        {
 
-                    //        message = message + ", Al: " + objAl + ", Work: " + objWork + ", Burden: " + objBurden +
-                    //             " , Number: " + objStack + " , Tinks: " + objTinks +
-                    //            ", Level: " + objLevel + ", " + objArmorSetName + " Set, " + objSpells +
-                    //            ", covers: " + objCoversName + ", ManaC: " + objManaC +
-                    //            ", MeleeD: " + objMelD + ", MagicD: " + objMagicD + ", MissileD: " + objMissD +
-                    //            ", ElemVsMonster: " + objElemvsMons + ", Attack: " + objAttack +
-                    //            ", MaxDam: " + objMaxDam + ", Variance: " + objVar + ", Embue: " + objEmbueTypeStr;
-                    //    }
+                            message = message + ", Al: " + objAl + ", Work: " + objWork + ", Burden: " + objBurden +
+                                 " , Number: " + objStack + " , Tinks: " + objTinks +
+                                ", Level: " + objLevel + ", " + objArmorSetName + " Set, " + objSpellXml +
+                                ", covers: " + objCoversName + ", ManaC: " + objManaC +
+                                ", MeleeD: " + objMelD + ", MagicD: " + objMagicD + ", MissileD: " + objMissD +
+                                ", ElemVsMonster: " + objElemvsMons + ", Attack: " + objAttack +
+                                ", MaxDam: " + objMaxDam + ", Variance: " + objDVar + ", Embue: " + objEmbueTypeStr;
+                        }
 
-                    //    break;
+                        break;
 
                     // *                
                     case 1:
@@ -1996,7 +2067,7 @@ namespace GearFoundry
                     case 11:
                         if (objClass == 1)
                         {
-                            message = ", Al: " + objAl + ", Work: " + objWork +
+                            message = message +  ", Al: " + objAl + ", Work: " + objWork +
                                    ", Tinks: " + objTinks;
                             if (objProts != "")
                             {
@@ -2108,7 +2179,7 @@ namespace GearFoundry
             objArmorLevel = 1;
             objSet = 0;
             newDoc = null;
-            xdoc = null;
+        //    xdoc = null;
 //            childElements = null;
 //            elements = null;
             mySelect = "";

@@ -32,7 +32,7 @@ namespace GearFoundry
             	}
             	else{
             	programinv = "inventory";
-               xdoc = new XDocument(new XElement("Objs"));
+          //     xdoc = new XDocument(new XElement("Objs"));
                 //Need a list to hold the inventory
                 mWaitingForIDTimer = new WindowsTimer();
                 mWaitingForID = new List<WorldObject>();
@@ -42,9 +42,9 @@ namespace GearFoundry
 
                 if (!File.Exists(genInventoryFilename))
                 {
-                    XDocument tempDoc = new XDocument(new XElement("Objs"));
-                    tempDoc.Save(genInventoryFilename);
-                    tempDoc = null;
+                    XDocument tempGIDoc = new XDocument(new XElement("Objs"));
+                    tempGIDoc.Save(genInventoryFilename);
+                    tempGIDoc = null;
                 }
 
 
@@ -107,7 +107,7 @@ namespace GearFoundry
                         m = 500;
                         //    n = 0;
                         if (mWaitingForID != null) { mWaitingForID = null; }
-                        if (xdoc != null) { xdoc = null; }
+                    //    if (xdoc != null) { xdoc = null; }
                         if (programinv != null) { programinv = ""; }
                     }
                     catch (Exception ex) { LogError(ex); }
