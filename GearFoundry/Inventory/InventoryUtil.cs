@@ -210,7 +210,6 @@ namespace GearFoundry
                         objIcon = currentobj.Icon;
                         LootObject whatsmygearscore = new LootObject(currentobj);
                         int nGearScore = whatsmygearscore.GearScore;
-                        WriteToChat("GearScore: " + nGearScore.ToString());
                         long objDesc = currentobj.Values(LongValueKey.DescriptionFormat);
                         long objMat = currentobj.Values(LongValueKey.Material);
                         long objCatType = (int)currentobj.Values(LongValueKey.Category);
