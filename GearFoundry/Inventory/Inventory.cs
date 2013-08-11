@@ -88,7 +88,7 @@ namespace GearFoundry
         private HudButton btnLstInv;
         private HudList.HudListRowAccessor InventoryHudListRow = null;
         private HudList lstHudInventory;
-        private int nInventoryRow;
+     //   private int nInventoryRow;
 
         //used by both the inventory and armor programs to hold current object being processed
         private WorldObject currentobj;
@@ -132,6 +132,7 @@ namespace GearFoundry
         private static string objEmbue = null;
         private static string objDamBon = null;
         private static string objElDam = null;
+        private static int objGearScore = 0;
 
 
 
@@ -1867,7 +1868,7 @@ namespace GearFoundry
                 XElement element = inventorySelectList[row];
 
                 newDoc = null;
-
+                if (element.Element("GearScore") != null) { objGearScore = Convert.ToInt32(element.Element("GearScore").Value); }
                 objName = element.Element("ObjName").Value;
                 objID = Convert.ToInt32(element.Element("ObjID").Value);
                 toonInvName = element.Element("ToonName").Value;
@@ -2033,7 +2034,7 @@ namespace GearFoundry
                 // //  objWieldType = element.Element("ObjWieldType").Value;
  
 
-                message = objName + ", " + toonInvName;
+                message = objName + ", " + toonInvName + ", GS: " + objGearScore.ToString();
                 switch (objClass)
                 {
                     case 0:

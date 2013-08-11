@@ -208,7 +208,9 @@ namespace GearFoundry
                         objName = currentobj.Name;
                         objID = currentobj.Id;
                         objIcon = currentobj.Icon;
-
+                        LootObject whatsmygearscore = new LootObject(currentobj);
+                        int nGearScore = whatsmygearscore.GearScore;
+                        WriteToChat("GearScore: " + nGearScore.ToString());
                         long objDesc = currentobj.Values(LongValueKey.DescriptionFormat);
                         long objMat = currentobj.Values(LongValueKey.Material);
                         long objCatType = (int)currentobj.Values(LongValueKey.Category);
@@ -274,6 +276,7 @@ namespace GearFoundry
                             new XElement("ObjID", objID),
                             new XElement("ToonName", toonName),
                             new XElement("ObjIcon", objIcon),
+                            new XElement("GearScore",nGearScore),
                             new XElement("ObjClass", objClassName),
                             new XElement("ObjDesc", objDesc),
                             new XElement("ObjMaterial", objMat),
