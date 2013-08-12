@@ -33,6 +33,7 @@ namespace GearFoundry
             	else{
             	programinv = "inventory";
                 xdocToonInventory = new XDocument(new XElement("Objs"));
+                xdocGenInventory = XDocument.Load(genInventoryFilename);
                 //Need a list to hold the inventory
                 mWaitingForIDTimer = new WindowsTimer();
                 mWaitingForID = new List<WorldObject>();
@@ -98,10 +99,10 @@ namespace GearFoundry
                     {
                         if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor); mWaitingForIDTimer = null; }
                         removeExcessObjsfromFile();
-                        if (xdocGenInventory.Element("Objs").Descendants("Obj") != null)
-                        {
+                     //   if (xdocGenInventory.Element("Objs").Descendants("Obj") == null){xdocGenInventory = XDocument.Load(genInventoryFilename);}
+                        
                             xdocGenInventory.Element("Objs").Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
-                        }
+                        
 
                         xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
 
