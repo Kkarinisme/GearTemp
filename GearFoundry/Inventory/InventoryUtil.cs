@@ -32,7 +32,7 @@ namespace GearFoundry
             	}
             	else{
             	programinv = "inventory";
-          //     xdoc = new XDocument(new XElement("Objs"));
+                xdocToonInventory = new XDocument(new XElement("Objs"));
                 //Need a list to hold the inventory
                 mWaitingForIDTimer = new WindowsTimer();
                 mWaitingForID = new List<WorldObject>();
@@ -98,7 +98,10 @@ namespace GearFoundry
                     {
                         if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor); mWaitingForIDTimer = null; }
                         removeExcessObjsfromFile();
-                        xdocGenInventory.Element("Objs").Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
+                        if (xdocGenInventory.Element("Objs").Descendants("Obj") != null)
+                        {
+                            xdocGenInventory.Element("Objs").Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
+                        }
 
                         xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
 
@@ -209,7 +212,7 @@ namespace GearFoundry
                         objID = currentobj.Id;
                         objIcon = currentobj.Icon;
                         LootObject whatsmygearscore = new LootObject(currentobj);
-                        int nGearScore = whatsmygearscore.GearScore;
+                        objGearScore = whatsmygearscore.GearScore;
                         long objDesc = currentobj.Values(LongValueKey.DescriptionFormat);
                         long objMat = currentobj.Values(LongValueKey.Material);
                         long objCatType = (int)currentobj.Values(LongValueKey.Category);
@@ -275,7 +278,7 @@ namespace GearFoundry
                             new XElement("ObjID", objID),
                             new XElement("ToonName", toonName),
                             new XElement("ObjIcon", objIcon),
-                            new XElement("GearScore",nGearScore),
+                            new XElement("GearScore",objGearScore),
                             new XElement("ObjClass", objClassName),
                             new XElement("ObjDesc", objDesc),
                             new XElement("ObjMaterial", objMat),
@@ -343,6 +346,7 @@ namespace GearFoundry
                             objDesc = 0;
                             objID = 0;
                             objIcon = 0;
+                            objGearScore = 0;
 
                             objAl = 0;
                             objSet = 0;
@@ -453,20 +457,23 @@ namespace GearFoundry
             {
                 int oldCount = 0;
                 int newCount = 0;
-                if (xdocToonInventory.Element("Objs").Descendants("Obj") != null && xdocToonInventory.Element("Objs").Descendants("Obj").Count() > 0)
+                if (xdocToonInventory != null)
                 {
+                   if (xdocToonInventory.Element("Objs").Descendants("Obj") != null && xdocToonInventory.Element("Objs").Descendants("Obj").Count() > 0)
+                    {
 
-                    IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("Obj");
-                    oldCount = elements.Count();
-                    WriteToChat("oldCount: " + oldCount.ToString());
-                    var obj = from o in xdocToonInventory.Descendants("Obj")
-                              where !mCurrID.Contains(o.Element("ObjID").Value)
-                              select o;
-                    obj.Remove();
-                }
-                else
-                {
-                    oldCount = 0;
+                        IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("Obj");
+                        oldCount = elements.Count();
+                        WriteToChat("oldCount: " + oldCount.ToString());
+                        var obj = from o in xdocToonInventory.Descendants("Obj")
+                                  where !mCurrID.Contains(o.Element("ObjID").Value)
+                                  select o;
+                        obj.Remove();
+                    }
+                    else
+                    {
+                        oldCount = 0;
+                    }
                 }
                 if (xdocToonInventory.Element("Objs").Descendants("Obj") != null && xdocToonInventory.Element("Objs").Descendants("Obj").Count() > 0)
                     {

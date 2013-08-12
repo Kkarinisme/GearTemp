@@ -934,7 +934,7 @@ namespace GearFoundry
                     //Now need to start routines that will continue to get data as becomes available or will end the search and save the files
                    mIsFinished();  
 
-                    mIsFinished();  
+  
 
                 }
 
