@@ -248,7 +248,6 @@ namespace GearFoundry
             populateSpellListBox();
             populateCloakSetsListBox();
             populateCloakSpellsListBox();
-//            populateUstListBox();
             populateEssElementsListBox();
 
         }

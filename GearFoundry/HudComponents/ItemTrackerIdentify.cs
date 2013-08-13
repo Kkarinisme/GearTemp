@@ -292,12 +292,15 @@ namespace GearFoundry
 				
 				if(AppliesToListMatches.Count() == 0) {return;}
 				
-				string RuleName;
 				if(GISettings.ModifiedLooting)
 				{
 					for(int i = 0; i < IOItemWithID.SpellCount; i ++)
 					{
 						ModifiedIOSpells.Add(IOItemWithID.Spell(i));
+					}
+					if(IOItemWithID.LValue((LongValueKey)352) ==  2)
+					{
+						ModifiedIOSpells.Add(10000);
 					}
 					
 					switch(IOItemWithID.ObjectClass)
@@ -310,7 +313,7 @@ namespace GearFoundry
 								(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
 								 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
 								(ruls.RuleArmorLevel == 0 || IOItemWithID.ArmorScore >= ruls.RuleArmorLevel) &&
-								(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
+								((ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
 								(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
 								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
 								(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && 
@@ -340,7 +343,7 @@ namespace GearFoundry
 								 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
 									IOItemWithID.ArmorScore >= ruls.RuleArmorLevel &&
 									(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(25)) &&
-									(ruls.RuleArmorCoverage == 0 || (ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&  
+									((ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&  
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
 									(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  
 									orderby ruls.RulePriority
@@ -361,7 +364,8 @@ namespace GearFoundry
 								var reducedcloakmatches = from ruls in AppliesToListMatches
 									where IOItemWithID.GearScore >= ruls.RuleItemLevel &&
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
-									(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))
+									(ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))) &&
+									ruls.RuleArmorCoverage == 0
 									orderby ruls.RulePriority
 									select ruls;
 								if(reducedcloakmatches.Count() > 0)
@@ -383,7 +387,7 @@ namespace GearFoundry
 									(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
 								 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
 									ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
-									ruls.RuleArmorLevel == 0 && ruls.RuleArmorSet.Count() == 0
+									ruls.RuleArmorCoverage == 0
 									orderby ruls.RulePriority
 									select ruls;
 								if(reducedclothmatches.Count() > 0)
@@ -503,244 +507,244 @@ namespace GearFoundry
 							return;
 					}
 				}
-				else
-				{
-					//UberLinqSearch......
-//						var LinqRulesSearch = from rules in AppliesToListMatches
-//							where (rules.RuleKeyWords.Count == 0 || IOItemWithID.Name.Split(' ').Union(rules.RuleKeyWords).Count >= rules.RuleKeyWords.Count) &&
-//							(rules.RuleKeyWordsNot.Count == 0 || IOItemWithID.Name.Split(' ').Union(rules.RuleKeyWordsNot).Count == 
-					
-					
-					foreach(var rule in AppliesToListMatches)
-					{					
-						RuleName = rule.RuleName;					
-						if(IOItemWithID.IOR == IOResult.rule){return;}
-						if(rule.RuleKeyWords.Count() > 0) {
-							foreach(string checkstring in rule.RuleKeyWords)
-							{
-								if(!IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
-							}
-						}
-						if(rule.RuleKeyWordsNot.Count() > 0) {
-							foreach(string checkstring in rule.RuleKeyWordsNot)
-							{
-								if(IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
-							}
-						}
-						if(rule.RuleArcaneLore > 0)
-						{
-							if(IOItemWithID.LValue(LongValueKey.LoreRequirement) > rule.RuleArcaneLore) {RuleName = String.Empty; goto Next;}
-						}
-						if(rule.RuleValue > 0)
-						{
-							if(IOItemWithID.LValue(LongValueKey.Value) > rule.RuleValue) {RuleName = String.Empty; goto Next;}
-						}
-						if(rule.RuleWork > 0)
-						{
-							if(IOItemWithID.DValue(DoubleValueKey.SalvageWorkmanship) > rule.RuleWork) {RuleName = String.Empty; goto Next;}
-						}
-						if(rule.RuleBurden > 0)
-						{
-							if(IOItemWithID.LValue(LongValueKey.Burden) > rule.RuleBurden) {RuleName = String.Empty; goto Next;}
-						}
-						if(rule.RuleWieldLevel > 0)
-						{
-							if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7) {
-								if(IOItemWithID.LValue(LongValueKey.WieldReqValue) > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
-							} else if (IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) == 7) {
-								if(IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
-							}
-						}
-						if(rule.RuleWieldAttribute > 0)
-						{
-							if(IOItemWithID.LValue(LongValueKey.WieldReqType) != 7)
-							{
-								if(IOItemWithID.LValue(LongValueKey.WieldReqAttribute) !=  rule.RuleWieldAttribute){RuleName = String.Empty; goto Next;}
-							}
-						}
-						if(rule.RuleMastery > 0)
-						{
-							if(IOItemWithID.WeaponMasteryCategory != rule.RuleMastery) {RuleName = String.Empty; goto Next;}
-						}
-						if(rule.RuleMeleeD > 0)
-						{
-							if(rule.RuleMeleeD > ((IOItemWithID.DValue(DoubleValueKey.MeleeDefenseBonus) - 1) * 100)) {RuleName = String.Empty; goto Next;}
-						}
-						if(rule.RuleMcModAttack > 0)
-						{
-							if(IOItemWithID.ObjectClass == ObjectClass.WandStaffOrb)
-							{
-								if(rule.RuleMcModAttack > (IOItemWithID.DValue(DoubleValueKey.ManaCBonus) * 100)) {RuleName = String.Empty; goto Next;}
-							}
-							if(IOItemWithID.ObjectClass == ObjectClass.MissileWeapon)
-							{
-								if(rule.RuleMcModAttack > ((IOItemWithID.DValue(DoubleValueKey.DamageBonus) -1 ) * 100)) {RuleName = String.Empty; goto Next;}
-							}
-							if(IOItemWithID.ObjectClass == ObjectClass.MeleeWeapon)
-							{
-								if(rule.RuleMcModAttack > ((IOItemWithID.DValue(DoubleValueKey.AttackBonus) - 1 ) * 100)) {RuleName = String.Empty; goto Next;}
-							}
-						}
-						if(rule.RuleMagicD > 0)
-						{
-								if(IOItemWithID.DValue(DoubleValueKey.MagicDBonus) > 0)
-								{
-									if(rule.RuleMagicD > ((IOItemWithID.DValue(DoubleValueKey.MagicDBonus) - 1) * 100)) {RuleName = String.Empty; goto Next;}
-								}
-								else if(IOItemWithID.DValue(DoubleValueKey.MissileDBonus) > 0)
-								{
-									if(rule.RuleMagicD > ((IOItemWithID.DValue(DoubleValueKey.MissileDBonus) -1) * 100)) {RuleName = String.Empty; goto Next;}
-								}
-								else
-								{
-									RuleName = String.Empty; goto Next;
-								}	
-						}
-						//Irquk:  Confirmed Functional
-						if(rule.RuleWeaponEnabledA || rule.RuleWeaponEnabledB || rule.RuleWeaponEnabledC || rule.RuleWeaponEnabledD)
-						{
-							bool[] ruletrue = {false, false, false, false};
-							if(rule.RuleWeaponEnabledA)
-							{	
-								if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.LValue(LongValueKey.WieldReqValue) &&
-								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceA))
-								     {ruletrue[0] = true;}
-							}
-							if(rule.RuleWeaponEnabledB)
-							{	
-								if((rule.MSCleaveB == IOItemWithID.MSCleave && rule.WieldReqValueB == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
-								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageB && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceB))
-								     {ruletrue[1] = true;}
-							}
-							if(rule.RuleWeaponEnabledC)
-							{	
-								if((rule.MSCleaveC == IOItemWithID.MSCleave && rule.WieldReqValueC == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
-								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageC && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceC))
-								     {ruletrue[2] = true;}
-							}					
-							if(rule.RuleWeaponEnabledD)
-							{	
-								if((rule.MSCleaveD == IOItemWithID.MSCleave && rule.WieldReqValueD == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
-								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageD && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceD))
-								     {ruletrue[3] = true;}
-							}
-							if(!ruletrue[0] && !ruletrue[1] && !ruletrue[2] && !ruletrue[3]) {RuleName = String.Empty; goto Next;}
-						}
-						//Irquk:  Confirmed functional
-						if(rule.RuleDamageTypes > 0)
-						{
-							if(!((rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)) {RuleName = String.Empty; goto Next;}
-						}
-	//					
-	//					//Irquk:  Confirmed functional
-						if(rule.RuleArmorLevel > 0)
-						{
-							if(rule.RuleArmorLevel > IOItemWithID.LValue(LongValueKey.ArmorLevel)) {RuleName = String.Empty; goto Next;}
-						}
-	//					//Irquk:  Modified, functionality untested
-						if(rule.RuleArmorTypes != null)
-						{
-							if(!rule.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) {RuleName = String.Empty; goto Next;} 
-						}
-						//Irquk:  Confirmed Functional
-						if(rule.RuleArmorSet != null)
-						{
-							if(!rule.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))){RuleName = String.Empty; goto Next;}
-						}
-						//Irquk Confirmed Functional
-						if(rule.RuleArmorCoverage > 0)
-						{
-							if((IOItemWithID.LValue(LongValueKey.Coverage) & rule.RuleArmorCoverage) != IOItemWithID.LValue(LongValueKey.Coverage)) {RuleName = String.Empty; goto Next;}
-						}
-						//Irquk Confirmed Functional
-						if(rule.RuleUnenchantable)
-						{
-							if(IOItemWithID.LValue(LongValueKey.Unenchantable) != 9999) {RuleName = String.Empty; goto Next;}
-						}
-				
-						bool red = false;
-						bool yellow = false;
-						bool blue = false;
-						//Irquk:  Confirmed Functional
-						if(rule.RuleRed || rule.RuleYellow || rule.RuleBlue)
-						{
-							if(rule.RuleRed) {if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 225) {red = true;}}
-							if(rule.RuleYellow) {if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 150) {yellow = true;}}
-							if(rule.RuleBlue){if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue)  == 75) {blue = true;}}
-							if(!red && !yellow && !blue){RuleName = String.Empty; goto Next;}
-						}
-										
-						//Irquk:  Confirmed functional
-						if(rule.RuleItemLevel > 0)
-						{
-							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.MaxItemLevel) < rule.RuleItemLevel) {RuleName = String.Empty; goto Next;}
-						}
-						//Irquk:  Confirmed functional
-						if(rule.RuleEssenceLevel > 0)
-						{
-							if(rule.RuleEssenceLevel > IOItemWithID.EssenceLevel) {RuleName = String.Empty; goto Next;}
-						}
-						//Irquk:  Confirmed functional
-						if(rule.RuleEssenceDamage > 0)
-						{
-							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.Dam) < rule.RuleEssenceDamage)  {RuleName = String.Empty; goto Next;}
-						}
-						//Irquk:  confirmed functional
-						if(rule.RuleEssenceDamageResist > 0)
-						{
-							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.DamResist) < rule.RuleEssenceDamageResist)  {RuleName = String.Empty; goto Next;}
-						}
-						//Irquk:  confirmed functional
-						if(rule.RuleEssenceCrit > 0)
-						{
-							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.Crit) < rule.RuleEssenceCrit)  {RuleName = String.Empty; goto Next;}
-						}
-						//Irquk:  confirmed functional
-						if(rule.RuleEssenceCritResist > 0)
-						{
-							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.CritDamResist) < rule.RuleEssenceCritResist)  {RuleName = String.Empty; goto Next;}
-						}
-						//Irquk:  Confirmed functional
-						if(rule.RuleEssenceCritDam > 0)
-						{
-							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.CritDam) < rule.RuleEssenceCritDam)  {RuleName = String.Empty; goto Next;}
-						}
-						//Irquk:  confirmed functional
-						if(rule.RuleEssenceCritDamResist > 0)
-						{
-							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.CritDamResist) < rule.RuleEssenceCritDamResist)  {RuleName = String.Empty; goto Next;}
-						}
-					
-						
-						//Irquk:  confirmed functional. 
-						if(rule.RuleSpellNumber > 0)
-						{
-							int spellmatches = 0;
-							for(int i = 0; i < IOItemWithID.SpellCount; i++)
-							{
-								if(rule.RuleSpells.Contains(IOItemWithID.Spell(i))) {spellmatches++;}
-							}
-							//Irq:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
-							if(rule.RuleSpells.Contains(10000)){if(IOItemWithID.LValue((LongValueKey)NewLongKeys.DamageAbsorb) == 2){spellmatches++;}}
-							if(spellmatches < rule.RuleSpellNumber) {RuleName = String.Empty; goto Next;}
-						}
-	
-	
-						if(RuleName != String.Empty)
-						{
-							IOItemWithIDReference.IOR = IOResult.rule;
-							IOItemWithIDReference.rulename = RuleName;
-							return;
-						}
-						
-						Next:
-						if(RuleName == String.Empty)
-						{
-							IOItemWithIDReference.IOR = IOResult.unknown;
-						}	
-					}
-					return;	
-				}
+//				else
+//				{
+//					//UberLinqSearch......
+////						var LinqRulesSearch = from rules in AppliesToListMatches
+////							where (rules.RuleKeyWords.Count == 0 || IOItemWithID.Name.Split(' ').Union(rules.RuleKeyWords).Count >= rules.RuleKeyWords.Count) &&
+////							(rules.RuleKeyWordsNot.Count == 0 || IOItemWithID.Name.Split(' ').Union(rules.RuleKeyWordsNot).Count == 
+//					
+//					
+//					foreach(var rule in AppliesToListMatches)
+//					{					
+//						RuleName = rule.RuleName;					
+//						if(IOItemWithID.IOR == IOResult.rule){return;}
+//						if(rule.RuleKeyWords.Count() > 0) {
+//							foreach(string checkstring in rule.RuleKeyWords)
+//							{
+//								if(!IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
+//							}
+//						}
+//						if(rule.RuleKeyWordsNot.Count() > 0) {
+//							foreach(string checkstring in rule.RuleKeyWordsNot)
+//							{
+//								if(IOItemWithID.Name.Contains(checkstring)) {RuleName = String.Empty; goto Next;}
+//							}
+//						}
+//						if(rule.RuleArcaneLore > 0)
+//						{
+//							if(IOItemWithID.LValue(LongValueKey.LoreRequirement) > rule.RuleArcaneLore) {RuleName = String.Empty; goto Next;}
+//						}
+//						if(rule.RuleValue > 0)
+//						{
+//							if(IOItemWithID.LValue(LongValueKey.Value) > rule.RuleValue) {RuleName = String.Empty; goto Next;}
+//						}
+//						if(rule.RuleWork > 0)
+//						{
+//							if(IOItemWithID.DValue(DoubleValueKey.SalvageWorkmanship) > rule.RuleWork) {RuleName = String.Empty; goto Next;}
+//						}
+//						if(rule.RuleBurden > 0)
+//						{
+//							if(IOItemWithID.LValue(LongValueKey.Burden) > rule.RuleBurden) {RuleName = String.Empty; goto Next;}
+//						}
+//						if(rule.RuleWieldLevel > 0)
+//						{
+//							if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7) {
+//								if(IOItemWithID.LValue(LongValueKey.WieldReqValue) > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
+//							} else if (IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) == 7) {
+//								if(IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) > rule.RuleWieldLevel) {RuleName = String.Empty; goto Next;}
+//							}
+//						}
+//						if(rule.RuleWieldAttribute > 0)
+//						{
+//							if(IOItemWithID.LValue(LongValueKey.WieldReqType) != 7)
+//							{
+//								if(IOItemWithID.LValue(LongValueKey.WieldReqAttribute) !=  rule.RuleWieldAttribute){RuleName = String.Empty; goto Next;}
+//							}
+//						}
+//						if(rule.RuleMastery > 0)
+//						{
+//							if(IOItemWithID.WeaponMasteryCategory != rule.RuleMastery) {RuleName = String.Empty; goto Next;}
+//						}
+//						if(rule.RuleMeleeD > 0)
+//						{
+//							if(rule.RuleMeleeD > ((IOItemWithID.DValue(DoubleValueKey.MeleeDefenseBonus) - 1) * 100)) {RuleName = String.Empty; goto Next;}
+//						}
+//						if(rule.RuleMcModAttack > 0)
+//						{
+//							if(IOItemWithID.ObjectClass == ObjectClass.WandStaffOrb)
+//							{
+//								if(rule.RuleMcModAttack > (IOItemWithID.DValue(DoubleValueKey.ManaCBonus) * 100)) {RuleName = String.Empty; goto Next;}
+//							}
+//							if(IOItemWithID.ObjectClass == ObjectClass.MissileWeapon)
+//							{
+//								if(rule.RuleMcModAttack > ((IOItemWithID.DValue(DoubleValueKey.DamageBonus) -1 ) * 100)) {RuleName = String.Empty; goto Next;}
+//							}
+//							if(IOItemWithID.ObjectClass == ObjectClass.MeleeWeapon)
+//							{
+//								if(rule.RuleMcModAttack > ((IOItemWithID.DValue(DoubleValueKey.AttackBonus) - 1 ) * 100)) {RuleName = String.Empty; goto Next;}
+//							}
+//						}
+//						if(rule.RuleMagicD > 0)
+//						{
+//								if(IOItemWithID.DValue(DoubleValueKey.MagicDBonus) > 0)
+//								{
+//									if(rule.RuleMagicD > ((IOItemWithID.DValue(DoubleValueKey.MagicDBonus) - 1) * 100)) {RuleName = String.Empty; goto Next;}
+//								}
+//								else if(IOItemWithID.DValue(DoubleValueKey.MissileDBonus) > 0)
+//								{
+//									if(rule.RuleMagicD > ((IOItemWithID.DValue(DoubleValueKey.MissileDBonus) -1) * 100)) {RuleName = String.Empty; goto Next;}
+//								}
+//								else
+//								{
+//									RuleName = String.Empty; goto Next;
+//								}	
+//						}
+//						//Irquk:  Confirmed Functional
+//						if(rule.RuleWeaponEnabledA || rule.RuleWeaponEnabledB || rule.RuleWeaponEnabledC || rule.RuleWeaponEnabledD)
+//						{
+//							bool[] ruletrue = {false, false, false, false};
+//							if(rule.RuleWeaponEnabledA)
+//							{	
+//								if((rule.MSCleaveA == IOItemWithID.MSCleave && rule.WieldReqValueA == IOItemWithID.LValue(LongValueKey.WieldReqValue) &&
+//								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageA && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceA))
+//								     {ruletrue[0] = true;}
+//							}
+//							if(rule.RuleWeaponEnabledB)
+//							{	
+//								if((rule.MSCleaveB == IOItemWithID.MSCleave && rule.WieldReqValueB == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
+//								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageB && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceB))
+//								     {ruletrue[1] = true;}
+//							}
+//							if(rule.RuleWeaponEnabledC)
+//							{	
+//								if((rule.MSCleaveC == IOItemWithID.MSCleave && rule.WieldReqValueC == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
+//								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageC && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceC))
+//								     {ruletrue[2] = true;}
+//							}					
+//							if(rule.RuleWeaponEnabledD)
+//							{	
+//								if((rule.MSCleaveD == IOItemWithID.MSCleave && rule.WieldReqValueD == IOItemWithID.LValue(LongValueKey.WieldReqValue) && 
+//								    IOItemWithID.WeaponMaxDamage >= rule.MaxDamageD && IOItemWithID.DValue(DoubleValueKey.Variance) <= rule.VarianceD))
+//								     {ruletrue[3] = true;}
+//							}
+//							if(!ruletrue[0] && !ruletrue[1] && !ruletrue[2] && !ruletrue[3]) {RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk:  Confirmed functional
+//						if(rule.RuleDamageTypes > 0)
+//						{
+//							if(!((rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)) {RuleName = String.Empty; goto Next;}
+//						}
+//	//					
+//	//					//Irquk:  Confirmed functional
+//						if(rule.RuleArmorLevel > 0)
+//						{
+//							if(rule.RuleArmorLevel > IOItemWithID.LValue(LongValueKey.ArmorLevel)) {RuleName = String.Empty; goto Next;}
+//						}
+//	//					//Irquk:  Modified, functionality untested
+//						if(rule.RuleArmorTypes != null)
+//						{
+//							if(!rule.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) {RuleName = String.Empty; goto Next;} 
+//						}
+//						//Irquk:  Confirmed Functional
+//						if(rule.RuleArmorSet != null)
+//						{
+//							if(!rule.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))){RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk Confirmed Functional
+//						if(rule.RuleArmorCoverage > 0)
+//						{
+//							if((IOItemWithID.LValue(LongValueKey.Coverage) & rule.RuleArmorCoverage) != IOItemWithID.LValue(LongValueKey.Coverage)) {RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk Confirmed Functional
+//						if(rule.RuleUnenchantable)
+//						{
+//							if(IOItemWithID.LValue(LongValueKey.Unenchantable) != 9999) {RuleName = String.Empty; goto Next;}
+//						}
+//				
+//						bool red = false;
+//						bool yellow = false;
+//						bool blue = false;
+//						//Irquk:  Confirmed Functional
+//						if(rule.RuleRed || rule.RuleYellow || rule.RuleBlue)
+//						{
+//							if(rule.RuleRed) {if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 225) {red = true;}}
+//							if(rule.RuleYellow) {if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) == 150) {yellow = true;}}
+//							if(rule.RuleBlue){if(IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue)  == 75) {blue = true;}}
+//							if(!red && !yellow && !blue){RuleName = String.Empty; goto Next;}
+//						}
+//										
+//						//Irquk:  Confirmed functional
+//						if(rule.RuleItemLevel > 0)
+//						{
+//							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.MaxItemLevel) < rule.RuleItemLevel) {RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk:  Confirmed functional
+//						if(rule.RuleEssenceLevel > 0)
+//						{
+//							if(rule.RuleEssenceLevel > IOItemWithID.EssenceLevel) {RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk:  Confirmed functional
+//						if(rule.RuleEssenceDamage > 0)
+//						{
+//							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.Dam) < rule.RuleEssenceDamage)  {RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk:  confirmed functional
+//						if(rule.RuleEssenceDamageResist > 0)
+//						{
+//							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.DamResist) < rule.RuleEssenceDamageResist)  {RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk:  confirmed functional
+//						if(rule.RuleEssenceCrit > 0)
+//						{
+//							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.Crit) < rule.RuleEssenceCrit)  {RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk:  confirmed functional
+//						if(rule.RuleEssenceCritResist > 0)
+//						{
+//							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.CritDamResist) < rule.RuleEssenceCritResist)  {RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk:  Confirmed functional
+//						if(rule.RuleEssenceCritDam > 0)
+//						{
+//							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.CritDam) < rule.RuleEssenceCritDam)  {RuleName = String.Empty; goto Next;}
+//						}
+//						//Irquk:  confirmed functional
+//						if(rule.RuleEssenceCritDamResist > 0)
+//						{
+//							if(IOItemWithID.LValue((LongValueKey)NewLongKeys.CritDamResist) < rule.RuleEssenceCritDamResist)  {RuleName = String.Empty; goto Next;}
+//						}
+//					
+//						
+//						//Irquk:  confirmed functional. 
+//						if(rule.RuleSpellNumber > 0)
+//						{
+//							int spellmatches = 0;
+//							for(int i = 0; i < IOItemWithID.SpellCount; i++)
+//							{
+//								if(rule.RuleSpells.Contains(IOItemWithID.Spell(i))) {spellmatches++;}
+//							}
+//							//Irq:  Cloak IDs....cloaks w/spells are 352 = 1;  cloaks w/absorb are 352=2
+//							if(rule.RuleSpells.Contains(10000)){if(IOItemWithID.LValue((LongValueKey)NewLongKeys.DamageAbsorb) == 2){spellmatches++;}}
+//							if(spellmatches < rule.RuleSpellNumber) {RuleName = String.Empty; goto Next;}
+//						}
+//	
+//	
+//						if(RuleName != String.Empty)
+//						{
+//							IOItemWithIDReference.IOR = IOResult.rule;
+//							IOItemWithIDReference.rulename = RuleName;
+//							return;
+//						}
+//						
+//						Next:
+//						if(RuleName == String.Empty)
+//						{
+//							IOItemWithIDReference.IOR = IOResult.unknown;
+//						}	
+//					}
+//					return;	
+//				}
 				
 			}
 			catch(Exception ex) {LogError(ex);}

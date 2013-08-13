@@ -1,13 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-# SharpDevelop 4.2.2.8818
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3525A1B5-8340-4420-819A-45EA37EC6174}"
-	ProjectSection(SolutionItems) = postProject
-		GearFoundry\Graphics\facilityhubgem.gif = GearFoundry\Graphics\facilityhubgem.gif
-		GearFoundry\Graphics\facilityhubgem.gif = GearFoundry\Graphics\facilityhubgem.gif
-	EndProjectSection
-EndProject
+# SharpDevelop 4.3
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GearFoundry", "GearFoundry\GearFoundry.csproj", "{70389EC2-7A91-4DE4-8EA5-5C1454270E8E}"
 EndProject
 Project("{CFEE4113-1246-4D54-95CB-156813CB8593}") = "GearFoundrySetup", "GearFoundrySetup\GearFoundrySetup.wixproj", "{DF5CBD43-B6E4-48B0-A1E4-EF3CC130EAF0}"

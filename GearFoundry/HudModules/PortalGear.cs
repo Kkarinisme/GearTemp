@@ -155,7 +155,7 @@ namespace GearFoundry
  				
                
 
-                portalGearHud = new VirindiViewService.HudView("", 380, 40, new ACImage(0x6AA2), false, "PortalGear");
+                portalGearHud = new VirindiViewService.HudView("", 390, 40, new ACImage(0x6AA2), false, "PortalGear");
                 portalGearHud.ShowInBar = false;
                 portalGearHud.UserAlphaChangeable = false;
                 portalGearHud.Visible = true;
@@ -310,7 +310,7 @@ namespace GearFoundry
                     DisposePortalRecallGearHud();
                 }
 
-                portalRecallGearHud = new VirindiViewService.HudView("", 320, 40, new ACImage(0x6AA2), false, "PortalRecallGear");
+                portalRecallGearHud = new VirindiViewService.HudView("", 360, 40, new ACImage(0x6AA2), false, "PortalRecallGear");
                 portalRecallGearHud.ShowInBar = false;
                 portalRecallGearHud.UserAlphaChangeable = false;
                 portalRecallGearHud.Visible = true;
