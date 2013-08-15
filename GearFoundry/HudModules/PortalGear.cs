@@ -525,12 +525,12 @@ namespace GearFoundry
         {
            try
            {
-                xdoc = new XDocument(new XElement("Settings"));
-                xdoc.Element("Settings").Add(new XElement("Setting",
+                XDocument xdocPortalSettings = new XDocument(new XElement("Settings"));
+                xdocPortalSettings.Element("Settings").Add(new XElement("Setting",
                         new XElement("OrbGuid", nOrbGuid),
                          new XElement("OrbIcon", nOrbIcon),
                         new XElement("FacilityHubGemID",nFacilityHubGemID)));
-                xdoc.Save(portalGearFilename);
+                xdocPortalSettings.Save(portalGearFilename);
                 xdocPortalGear = XDocument.Load(portalGearFilename);
  
  
@@ -776,13 +776,13 @@ namespace GearFoundry
         			nOrbIcon = Core.WorldFilter[nOrbGuid].Icon;
        
         			mSelectCaster.Image = nOrbIcon;
-        			
-        			xdoc = new XDocument(new XElement("Settings"));
-                xdoc.Element("Settings").Add(new XElement("Setting",
-                        new XElement("OrbGuid", nOrbGuid),
-                         new XElement("OrbIcon", nOrbIcon)));
-                		xdoc.Save(portalGearFilename);
-        		}
+                    savePortalSettings();
+                //    xdoc = new XDocument(new XElement("Settings"));
+                //xdoc.Element("Settings").Add(new XElement("Setting",
+                //        new XElement("OrbGuid", nOrbGuid),
+                //         new XElement("OrbIcon", nOrbIcon)));
+                //        xdoc.Save(portalGearFilename);
+                }
         		
         		//Not holding a caster
         		if(Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) == 0x1000000).Count() == 0)

@@ -359,6 +359,7 @@ namespace GearFoundry
             sRuleMSCleavec = "false";
             sRuleMSCleaved = "false";
             sRuleArmorType = "";
+            nRuleMinArmorLevel = 0;
             sRuleArmorSet = "";
             sRuleArmorCoverage = "";
             bRuleMustBeUnEnchantable = false;
@@ -392,9 +393,9 @@ namespace GearFoundry
         {
             try
             {
-                xdoc = XDocument.Load(genSettingsFilename);
+                XDocument xdocGenSet = XDocument.Load(genSettingsFilename);
                 
-                XElement el = xdoc.Root.Element("Setting");
+                XElement el = xdocGenSet.Root.Element("Setting");
 
                 bCorpseHudEnabled = Convert.ToBoolean(el.Element("CorpseHudEnabled").Value);
                bLandscapeHudEnabled = Convert.ToBoolean(el.Element("LandscapeHudEnabled").Value);
@@ -701,6 +702,7 @@ namespace GearFoundry
 //            txtRuleWieldReqValue.Text = nRuleWieldReqValue.ToString();
             txtRuleWieldLevel.Text = nRuleWieldLevel.ToString();
             txtRuleItemLevel.Text = nRuleItemLevel.ToString();
+            txtRuleMinArmorLevel.Text = nRuleMinArmorLevel.ToString();
             try
             {
                 int i=0;
@@ -1097,15 +1099,15 @@ namespace GearFoundry
             try
             {
                 if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = GearDir + @"\ArmorSettings.xml"; }
-                xdoc = new XDocument(new XElement("Settings"));
-                xdoc.Element("Settings").Add(new XElement("Setting",
+                xdocArmorSettings = new XDocument(new XElement("Settings"));
+                xdocArmorSettings.Element("Settings").Add(new XElement("Setting",
                     new XElement("ArmorHudWidth", ArmorHudWidth),
                     new XElement("ArmorHudHeight", ArmorHudHeight),
                     new XElement("InventoryHudWidth", InventoryHudWidth),
                     new XElement("InventoryHudHeight", InventoryHudHeight)));
 
 
-                xdoc.Save(armorSettingsFilename);
+                xdocArmorSettings.Save(armorSettingsFilename);
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -1555,8 +1557,8 @@ namespace GearFoundry
         {
             try
             {
-                xdoc = new XDocument(new XElement("Settings"));
-                xdoc.Element("Settings").Add(new XElement("Setting",
+                XDocument xdocGeneralSet = new XDocument(new XElement("Settings"));
+                xdocGeneralSet.Element("Settings").Add(new XElement("Setting",
                         new XElement("CorpseHudEnabled", bCorpseHudEnabled),
                          new XElement("LandscapeHudEnabled", bLandscapeHudEnabled),
                          new XElement("InspectorHudEnabled", bGearInspectorEnabled),
@@ -1597,7 +1599,8 @@ namespace GearFoundry
                          new XElement("ItemFontHeight", nitemFontHeight),
                          new XElement("MenuFontHeight", nmenuFontHeight)));
 
-               xdoc.Save(genSettingsFilename);
+               xdocGeneralSet.Save(genSettingsFilename);
+               xdocGeneralSet = null;
 
             }
             catch (Exception ex) { LogError(ex); }

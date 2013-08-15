@@ -72,9 +72,9 @@ namespace GearFoundry
                 if (!File.Exists(allStatsFilename))
                 {
 
-                    XDocument tempDoc = new XDocument(new XElement("Toons"));
-                    tempDoc.Save(allStatsFilename);
-                    tempDoc = null;
+                    XDocument tempASDoc = new XDocument(new XElement("Toons"));
+                    tempASDoc.Save(allStatsFilename);
+                    tempASDoc = null;
 
 
                 }

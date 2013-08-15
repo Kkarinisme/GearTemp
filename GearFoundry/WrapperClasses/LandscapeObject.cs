@@ -50,10 +50,10 @@ namespace GearFoundry
 			}
 			
 			internal IOResult IOR = IOResult.unknown;
-			public bool addtoloot;
-			public bool notify;
-			public string rulename;
-			public double DistanceAway;							
+			public bool addtoloot = false;
+			public bool notify = false;
+			public string rulename = string.Empty;
+			public double DistanceAway = 0;							
 			
 			public string IORString()
 			{

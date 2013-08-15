@@ -80,17 +80,17 @@ namespace GearFoundry
 
                 if (!File.Exists(armorSettingsFilename))
                 {
-                    XDocument tempDoc = new XDocument(new XElement("Settings"));
-                    tempDoc.Save(armorSettingsFilename);
-                    tempDoc = null;
+                    XDocument tempArmorDoc = new XDocument(new XElement("Settings"));
+                    tempArmorDoc.Save(armorSettingsFilename);
+                    tempArmorDoc = null;
                 }
 
                 if (!File.Exists(genArmorFilename))
                 {
 
-                    XDocument tempDoc = new XDocument(new XElement("Objs"));
-                    tempDoc.Save(genArmorFilename);
-                    tempDoc = null;
+                    XDocument tempgenArmorDoc = new XDocument(new XElement("Objs"));
+                    tempgenArmorDoc.Save(genArmorFilename);
+                    tempgenArmorDoc = null;
 
 
                 }
@@ -165,7 +165,7 @@ namespace GearFoundry
 //                         k = 0;
 //                         n = 0;
                          mWaitingForID = null;
-                         xdoc = null;
+ //                        xdoc = null;
                      }
                 
             }

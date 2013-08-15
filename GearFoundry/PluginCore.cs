@@ -244,7 +244,6 @@ namespace GearFoundry
             try
             {
             	InitPaths();
-            	LoadSettingsFiles();
             	
 				InitListBuilder();
                
@@ -255,7 +254,7 @@ namespace GearFoundry
                 populateRuleSpellEnabledListBox();
                 startRoutines();
                 
-                
+                SubscribeFellowshipEvents();
 
                 Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
 
@@ -267,24 +266,12 @@ namespace GearFoundry
                
 
                 mCharacterLoginComplete = true;             
+                
   
 
             }
             catch (Exception ex) { LogError(ex); }
-        }
-
-        private void LoadSettingsFiles()
-        {
-        	try
-        	{
-        		
-        	}
-        	catch(Exception ex){LogError(ex);}
-        }
-        
-        
-
-        
+        }    
 
     }
 }

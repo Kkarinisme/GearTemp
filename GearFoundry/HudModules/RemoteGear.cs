@@ -49,9 +49,9 @@ namespace GearFoundry
             }
             if (!File.Exists(remoteGearFilename))
             {
-                XDocument tempDoc = new XDocument(new XElement("Huds"));
-                tempDoc.Save(remoteGearFilename);
-                tempDoc = null;
+                XDocument tempRHDoc = new XDocument(new XElement("Huds"));
+                tempRHDoc.Save(remoteGearFilename);
+                tempRHDoc = null;
             }
 
             xdocRemoteGear = XDocument.Load(remoteGearFilename);

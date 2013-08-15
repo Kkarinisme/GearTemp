@@ -76,74 +76,12 @@ namespace GearFoundry
 		// Sorry Mag-nus.  I just can't leave anything alone.....I heavily repurposed your Regex expressions.
 		// For original Mag-Tools source code, go to http://http://magtools.codeplex.com/
 			
-		private static Collection<Regex> MyDefenseMessages = new Collection<Regex>();
-		private static Collection<Regex> MobDefenseMessages = new Collection<Regex>();
-		private static Collection<Regex> MyAttackMessages = new Collection<Regex>();
-		private static Collection<Regex> MobAttackMessages = new Collection<Regex>();
-		private static Collection<Regex> TargetKilledByMe = new Collection<Regex>();
 		private static Collection<Regex> ChatTypes = new Collection<Regex>();	
 		private static List<string> CastWords = new List<string>();
+		private static List<int> ChatChannelPass = new List<int>();
 
 		private void BuildTextCollections()
 		{
-			MyDefenseMessages.Add(new Regex("^You evaded (?<targetname>.+)!$"));
-			MyDefenseMessages.Add(new Regex("^You resist the spell cast by (?<targetname>.+)$"));
-			
-			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) evaded your attack.$"));
-			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell!$"));
-			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell!$"));
-			MobDefenseMessages.Add(new Regex("^(?<targetname>.+) resists your spell$"));
-	
-			MyAttackMessages.Add(new Regex("^Critical hit!  You [\\w]+ (?<targetname>.*) for (?<points>.+) point.* of .+ damage.*$"));
-			MyAttackMessages.Add(new Regex("^You [\\w]+ (?<targetname>.*) for (?<points>.+) point.* of .+ damage.*$"));
-			MyAttackMessages.Add(new Regex("^Critical hit! You [\\w]+ (?<targetname>.+) for (?<points>.+) point.* with .+$"));
-			MyAttackMessages.Add(new Regex("^You [\\w]+ (?<targetname>.+) for (?<points>.+) point.* with .+$"));
-
-			MobAttackMessages.Add(new Regex("^Critical hit! (?<targetname>.+) [\\w]+ you for (?<points>.+) point.* with .+$"));
-			MobAttackMessages.Add(new Regex("^(?<targetname>.+) [\\w]+ you for (?<points>.+) point.* with .+$"));
-			MobAttackMessages.Add(new Regex("^Magical energies lose (?<points>.+) point.* of health due to (?<targetname>.+) casting .+$"));
-			MobAttackMessages.Add(new Regex("^You lose (?<points>.+) point.* of health due to (?<targetname>.+) casting .+$"));
-			MobAttackMessages.Add(new Regex("^(?<targetname>.+) casts .+ and drains (?<points>.+) point.* .+$"));
-			MobAttackMessages.Add(new Regex("^Critical hit! (?<targetname>.+) [\\w]+ your .+ for (?<points>.*) point.* of .+ damage.*$"));
-			MobAttackMessages.Add(new Regex("^(?<targetname>.+) [\\w]+ your .+ for (?<points>.+) point.* of .+ damage.*$"));
-
-			TargetKilledByMe.Add(new Regex("^You flatten (?<targetname>.+)'s body with the force of your assault!$"));
-			TargetKilledByMe.Add(new Regex("^You bring (?<targetname>.+) to a fiery end!$"));
-			TargetKilledByMe.Add(new Regex("^You beat (?<targetname>.+) to a lifeless pulp!$"));
-			TargetKilledByMe.Add(new Regex("^You smite (?<targetname>.+) mightily!$"));
-			TargetKilledByMe.Add(new Regex("^You obliterate (?<targetname>.+)!$"));
-			TargetKilledByMe.Add(new Regex("^You run (?<targetname>.+) through!$"));
-			TargetKilledByMe.Add(new Regex("^You reduce (?<targetname>.+) to a sizzling, oozing mass!$"));
-			TargetKilledByMe.Add(new Regex("^You knock (?<targetname>.+) into next Morningthaw!$"));
-			TargetKilledByMe.Add(new Regex("^You split (?<targetname>.+) apart!$"));
-			TargetKilledByMe.Add(new Regex("^You cleave (?<targetname>.+) in twain!$"));
-			TargetKilledByMe.Add(new Regex("^You slay (?<targetname>.+) viciously enough to impart death several times over!$"));
-			TargetKilledByMe.Add(new Regex("^You reduce (?<targetname>.+) to a drained, twisted corpse!$"));
-			TargetKilledByMe.Add(new Regex("^Your killing blow nearly turns (?<targetname>.+) inside-out!$"));
-			TargetKilledByMe.Add(new Regex("^Your attack stops (?<targetname>.+) cold!$"));
-			TargetKilledByMe.Add(new Regex("^Your lightning coruscates over (?<targetname>.+)'s mortal remains!$"));
-			TargetKilledByMe.Add(new Regex("^Your assault sends (?<targetname>.+) to an icy death!$"));
-			TargetKilledByMe.Add(new Regex("^You killed (?<targetname>.+)!$"));
-			TargetKilledByMe.Add(new Regex("^The thunder of crushing (?<targetname>.+) is followed by the deafening silence of death!$"));
-			TargetKilledByMe.Add(new Regex("^The deadly force of your attack is so strong that (?<targetname>.+)'s ancestors feel it!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s seared corpse smolders before you!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is reduced to cinders!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is shattered by your assault!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) catches your attack, with dire consequences!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is utterly destroyed by your attack!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) suffers a frozen fate!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s perforated corpse falls before you!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is fatally punctured!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s death is preceded by a sharp, stabbing pain!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is torn to ribbons by your assault!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is liquified by your attack!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s last strength dissolves before you!$"));
-			TargetKilledByMe.Add(new Regex("^Electricity tears (?<targetname>.+) apart!$"));
-			TargetKilledByMe.Add(new Regex("^Blistered by lightning, (?<targetname>.+) falls!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+)'s last strength withers before you!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is dessicated by your attack!$"));
-			TargetKilledByMe.Add(new Regex("^(?<targetname>.+) is incinerated by your assault!$"));
-					
 			ChatTypes.Add(new Regex("^You say, \"(?<msg>.*)\"$"));
 			ChatTypes.Add(new Regex("^<Tell:IIDString:[0-9]+:(?<name>[\\w\\s'-]+)>[\\w\\s'-]+<\\\\Tell> says, \"(?<msg>.*)\"$"));
 			ChatTypes.Add(new Regex("^(?<name>[\\w\\s'-]+) says, \"(?<msg>.*)\"$"));
@@ -171,126 +109,85 @@ namespace GearFoundry
 			CastWords.Add(", \"Traku");
 			CastWords.Add(", \"Yanoi");
 			CastWords.Add(", \"Drosta");
-			CastWords.Add(", \"Feazh");	              
+			CastWords.Add(", \"Feazh");	
+
+			ChatChannelPass.Add(0);
+			ChatChannelPass.Add(1);
+			ChatChannelPass.Add(2);
+			ChatChannelPass.Add(3);
+			ChatChannelPass.Add(4);
+			ChatChannelPass.Add(5);
+			ChatChannelPass.Add(8);
+			ChatChannelPass.Add(9);
+			ChatChannelPass.Add(10);
+			ChatChannelPass.Add(11);
+			ChatChannelPass.Add(12);
+			ChatChannelPass.Add(18);
+			ChatChannelPass.Add(19);
+			ChatChannelPass.Add(24);
+			ChatChannelPass.Add(27);
+			ChatChannelPass.Add(28);
+			ChatChannelPass.Add(29);
+			ChatChannelPass.Add(30);
+			
+			
+			//0: Green: (Gameplay) Many system messages including death, quest, motd, friends, etc. 
+			//1: Green: (Mandatory) 
+			//2: White: (Area Chat) Local chat 
+			//3: Yellow: (Tells) Tell to someone 
+			//4: Dim Yellow: (Tells) Tell from someone 
+			//5: Purple: (Gameplay) 
+			//6: Red: (Gameplay/Combat) Impact damage 
+			//7: Blue: (Magic) Spell cast, fizzle, resist, spell burn, vitae, cast recall text, attuning to lifestone 
+			//8: Peach: (Mandatory) 
+			//9: Peach: (Mandatory) 
+			//10: Yellow: (Allegiance) Alleg broadcasts, To/From Co-Vassals 
+			//11: Dim Yellow: (Allegiance) To vassals 
+			//12: Grey: (Area Chat) Emotes 
+			//13: Turquoise: (Gameplay) Stat/Attribute raises, level up related 
+			//14: Light Blue: (Mandatory) 
+			//15: Red: (Mandatory) 
+			//16: Green: (Gameplay) Failed to assess 
+			//17: Blue: (Magic) Spell words 
+			//18: Orange: (Allegiance) Allegiance channel 
+			//19: Yellow: (Fellowship) Fellow To/From, Other Fellow Messages 
+			//20: Green: (Gameplay) House Maintenance 
+			//21: Red: (Combat) Melee/Missle messages to you from attacker 
+			//22: Pink: (Combat) Melee/Missle messages from you attacking 
+			//23: Green: (Gameplay) Commandline Recalls 
+			//24: Green: (Gameplay) Tinker attempts 
+			//25: Green: (Gameplay) 
+			//26: Red: (Errors) Errors, Status text 
+			//27: Light Blue: (General Channel) General channel 
+			//28: Light Blue: (Trade Channel) Trade channel 
+			//29: Light Blue: (LFG Channel) LFG channel 
+			//30: Light Blue: (Roleplay Channel) Roleplay channel 
 		}
 
 		private void ChatBoxTextMessage(object sender, ChatTextInterceptEventArgs e)
 		{
 			try
 			{
-				if(e.Eat || string.IsNullOrEmpty(e.Text)) {return;}
-				if(!bEnableTextFiltering) {return;}
-				
-				if(e.Color == 17)
+				if(ChatChannelPass.Contains(e.Color)) {return;}
+				else if(bEnableTextFiltering)
 				{
+					e.Eat = true;
+					return;
+				}
 
-					if(bTextFilterMySpellCasting && e.Text.StartsWith("You say, "))
-					{
-						if(CastWords.Any(x => e.Text.Contains(x))){e.Eat = true; return;}
-					}
-					if (bTextFilterOthersSpellCasting && e.Text.Contains("says,"))
-					{
-					    if(CastWords.Any(x => e.Text.Contains(x))){e.Eat = true; return;}
-					}
-				}
-				
-				if(ChatTypes.Any(x => x.IsMatch(e.Text)))
-				{
-					
-					if(bTextFilterBotSpam)
-					{
-						if(e.Text.Trim().EndsWith("-t-\"") || e.Text.Trim().EndsWith("-b-\"")) {e.Eat = true; return;}
-					}
-					if(bTextFilterVendorTells)
-					{
-						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Vendor).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true; return;}
-					}
-					if (bTextFilterMonsterTells)
-					{
-						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Monster).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true; return;}
-					}
-					if(bTextFilterNPCChatter)
-					{
-						if(Core.WorldFilter.GetByObjectClass(ObjectClass.Npc).ToList().Any(x => e.Text.StartsWith(x.Name))) {e.Eat = true; return;}
-					}		
-				}
-				else
-				{
-					if(bTextFilterMobDefenseMessages)
-					{
-						if(MobDefenseMessages.Any(x => x.IsMatch(e.Text))) {e.Eat = true;  return;}
-					}
-					if(bTextFilterMyDefenseMessages)
-					{
-						if(MyDefenseMessages.Any(x => x.IsMatch(e.Text))) {e.Eat = true;  return;}
-					}
-					if(bTextFilterMyKillMessages)
-					{
-						if(TargetKilledByMe.Any(x => x.IsMatch(e.Text))) {e.Eat = true;  return;}
-					}
-					if(bTextFilterPKFails)
-					{
-						if(e.Text.StartsWith("You fail to affect ") && e.Text.Contains(" you are not a player killer!")){e.Eat = true;  return;}
-						if(e.Text.Contains("fails to affect you") && e.Text.Contains(" is not a player killer!")) {e.Eat = true;  return;}
-					}
-					if(bTextFilterDirtyFighting)
-					{
-						if(e.Text.StartsWith("Dirty Fighting! ") && e.Text.Contains(" delivers a ")) {e.Eat = true;  return;}
-					}
-					if(bTextFilterMySpellCasting)
-					{
-						if(e.Text.StartsWith("Your spell fizzled.")) {e.Eat = true;  return;}
-						if (e.Text.StartsWith("The spell consumed the following components")) {e.Eat = true;  return;}
-					}
-					if(bTextFilterSpellExpirations)
-					{
-						if (!e.Text.Contains("Brilliance") && !e.Text.Contains("Prodigal") && !e.Text.Contains("Spectral"))
-						{
-							if (e.Text.Contains("has expired.") || e.Text.Contains("have expired.")) {e.Eat = true;  return;}
-						}
-					}
-					if(bTextFilterHealingMessages)
-					{
-						if(e.Text.StartsWith("You ") && e.Text.Contains(" heal yourself for ")) {e.Eat = true;  return;}
-						if(e.Text.StartsWith("You fail to heal yourself. ")) {e.Eat = true;  return;}
-					}
-					if(bTextFilterSalvageMessages)
-					{
-						if(e.Text.StartsWith("You obtain ") && e.Text.Contains(" using your knowledge of ")) {e.Eat = true;  return;}
-						if (e.Text.StartsWith("Salvaging Failed!")) {e.Eat = true;  return;}
-						if (e.Text.Contains("The following were not suitable for salvaging: ")) {e.Eat = true;  return;}
-					}
-					if(bTextFilterManaStoneMessages)
-					{
-						if(e.Text.StartsWith("The Mana Stone gives ")) {e.Eat = true;  return;}
-						if(e.Text.StartsWith("You need ") && e.Text.Trim().EndsWith(" more mana to fully charge your items.")) {e.Eat = true;  return;}
-						if(e.Text.StartsWith("The Mana Stone drains ")) {e.Eat = true;  return;}
-						if(e.Text.StartsWith("The ") && e.Text.Trim().EndsWith(" is destroyed.")) {e.Eat = true;  return;}
-					}
-					if(bTextFilterBotSpam)
-					{
-						if(e.Text.Trim().EndsWith("-t-") || e.Text.Trim().EndsWith("-b-")) {e.Eat = true;  return;}
-					}
-					if(bTextFilterIdentFailures)
-					{
-						if(e.Text.Trim().EndsWith("tried and failed to assess you!")) {e.Eat = true;  return;}
-					}
-					if(bTextFilterKillTaskComplete)
-					{
-						if (e.Text.StartsWith("You have killed ") && e.Text.Trim().EndsWith("Your task is complete!")) {e.Eat = true;  return;}
-					}	
-				}	
 			}catch(Exception ex){LogError(ex);}
 		}
-		
+			
 		private void StatusTextMessage(string StatusText, ref bool bEat)
 		{
 			try
 			{
-				if(!bEnableTextFiltering || StatusText == String.Empty) {return;}
-				if (bTextFilterAllStatus) {bEat = true;}
-				if (bTextFilterBusyStatus && !bEat && StatusText == "You're too busy!") {bEat = true;}
-				if (bTextFilterCastingStatus && !bEat && StatusText.StartsWith("Casting ")){bEat = true;}
+				if(!bEnableTextFiltering) {return;}
+				else
+				{
+					bEat = true;
+					return;
+				}
 			}catch(Exception ex){LogError(ex);}
 			
 		}

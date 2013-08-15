@@ -149,9 +149,9 @@ namespace GearFoundry
             }
             if (!File.Exists(quickSlotsvFilename))
             {
-                XDocument tempDoc = new XDocument(new XElement("Objs"));
-                tempDoc.Save(quickSlotsvFilename);
-                tempDoc = null;
+                XDocument tempQDoc = new XDocument(new XElement("Objs"));
+                tempQDoc.Save(quickSlotsvFilename);
+                tempQDoc = null;
             }
 
             xdocQuickSlotsv = XDocument.Load(quickSlotsvFilename);
@@ -303,9 +303,9 @@ namespace GearFoundry
 
              if (!File.Exists(quickSlotshFilename))
                 {
-                    XDocument tempDoc = new XDocument(new XElement("Objs"));
-                    tempDoc.Save(quickSlotshFilename);
-                    tempDoc = null;
+                    XDocument tempQuickDoc = new XDocument(new XElement("Objs"));
+                    tempQuickDoc.Save(quickSlotshFilename);
+                    tempQuickDoc = null;
                 }
 
                 xdocQuickSlotsh = XDocument.Load(quickSlotshFilename);
@@ -455,16 +455,16 @@ namespace GearFoundry
 
  
 
-        private void doGetData(XDocument xdoc, string filename)
+        private void doGetData(XDocument xdocQuickie, string filename)
         {
 
             try
             {
 
-                if (xdoc == xdocQuickSlotsv) { nquickiev = 0; }
-                else if (xdoc == xdocQuickSlotsh) { nquickieh = 0; }
+                if (xdocQuickie == xdocQuickSlotsv) { nquickiev = 0; }
+                else if (xdocQuickie == xdocQuickSlotsh) { nquickieh = 0; }
 
-                IEnumerable<XElement> elements = xdoc.Element("Objs").Descendants("Obj");
+                IEnumerable<XElement> elements = xdocQuickie.Element("Objs").Descendants("Obj");
 
                 foreach (XElement elem in elements)
                 {
@@ -473,7 +473,7 @@ namespace GearFoundry
                     thisQuickie.Icon = Convert.ToInt32(elem.Element("QIcon").Value);
                     thisQuickie.IconOverlay = Convert.ToInt32(elem.Element("QIconOverlay").Value);
                     thisQuickie.IconUnderlay = Convert.ToInt32(elem.Element("QIconUnderlay").Value);
-                    fillHud(xdoc, filename, thisQuickie);
+                    fillHud(xdocQuickie, filename, thisQuickie);
 
                 }
             }
@@ -599,16 +599,16 @@ namespace GearFoundry
         }
 
 
-        private void doQuickieChkWork(Int32 qid, XDocument xdoc, string filename, Int32 n, VirindiViewService.HudView hud)
+        private void doQuickieChkWork(Int32 qid, XDocument xdocQuickieC, string filename, Int32 n, VirindiViewService.HudView hud)
         {
             if (bremoveItem)
             {
                 try
                 {
-                    IEnumerable<XElement> elements = xdoc.Element("Objs").Descendants("Obj");
+                    IEnumerable<XElement> elements = xdocQuickieC.Element("Objs").Descendants("Obj");
 
-                    xdoc.Descendants("Obj").Where(x => x.Element("QID").Value == qid.ToString()).Remove();
-                    xdoc.Save(filename);
+                    xdocQuickieC.Descendants("Obj").Where(x => x.Element("QID").Value == qid.ToString()).Remove();
+                    xdocQuickieC.Save(filename);
                 }
                 catch (Exception ex) { LogError(ex); }
                 bremoveItem = false;
@@ -922,7 +922,7 @@ namespace GearFoundry
 
         }
 
-        private void fillHud(XDocument xdoc, string filename, QuickSlotData thisQuickie)
+        private void fillHud(XDocument xdocQuickF, string filename, QuickSlotData thisQuickie)
         {
             ACImage mQuickSlots;
             Rectangle rec = new Rectangle(0, 0, 20, 20);
@@ -949,7 +949,7 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
 
 
-            if (xdoc == xdocQuickSlotsv)
+            if (xdocQuickF == xdocQuickSlotsv)
             {
                 switch (nquickiev)
                 {
@@ -1066,7 +1066,7 @@ namespace GearFoundry
 
                 }
             }
-            else if (xdoc == xdocQuickSlotsh)
+            else if (xdocQuickF == xdocQuickSlotsh)
             {
                 try
                 {
@@ -1191,14 +1191,14 @@ namespace GearFoundry
         }
 
 
-        private void writeToQuickSlots(XDocument xdoc, string filename, QuickSlotData thisQuickie)
+        private void writeToQuickSlots(XDocument xdocQuick, string filename, QuickSlotData thisQuickie)
         {
-            xdoc.Element("Objs").Add(new XElement("Obj",
+            xdocQuick.Element("Objs").Add(new XElement("Obj",
                 new XElement("QID", thisQuickie.Guid),
                 new XElement("QIcon", thisQuickie.Icon),
                 new XElement("QIconOverlay", thisQuickie.IconOverlay),
                 new XElement("QIconUnderlay", thisQuickie.IconUnderlay)));
-            xdoc.Save(filename);
+            xdocQuick.Save(filename);
         }
 
 
