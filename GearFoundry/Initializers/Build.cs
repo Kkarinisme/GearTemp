@@ -727,13 +727,13 @@ namespace GearFoundry
 		private void CreateSpeciesIndex()
 		{
 			IDName info; 						
-			for(int i = 0; i < FileService.SpeciesTable.Length; i++)
+			for(int i = 0; i < fileservice.SpeciesTable.Length; i++)
 			{
 				info = new IDName();
 				info.ID = i;		
 				try
 				{
-					info.name = (FileService.SpeciesTable.GetById(i)).Name;
+					info.name = (fileservice.SpeciesTable.GetById(i)).Name;
 				}
 				catch
 				{
@@ -762,13 +762,13 @@ namespace GearFoundry
 		private void CreateMaterialIndex()
 		{
 			IDName info; 						
-			for(int i = 0; i < FileService.MaterialTable.Length; i++)
+			for(int i = 0; i < fileservice.MaterialTable.Length; i++)
 			{
 				info = new IDName();
 				info.ID = i;		
 				try
 				{
-					info.name = (FileService.MaterialTable.GetById(i)).Name;
+					info.name = (fileservice.MaterialTable.GetById(i)).Name;
 				}
 				catch
 				{
@@ -842,13 +842,13 @@ namespace GearFoundry
 		
 		private void CreateAttribIndex()
 		{	
-			for(int i = 0; i < FileService.AttributeTable.Length; i++)
+			for(int i = 0; i < fileservice.AttributeTable.Length; i++)
 			{
 				IDName info = new IDName();
 				info.ID = i;
 				try
 				{
-					info.name = (FileService.AttributeTable.GetById(i)).Name;
+					info.name = (fileservice.AttributeTable.GetById(i)).Name;
 				}
 				catch
 				{
@@ -880,9 +880,9 @@ namespace GearFoundry
 		private void CreateSkillIndex()
 		{
 			int loopcounter = 0;
-			for(int i = 0; i < FileService.SkillTable.Length; i++)
+			for(int i = 0; i < fileservice.SkillTable.Length; i++)
 			{
-				if(FileService.SkillTable[i].Id > loopcounter) {loopcounter = FileService.SkillTable[i].Id;}
+				if(fileservice.SkillTable[i].Id > loopcounter) {loopcounter = fileservice.SkillTable[i].Id;}
 			}
 			
 			for(int i = 0; i <= loopcounter; i++)
@@ -891,7 +891,7 @@ namespace GearFoundry
 				info.ID = i;
 				try
 				{
-					info.name = (FileService.SkillTable.GetById(i)).Name;
+					info.name = (fileservice.SkillTable.GetById(i)).Name;
 				}
 				catch
 				{
@@ -1076,13 +1076,13 @@ namespace GearFoundry
 		private void CreateHeritageIndex()
 		{
 			
-		for(int i = 0; i < FileService.HeritageTable.Length; i++)
+		for(int i = 0; i < fileservice.HeritageTable.Length; i++)
 			{
 				IDName info = new IDName();
 				info.ID = i;				
 				try
 				{
-					info.name = (FileService.HeritageTable.GetById(i)).Name;
+					info.name = (fileservice.HeritageTable.GetById(i)).Name;
 				}
 				catch
 				{
@@ -1117,7 +1117,7 @@ namespace GearFoundry
                 spellinfo tsinfo = new spellinfo();
                 try
                 {
-	                 Spell tspell = FileService.SpellTable.GetById(spellid);
+	                 Spell tspell = fileservice.SpellTable.GetById(spellid);
 	
 	                 tsinfo.spellid = spellid;
 	                 tsinfo.spellname = tspell.Name;

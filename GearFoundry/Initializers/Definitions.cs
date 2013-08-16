@@ -26,12 +26,12 @@ namespace GearFoundry
 
     public partial class PluginCore : Decal.Adapter.PluginBase
     {
-    	static internal FileService FileService;
+    	static internal FileService fileservice;
         
         //Operational flags.  Not saved across sessions
         private bool mCharacterLoginComplete;
 
-        private System.Windows.Forms.Timer MasterTimer;
+        private System.Windows.Forms.Timer MasterTimer = new System.Windows.Forms.Timer();
         public static string Log;
 
         public static PluginCore Instance;

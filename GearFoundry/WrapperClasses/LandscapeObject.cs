@@ -310,7 +310,7 @@ namespace GearFoundry
 			{
 				try
 				{
-					return TruncateName() + DistanceString();		
+					return DistanceString();		
 				}catch(Exception ex){LogError(ex); return String.Empty;}
 			}
 		}

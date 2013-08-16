@@ -19,9 +19,7 @@ using System.Xml.Linq;
 namespace GearFoundry
 {
 	public partial class PluginCore
-	{
-		//TODO:  Simplify EchoFilter, etc using newer calls.
-		
+	{		
 		private List<LandscapeObject> LandscapeTrackingList = new List<PluginCore.LandscapeObject>();
 		private System.Windows.Forms.Timer LandscapeTimer = new System.Windows.Forms.Timer();
 		
@@ -43,8 +41,7 @@ namespace GearFoundry
             public int LandscapeHudWidth = 300;
             public int LandscapeHudHeight = 220;
 		}
-		
-		
+				
 		private void GearSenseReadWriteSettings(bool read)
 		{
 			try
@@ -71,14 +68,9 @@ namespace GearFoundry
 							gsSettings = (GearSenseSettings)serializer.Deserialize(reader);
 							reader.Close();
 						}
-					}
-					catch
-					{
-						gsSettings = new GearSenseSettings();
-					}
+					}catch{gsSettings = new GearSenseSettings();}
 				}
-				
-				
+								
 				if(!read)
 				{
 					if(GearSenseSettingsFile.Exists)
@@ -105,7 +97,8 @@ namespace GearFoundry
 				Core.WorldFilter.CreateObject += OnWorldFilterCreateLandscape;
                 Core.WorldFilter.ReleaseObject += OnWorldFilterDeleteLandscape;
                 Core.ItemDestroyed += OnLandscapeDestroyed;
-                Core.WorldFilter.ChangeObject += ChangeObjectLandscape;                         
+                Core.WorldFilter.ChangeObject += ChangeObjectLandscape;      
+				Core.CharacterFilter.Logoff += LandscapeLogoff;                
 			}
 			catch(Exception ex) {LogError(ex);}
 			return;
@@ -120,9 +113,19 @@ namespace GearFoundry
 				Core.WorldFilter.CreateObject -= OnWorldFilterCreateLandscape;
                 Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteLandscape;
                 Core.ItemDestroyed -= OnLandscapeDestroyed;
-                Core.WorldFilter.ChangeObject -= ChangeObjectLandscape;			
+                Core.WorldFilter.ChangeObject -= ChangeObjectLandscape;	
+				Core.CharacterFilter.Logoff -= LandscapeLogoff;                  
 			}catch(Exception ex) {LogError(ex);}
 			return;
+		}
+		
+		private void LandscapeLogoff(object sender, EventArgs e)
+		{
+			try
+			{
+				LandscapeTrackingList.Clear();
+				UnsubscribeLandscapeEvents();
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void OnWorldFilterCreateLandscape(object sender, Decal.Adapter.Wrappers.CreateObjectEventArgs e)
@@ -458,17 +461,11 @@ namespace GearFoundry
             {
             	gsSettings.LandscapeHudWidth = LandscapeHudView.Width;
             	gsSettings.LandscapeHudHeight = LandscapeHudView.Height;
-                MasterTimer.Tick += LandscapeHudResizeTimerTick;
+            	GearSenseReadWriteSettings(false);
             }
             catch (Exception ex) { LogError(ex); }
-            return;
         }
 
-        private void LandscapeHudResizeTimerTick(object sender, EventArgs e)
-        {
-        	MasterTimer.Tick -= LandscapeHudResizeTimerTick;
-            GearSenseReadWriteSettings(false);                       
-        }
    	
     	private void LandscapeHudTabView_OpenTabChange(object sender, System.EventArgs e)
     	{
@@ -479,6 +476,7 @@ namespace GearFoundry
     				case 0:
     					DisposeLandscapeSettingsLayout();
     					RenderLandscapeTabLayout();
+    					UpdateLandscapeHud();
     					return;
     				case 1:
     					DisposeLandscapeTabLayout();
@@ -499,9 +497,9 @@ namespace GearFoundry
     			LandscapeHudList = new HudList();
     			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0, gsSettings.LandscapeHudWidth,gsSettings.LandscapeHudHeight));
 				LandscapeHudList.ControlHeight = 16;	
-				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);
+				LandscapeHudList.AddColumn(typeof(HudPictureBox), 14, null);
 				LandscapeHudList.AddColumn(typeof(HudStaticText), gsSettings.LandscapeHudWidth - 60, null);
-				LandscapeHudList.AddColumn(typeof(HudPictureBox), 16, null);	
+				LandscapeHudList.AddColumn(typeof(HudPictureBox), 14, null);	
 				LandscapeHudList.AddColumn(typeof(HudStaticText), 1, null);
 				
 				LandscapeHudList.Click += LandscapeHudList_Click; 
@@ -647,7 +645,7 @@ namespace GearFoundry
     			if(gsSettings.bRenderMini)
     			{
     				gsSettings.LandscapeHudHeight = 220;
-    				gsSettings.LandscapeHudWidth = 150;
+    				gsSettings.LandscapeHudWidth = 100;
     			}
     			else
     			{

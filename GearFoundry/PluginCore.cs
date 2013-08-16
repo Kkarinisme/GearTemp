@@ -63,13 +63,56 @@ namespace GearFoundry
             }
             catch (Exception ex) { LogError(ex); }
         }
+        
+        public void InitEvents()
+		{
+
+			try 
+			{	
+				fileservice = (FileService)Core.FileService;				
+				Core.CharacterFilter.LoginComplete += OnCharacterFilterLoginCompleted;			
+			} catch (Exception ex) {LogError(ex);}
+		}
+        
+        
+        private void OnCharacterFilterLoginCompleted(object sender, System.EventArgs e)
+        {
+            try
+            {
+            	InitPaths();           	
+				InitListBuilder();               
+                InitFilenames();
+                loadFiles();
+                loadLists();
+                populateRulesListBox();
+                populateRuleSpellEnabledListBox();
+                startRoutines();
+                
+                SubscribeFellowshipEvents();
+
+                //TODO:  This could be moved to be subscribed situationally.
+                Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
+
+                WriteToChat("Plugin now online. Server population: " + Core.CharacterFilter.ServerPopulation);
+
+                MasterTimer.Interval = 1000;
+                MasterTimer.Start();
+                
+               
+
+                mCharacterLoginComplete = true;             
+                
+  
+
+            }
+            catch (Exception ex) { LogError(ex); }
+        }  
 
         protected override void Shutdown()
         {
             try
             {
             	DisposeOnShutdown();
-                //Destroy the view.
                 MVWireupHelper.WireupEnd(this);
                 View.Dispose();
                 EndEvents();
@@ -94,21 +137,7 @@ namespace GearFoundry
         }
         
         
-        public void InitEvents()
-		{
 
-			try 
-			{
-				FileService = Core.Filter<FileService>();				
-				Core.CharacterFilter.LoginComplete += new EventHandler(OnCharacterFilterLoginCompleted);			
-				MasterTimer = new System.Windows.Forms.Timer();	
-          
-
-				
-			} catch (Exception ex) {
-				LogError(ex);
-			}
-		}
 
 
 		public void EndEvents()
@@ -239,39 +268,7 @@ namespace GearFoundry
 		}
 
 
-        private void OnCharacterFilterLoginCompleted(object sender, System.EventArgs e)
-        {
-            try
-            {
-            	InitPaths();
-            	
-				InitListBuilder();
-               
-                InitFilenames();
-                loadFiles();
-                loadLists();
-                populateRulesListBox();
-                populateRuleSpellEnabledListBox();
-                startRoutines();
-                
-                SubscribeFellowshipEvents();
-
-                Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
-
-                WriteToChat("Plugin now online. Server population: " + Core.CharacterFilter.ServerPopulation);
-
-                MasterTimer.Interval = 1000;
-                MasterTimer.Start();
-                
-               
-
-                mCharacterLoginComplete = true;             
-                
   
-
-            }
-            catch (Exception ex) { LogError(ex); }
-        }    
 
     }
 }
