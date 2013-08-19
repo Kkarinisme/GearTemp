@@ -206,7 +206,7 @@ namespace GearFoundry
 				List<XElement> matches;
 				
 				var exact = from XTrophies in mSortedTrophiesList
-					where XTrophies.Element("enabled").Value == "true" && 
+					where XTrophies.Element("checked").Value == "true" && 
 					XTrophies.Element("isexact").Value == "true"
 					select XTrophies;
 				
@@ -286,37 +286,43 @@ namespace GearFoundry
 				ModifiedIOSpells.Clear();
 				LootObject IOItemWithID = IOItemWithIDReference;
 
-				var AppliesToListMatches = from rules in ItemRulesList
-					where (rules.RuleAppliesTo & IOItemWithID.LValue(LongValueKey.Category)) == IOItemWithID.LValue(LongValueKey.Category)
-					orderby rules.RulePriority
-					select rules;
+				var AppliesToListMatches = from appliesto in ItemRulesList
+					where (appliesto.RuleAppliesTo & IOItemWithID.LValue(LongValueKey.Category)) == IOItemWithID.LValue(LongValueKey.Category)
+					select appliesto;
 				
 				if(AppliesToListMatches.Count() == 0) {return;}
 				
-
+				var PropertyListMatches = from properties in AppliesToListMatches
+					where (properties.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= properties.RuleArcaneLore) &&
+						  (properties.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= properties.RuleWork) &&
+						  (properties.RuleWieldLevel == 0 || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7 ||
+					 	  (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= properties.RuleWieldLevel))
+					select properties;	
+				
+				if(PropertyListMatches.Count() == 0) {return;}
+				
 				for(int i = 0; i < IOItemWithID.SpellCount; i ++)
 				{
 					ModifiedIOSpells.Add(IOItemWithID.Spell(i));
-				}
-				
+				}			
 				if(IOItemWithID.LValue((LongValueKey)352) ==  2)
 				{
 					ModifiedIOSpells.Add(10000);
 				}
 				
+				var SpellListMatches = from spellmatches in PropertyListMatches
+					where ModifiedIOSpells.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
+					select spellmatches;
+				
+				if(SpellListMatches.Count() == 0) {return;}
+								
 				switch(IOItemWithID.ObjectClass)
 				{					
 					case ObjectClass.Armor:
-						var reducedarmormatches = from ruls in AppliesToListMatches
-							where 
-							(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
-							(ruls.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= ruls.RuleWork) &&
-							(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
-							 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
-							(ruls.RuleArmorLevel == 0 || IOItemWithID.ArmorScore >= ruls.RuleArmorLevel) &&
+						var reducedarmormatches = from ruls in SpellListMatches
+							where (IOItemWithID.GearScore >= ruls.GearScore) &&
 							((ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
 							(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
-							ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
 							(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && 
 							(!ruls.RuleUnenchantable || IOItemWithID.LValue(LongValueKey.Unenchantable) > 0)
 							orderby ruls.RulePriority
@@ -336,19 +342,15 @@ namespace GearFoundry
 					case ObjectClass.Clothing:
 						if(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)
 						{
-							var reducedarmorclothmatches = from ruls in AppliesToListMatches
-								where 
-								(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
-								(ruls.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= ruls.RuleWork) &&
-								(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
-							 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
-								IOItemWithID.ArmorScore >= ruls.RuleArmorLevel &&
-								(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(25)) &&
-								((ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&  
-								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&	
-								(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  
+							var reducedarmorclothmatches = from ruls in SpellListMatches
+								where (IOItemWithID.GearScore >= ruls.GearScore) &&
+								((ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
+								(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
+								(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && 
+								(!ruls.RuleUnenchantable || IOItemWithID.LValue(LongValueKey.Unenchantable) > 0)
 								orderby ruls.RulePriority
-								select ruls;	
+								select ruls;
+						
 							if(reducedarmorclothmatches.Count() > 0)
 							{
 								IOItemWithID.rulename = reducedarmorclothmatches.First().RuleName; 
@@ -362,13 +364,13 @@ namespace GearFoundry
 						}
 						else if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
 						{
-							var reducedcloakmatches = from ruls in AppliesToListMatches
-								where IOItemWithID.GearScore >= ruls.RuleItemLevel &&
-								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
+							var reducedcloakmatches = from ruls in SpellListMatches
+								where IOItemWithID.GearScore >= ruls.GearScore &&
 								(ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))) &&
 								ruls.RuleArmorCoverage == 0
 								orderby ruls.RulePriority
 								select ruls;
+							
 							if(reducedcloakmatches.Count() > 0)
 							{
 								IOItemWithID.rulename = reducedcloakmatches.First().RuleName; 
@@ -382,15 +384,11 @@ namespace GearFoundry
 						}
 						else
 						{
-							var reducedclothmatches = from ruls in AppliesToListMatches
-								where 
-								(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
-								(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
-							 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
-								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber &&
-								ruls.RuleArmorCoverage == 0
+							var reducedclothmatches = from ruls in SpellListMatches
+								where ruls.RuleArmorCoverage == 0
 								orderby ruls.RulePriority
 								select ruls;
+							
 							if(reducedclothmatches.Count() > 0)
 							{
 								IOItemWithID.rulename = reducedclothmatches.First().RuleName; 
@@ -405,14 +403,11 @@ namespace GearFoundry
 					case ObjectClass.MeleeWeapon:
 					case ObjectClass.MissileWeapon:
 					case ObjectClass.WandStaffOrb:
-						var reducedmeleematches = from ruls in AppliesToListMatches
+						var reducedmeleematches = from ruls in SpellListMatches
 							where 
-							(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
-							(ruls.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= ruls.RuleWork) &&
-							(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)) &&
-							IOItemWithID.GearScore >= ruls.WeaponModSum &&
+							IOItemWithID.GearScore >= ruls.GearScore &&
 							(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
-							(ruls.RuleWieldAttribute == 0 || ruls.RuleWieldAttribute == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
+							(ruls.RuleWieldSkill== 0 || ruls.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
 							((ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
 							 (ruls.RuleWeaponEnabledB && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueB) ||
 							 (ruls.RuleWeaponEnabledC && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueC) ||
@@ -434,11 +429,10 @@ namespace GearFoundry
 					case ObjectClass.Gem:
 						if(IOItemWithID.Aetheriacheck)
 						{
-						 	var reducedaetheriamatches = from ruls in AppliesToListMatches
+						 	var reducedaetheriamatches = from ruls in SpellListMatches
 						 		where ((ruls.RuleRed && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x40000000) ||
 						 		       (ruls.RuleYellow && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x20000000) ||
-						 		       (ruls.RuleBlue && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x10000000)) &&
-						 				IOItemWithID.LValue((LongValueKey)NewLongKeys.MaxItemLevel) >= ruls.RuleItemLevel
+						 		       (ruls.RuleBlue && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x10000000))
 						 		orderby ruls.RulePriority
 						 		select ruls;
 						 	if(reducedaetheriamatches.Count() > 0)
@@ -458,14 +452,10 @@ namespace GearFoundry
 						}
 						
 					case ObjectClass.Jewelry:
-						var reducedjewelrymatches = from ruls in AppliesToListMatches
-							where 
-								(ruls.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= ruls.RuleArcaneLore) &&
-								(ruls.RuleWieldLevel == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= ruls.RuleWieldLevel)
-							 						  || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7) &&
-								ModifiedIOSpells.Intersect(ruls.RuleSpells).Count() >= ruls.RuleSpellNumber
+						var reducedjewelrymatches = from ruls in SpellListMatches
 								orderby ruls.RulePriority
 								select ruls;
+						
 							if(reducedjewelrymatches.Count() > 0)
 							{
 								IOItemWithID.rulename = reducedjewelrymatches.First().RuleName; 
@@ -481,8 +471,8 @@ namespace GearFoundry
 						if(IOItemWithID.Name.ToLower().Contains("essence"))
 						{
 							
-							var reducedessencematches = from ruls in AppliesToListMatches
-								where IOItemWithID.RatingScore >= ruls.EssenceModSum &&
+							var reducedessencematches = from ruls in SpellListMatches
+								where IOItemWithID.RatingScore >= ruls.GearScore &&
 								IOItemWithID.EssenceLevel == ruls.RuleEssenceLevel &&
 								(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
 								((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0)
@@ -519,9 +509,6 @@ namespace GearFoundry
 			string[] splitstring;
 	        string[] splitstringEnabled;
 	        string[] splitstringWield;
-	        string[] splitstringDamage;
-	        string[] splitstringMSCleave;
-	        string[] damagesplit;
 	        int[] sumarray;
 	        int tempint;
 	        List<int> CombineIntList = new List<int>();
@@ -529,9 +516,12 @@ namespace GearFoundry
 			try
 			{
 				ItemRulesList.Clear();				
-				for(int i = 0; i < mPrioritizedRulesListEnabled.Count(); i++)
+				var ruleslistenabled = from rules in mPrioritizedRulesList
+					where rules.Element("Enabled").Value == "true"
+					select rules;
+				
+				foreach(var XRule in ruleslistenabled)
 				{
-					var XRule = mPrioritizedRulesListEnabled[i];
 					ItemRule tRule = new ItemRule();
 		        	
 		        	if(!bool.TryParse((XRule.Element("Enabled").Value), out tRule.RuleEnabled)){tRule.RuleEnabled = false;}
@@ -546,56 +536,21 @@ namespace GearFoundry
 		        	}
 		        		        	
 		        	tRule.RuleName = (string)XRule.Element("Name").Value;
-		        	if((string)XRule.Element("NameContains").Value != String.Empty)
-		        	{
-		        		tRule.RuleKeyWords = ((string)XRule.Element("NameContains").Value).Split(' ').ToList();
-		        	}
-		        	else
-		        	{
-		        		tRule.RuleKeyWords.Clear();
-		        	}
-		        	if((string)XRule.Element("NameNotContains").Value != String.Empty)
-		        	{
-		        		tRule.RuleKeyWordsNot = ((string)XRule.Element("NameNotContains").Value).Split(' ').ToList();
-		        	}
-		        	else
-		        	{
-		        		tRule.RuleKeyWordsNot.Clear();
-		        	}
+		        
+
 		        	
 		        	if(!Int32.TryParse(XRule.Element("ArcaneLore").Value, out tRule.RuleArcaneLore)){tRule.RuleArcaneLore = 0;}
-		        	if(!Int32.TryParse(XRule.Element("Value").Value, out tRule.RuleValue)){tRule.RuleValue = 0;}
-		        	if(!Int32.TryParse(XRule.Element("Burden").Value,out tRule.RuleBurden)){tRule.RuleBurden = 0;}
 		        	if(!Double.TryParse(XRule.Element("Work").Value, out tRule.RuleWork)){tRule.RuleWork = 0;}
-		        	if(!Int32.TryParse(XRule.Element("WieldReqValue").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = 0;}
-					if(!Int32.TryParse(XRule.Element("ItemLevel").Value, out tRule.RuleItemLevel)) {tRule.RuleItemLevel = 0;}	        	
-					if(!Int32.TryParse(XRule.Element("WieldAttribute").Value, out tRule.RuleWieldAttribute)) {tRule.RuleWieldAttribute = 0;}
+					
+					if(!Int32.TryParse(XRule.Element("WieldSkill").Value, out tRule.RuleWieldSkill)) {tRule.RuleWieldSkill = 0;}
 					if(!Int32.TryParse(XRule.Element("MasteryType").Value, out tRule.RuleMastery)){tRule.RuleMastery = 0;}
-					if(!(tRule.RuleMastery > 0))
-					{
-		        		if(!Int32.TryParse(XRule.Element("EssMastery").Value, out tRule.RuleMastery)){tRule.RuleMastery = 0;}
-					}
-					if(!Double.TryParse(XRule.Element("McModAttack").Value, out tRule.RuleMcModAttack)){tRule.RuleMcModAttack = 0;}
-					if(!Double.TryParse(XRule.Element("MeleeDef").Value, out tRule.RuleMeleeD)){tRule.RuleMeleeD = 0;}
-					if(!Double.TryParse(XRule.Element("MagicDef").Value, out tRule.RuleMagicD)){tRule.RuleMagicD = 0;}
+					if(!Int32.TryParse(XRule.Element("GearScore").Value, out tRule.GearScore)){tRule.GearScore = 0;}
 		        	
 		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = 0;}
-		        	if(!Int32.TryParse(XRule.Element("EssLevel").Value, out tRule.RuleEssenceLevel)){tRule.RuleEssenceLevel = 0;}
-		        	if(!Int32.TryParse(XRule.Element("EssDamageLevel").Value, out tRule.RuleEssenceDamage)){tRule.RuleEssenceDamage = 0;}
-		        	if(!Int32.TryParse(XRule.Element("EssDRLevel").Value, out tRule.RuleEssenceDamageResist)){tRule.RuleEssenceDamageResist = 0;}
-		        	if(!Int32.TryParse(XRule.Element("EssCritLevel").Value, out tRule.RuleEssenceCrit)){tRule.RuleEssenceCrit = 0;}
-		        	if(!Int32.TryParse(XRule.Element("EssCRLevel").Value, out tRule.RuleEssenceCritResist)){tRule.RuleEssenceCritResist = 0;}     	
-		        	if(!Int32.TryParse(XRule.Element("EssCDLevel").Value, out tRule.RuleEssenceCritDam)){tRule.RuleEssenceCritDam = 0;}     	
-		        	if(!Int32.TryParse(XRule.Element("EssCritDamRes").Value, out tRule.RuleEssenceCritDamResist)){tRule.RuleEssenceCritDamResist = 0;}	        	
+
+	        	
 					splitstring = ((string)XRule.Element("DamageType").Value).Split(',');
 					if(splitstring.Length > 0)
-					{
-						sumarray = new int[splitstring.Length];      	
-						for(int j = 0; j < splitstring.Length; j++){if(!Int32.TryParse(splitstring[j], out sumarray[j])){sumarray[j] = 0;}}
-						tRule.RuleDamageTypes = sumarray.Sum();
-					}
-					splitstring = ((string)XRule.Element("EssElements").Value).Split(',');
-					if(splitstring.Length > 0 && tRule.RuleDamageTypes == 0)
 					{
 						sumarray = new int[splitstring.Length];      	
 						for(int j = 0; j < splitstring.Length; j++){if(!Int32.TryParse(splitstring[j], out sumarray[j])){sumarray[j] = 0;}}
@@ -604,112 +559,30 @@ namespace GearFoundry
 					
 					splitstringEnabled = (XRule.Element("WieldEnabled").Value).Split(',');
 					splitstringWield = (XRule.Element("ReqSkill").Value).Split(',');
-					splitstringDamage = (XRule.Element("MinMax").Value).Split(',');
-					splitstringMSCleave = (XRule.Element("MSCleave").Value).Split(',');
 					
 					if(!Boolean.TryParse(splitstringEnabled[0], out tRule.RuleWeaponEnabledA)) {tRule.RuleWeaponEnabledA = false;}
 					if(tRule.RuleWeaponEnabledA)
 					{
-						if(!Boolean.TryParse(splitstringMSCleave[0], out tRule.MSCleaveA)) {tRule.MSCleaveA = false;}
 						if(!Int32.TryParse(splitstringWield[0], out tRule.WieldReqValueA)) {tRule.WieldReqValueA = -1;}
-						damagesplit = splitstringDamage[0].Split('-');
-						if(damagesplit.Length == 2)
-						{
-							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageA)) {tRule.MaxDamageA = 0;}
-							int tint;
-							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-							if(tRule.MaxDamageA > 0) {tRule.VarianceA = ((double)tRule.MaxDamageA - (double)tint)/(double)tRule.MaxDamageA;}
-							else {tRule.VarianceA = 0;}
-						}
-						else
-						{
-							if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageA)) {tRule.MaxDamageA = 0;}
-							tRule.VarianceA = 0;
-						}
-					}
-					else
-					{
-						tRule.MSCleaveA = false; tRule.MaxDamageA = 0; tRule.VarianceA = 0;
 					}
 
 					if(!Boolean.TryParse(splitstringEnabled[1], out tRule.RuleWeaponEnabledB)) {tRule.RuleWeaponEnabledB = false;}
 					if(tRule.RuleWeaponEnabledB)
 					{
-						if(!Boolean.TryParse(splitstringMSCleave[1], out tRule.MSCleaveB)) {tRule.MSCleaveB = false;}
 						if(!Int32.TryParse(splitstringWield[1], out tRule.WieldReqValueB)) {tRule.WieldReqValueB = -1;}
-						damagesplit = splitstringDamage[1].Split('-');
-						if(damagesplit.Length == 2)
-						{
-							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageB)) {tRule.MaxDamageB = 0;}
-							int tint;
-							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-							if(tRule.MaxDamageB > 0) {tRule.VarianceB = ((double)tRule.MaxDamageB - (double)tint)/(double)tRule.MaxDamageB;}
-							else {tRule.VarianceB = 0;}
-						
-						}
-						else
-						{
-							if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageB)) {tRule.MaxDamageB = 0;}
-							tRule.VarianceB = 0;
-						}
-					}
-					else
-					{
-						tRule.MSCleaveB = false; tRule.MaxDamageB = 0; tRule.VarianceB = 0;
 					}
 
 					if(!Boolean.TryParse(splitstringEnabled[2], out tRule.RuleWeaponEnabledC)) {tRule.RuleWeaponEnabledC = false;}
 					if(tRule.RuleWeaponEnabledC)
 					{
-						if(!Boolean.TryParse(splitstringMSCleave[2], out tRule.MSCleaveC)) {tRule.MSCleaveC = false;}
 						if(!Int32.TryParse(splitstringWield[2], out tRule.WieldReqValueC)) {tRule.WieldReqValueC = -1;}
-						damagesplit = splitstringDamage[2].Split('-');
-						if(damagesplit.Length == 2)
-						{
-							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageC)) {tRule.MaxDamageC = 0;}
-							int tint;
-							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-							if(tRule.MaxDamageC > 0) {tRule.VarianceC = ((double)tRule.MaxDamageC - (double)tint)/(double)tRule.MaxDamageC;}
-							else {tRule.VarianceC = 0;}
-						
-						}
-						else
-						{
-							if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageC)) {tRule.MaxDamageC = 0;}
-							tRule.VarianceC = 0;
-						}
-					}
-					else
-					{
-						tRule.MSCleaveC = false; tRule.MaxDamageC = 0; tRule.VarianceC = 0;
 					}
 
 					if(!Boolean.TryParse(splitstringEnabled[3], out tRule.RuleWeaponEnabledD)) {tRule.RuleWeaponEnabledD = false;}
 					if(tRule.RuleWeaponEnabledD)
 					{
-						if(!Boolean.TryParse(splitstringMSCleave[3], out tRule.MSCleaveD)) {tRule.MSCleaveD = false;}
 						if(!Int32.TryParse(splitstringWield[3], out tRule.WieldReqValueD)) {tRule.WieldReqValueD = -1;}
-						damagesplit = splitstringDamage[3].Split('-');
-						if(damagesplit.Length == 2)
-						{
-							if(!Int32.TryParse(damagesplit[1], out tRule.MaxDamageD)) {tRule.MaxDamageD = 0;}
-							int tint;
-							if(!Int32.TryParse(damagesplit[0], out tint)) {tint = 0;}
-							if(tRule.MaxDamageD > 0) {tRule.VarianceD = ((double)tRule.MaxDamageD - (double)tint)/(double)tRule.MaxDamageD;}
-							else {tRule.VarianceD = 0;}
-						
-						}
-						else
-						{
-							if(!Int32.TryParse(damagesplit[0], out tRule.MaxDamageD)) {tRule.MaxDamageD = 0;}
-							tRule.VarianceD = 0;
-						}
-					}
-					else
-					{
-						tRule.MSCleaveD = false; tRule.MaxDamageD = 0; tRule.VarianceD = 0;
 					}		
-					
 					
 					if((string)XRule.Element("ArmorType").Value != String.Empty)
 					{
@@ -752,16 +625,6 @@ namespace GearFoundry
 								if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
 							}
 						}
-						splitstring = (XRule.Element("CloakSets").Value).Split(',');
-						if(splitstring.Length > 0)
-						{
-							for(int j = 0; j < splitstring.Length; j++)
-							{
-								tempint = 0;
-								Int32.TryParse(splitstring[j], out tempint);
-								if(tempint > 0) {CombineIntList.Add(tempint); tempint = 0;}
-							}
-						}
 						tRule.RuleArmorSet = CombineIntList.ToArray();
 						CombineIntList.Clear();
 					}
@@ -771,7 +634,6 @@ namespace GearFoundry
 					}
 					
 					if(!bool.TryParse((XRule.Element("Unenchantable").Value), out tRule.RuleUnenchantable)){tRule.RuleUnenchantable = false;}
-					if(!Int32.TryParse((XRule.Element("MinArmorLevel").Value), out tRule.RuleArmorLevel)){tRule.RuleArmorLevel = 0;}
 					
 					if(!Boolean.TryParse(XRule.Element("Red").Value, out tRule.RuleRed)) {tRule.RuleRed = false;}
 					if(!Boolean.TryParse(XRule.Element("Yellow").Value, out tRule.RuleYellow)) {tRule.RuleYellow = false;}
@@ -779,7 +641,9 @@ namespace GearFoundry
 					
 					CombineIntList.Clear();
 					
-					if((string)XRule.Element("Spells").Value == String.Empty && (string)XRule.Element("CloakSpells").Value == String.Empty)
+					if(!Int32.TryParse((XRule.Element("NumSpells").Value), out tRule.RuleSpellNumber)){tRule.RuleSpellNumber = 0;}
+					
+					if((string)XRule.Element("Spells").Value == String.Empty)
 					{
 						tRule.RuleSpells = null;
 						tRule.RuleSpellNumber = 0;
@@ -795,31 +659,12 @@ namespace GearFoundry
 								Int32.TryParse(splitstring[j], out tempint);
 								if(tempint > 0) {CombineIntList.Add(tempint);}
 							}
-							if(!Int32.TryParse((XRule.Element("NumSpells").Value), out tRule.RuleSpellNumber)){tRule.RuleSpellNumber = 0;}
+							
 						}
-						if((string)XRule.Element("CloakSpells").Value != String.Empty)
-						{
-							splitstring = ((string)XRule.Element("CloakSpells").Value).Split(',');
-							tRule.RuleSpellNumber++;
-							for(int j = 0; j < splitstring.Length; j++)
-							{
-								tempint = 0;
-								Int32.TryParse(splitstring[j], out tempint);
-								if(tempint > 0) {CombineIntList.Add(tempint);}
-							}
-							tRule.RuleSpellNumber++;
-						}
+
 						tRule.RuleSpells = CombineIntList.ToArray();
 						CombineIntList.Clear();
 					}
-					
-	
-					
-					
-					//rules for modified looting behavior
-					
-					tRule.WeaponModSum = tRule.RuleMcModAttack + tRule.RuleMeleeD + tRule.RuleMagicD;
-					tRule.EssenceModSum = tRule.RuleEssenceCrit + tRule.RuleEssenceCritDam +tRule.RuleEssenceCritDamResist + tRule.RuleEssenceCritResist + tRule.RuleEssenceDamage + tRule.RuleEssenceDamageResist;
 					
 					ItemRulesList.Add(tRule);
 				}
@@ -829,71 +674,40 @@ namespace GearFoundry
 		
 		private class ItemRule
 		{
-			public bool RuleEnabled; 
-	        public int RulePriority; 
-	        public int RuleAppliesTo;
-	        public string RuleName; 
-	        public List<string> RuleKeyWords = new List<string>();
-	        public List<string> RuleKeyWordsNot = new List<string>();
-	        public int RuleArcaneLore;
-	        public int RuleBurden;
-	        public int RuleValue;
-	        public double RuleWork;
-	        public int RuleWieldLevel;
-	        public int RuleItemLevel;
-	        public bool RuleRed;
-	        public bool RuleYellow;
-	        public bool RuleBlue;
+			public int GearScore = 0;
+			public bool RuleEnabled = false; 
+	        public int RulePriority = 999; 
+	        public int RuleAppliesTo = 0;
+	        public string RuleName = String.Empty; 
+	        public int RuleArcaneLore = 0;
+	        public double RuleWork = 0;
+	        public int RuleWieldLevel = 0;
+	        public bool RuleRed = false;
+	        public bool RuleYellow = false;
+	        public bool RuleBlue = false;
+	        
+	        public int RuleEssenceLevel = 0;
 	        	        
-	        public int RuleWieldAttribute;
-	        public int RuleMastery;
-	        public int RuleDamageTypes;
-	        public double RuleMcModAttack;
-	        public double RuleMeleeD;
-	        public double RuleMagicD;
+	        public int RuleWieldSkill = 0;
+	        public int RuleMastery = 0;
+	        public int RuleDamageTypes = 0;
 	        
-	        public bool RuleWeaponEnabledA;
-	        public bool MSCleaveA;
-	        public int WieldReqValueA;
-	        public int MaxDamageA;
-	        public double VarianceA;
-	        public bool RuleWeaponEnabledB;
-	        public bool MSCleaveB;
-	        public int WieldReqValueB;
-	        public int MaxDamageB;
-	        public double VarianceB;
-	        public bool RuleWeaponEnabledC;
-	        public bool MSCleaveC;
-	        public int WieldReqValueC;
-	        public int MaxDamageC;
-	        public double VarianceC;
-	        public bool RuleWeaponEnabledD;
-	        public bool MSCleaveD;
-	        public int WieldReqValueD;
-	        public int MaxDamageD;
-	        public double VarianceD;
-	        
-	        public int RuleArmorLevel;
+	        public bool RuleWeaponEnabledA = false;
+	        public int WieldReqValueA = 0;
+	        public bool RuleWeaponEnabledB = false;
+	        public int WieldReqValueB = 0;
+	        public bool RuleWeaponEnabledC = false;
+	        public int WieldReqValueC = 0;
+	        public bool RuleWeaponEnabledD = false;
+	        public int WieldReqValueD = 0;
+
 	        public int[] RuleArmorTypes;
 	        public int[] RuleArmorSet;
 	        public int RuleArmorCoverage;
 	        public bool RuleUnenchantable;
-	        
-	        public int RuleEssenceLevel;
-	        public int RuleEssenceDamage;
-	        public int RuleEssenceDamageResist;
-	        public int RuleEssenceCrit;
-	        public int RuleEssenceCritResist;
-	        public int RuleEssenceCritDam;
-	        public int RuleEssenceCritDamResist;
 
-	        public int[] RuleSpells;
-	        public int RuleSpellNumber;     
-
-	        public double WeaponModSum;
-	        public double EssenceModSum;
-	        
-
+	        public int[] RuleSpells = null;
+	        public int RuleSpellNumber = 0;     
 		}
 		
 		

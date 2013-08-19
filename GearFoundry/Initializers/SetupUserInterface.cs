@@ -276,7 +276,6 @@ namespace GearFoundry
                 string rowprior = (Convert.ToString(row[1][0]));
 
                 txtRuleName.Text = rowname;
-                txtRuleDescr.Text = rowdescr;
                 txtRulePriority.Text = rowprior;
                 if (bRuleEnabled)
                     chkRuleEnabled.Checked = true;
@@ -314,7 +313,6 @@ namespace GearFoundry
                         txtRuleName.Text = rowname;
                         break;
                     case 3:
-                        txtRuleDescr.Text = rowdescr;
                         break;
                     case 4:
                         mdelete = true;
@@ -481,15 +479,7 @@ namespace GearFoundry
                     setUpForChecks(n, flag, lst);
                 }
 
- 
-                populateEssElementsListBox();
-                flag = sRuleEssElements;
-                if (flag.Length != 0)
-                {
-                    int n = EssElementsList.Count;
-                    MyClasses.MetaViewWrappers.IList lst = lstRuleEssElements;
-                    setUpForChecks(n, flag, lst);
-                }
+
 
 
                flag = sRuleSpells;
@@ -1021,7 +1011,6 @@ namespace GearFoundry
                     {
                         mchecked = Convert.ToBoolean(element.Element("Enabled").Value);
                         mname = element.Element("Name").Value.ToString().Trim();
-                        mdescr = element.Element("Descr").Value.ToString().Trim();
                         spriority = element.Element("Priority").Value.ToString();
 
                     }
@@ -1288,19 +1277,6 @@ namespace GearFoundry
         }
 
 
-        private void populateEssElementsListBox()
-        {
-            try
-            {
-
-                int mList = 3;
-                populateLst(lstRuleEssElements, EssElementsList, mList);
-
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
-        }
 
 
 

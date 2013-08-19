@@ -149,8 +149,6 @@ namespace GearFoundry
             if (lstRuleSets != null) { lstRuleSets.Clear(); }
             if (lstRuleCloakSets != null) { lstRuleCloakSets.Clear(); }
             if (lstRuleCloakSpells != null) { lstRuleCloakSpells.Clear(); }
-            if (cboRuleEssMastery != null) { cboRuleEssMastery.Clear(); }
-            if (lstRuleEssElements != null) { lstRuleEssElements.Clear(); }
             if (lstRuleSpellsEnabled != null) { lstRuleSpellsEnabled.Clear(); }
             if (lstRuleSpells != null) { lstRuleSpells.Clear(); }
             if (lstRules != null) { lstRules.Clear(); }
@@ -159,8 +157,6 @@ namespace GearFoundry
             if (lstmyTrophies != null) { lstmyTrophies.Clear(); }
             if (lstmyMobs != null) { lstmyMobs.Clear(); }
             if (lstNotifySalvage != null) { lstNotifySalvage.Clear(); }
-//            if (lstNotifyOptions != null) { lstNotifyOptions.Clear(); }
-//            if (lstUstList != null) { lstUstList.Clear(); }
 
         }
 
@@ -232,8 +228,6 @@ namespace GearFoundry
             CreateWeaponWieldInvList();
             CreateCoverageInvList();
             CreateEmbueInvList();
-            CreateEssMasteryList();
-            CreateEssElementsList();
             populateListBoxes();
 		}
 
@@ -248,8 +242,6 @@ namespace GearFoundry
             populateSpellListBox();
             populateCloakSetsListBox();
             populateCloakSpellsListBox();
-            populateEssElementsListBox();
-
         }
 
         private void CreateAppliesToList()
@@ -260,7 +252,7 @@ namespace GearFoundry
 
                 IDNameLoadable info;
 
-                info = new IDNameLoadable(0x1, "Melee Weapon");
+                info = new IDNameLoadable(0x1, "Melee Weapons");
                 AppliesToList.Add(info);
                 info = new IDNameLoadable(0x2, "Armor");
                 AppliesToList.Add(info);
@@ -272,10 +264,10 @@ namespace GearFoundry
                 AppliesToList.Add(info);
                 info = new IDNameLoadable(0x100, "Missile Weapons");
                 AppliesToList.Add(info);
-                info = new IDNameLoadable(0x800, "Gems");
+                info = new IDNameLoadable(0x800, "Aetheria");
                 AppliesToList.Add(info);
-                info = new IDNameLoadable(0x2000, "Scrolls");
-                AppliesToList.Add(info);
+                //info = new IDNameLoadable(0x2000, "Scrolls");
+                //AppliesToList.Add(info);
                 info = new IDNameLoadable(0x8000, "Casters");
                 AppliesToList.Add(info);
                 
@@ -417,10 +409,7 @@ namespace GearFoundry
 			ArmorCoverageList.Add(info);
 			info = new IDNameLoadable(0x10000 ,"Feet");
 			ArmorCoverageList.Add(info);
-//			info = new IDNameLoadable(0x8 ,"Chest(Underwear)");
-//			ArmorCoverageList.Add(info);
-//			info = new IDNameLoadable(0x10 ,"Abdomen(Underwear)");
-//			ArmorCoverageList.Add(info);
+
 			
 			if(writelists){
 				FileInfo logFile = new FileInfo(GearDir + @"\ArmorCoverage.csv");	
@@ -535,6 +524,9 @@ namespace GearFoundry
                 addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
                 info = new IDNameLoadable(43, "Void Magic");
                 addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                info = new IDNameLoadable(54, "Summoning");
+                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -795,50 +787,6 @@ namespace GearFoundry
 			}
 		}
 
-        //private void RedoSalvageFile()
-        //{
-        // try{
-        //     WriteToChat("I am in routine to redoSalvagefile");
-        //     List<string> temp = new List<string>();
-        //     string tempname;
-        //     for (int n = 0; n < mSortedSalvageList.Count(); n++)
-        //     {
-        //         tempname = mSortedSalvageList[n].Element("key").Value;
-        //         temp.Add(tempname);
-        //     }
-
-        //     foreach (IDName idname in MaterialIndex)
-        //    {
-        //         try
-        //         {
-        //             if(temp.Contains(idname.name))
-        //             {
-        //                 WriteToChat(idname.name + "is contained in file");
-                        
-        //             }
-
-        //                     else
-        //                    {
-        //                        xdocSalvage.Element("GameItems").Add(new XElement("Item",
-        //                        new XElement("key", idname.name),
-        //                        new XElement("intvalue", idname.ID),
-        //                        new XElement("checked", true),
-        //                        new XElement("combine", ""),
-        //                        new XElement("GUID", "")));
-        //                        WriteToChat(idname.name + " added to salvage list.");
-        //                    }
-        //                }
-             
-        //                catch (Exception ex) { LogError(ex); }
-
-        //            }
-        //     setUpLists(xdocSalvage, mSortedSalvageList, mSortedSalvageListChecked);
-
-            
-        // }
-        // catch (Exception ex) { LogError(ex); }
-
-        //}
 		
 		private void CreateAttribIndex()
 		{	
@@ -922,8 +870,8 @@ namespace GearFoundry
 		
 		private void CreateMasteryIndex()
 		{
-			string[] loadme = {"None", "Unarmed", "Sword", "Axe", "Mace", "Spear", "Dagger", "Staff", "Bow", "Crossbow", "Thrown", "TwoHanded"};
-			
+			string[] loadme = {"None", "Unarmed", "Sword", "Axe", "Mace", "Spear", "Dagger", "Staff", "Bow", "Crossbow", "Thrown", "TwoHanded", "Naturalist", "Primalist", "Necromancer"};
+			//Nat 13, Prim 14, Necro 15
 			int i = 0;
 			foreach(string load in loadme)
 			{
@@ -951,81 +899,50 @@ namespace GearFoundry
 			
 		}
 
-        private void CreateEssMasteryList()
-        {
-            string[] loadme = { "None", "Naturalist", "Primalist", "Necromancer" };
-
-            int i = 0;
-            foreach (string load in loadme)
-            {
-                IDNameLoadable info = new IDNameLoadable(i++, load);
-                EssMasteryList.Add(info);
-                cboRuleEssMastery.Add(info.name);
-            }
-
-            //if (writelists)
-            //{
-            //    FileInfo logFile = new FileInfo(GearDir + @"\EssMasteryList.csv");
-            //    if (logFile.Exists)
-            //    {
-            //        logFile.Delete();
-            //    }
-            //    StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
-            //    StringBuilder output = new StringBuilder();
-            //    output.Append("Indexed to Mast.ID\n\nMasteryID, Name\n");
-            //    foreach (var info in EssMasteryList)
-            //    {
-            //        output.Append(info.ID.ToString() + "," + info.name.ToString() + "\n");
-            //    }
-            //    writer0.WriteLine(output);
-            //    writer0.Close();
-            //}
-
-        }
 
            
-         private void CreateEssElementsList()
-        {
-            IDNameLoadable info;
-            //Again...Flags suck
-            
-            info = new IDNameLoadable(0, "None");
-            EssElementsList.Add(info);
-              info = new IDNameLoadable(1, "Slashing");
-            EssElementsList.Add(info);
-            info = new IDNameLoadable(2, "Piercing");
-            EssElementsList.Add(info);
-            info = new IDNameLoadable(4, "Bludgeoning");
-            EssElementsList.Add(info);
-            info = new IDNameLoadable(8, "Cold");
-            EssElementsList.Add(info);
-             info = new IDNameLoadable(16, "Fire");
-             EssElementsList.Add(info);
-            info = new IDNameLoadable(32, "Acid");
-            EssElementsList.Add(info);
-             info = new IDNameLoadable(64, "Electric");
-             EssElementsList.Add(info);
-             info = new IDNameLoadable(1024, "Void");
-             EssElementsList.Add(info);
-          
-            if(writelists){
-                FileInfo logFile = new FileInfo(GearDir + @"\EssElementsList.csv");    
-                            if(logFile.Exists)
-                {
-                    logFile.Delete();
-                }
-            StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
-            StringBuilder output = new StringBuilder();
-            output.Append("Index, ID#, Damagetype\n");
-            int index = 0;
-            foreach (var idname in EssElementsList)
-            {
-                output.Append(index.ToString() + "," + idname.ID.ToString() + "," + idname.name.ToString() + "\n");
-            }
-            writer0.WriteLine(output);
-            writer0.Close();
-            }
-        }
+//         private void CreateEssElementsList()
+//        {
+//            IDNameLoadable info;
+//            //Again...Flags suck
+//            
+//            info = new IDNameLoadable(0, "None");
+//            EssElementsList.Add(info);
+//              info = new IDNameLoadable(1, "Slashing");
+//            EssElementsList.Add(info);
+//            info = new IDNameLoadable(2, "Piercing");
+//            EssElementsList.Add(info);
+//            info = new IDNameLoadable(4, "Bludgeoning");
+//            EssElementsList.Add(info);
+//            info = new IDNameLoadable(8, "Cold");
+//            EssElementsList.Add(info);
+//             info = new IDNameLoadable(16, "Fire");
+//             EssElementsList.Add(info);
+//            info = new IDNameLoadable(32, "Acid");
+//            EssElementsList.Add(info);
+//             info = new IDNameLoadable(64, "Electric");
+//             EssElementsList.Add(info);
+//             info = new IDNameLoadable(1024, "Void");
+//             EssElementsList.Add(info);
+//          
+//            if(writelists){
+//                FileInfo logFile = new FileInfo(GearDir + @"\EssElementsList.csv");    
+//                            if(logFile.Exists)
+//                {
+//                    logFile.Delete();
+//                }
+//            StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
+//            StringBuilder output = new StringBuilder();
+//            output.Append("Index, ID#, Damagetype\n");
+//            int index = 0;
+//            foreach (var idname in EssElementsList)
+//            {
+//                output.Append(index.ToString() + "," + idname.ID.ToString() + "," + idname.name.ToString() + "\n");
+//            }
+//            writer0.WriteLine(output);
+//            writer0.Close();
+//            }
+//        }
 
 		
 		private void CreateElementalList()

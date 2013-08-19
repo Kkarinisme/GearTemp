@@ -110,7 +110,7 @@
     <EmbeddedResource Include="Graphics\gearswapvert1.png">
       <LogicalName>gearswapvert1.png</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Defaults\Rules.xml">
+    <EmbeddedResource Include="Defaults\Rules_Saved.xml">
       <LogicalName>Rules.xml</LogicalName>
       <SubType>Designer</SubType>
     </EmbeddedResource>
