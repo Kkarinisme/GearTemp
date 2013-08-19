@@ -39,8 +39,6 @@ namespace GearFoundry
                 mWaitingForID = new List<WorldObject>();
                 mCurrID = new List<string>();
 
-
-
                 if (!File.Exists(genInventoryFilename))
                 {
                     XDocument tempGIDoc = new XDocument(new XElement("Objs"));
@@ -99,20 +97,17 @@ namespace GearFoundry
                     {
                         if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor); mWaitingForIDTimer = null; }
                         removeExcessObjsfromFile();
-                     //   if (xdocGenInventory.Element("Objs").Descendants("Obj") == null){xdocGenInventory = XDocument.Load(genInventoryFilename);}
+                        xdocGenInventory.Element("Objs").Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
                         
-                            xdocGenInventory.Element("Objs").Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
-                        
-
                         xdocGenInventory.Root.Add(XDocument.Load(inventoryFilename).Root.Elements());
 
                         xdocGenInventory.Save(genInventoryFilename);
                         GearFoundry.PluginCore.WriteToChat("General Inventory file has been saved. ");
                         m = 500;
-                        //    n = 0;
-                        if (mWaitingForID != null) { mWaitingForID = null; }
-                    //    if (xdoc != null) { xdoc = null; }
-                        if (programinv != null) { programinv = ""; }
+                        if (mWaitingForID != null) {mWaitingForID = null;}
+                        if (xdocGenInventory != null) {xdocGenInventory = null;}
+                        if (xdocToonInventory != null) {xdocToonInventory = null;}
+                        if (programinv != null) { programinv = "";}
                     }
                     catch (Exception ex) { LogError(ex); }
                  }
@@ -165,36 +160,28 @@ namespace GearFoundry
             {
 
 
-                mWaitingForIDTimer.Stop();
-                
-                for (int n = 0; n < mWaitingForID.Count; n++)
+                if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Stop(); }
+ 
+                if (mWaitingForID.Count > 0)
                 {
-                    if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData)
+                    for (int n = 0; n < mWaitingForID.Count; n++)
                     {
-                        ProcessDataInventory();
-                        mIsFinished();
+                         if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData)
+                        {
+
+                            ProcessDataInventory();
+                            mIsFinished();
+
+                        }
+                        else { mDoWait(); }
 
                     }
-                    else { mDoWait(); }
                 }
-               
+                }
 
-          
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
+                catch (Exception ex) { LogError(ex); }
         }
 
-        //public void mDoWaitMore()
-        //{
-        //    try
-        //    {
-        //        mWaitingForIDTimer.Start();
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
-
-        //}
 
         //This is routine that puts the data of an obj into the inventory file xml
         private void ProcessDataInventory()
@@ -339,8 +326,7 @@ namespace GearFoundry
                             new XElement("ObjUnknown800000", objUnknown800000),
                             new XElement("ObjUnknown8000000", objUnknown8000000),
                             new XElement("ObjUsageMask", objUsageMask)));
-
-
+                        
                             currentobj = null;
                             objClassName = null;
                             objName = null;
@@ -418,7 +404,7 @@ namespace GearFoundry
 
 
 
-                catch (Exception ex) { LogError(ex); }
+                catch (Exception ex) { LogError(ex);  }
 
             } // end of for
 
@@ -494,13 +480,7 @@ namespace GearFoundry
                 }
             
             catch (Exception ex) { LogError(ex); }
-
-
         }
-
-
-
-
 
     }
 }// end of namespace
