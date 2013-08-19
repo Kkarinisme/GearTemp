@@ -1,916 +1,1144 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <GameItems>
-    <item>
-      <key>Token</key>
-      <checked>true</checked>
-      <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Coin</key>
-      <checked>true</checked>
-      <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Small Olthoi Venom Sac</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Ornate Gear Marker</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Mutated Olthoi Gland</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Invigation to the Battle Burrows</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Blighted Mana Crystal</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-        <item>
-      <key>Antiquated Compass</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Black Glass Array</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Black Luster Pearl</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Blood Fang Jewel</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Burning Veil</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Corrupted Skull</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Desolate Seed</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Seething Skull</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-     <item>
-      <key>Shadow Cursed Totem</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Soul Chalice</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Warrior's Emblem</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-      <key>Broken Black Marrow Key</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Atakir's Blade</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-      <key>Gikar's Dream</key>
-      <checked>true</checked>
-      <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Plaguefang's Hide</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Puppeteer's Skull</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>Scourge's Hide</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Snarl's Hide</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Carenzi Fangs</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Doomshark Hide</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Gem of Luminance</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Coconut</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Basalt Blade</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-          <lootmax>0</lootmax>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Exhumed Bones</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Osseous Mace</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-        <item>
-       <key>Dark Sorcerer's Phylactery</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Skeletal Atlatl</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Diamond Shield</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Heavy Ursuin Coat</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Energy Crown</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>Crystal Sword</key>
-       <checked>true</checked>
-        <isexact>false</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>Gauntlets of Marksmanship</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-          <lootmax>0</lootmax>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Robe of the Tundra</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Corrupted Essence</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Armoredillo Spine</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Carapace</key>
-        <checked>true</checked>
-        <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Olthoi Ripper Spine</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Golden Shuriken of Tanada</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Eater Jaw</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Bandage</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Jawbone</key>
-        <checked>true</checked>
-        <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Stinger</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Glowing</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Phyntos Honey</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Severed Head</key>
-        <checked>true</checked>
-        <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Blood Sample</key>
-        <checked>true</checked>
-        <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Aetherium-Infused Gear</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Power Core</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-       <Guid></Guid>
-    </item>
-   <item>
-       <key>Core Fragment</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>Scratched Gear</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Golem Heart</key>
-        <checked>true</checked>
-        <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Diamond Heart</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Obsidian Heart</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-        <key>Wood Heart</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Copper Heart</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Coral Heart</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Iron Heart</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>of Eyes</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>of Hands</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>The Jester</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Fang</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-     <item>
-       <key>Ornate Bone Key</key>
-        <checked>true</checked>
-        <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pyre Skeleton Jaw</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pyre Shroud</key>
-       <checked>true</checked>
-       <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Treasury Key</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>Tongue</key>
-       <checked>true</checked>
-       <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Thick Gromnie Hide</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Rabbit Carcass</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Siraluun Claw</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Swamp Stone</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>Lucky</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Idol Gem</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Mattekar Claw</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Mattekar Hide</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Monougat</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Large Armoredilllo Hide</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>White Jewel</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Wasp Wing</key>
-           <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Gromnie Tooth</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pelt</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Small Armoredillo Hide</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Glyph of</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Quill of</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Alacritous Ink</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Ink of</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>Parabolic Ink</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Little Green Seeds</key>
-          <checked>true</checked>
-           <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Mana Forge Key</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pyreal Mote</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pyreal Sliver</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pyreal Nugget</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pyreal Bar</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Engraved A'nekshay Bracer</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Broken Stone Tablet</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Large Stone Tablet</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-       <Guid></Guid>
-    </item>
-    <item>
-       <key>Cracked Stone Tablet</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Prickly Pear</key>
-       <checked>true</checked>
-        <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pyreal Pea</key>
-         <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Gold Pea</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Silver Pea</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Copper Pea</key>
-          <checked>false</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Iron Pea</key>
-          <checked>false</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Lead Pea</key>
-          <checked>false</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>    <item>
-       <key>Powdered Chorizite Pea</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pincer</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Tusk</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Pristine Mana Shard</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Sending Gem</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Adjanite Gem</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Portal Gem</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Recall Gem</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Gem of Worth</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Cavernous Olthoi Cavern</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Dark Towers</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Gold Hill Ruins</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Kelderam's Path</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Lair of The Homunculus</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Niffis Fighting Pits</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Oubliette</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Sezzherei's Lair</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Singularity Caul Asylum</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Son of Pooky's Den</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>The Orphanage</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Insignia</key>
-          <checked>true</checked>
-           <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Commendation</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Diamond Powder</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Red Veined Grub</key>
-           <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-     <item>
-       <key>Coruscating Olthoi Scent Gland</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Shard</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Speck</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Sliver</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Sturdy Iron Key</key>
-          <checked>false</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Singularity Key</key>
-          <checked>false</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Clay Figurine</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Sturdy Steel Key</key>
-          <checked>false</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Ulgrim's Contest Mug</key>
-           <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Ulgrim's Scroll</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Vial of Margul Blood</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Purple Jewel</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Gold Shallows Shredder Fin</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Gold Niffis Tentacle</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Gold Remoran Eggs</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Gold Moarsman Tooth</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Yellow Jewel</key>
-          <checked>true</checked>
-          <isexact>true</isexact>
-      <Guid></Guid>
-    </item>
-    <item>
-       <key>Trinket</key>
-          <checked>true</checked>
-          <isexact>false</isexact>
-      <Guid></Guid>
-    </item>
- </GameItems>
+  <item>
+    <key>Token</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Coin</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Small Olthoi Venom Sac</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Ornate Gear Marker</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Mutated Olthoi Gland</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Invigation to the Battle Burrows</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Blighted Mana Crystal</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Blood Fang Jewel</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Burning Veil</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Corrupted Skull</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Desolate Seed</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Seething Skull</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Shadow Cursed Totem</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Soul Chalice</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Warrior's Emblem</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Broken Black Marrow Key</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gikar's Dream</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Plaguefang's Hide</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Puppeteer's Skull</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Scourge's Hide</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Snarl's Hide</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Doomshark Hide</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gem of Luminance</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Coconut</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Exhumed Bones</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Osseous Mace</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Dark Sorcerer's Phylactery</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Skeletal Atlatl</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Diamond Shield</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Heavy Ursuin Coat</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Energy Crown</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gauntlets of Marksmanship</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <lootmax>0</lootmax>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Robe of the Tundra</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Corrupted Essence</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Carapace</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Olthoi Ripper Spine</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Golden Shuriken of Tanada</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Bandage</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Jawbone</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Stinger</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Glowing</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Phyntos Honey</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Severed Head</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Blood Sample</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Aetherium-Infused Gear</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Power Core</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Core Fragment</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Scratched Gear</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Golem Heart</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Diamond Heart</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Obsidian Heart</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Wood Heart</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Copper Heart</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Coral Heart</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Iron Heart</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>of Eyes</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>of Hands</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>The Jester</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Fang</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Ornate Bone Key</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Pyre Skeleton Jaw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Pyre Shroud</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Treasury Key</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Tongue</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Thick Gromnie Hide</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Rabbit Carcass</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Siraluun Claw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Swamp Stone</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Lucky</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Idol Gem</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Mattekar Claw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Mattekar Hide</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Monougat</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Large Armoredilllo Hide</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>White Jewel</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Wasp Wing</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gromnie Tooth</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Pelt</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Small Armoredillo Hide</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Alacritous Ink</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Parabolic Ink</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Little Green Seeds</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Mana Forge Key</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Pyreal Mote</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Pyreal Sliver</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Pyreal Nugget</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Pyreal Bar</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Broken Stone Tablet</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Large Stone Tablet</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Cracked Stone Tablet</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Prickly Pear</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Pyreal Pea</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gold Pea</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Silver Pea</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Copper Pea</key>
+    <checked>false</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Iron Pea</key>
+    <checked>false</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Lead Pea</key>
+    <checked>false</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Powdered Chorizite Pea</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Pristine Mana Shard</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Sending Gem</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Portal Gem</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Recall Gem</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gem of Worth</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Dark Towers</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gold Hill Ruins</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Kelderam's Path</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Lair of The Homunculus</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Oubliette</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Sezzherei's Lair</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Singularity Caul Asylum</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Son of Pooky's Den</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>The Orphanage</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Insignia</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Commendation</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Diamond Powder</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Red Veined Grub</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Coruscating Olthoi Scent Gland</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Shard</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Speck</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Sliver</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Sturdy Iron Key</key>
+    <checked>false</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Singularity Key</key>
+    <checked>false</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Clay Figurine</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Ulgrim's Contest Mug</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Ulgrim's Scroll</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Vial of Margul Blood</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Purple Jewel</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gold Shallows Shredder Fin</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gold Niffis Tentacle</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gold Remoran Eggs</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Gold Moarsman Tooth</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Trinket</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Quill of</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Glyph of</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Basalt Blade</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Niffis Fighting Pits</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Chorizite Chest</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Lesser Corrupted Essence</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Ink of</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Cavernous Olthoi Cavern</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>200</Guid>
+  </item>
+  <item>
+    <key>Black Glass Array</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Atakir's Blade</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>10</Guid>
+  </item>
+  <item>
+    <key>Engraved A'nekshay Bracer</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Sturdy Steel Key</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Scarlet Red Letter</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid></Guid>
+  </item>
+  <item>
+    <key>Black Coral</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Crystal Sword</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Yellow Jewel</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Antiquated Compass</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Adjanite Gem</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Black Luster Pearl</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>10</Guid>
+  </item>
+  <item>
+    <key>Major Mana Stone</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>10</Guid>
+  </item>
+  <item>
+    <key>Encapsulated Spirit</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Armoredillo Spine</key>
+    <checked>true</checked>
+    <isexact>false</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Ancient Mhoire Coin</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>A'nekshay Token</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item>
+  <item>
+    <key>Colosseum Coin</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>0</Guid>
+  </item> 
+  <item>
+    <key>Dark Tusker Paw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Engorged Eater Jaw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+	  <item>
+    <key>Voracious Eater Jaw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+	  <item>
+    <key>Abhorrent Eater Jaw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+	  <item>
+    <key>Ravenous Eater Jaw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Upper Insatiable Eater Jaw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+	  <item>
+    <key>Insatiable Eater Jaw</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Harvester Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Gardener Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Worker Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Soldier Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Legionary Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Eviscerator Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Warrior Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Mutilator Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Hive Eviscerator Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Hive Warrior Pincer</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Assailer Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Devastator Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Plated Tusker Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Assailer Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Rampager Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Armored Tusker Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Silver Tusker Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Tusker Guard Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Tusker Slave Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Tusker Liberator Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Tusker Redeemer Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Goldenback Tusker Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Tusker Crimsonback Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Male Tusker Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Female Tusker Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+  <item>
+    <key>Snow Tusker Leader Tusk</key>
+    <checked>true</checked>
+    <isexact>true</isexact>
+    <Guid>-1</Guid>
+  </item>
+</GameItems>

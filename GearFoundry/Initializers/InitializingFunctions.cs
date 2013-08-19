@@ -322,44 +322,30 @@ namespace GearFoundry
             nRulePriority = 0;
             sRuleAppliesTo = "";
             sRuleName = "";
-            sRuleKeyWords = "";
-            sRuleKeyWordsNot = "";
-            sRuleDescr = "";
+            nGearScore = 0;
+
             nRuleArcaneLore = 0;
-            nRuleBurden = 0;
-            nRuleValue = 0;
+
             nRuleWork = 0;
-            nRuleWieldReqValue = 0;
-            nRuleItemLevel = 0;
-            nRuleMinArmorLevel = 0;
-            nRuleWieldAttribute = 0;
+
+            nRuleWieldSkill = 0;
             nRuleMasteryType = 0;
             sRuleDamageTypes = "";
-            nRuleMcModAttack = 0;
-            nRuleMeleeD = 0;
-            nRuleMagicD = 0;
+
             sRuleReqSkill = "";
             sRuleReqSkilla = "";
             sRuleReqSkillb = "";
             sRuleReqSkillc = "";
             sRuleReqSkilld = "";
-            sRuleMinMax = "";
-            sRuleMinMaxa = "";
-            sRuleMinMaxb = "";
-            sRuleMinMaxc = "";
-            sRuleMinMaxd = "";
+
             sRuleWeapons = "";
             sRuleWeaponsa = "false";
             sRuleWeaponsb = "false";
             sRuleWeaponsc = "false";
             sRuleWeaponsd = "false";
-            sRuleMSCleave = "";
-            sRuleMSCleavea = "false";
-            sRuleMSCleaveb = "false";
-            sRuleMSCleavec = "false";
-            sRuleMSCleaved = "false";
+
             sRuleArmorType = "";
-            nRuleMinArmorLevel = 0;
+
             sRuleArmorSet = "";
             sRuleArmorCoverage = "";
             bRuleMustBeUnEnchantable = false;
@@ -368,15 +354,6 @@ namespace GearFoundry
             bRuleRed = false;
             bRuleYellow = false;
             bRuleBlue = false;
-            bRuleCloakMustHaveSpell = false;
-            nRuleEssCDLevel = 0;
-            nRuleEssCritLevel = 0;
-            nRuleEssCritDamResLevel = 0;
-            nRuleEssCRLevel = 0;
-            nRuleEssDamageLevel = 0;
-            nRuleEssDRLevel = 0;
-            nRuleEssLevel = 0;
-            nRuleEssMastery = 0;
             bRuleFilterLegend = false;
             bRuleFilterEpic = false;
             bRuleFilterMajor = false;
@@ -482,25 +459,25 @@ namespace GearFoundry
                    //Filter Section
                    chkEnableTextFiltering.Checked = bEnableTextFiltering;
                    chkTextFilterAllStatus.Checked = bTextFilterAllStatus;
-                   chkTextFilterBusyStatus.Checked = bTextFilterBusyStatus;
-                   chkTextFilterCastingStatus.Checked = bTextFilterCastingStatus;
-                   chkTextFilterMyDefenseMessages.Checked = bTextFilterMyDefenseMessages;
-                   chkTextFilterMobDefenseMessages.Checked = bTextFilterMobDefenseMessages;
-                   chkTextFilterMyKillMessages.Checked = bTextFilterMyKillMessages;
-                   chkTextFilterPKFails.Checked = bTextFilterPKFails;
-                   chkTextFilterDirtyFighting.Checked = bTextFilterDirtyFighting;
-                   chkTextFilterMySpellCasting.Checked = bTextFilterMySpellCasting;
-                   chkTextFilterOthersSpellCasting.Checked = bTextFilterOthersSpellCasting;
-                   chkTextFilterSpellExpirations.Checked = bTextFilterSpellExpirations;
-                   chkTextFilterManaStoneMessages.Checked = bTextFilterManaStoneMessages;
-                   chkTextFilterHealingMessages.Checked = bTextFilterHealingMessages;
-                   chkTextFilterSalvageMessages.Checked = bTextFilterSalvageMessages;
-                   chkTextFilterBotSpam.Checked = bTextFilterBotSpam;
-                   chkTextFilterIdentFailures.Checked = bTextFilterIdentFailures;
-                   chkTextFilterKillTaskComplete.Checked = bTextFilterKillTaskComplete;
-                   chkTextFilterVendorTells.Checked = bTextFilterVendorTells;
-                   chkTextFilterMonsterTells.Checked = bTextFilterMonsterTells;
-                   chkTextFilterNPCChatter.Checked = bTextFilterNPCChatter;
+//                   chkTextFilterBusyStatus.Checked = bTextFilterBusyStatus;
+//                   chkTextFilterCastingStatus.Checked = bTextFilterCastingStatus;
+//                   chkTextFilterMyDefenseMessages.Checked = bTextFilterMyDefenseMessages;
+//                   chkTextFilterMobDefenseMessages.Checked = bTextFilterMobDefenseMessages;
+//                   chkTextFilterMyKillMessages.Checked = bTextFilterMyKillMessages;
+//                   chkTextFilterPKFails.Checked = bTextFilterPKFails;
+//                   chkTextFilterDirtyFighting.Checked = bTextFilterDirtyFighting;
+//                   chkTextFilterMySpellCasting.Checked = bTextFilterMySpellCasting;
+//                   chkTextFilterOthersSpellCasting.Checked = bTextFilterOthersSpellCasting;
+//                   chkTextFilterSpellExpirations.Checked = bTextFilterSpellExpirations;
+//                   chkTextFilterManaStoneMessages.Checked = bTextFilterManaStoneMessages;
+//                   chkTextFilterHealingMessages.Checked = bTextFilterHealingMessages;
+//                   chkTextFilterSalvageMessages.Checked = bTextFilterSalvageMessages;
+//                   chkTextFilterBotSpam.Checked = bTextFilterBotSpam;
+//                   chkTextFilterIdentFailures.Checked = bTextFilterIdentFailures;
+//                   chkTextFilterKillTaskComplete.Checked = bTextFilterKillTaskComplete;
+//                   chkTextFilterVendorTells.Checked = bTextFilterVendorTells;
+//                   chkTextFilterMonsterTells.Checked = bTextFilterMonsterTells;
+//                   chkTextFilterNPCChatter.Checked = bTextFilterNPCChatter;
 
                 }
             catch (Exception ex) { LogError(ex); }
@@ -692,24 +669,21 @@ namespace GearFoundry
             chkRuleEnabled.Checked = bRuleEnabled;
             txtRulePriority.Text = nRulePriority.ToString();
             txtRuleName.Text = sRuleName;
-            txtRuleKeywords.Text = sRuleKeyWords;
-            txtRuleKeyWordsNot.Text = sRuleKeyWordsNot;
-            txtRuleDescr.Text = sRuleDescr;
+
+          
             txtRuleArcaneLore.Text = nRuleArcaneLore.ToString();
-            txtRulePrice.Text = nRuleValue.ToString();
-            txtRuleMaxBurden.Text = nRuleBurden.ToString();
+            txtGearScore.Text = nGearScore.ToString();
             txtRuleMaxCraft.Text = nRuleWork.ToString();
-//            txtRuleWieldReqValue.Text = nRuleWieldReqValue.ToString();
             txtRuleWieldLevel.Text = nRuleWieldLevel.ToString();
-            txtRuleItemLevel.Text = nRuleItemLevel.ToString();
-            txtRuleMinArmorLevel.Text = nRuleMinArmorLevel.ToString();
+         
+           
             try
             {
                 int i=0;
                 foreach (IDNameLoadable item in WeaponTypeList)
                 {
 
-                    if (item.ID == nRuleWieldAttribute)
+                    if (item.ID == nRuleWieldSkill)
                     {
                         cboWeaponAppliesTo.Selected = i;
                          break;
@@ -720,38 +694,23 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
 
             cboMasteryType.Selected = nRuleMasteryType;
-            txtRuleMcModAttack.Text = nRuleMcModAttack.ToString();
-            txtRuleMeleeD.Text = nRuleMeleeD.ToString();
-            txtRuleMagicD.Text = nRuleMagicD.ToString();
+     
             chkRuleWeaponsa.Checked = Convert.ToBoolean(sRuleWeaponsa);
             chkRuleWeaponsb.Checked = Convert.ToBoolean(sRuleWeaponsb);
             chkRuleWeaponsc.Checked = Convert.ToBoolean(sRuleWeaponsc);
             chkRuleWeaponsd.Checked = Convert.ToBoolean(sRuleWeaponsd);
-            chkRuleMSCleavea.Checked = Convert.ToBoolean(sRuleMSCleavea);
-            chkRuleMSCleaveb.Checked = Convert.ToBoolean(sRuleMSCleaveb);
-            chkRuleMSCleavec.Checked = Convert.ToBoolean(sRuleMSCleavec);
-            chkRuleMSCleaved.Checked = Convert.ToBoolean(sRuleMSCleaved);
+
               
             txtRuleReqSkilla.Text = sRuleReqSkilla;
-             txtRuleReqSkillb.Text = sRuleReqSkillb;
+            txtRuleReqSkillb.Text = sRuleReqSkillb;
             txtRuleReqSkillc.Text = sRuleReqSkillc;
             txtRuleReqSkilld.Text = sRuleReqSkilld;
-            txtRuleMinMaxa.Text = sRuleMinMaxa;
-            txtRuleMinMaxb.Text = sRuleMinMaxb;
-            txtRuleMinMaxc.Text = sRuleMinMaxc;
-            txtRuleMinMaxd.Text = sRuleMinMaxd;
+     
             chkRuleMustBeUnenchantable.Checked = bRuleMustBeUnEnchantable;
             chkRuleRed.Checked = bRuleRed;
             chkRuleYellow.Checked = bRuleYellow;
             chkRuleBlue.Checked = bRuleBlue;
-//            chkRuleCloakMustHaveSpell.Checked = bRuleCloakMustHaveSpell;
-            cboRuleEssMastery.Selected = nRuleEssMastery;
-            txtRuleEssCDLevel.Text = nRuleEssCDLevel.ToString();
-            txtRuleEssCritLevel.Text = nRuleEssCritLevel.ToString();
-            txtRuleEssCRLevel.Text = nRuleEssCRLevel.ToString();
-            txtRuleEssDamageLevel.Text = nRuleEssDamageLevel.ToString();
-            txtRuleEssDRLevel.Text = nRuleEssDRLevel.ToString();
-            txtRuleEssLevel.Text = nRuleEssLevel.ToString();
+         
             txtRuleNumSpells.Text = nRuleNumSpells.ToString();
 
             chkRuleFilterLegend.Checked = bRuleFilterLegend;

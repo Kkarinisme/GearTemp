@@ -62,7 +62,6 @@ namespace GearFoundry
             sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);
             sRuleArmorCoverage = mFindList(lstRuleArmorCoverages, ArmorCoverageList);
             sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
-            sRuleEssElements = mFindList(lstRuleEssElements, EssElementsList);
             sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
             sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
             mMakeStrings();
@@ -98,7 +97,7 @@ namespace GearFoundry
             try
             {
 
-                sRuleMinMaxa = txtRuleMinMaxa.Text.ToString().Trim();
+           
                 sRuleReqSkilla = txtRuleReqSkilla.Text.ToString().Trim();
                 if (sRuleReqSkilla != "")
                 {
@@ -192,47 +191,22 @@ namespace GearFoundry
                 new XElement("Priority", nRulePriority),
                 new XElement("AppliesToFlag", sRuleAppliesTo),
                 new XElement("Name", sRuleName),
-                new XElement("NameContains", sRuleKeyWords),
-                new XElement("NameNotContains", sRuleKeyWordsNot),
-                new XElement("Descr", sRuleDescr),
                 new XElement("ArcaneLore", nRuleArcaneLore),
-                new XElement("Value", nRuleValue),
-                new XElement("Burden", nRuleBurden),
                 new XElement("Work", nRuleWork),
-                new XElement("WieldReqValue", nRuleWieldReqValue),
                 new XElement("WieldLevel", nRuleWieldLevel),
-                new XElement("ItemLevel", nRuleItemLevel),
-                new XElement("MinArmorLevel", nRuleMinArmorLevel),
-                new XElement("WieldAttribute", nRuleWieldAttribute),
+                new XElement("WieldSkill", nRuleWieldSkill),
                 new XElement("MasteryType", nRuleMasteryType),
                 new XElement("DamageType", sRuleDamageTypes),
-                new XElement("McModAttack", nRuleMcModAttack),
-                new XElement("MeleeDef", nRuleMeleeD),
-                new XElement("MagicDef", nRuleMagicD),
+                new XElement("GearScore", nGearScore),
                 new XElement("WieldEnabled", sRuleWeapons),
                 new XElement("ReqSkill", sRuleReqSkill),
-                new XElement("MinMax", sRuleMinMax),
-                new XElement("MSCleave", sRuleMSCleave),
                 new XElement("Coverage", sRuleArmorCoverage),
                new XElement("ArmorType", sRuleArmorType),
                  new XElement("ArmorSet", sRuleArmorSet),
                 new XElement("Unenchantable", bRuleMustBeUnEnchantable),
-            //    new XElement("MustHaveSpell", nRuleMustHaveSpell),
-                 new XElement("CloakSets", sRuleCloakSets),
-                 new XElement("CloakSpells", sRuleCloakSpells),
-                 new XElement("CloakMustHaveSpell",bRuleCloakMustHaveSpell),
                  new XElement("Red", bRuleRed),
                  new XElement("Yellow", bRuleYellow),
                  new XElement("Blue", bRuleBlue),
-                 new XElement("EssMastery", nRuleEssMastery),
-               new XElement("EssElements", sRuleEssElements),
-               new XElement("EssLevel", nRuleEssLevel),
-               new XElement("EssDamageLevel", nRuleEssDamageLevel),
-               new XElement("EssCDLevel", nRuleEssCDLevel),
-               new XElement("EssCRLevel", nRuleEssCRLevel),
-               new XElement("EssDRLevel", nRuleEssDRLevel),
-               new XElement("EssCritLevel", nRuleEssCritLevel),
-                new XElement("EssCritDamRes", nRuleEssCritDamResLevel),
                 new XElement("FilterLegend", bRuleFilterLegend),
                 new XElement("FilterEpic", bRuleFilterEpic),
                 new XElement("FilterMajor", bRuleFilterMajor),
@@ -253,50 +227,23 @@ namespace GearFoundry
                 nRulePriority = Convert.ToInt32(el.Element("Priority").Value);
                 sRuleAppliesTo = el.Element("AppliesToFlag").Value.ToString();
                 sRuleName = el.Element("Name").Value.ToString();
-                sRuleKeyWords = el.Element("NameContains").Value.ToString();
-                sRuleKeyWordsNot = el.Element("NameNotContains").Value.ToString();
-                sRuleDescr = el.Element("Descr").Value.ToString();
                 nRuleArcaneLore = Convert.ToInt32(el.Element("ArcaneLore").Value);
-                nRuleValue = Convert.ToInt32(el.Element("Value").Value);
-                nRuleBurden = Convert.ToInt32(el.Element("Burden").Value);
                 nRuleWork = Convert.ToInt32(el.Element("Work").Value);
-                nRuleWieldReqValue = Convert.ToInt32(el.Element("WieldReqValue").Value);
                 nRuleWieldLevel = Convert.ToInt32(el.Element("WieldLevel").Value);
-                nRuleItemLevel = Convert.ToInt32(el.Element("ItemLevel").Value);
-                nRuleMinArmorLevel = Convert.ToInt32(el.Element("MinArmorLevel").Value);
-                //bRuleTradeBotOnly = Convert.ToBoolean(el.Element("TradeBotOnly").Value);
-                //bRuleTradeBot = Convert.ToBoolean(el.Element("UseTradeBot").Value);
-                nRuleWieldAttribute = Convert.ToInt32(el.Element("WieldAttribute").Value);
+                nRuleWieldSkill = Convert.ToInt32(el.Element("WieldSkill").Value);
                 nRuleMasteryType = Convert.ToInt32(el.Element("MasteryType").Value);
                 sRuleDamageTypes = el.Element("DamageType").Value;
-                nRuleMcModAttack = Convert.ToInt32(el.Element("McModAttack").Value);
-                nRuleMeleeD = Convert.ToInt32(el.Element("MeleeDef").Value);
-                nRuleMagicD = Convert.ToInt32(el.Element("MagicDef").Value);
-                sRuleMinMax = el.Element("MinMax").Value;
-                sRuleMSCleave = el.Element("MSCleave").Value;
+                nGearScore = Convert.ToInt32(el.Element("GearScore").Value);
+                 sRuleWeapons = el.Element("WieldEnabled").Value;
                 sRuleReqSkill = el.Element("ReqSkill").Value;
-                sRuleWeapons = el.Element("WieldEnabled").Value;
+                sRuleArmorCoverage = (el.Element("Coverage").Value).ToString();
                 sRuleArmorType = el.Element("ArmorType").Value.ToString();
                 sRuleArmorSet = el.Element("ArmorSet").Value.ToString();
-                sRuleArmorCoverage = (el.Element("Coverage").Value).ToString();
                 bRuleMustBeUnEnchantable = Convert.ToBoolean(el.Element("Unenchantable").Value);
                 bRuleRed = Convert.ToBoolean(el.Element("Red").Value);
                 bRuleYellow = Convert.ToBoolean(el.Element("Yellow").Value);
                 bRuleBlue = Convert.ToBoolean(el.Element("Blue").Value);
-                sRuleCloakSets = (el.Element("CloakSets").Value.ToString());
-                sRuleCloakSpells = (el.Element("CloakSpells").Value.ToString());
-                bRuleCloakMustHaveSpell = Convert.ToBoolean(el.Element("CloakMustHaveSpell").Value);
-                nRuleEssMastery = Convert.ToInt32(el.Element("EssMastery").Value);
-                sRuleEssElements = el.Element("EssElements").Value.ToString();
-                nRuleEssLevel = Convert.ToInt32(el.Element("EssLevel").Value);
-                nRuleEssDamageLevel = Convert.ToInt32(el.Element("EssDamageLevel").Value);
-                nRuleEssCDLevel = Convert.ToInt32(el.Element("EssCDLevel").Value);
-                nRuleEssCRLevel = Convert.ToInt32(el.Element("EssCRLevel").Value);
-                nRuleEssDRLevel = Convert.ToInt32(el.Element("EssDRLevel").Value);
-                nRuleEssCritLevel = Convert.ToInt32(el.Element("EssCritLevel").Value);
-                nRuleEssCritDamResLevel = Convert.ToInt32(el.Element("EssCritDamRes").Value);
                 sRuleSpells = el.Element("Spells").Value;
-             //   nRuleMustHaveSpell = Convert.ToInt32(el.Element("MustHaveSpell").Value);
                 nRuleNumSpells = Convert.ToInt32(el.Element("NumSpells").Value);
                 bRuleFilterLegend = Convert.ToBoolean(el.Element("FilterLegend").Value);
                 bRuleFilterEpic = Convert.ToBoolean(el.Element("FilterEpic").Value);
@@ -328,27 +275,6 @@ namespace GearFoundry
 
         }
 
-        [ControlEvent("txtRuleDescr", "End")]
-        private void txtRuleDescr_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e) //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            sRuleDescr = txtRuleDescr.Text.ToString().Trim();
-        }
-
-        [ControlEvent("txtRuleMaxBurden", "End")]
-        private void txtRuleMaxBurden_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  // Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleMaxBurden.Text, out result))
-            {
-                nRuleBurden = result;
-            }
-            else
-            {
-                txtRuleMaxBurden.Text = string.Empty;
-                nRuleBurden = -1;
-            }
-
-        }
 
         [ControlEvent("txtRuleMaxCraft", "End")]
         private void txtRuleMaxCraft_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)   //Decal.Adapter.TextBoxEndEventArgs e)
@@ -381,40 +307,24 @@ namespace GearFoundry
             }
 
         }
-
-        [ControlEvent("txtRulePrice", "End")]
-        private void txtRulePrice_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
+        
+        [ControlEvent("txtGearScore", "End")]
+        private void txtGearScore_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)   //Decal.Adapter.TextBoxEndEventArgs e)
         {
             int result = 0;
-            if (int.TryParse(txtRulePrice.Text, out result))
+            if (int.TryParse(txtGearScore.Text, out result))
             {
-                nRuleValue = result;
+                nGearScore = result;
             }
             else
             {
-                txtRulePrice.Text = string.Empty;
-                nRuleValue = -1;
+                txtRuleArcaneLore.Text = string.Empty;
+                nGearScore = -1;
             }
 
         }
 
-//
-//        [ControlEvent("txtRuleWieldReqValue", "End")]
-//        private void txtRuleWieldReqValue_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-//        {
-//
-//            int result = 0;
-//            if (int.TryParse(txtRuleWieldReqValue.Text, out result))
-//            {
-//                nRuleWieldReqValue = result;
-//            }
-//            else
-//            {
-//                txtRuleWieldReqValue.Text = string.Empty;
-//                nRuleWieldReqValue = -1;
-//            }
 
-//        }
         [ControlEvent("txtRuleWieldLevel", "End")]
         private void txtRuleWieldLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
         {
@@ -432,51 +342,8 @@ namespace GearFoundry
 
         }
 
-        [ControlEvent("txtRuleItemLevel", "End")]
-        private void txtRuleItemLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleItemLevel.Text, out result))
-            {
-                nRuleItemLevel = result;
-            }
-            else
-            {
-                txtRuleItemLevel.Text = string.Empty;
-                nRuleItemLevel = -1;
-            }
-
-        }
-
-        [ControlEvent("txtRuleMinArmorLevel", "End")]
-        private void txtRuleMinArmorLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleMinArmorLevel.Text, out result))
-            {
-                nRuleMinArmorLevel = result;
-            }
-            else
-            {
-                txtRuleMinArmorLevel.Text = string.Empty;
-                nRuleMinArmorLevel = -1;
-            }
-
-        }
 
 
-        [ControlEvent("txtRuleKeyWordsNot", "End")]
-        private void txtRuleKeyWordsNot_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            sRuleKeyWordsNot = txtRuleKeyWordsNot.Text.Trim();
-        }
-
-
-        [ControlEvent("txtRuleKeywords", "End")]
-        private void txtRuleKeywords_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            sRuleKeyWords = txtRuleKeywords.Text;
-        }
 
         [ControlEvent("chkRuleMustBeUnenchantable", "Change")]
         private void chkRuleMustBeUnenchantable_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
@@ -511,128 +378,6 @@ namespace GearFoundry
             bRuleBlue = e.Checked;
         }
 
-        [ControlEvent("txtRuleEssLevel", "End")]
-        private void txtRuleEssLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleEssLevel.Text, out result))
-            {
-                nRuleEssLevel = result;
-            }
-            else
-            {
-                txtRuleEssLevel.Text = string.Empty;
-                nRuleEssLevel = -1;
-            }
-
-        }
-
-        //[ControlEvent("txtRuleEssSummLevel", "End")]
-        //private void txtRuleEssSummLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        //{
-        //    int result = 0;
-        //    if (int.TryParse(txtRuleEssSummLevel.Text, out result))
-        //    {
-        //        nRuleEssSummLevel = result;
-        //    }
-        //    else
-        //    {
-        //        txtRuleEssSummLevel.Text = string.Empty;
-        //        nRuleEssSummLevel = -1;
-        //    }
-
-        //}
-        [ControlEvent("txtRuleEssDamageLevel", "End")]
-        private void txtRuleEssDamageLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleEssDamageLevel.Text, out result))
-            {
-                nRuleEssDamageLevel = result;
-            }
-            else
-            {
-                txtRuleEssDamageLevel.Text = string.Empty;
-                nRuleEssDamageLevel = -1;
-            }
-
-        }
-        [ControlEvent("txtRuleEssCDLevel", "End")]
-        private void txtRuleEssCDLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleEssCDLevel.Text, out result))
-            {
-                nRuleEssCDLevel = result;
-            }
-            else
-            {
-                txtRuleEssCDLevel.Text = string.Empty;
-                nRuleEssCDLevel = -1;
-            }
-
-        }
-        [ControlEvent("txtRuleEssCRLevel", "End")]
-        private void txtRuleEssCRLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleEssCRLevel.Text, out result))
-            {
-                nRuleEssCRLevel = result;
-            }
-            else
-            {
-                txtRuleEssCRLevel.Text = string.Empty;
-                nRuleEssCRLevel = -1;
-            }
-
-        }
-        [ControlEvent("txtRuleEssDRLevel", "End")]
-        private void txtRuleEssDRLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleEssDRLevel.Text, out result))
-            {
-                nRuleEssDRLevel = result;
-            }
-            else
-            {
-                txtRuleEssDRLevel.Text = string.Empty;
-                nRuleEssDRLevel = -1;
-            }
-
-        }
-        [ControlEvent("txtRuleEssCritLevel", "End")]
-        private void txtRuleEssCritLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleEssCritLevel.Text, out result))
-            {
-                nRuleEssCritLevel = result;
-            }
-            else
-            {
-                txtRuleEssCritLevel.Text = string.Empty;
-                nRuleEssCritLevel = -1;
-            }
-
-        }
-
-        [ControlEvent("txtRuleEssCritDamResLevel", "End")]
-        private void txtRuleEssCritDamResLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-            int result = 0;
-            if (int.TryParse(txtRuleEssCritDamResLevel.Text, out result))
-            {
-                nRuleEssCritDamResLevel = result;
-            }
-            else
-            {
-                txtRuleEssCritDamResLevel.Text = string.Empty;
-                nRuleEssCritDamResLevel = -1;
-            }
-
-        }
 
 
 
@@ -715,31 +460,9 @@ namespace GearFoundry
             try
             {
 
-                nRuleWieldAttribute = (WeaponTypeList[cboWeaponAppliesTo.Selected].ID);
-
-                switch (nRuleWieldAttribute)
-                {
-                    case 0: // eRuleWeaponTypes.notapplicable:
-                        lblRuleMcModAttack.Text = "mc/mod%/attack";
-                        lblRuleMinMax_ElvsMons.Text = "Damage";
-                        break;
-                    case 47: //eRuleWeaponTypes.missile:
-                        lblRuleMcModAttack.Text = "Damage Mod:";
-                        lblRuleMinMax_ElvsMons.Text = "ElemDam";
-                        break;
-                    case 34: //eRuleWeaponTypes.mage:
-                    case 43:
-                        //wand
-                        lblRuleMcModAttack.Text = "Mana Conversion:";
-                        lblRuleMinMax_ElvsMons.Text = "ElemvsMons";
-                        break;
-                    default:
-                        //melee
-                        lblRuleMcModAttack.Text = "Attack Mod:";
-                        lblRuleMinMax_ElvsMons.Text = "Min-Max";
-                        break;
-                }
-
+                nRuleWieldSkill = (WeaponTypeList[cboWeaponAppliesTo.Selected].ID);
+                if(nRuleWieldSkill == 54) {lblRuleReqSkilla.Text = "Essence Level";}
+                else{lblRuleReqSkilla.Text = "Skill Level";}
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -754,68 +477,7 @@ namespace GearFoundry
 
         }
 
-        [ControlEvent("cboRuleEssMastery", "Change")]
-        private void cboRuleEssMastery_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
-        {
-            nRuleEssMastery = EssMasteryList[cboRuleEssMastery.Selected].ID;
 
-        }
-
-
-        [ControlEvent("txtRuleMcModAttack", "End")]
-        private void txtRuleMcModAttack_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-            int d = 0;
-            nRuleMcModAttack = 0;
-            if (int.TryParse(txtRuleMcModAttack.Text, out d))
-            {
-                nRuleMcModAttack = d;
-            }
-            else
-            {
-                nRuleMcModAttack = 0;
-
-            }
-
-            //	}
-        }
-
-        [ControlEvent("txtRuleMeleeD", "End")]
-        private void txtRuleMeleeD_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            //if (mSelectedRule != null) {
-            int d = 0;
-            nRuleMeleeD = 0;
-            if (int.TryParse(txtRuleMeleeD.Text, out d))
-            {
-                //mSelectedRule.minmeleebonus = d;
-                nRuleMeleeD = d;
-            }
-            else
-            {
-                nRuleMeleeD = 0;
-            }
-
-            //}
-        }
-
-        [ControlEvent("txtRuleMagicD", "End")]
-        private void txtRuleMagicD_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            //	if (mSelectedRule != null) {
-            int d = 0;
-            nRuleMagicD = 0;
-            if (int.TryParse(txtRuleMagicD.Text, out d))
-            {
-                //mSelectedRule.minmagicdbonus = d;
-                nRuleMagicD = d;
-            }
-            else
-            {
-                //mSelectedRule.minmagicdbonus = -1;
-                nRuleMagicD = d;
-            }
-        }
 
         [ControlEvent("chkRuleWeaponsa", "Change")]
         private void chkRuleWeaponsa_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
@@ -858,44 +520,6 @@ namespace GearFoundry
             { sRuleWeaponsd = "false"; }
         }
 
-        [ControlEvent("chkRuleMSCleavea", "Change")]
-        private void chkRuleMSCleavea_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
-        {
-            sRuleMSCleavea = "false";
-
-            if (chkRuleMSCleavea.Checked)
-            { sRuleMSCleavea = "true"; }
-
-        }
-
-        [ControlEvent("chkRuleMSCleaveb", "Change")]
-        private void chkRuleMSCleaveb_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
-        {
-            sRuleMSCleaveb = "false";
-            if (chkRuleMSCleaveb.Checked)
-            { sRuleMSCleaveb = "true"; }
-
-
-        }
-
-        [ControlEvent("chkRuleMSCleavec", "Change")]
-        private void chkRuleMSCleavec_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
-        {
-            sRuleMSCleavec = "false";
-            if (chkRuleMSCleavec.Checked)
-            { sRuleMSCleavec = "true"; }
-
-        }
-
-        [ControlEvent("chkRuleMSCleaved", "Change")]
-        private void chkRuleMSCleaved_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
-        {
-            sRuleMSCleaved = "false";
-            if (chkRuleMSCleaved.Checked)
-            { sRuleMSCleaved = "true"; }
-
-        }
-
 
 
 
@@ -922,36 +546,9 @@ namespace GearFoundry
         {
             sRuleReqSkilld = txtRuleReqSkilld.Text.Trim();
         }
-        [ControlEvent("txtRuleMinMaxa", "End")]
+      
 
-        private void txtRuleMinMaxa_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-
-            sRuleMinMaxa = txtRuleMinMaxa.Text.ToString().Trim();
-
-        }
-
-        [ControlEvent("txtRuleMinMaxb", "End")]
-        private void txtRuleMinMaxb_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            sRuleMinMaxb = txtRuleMinMaxb.Text.Trim();
-        }
-
-        [ControlEvent("txtRuleMinMaxc", "End")]
-        private void txtRuleMinMaxc_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            sRuleMinMaxc = txtRuleMinMaxc.Text.Trim();
-
-        }
-
-        [ControlEvent("txtRuleMinMaxd", "End")]
-
-        private void txtRuleMinMaxd_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
-        {
-            sRuleMinMaxd = txtRuleMinMaxd.Text.Trim();
-
-        }
-
+      
         //Creates a string of integers separated by columns in listviews in which more than one chosen
         private string mFindList(MyClasses.MetaViewWrappers.IList lstvue, List<IDNameLoadable> lst)
         {

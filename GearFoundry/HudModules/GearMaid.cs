@@ -27,12 +27,15 @@ namespace GearFoundry
 		private HudButton MaidTradeAllSalvage = null;
 		private HudButton MaidTradeParialSalvage = null;
 		private HudButton MaidTradeFilledSalvage = null;
+		private HudButton MaidTradeAllEightComps = null;
 		private HudButton MaidSalvageCombine = null;
 		private HudButton MaidCannibalizeInventory = null;
 		private HudCheckBox MaidCannibalizeEnable = null;
 		
 		private Queue<WorldObject> MaidCannibalizeQueue = new Queue<WorldObject>();
 		private List<int> MaidCannibalizeProcessList = new List<int>();
+		private System.Windows.Forms.Timer MaidTimer = new System.Windows.Forms.Timer();
+		private List<WorldObject> MaidCompsList = new List<WorldObject>();
 		
 		private void RenderButlerHudMaidLayout()
     	{
@@ -62,9 +65,13 @@ namespace GearFoundry
     			MaidSalvageCombine.Text = "Combine Salvage Bags";
     			MaidTabLayout.AddControl(MaidSalvageCombine, new Rectangle(0,150,150,20));
     			
+    			MaidTradeAllEightComps = new HudButton();
+    			MaidTradeAllEightComps.Text = "Window All L8 Spell Components";
+    			MaidTabLayout.AddControl(MaidTradeAllEightComps, new Rectangle(0, 180, 150,20));
+    			
     			MaidCannibalizeEnable = new HudCheckBox();
     			MaidCannibalizeEnable.Text = "Enable Cannibalize Button";
-    			MaidTabLayout.AddControl(MaidCannibalizeEnable, new Rectangle(0,180,150,20));
+    			MaidTabLayout.AddControl(MaidCannibalizeEnable, new Rectangle(0,210,150,20));
     			
     			MaidStackInventory.Hit += MaidStackInventory_Hit;
     			MaidRingKeys.Hit += MaidRingKeys_Hit;
@@ -73,6 +80,7 @@ namespace GearFoundry
     			MaidTradeParialSalvage.Hit += MaidTradeParialSalvage_Hit;
     			MaidSalvageCombine.Hit += MaidSalvageCombine_Hit;
     			MaidCannibalizeEnable.Hit += MaidCannibalizeEnable_Hit;
+    			MaidTradeAllEightComps.Hit += MaidTradeAllEightComps_Hit;
     			
     			MaidTab = true;
     			
@@ -91,6 +99,7 @@ namespace GearFoundry
     			MaidTradeFilledSalvage.Hit -= MaidTradeFilledSalvage_Hit;
     			MaidTradeParialSalvage.Hit -= MaidTradeParialSalvage_Hit;
     			MaidSalvageCombine.Hit -= MaidSalvageCombine_Hit;
+    			MaidTradeAllEightComps.Hit -= MaidTradeAllEightComps_Hit;
     			if(MaidCannibalizeInventory != null) {MaidCannibalizeInventory.Hit -= MaidCannibalizeInventory_Hit;}
     			
     			if(MaidCannibalizeInventory != null){MaidCannibalizeInventory.Dispose();}
@@ -118,7 +127,7 @@ namespace GearFoundry
     			
     				MaidCannibalizeInventory = new HudButton();
     				MaidCannibalizeInventory.Text = "Cannibalize Inventory";
-    				MaidTabLayout.AddControl(MaidCannibalizeInventory, new Rectangle(0,210,150,20));
+    				MaidTabLayout.AddControl(MaidCannibalizeInventory, new Rectangle(0,240,150,20));
     				MaidCannibalizeInventory.Hit += MaidCannibalizeInventory_Hit;
     			}
     			else
@@ -156,7 +165,11 @@ namespace GearFoundry
 		{
 			try
 			{
+				MaidTimer.Interval = 200;
+				MaidTimer.Start();
+				MaidTimer.Tick += MaidTimerDo;
 				FillMaidStackList();
+				
 						 
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -315,11 +328,29 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		private void MaidTradeAllEightComps_Hit(object sender, EventArgs e)
+		{
+			try
+			{
+				ScanInventoryForComps();
+				if(bButlerTradeOpen)
+				{
+					TradeComps();
+					return;
+				}
+				else
+				{
+					WriteToChat("Open a trade window.");
+				}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		private void MaidTradeAllSalvage_Hit(object sender, System.EventArgs e)
 		{
 			try
 			{
-				ScanInventoryForSalvageBags();
+				MaidScanInventoryForSalvageBags();
 				if(bButlerTradeOpen)
 				{
 					TradeSalvageBags(1);
@@ -339,7 +370,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				ScanInventoryForSalvageBags();
+				MaidScanInventoryForSalvageBags();
 				if(bButlerTradeOpen)
 				{
 					TradeSalvageBags(0);
@@ -359,7 +390,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				ScanInventoryForSalvageBags();
+				MaidScanInventoryForSalvageBags();
 				if(bButlerTradeOpen)
 				{
 					TradeSalvageBags(2);
@@ -448,12 +479,38 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		private void TradeComps()
+		{
+			try
+			{
+				foreach(WorldObject comp in MaidCompsList)
+				{
+					Core.Actions.TradeAdd(comp.Id);
+				}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		
 		private void MaidScanInventoryForSalvageBags()
 		{
 			try
 			{
 				MaidSalvage = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains("salvage")).ToList();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void ScanInventoryForComps()
+		{
+			try
+			{
+				MaidCompsList = (from items in Core.WorldFilter.GetInventory()
+					where items.Name.ToLower().Contains("ink of") || items.Name.ToLower().Contains("inks of") ||
+					items.Name.ToLower().Contains("glyph of") || items.Name.ToLower().Contains("glyphs of") ||
+					items.Name.ToLower().Contains("quill of") || items.Name.ToLower().Contains("quills of") ||
+					items.Name.ToLower().Contains("alacritous") || items.Name.ToLower().Contains("parabolic")
+					select items).ToList();
+					
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -494,6 +551,22 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		private void MaidTimerDo(object sender, EventArgs e)
+		{
+			try
+			{
+				if(MaidStackList.Count > 0) 
+				{
+					MaidProcessStack();
+					return;
+				}
+				else
+				{
+					MaidTimer.Stop();
+					MaidTimer.Tick -= MaidTimerDo;
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
 		
 	
 	

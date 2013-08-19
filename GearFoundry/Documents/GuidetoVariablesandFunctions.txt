@@ -5,9 +5,6 @@ Enabled                 bool		bRuleEnabled            Determines if a rule is en
 Priority				int			nRulePriority			The priority of the rule
 AppliesToFlag			string		sRuleAppliesTo			The choices selected that rule applies to
 Name					string		sRuleName				Name of rule
-NameContains			string		sRuleKeywords			The words that must be in name
-NameContainsNot			string		sRuleKeywordsNot		The words that must not be in name
-Descr					string		sRuleDescr				A description of the rule
 ArcaneLore				int			nRuleArcaneLore			Arcane Lore of Item
 Value					int			nRuleValue				Value of item
 Burden					int			nRuleBurden				Burden of item

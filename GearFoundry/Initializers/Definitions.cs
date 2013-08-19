@@ -26,12 +26,12 @@ namespace GearFoundry
 
     public partial class PluginCore : Decal.Adapter.PluginBase
     {
-    	static internal FileService FileService;
+    	static internal FileService fileservice;
         
         //Operational flags.  Not saved across sessions
         private bool mCharacterLoginComplete;
 
-        private System.Windows.Forms.Timer MasterTimer;
+        private System.Windows.Forms.Timer MasterTimer = new System.Windows.Forms.Timer();
         public static string Log;
 
         public static PluginCore Instance;
@@ -132,23 +132,18 @@ namespace GearFoundry
         int nRulePriority = 0;
         string sRuleAppliesTo = "";
         string sRuleName = "";
-        string sRuleDescr = "";
-        string sRuleKeyWords = "";
-        string sRuleKeyWordsNot = "";
+
         int nRuleArcaneLore = 0;
-        int nRuleBurden = 0;
-        int nRuleValue = 0;
+        int nGearScore = 0;
+
         double nRuleWork = 0;
-        int nRuleWieldReqValue = 0;
+
         int nRuleWieldLevel = 0;
-        int nRuleItemLevel = 0;
-        int nRuleMinArmorLevel = 0;
-        int nRuleWieldAttribute = 0;
+
+        int nRuleWieldSkill = 0;
         int nRuleMasteryType = 0;
         string sRuleDamageTypes = "";
-        int nRuleMcModAttack = 0;
-        int nRuleMeleeD = 0;
-        int nRuleMagicD = 0;
+
         string sRuleReqSkill = "";
         string sRuleReqSkilla = "";
         string sRuleReqSkillb = "";

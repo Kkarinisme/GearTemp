@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HudComponents\CombatHudMechanics.cs" />
+    <Compile Include="HudComponents\Fellowship.cs" />
     <Compile Include="HudModules\GearMaid.cs" />
     <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="Initializers\Enums.cs" />
@@ -109,7 +110,7 @@
     <EmbeddedResource Include="Graphics\gearswapvert1.png">
       <LogicalName>gearswapvert1.png</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Defaults\Rules.xml">
+    <EmbeddedResource Include="Defaults\Rules_Saved.xml">
       <LogicalName>Rules.xml</LogicalName>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -201,6 +202,7 @@
     <EmbeddedResource Include="Graphics\summonP2.gif">
       <LogicalName>summonP2.gif</LogicalName>
     </EmbeddedResource>
+    <None Include="HudComponents\Text1.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Defaults\Mobs.xml">

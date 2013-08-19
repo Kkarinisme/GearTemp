@@ -187,7 +187,7 @@ namespace GearFoundry
     			ItemHudView.UserMinimizable = true;
     			ItemHudView.ShowInBar = false;
     			ItemHudView.Visible = true;
-    			ItemHudView.UserResizeable = false;
+    			ItemHudView.UserResizeable = true;
     			ItemHudView.LoadUserSettings();
     			
     			ItemHudTabView = new HudTabView();
@@ -203,41 +203,38 @@ namespace GearFoundry
     			ItemHudTabView.AddTab(ItemHudSettingsLayout, "Set");
     			
     			ItemHudTabView.OpenTabChange += ItemHudTabView_OpenTabChange;
-                ItemHudView.Resize += ItemHudView_Resize; 
   				
     			RenderItemHudInspectorTab();
     			
 				SubscribeItemEvents();
-                ItemHudView.UserResizeable = true;
-
 			  							
     		}catch(Exception ex) {LogError(ex);}
     		
     	}
        
-        private void ItemHudView_Resize(object sender, System.EventArgs e)
-        {
-            try
-            {
-                bool bw = Math.Abs(ItemHudView.Width - GISettings.ItemHudWidth) > 20;
-                bool bh = Math.Abs(ItemHudView.Height - GISettings.ItemHudHeight) > 20;
-                if (bh || bw)
-                {
-                    MasterTimer.Tick += ItemHudResizeTimerTick;
-                    return;
-                }
-            }
-            catch (Exception ex) { LogError(ex); }
-            return;
-        }
-
-        private void ItemHudResizeTimerTick(object sender, EventArgs e)
-        {
-        	MasterTimer.Tick -= ItemHudResizeTimerTick;
-            GISettings.ItemHudWidth = ItemHudView.Width;
-            GISettings.ItemHudHeight = ItemHudView.Height;
-            GearInspectorReadWriteSettings(false);
-        }
+//        private void ItemHudView_Resize(object sender, System.EventArgs e)
+//        {
+//            try
+//            {
+//                bool bw = Math.Abs(ItemHudView.Width - GISettings.ItemHudWidth) > 20;
+//                bool bh = Math.Abs(ItemHudView.Height - GISettings.ItemHudHeight) > 20;
+//                if (bh || bw)
+//                {
+//                    MasterTimer.Tick += ItemHudResizeTimerTick;
+//                    return;
+//                }
+//            }
+//            catch (Exception ex) { LogError(ex); }
+//            return;
+//        }
+//
+//        private void ItemHudResizeTimerTick(object sender, EventArgs e)
+//        {
+//        	MasterTimer.Tick -= ItemHudResizeTimerTick;
+//            GISettings.ItemHudWidth = ItemHudView.Width;
+//            GISettings.ItemHudHeight = ItemHudView.Height;
+//            GearInspectorReadWriteSettings(false);
+//        }
 
     	
     	private void ItemHudTabView_OpenTabChange(object sender, System.EventArgs e)
@@ -645,8 +642,6 @@ namespace GearFoundry
     		try
     		{
     			UnsubscribeItemEvents();
-    			
-    			ItemHudView.Resize -= ItemHudView_Resize;
     			
     			ItemHudUstLayout.Dispose();
     			ItemHudInspectorLayout.Dispose();   			

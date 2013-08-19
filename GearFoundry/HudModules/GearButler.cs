@@ -1118,11 +1118,7 @@ namespace GearFoundry
 					else if(ValetEquipList.Count > 0) {
 						ValetProcessEquip();
 						return;
-					}
-					else if(MaidStackList.Count > 0) {
-						MaidProcessStack();
-						return;
-					}		
+					}	
 					else if(MaidCannibalizeQueue.Count > 0){
 						MaidProcessCannibalize();
 						return;
