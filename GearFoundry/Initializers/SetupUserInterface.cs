@@ -60,8 +60,6 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in lstSelect with Filename = " + filename);
-
                 // Variable initiations
                 mgoon = true;
                 string mcomb = "";
@@ -109,8 +107,7 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("I am in lstSelect with Filename = " + filename);
-
+ 
                 // Variable initiations
                 mgoon = true;
                 string mcomb = "";
@@ -118,9 +115,10 @@ namespace GearFoundry
                 string mID = "";
                 //This is gotten from the sender function which has identified event args and sent as a parameter
                 row = lstvue[margs.Row];
-                //If this function follows a click on the check box then mchecked will be different here from in the salvagelist (lst)
+                 //If this function follows a click on the check box then mchecked will be different here from in the salvagelist (lst)
                 mchecked = Convert.ToBoolean(row[0][0]);
                 sname = (Convert.ToString(row[1][0]));
+                snameorig = sname;
                 mtxt.Text = sname;
 
                if (xdoc != null && ((filename == mobsFilename) || (filename == trophiesFilename)))
@@ -147,7 +145,7 @@ namespace GearFoundry
                     {
                         case 0:
                         case 1:
-                            mtxt.Text = sname;
+                           mtxt.Text = sname;
                             break;
                         case 2:
                             mgoon = false;
@@ -156,11 +154,11 @@ namespace GearFoundry
                     mchecked = Convert.ToBoolean(row[0][0]);
                 }  // end of trophies or mobs selected
                     //Need to remove object being worked on before adding it back so won't have a duplication of itme.
-                    if (xdoc != null)
-                    {
-                        IEnumerable<XElement> elements = xdoc.Element("GameItems").Descendants("item");
-                        xdoc.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Contains(sname.Trim())).Remove();
-                    }
+               if (xdoc != null)
+               {
+                  IEnumerable<XElement> elements = xdoc.Element("GameItems").Descendants("item");
+                   xdoc.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Equals(sname.Trim())).Remove();
+               }
                     //If want to keep the item above need to add it back with the new data
                     if (mgoon)
                     { addMyItem(xdoc, filename, mID, mexact, mitem); }
@@ -705,6 +703,8 @@ namespace GearFoundry
         // [ControlEvent]("lstmyTrophies", "Selected")
         private void lstmyTrophies_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
         {
+            nTrophyRow = e.Row;
+            
             int mList = 1;
             MVListSelectEventArgs args = e;
             lstSelect(xdocTrophies, trophiesFilename, mSortedTrophiesList, lstmyTrophies, txtTrophyName, args, mList);
@@ -713,6 +713,7 @@ namespace GearFoundry
         // [ControlEvent]("lstmyMobs", "Selected") 
         private void lstmyMobs_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
         {
+            nMobRow = e.Row;
             int mList = 1;
             MVListSelectEventArgs args = e;
             lstSelect(xdocMobs, mobsFilename, mSortedMobsList, lstmyMobs, txtmyMobName, args, mList);
@@ -936,7 +937,7 @@ namespace GearFoundry
                 if (sname != null && sname.Trim().Length > 0)
                 {
 
- //                   string mcomb = "";
+                    //                   string mcomb = "";
                     mchecked = true;
                     int mList = 1;
                     bool mexact;
@@ -954,10 +955,91 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
         }
 
+        private void btnUpdateTrophyItem_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
+        {
+            try
+            {
+                if (sname != null && sname.Trim().Length > 0)
+                {
+                    nTrophyRow = lstmyTrophies.ScrollPosition;
+
+                    try
+                    {
+                        if (xdocTrophies != null)
+                        {
+                            IEnumerable<XElement> elements = xdocTrophies.Element("GameItems").Descendants("item");
+                            xdocTrophies.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Equals(snameorig.Trim())).Remove();
+                           populateTrophysListBox();
+                        }
+
+                    }
+
+                    catch (Exception ex) { LogError(ex); }
+
+                    mchecked = true;
+                    int mList = 1;
+                    bool mexact;
+                    if (chkTrophyExact.Checked)
+                    { mexact = true; }
+                    else
+                    { mexact = false; }
+                    string mID = "";
+                    addMyItem(xdocTrophies, trophiesFilename, mID, mexact, mList);
+                    lstmyTrophies.ScrollPosition = nTrophyRow;
+
+
+                }
+                else { GearFoundry.PluginCore.WriteToChat("Please give the name of a trophy or NPC to add"); }
+
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
 
 
 
         //   [ControlEvent("btnAddMobItem", "Click")]
+        private void btnUpdateMobItem_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
+        {
+            nMobRow = lstmyMobs.ScrollPosition;
+
+            try
+            {
+                if (xdocMobs != null)
+                {
+                    IEnumerable<XElement> elements = xdocMobs.Element("GameItems").Descendants("item");
+                    xdocMobs.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Equals(snameorig.Trim())).Remove();
+                    populateMobsListBox();
+                }
+
+            }
+            catch (Exception ex) { LogError(ex); }
+  
+
+            try
+            {
+
+                if (sname != null && sname.Trim().Length > 0)
+                {
+
+                    //                string mCombine = "";
+                    mchecked = true;
+                    int mList = 1;
+                    bool mexact;
+                    if (chkmyMobExact.Checked)
+                    { mexact = true; }
+                    else
+                    { mexact = false; }
+                    string mID = "";
+                    addMyItem(xdocMobs, mobsFilename, mID, mexact, mList);
+
+                }
+                else { GearFoundry.PluginCore.WriteToChat("Please give the name of a mob to add"); }
+
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
         private void btnAddMobItem_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
         {
             try
@@ -966,7 +1048,7 @@ namespace GearFoundry
                 if (sname != null && sname.Trim().Length > 0)
                 {
 
-    //                string mCombine = "";
+                    //                string mCombine = "";
                     mchecked = true;
                     int mList = 1;
                     bool mexact;

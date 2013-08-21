@@ -955,7 +955,6 @@ namespace GearFoundry
         	if (!File.Exists(genInventoryFilename)){WriteToChat("You must first do an inventory.");}
         	else if(File.Exists(genInventoryFilename))
             {
-                 
                 try
                 {
                     XDocument tempGIDoc = new XDocument(new XElement("Objs"));

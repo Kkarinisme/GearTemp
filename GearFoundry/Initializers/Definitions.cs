@@ -128,7 +128,10 @@ namespace GearFoundry
 
         int nNextRuleNum;
         bool bRuleEnabled = false;
+        int nItemNum;
         int nRuleNum;
+        int nTrophyNum;
+        int nMobsNum;
         int nRulePriority = 0;
         string sRuleAppliesTo = "";
         string sRuleName = "";
@@ -199,6 +202,9 @@ namespace GearFoundry
         int nusearrowid;
         int nspells;
         int nRuleRow;
+        int nTrophyRow;
+        int nMobRow;
+        string snameorig;
 
 
 
