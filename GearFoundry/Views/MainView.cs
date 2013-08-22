@@ -173,13 +173,15 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.IList lstmyTrophies;
         MyClasses.MetaViewWrappers.ITextBox txtTrophyName;
         MyClasses.MetaViewWrappers.IButton btnAddTrophyItem;
+        MyClasses.MetaViewWrappers.IButton btnUpdateTrophyItem;
         MyClasses.MetaViewWrappers.ICheckBox chkTrophyExact;
         MyClasses.MetaViewWrappers.ITextBox txtTrophyMax;
 
         // Controls on Notify.Mobs Page
         MyClasses.MetaViewWrappers.IList lstmyMobs;
        MyClasses.MetaViewWrappers.IButton btnAddMobItem;
-        MyClasses.MetaViewWrappers.ICheckBox chkmyMobExact;
+       MyClasses.MetaViewWrappers.IButton btnUpdateMobItem;
+       MyClasses.MetaViewWrappers.ICheckBox chkmyMobExact;
         MyClasses.MetaViewWrappers.ITextBox txtmyMobName;
 
         // Controls on Notify.Salvage Page
@@ -537,6 +539,7 @@ namespace GearFoundry
                 // Controls on Notify.NPC/Trophies Page
 
                 btnAddTrophyItem = (MyClasses.MetaViewWrappers.IButton)View["btnAddTrophyItem"];
+                btnUpdateTrophyItem = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateTrophyItem"];
                 lstmyTrophies = (MyClasses.MetaViewWrappers.IList)View["lstmyTrophies"];
                 txtTrophyName = (MyClasses.MetaViewWrappers.ITextBox)View["txtTrophyName"];
                 chkTrophyExact = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTrophyExact"];
@@ -546,7 +549,9 @@ namespace GearFoundry
                 txtTrophyName.End += new EventHandler<MVTextBoxEndEventArgs>(txtTrophyName_End);
                 txtTrophyMax.End += new EventHandler<MVTextBoxEndEventArgs>(txtTrophyMax_End);
                 btnAddTrophyItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAddTrophyItem_Click);
-                }catch(Exception ex){LogError(ex);}
+                btnUpdateTrophyItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateTrophyItem_Click);
+                  }
+                  catch (Exception ex) { LogError(ex); }
                   try
                   {
                 
@@ -555,6 +560,7 @@ namespace GearFoundry
 
                 lstmyMobs = (MyClasses.MetaViewWrappers.IList)View["lstmyMobs"];
                 btnAddMobItem = (MyClasses.MetaViewWrappers.IButton)View["btnAddMobItem"];
+                btnUpdateMobItem = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateMobItem"];
                 chkmyMobExact = (MyClasses.MetaViewWrappers.ICheckBox)View["chkmyMobExact"];
                 txtmyMobName = (MyClasses.MetaViewWrappers.ITextBox)View["txtmyMobName"];
 				}catch(Exception ex){LogError(ex);}
@@ -564,7 +570,9 @@ namespace GearFoundry
                 chkmyMobExact.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkmyMobExact_Change);
                 txtmyMobName.End += new EventHandler<MVTextBoxEndEventArgs>(txtmyMobName_End);
                 btnAddMobItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnAddMobItem_Click);
-				}catch(Exception ex){LogError(ex);}
+                btnUpdateMobItem.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateMobItem_Click);
+                  }
+                  catch (Exception ex) { LogError(ex); }
                   try
                   {
                 // Controls on Notify.Salvage Page
