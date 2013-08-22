@@ -257,6 +257,7 @@ namespace GearFoundry
 
 
         // [ControlEvent]("lstRules", "Selected")
+        //TODO:  Revise here with pointers to list objects.
         private void lstRules_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
         {
             //int mList = 6;
@@ -351,7 +352,6 @@ namespace GearFoundry
             try
             {
                 initRulesVariables();
-                lstRuleCloakSpells.Clear();
                 populateListBoxes();
                 lstRuleSpellsEnabled.Clear();
                 EnabledSpellsList.Clear();
@@ -378,30 +378,20 @@ namespace GearFoundry
                 if (sRuleReqSkill.Length > 0)
                 {
                     // strBreakUp(sRuleReqSkill, sRuleReqSkilla, sRuleReqSkillb, sRuleReqSkillc, sRuleReqSkilld);
-                    strBreakUp(sRuleReqSkill);
-                    sRuleReqSkilla = myvara;
-                    sRuleReqSkillb = myvarab;
-                    sRuleReqSkillc = myvarac;
-                    sRuleReqSkilld = myvarad;
+                    string[] SplitReqSkill = sRuleReqSkill.Split(',');
+                    
+                    sRuleReqSkilla = SplitReqSkill[0];
+                    sRuleReqSkillb = SplitReqSkill[1];
+                    sRuleReqSkillc = SplitReqSkill[2];
+                    sRuleReqSkilld = SplitReqSkill[3];
+                    
+                    string[] SplitRuleWeapons = sRuleWeapons.Split(',');
 
-                    strBreakUp(sRuleMinMax);
-                    sRuleMinMaxa = myvara;
-                    sRuleMinMaxb = myvarab;
-                    sRuleMinMaxc = myvarac;
-                    sRuleMinMaxd = myvarad;
-
-                    strBreakUp(sRuleWeapons);
-                    if (myvara == "") { sRuleWeaponsa = "false"; } else { sRuleWeaponsa = myvara; }
-                    if (myvarab == "") { sRuleWeaponsb = "false"; } else { sRuleWeaponsb = myvarab; }
-                    if (myvarac == "") { sRuleWeaponsc = "false"; } else { sRuleWeaponsc = myvarac; }
-                    if (myvarad == "") { sRuleWeaponsd = "false"; } else { sRuleWeaponsd = myvarad; }
-
-                    strBreakUp(sRuleMSCleave);
-                    if (myvara == "") { sRuleMSCleavea = "false"; } else { sRuleMSCleavea = myvara; }
-                    if (myvarab == "") { sRuleMSCleaveb = "false"; } else { sRuleMSCleaveb = myvarab; }
-                    if (myvarac == "") { sRuleMSCleavec = "false"; } else { sRuleMSCleavec = myvarac; }
-                    if (myvarad == "") { sRuleMSCleaved = "false"; } else { sRuleMSCleaved = myvarad; }
-
+                    sRuleWeaponsa = SplitRuleWeapons[0];
+                    sRuleWeaponsb = SplitRuleWeapons[1];
+                    sRuleWeaponsc = SplitRuleWeapons[2];
+                    sRuleWeaponsd = SplitRuleWeapons[3];
+                    
                 }
                 //Now add variables to text and checkbox controls to clear them
 
@@ -431,6 +421,11 @@ namespace GearFoundry
                     setUpForChecks(n, flag, lst);
 
                 }
+                
+                if(sRulePalettes != String.Empty)
+                {
+                
+                }
 
                 //Reset ArmorTypebox
                 if (sRuleArmorType != "")
@@ -440,14 +435,14 @@ namespace GearFoundry
                     MyClasses.MetaViewWrappers.IList lst = lstRuleArmorTypes;
                     setUpForChecks(n, flag, lst);
                 }
-
-                //Reset Armorcoveragebox
-                flag = sRuleArmorCoverage;
-                if (flag.Length != 0)
+                
+                //Reset Slot List Box
+                flag = sRuleSlots;
+                if(flag.Length !=0)
                 {
-                    int n = ArmorCoverageList.Count;
-                    MyClasses.MetaViewWrappers.IList lst = lstRuleArmorCoverages;
-                    setUpForChecks(n, flag, lst);
+                	int n = SlotList.Count;
+                	MyClasses.MetaViewWrappers.IList lst = lstRuleSlots;
+                	setUpForChecks(n, flag, lst);
                 }
 
 
@@ -460,26 +455,6 @@ namespace GearFoundry
                     MyClasses.MetaViewWrappers.IList lst = lstRuleSets;
                     setUpForChecks(n, flag, lst);
                 }
-
-                populateCloakSetsListBox();
-                flag = sRuleCloakSets;
-                if (flag.Length != 0)
-                {
-                    int n = CloakSetsList.Count;
-                    MyClasses.MetaViewWrappers.IList lst = lstRuleCloakSets;
-                    setUpForChecks(n, flag, lst);
-                }
-
-                populateCloakSpellsListBox();
-                flag = sRuleCloakSpells;
-                if (flag.Length != 0)
-                {
-                    int n = CloakSpellList.Count;
-                    MyClasses.MetaViewWrappers.IList lst = lstRuleCloakSpells;
-                    setUpForChecks(n, flag, lst);
-                }
-
-
 
 
                flag = sRuleSpells;
@@ -542,115 +517,7 @@ namespace GearFoundry
             }
         }
 
-        //This function breaks down a variable composed of a comma separated list into its individual members
-        private void strBreakUp(string str)
-        {
-            try
-            {
-                //There can be up to 4 different variables in list
-                myvara = "";
-                myvarab = "";
-                myvarac = "";
-                myvarad = "";
-                string item = "";
 
-                //If there is only one variable in the list then it should be returned
-                if (!str.Contains(","))
-                {
-                    myvara = str;
-                }
-                //If there are more than one variables than it is necessary to separate out each one
-
-                else
-                {
-                    //Need to count the number of variables in the string -- there actually one more variables than number of commas
-                    var count = str.Count(x => x == ',');
-
-                    int z = (int)count;
-
-                    for (int m = 0; m < z + 1; m++)
-                    {
-                        if (m < z)
-                        {
-                            int k = str.IndexOf(',');
-                            item = str.Substring(0, k);
-                            str = str.Substring(k + 1);
-                        }
-                        else // there is still one more variable which is the resultant str after removing the comma and associated variables m times
-
-                        { item = str; }
-
-                        //Switch on the number of the variable in the string starting with 0 so the final variable is the last one in the  string (switch is really done for m+1 variables)
-                        switch (m)
-                        {
-                            case 0:
-                                myvara = item;
-
-                                break;
-                            case 1:
-                                myvarab = item;
- 
-                                break;
-                            case 2:
-                                myvarac = item;
-                                break;
-                            case 3:
-                                myvarad = item;
-                                break;
-                        }
-                    }
-                }
-
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
-
-        }
-
-        private void strBreakUp(string str, string myvara, string myvarb, string myvarc, string myvard)
-        {
-            try
-            {
-                if (!str.Contains(","))
-                {
-                    myvara = str;
-                }
-                else
-                {
-                    var count = str.Count(x => x == ',');
-                    int z = (int)count;
-
-                    for (int m = 0; m < z; m++)
-                    {
-                        int k = str.IndexOf(',');
-                        string item = str.Substring(0, k);
-                        str = str.Substring(k + 1);
-
-                        switch (m)
-                        {
-                            case 0:
-                                myvara = item;
-                                break;
-                            case 1:
-                                myvarb = item;
-                                break;
-                            case 2:
-                                myvarc = item;
-                                break;
-                            case 3:
-                                myvard = item;
-                                break;
-                        }
-                    }
-                }
-
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
-
-        }
         private void setUpForChecks(int n, string flag, MyClasses.MetaViewWrappers.IList lst)
         {
             try
@@ -818,22 +685,6 @@ namespace GearFoundry
             string mDamageTypeNum = lstSelect(ElementalList, lstDamageTypes, args, mList);
         }
 
-        // [ControlEvent]("lstRuleCloakSets", "Selected")
-        private void lstRuleCloakSets_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  
-        {
-
-            int mList = 3;
-            MVListSelectEventArgs args = e;
-            string mCloakSetsNum = lstSelect(CloakSetsList,lstRuleCloakSets,args, mList);
-        }
-        //// [ControlEvent]("lstDamageTypes", "Selected")
-        private void lstRuleCloakSpells_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  
-        {
-
-            int mList = 3;
-            MVListSelectEventArgs args = e;
-            string mCloakSpellsNum = lstSelect(CloakSpellList, lstRuleCloakSpells, args, mList);
-        }
         [ControlEvent("txtTrophyMax", "End")]
         private void txtTrophyMax_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
         {
@@ -1067,7 +918,6 @@ namespace GearFoundry
         private void populateLst(MyClasses.MetaViewWrappers.IList lstView, List<IDNameLoadable> lst, int mlist)
         {
             lstView.Clear();
-            
 
             foreach (IDNameLoadable element in lst)
             {
@@ -1221,13 +1071,13 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
 
         }
-
-        private void populateArmorCoverageListBox()
+        
+        private void populateSlotListBox()
         {
             try
             {
                 int mList = 3;
-                populateLst(lstRuleArmorCoverages, ArmorCoverageList, mList);
+                populateLst(lstRuleSlots, SlotList, mList);
 
             }
 
@@ -1262,19 +1112,7 @@ namespace GearFoundry
 
         }
 
-        private void populateCloakSetsListBox()
-        {
-            try
-            {
 
-                int mList = 3;
-                populateLst(lstRuleCloakSets, CloakSetsList, mList);
-
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
-        }
 
 
 
@@ -1303,24 +1141,6 @@ namespace GearFoundry
             }
         }
 
-        private void populateCloakSpellsListBox()
-        {
-            foreach (spellinfo element in CloakSpellList)
-            {
-                try
-                {
-                    string vname = element.spellname;
-                    bool mchecked = false;
-                    string snum = element.spellid.ToString();
-                    MyClasses.MetaViewWrappers.IListRow newRow = lstRuleCloakSpells.AddRow();
-                    newRow[0][0] = mchecked;
-                    newRow[1][0] = vname;
-                    newRow[2][0] = snum;
-
-                }
-                catch (Exception ex) { LogError(ex); }
-            }
-        }
 
 
         //[ControlEvent("btnNewSalvage", "Click")]

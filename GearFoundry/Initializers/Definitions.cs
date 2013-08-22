@@ -109,7 +109,7 @@ namespace GearFoundry
         private string quickSlotshFilename = null;
         private string remoteGearFilename = null;
         private string portalGearFilename = null;
-        private string programinv = "";
+        private string programinv = String.Empty;
 
         private int nitemFontHeight = 0;
         private int nmenuFontHeight = 0;
@@ -119,8 +119,8 @@ namespace GearFoundry
         int mitem;
         Int32 mMaxLoot;
         private int mintvalue;
-        private string sname;
-        private string sinput;
+        private string sname = String.Empty;
+        private string sinput = String.Empty;
         private bool mexact = false;
         private bool mchecked = false;
         private bool mgoon;
@@ -129,72 +129,46 @@ namespace GearFoundry
         int nNextRuleNum;
         bool bRuleEnabled = false;
         int nRuleNum;
-        int nRulePriority = 0;
-        string sRuleAppliesTo = "";
-        string sRuleName = "";
+        int nRulePriority = 999;
+        string sRuleAppliesTo = String.Empty;
+        string sRuleName = String.Empty;
 
-        int nRuleArcaneLore = 0;
-        int nGearScore = 0;
+        int nRuleArcaneLore = -1;
+        int nGearScore = -1;
 
-        double nRuleWork = 0;
+        double nRuleWork = -1;
 
-        int nRuleWieldLevel = 0;
+        int nRuleWieldLevel = -1;
 
-        int nRuleWieldSkill = 0;
-        int nRuleMasteryType = 0;
-        string sRuleDamageTypes = "";
+        int nRuleWieldSkill = -1;
+        int nRuleMasteryType = -1;
+        string sRuleDamageTypes = String.Empty;
+        string sRulePalettes = String.Empty;
 
-        string sRuleReqSkill = "";
-        string sRuleReqSkilla = "";
-        string sRuleReqSkillb = "";
-        string sRuleReqSkillc = "";
-        string sRuleReqSkilld = "";
-        string sRuleMinMax = "";
-        string sRuleMinMaxa = "";
-        string sRuleMinMaxb = "";
-        string sRuleMinMaxc = "";
-        string sRuleMinMaxd = "";
-        string sRuleWeapons = "";
+        string sRuleReqSkill = String.Empty;
+        string sRuleReqSkilla = String.Empty;
+        string sRuleReqSkillb = String.Empty;
+        string sRuleReqSkillc = String.Empty;
+        string sRuleReqSkilld = String.Empty;
+
+        string sRuleWeapons = String.Empty;
         string sRuleWeaponsa = "false";
         string sRuleWeaponsb = "false";
         string sRuleWeaponsc = "false";
         string sRuleWeaponsd = "false";
-        string sRuleMSCleave = "";
-        string sRuleMSCleavea = "false";
-        string sRuleMSCleaveb = "false";
-        string sRuleMSCleavec = "false";
-        string sRuleMSCleaved = "false";
-        string myvara;
-        string myvarab;
-        string myvarac;
-        string myvarad;
-        string sRuleArmorType = "";
-        string sRuleArmorSet = "";
-        string sRuleArmorCoverage = "";
-        string sRuleCloakSets = "";
-        string sRuleCloakSpells = "";
-        bool bRuleMustBeUnEnchantable = false;
-        bool bRuleCloakMustHaveSpell = false;
-        bool bRuleRed = false;
-        bool bRuleYellow = false;
-        bool bRuleBlue = false;
-        int nRuleEssMastery = 0;
-        string sRuleEssElements = "";
-        int nRuleEssLevel = 0;
-        int nRuleEssDamageLevel = 0;
-        int nRuleEssCDLevel = 0;
-        int nRuleEssCRLevel = 0;
-        int nRuleEssDRLevel = 0;
-        int nRuleEssCritLevel = 0;
-        int nRuleEssCritDamResLevel = 0;
+
+        string sRuleArmorType = String.Empty;
+        string sRuleArmorSet = String.Empty;
+
+        string sRuleSlots = String.Empty;
         bool bRuleFilterLegend = true;
         bool bRuleFilterEpic = true;
         bool bRuleFilterMajor = true;
         bool bRuleFilterlvl8 = true;
-        bool bRuleFilterlvl7 = true;
-        bool bRuleFilterlvl6 = true;
-        string sRuleSpells = "";
-        int nRuleNumSpells = 0;
+        bool bRuleFilterCloak = true;
+        bool bRuleMustBeUnEnchantable = false;
+        string sRuleSpells = String.Empty;
+        int nRuleNumSpells = -1;
         int nid;
         int nusearrowid;
         int nspells;

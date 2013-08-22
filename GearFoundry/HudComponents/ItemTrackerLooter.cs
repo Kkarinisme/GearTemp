@@ -66,7 +66,7 @@ namespace GearFoundry
 			try
 			{	
 				if(e.Change == WorldChangeType.IdentReceived)
-				{
+				{					
 					if(e.Changed.Id == Host.Actions.CurrentSelection)
 	        		{
 	        			ManualCheckItemForMatches(new LootObject(e.Changed));
@@ -78,7 +78,7 @@ namespace GearFoundry
 						lo.Listen = false;
 	        			CheckItemForMatches(lo.Id);
 	        			return;
-	        		}					
+	        		}							
 				}
 				else if(e.Change == WorldChangeType.StorageChange)
 				{

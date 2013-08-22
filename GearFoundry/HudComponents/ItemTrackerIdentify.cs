@@ -285,7 +285,10 @@ namespace GearFoundry
 				
 				ModifiedIOSpells.Clear();
 				LootObject IOItemWithID = IOItemWithIDReference;
+				
+				WriteToChat("ItemRulesList.Count = " + ItemRulesList.Count());
 
+				
 				var AppliesToListMatches = from appliesto in ItemRulesList
 					where (appliesto.RuleAppliesTo & IOItemWithID.LValue(LongValueKey.Category)) == IOItemWithID.LValue(LongValueKey.Category)
 					select appliesto;
@@ -293,13 +296,19 @@ namespace GearFoundry
 				if(AppliesToListMatches.Count() == 0) {return;}
 				
 				var PropertyListMatches = from properties in AppliesToListMatches
-					where (properties.RuleArcaneLore == 0 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= properties.RuleArcaneLore) &&
-						  (properties.RuleWork == 0 || IOItemWithID.LValue(LongValueKey.Workmanship) <= properties.RuleWork) &&
-						  (properties.RuleWieldLevel == 0 || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7 ||
+					where (properties.RuleArcaneLore == -1 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= properties.RuleArcaneLore) &&
+						  (properties.RuleWork == -1 || IOItemWithID.LValue(LongValueKey.Workmanship) <= properties.RuleWork) &&
+						  (properties.RuleWieldLevel == -1 || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7 ||
 					 	  (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= properties.RuleWieldLevel))
 					select properties;	
 				
-				if(PropertyListMatches.Count() == 0) {return;}
+				if(PropertyListMatches.Count() == 0) {return;}				
+				
+				var SlotListMatches = from slots in PropertyListMatches
+					where slots.RuleSlots == 0 || (IOItemWithID.LValue(LongValueKey.EquipableSlots) & slots.RuleSlots) != 0
+					select slots;
+				
+				if(SlotListMatches.Count() == 0) {return;}
 				
 				for(int i = 0; i < IOItemWithID.SpellCount; i ++)
 				{
@@ -311,19 +320,54 @@ namespace GearFoundry
 				}
 				
 				var SpellListMatches = from spellmatches in PropertyListMatches
-					where ModifiedIOSpells.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
+					where spellmatches.RuleSpellNumber == -1 || ModifiedIOSpells.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
 					select spellmatches;
 				
+				WriteToChat("Spell List Match = " + SpellListMatches.Count());
+				
 				if(SpellListMatches.Count() == 0) {return;}
+				else{WriteToChat("Spell Matches works");}
+					
+				var SetMatches = from sets in SpellListMatches
+					where sets.RuleArmorSet == null || sets.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))
+					orderby sets.RulePriority
+					select sets;
+				
+				if(SetMatches.Count() == 0) {return;}
+				else{WriteToChat("Set Matches Works");}
 								
 				switch(IOItemWithID.ObjectClass)
-				{					
+				{		
+
+					case ObjectClass.Gem:
+							if(!IOItemWithID.Aetheriacheck) {return;}
+							if(SetMatches.Count() > 0)
+							{
+								IOItemWithID.rulename = SetMatches.First().RuleName; 
+								IOItemWithID.IOR = IOResult.rule; 
+								return;
+							}
+							else
+							{
+								return;
+							}
+
+					case ObjectClass.Jewelry:  //Jewelry doesn't have gear scores at this time.						
+							if(SetMatches.Count() > 0)
+							{
+								IOItemWithID.rulename = SetMatches.First().RuleName; 
+								IOItemWithID.IOR = IOResult.rule; 
+								return;
+							}
+							else
+							{
+								return;
+							}
+						
 					case ObjectClass.Armor:
-						var reducedarmormatches = from ruls in SpellListMatches
-							where (IOItemWithID.GearScore >= ruls.GearScore) &&
-							((ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
+						var reducedarmormatches = from ruls in SetMatches
+							where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) &&
 							(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
-							(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && 
 							(!ruls.RuleUnenchantable || IOItemWithID.LValue(LongValueKey.Unenchantable) > 0)
 							orderby ruls.RulePriority
 							select ruls;
@@ -342,12 +386,9 @@ namespace GearFoundry
 					case ObjectClass.Clothing:
 						if(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)
 						{
-							var reducedarmorclothmatches = from ruls in SpellListMatches
-								where (IOItemWithID.GearScore >= ruls.GearScore) &&
-								((ruls.RuleArmorCoverage & IOItemWithID.LValue(LongValueKey.Coverage)) == IOItemWithID.LValue(LongValueKey.Coverage)) &&
-								(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
-								(ruls.RuleArmorSet == null || ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet)))  && 
-								(!ruls.RuleUnenchantable || IOItemWithID.LValue(LongValueKey.Unenchantable) > 0)
+							var reducedarmorclothmatches = from ruls in SetMatches
+								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) &&
+								(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType))
 								orderby ruls.RulePriority
 								select ruls;
 						
@@ -363,51 +404,39 @@ namespace GearFoundry
 							}
 						}
 						else if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
-						{
-							var reducedcloakmatches = from ruls in SpellListMatches
-								where IOItemWithID.GearScore >= ruls.GearScore &&
-								(ruls.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))) &&
-								ruls.RuleArmorCoverage == 0
-								orderby ruls.RulePriority
-								select ruls;
-							
-							if(reducedcloakmatches.Count() > 0)
+						{							
+							if(SetMatches.Count() > 0)
 							{
-								IOItemWithID.rulename = reducedcloakmatches.First().RuleName; 
+								IOItemWithID.rulename = SetMatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
 								return;
 							}
-							else 
+							else
 							{
 								return;
 							}
 						}
 						else
-						{
-							var reducedclothmatches = from ruls in SpellListMatches
-								where ruls.RuleArmorCoverage == 0
-								orderby ruls.RulePriority
-								select ruls;
-							
-							if(reducedclothmatches.Count() > 0)
+						{							
+							if(SetMatches.Count() > 0)
 							{
-								IOItemWithID.rulename = reducedclothmatches.First().RuleName; 
+								IOItemWithID.rulename = SetMatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
 								return;
 							}
-							else 
+							else
 							{
 								return;
-							}										
+							}						
 						}
 					case ObjectClass.MeleeWeapon:
 					case ObjectClass.MissileWeapon:
 					case ObjectClass.WandStaffOrb:
 						var reducedmeleematches = from ruls in SpellListMatches
-							where 
-							IOItemWithID.GearScore >= ruls.GearScore &&
+							where IOItemWithID.GearScore >= ruls.GearScore &&
 							(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
-							(ruls.RuleWieldSkill== 0 || ruls.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
+							(ruls.RuleWieldSkill == 0 || ruls.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
+							(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
 							((ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
 							 (ruls.RuleWeaponEnabledB && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueB) ||
 							 (ruls.RuleWeaponEnabledC && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueC) ||
@@ -424,60 +453,24 @@ namespace GearFoundry
 						{
 							return;
 						}	
-
-							
-					case ObjectClass.Gem:
-						if(IOItemWithID.Aetheriacheck)
-						{
-						 	var reducedaetheriamatches = from ruls in SpellListMatches
-						 		where ((ruls.RuleRed && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x40000000) ||
-						 		       (ruls.RuleYellow && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x20000000) ||
-						 		       (ruls.RuleBlue && IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x10000000))
-						 		orderby ruls.RulePriority
-						 		select ruls;
-						 	if(reducedaetheriamatches.Count() > 0)
-							{
-								IOItemWithID.rulename = reducedaetheriamatches.First().RuleName; 
-								IOItemWithID.IOR = IOResult.rule; 
-								return;
-							}
-							else
-							{
-								return;
-							}	
-					   	}
-						else
-						{
-							return;
-						}
-						
-					case ObjectClass.Jewelry:
-						var reducedjewelrymatches = from ruls in SpellListMatches
-								orderby ruls.RulePriority
-								select ruls;
-						
-							if(reducedjewelrymatches.Count() > 0)
-							{
-								IOItemWithID.rulename = reducedjewelrymatches.First().RuleName; 
-								IOItemWithID.IOR = IOResult.rule; 
-								return;
-							}
-							else
-							{
-								return;
-							}
-					
+	
 					case ObjectClass.Misc:
 						if(IOItemWithID.Name.ToLower().Contains("essence"))
 						{
 							
-							var reducedessencematches = from ruls in SpellListMatches
-								where IOItemWithID.RatingScore >= ruls.GearScore &&
-								IOItemWithID.EssenceLevel == ruls.RuleEssenceLevel &&
+							var reducedessencematches = from ruls in SetMatches
+								where IOItemWithID.GearScore >= ruls.GearScore && ruls.RuleWieldSkill == 54 &&
 								(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
-								((ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType || ruls.RuleDamageTypes == 0)
+								(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
+								((ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
+							 	 (ruls.RuleWeaponEnabledB && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueB) ||
+							 	 (ruls.RuleWeaponEnabledC && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueC) ||
+							 	 (ruls.RuleWeaponEnabledD && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueD))
+								
 								orderby ruls.RulePriority
 								select ruls;
+							
+
 							
 							if(reducedessencematches.Count() > 0)
 							{
@@ -496,10 +489,7 @@ namespace GearFoundry
 						}
 					default:
 						return;
-				}
-				//PITA Looter Code was here.
-
-				
+				}				
 			}
 			catch(Exception ex) {LogError(ex);}
 		}
@@ -515,7 +505,8 @@ namespace GearFoundry
 			
 			try
 			{
-				ItemRulesList.Clear();				
+				ItemRulesList.Clear();	
+				
 				var ruleslistenabled = from rules in mPrioritizedRulesList
 					where rules.Element("Enabled").Value == "true"
 					select rules;
@@ -524,8 +515,7 @@ namespace GearFoundry
 				{
 					ItemRule tRule = new ItemRule();
 		        	
-		        	if(!bool.TryParse((XRule.Element("Enabled").Value), out tRule.RuleEnabled)){tRule.RuleEnabled = false;}
-		        	if(!Int32.TryParse((XRule.Element("Priority").Value), out tRule.RulePriority)){tRule.RulePriority = 0;}
+		        	if(!Int32.TryParse((XRule.Element("Priority").Value), out tRule.RulePriority)){tRule.RulePriority = 999;}
 		        	
 		        	splitstring = ((string)XRule.Element("AppliesToFlag").Value).Split(',');
 		        	if(splitstring.Length > 0)
@@ -537,16 +527,14 @@ namespace GearFoundry
 		        		        	
 		        	tRule.RuleName = (string)XRule.Element("Name").Value;
 		        
-
-		        	
-		        	if(!Int32.TryParse(XRule.Element("ArcaneLore").Value, out tRule.RuleArcaneLore)){tRule.RuleArcaneLore = 0;}
-		        	if(!Double.TryParse(XRule.Element("Work").Value, out tRule.RuleWork)){tRule.RuleWork = 0;}
+		        	if(!Int32.TryParse(XRule.Element("ArcaneLore").Value, out tRule.RuleArcaneLore)){tRule.RuleArcaneLore = -1;}
+		        	if(!Double.TryParse(XRule.Element("Work").Value, out tRule.RuleWork)){tRule.RuleWork = -1;}
 					
 					if(!Int32.TryParse(XRule.Element("WieldSkill").Value, out tRule.RuleWieldSkill)) {tRule.RuleWieldSkill = 0;}
 					if(!Int32.TryParse(XRule.Element("MasteryType").Value, out tRule.RuleMastery)){tRule.RuleMastery = 0;}
-					if(!Int32.TryParse(XRule.Element("GearScore").Value, out tRule.GearScore)){tRule.GearScore = 0;}
+					if(!Int32.TryParse(XRule.Element("GearScore").Value, out tRule.GearScore)){tRule.GearScore = -1;}
 		        	
-		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = 0;}
+		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = -1;}
 
 	        	
 					splitstring = ((string)XRule.Element("DamageType").Value).Split(',');
@@ -557,7 +545,10 @@ namespace GearFoundry
 						tRule.RuleDamageTypes = sumarray.Sum();
 					}
 					
+					
+					
 					splitstringEnabled = (XRule.Element("WieldEnabled").Value).Split(',');
+					
 					splitstringWield = (XRule.Element("ReqSkill").Value).Split(',');
 					
 					if(!Boolean.TryParse(splitstringEnabled[0], out tRule.RuleWeaponEnabledA)) {tRule.RuleWeaponEnabledA = false;}
@@ -604,15 +595,15 @@ namespace GearFoundry
 						tRule.RuleArmorTypes = null;
 					}
 					
-					
-					splitstring = ((string)XRule.Element("Coverage").Value).Split(',');
+					splitstring = ((string)XRule.Element("Slots").Value).Split(',');
 					if(splitstring.Length > 0)
 					{
 						sumarray = new int[splitstring.Length];      	
 						for(int j = 0; j < splitstring.Length; j++){if(!Int32.TryParse(splitstring[j], out sumarray[j])){sumarray[j] = 0;}}
-						tRule.RuleArmorCoverage = sumarray.Sum();
+						tRule.RuleSlots = sumarray.Sum();
 					}
-					if((string)XRule.Element("ArmorSet").Value != String.Empty || (string)XRule.Element("CloakSets").Value != String.Empty)
+					
+					if((string)XRule.Element("ArmorSet").Value != String.Empty)
 					{
 						CombineIntList.Clear();
 						splitstring = (XRule.Element("ArmorSet").Value).Split(',');
@@ -635,18 +626,14 @@ namespace GearFoundry
 					
 					if(!bool.TryParse((XRule.Element("Unenchantable").Value), out tRule.RuleUnenchantable)){tRule.RuleUnenchantable = false;}
 					
-					if(!Boolean.TryParse(XRule.Element("Red").Value, out tRule.RuleRed)) {tRule.RuleRed = false;}
-					if(!Boolean.TryParse(XRule.Element("Yellow").Value, out tRule.RuleYellow)) {tRule.RuleYellow = false;}
-					if(!Boolean.TryParse(XRule.Element("Blue").Value, out tRule.RuleBlue)) {tRule.RuleBlue = false;}
-					
 					CombineIntList.Clear();
 					
-					if(!Int32.TryParse((XRule.Element("NumSpells").Value), out tRule.RuleSpellNumber)){tRule.RuleSpellNumber = 0;}
+					if(!Int32.TryParse((XRule.Element("NumSpells").Value), out tRule.RuleSpellNumber)){tRule.RuleSpellNumber = -1;}
 					
 					if((string)XRule.Element("Spells").Value == String.Empty)
 					{
 						tRule.RuleSpells = null;
-						tRule.RuleSpellNumber = 0;
+						tRule.RuleSpellNumber = -1;
 					}
 					else
 					{
@@ -674,40 +661,36 @@ namespace GearFoundry
 		
 		private class ItemRule
 		{
-			public int GearScore = 0;
-			public bool RuleEnabled = false; 
+			public int GearScore = -1;
 	        public int RulePriority = 999; 
 	        public int RuleAppliesTo = 0;
 	        public string RuleName = String.Empty; 
-	        public int RuleArcaneLore = 0;
-	        public double RuleWork = 0;
-	        public int RuleWieldLevel = 0;
-	        public bool RuleRed = false;
-	        public bool RuleYellow = false;
-	        public bool RuleBlue = false;
-	        
-	        public int RuleEssenceLevel = 0;
+	        public int RuleArcaneLore = -1;
+	        public double RuleWork = -1;
+	        public int RuleWieldLevel = -1;
 	        	        
 	        public int RuleWieldSkill = 0;
 	        public int RuleMastery = 0;
 	        public int RuleDamageTypes = 0;
 	        
 	        public bool RuleWeaponEnabledA = false;
-	        public int WieldReqValueA = 0;
+	        public int WieldReqValueA = -1;
 	        public bool RuleWeaponEnabledB = false;
-	        public int WieldReqValueB = 0;
+	        public int WieldReqValueB = -1;
 	        public bool RuleWeaponEnabledC = false;
-	        public int WieldReqValueC = 0;
+	        public int WieldReqValueC = -1;
 	        public bool RuleWeaponEnabledD = false;
-	        public int WieldReqValueD = 0;
+	        public int WieldReqValueD = -1;
 
 	        public int[] RuleArmorTypes;
 	        public int[] RuleArmorSet;
-	        public int RuleArmorCoverage;
-	        public bool RuleUnenchantable;
+	        public int RuleSlots = 0;
+	        public bool RuleUnenchantable = false;
 
 	        public int[] RuleSpells = null;
-	        public int RuleSpellNumber = 0;     
+	        public int RuleSpellNumber = -1;   
+
+	        public int[] Palattes = null;
 		}
 		
 		

@@ -60,7 +60,6 @@ DIRECTORIES USED BY PROGRAM
 Lists 
         private static List<spellinfo> SpellIndex = new List<spellinfo>();
         private static List<XElement> mSpellEnabledList = new List<XElement>();
-        private static List<spellinfo> CloakSpellList = new List<spellinfo>();
         private static List<IDName> HeritageIndex = new List<IDName>();
 		private static List<IDName> SkillIndex = new List<IDName>();
 		private static List<IDName> AttribIndex = new List<IDName>();

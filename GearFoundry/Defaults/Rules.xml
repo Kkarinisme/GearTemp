@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Rules>
+  <Rule>
+    <RuleNum>1</RuleNum>
+    <Enabled>false</Enabled>
+    <Priority>999</Priority>
+    <AppliesToFlag></AppliesToFlag>
+    <Name>New Rule</Name>
+    <ArcaneLore>0</ArcaneLore>
+    <Work>0</Work>
+    <WieldLevel>0</WieldLevel>
+    <WieldSkill>0</WieldSkill>
+    <MasteryType>0</MasteryType>
+    <DamageType></DamageType>
+    <GearScore>0</GearScore>
+    <WieldEnabled>false,false,false,false</WieldEnabled>
+    <ReqSkill>,,,</ReqSkill>
+    <Coverage></Coverage>
+    <ArmorType></ArmorType>
+    <ArmorSet></ArmorSet>
+    <Unenchantable>false</Unenchantable>
+    <Red>false</Red>
+    <Yellow>false</Yellow>
+    <Blue>false</Blue>
+    <FilterLegend>true</FilterLegend>
+    <FilterEpic>true</FilterEpic>
+    <FilterMajor>true</FilterMajor>
+    <FilterLvl8>true</FilterLvl8>
+    <FilterLvl7>true</FilterLvl7>
+    <FilterLvl6>true</FilterLvl6>
+    <Spells></Spells>
+    <NumSpells>0</NumSpells>
+  </Rule>
+  <Rule>
+    <RuleNum>2</RuleNum>
+    <Enabled>false</Enabled>
+    <Priority>0</Priority>
+    <AppliesToFlag></AppliesToFlag>
+    <Name>New Rule</Name>
+    <ArcaneLore>0</ArcaneLore>
+    <Work>0</Work>
+    <WieldLevel>0</WieldLevel>
+    <WieldSkill>0</WieldSkill>
+    <MasteryType>0</MasteryType>
+    <DamageType></DamageType>
+    <GearScore>0</GearScore>
+    <WieldEnabled>false,false,false,false</WieldEnabled>
+    <ReqSkill>,,,</ReqSkill>
+    <Coverage></Coverage>
+    <ArmorType></ArmorType>
+    <ArmorSet></ArmorSet>
+    <Unenchantable>false</Unenchantable>
+    <Red>false</Red>
+    <Yellow>false</Yellow>
+    <Blue>false</Blue>
+    <FilterLegend>true</FilterLegend>
+    <FilterEpic>true</FilterEpic>
+    <FilterMajor>true</FilterMajor>
+    <FilterLvl8>true</FilterLvl8>
+    <FilterLvl7>true</FilterLvl7>
+    <FilterLvl6>true</FilterLvl6>
+    <Spells></Spells>
+    <NumSpells>0</NumSpells>
+  </Rule>
+</Rules>

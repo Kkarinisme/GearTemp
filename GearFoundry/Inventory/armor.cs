@@ -50,7 +50,7 @@ namespace GearFoundry
         private HudCombo cboToonArmorName;
         private HudButton btnInventoryArmor;
 
-        private string toonArmorName = "";
+        private string toonArmorName = String.Empty;
 
         WindowsTimer mWaitingForArmorIDTimer = new WindowsTimer();
 
@@ -160,7 +160,7 @@ namespace GearFoundry
                          catch (Exception ex) { LogError(ex); }
 
 
-                         programinv = "";
+                         programinv = String.Empty;
                          m = 30;
 //                         k = 0;
 //                         n = 0;
@@ -363,7 +363,7 @@ namespace GearFoundry
         {
             FileService fs = (FileService)Core.FileService;
             int intspellcnt = o.SpellCount;
-            string oXmlSpells = "";
+            string oXmlSpells = String.Empty;
             for (int i = 0; i < intspellcnt; i++)
             {
                 int spellId = o.Spell(i);
@@ -582,7 +582,7 @@ namespace GearFoundry
                         string armorpiece = el.Element("ArmorName").Value;
                         string spells = el.Element("ArmorSpellXml").Value;
                         string armorclass = el.Element("ArmorClass").Value;
-                        objArmorSetName = "";
+                        objArmorSetName = String.Empty;
                         if (armorclass == "Armor") 
                         {
                             if (Convert.ToInt32(el.Element("ArmorSet").Value) > 0)

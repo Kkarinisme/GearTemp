@@ -60,15 +60,11 @@ namespace GearFoundry
             sRuleAppliesTo = mFindList(lstRuleApplies, AppliesToList);
             sRuleArmorSet = mFindList(lstRuleSets, ArmorSetsList);
             sRuleDamageTypes = mFindList(lstDamageTypes, ElementalList);
-            sRuleArmorCoverage = mFindList(lstRuleArmorCoverages, ArmorCoverageList);
+            sRuleSlots = mFindList(lstRuleSlots, SlotList);
             sRuleArmorType = mFindList(lstRuleArmorTypes, ArmorIndex);
-            sRuleCloakSets = mFindList(lstRuleCloakSets, CloakSetsList);
-            sRuleCloakSpells = mFindList(lstRuleCloakSpells, CloakSpellList);
             mMakeStrings();
             writeToXdocRules(xdocRules);
             xdocRules.Save(rulesFilename);
-
-
         }
 
 
@@ -99,11 +95,9 @@ namespace GearFoundry
 
            
                 sRuleReqSkilla = txtRuleReqSkilla.Text.ToString().Trim();
-                if (sRuleReqSkilla != "")
+                if (sRuleReqSkilla != String.Empty)
                 {
-                    sRuleMinMax = sRuleMinMaxa;
                     sRuleReqSkill = sRuleReqSkilla;
-                    sRuleMSCleave = sRuleMSCleavea;
                     sRuleWeapons = sRuleWeaponsa;                    
                 }
 
@@ -112,11 +106,8 @@ namespace GearFoundry
 
                     try
                     {
-                        sRuleMinMax = "";
                         sRuleReqSkill = "";
-                        sRuleMSCleave = "false";
                         sRuleWeapons = "false";
-
                     }
                     catch (Exception ex) { LogError(ex); }
                 }
@@ -125,9 +116,7 @@ namespace GearFoundry
 
                 if (sRuleReqSkillb != "")
                 {
-                    sRuleMinMax = sRuleMinMax + "," + sRuleMinMaxb;
                     sRuleReqSkill = sRuleReqSkill + "," + sRuleReqSkillb;
-                    sRuleMSCleave = sRuleMSCleave + "," + sRuleMSCleaveb;
                     sRuleWeapons = sRuleWeapons + "," + sRuleWeaponsb;
                 }
                 else if (sRuleReqSkillb == "")
@@ -137,9 +126,7 @@ namespace GearFoundry
 
                 if (sRuleReqSkillc != "")
                 {
-                    sRuleMinMax = sRuleMinMax + "," + sRuleMinMaxc;
                     sRuleReqSkill = sRuleReqSkill + "," + sRuleReqSkillc;
-                    sRuleMSCleave = sRuleMSCleave + "," + sRuleMSCleavec;
                     sRuleWeapons = sRuleWeapons + "," + sRuleWeaponsc;
                 }
 
@@ -149,9 +136,7 @@ namespace GearFoundry
                 }
                 if (sRuleReqSkilld != "")
                 {
-                    sRuleMinMax = sRuleMinMax + "," + sRuleMinMaxd;
                     sRuleReqSkill = sRuleReqSkill + "," + sRuleReqSkilld;
-                    sRuleMSCleave = sRuleMSCleave + "," + sRuleMSCleaved;
                     sRuleWeapons = sRuleWeapons + "," + sRuleWeaponsd;
                 }
                 else if (sRuleReqSkilld == "")
@@ -172,9 +157,7 @@ namespace GearFoundry
             try
             {
 
-                sRuleMinMax = sRuleMinMax + "," + "";
                 sRuleReqSkill = sRuleReqSkill + "," + "";
-                sRuleMSCleave = sRuleMSCleave + "," + "false";
                 sRuleWeapons = sRuleWeapons + "," + "false";
             }
             catch (Exception ex) { LogError(ex); }
@@ -200,21 +183,13 @@ namespace GearFoundry
                 new XElement("GearScore", nGearScore),
                 new XElement("WieldEnabled", sRuleWeapons),
                 new XElement("ReqSkill", sRuleReqSkill),
-                new XElement("Coverage", sRuleArmorCoverage),
+                new XElement("Slots", sRuleSlots),
                new XElement("ArmorType", sRuleArmorType),
                  new XElement("ArmorSet", sRuleArmorSet),
                 new XElement("Unenchantable", bRuleMustBeUnEnchantable),
-                 new XElement("Red", bRuleRed),
-                 new XElement("Yellow", bRuleYellow),
-                 new XElement("Blue", bRuleBlue),
-                new XElement("FilterLegend", bRuleFilterLegend),
-                new XElement("FilterEpic", bRuleFilterEpic),
-                new XElement("FilterMajor", bRuleFilterMajor),
-                new XElement("FilterLvl8", bRuleFilterlvl8),
-                new XElement("FilterLvl7", bRuleFilterlvl7),
-                new XElement("FilterLvl6", bRuleFilterlvl6),
                 new XElement("Spells", sRuleSpells),
-                new XElement("NumSpells", nRuleNumSpells)));
+                new XElement("NumSpells", nRuleNumSpells),
+                new XElement("Palettes", sRulePalettes)));
 
         }
 
@@ -226,7 +201,7 @@ namespace GearFoundry
                 bRuleEnabled = Convert.ToBoolean(el.Element("Enabled").Value);
                 nRulePriority = Convert.ToInt32(el.Element("Priority").Value);
                 sRuleAppliesTo = el.Element("AppliesToFlag").Value.ToString();
-                sRuleName = el.Element("Name").Value.ToString();
+                sRuleName = (string)el.Element("Name").Value;
                 nRuleArcaneLore = Convert.ToInt32(el.Element("ArcaneLore").Value);
                 nRuleWork = Convert.ToInt32(el.Element("Work").Value);
                 nRuleWieldLevel = Convert.ToInt32(el.Element("WieldLevel").Value);
@@ -236,21 +211,13 @@ namespace GearFoundry
                 nGearScore = Convert.ToInt32(el.Element("GearScore").Value);
                  sRuleWeapons = el.Element("WieldEnabled").Value;
                 sRuleReqSkill = el.Element("ReqSkill").Value;
-                sRuleArmorCoverage = (el.Element("Coverage").Value).ToString();
-                sRuleArmorType = el.Element("ArmorType").Value.ToString();
-                sRuleArmorSet = el.Element("ArmorSet").Value.ToString();
+                sRuleSlots = (string)el.Element("Slots").Value;
+                sRuleArmorType = (string)el.Element("ArmorType").Value;
+                sRuleArmorSet = (string)el.Element("ArmorSet").Value;
                 bRuleMustBeUnEnchantable = Convert.ToBoolean(el.Element("Unenchantable").Value);
-                bRuleRed = Convert.ToBoolean(el.Element("Red").Value);
-                bRuleYellow = Convert.ToBoolean(el.Element("Yellow").Value);
-                bRuleBlue = Convert.ToBoolean(el.Element("Blue").Value);
                 sRuleSpells = el.Element("Spells").Value;
                 nRuleNumSpells = Convert.ToInt32(el.Element("NumSpells").Value);
-                bRuleFilterLegend = Convert.ToBoolean(el.Element("FilterLegend").Value);
-                bRuleFilterEpic = Convert.ToBoolean(el.Element("FilterEpic").Value);
-                bRuleFilterMajor = Convert.ToBoolean(el.Element("FilterMajor").Value);
-                bRuleFilterlvl8 = Convert.ToBoolean(el.Element("FilterLvl8").Value);
-                bRuleFilterlvl7 = Convert.ToBoolean(el.Element("FilterLvl7").Value);
-                bRuleFilterlvl6 = Convert.ToBoolean(el.Element("FilterLvl6").Value);
+                sRulePalettes = (string)el.Element("Palettes").Value;
  
             }
             catch (Exception ex) { LogError(ex); }
@@ -342,40 +309,11 @@ namespace GearFoundry
 
         }
 
-
-
-
         [ControlEvent("chkRuleMustBeUnenchantable", "Change")]
         private void chkRuleMustBeUnenchantable_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
 
             bRuleMustBeUnEnchantable = e.Checked;
-        }
-
-        [ControlEvent("chkRuleCloakMustHaveSpell", "Change")]
-        private void chkRuleCloakMustHaveSpell_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-
-            bRuleCloakMustHaveSpell = e.Checked;
-        }
-
-        [ControlEvent("chkRuleRed", "Change")]
-        private void chkRuleRed_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-
-            bRuleRed = e.Checked;
-        }
-        [ControlEvent("chkRuleYellow", "Change")]
-        private void chkRuleYellow_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-
-            bRuleYellow = e.Checked;
-        }
-        [ControlEvent("chkRuleBlue", "Change")]
-        private void chkRuleBlue_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-
-            bRuleBlue = e.Checked;
         }
 
 
@@ -405,6 +343,19 @@ namespace GearFoundry
             populateSpellListBox();
 
         }
+        
+        private void chkRuleFilterCloak_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            if (chkRuleFilterCloak.Checked)
+            {
+                bRuleFilterCloak = true;
+            }
+            else
+            { bRuleFilterCloak = false; }
+            populateSpellListBox();
+
+        }
+        
 
         private void chkRuleFilterMajor_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
         {
@@ -421,26 +372,6 @@ namespace GearFoundry
             { bRuleFilterlvl8 = true; }
             else
             { bRuleFilterlvl8 = false; }
-            populateSpellListBox();
-
-        }
-
-        private void chkRuleFilterlvl7_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
-        {
-            if (chkRuleFilterlvl7.Checked)
-            { bRuleFilterlvl7 = true; }
-            else
-            { bRuleFilterlvl7 = false; }
-            populateSpellListBox();
-
-        }
-
-        private void chkRuleFilterlvl6_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
-        {
-            if (chkRuleFilterlvl6.Checked)
-            { bRuleFilterlvl6 = true; }
-            else
-            { bRuleFilterlvl6 = false; }
             populateSpellListBox();
 
         }

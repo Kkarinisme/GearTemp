@@ -149,19 +149,12 @@ namespace GearFoundry
 
 
         // Controls on Notify.SearchRules.Armor Page
-        MyClasses.MetaViewWrappers.IList lstRuleArmorCoverages;
+        MyClasses.MetaViewWrappers.IList lstRuleSlots;
         MyClasses.MetaViewWrappers.IList lstRuleArmorTypes;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleMustBeUnenchantable;
 
         MyClasses.MetaViewWrappers.IList lstRuleSets;
 
-        // Controls on Notify.SearchRules.Cloaks/Aetheria
-        MyClasses.MetaViewWrappers.IList lstRuleCloakSets;
-        MyClasses.MetaViewWrappers.IList lstRuleCloakSpells;
-
-        MyClasses.MetaViewWrappers.ICheckBox chkRuleRed;
-        MyClasses.MetaViewWrappers.ICheckBox chkRuleYellow;
-        MyClasses.MetaViewWrappers.ICheckBox chkRuleBlue;
 
         // Controls on Notify.SearchRules.Req Spells
 
@@ -171,8 +164,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterEpic;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterMajor;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl8;
-        MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl7;
-        MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl6;
+        MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterCloak;
         MyClasses.MetaViewWrappers.ITextBox txtRuleNumSpells;
 
 
@@ -193,7 +185,6 @@ namespace GearFoundry
         // Controls on Notify.Salvage Page
         MyClasses.MetaViewWrappers.IList lstNotifySalvage;
         MyClasses.MetaViewWrappers.IButton btnUpdateSalvage;
-     //   MyClasses.MetaViewWrappers.IButton btnNewSalvage;
         MyClasses.MetaViewWrappers.IStaticText lblSalvageName;
         MyClasses.MetaViewWrappers.ITextBox txtSalvageString;
         MyClasses.MetaViewWrappers.IStaticText lblSalvageString;
@@ -495,7 +486,7 @@ namespace GearFoundry
                   {
 
                 // Controls on Notify.SearchRules.Armor Page
-                lstRuleArmorCoverages = (MyClasses.MetaViewWrappers.IList)View["lstRuleArmorCoverages"];
+                lstRuleSlots = (MyClasses.MetaViewWrappers.IList)View["lstRuleSlots"];
                 lstRuleArmorTypes = (MyClasses.MetaViewWrappers.IList)View["lstRuleArmorTypes"];
               
                 chkRuleMustBeUnenchantable = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleMustBeUnenchantable"];
@@ -506,26 +497,6 @@ namespace GearFoundry
                 chkRuleMustBeUnenchantable.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleMustBeUnenchantable_Change);
                
 				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
-                // Controls on Notify.SearchRules.Cloaks/Aetheria
-                lstRuleCloakSets = (MyClasses.MetaViewWrappers.IList)View["lstRuleCloakSets"];
-                lstRuleCloakSpells = (MyClasses.MetaViewWrappers.IList)View["lstRuleCloakSpells"];
-             
-                lstRuleCloakSets.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleCloakSets_Selected);
-                lstRuleCloakSpells.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleCloakSpells_Selected);
-                chkRuleRed = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleRed"];
-                chkRuleYellow = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleYellow"];
-                chkRuleBlue = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleBlue"];
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
-
-                chkRuleRed.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleRed_Change);
-                chkRuleYellow.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleYellow_Change);
-                chkRuleBlue.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleBlue_Change);
-                  }
-                  catch (Exception ex) { LogError(ex); }
 
 
                   try
@@ -535,16 +506,18 @@ namespace GearFoundry
                 lstRuleSpellsEnabled = (MyClasses.MetaViewWrappers.IList)View["lstRuleSpellsEnabled"];
                 chkRuleFilterLegend = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterLegend"];
                 chkRuleFilterLegend.Checked = bRuleFilterLegend;
+                
                 chkRuleFilterEpic = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterEpic"];
                 chkRuleFilterEpic.Checked = bRuleFilterEpic;
+                chkRuleFilterCloak = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterCloak"];
+                chkRuleFilterCloak.Checked = bRuleFilterCloak;
+                
+                
                 chkRuleFilterMajor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterMajor"];
                 chkRuleFilterMajor.Checked = bRuleFilterMajor;
                 chkRuleFilterlvl8 = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterlvl8"];
-                  chkRuleFilterlvl8.Checked = bRuleFilterlvl8;
-                  chkRuleFilterlvl7 = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterlvl7"];
-                chkRuleFilterlvl7.Checked = bRuleFilterlvl7;
-                chkRuleFilterlvl6 = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterlvl6"];
-                chkRuleFilterlvl6.Checked = bRuleFilterlvl6;
+                chkRuleFilterlvl8.Checked = bRuleFilterlvl8;
+
                 txtRuleNumSpells = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleNumSpells"];
        			}catch(Exception ex){LogError(ex);}
                   try
@@ -553,10 +526,9 @@ namespace GearFoundry
                 lstRuleSpellsEnabled.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleSpellsEnabled_Selected); 
                 chkRuleFilterLegend.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterLegend_Change);
                 chkRuleFilterEpic.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterEpic_Change);
+                chkRuleFilterCloak.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterCloak_Change);
                 chkRuleFilterMajor.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterMajor_Change);
                 chkRuleFilterlvl8.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl8_Change);
-                chkRuleFilterlvl7.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl7_Change);
-                chkRuleFilterlvl6.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl6_Change);
                 txtRuleNumSpells.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleNumSpells_End);
 				}catch(Exception ex){LogError(ex);}
                   try

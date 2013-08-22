@@ -104,124 +104,105 @@
 										<control progid = "DecalControls.Edit" name="txtRuleNumSpells" left ="160" top="150" width="50" height="16" text="" />
 										<control progid = "DecalControls.StaticText" name="lblnumSpells" left ="215" top="150" width="150" height="16" text="Num. Spells (Min)" />
 									
-										<control progid="DecalControls.StaticText" name="lblRuleAetheria" left="160" top="170" width="120" height="16" text="Aetheria"/>
-										<control progid="DecalControls.Checkbox" name="chkRuleRed" left="160" top="190" width="40" height="16" text="Red " />
-										<control progid="DecalControls.Checkbox" name="chkRuleYellow" left="205" top="190" width="50" height="16" text="Yellow " />
-										<control progid="DecalControls.Checkbox" name="chkRuleBlue" left="260" top="190" width="40" height="16" text="Blue " />
+										<control progid="DecalControls.Checkbox" name="chkRuleMustBeUnenchantable" left="160" top="170" width="140" height="16" text="Unenchantable (Armor)" />
 									
-										<control progid="DecalControls.StaticText" name="lblArmor" left="160" top="210" width="50" height="16" text="Armor"/>
-										<control progid="DecalControls.Checkbox" name="chkRuleMustBeUnenchantable" left="160" top="230" width="100" height="16" text="Unenchantable" />
+										<control progid="DecalControls.StaticText" name="lblSlots" left="330" top="50" width="88" height="16" text="Slots" />
+										<control progid="DecalControls.List" name="lstRuleSlots" left="330" top="70" width="135" height="200">
+											<column progid="DecalControls.CheckColumn" />
+											<column progid="DecalControls.TextColumn" fixedwidth="110" />
+											<column progid="DecalControls.TextColumn" />
+										</control>
 																		
 									</control>
 								</page>
 								<!--main-->
-								<page label="Weapons/Essences">
+								<page label="Properties">
 									<control progid="DecalControls.FixedLayout" clipped="">
-										<control progid="DecalControls.StaticText" name="lblWeapCat" left="10" top="10" width="80" height="16" text="Wield Skill:" />
-										<control progid="DecalControls.Choice" name="cboWeaponAppliesTo" left="10" top="25" width="125" height="20">
+										<control progid="DecalControls.StaticText" name="lblWeapCat" left="5" top="0" width="80" height="16" text="Wield Skill" />
+										<control progid="DecalControls.Choice" name="cboWeaponAppliesTo" left="5" top="15" width="125" height="20">
 										</control>
-										<control progid="DecalControls.StaticText" name="lblMastCat" left="145" top="10" width="80" height="16" text="Mastery Category:" />
-										<control progid="DecalControls.Choice" name="cboMasteryType" left="145" top="25" width="125" height="20">
+										<control progid="DecalControls.StaticText" name="lblMastCat" left="5" top="35" width="80" height="16" text="Mastery Category" />
+										<control progid="DecalControls.Choice" name="cboMasteryType" left="5" top="50" width="125" height="20">
 										</control>
-										<control progid="DecalControls.StaticText" name="lblDamageTypes" left="145" top="50" width="110" height="20" text="Damage Types:" />
-									
-										<control progid="DecalControls.List" name="lstDamageTypes" left="145" top="65" width="125" height="90">
+										
+										<control progid="DecalControls.StaticText" name="lblDamageTypes" left="5" top="70" width="110" height="16" text="Damage Types" />
+										<control progid="DecalControls.List" name="lstDamageTypes" left="5" top="85" width="125" height="90">
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="110" />
 											<column progid="DecalControls.TextColumn" />
 										</control>
 										
-										<control progid="DecalControls.StaticText" name="lblEnabled10025" left="10" top="175" width="40" height="20" text="Enabled" />
-										<control progid="DecalControls.StaticText" name="lblRuleReqSkilla" left="75" top="175" width="75" height="20" text="Skill Leve" />
+										<control progid="DecalControls.StaticText" name="lblEnabled10025" left="5" top="175" width="40" height="20" text="Enabled" />
+										<control progid="DecalControls.StaticText" name="lblRuleReqSkilla" left="55" top="175" width="75" height="20" text="Skill Level" />
 										
-										<control progid="DecalControls.Checkbox" name="chkRuleWeaponsa" left="15" top="200" width="20" height="16" text="" />
-										<control progid="DecalControls.Edit" name="txtRuleReqSkilla" left="75" top="200" width="40" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
-										<control progid="DecalControls.Checkbox" name="chkRuleWeaponsb" left="15" top="220" width="20" height="16" text="" />
+										<control progid="DecalControls.Checkbox" name="chkRuleWeaponsa" left="15" top="190" width="20" height="16" text="" />
+										<control progid="DecalControls.Edit" name="txtRuleReqSkilla" left="55" top="190" width="40" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
 										
-										<control progid="DecalControls.Edit" name="txtRuleReqSkillb" left="75" top="220" width="40" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
-										<control progid="DecalControls.Checkbox" name="chkRuleWeaponsc" left="15" top="240" width="20" height="16" text="" />
+										<control progid="DecalControls.Checkbox" name="chkRuleWeaponsb" left="15" top="210" width="20" height="16" text="" />
+										<control progid="DecalControls.Edit" name="txtRuleReqSkillb" left="55" top="210" width="40" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
 										
-										<control progid="DecalControls.Edit" name="txtRuleReqSkillc" left="75" top="240" width="40" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
+										<control progid="DecalControls.Checkbox" name="chkRuleWeaponsc" left="15" top="230" width="20" height="16" text="" />
+										<control progid="DecalControls.Edit" name="txtRuleReqSkillc" left="55" top="230" width="40" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
 										
-										<control progid="DecalControls.Checkbox" name="chkRuleWeaponsd" left="15" top="260" width="20" height="16" text="" />
-										<control progid="DecalControls.Edit" name="txtRuleReqSkilld" left="75" top="260" width="40" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
-																		
+										<control progid="DecalControls.Checkbox" name="chkRuleWeaponsd" left="15" top="250" width="20" height="16" text="" />
+										<control progid="DecalControls.Edit" name="txtRuleReqSkilld" left="55" top="250" width="40" height="16" imageportalsrc="4410" textcolor="16777215" text="" />
 
+										
+										<control progid="DecalControls.StaticText" name="lblSets" left="150" top="0" width="110" height="16" text="Sets" />
+										<control progid="DecalControls.List" name="lstRuleSets" left="150" top="15" width="200" height="255">
+											<column progid="DecalControls.CheckColumn" />
+											<column progid="DecalControls.TextColumn" fixedwidth="193" />
+											<column progid="DecalControls.TextColumn" />
+										</control>
+									
+									
+									
 									</control>
 								</page>
 								<!--Weapons-->
 
-								<page label="Armor">
+								<page label="Appearance">
 									<control progid="DecalControls.FixedLayout" clipped="">
 										
-										
-										<control progid="DecalControls.StaticText" name="lblRuleArmorCoverage" left="10" top="30" width="88" height="16" text="Coverage*:" />
-										<control progid="DecalControls.List" name="lstRuleArmorCoverages" left="10" top="50" width="135" height="240">
+										<control progid="DecalControls.StaticText" name="lblRuleArmorTypes" left="5" top="0" width="80" height="16" text="Armor Models" />
+										<control progid="DecalControls.List" name="lstRuleArmorTypes" left="5" top="15" width="110" height="255">
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="110" />
-											<column progid="DecalControls.TextColumn" />
-										</control>
-										<control progid="DecalControls.StaticText" name="lblRuleArmorTypes" left="155" top="30" width="80" height="16" text="Type*:" />
-										<control progid="DecalControls.List" name="lstRuleArmorTypes" left="155" top="50" width="110" height="240">
-											<column progid="DecalControls.CheckColumn" />
-											<column progid="DecalControls.TextColumn" fixedwidth="110" />
-											<column progid="DecalControls.TextColumn" />
+											<column progid="DecalControls.TextColumn" fixedwidth = "1" />
 										</control>
 										
-										<control progid="DecalControls.List" name="lstRuleSets" left="270" top="30" width="200" height="230">
-											<column progid="DecalControls.CheckColumn" />
-											<column progid="DecalControls.TextColumn" fixedwidth="193" />
-											<column progid="DecalControls.TextColumn" />
-										</control>
-										
-
+										<control progid="DecalControls.StaticText" name="lblColorPalettes" left="155" top="0" width="80" height="16" text="Color Palettes" />
+									
 									</control>
 								</page>
 								<!--Armor-->
-								<page label="Cloaks/Aetheria">
-									<control progid="DecalControls.FixedLayout" clipped="">
-										<control progid="DecalControls.StaticText" name="lblRuleCloakSets" left="10" top="30" width="88" height="16" text="Cloak Sets*:" />
-										<control progid="DecalControls.List" name="lstRuleCloakSets" left="10" top="50" width="200" height="100">
-											<column progid="DecalControls.CheckColumn" />
-											<column progid="DecalControls.TextColumn" fixedwidth="175" />
-											<column progid="DecalControls.TextColumn" />
-										</control>
-										<control progid="DecalControls.StaticText" name="lblRuleCloakSpells" left="10" top="150" width="88" height="16" text="Cloak Spells*:" />
-										<control progid="DecalControls.List" name="lstRuleCloakSpells" left="10" top="170" width="200" height="70">
-											<column progid="DecalControls.CheckColumn" />
-											<column progid="DecalControls.TextColumn" fixedwidth="175" />
-											<column progid="DecalControls.TextColumn" />
-										</control>
-										
-										
-
-									</control>
-								</page>
-								<!--Cloaks/Aetheria-->
 
 								<page label="Req. Spells">
 									<control progid="DecalControls.FixedLayout" clipped="">
-										<control progid="DecalControls.StaticText" name="lblCurrentSpells" left="10" top="30" width="130" height="16" text="Current Spells Enabled*:" />
-										<control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="10" top="50" width="200" height="100">
+										<control progid="DecalControls.StaticText" name="lblCurrentSpells" left="5" top="0" width="130" height="16" text="Required Spells" />
+										<control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="5" top="15" width="220" height="200">
 											<column progid="DecalControls.TextColumn" fixedwidth="150" />
-											<column progid="DecalControls.TextColumn"  />
+											<column progid="DecalControls.TextColumn" fixedwidth = "1" />
 											<column progid="DecalControls.IconColumn" fixedwidth="15"  />
 										</control>
-										<control progid="DecalControls.StaticText" name="lblRuleMoreSpells" left="230" top="10" width="180" height="16" text="Select desired spells from the list:" />
-										<control progid="DecalControls.List" name="lstRuleSpells" left="230" top="30" width="250" height="200">
-											<column progid="DecalControls.CheckColumn" fixedwidth="20"/>
-											<column progid="DecalControls.TextColumn" fixedwidth="193" />
-											<column progid="DecalControls.TextColumn" />
+										<control progid="DecalControls.StaticText" name="lblRuleMoreSpells" left="250" top="0" width="180" height="16" text="Available Spells" />
+										<control progid="DecalControls.List" name="lstRuleSpells" left="230" top="15" width="250" height="200">
+											<column progid="DecalControls.CheckColumn" fixedwidth ="20"/>
+											<column progid="DecalControls.TextColumn" fixedwidth = "193" />
+											<column progid="DecalControls.TextColumn" fixedwidth = "1"/>
 										</control>
 										
-
-										<control progid="DecalControls.StaticText" name="lblRuleFilterSpells" left="100" top="170" width="130" height="16" text="Filter Spells by:" />
-										<control progid="DecalControls.Checkbox" name="chkRuleFilterLegend" left="50" top="190" width="50" height="16" text="Legendary" />
-										<control progid="DecalControls.Checkbox" name="chkRuleFilterlvl8" left= "150" top="190" width="50" height="16" text="lvl 8" />
-										<control progid="DecalControls.Checkbox" name="chkRuleFilterEpic" left="50" top="210" width="50" height="16" text="Epic" />
-										<control progid="DecalControls.Checkbox" name="chkRuleFilterlvl7" left="150" top="210" width="50" height="16" text="lvl 7" />
-										<control progid="DecalControls.Checkbox" name="chkRuleFilterMajor" left= "50" top="230" width="50" height="16" text="Major" />
-										<control progid="DecalControls.Checkbox" name="chkRuleFilterlvl6" left="150" top="230" width="50" height="16" text="lvl 6" />
+										<control progid="DecalControls.StaticText" name="lblRuleFilterSpells" left="5" top="225" width="130" height="16" text="Filter Spells by:" />
+										<control progid="DecalControls.Checkbox" name="chkRuleFilterlvl8" left= "5" top="240" width="70" height="16" text="lvl 8" />
+										<control progid="DecalControls.Checkbox" name="chkRuleFilterLegend" left="80" top="240" width="70" height="16" text="Legendary" />
+										<control progid="DecalControls.Checkbox" name="chkRuleFilterMajor" left="160" top="240" width="70" height="16" text="Major" />
+										<control progid="DecalControls.Checkbox" name="chkRuleFilterEpic" left="240" top="240" width="70" height="16" text="Epic" />
+										<control progid="DecalControls.Checkbox" name="chkRuleFilterCloak" left="320" top="240" width="70" height="16" text="Cloak" />
+										
+										
+										
+										
+									
 									</control>
 								</page>
 								<!--Spells-->

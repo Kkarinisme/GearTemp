@@ -39,6 +39,8 @@ namespace GearFoundry
 			
 			public DateTime LastActionTime = DateTime.MinValue;
 			
+			//public List<int> Palettes = new List<int>();
+			
 			
 			private WorldObject wo;
 		
@@ -1174,7 +1176,6 @@ namespace GearFoundry
 			{
 				get { return wo.Container; }
 			}
-		
 		
 			//wo.properties not readily available from Decal.Adapter.Wrappers (calculated)
 			public bool Aetheriacheck

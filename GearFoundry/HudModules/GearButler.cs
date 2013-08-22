@@ -490,7 +490,7 @@ namespace GearFoundry
     			ButlerHudTabLayout.AddControl(ButlerHudCurrentSelectionText, new Rectangle(0,50,300,16));
     			  			
     			ButlerHudSearchBox = new HudTextBox();
-    			ButlerHudSearchBox.Text = "";
+    			ButlerHudSearchBox.Text = String.Empty;
     			ButlerHudTabLayout.AddControl(ButlerHudSearchBox, new Rectangle(0,80,200,20));
     			
     			ButlerHudSearchButton = new HudButton();
@@ -845,7 +845,7 @@ namespace GearFoundry
     	{
     		try
     		{
-    			ButlerHudSearchBox.Text = "";
+    			ButlerHudSearchBox.Text = String.Empty;
     			ButlerInventory = Core.WorldFilter.GetInventory().OrderBy(x => x.Name).ToList();
     			UpdateButlerHudList();
     		}catch(Exception ex){LogError(ex);}

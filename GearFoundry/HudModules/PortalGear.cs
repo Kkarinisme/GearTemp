@@ -60,8 +60,7 @@ namespace GearFoundry
         private int nOrbGuid = 0;
         private int nOrbIcon = 0;
         private int nFacilityHubGemID = 0;
-        private WorldObject oFacilityHubGem;
-        
+       
         private List<PortalActions> PortalActionList = new List<PortalActions>();
         private System.Windows.Forms.Timer PortalActionTimer = new System.Windows.Forms.Timer();
         

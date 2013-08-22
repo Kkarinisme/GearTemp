@@ -75,7 +75,6 @@ namespace GearFoundry
 
         //From:  Irquk - to replace old dictionary lookups
         private static List<spellinfo> SpellIndex = new List<spellinfo>();
-        private static List<spellinfo> CloakSpellList = new List<spellinfo>();
         private static List<spellinfo> ItemsSpellList = new List<spellinfo>();
         private static List<spellinfo> FilteredSpellIndex = new List<spellinfo>();
         private static List<IDName> HeritageIndex = new List<IDName>();
@@ -129,7 +128,6 @@ namespace GearFoundry
             if (EssMasteryList != null) { EssMasteryList.Clear(); }
             if (EssElementsList != null) { EssElementsList.Clear(); }
             if (SpellIndex != null) { SpellIndex.Clear(); }
-            if (CloakSpellList != null) { CloakSpellList.Clear(); }
             if (ItemsSpellList != null) { ItemsSpellList.Clear(); }
             if (FilteredSpellIndex != null) { FilteredSpellIndex.Clear(); }
             if (HeritageIndex != null) { HeritageIndex.Clear(); }
@@ -144,11 +142,9 @@ namespace GearFoundry
         {
             if (lstRuleApplies != null) { lstRuleApplies.Clear(); }
             if (lstDamageTypes != null) { lstDamageTypes.Clear(); }
-            if (lstRuleArmorCoverages != null) { lstRuleArmorCoverages.Clear(); }
+            if (lstRuleSlots != null) {lstRuleSlots.Clear();}
             if (lstRuleArmorTypes != null) { lstRuleArmorTypes.Clear(); }
             if (lstRuleSets != null) { lstRuleSets.Clear(); }
-            if (lstRuleCloakSets != null) { lstRuleCloakSets.Clear(); }
-            if (lstRuleCloakSpells != null) { lstRuleCloakSpells.Clear(); }
             if (lstRuleSpellsEnabled != null) { lstRuleSpellsEnabled.Clear(); }
             if (lstRuleSpells != null) { lstRuleSpells.Clear(); }
             if (lstRules != null) { lstRules.Clear(); }
@@ -201,8 +197,6 @@ namespace GearFoundry
             CreateWeaponTypeList();
             CreateElementalList();
             CreateSpellIndex();
-            CreateFilteredSpellIndex();
-            CreateCloakSpellList();
 			CreateHeritageIndex();
 			CreateMasteryIndex();
 			CreateSkillIndex();
@@ -210,11 +204,9 @@ namespace GearFoundry
 			CreateMaterialIndex();
 			CreateSpeciesIndex();
 			CreateSetsIndex();
-            CreateCloakSetsList();
 			CreateImbueList();
 			CreateArmorIndex();
 			CreateSlotList();
-            CreateArmorCoverageList();
             CreateAppliesToList();
             CreateItemSpellsList();
             CreateArmorSetsList();
@@ -228,20 +220,19 @@ namespace GearFoundry
             CreateWeaponWieldInvList();
             CreateCoverageInvList();
             CreateEmbueInvList();
+            CreateFilteredSpellIndex();
             populateListBoxes();
 		}
 
         private void populateListBoxes()
         {
             populateWeaponDamageListBox();
-            populateArmorCoverageListBox();
+            populateSlotListBox();
             populateArmorTypesListBox();
             populateRulesListBox();
             populateListRuleAppliesBox();
             populateSetsListBox();
             populateSpellListBox();
-            populateCloakSetsListBox();
-            populateCloakSpellsListBox();
         }
 
         private void CreateAppliesToList()
@@ -302,9 +293,9 @@ namespace GearFoundry
 			
 			info = new IDNameLoadable(0x1 ,"Head");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x2 ,"Chest(Underwear)");
+			info = new IDNameLoadable(0x2 ,"Shirt");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x4 ,"Abdomen(Underwear)");
+			info = new IDNameLoadable(0x4 ,"Pants");
 			SlotList.Add(info);
 //			info = new IDNameLoadable(0x8 ,"UpperArms(Underwear)");
 //			SlotList.Add(info);
@@ -318,45 +309,45 @@ namespace GearFoundry
 //			SlotList.Add(info);
 			info = new IDNameLoadable(0x100 ,"Feet");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x200 ,"Chest(Armor)");
+			info = new IDNameLoadable(0x200 ,"Breast Plate");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x400 ,"Abdomen(Armor)");
+			info = new IDNameLoadable(0x400 ,"Girth");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x800 ,"UpperArms(Armor)");
+			info = new IDNameLoadable(0x800 ,"Pauldrons");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x1000 ,"LowerArms(Armor)");
+			info = new IDNameLoadable(0x1000 ,"Bracers");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x2000 ,"UpperLegs(Armor)");
+			info = new IDNameLoadable(0x2000 ,"Tassets");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x4000 ,"LowerLegs(Armor)");
+			info = new IDNameLoadable(0x4000 ,"Greaves");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x8000 ,"Necklace(Jewelry)");
+			info = new IDNameLoadable(0x8000 ,"Necklace");
 			SlotList.Add(info);
 //			info = new IDNameLoadable(0x10000 ,"Bracelet(Right)");
 //			SlotList.Add(info);
 //			info = new IDNameLoadable(0x20000 ,"Bracelet(Left)");
 //			SlotList.Add(info);
-			info = new IDNameLoadable(0x30000 ,"Bracelet(Jewelry)");
+			info = new IDNameLoadable(0x30000 ,"Bracelet");
 			SlotList.Add(info);
 //			info = new IDNameLoadable(0x40000 ,"Ring(Right)");
 //			SlotList.Add(info);
 //			info = new IDNameLoadable(0x80000 ,"Ring(Left)");
 //			SlotList.Add(info);
-			info = new IDNameLoadable(0xC0000 ,"Ring(Jewelry)");
+			info = new IDNameLoadable(0xC0000 ,"Ring");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x100000 ,"Melee Weapon");
-			SlotList.Add(info);
+//			info = new IDNameLoadable(0x100000 ,"Melee Weapon");
+//			SlotList.Add(info);
 			info = new IDNameLoadable(0x200000 ,"Shield");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x400000 ,"MissileWeapon");
-			SlotList.Add(info);
-			info = new IDNameLoadable(0x800000 ,"Ammunition");
-			SlotList.Add(info);
-			info = new IDNameLoadable(0x1000000 ,"Caster");
-			SlotList.Add(info);
-			info = new IDNameLoadable(0x2000000 ,"TwoHanded");
-			SlotList.Add(info);
-			info = new IDNameLoadable(0x4000000 ,"Trinket(Jewelry)");
+//			info = new IDNameLoadable(0x400000 ,"MissileWeapon");
+//			SlotList.Add(info);
+//			info = new IDNameLoadable(0x800000 ,"Ammunition");
+//			SlotList.Add(info);
+//			info = new IDNameLoadable(0x1000000 ,"Caster");
+//			SlotList.Add(info);
+//			info = new IDNameLoadable(0x2000000 ,"TwoHanded");
+//			SlotList.Add(info);
+			info = new IDNameLoadable(0x4000000 ,"Trinket");
 			SlotList.Add(info);
 			info = new IDNameLoadable(0x8000000 ,"Cloak");
 			SlotList.Add(info);
@@ -365,6 +356,7 @@ namespace GearFoundry
 			info = new IDNameLoadable(0x20000000 ,"Yellow Aetheria");
 			SlotList.Add(info);
 			info = new IDNameLoadable(0x40000000 ,"Red Aetheria");
+			SlotList.Add(info);
 			
 			if(writelists){
 				FileInfo logFile = new FileInfo(GearDir + @"\SlotList.csv");	
@@ -377,51 +369,6 @@ namespace GearFoundry
 				output.Append("Index,SlotID, Name\n");
 				int index = 0;
 				foreach(var idname in SlotList)
-				{
-					output.Append(index.ToString() + "," +  idname.ID.ToString() + "," + idname.name.ToString() + "\n");
-					index++;
-				}
-				writer0.WriteLine(output);
-				writer0.Close();
-			}
-		}
-		
-		private void CreateArmorCoverageList()
-		{
-			//Irq:  I have prehaps mentioned that flags suck?
-			IDNameLoadable info;
-			
-			info = new IDNameLoadable(0x100 ,"UpperLegs");
-			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x200 ,"LowerLegs");
-			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x400 ,"Chest");
-			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x800 ,"Abdomen");
-			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x1000 ,"UpperArms");
-			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x2000 ,"LowerArms");
-			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x4000 ,"Head");
-			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x8000 ,"Hands");
-			ArmorCoverageList.Add(info);
-			info = new IDNameLoadable(0x10000 ,"Feet");
-			ArmorCoverageList.Add(info);
-
-			
-			if(writelists){
-				FileInfo logFile = new FileInfo(GearDir + @"\ArmorCoverage.csv");	
-				if(logFile.Exists)
-				{
-					logFile.Delete();
-				}
-				StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
-				StringBuilder output = new StringBuilder();
-				output.Append("Index,SlotID, Name\n");
-				int index = 0;
-				foreach(var idname in ArmorCoverageList)
 				{
 					output.Append(index.ToString() + "," +  idname.ID.ToString() + "," + idname.name.ToString() + "\n");
 					index++;
@@ -483,7 +430,7 @@ namespace GearFoundry
                     EnabledSpellsList.Add(info);
                 }
 
-               sRuleSpells = "";
+               sRuleSpells = String.Empty;
                nspells = 0;
 
                 //Now resetup the variables nspells and sRuleSpells
@@ -653,9 +600,11 @@ namespace GearFoundry
 		private void CreateArmorSetsList()
 		{
 			var armors = from sets in SetsIndex
-				where !sets.name.Contains("Weave") && !sets.name.Contains("Unknown") && !sets.name.Contains("Sigil")
+				where !sets.name.Contains("Unknown") && !sets.name.Contains("Sigil") && !sets.name.Contains("Relic") &&
+				!sets.name.Contains("Shou-jen") && !sets.name.Contains("Arm") && !sets.name.Contains("Perfect Light")
 				orderby sets.name
 				select sets;
+			
 			foreach(var armorsets in armors)
 			{
 				ArmorSetsList.Add(armorsets);
@@ -680,41 +629,6 @@ namespace GearFoundry
             }
 			
 		}
-
-        private void CreateCloakSetsList()
-        {
-        	
-        	try
-        	{
-        		var cloaks = from sets in SetsIndex	
-        			where sets.name.Contains("Weave")
-        			orderby sets.name
-        			select sets;
-        		foreach(var cloaksets in cloaks)
-        		{
-        			CloakSetsList.Add(cloaksets);
-        		}
-        			
-        	}catch{}
-
-            if (writelists)
-            {
-                FileInfo logFile = new FileInfo(GearDir + @"\CloakSetsList.csv");
-                if (logFile.Exists)
-                {
-                    logFile.Delete();
-                }
-                StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
-                StringBuilder output = new StringBuilder();
-                output.Append("Indexed to SetID\n\nSet ID, Name\n");
-                foreach (var idname in CloakSetsList)
-                {
-                    output.Append(idname.ID.ToString() + "," + idname.name.ToString() + "\n");
-                }
-                writer0.WriteLine(output);
-                writer0.Close();
-            }
-        }
 
 		private void CreateSpeciesIndex()
 		{
@@ -899,51 +813,6 @@ namespace GearFoundry
 			
 		}
 
-
-           
-//         private void CreateEssElementsList()
-//        {
-//            IDNameLoadable info;
-//            //Again...Flags suck
-//            
-//            info = new IDNameLoadable(0, "None");
-//            EssElementsList.Add(info);
-//              info = new IDNameLoadable(1, "Slashing");
-//            EssElementsList.Add(info);
-//            info = new IDNameLoadable(2, "Piercing");
-//            EssElementsList.Add(info);
-//            info = new IDNameLoadable(4, "Bludgeoning");
-//            EssElementsList.Add(info);
-//            info = new IDNameLoadable(8, "Cold");
-//            EssElementsList.Add(info);
-//             info = new IDNameLoadable(16, "Fire");
-//             EssElementsList.Add(info);
-//            info = new IDNameLoadable(32, "Acid");
-//            EssElementsList.Add(info);
-//             info = new IDNameLoadable(64, "Electric");
-//             EssElementsList.Add(info);
-//             info = new IDNameLoadable(1024, "Void");
-//             EssElementsList.Add(info);
-//          
-//            if(writelists){
-//                FileInfo logFile = new FileInfo(GearDir + @"\EssElementsList.csv");    
-//                            if(logFile.Exists)
-//                {
-//                    logFile.Delete();
-//                }
-//            StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
-//            StringBuilder output = new StringBuilder();
-//            output.Append("Index, ID#, Damagetype\n");
-//            int index = 0;
-//            foreach (var idname in EssElementsList)
-//            {
-//                output.Append(index.ToString() + "," + idname.ID.ToString() + "," + idname.name.ToString() + "\n");
-//            }
-//            writer0.WriteLine(output);
-//            writer0.Close();
-//            }
-//        }
-
 		
 		private void CreateElementalList()
 		{
@@ -1127,10 +996,32 @@ namespace GearFoundry
          	    	              spels1.spellid < 6127  
          	    			select spels1;
          	    
+         	    var cspells = from spl in SpellIndex
+               				where spl.spellname.Contains("Shroud of") || spl.spellname.Contains("Cloaked") || spl.spellname == "Horizon's Blades" ||
+            				spl.spellname == "Tectonic Rifts" || spl.spellname == "Nuhmudira's Spines" ||
+            				spl.spellname == "Searing Disc" || spl.spellname == "Cassius' Ring of Fire" || spl.spellname == "Halo of Frost" ||
+            				spl.spellname == "Eye of the Storm" || spl.spellid == 5361 //Clouded Soul is 5331 and 5361.  5331 has a 700 cast level and very high damage compared to cloak damage proc.
+            				orderby spl.spellname ascending
+							select spl;
+         	    
+         	    
          	    foreach(var spel in spl2)
          	    {
          	    	ItemsSpellList.Add(spel);
          	    }
+         	    
+         	    foreach(var selectedspell in cspells)
+            	{
+         	    	selectedspell.spelllevel = 20;
+            		ItemsSpellList.Add(selectedspell);
+            	}
+            	
+            	spellinfo damageabsorb = new spellinfo();
+            	damageabsorb.spellname = "Damage Absorb";
+            	damageabsorb.spelllevel = 20;
+            	damageabsorb.spellid = 10000;
+            	
+            	ItemsSpellList.Add(damageabsorb);
          	   
          	    
          	 if(writelists)
@@ -1161,11 +1052,13 @@ namespace GearFoundry
   
         private void CreateFilteredSpellIndex()
         {
-        	try{
+        	try
+        	{        		
+        	       		
         	var spelllist = from tsinfo in ItemsSpellList
-        					where (tsinfo.spelllevel == 6 && bRuleFilterlvl6) || (tsinfo.spelllevel == 7 && bRuleFilterlvl7) || 
-        		       			  (tsinfo.spelllevel == 8 && bRuleFilterlvl8) || (tsinfo.spellname.Contains("Major") && bRuleFilterMajor) ||
-                                  (tsinfo.spellname.Contains("Epic") && bRuleFilterEpic) || (tsinfo.spellname.ToLower().Contains("legendary") && bRuleFilterLegend) 
+        					where (bRuleFilterlvl8 && tsinfo.spelllevel == 8) || (bRuleFilterMajor && tsinfo.spelllevel == 13) ||
+        						  (bRuleFilterEpic && tsinfo.spelllevel == 14) || (bRuleFilterLegend && tsinfo.spelllevel == 15) ||
+        						  (bRuleFilterCloak && tsinfo.spelllevel == 20)
 							orderby tsinfo.spellname
         			 		select tsinfo;
         	
@@ -1173,6 +1066,7 @@ namespace GearFoundry
         	{
         		FilteredSpellIndex.Add(spel);
         	}
+
         		
                 }
                 catch
@@ -1180,38 +1074,6 @@ namespace GearFoundry
                 }
             if (writelists)
             { doWriteLists(FilteredSpellIndex); }
-         }
-
-         private void CreateCloakSpellList()
-         {
-            try
-            {
-
-            	var cspells = from spl in SpellIndex
-               				where spl.spellname.Contains("Shroud of") || spl.spellname.Contains("Cloaked") || spl.spellname.Contains("Horizon's Blades") ||
-            				spl.spellname.Contains("Tectonic Rifts") || spl.spellname.Contains("Nuhmudira's Spines") ||
-            				spl.spellname.Contains("Searing Disc") || spl.spellname.Contains("Cassius' Ring of Fire") || spl.spellname.Contains("Halo of Frost") ||
-            				spl.spellname.Contains("Eye of the Storm") || spl.spellname.Contains("Clouded Soul")
-            				orderby spl.spellname ascending
-							select spl;
-            	
-            	
-            	foreach(var selectedspell in cspells)
-            	{
-            		CloakSpellList.Add(selectedspell);
-            	}
-            	
-            	spellinfo damageabsorb = new spellinfo();
-            	damageabsorb.spellname = "Damage Absorb";
-            	damageabsorb.spelllevel = 0;
-            	damageabsorb.spellid = 10000;
-            	
-            	CloakSpellList.Add(damageabsorb);
-	
-            }catch{}
-            	
-
-             if (writelists){doWriteLists(CloakSpellList);}
          }
 
        //These are functions to create lists for comboboxes and initialize them
@@ -1381,7 +1243,7 @@ namespace GearFoundry
                 SalvageWorkInvList.Add(info);
             }
             catch (Exception ex) { LogError(ex); }
-            if (writelists) { doWriteLists(CloakSpellList); }
+            if (writelists) { doWriteLists(SalvageWorkInvList); }
 
         }
 
@@ -1498,7 +1360,7 @@ namespace GearFoundry
                 IDNameLoadable info = new IDNameLoadable(i++, load);
                 WeaponWieldInvList.Add(info);
             }
-            if (writelists) { doWriteLists(CloakSpellList); }
+            if (writelists) { doWriteLists(WeaponWieldInvList); }
 
             }
             catch (Exception ex) { LogError(ex); }

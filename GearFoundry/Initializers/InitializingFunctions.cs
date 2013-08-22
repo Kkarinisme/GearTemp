@@ -319,50 +319,44 @@ namespace GearFoundry
         {
             bRuleEnabled = false;
             nRuleNum = 0;
-            nRulePriority = 0;
-            sRuleAppliesTo = "";
-            sRuleName = "";
-            nGearScore = 0;
+            nRulePriority = 999;
+            sRuleAppliesTo = String.Empty;
+            sRuleName = String.Empty;
+            nGearScore = -1;
 
-            nRuleArcaneLore = 0;
+            nRuleArcaneLore = -1;
 
-            nRuleWork = 0;
+            nRuleWork = -1;
 
-            nRuleWieldSkill = 0;
-            nRuleMasteryType = 0;
-            sRuleDamageTypes = "";
+            nRuleWieldSkill = -1;
+            nRuleMasteryType = -1;
+            sRuleDamageTypes = String.Empty;
+            sRulePalettes = String.Empty;
 
-            sRuleReqSkill = "";
-            sRuleReqSkilla = "";
-            sRuleReqSkillb = "";
-            sRuleReqSkillc = "";
-            sRuleReqSkilld = "";
-
-            sRuleWeapons = "";
+            sRuleReqSkilla = String.Empty;
+            sRuleReqSkillb = String.Empty;
+            sRuleReqSkillc = String.Empty;
+            sRuleReqSkilld = String.Empty;
+            
             sRuleWeaponsa = "false";
             sRuleWeaponsb = "false";
             sRuleWeaponsc = "false";
             sRuleWeaponsd = "false";
 
-            sRuleArmorType = "";
+            sRuleArmorType = String.Empty;
 
-            sRuleArmorSet = "";
-            sRuleArmorCoverage = "";
+            sRuleArmorSet = String.Empty;
+            sRuleSlots = String.Empty;
             bRuleMustBeUnEnchantable = false;
-            sRuleCloakSets = "";
-            sRuleCloakSpells = "";
-            bRuleRed = false;
-            bRuleYellow = false;
-            bRuleBlue = false;
+
+
             bRuleFilterLegend = false;
             bRuleFilterEpic = false;
             bRuleFilterMajor = false;
             bRuleFilterlvl8 = false;
-            bRuleFilterlvl7 = false;
-            bRuleFilterlvl6 = false;
-            sRuleDamageTypes = "";
-            sRuleSpells = "";
-            nRuleNumSpells = 0;
+
+            sRuleSpells = String.Empty;
+            nRuleNumSpells = -1;
 
         }
 
@@ -459,25 +453,7 @@ namespace GearFoundry
                    //Filter Section
                    chkEnableTextFiltering.Checked = bEnableTextFiltering;
                    chkTextFilterAllStatus.Checked = bTextFilterAllStatus;
-//                   chkTextFilterBusyStatus.Checked = bTextFilterBusyStatus;
-//                   chkTextFilterCastingStatus.Checked = bTextFilterCastingStatus;
-//                   chkTextFilterMyDefenseMessages.Checked = bTextFilterMyDefenseMessages;
-//                   chkTextFilterMobDefenseMessages.Checked = bTextFilterMobDefenseMessages;
-//                   chkTextFilterMyKillMessages.Checked = bTextFilterMyKillMessages;
-//                   chkTextFilterPKFails.Checked = bTextFilterPKFails;
-//                   chkTextFilterDirtyFighting.Checked = bTextFilterDirtyFighting;
-//                   chkTextFilterMySpellCasting.Checked = bTextFilterMySpellCasting;
-//                   chkTextFilterOthersSpellCasting.Checked = bTextFilterOthersSpellCasting;
-//                   chkTextFilterSpellExpirations.Checked = bTextFilterSpellExpirations;
-//                   chkTextFilterManaStoneMessages.Checked = bTextFilterManaStoneMessages;
-//                   chkTextFilterHealingMessages.Checked = bTextFilterHealingMessages;
-//                   chkTextFilterSalvageMessages.Checked = bTextFilterSalvageMessages;
-//                   chkTextFilterBotSpam.Checked = bTextFilterBotSpam;
-//                   chkTextFilterIdentFailures.Checked = bTextFilterIdentFailures;
-//                   chkTextFilterKillTaskComplete.Checked = bTextFilterKillTaskComplete;
-//                   chkTextFilterVendorTells.Checked = bTextFilterVendorTells;
-//                   chkTextFilterMonsterTells.Checked = bTextFilterMonsterTells;
-//                   chkTextFilterNPCChatter.Checked = bTextFilterNPCChatter;
+
 
                 }
             catch (Exception ex) { LogError(ex); }
@@ -707,18 +683,15 @@ namespace GearFoundry
             txtRuleReqSkilld.Text = sRuleReqSkilld;
      
             chkRuleMustBeUnenchantable.Checked = bRuleMustBeUnEnchantable;
-            chkRuleRed.Checked = bRuleRed;
-            chkRuleYellow.Checked = bRuleYellow;
-            chkRuleBlue.Checked = bRuleBlue;
+
          
             txtRuleNumSpells.Text = nRuleNumSpells.ToString();
 
             chkRuleFilterLegend.Checked = bRuleFilterLegend;
             chkRuleFilterEpic.Checked = bRuleFilterEpic;
+            chkRuleFilterCloak.Checked = bRuleFilterCloak;
             chkRuleFilterMajor.Checked = bRuleFilterMajor;
             chkRuleFilterlvl8.Checked = bRuleFilterlvl8;
-            chkRuleFilterlvl7.Checked = bRuleFilterlvl7;
-            chkRuleFilterlvl6.Checked = bRuleFilterlvl6;
             populateSpellListBox();
         }
 

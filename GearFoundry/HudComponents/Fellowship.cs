@@ -35,6 +35,9 @@ namespace GearFoundry
 			public int CurrentMana = 0;
 		}
 		
+		
+		//this coud be updated to use Core.CharacterFilter.ChangeFellowship
+		
 		private void SubscribeFellowshipEvents()
 		{
 			try
