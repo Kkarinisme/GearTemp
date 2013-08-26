@@ -39,7 +39,7 @@ ArmorType				string		sRuleArmorType			eg: platemail,Noble etc Can be multiple ty
 																of integers separated by commas
 ArmorSet				String		sRuleArmorSet			 Again a list  of  integers separated by commas
 
-Unenchantable			bool		bRuleMustBeUnenchantable	
+	
 
 
 CloakSets				string								A list of integers separated by commas

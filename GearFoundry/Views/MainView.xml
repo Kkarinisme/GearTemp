@@ -104,8 +104,6 @@
 										<control progid = "DecalControls.Edit" name="txtRuleNumSpells" left ="160" top="150" width="50" height="16" text="" />
 										<control progid = "DecalControls.StaticText" name="lblnumSpells" left ="215" top="150" width="150" height="16" text="Num. Spells (Min)" />
 									
-										<control progid="DecalControls.Checkbox" name="chkRuleMustBeUnenchantable" left="160" top="170" width="140" height="16" text="Unenchantable (Armor)" />
-									
 										<control progid="DecalControls.StaticText" name="lblSlots" left="330" top="50" width="88" height="16" text="Slots" />
 										<control progid="DecalControls.List" name="lstRuleSlots" left="330" top="70" width="135" height="200">
 											<column progid="DecalControls.CheckColumn" />

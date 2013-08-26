@@ -126,6 +126,8 @@ namespace GearFoundry
         private bool mgoon;
         bool mgoonInv;
 
+		XElement SelectedRule = null;        
+        
         int nNextRuleNum;
         bool bRuleEnabled = false;
         int nItemNum;
@@ -170,6 +172,7 @@ namespace GearFoundry
         bool bRuleFilterCloak = true;
         bool bRuleMustBeUnEnchantable = false;
         string sRuleSpells = String.Empty;
+        
         int nRuleNumSpells = -1;
         int nid;
         int nusearrowid;

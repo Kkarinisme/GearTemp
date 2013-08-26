@@ -54,24 +54,23 @@ namespace GearFoundry
         private static List<IDNameLoadable> WeaponWieldInvList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> CoverageInvList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> EmbueInvList = new List<IDNameLoadable>();
+        
+        //Lists for LootObject GearScore Calcs
+        private static List<TwoIntLoadable> ImpenCantripList = new List<TwoIntLoadable>();
 
 		
 		private static List<IDNameLoadable> ElementalList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> MasteryIndex = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> SetsIndex = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> CloakSetsList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> ArmorSetsList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> ImbueList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> ArmorIndex = new List<IDNameLoadable>();
-		private static List<IDNameLoadable> ArmorCoverageList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> ObjectList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> SlotList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> WeaponTypeList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> WeaponSubtypeIndex = new List<IDNameLoadable>();
         private static List<IDNameLoadable> AppliesToList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> EnabledSpellsList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> EssMasteryList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> EssElementsList = new List<IDNameLoadable>();
 
         //From:  Irquk - to replace old dictionary lookups
         private static List<spellinfo> SpellIndex = new List<spellinfo>();
@@ -114,19 +113,15 @@ namespace GearFoundry
             if (ElementalList != null) { ElementalList.Clear(); }
             if (MasteryIndex != null) { MasteryIndex.Clear(); }
             if (SetsIndex != null) { SetsIndex.Clear(); }
-            if (CloakSetsList != null) { CloakSetsList.Clear(); }
             if (ArmorSetsList != null) { ArmorSetsList.Clear(); }
             if (ImbueList != null) { ImbueList.Clear(); }
             if (ArmorIndex != null) { ArmorIndex.Clear(); }
-            if (ArmorCoverageList != null) { ArmorCoverageList.Clear(); }
             if (ObjectList != null) { ObjectList.Clear(); }
             if (SlotList != null) { SlotList.Clear(); }
             if (WeaponTypeList != null) { WeaponTypeList.Clear(); }
             if (WeaponSubtypeIndex != null) { WeaponSubtypeIndex.Clear(); }
             if (AppliesToList != null) { AppliesToList.Clear(); }
             if (EnabledSpellsList != null) { EnabledSpellsList.Clear(); }
-            if (EssMasteryList != null) { EssMasteryList.Clear(); }
-            if (EssElementsList != null) { EssElementsList.Clear(); }
             if (SpellIndex != null) { SpellIndex.Clear(); }
             if (ItemsSpellList != null) { ItemsSpellList.Clear(); }
             if (FilteredSpellIndex != null) { FilteredSpellIndex.Clear(); }
@@ -166,6 +161,19 @@ namespace GearFoundry
 			{
 				ID =  i;
 				name = s;
+			}
+
+		}
+        
+        private class TwoIntLoadable
+		{
+			public int ID;
+			public int Val;
+			
+			public TwoIntLoadable(int i, int j)
+			{
+				ID =  i;
+				Val = j;
 			}
 
 		}
@@ -1395,6 +1403,27 @@ namespace GearFoundry
                 writer0.Close();
 
        	 }
+        
+        
+        private void FillLootObjectLists()
+        {        	//Determine highest level Impen Cantrip bonus
+//								if(wo.ActiveSpell(i) == 6095 && cantrippenality < 4){cantrippenality = 4;}
+//								else if(wo.ActiveSpell(i) == 4667 && cantrippenality < 3){cantrippenality = 3;}
+//								else if(wo.ActiveSpell(i) == 2592 && cantrippenality < 2){cantrippenality = 2;}
+//								else if(wo.ActiveSpell(i) == 2604 && cantrippenality < 1){cantrippenality = 1;}
+//								
+//								//Determine highest level Impen Bonus
+//								if(wo.ActiveSpell(i) == 4407 && enchantmentpenalty < 12){enchantmentpenalty = 12;}
+//								else if(wo.ActiveSpell(i) == 3908 && enchantmentpenalty < 12){enchantmentpenalty = 12;}
+//								else if(wo.ActiveSpell(i) == 2108 && enchantmentpenalty < 11){enchantmentpenalty = 11;}
+//								else if(wo.ActiveSpell(i) == 1486 && enchantmentpenalty < 10){enchantmentpenalty = 10;}
+//								else if(wo.ActiveSpell(i) == 1485 && enchantmentpenalty < 7.5){enchantmentpenalty = 7.5;}
+//								else if(wo.ActiveSpell(i) == 1484 && enchantmentpenalty < 5){enchantmentpenalty = 5;}
+//								else if(wo.ActiveSpell(i) == 1483 && enchantmentpenalty < 3.75){enchantmentpenalty = 3.75;}
+//								else if(wo.ActiveSpell(i) == 1482 && enchantmentpenalty < 2.5){enchantmentpenalty = 2.5;}
+//								else if(wo.ActiveSpell(i) == 51 && enchantmentpenalty < 1){enchantmentpenalty = 1;}	
+        }
+        
         
              private void doWriteLists(List<spellinfo> index)
          {

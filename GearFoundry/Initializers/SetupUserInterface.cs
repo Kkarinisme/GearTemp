@@ -354,6 +354,7 @@ namespace GearFoundry
                 lstRuleSpellsEnabled.Clear();
                 EnabledSpellsList.Clear();
                 initRulesCtrls();
+                //TODO:  make this clear new fields which were added.
                 
             }
                 catch (Exception ex) { LogError(ex); }

@@ -682,7 +682,6 @@ namespace GearFoundry
             txtRuleReqSkillc.Text = sRuleReqSkillc;
             txtRuleReqSkilld.Text = sRuleReqSkilld;
      
-            chkRuleMustBeUnenchantable.Checked = bRuleMustBeUnEnchantable;
 
          
             txtRuleNumSpells.Text = nRuleNumSpells.ToString();

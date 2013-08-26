@@ -151,7 +151,6 @@ namespace GearFoundry
         // Controls on Notify.SearchRules.Armor Page
         MyClasses.MetaViewWrappers.IList lstRuleSlots;
         MyClasses.MetaViewWrappers.IList lstRuleArmorTypes;
-        MyClasses.MetaViewWrappers.ICheckBox chkRuleMustBeUnenchantable;
 
         MyClasses.MetaViewWrappers.IList lstRuleSets;
 
@@ -491,13 +490,8 @@ namespace GearFoundry
                 lstRuleSlots = (MyClasses.MetaViewWrappers.IList)View["lstRuleSlots"];
                 lstRuleArmorTypes = (MyClasses.MetaViewWrappers.IList)View["lstRuleArmorTypes"];
               
-                chkRuleMustBeUnenchantable = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleMustBeUnenchantable"];
+
                 lstRuleSets = (MyClasses.MetaViewWrappers.IList)View["lstRuleSets"];
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
-                chkRuleMustBeUnenchantable.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleMustBeUnenchantable_Change);
-               
 				}catch(Exception ex){LogError(ex);}
 
 
