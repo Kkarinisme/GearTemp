@@ -80,6 +80,8 @@ namespace GearFoundry
                 setUpForFindingLists();
 
                 FillItemRules();
+                setUpRulesLists(xdocRules, mPrioritizedRulesList, mPrioritizedRulesListEnabled);
+ 
                 lstRules.ScrollPosition = nRuleRow;
             }
             catch (Exception ex) { LogError(ex); }
