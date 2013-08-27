@@ -1406,9 +1406,11 @@ namespace GearFoundry
         
         
         private void FillLootObjectLists()
-        {        	//Determine highest level Impen Cantrip bonus
-//								if(wo.ActiveSpell(i) == 6095 && cantrippenality < 4){cantrippenality = 4;}
-//								else if(wo.ActiveSpell(i) == 4667 && cantrippenality < 3){cantrippenality = 3;}
+        {
+
+        	ImpenCantripList.Add(new TwoIntLoadable(6095, 4));
+        	ImpenCantripList.Add(new TwoIntLoadable(4667, 3));
+        
 //								else if(wo.ActiveSpell(i) == 2592 && cantrippenality < 2){cantrippenality = 2;}
 //								else if(wo.ActiveSpell(i) == 2604 && cantrippenality < 1){cantrippenality = 1;}
 //								
