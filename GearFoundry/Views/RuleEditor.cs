@@ -188,7 +188,6 @@ namespace GearFoundry
                 new XElement("Slots", sRuleSlots),
                new XElement("ArmorType", sRuleArmorType),
                  new XElement("ArmorSet", sRuleArmorSet),
-                new XElement("Unenchantable", bRuleMustBeUnEnchantable),
                 new XElement("Spells", sRuleSpells),
                 new XElement("NumSpells", nRuleNumSpells),
                 new XElement("Palettes", sRulePalettes)));
@@ -216,7 +215,6 @@ namespace GearFoundry
                 sRuleSlots = (string)el.Element("Slots").Value;
                 sRuleArmorType = (string)el.Element("ArmorType").Value;
                 sRuleArmorSet = (string)el.Element("ArmorSet").Value;
-                bRuleMustBeUnEnchantable = Convert.ToBoolean(el.Element("Unenchantable").Value);
                 sRuleSpells = el.Element("Spells").Value;
                 nRuleNumSpells = Convert.ToInt32(el.Element("NumSpells").Value);
                 sRulePalettes = (string)el.Element("Palettes").Value;
@@ -311,12 +309,7 @@ namespace GearFoundry
 
         }
 
-        [ControlEvent("chkRuleMustBeUnenchantable", "Change")]
-        private void chkRuleMustBeUnenchantable_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
 
-            bRuleMustBeUnEnchantable = e.Checked;
-        }
 
 
 

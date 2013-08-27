@@ -11,6 +11,7 @@ using Decal.Adapter.Wrappers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace GearFoundry
 {
@@ -39,9 +40,14 @@ namespace GearFoundry
 			
 			public DateTime LastActionTime = DateTime.MinValue;
 			
-			//public List<int> Palettes = new List<int>();
+			public List<pale> Palettes = new List<pale>();
 			
-			
+			public class pale
+			{
+				int entry = 0;
+				int color = 0;
+			}
+					
 			private WorldObject wo;
 		
 			public LootObject(WorldObject obj)
@@ -75,6 +81,14 @@ namespace GearFoundry
 			public bool notify;
 			public string rulename;
 			public double DistanceAway;
+			
+//			public string model
+//			{
+//				get
+//				{
+//					return wo.Values(LongValueKey.Model);
+//				}
+//			}
 			
 			public int GearScore
 			{	
@@ -174,7 +188,6 @@ namespace GearFoundry
 			{
 				get
 				{
-
 					//Enchantable Armors
 					if((wo.Values(LongValueKey.EquipableSlots) & UnderwearSlots) == wo.Values(LongValueKey.EquipableSlots) ||
 					   (wo.Values(LongValueKey.EquipableSlots) & CloakSlot) == wo.Values(LongValueKey.EquipableSlots))
@@ -186,7 +199,8 @@ namespace GearFoundry
 					{
 						double observedarmortinks = 0;
 						if(wo.LongKeys.Contains((int)LongValueKey.ArmorLevel)) {observedarmortinks = wo.Values(LongValueKey.ArmorLevel) / 20;}
-						double availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);
+						double availabletinks = 0;
+						if(wo.LongKeys.Contains((int)DoubleValueKey.SalvageWorkmanship)) {availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);}
 						double basearmortinks = 0;
 						double cantrippenality = 0;
 						double cantripsteelbonus = 0;
@@ -216,8 +230,11 @@ namespace GearFoundry
 								else if(wo.ActiveSpell(i) == 1482 && enchantmentpenalty < 2.5){enchantmentpenalty = 2.5;}
 								else if(wo.ActiveSpell(i) == 51 && enchantmentpenalty < 1){enchantmentpenalty = 1;}	
 							}
+
 							basearmortinks = observedarmortinks - cantrippenality - enchantmentpenalty;
-						}
+
+
+						}						
 						
 						if(wo.SpellCount > 0)
 						{
@@ -230,7 +247,9 @@ namespace GearFoundry
 							}
 						}
 
+
 						return Convert.ToInt32(basearmortinks + cantripsteelbonus + availabletinks + impen7or8);
+						
 					}
 					//Calculation for unenchantable armor.  
 					else 
@@ -618,7 +637,9 @@ namespace GearFoundry
 				{
 					if(wo.ObjectClass == ObjectClass.MeleeWeapon)
 					{
-						double availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);
+						
+						double availabletinks = 0;
+						if(wo.DoubleKeys.Contains((int)DoubleValueKey.SalvageWorkmanship)) {availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);}
 						double granitetinks = 0;
 						double fudgefactor = 1;
 						double mscleaveadjust = 1;
@@ -722,7 +743,8 @@ namespace GearFoundry
 					if(wo.ObjectClass == ObjectClass.MissileWeapon)
 					{
 						if(!wo.DoubleKeys.Contains((int)DoubleValueKey.DamageBonus)){return 0;}
-						double availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);
+						double availabletinks = 0;
+						if(wo.DoubleKeys.Contains((int)DoubleValueKey.SalvageWorkmanship)) {availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);}
 						double mahoganytinks = 0;
 						if(wo.DoubleKeys.Contains((int)DoubleValueKey.DamageBonus)){mahoganytinks = ((wo.Values(DoubleValueKey.DamageBonus) - 1) / 0.04);}
 						double elementaldamagebonus = 0;
@@ -743,13 +765,15 @@ namespace GearFoundry
 								else if(wo.Spell(i) == 2598 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
 								else if(wo.Spell(i) == 2486 && cantripdamageboosters < 2) {cantripdamageboosters = 2;}
 							}
-						}					
+						}
+
 						return Convert.ToInt32(mahoganytinks + availabletinks + cantripdamageboosters + elementaldamagebonus);
 					}
 					
 					if(wo.ObjectClass == ObjectClass.WandStaffOrb)
 					{
-						double availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);
+						double availabletinks = 0;
+						if(wo.DoubleKeys.Contains((int)DoubleValueKey.SalvageWorkmanship)) { availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);}
 						double cantripdamageboosters = 0;
 						double elementaldamagevsmonstersobs = 0;
 						if(wo.DoubleKeys.Contains((int)DoubleValueKey.ElementalDamageVersusMonsters)) {elementaldamagevsmonstersobs = (wo.Values(DoubleValueKey.ElementalDamageVersusMonsters) -1) * 100;}
@@ -812,6 +836,54 @@ namespace GearFoundry
 				}
 			}
 
+			
+			
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 8/25/2013 8:38 PM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 8/25/2013 8:47 PM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] [Meta] Client valid: True
+//[VTank] ID: 8C06BD10
+//[VTank] ObjectClass: WandStaffOrb
+//[VTank] (S) Name: Staff
+//[VTank] (S) FullDescription: Staff of Shockwave
+//[VTank] (I) CreateFlags1: -1855373160
+//[VTank] (I) Type: 2547
+//[VTank] (I) Icon: 5801
+//[VTank] (I) Category: 32768
+//[VTank] (I) Behavior: 18
+//[VTank] (I) Value: 16402
+//[VTank] (I) ItemUsabilityFlags: 6291461
+//[VTank] (I) UsageMask: 16
+//[VTank] (I) IconOutline: 1
+//[VTank] (I) Container: 0
+//[VTank] (I) EquipableSlots: 16777216 (z)
+//[VTank] (I) Burden: 50
+//[VTank] (I) HookMask: 2
+//[VTank] (I) Material: 22
+//[VTank] (I) PhysicsDataFlags: 137345
+//[VTank] (I) GemSettingQty: 3
+//[VTank] (I) GemSettingType: 20
+//[VTank] (I) SkillLevelReq: 0
+//[VTank] (I) Workmanship: 6
+//[VTank] (I) Spellcraft: 328
+//[VTank] (I) CurrentMana: 3267
+//[VTank] (I) DescriptionFormat: 5
+//[VTank] (I) MaximumMana: 3267
+//[VTank] (I) LoreRequirement: 344
+//[VTank] (I) RankRequirement: 0
+//[VTank] (I) EquippedBy: 1343211182
+//[VTank] (I) EquippedSlots: 16777216 (z)
+//[VTank] (D) SalvageWorkmanship: 6
+//[VTank] (D) ManaCBonus: 0.170000004768372
+//[VTank] (D) MeleeDefenseBonus: 1.32000000178814
+//[VTank] (D) ManaRateOfChange: -0.0555555555555556
+//[VTank] (D) ElementalDamageVersusMonsters: 1.07000000029802
+//[VTank] (L) Container: 0
+//[VTank] (L) EquippedBy: 1343211182
+//[VTank] Palette Entry 0: ID 0x000BF1, Ex Color: 000000, 0/0
+			
 
 						
 			public string GearScoreString()
@@ -1654,10 +1726,353 @@ namespace GearFoundry
 				}
 				return result;
 			}
+			
+			public void Pals()
+			{
+				int ModelDWord = wo.Values(LongValueKey.Model);
+				
+				
+			}
 		}
 	}
 }
 
+
+//Studded Leather Coat
+//Model data:  33554644
+//Binary:  10000000000000000011010100
+//Dword Max:   11111111111111111111111111111111
+//Byte 11, always 0x11
+//0xFF packed D word Palette
+//Binary:  11111111
+
+
+//using System.Runtime.InteropServices;
+//public static byte[] getBytes(object o)
+//        {
+//            int size = Marshal.SizeOf(o);
+//            byte[] arr = new byte[size];
+//            IntPtr ptr = Marshal.AllocHGlobal(size);
+//            Marshal.StructureToPtr(o, ptr, true);
+//            Marshal.Copy(ptr, arr, 0, size);
+//            Marshal.FreeHGlobal(ptr);
+//            return arr;
+//        } 
+//
+//
+//public static object getStruct(byte[] arr, object o)
+//        {
+//            //object str = new object();
+//            int size = Marshal.SizeOf(o);
+//            IntPtr ptr = Marshal.AllocHGlobal(size);
+//            Marshal.Copy(arr, 0, ptr, size);
+//            o = (object)Marshal.PtrToStructure(ptr, o.GetType());
+//            Marshal.FreeHGlobal(ptr);
+//            return o;
+//        }
+
+
+//private void Echo_CreateObject(IMessage2 msg) // F745
+//		{
+//			string test = "Start";
+//            object o = null;
+//			try 
+//			{
+//                int guid = (int)msg.get_Value("object");
+//                //ITEM_CLASS eClass;
+//				test = "paletteCount";
+//                IMessageMember mem = msg.get_Struct(test = "model");
+//				int i;
+//				for (i=0; i< m_nKnownItems; i++)
+//				{
+//					if (KnownItemArray[i].guid == guid) return;
+//				}
+//                o = mem.get_Value(test = "paletteCount");
+//                test = "cast paletteCount";
+//                int paletteCount = (byte)o;
+//                o = mem.get_Value(test = "textureCount");
+//                test = "case textureCount";
+//                int textureCount = (byte)o;
+//				IMessageIterator aPalettes = (IMessageIterator)mem.get_Struct(test = "palettes");
+//                IMessageIterator aTextures = (IMessageIterator)mem.get_Struct(test = "textures");
+//
+//                mem = msg.get_Struct(test = "game");
+//                o = mem.get_Value(test = "name");
+//                string name = o.ToString();
+//				
+//                o = mem.get_Value(test = "type");
+//				int model = (int)o;
+//
+//                o = mem.get_Value(test = "icon");
+//                int icon = (int)o;
+//
+//                o = mem.get_Value(test = "category");
+//                int nTypeFlags = (int)o;
+//				if ((nTypeFlags & 0x06)==0) return;   // Only Armor and Clothing
+//
+//				int pyrealvalue;
+//				int coverage;
+//				int burden;      
+//				try { pyrealvalue  = (int)mem.get_Value("value");    }catch{pyrealvalue=0;}
+//				try { coverage     = (int)mem.get_Value("coverage1");}catch{coverage   =0;}
+//				try { burden       = (int)mem.get_Value("burden");   }catch{burden     =0;}
+//			
+//				int[]  Color = new int[paletteCount];
+//				for(i=0; i<paletteCount; i++)
+//				{
+//					if (m_bStats)
+//					{
+//						test = "palette iteration #"+i.ToString();
+//						IMessageIterator palette = aPalettes.NextObjectIndex;
+//						int iOS = palette.get_NextInt(test="palette");
+//                        int iOffset = palette.get_NextInt(test="offset");
+//                        int iSize = palette.get_NextInt(test ="length");
+//                        Color[i] = iOS; //  + palette.get_NextInt("length") * 256;
+//						//if (ColorTable.Contains(Color[i]) == false)
+//						{
+//							test = Color[i].ToString()
+//								+ "," + iOffset.ToString()
+//								+ "," + iSize.ToString();
+//                            m_Hooks.AddChatText("DCS: Color " + test + " on " + name, 14, 1);
+//							StreamWriter sw = new StreamWriter(/*m_sAssemblyPath+*/"F:\\ColorTrap.csv",true);
+//							sw.Write(name+","+model.ToString()+",#"+coverage.ToString("X8")+","+i.ToString()+","+test+m_sEOL);
+//							sw.Flush();
+//							sw.Close();
+//						}
+//					}
+//					else
+//					{
+//						test = "palette iteration #"+i.ToString();
+//						IMessageIterator palette = aPalettes.NextObjectIndex;
+//                        Color[i] = palette.get_NextInt(test = "palette");
+//					}
+//				}
+//
+//				COLOR_INFO NewColor;
+//				//AC_MODEL   acModel;
+//				ushort     iModel = (ushort)model;
+//				/*
+//				eClass = ITEM_CLASS.NONE;
+//				switch (coverage)
+//				{
+//					case 0x00200000:  // Shield
+//						return;
+//					case 0x00000400:  // Girth
+//						eClass |= ITEM_CLASS.GIRTH;
+//						acModel = new AC_MODEL(iModel, "AB", name);
+//						break;
+//					case 0x00000200:  // Breastplate
+//						eClass |= ITEM_CLASS.BREASTPLATE;
+//						acModel = new AC_MODEL(iModel, "AB", name);
+//						break;
+//					case 0x00001800:  // Sleeves
+//						eClass |= ITEM_CLASS.SLEEVES;
+//						acModel = new AC_MODEL(iModel, "AC", name);
+//						break;
+//					case 0x00000600:  // Curaiss
+//						eClass |= ITEM_CLASS.CURAISS;
+//						acModel = new AC_MODEL(iModel, "AC", name);
+//						break;
+//					case 0x00000E00:  // Short Sleeve Shirt
+//						eClass |= ITEM_CLASS.OVERSHIRT;
+//						acModel = new AC_MODEL(iModel, "AD", name);
+//						break;
+//					case 0x00001A00:  // Coat
+//						eClass |= ITEM_CLASS.COAT;
+//						acModel = new AC_MODEL(iModel, "ABD", name);
+//						break;
+//					case 0x00002000:  // Tassets (have no color)
+//						acModel = new AC_MODEL(iModel, "", name);
+//						break;
+//					case 0x00007F00:  // Robe
+//					case 0x00007F01:  // Hooded Robe
+//						eClass |= ITEM_CLASS.ROBE;
+//						acModel = new AC_MODEL(iModel, "ABDE", name);
+//						break;
+//					case 0x00001E00:  // Hauberk  
+//						eClass |= ITEM_CLASS.HAUBERK;
+//						acModel = new AC_MODEL(iModel, "AE", name);
+//						break;
+//					case 0x00006400:  // Pants
+//						eClass |= ITEM_CLASS.OVERPANTS;
+//						if (model == 6004)
+//							acModel = new AC_MODEL(iModel, "ACDE", name);
+//						else
+//							acModel = new AC_MODEL(iModel, "AC", name);
+//						break;
+//					default: 
+//						acModel = new AC_MODEL(iModel, "ABCD", name);
+//						break;
+//				}
+//				*/
+//
+//				
+//				/*if (ModelTable.Contains(model))
+//				{
+//					AC_MODEL acModel = (AC_MODEL)ModelTable[model];
+//					NewColor = new COLOR_INFO(guid,name,model,icon,coverage,acModel.Colors);
+//					for (i=0; i < acModel.Colors; i++)
+//					{
+//						NewColor.SetColor(i,Color[acModel.GetColor(i)]);
+//					}
+//				}
+//				else 
+//				{ */
+//					NewColor = new COLOR_INFO(guid,name,model,icon,coverage,4);
+//					string sColors = "";
+//					string sColorCodes = ",";
+//					if (paletteCount > 0)
+//					{
+//						sColors = "A";
+//						sColorCodes = ","+Color[0].ToString();
+//						NewColor.SetColor(0,Color[0]);
+//						for (i=1; i < paletteCount; i++)
+//						{
+//							sColorCodes += ","+Color[i].ToString();
+//							if (sColors.Length < 4)
+//							{
+//								if (Color[i] != Color[i-1])
+//								{
+//									NewColor.SetColor(sColors.Length,Color[i]);
+//									sColors += (char)('A' + i);
+//								}
+//							}
+//						}
+//					}
+//					if (m_bDebug)
+//					{
+//						ModelTable[model] = new AC_MODEL(iModel,sColors,name);
+//						StreamWriter sw = new StreamWriter(m_sAssemblyPath+"\\ModelTrap.csv",true);
+//						sw.WriteLine(model.ToString()+",\""+name+"\",#"+coverage.ToString("X8")+sColorCodes);
+//						sw.Flush();
+//						sw.Close();
+//						m_Hooks.AddChatText(model.ToString()+",\""+name+"\",#"+coverage.ToString("X8")+","+sColors+sColorCodes,7,1);
+//					}
+//				/*}*/
+//				
+//				if (m_nKnownItems > MAX_ITEMS)
+//				{
+//					CheckKnown();
+//				}
+//				else if (m_nKnownItems > MAX_ITEMS)
+//				{
+//					m_Hooks.AddChatText("DCS: ****ERROR*** Inventory Overflow",10,1);
+//					return;
+//				}
+//				int ins = m_nKnownItems;
+//				while (ins>0)
+//				{
+//					ins--;
+//					if (KnownItemArray[ins].coverage > coverage) {ins++; break;}
+//					if (KnownItemArray[ins].coverage == coverage)
+//					{
+//						if( KnownItemArray[ins].model < model) {ins++; break;}
+//						if( KnownItemArray[ins].model == model)
+//						{
+//							if( KnownItemArray[ins].icon < icon) {ins++; break;}
+//							if( KnownItemArray[ins].icon == icon)
+//							{
+//								if( KnownItemArray[ins].name.CompareTo(name)<=0) {ins++; break;}
+//							}
+//						}
+//					}
+//				}
+//				int iPos;
+//				for (iPos=m_nKnownItems-1;iPos>=ins;iPos--)
+//				{
+//					KnownItemArray[iPos+1] = KnownItemArray[iPos];
+//				}
+//				//				m_Hooks.AddChatText(name,4);
+//				//				for (iPos--;iPos>=0;iPos--)
+//				//				{
+//				//					m_Hooks.AddChatText(KnownItemArray[iPos].name,7);
+//				//				}
+//
+//				KnownItemArray[ins] = NewColor;
+//				m_nKnownItems++;    
+//				if (cbAll.Checked)
+//				{
+//					m_Hooks.IDQueueAdd(guid);
+//				}
+//			}
+//			catch (Exception ex)
+//			{
+//				/*if (m_bDebug)*/ m_Hooks.AddChatText("DCS: Error on " + test + "--" + ex.Message + "( object is "+o.GetType().ToString()+")",7,1);
+//			}
+//		}
+
+
+//Palette Reporting
+//	foreach (br current8 in A_0.t)
+//	{
+//		List<string> arg_8A7_0 = list;
+//		string[] array = new string[10];
+//		array[0] = "Palette Entry ";
+//		array[1] = num++.ToString();
+//		array[2] = ": ID 0x";
+//		int num2 = current8.a;
+//		array[3] = num2.ToString("X6");
+//		array[4] = ", Ex Color: ";
+//		array[5] = (current8.a().ToArgb() & 16777215).ToString("X6");   //16777215 == FFFFFF
+//		array[6] = ", ";
+//		byte b = current8.b;
+//		array[7] = b.ToString();
+//		array[8] = "/";
+//		string[] arg_89F_0 = array;
+//		int arg_89F_1 = 9;
+//		byte b2 = current8.c;
+//		arg_89F_0[arg_89F_1] = b2.ToString();
+//		byte b2 = current8.c;
+//		array[9] = b2.ToString();
+//		arg_8A7_0.Add(string.Concat(array));
+//	}
+
+//public Color a()
+//{
+//	int num = (int)(this.c * 16 + this.b * 32 + 8);
+//	Color result;
+//	try
+//	{
+//		byte[] array = g.a(this.a);
+//		result = Color.FromArgb((int)array[num + 3], (int)array[num + 2], (int)array[num + 1], (int)array[num]);
+//	}
+//	catch
+//	{
+//		result = Color.Black;
+//	}
+//	return result;
+//}
+
+//internal struct br
+//{
+//	public int a;
+//	public byte b;
+//	public byte c;
+//	public Color a()
+//	{
+//		int num = (int)(this.c * 16 + this.b * 32 + 8);
+//		Color result;
+//		try
+//		{
+//			byte[] array = g.a(this.a);
+//			result = Color.FromArgb((int)array[num + 3], (int)array[num + 2], (int)array[num + 1], (int)array[num]);
+//		}
+//		catch
+//		{
+//			result = Color.Black;
+//		}
+//		return result;
+//	}
+//}
+
+//		private void a()
+//		{
+//			this.e = new List<GameItemInfo.PaletteData>();
+//			foreach (br current in this.a.t)
+//			{
+//				this.e.Add(new GameItemInfo.PaletteData(current));
+//			}
+//		}
 
 		
 		

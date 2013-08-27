@@ -186,7 +186,6 @@ namespace GearFoundry
                 txtRuleReqSkilld.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRuleReqSkilld_End);
               
               
-                chkRuleMustBeUnenchantable.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleMustBeUnenchantable_Change);
                 lstRuleSpells.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleSpells_Selected);
                 lstRuleSpellsEnabled.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleSpellsEnabled_Selected);
 

@@ -354,6 +354,7 @@ namespace GearFoundry
                 lstRuleSpellsEnabled.Clear();
                 EnabledSpellsList.Clear();
                 initRulesCtrls();
+                //TODO:  make this clear new fields which were added.
                 
             }
                 catch (Exception ex) { LogError(ex); }
@@ -1044,7 +1045,7 @@ namespace GearFoundry
             {
                 int mList = 4;
 
-                setUpRulesLists(xdocRules, mPrioritizedRulesList, mPrioritizedRulesListEnabled);
+                setUpRulesLists(xdocRules, mPrioritizedRulesList);
                 populateLst(lstRules, mPrioritizedRulesList, mList);
                 FillItemRules();
 
@@ -1080,7 +1081,7 @@ namespace GearFoundry
             {
                 int mList = 1;
 
-                setUpLists(xdocTrophies, mSortedTrophiesList, mSortedTrophiesListChecked);
+                setUpLists(xdocTrophies, mSortedTrophiesList);
                 populateLst(lstmyTrophies, mSortedTrophiesList, mList);
 
             }
@@ -1098,7 +1099,7 @@ namespace GearFoundry
             try
             {
                 int mList = 1;
-                setUpLists(xdocMobs, mSortedMobsList, mSortedMobsListChecked);
+                setUpLists(xdocMobs, mSortedMobsList);
                 populateLst(lstmyMobs, mSortedMobsList, mList);
 
             }
@@ -1131,7 +1132,7 @@ namespace GearFoundry
             try
             {
                 int mList = 2;
-                setUpLists(xdocSalvage, mSortedSalvageList, mSortedSalvageListChecked);
+                setUpLists(xdocSalvage, mSortedSalvageList);
                 populateLst(lstNotifySalvage, mSortedSalvageList, mList);
 
             }

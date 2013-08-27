@@ -35,11 +35,7 @@ namespace GearFoundry
         private List<XElement> mSortedMobsList = new List<XElement>();
         private List<XElement> mSortedTrophiesList = new List<XElement>();
         private List<XElement> mSortedSalvageList = new List<XElement>();
-        private List<XElement> mSortedMobsListChecked = new List<XElement>();
-        private List<XElement> mSortedTrophiesListChecked = new List<XElement>();
-        private List<XElement> mSortedSalvageListChecked = new List<XElement>();
         private List<XElement> mPrioritizedRulesList = new List<XElement>();
-        private List<XElement> mPrioritizedRulesListEnabled = new List<XElement>();
         private List<XElement> mGenSettingsList = new List<XElement>();
         private List<XElement> mSwitchGearSettingsList = new List<XElement>();
 
@@ -54,24 +50,22 @@ namespace GearFoundry
         private static List<IDNameLoadable> WeaponWieldInvList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> CoverageInvList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> EmbueInvList = new List<IDNameLoadable>();
+        
+        //Lists for LootObject GearScore Calcs
+        private static List<IntDoubleLoadable> ImpenCantripList = new List<IntDoubleLoadable>();
+        private static List<IntDoubleLoadable> ImpenList = new List<IntDoubleLoadable>();
 
-		
 		private static List<IDNameLoadable> ElementalList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> MasteryIndex = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> SetsIndex = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> CloakSetsList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> ArmorSetsList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> ImbueList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> ArmorIndex = new List<IDNameLoadable>();
-		private static List<IDNameLoadable> ArmorCoverageList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> ObjectList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> SlotList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> WeaponTypeList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> WeaponSubtypeIndex = new List<IDNameLoadable>();
         private static List<IDNameLoadable> AppliesToList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> EnabledSpellsList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> EssMasteryList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> EssElementsList = new List<IDNameLoadable>();
 
         //From:  Irquk - to replace old dictionary lookups
         private static List<spellinfo> SpellIndex = new List<spellinfo>();
@@ -93,13 +87,9 @@ namespace GearFoundry
         private void ClearRuleLists()
         {
             if (mSortedMobsList != null) { mSortedMobsList.Clear(); }
-            if (mSortedMobsListChecked != null) { mSortedMobsListChecked.Clear(); }
             if (mSortedTrophiesList != null) { mSortedTrophiesList.Clear(); }
-            if (mSortedTrophiesListChecked != null) { mSortedTrophiesListChecked.Clear(); }
             if (mSortedSalvageList != null) { mSortedSalvageList.Clear(); }
-            if (mSortedSalvageListChecked != null) { mSortedSalvageListChecked.Clear(); }
             if (mPrioritizedRulesList != null) { mPrioritizedRulesList.Clear(); }
-            if (mPrioritizedRulesListEnabled != null) { mPrioritizedRulesListEnabled.Clear(); }
             if (mGenSettingsList != null) { mGenSettingsList.Clear(); }
             if (mSwitchGearSettingsList != null) { mSwitchGearSettingsList.Clear(); }
             if (ClassInvList != null) { ClassInvList.Clear(); }
@@ -114,19 +104,14 @@ namespace GearFoundry
             if (ElementalList != null) { ElementalList.Clear(); }
             if (MasteryIndex != null) { MasteryIndex.Clear(); }
             if (SetsIndex != null) { SetsIndex.Clear(); }
-            if (CloakSetsList != null) { CloakSetsList.Clear(); }
             if (ArmorSetsList != null) { ArmorSetsList.Clear(); }
             if (ImbueList != null) { ImbueList.Clear(); }
             if (ArmorIndex != null) { ArmorIndex.Clear(); }
-            if (ArmorCoverageList != null) { ArmorCoverageList.Clear(); }
             if (ObjectList != null) { ObjectList.Clear(); }
             if (SlotList != null) { SlotList.Clear(); }
             if (WeaponTypeList != null) { WeaponTypeList.Clear(); }
-            if (WeaponSubtypeIndex != null) { WeaponSubtypeIndex.Clear(); }
             if (AppliesToList != null) { AppliesToList.Clear(); }
             if (EnabledSpellsList != null) { EnabledSpellsList.Clear(); }
-            if (EssMasteryList != null) { EssMasteryList.Clear(); }
-            if (EssElementsList != null) { EssElementsList.Clear(); }
             if (SpellIndex != null) { SpellIndex.Clear(); }
             if (ItemsSpellList != null) { ItemsSpellList.Clear(); }
             if (FilteredSpellIndex != null) { FilteredSpellIndex.Clear(); }
@@ -166,6 +151,19 @@ namespace GearFoundry
 			{
 				ID =  i;
 				name = s;
+			}
+
+		}
+        
+        private class IntDoubleLoadable
+		{
+			public int ID;
+			public double Val;
+			
+			public IntDoubleLoadable(int i, double j)
+			{
+				ID =  i;
+				Val = j;
 			}
 
 		}
@@ -1395,6 +1393,30 @@ namespace GearFoundry
                 writer0.Close();
 
        	 }
+        
+        
+        private void FillLootObjectLists()
+        {
+
+        	ImpenCantripList.Add(new IntDoubleLoadable(6095, 4));
+        	ImpenCantripList.Add(new IntDoubleLoadable(4667, 3));
+        	ImpenCantripList.Add(new IntDoubleLoadable(2592, 2));
+        	ImpenCantripList.Add(new IntDoubleLoadable(2604, 1));
+        	
+        	ImpenList.Add(new IntDoubleLoadable(4407, 12));
+        	ImpenList.Add(new IntDoubleLoadable(3908, 12));
+        	ImpenList.Add(new IntDoubleLoadable(2108, 11));
+        	ImpenList.Add(new IntDoubleLoadable(1486, 10));
+        	ImpenList.Add(new IntDoubleLoadable(1485, 7.5));
+        	ImpenList.Add(new IntDoubleLoadable(1484, 5));
+        	ImpenList.Add(new IntDoubleLoadable(1483, 3.75));
+        	ImpenList.Add(new IntDoubleLoadable(1482, 2.5));
+        	ImpenList.Add(new IntDoubleLoadable(51, 1));
+        	
+        	
+        	
+        }
+        
         
              private void doWriteLists(List<spellinfo> index)
          {

@@ -341,7 +341,13 @@ namespace GearFoundry
 
 					case ObjectClass.Gem:
 							if(!IOItemWithID.Aetheriacheck) {return;}
-							if(SetMatches.Count() > 0)
+							
+						var reducedaetheriamatches = from ruls in SlotListMatches
+							where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) 
+							orderby ruls.RulePriority
+							select ruls;
+						
+							if(reducedaetheriamatches.Count() > 0)
 							{
 								IOItemWithID.rulename = SetMatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
@@ -353,7 +359,7 @@ namespace GearFoundry
 							}
 
 					case ObjectClass.Jewelry:  //Jewelry doesn't have gear scores at this time.						
-							if(SetMatches.Count() > 0)
+							if(SpellListMatches.Count() > 0)
 							{
 								IOItemWithID.rulename = SetMatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
@@ -367,8 +373,7 @@ namespace GearFoundry
 					case ObjectClass.Armor:
 						var reducedarmormatches = from ruls in SetMatches
 							where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) &&
-							(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType)) &&
-							(!ruls.RuleUnenchantable || IOItemWithID.LValue(LongValueKey.Unenchantable) > 0)
+							(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType))
 							orderby ruls.RulePriority
 							select ruls;
 						
@@ -404,8 +409,13 @@ namespace GearFoundry
 							}
 						}
 						else if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
-						{							
-							if(SetMatches.Count() > 0)
+						{
+							var reducedcloakmatches = from ruls in SetMatches
+								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore)
+								orderby ruls.RulePriority
+								select ruls;
+							
+							if(reducedcloakmatches.Count() > 0)
 							{
 								IOItemWithID.rulename = SetMatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
@@ -437,7 +447,8 @@ namespace GearFoundry
 							(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
 							(ruls.RuleWieldSkill == 0 || ruls.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
 							(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
-							((ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
+							((!ruls.RuleWeaponEnabledA && !ruls.RuleWeaponEnabledB && !ruls.RuleWeaponEnabledC && !ruls.RuleWeaponEnabledD) ||
+							 (ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
 							 (ruls.RuleWeaponEnabledB && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueB) ||
 							 (ruls.RuleWeaponEnabledC && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueC) ||
 							 (ruls.RuleWeaponEnabledD && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueD))
@@ -494,6 +505,55 @@ namespace GearFoundry
 			catch(Exception ex) {LogError(ex);}
 		}
 		
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 8/26/2013 5:38 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 8/26/2013 6:00 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] [Meta] Client valid: True
+//[VTank] ID: 8C06BD10
+//[VTank] ObjectClass: WandStaffOrb
+//[VTank] (S) Name: Staff
+//[VTank] (S) FullDescription: Staff of Shockwave
+//[VTank] (I) CreateFlags1: -1855225704
+//[VTank] (I) Type: 2547
+//[VTank] (I) Icon: 5801
+//[VTank] (I) Category: 32768
+//[VTank] (I) Behavior: 18
+//[VTank] (I) Value: 16402
+//[VTank] (I) ItemUsabilityFlags: 6291461
+//[VTank] (I) UsageMask: 16
+//[VTank] (I) IconOutline: 1
+//[VTank] (I) Container: 1343211182
+//[VTank] (I) Slot: -1
+//[VTank] (I) EquipableSlots: 16777216 (z)
+//[VTank] (I) EquippedSlots: 0 (0)
+//[VTank] (I) Burden: 50
+//[VTank] (I) HookMask: 2
+//[VTank] (I) Material: 22
+//[VTank] (I) PhysicsDataFlags: 170145
+//[VTank] (I) GemSettingQty: 3
+//[VTank] (I) GemSettingType: 20
+//[VTank] (I) SkillLevelReq: 0
+//[VTank] (I) Workmanship: 6
+//[VTank] (I) Spellcraft: 328
+//[VTank] (I) CurrentMana: 3267
+//[VTank] (I) DescriptionFormat: 5
+//[VTank] (I) MaximumMana: 3267
+//[VTank] (I) LoreRequirement: 344
+//[VTank] (I) RankRequirement: 0
+//[VTank] (I) EquippedBy: 0
+//[VTank] (D) SalvageWorkmanship: 6
+//[VTank] (D) ElementalDamageVersusMonsters: 1.07000000029802
+//[VTank] (D) ManaCBonus: 0.1
+//[VTank] (D) MeleeDefenseBonus: 1.15
+//[VTank] (D) ManaRateOfChange: -0.0555555555555556
+//[VTank] (L) EquippedBy: 0
+//[VTank] (L) Container: 1343211182
+//[VTank] Palette Entry 0: ID 0x000BF1, Ex Color: 000000, 0/0
+		
+		
 		private void FillItemRules()
 		{
 			string[] splitstring;
@@ -538,6 +598,7 @@ namespace GearFoundry
 
 	        	
 					splitstring = ((string)XRule.Element("DamageType").Value).Split(',');
+					
 					if(splitstring.Length > 0)
 					{
 						sumarray = new int[splitstring.Length];      	
@@ -624,7 +685,6 @@ namespace GearFoundry
 						tRule.RuleArmorSet = null;
 					}
 					
-					if(!bool.TryParse((XRule.Element("Unenchantable").Value), out tRule.RuleUnenchantable)){tRule.RuleUnenchantable = false;}
 					
 					CombineIntList.Clear();
 					
@@ -685,7 +745,6 @@ namespace GearFoundry
 	        public int[] RuleArmorTypes;
 	        public int[] RuleArmorSet;
 	        public int RuleSlots = 0;
-	        public bool RuleUnenchantable = false;
 
 	        public int[] RuleSpells = null;
 	        public int RuleSpellNumber = -1;   
