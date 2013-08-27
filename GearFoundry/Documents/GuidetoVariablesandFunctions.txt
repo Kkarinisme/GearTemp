@@ -74,7 +74,6 @@ Lists
 		private static List<IDNameLoadable> ObjectList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> SlotList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> WeaponTypeList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> WeaponSubtypeIndex = new List<IDNameLoadable>();
         private static List<IDNameLoadable> AppliesToList = new List<IDNameLoadable>();
 
 		//Lists for inventory combo boxes
@@ -83,11 +82,8 @@ Lists
 		private List<XElement> mSortedMobsList = new List<XElement>();
         private List<XElement> mSortedTrophiesList = new List<XElement>();
         private List<XElement> mSortedSalvageList = new List<XElement>();
-        private List<XElement> mSortedMobsListChecked = new List<XElement>();
-        private List<XElement> mSortedTrophiesListChecked = new List<XElement>();
-        private List<XElement> mSortedSalvageListChecked = new List<XElement>();
         private List<XElement> mPrioritizedRulesList = new List<XElement>();
-        private List<XElement> mPrioritizedRulesListEnabled = new List<XElement>();
+
 
 
 		XDocuments and associated filenames:

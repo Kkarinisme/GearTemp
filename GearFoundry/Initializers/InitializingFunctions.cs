@@ -206,10 +206,10 @@ namespace GearFoundry
         {
             try
             {  
-            	setUpLists(xdocMobs, mSortedMobsList, mSortedMobsListChecked);
-                setUpLists(xdocTrophies, mSortedTrophiesList, mSortedTrophiesListChecked);
-                setUpLists(xdocSalvage, mSortedSalvageList, mSortedSalvageListChecked);
-                setUpRulesLists(xdocRules, mPrioritizedRulesList, mPrioritizedRulesListEnabled);
+            	setUpLists(xdocMobs, mSortedMobsList);
+                setUpLists(xdocTrophies, mSortedTrophiesList);
+                setUpLists(xdocSalvage, mSortedSalvageList);
+                setUpRulesLists(xdocRules, mPrioritizedRulesList);
                 //Irq:  Builds class mirror lists of Mish's xdocs at load time.
                 setUpSettingsList();
                 FillSalvageRules();
@@ -241,10 +241,10 @@ namespace GearFoundry
 
     }
 
-        public void setUpLists(XDocument xdoc, List<XElement> sorted, List<XElement> enabled)
+        public void setUpLists(XDocument xdoc, List<XElement> sorted)
         {
             sorted.Clear();
-            enabled.Clear();
+            
             IEnumerable<XElement> myelements = xdoc.Element("GameItems").Descendants("item");
 
             var lstChecked = from element in myelements
@@ -252,8 +252,8 @@ namespace GearFoundry
                                             orderby element.Element("key").Value ascending
 
                                             select element;
-            enabled.AddRange(lstChecked);
-            sorted.AddRange(enabled);
+            
+            sorted.AddRange(lstChecked);
 
             var lstUnChecked = from element in myelements
                                               where !Convert.ToBoolean(element.Element("checked").Value)
@@ -268,12 +268,11 @@ namespace GearFoundry
 
 
 
-        public void setUpRulesLists(XDocument xdoc, List<XElement> sorted, List<XElement> enabled)
+        public void setUpRulesLists(XDocument xdoc, List<XElement> sorted)
         {
             try
             {
                 sorted.Clear();
-                enabled.Clear();
 
                 IEnumerable<XElement> myelements = xdocRules.Element("Rules").Descendants("Rule");
                 int n = myelements.Count();
@@ -294,9 +293,8 @@ namespace GearFoundry
                 var lstChecked = from element in myelements
                                    where Convert.ToBoolean(element.Element("Enabled").Value)
                                  orderby Convert.ToInt32(element.Element("Priority").Value) ascending
-
                                  select element;
-                enabled.AddRange(lstChecked);
+
 
                 sorted.AddRange(lstChecked);
 

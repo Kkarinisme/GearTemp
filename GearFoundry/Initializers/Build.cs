@@ -35,11 +35,7 @@ namespace GearFoundry
         private List<XElement> mSortedMobsList = new List<XElement>();
         private List<XElement> mSortedTrophiesList = new List<XElement>();
         private List<XElement> mSortedSalvageList = new List<XElement>();
-        private List<XElement> mSortedMobsListChecked = new List<XElement>();
-        private List<XElement> mSortedTrophiesListChecked = new List<XElement>();
-        private List<XElement> mSortedSalvageListChecked = new List<XElement>();
         private List<XElement> mPrioritizedRulesList = new List<XElement>();
-        private List<XElement> mPrioritizedRulesListEnabled = new List<XElement>();
         private List<XElement> mGenSettingsList = new List<XElement>();
         private List<XElement> mSwitchGearSettingsList = new List<XElement>();
 
@@ -56,9 +52,9 @@ namespace GearFoundry
         private static List<IDNameLoadable> EmbueInvList = new List<IDNameLoadable>();
         
         //Lists for LootObject GearScore Calcs
-        private static List<TwoIntLoadable> ImpenCantripList = new List<TwoIntLoadable>();
+        private static List<IntDoubleLoadable> ImpenCantripList = new List<IntDoubleLoadable>();
+        private static List<IntDoubleLoadable> ImpenList = new List<IntDoubleLoadable>();
 
-		
 		private static List<IDNameLoadable> ElementalList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> MasteryIndex = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> SetsIndex = new List<IDNameLoadable>();
@@ -68,7 +64,6 @@ namespace GearFoundry
 		private static List<IDNameLoadable> ObjectList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> SlotList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> WeaponTypeList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> WeaponSubtypeIndex = new List<IDNameLoadable>();
         private static List<IDNameLoadable> AppliesToList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> EnabledSpellsList = new List<IDNameLoadable>();
 
@@ -92,13 +87,9 @@ namespace GearFoundry
         private void ClearRuleLists()
         {
             if (mSortedMobsList != null) { mSortedMobsList.Clear(); }
-            if (mSortedMobsListChecked != null) { mSortedMobsListChecked.Clear(); }
             if (mSortedTrophiesList != null) { mSortedTrophiesList.Clear(); }
-            if (mSortedTrophiesListChecked != null) { mSortedTrophiesListChecked.Clear(); }
             if (mSortedSalvageList != null) { mSortedSalvageList.Clear(); }
-            if (mSortedSalvageListChecked != null) { mSortedSalvageListChecked.Clear(); }
             if (mPrioritizedRulesList != null) { mPrioritizedRulesList.Clear(); }
-            if (mPrioritizedRulesListEnabled != null) { mPrioritizedRulesListEnabled.Clear(); }
             if (mGenSettingsList != null) { mGenSettingsList.Clear(); }
             if (mSwitchGearSettingsList != null) { mSwitchGearSettingsList.Clear(); }
             if (ClassInvList != null) { ClassInvList.Clear(); }
@@ -119,7 +110,6 @@ namespace GearFoundry
             if (ObjectList != null) { ObjectList.Clear(); }
             if (SlotList != null) { SlotList.Clear(); }
             if (WeaponTypeList != null) { WeaponTypeList.Clear(); }
-            if (WeaponSubtypeIndex != null) { WeaponSubtypeIndex.Clear(); }
             if (AppliesToList != null) { AppliesToList.Clear(); }
             if (EnabledSpellsList != null) { EnabledSpellsList.Clear(); }
             if (SpellIndex != null) { SpellIndex.Clear(); }
@@ -165,12 +155,12 @@ namespace GearFoundry
 
 		}
         
-        private class TwoIntLoadable
+        private class IntDoubleLoadable
 		{
 			public int ID;
-			public int Val;
+			public double Val;
 			
-			public TwoIntLoadable(int i, int j)
+			public IntDoubleLoadable(int i, double j)
 			{
 				ID =  i;
 				Val = j;
@@ -1408,22 +1398,23 @@ namespace GearFoundry
         private void FillLootObjectLists()
         {
 
-        	ImpenCantripList.Add(new TwoIntLoadable(6095, 4));
-        	ImpenCantripList.Add(new TwoIntLoadable(4667, 3));
-        
-//								else if(wo.ActiveSpell(i) == 2592 && cantrippenality < 2){cantrippenality = 2;}
-//								else if(wo.ActiveSpell(i) == 2604 && cantrippenality < 1){cantrippenality = 1;}
-//								
-//								//Determine highest level Impen Bonus
-//								if(wo.ActiveSpell(i) == 4407 && enchantmentpenalty < 12){enchantmentpenalty = 12;}
-//								else if(wo.ActiveSpell(i) == 3908 && enchantmentpenalty < 12){enchantmentpenalty = 12;}
-//								else if(wo.ActiveSpell(i) == 2108 && enchantmentpenalty < 11){enchantmentpenalty = 11;}
-//								else if(wo.ActiveSpell(i) == 1486 && enchantmentpenalty < 10){enchantmentpenalty = 10;}
-//								else if(wo.ActiveSpell(i) == 1485 && enchantmentpenalty < 7.5){enchantmentpenalty = 7.5;}
-//								else if(wo.ActiveSpell(i) == 1484 && enchantmentpenalty < 5){enchantmentpenalty = 5;}
-//								else if(wo.ActiveSpell(i) == 1483 && enchantmentpenalty < 3.75){enchantmentpenalty = 3.75;}
-//								else if(wo.ActiveSpell(i) == 1482 && enchantmentpenalty < 2.5){enchantmentpenalty = 2.5;}
-//								else if(wo.ActiveSpell(i) == 51 && enchantmentpenalty < 1){enchantmentpenalty = 1;}	
+        	ImpenCantripList.Add(new IntDoubleLoadable(6095, 4));
+        	ImpenCantripList.Add(new IntDoubleLoadable(4667, 3));
+        	ImpenCantripList.Add(new IntDoubleLoadable(2592, 2));
+        	ImpenCantripList.Add(new IntDoubleLoadable(2604, 1));
+        	
+        	ImpenList.Add(new IntDoubleLoadable(4407, 12));
+        	ImpenList.Add(new IntDoubleLoadable(3908, 12));
+        	ImpenList.Add(new IntDoubleLoadable(2108, 11));
+        	ImpenList.Add(new IntDoubleLoadable(1486, 10));
+        	ImpenList.Add(new IntDoubleLoadable(1485, 7.5));
+        	ImpenList.Add(new IntDoubleLoadable(1484, 5));
+        	ImpenList.Add(new IntDoubleLoadable(1483, 3.75));
+        	ImpenList.Add(new IntDoubleLoadable(1482, 2.5));
+        	ImpenList.Add(new IntDoubleLoadable(51, 1));
+        	
+        	
+        	
         }
         
         

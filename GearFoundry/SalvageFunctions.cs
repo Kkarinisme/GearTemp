@@ -32,7 +32,11 @@ namespace GearFoundry
 			try
 			{
 				SalvageRulesList.Clear();
-				foreach(var XSalv in mSortedSalvageListChecked)
+				var EnabledSalvage = from salv in mSortedSalvageList
+					where salv.Element("checked").Value == "true"
+					select salv;
+				
+				foreach(var XSalv in EnabledSalvage)
 				{
 					
 					splitstring = XSalv.Element("combine").Value.Split(',');
