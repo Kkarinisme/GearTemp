@@ -87,8 +87,6 @@ namespace GearFoundry
         private XDocument xdocGenInventory = null;
         private XDocument xdocToonInventory = null;
 
-        XElement el = null;
-
         //Filenames used in GearFoundry that correspond to xdocuments
 
         private string GearDir = null;
@@ -126,58 +124,14 @@ namespace GearFoundry
         private bool mgoon;
         bool mgoonInv;
 
-		XElement SelectedRule = null;        
+		XElement mSelectedRule = null;        
         
-        int nNextRuleNum;
-        bool bRuleEnabled = false;
+
         int nItemNum;
-        int nRuleNum;
-        int nTrophyNum;
-        int nRulePriority = 999;
-        string sRuleAppliesTo = String.Empty;
-        string sRuleName = String.Empty;
 
-        int nRuleArcaneLore = -1;
-        int nGearScore = -1;
-
-        double nRuleWork = -1;
-
-        int nRuleWieldLevel = -1;
-
-        int nRuleWieldSkill = -1;
-        int nRuleMasteryType = -1;
-        string sRuleDamageTypes = String.Empty;
-        string sRulePalettes = String.Empty;
-
-        string sRuleReqSkill = String.Empty;
-        string sRuleReqSkilla = String.Empty;
-        string sRuleReqSkillb = String.Empty;
-        string sRuleReqSkillc = String.Empty;
-        string sRuleReqSkilld = String.Empty;
-
-        string sRuleWeapons = String.Empty;
-        string sRuleWeaponsa = "false";
-        string sRuleWeaponsb = "false";
-        string sRuleWeaponsc = "false";
-        string sRuleWeaponsd = "false";
-
-        string sRuleArmorType = String.Empty;
-        string sRuleArmorSet = String.Empty;
-
-        string sRuleSlots = String.Empty;
-        bool bRuleFilterLegend = true;
-        bool bRuleFilterEpic = true;
-        bool bRuleFilterMajor = true;
-        bool bRuleFilterlvl8 = true;
-        bool bRuleFilterCloak = true;
-        bool bRuleMustBeUnEnchantable = false;
-        string sRuleSpells = String.Empty;
-        
-        int nRuleNumSpells = -1;
+        int nTrophyNum;        
         int nid;
         int nusearrowid;
-        int nspells;
-        int nRuleRow;
         int nTrophyRow;
         int nMobRow;
         string snameorig;

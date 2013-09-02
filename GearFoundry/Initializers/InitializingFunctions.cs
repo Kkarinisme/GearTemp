@@ -196,7 +196,6 @@ namespace GearFoundry
             xdocMobs = XDocument.Load(mobsFilename);
             xdocTrophies = XDocument.Load(trophiesFilename);
             xdocSalvage = XDocument.Load(salvageFilename);
-          //  RedoSalvageFile();
             xdocRules = XDocument.Load(rulesFilename);
             xdocGenSettings = XDocument.Load(genSettingsFilename);
             xdocSwitchGearSettings = XDocument.Load(switchGearSettingsFilename);
@@ -209,7 +208,7 @@ namespace GearFoundry
             	setUpLists(xdocMobs, mSortedMobsList);
                 setUpLists(xdocTrophies, mSortedTrophiesList);
                 setUpLists(xdocSalvage, mSortedSalvageList);
-                setUpRulesLists(xdocRules, mPrioritizedRulesList);
+                setUpRulesLists();
                 //Irq:  Builds class mirror lists of Mish's xdocs at load time.
                 setUpSettingsList();
                 FillSalvageRules();
@@ -268,43 +267,32 @@ namespace GearFoundry
 
 
 
-        public void setUpRulesLists(XDocument xdoc, List<XElement> sorted)
+        public void setUpRulesLists()
         {
             try
             {
-                sorted.Clear();
+            	
+
+                mPrioritizedRulesList.Clear();
 
                 IEnumerable<XElement> myelements = xdocRules.Element("Rules").Descendants("Rule");
-                int n = myelements.Count();
-                nNextRuleNum = n;
-
-                foreach (XElement el in myelements)
-                {
-
-                    int num = Convert.ToInt32(el.Element("Priority").Value);
-                    if (num == 0) { el.Element("Priority").Value = "999"; }
-                    int rulenum = Convert.ToInt32(el.Element("RuleNum").Value);
-                    if(rulenum>nNextRuleNum){nNextRuleNum=rulenum;}
-                }
-                //Will be number of next rule
-                nNextRuleNum++;
- 
+                
 
                 var lstChecked = from element in myelements
-                                   where Convert.ToBoolean(element.Element("Enabled").Value)
-                                 orderby Convert.ToInt32(element.Element("Priority").Value) ascending
+                                   where element.Element("Enabled").Value == "true"
+                                 orderby element.Element("Priority").Value ascending
                                  select element;
 
 
-                sorted.AddRange(lstChecked);
+                mPrioritizedRulesList.AddRange(lstChecked);
 
 
                var lstUnChecked = from element in myelements
-                                   where !Convert.ToBoolean(element.Element("Enabled").Value)
-                                   orderby Convert.ToInt32(element.Element("Priority").Value) ascending
+                                   where element.Element("Enabled").Value == "false"
+                                   orderby element.Element("Priority").Value ascending
                                    select element;
 
-                 sorted.AddRange(lstUnChecked);
+                 mPrioritizedRulesList.AddRange(lstUnChecked);
  
             }
             catch (Exception ex) { LogError(ex); }
@@ -312,51 +300,129 @@ namespace GearFoundry
 
         }
 
-        //Function clears all rules variables from previous rule
-        private void initRulesVariables()
+        private void _UpdateRulesTabs()
         {
-            bRuleEnabled = false;
-            nRuleNum = 0;
-            nRulePriority = 999;
-            sRuleAppliesTo = String.Empty;
-            sRuleName = String.Empty;
-            nGearScore = -1;
-
-            nRuleArcaneLore = -1;
-
-            nRuleWork = -1;
-
-            nRuleWieldSkill = -1;
-            nRuleMasteryType = -1;
-            sRuleDamageTypes = String.Empty;
-            sRulePalettes = String.Empty;
-
-            sRuleReqSkilla = String.Empty;
-            sRuleReqSkillb = String.Empty;
-            sRuleReqSkillc = String.Empty;
-            sRuleReqSkilld = String.Empty;
-            
-            sRuleWeaponsa = "false";
-            sRuleWeaponsb = "false";
-            sRuleWeaponsc = "false";
-            sRuleWeaponsd = "false";
-
-            sRuleArmorType = String.Empty;
-
-            sRuleArmorSet = String.Empty;
-            sRuleSlots = String.Empty;
-            bRuleMustBeUnEnchantable = false;
-
-
-            bRuleFilterLegend = false;
-            bRuleFilterEpic = false;
-            bRuleFilterMajor = false;
-            bRuleFilterlvl8 = false;
-
-            sRuleSpells = String.Empty;
-            nRuleNumSpells = -1;
-
+        	try
+        	{
+        		string[] SplitString;
+        		int HoldScrollPosition = lstRules.ScrollPosition;
+        		
+        		if(mSelectedRule == null){mSelectedRule = new XElement("Rule");}
+        		
+        		
+        		//Not Visible:  "RuleNum"
+        		txtRuleName.Text = mSelectedRule.Element("Name").Value;
+        		txtRulePriority.Text = mSelectedRule.Element("Priority").Value;
+        		chkRuleEnabled.Checked = Convert.ToBoolean(mSelectedRule.Element("bRuleEnabled").Value);
+        		txtGearScore.Text = mSelectedRule.Element("GearScore").Value;
+        		txtRuleMaxCraft.Text = mSelectedRule.Element("Work").Value;
+        		txtRuleArcaneLore.Text = mSelectedRule.Element("ArcaneLore").Value;
+        		txtRuleWieldLevel.Text = mSelectedRule.Element("WieldLevel").Value;
+        		txtRuleNumSpells.Text = mSelectedRule.Element("NumSpells").Value;
+        		
+        		SplitString = mSelectedRule.Element("WieldEnabled").Value.Split(',');
+        		chkRuleWeaponsa.Checked = Convert.ToBoolean(SplitString[0]);
+        		chkRuleWeaponsb.Checked = Convert.ToBoolean(SplitString[1]);
+        		chkRuleWeaponsc.Checked = Convert.ToBoolean(SplitString[2]);
+        		chkRuleWeaponsd.Checked = Convert.ToBoolean(SplitString[3]);
+        		
+        		SplitString = mSelectedRule.Element("ReqSkill").Value.Split(',');
+        		txtRuleReqSkilla.Text = SplitString[0];
+        		txtRuleReqSkillb.Text = SplitString[1];
+        		txtRuleReqSkillc.Text = SplitString[2];
+        		txtRuleReqSkilld.Text = SplitString[3];
+        		   
+        		_PopulateList(lstRuleApplies, AppliesToList, _ConvertCommaStringToIntList(mSelectedRule.Element("AppliesToFlag").Value)); 
+				_PopulateList(lstRuleSlots, SlotList, _ConvertCommaStringToIntList(mSelectedRule.Element("Slots").Value));
+				_PopulateList(lstDamageTypes, ElementalList, _ConvertCommaStringToIntList(mSelectedRule.Element("DamageType").Value));
+				_PopulateList(lstRuleArmorTypes, ArmorIndex, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorType").Value));
+				_PopulateList(lstRuleSets, ArmorSetsList, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorSet").Value));
+        		
+        		cboWeaponAppliesTo.Selected = Convert.ToInt32(mSelectedRule.Element("WieldSkill").Value);
+        		cboMasteryType.Selected = Convert.ToInt32(mSelectedRule.Element("MasteryType").Value);
+        		
+        		_UpdateSpellEnabledListBox();
+        		
+        		lstRules.ScrollPosition = HoldScrollPosition;
+        		
+        		//UNDONE:  Spells
+        		
+        		//UNDONE:  Palettes
+        		
+        		
+        	}catch(Exception ex){LogError(ex);}
         }
+        
+        private void _PopulateList(MyClasses.MetaViewWrappers.IList target, List<IDNameLoadable> source, List<int> selected)
+        {
+        	try
+        	{
+        		IListRow row;
+        		target.Clear();
+        		foreach(IDNameLoadable entry in source)
+        		{
+        			row = target.AddRow();
+        			if(selected.Contains(entry.ID)) {row[0][0] = true;}
+        			row[1][0] = entry.name;
+        			row[2][0] = entry.ID.ToString();
+        		}
+        		
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
+        private void _UpdateSpellEnabledListBox()
+        {
+            try
+            {
+            	MyClasses.MetaViewWrappers.IListRow newRow;
+            	lstRuleSpellsEnabled.Clear();
+            	
+            	List<int> SpellIds = _ConvertCommaStringToIntList(mSelectedRule.Element("Spells").Value);
+
+            	foreach(int spelid in SpellIds)
+            	{
+            		newRow = lstRuleSpellsEnabled.AddRow();
+            		newRow[0][0] = SpellIndex[spelid].spellname;
+            		newRow[1][0] = SpellIndex[spelid].spellid;
+                    newRow[2][1] = 0x6005e6a;
+            	}
+            }
+
+            catch (Exception ex) { LogError(ex); }
+        }
+        
+
+        
+        
+        private void _UpdateSpellListBox()
+        {
+        	try
+        	{
+        		lstRuleSpells.Clear();
+        		
+        		List<int> exclude = _ConvertCommaStringToIntList(mSelectedRule.Element("Spells").Value);
+        		
+        		var spelllist = from tsinfo in ItemsSpellList
+        			where ((chkRuleFilterlvl8.Checked && tsinfo.spelllevel == 8) || (chkRuleFilterMajor.Checked && tsinfo.spelllevel == 13) ||
+        				  (chkRuleFilterEpic.Checked && tsinfo.spelllevel == 14) || (chkRuleFilterLegend.Checked && tsinfo.spelllevel == 15) ||
+        				  (chkRuleFilterCloak.Checked && tsinfo.spelllevel == 20)) && !exclude.Contains(tsinfo.spellid)
+					orderby tsinfo.spellname
+        			select tsinfo;
+        		          
+	            foreach (spellinfo element in spelllist)
+	            {	             
+	                    string vname = element.spellname;
+	                    bool mchecked = false;
+	                    string snum = element.spellid.ToString();
+	                    MyClasses.MetaViewWrappers.IListRow newRow = lstRuleSpells.AddRow();
+	                    newRow[0][0] = mchecked;
+	                    newRow[1][0] = vname;
+	                    newRow[2][0] = snum;
+	             }
+                
+            }catch (Exception ex) { LogError(ex); }
+        }
+        
 
         private void fillSettingsVariables()
         {
@@ -629,67 +695,6 @@ namespace GearFoundry
             {
                 SubscribeChatEvents();
             }
-
-
-            
-
-        }
-
-
-        //Removes any previous rule data from textboxes and checkboxes and adds current rule data
-        private void initRulesCtrls()
-        {
-
-            chkRuleEnabled.Checked = bRuleEnabled;
-            txtRulePriority.Text = nRulePriority.ToString();
-            txtRuleName.Text = sRuleName;
-
-          
-            txtRuleArcaneLore.Text = nRuleArcaneLore.ToString();
-            txtGearScore.Text = nGearScore.ToString();
-            txtRuleMaxCraft.Text = nRuleWork.ToString();
-            txtRuleWieldLevel.Text = nRuleWieldLevel.ToString();
-         
-           
-            try
-            {
-                int i=0;
-                foreach (IDNameLoadable item in WeaponTypeList)
-                {
-
-                    if (item.ID == nRuleWieldSkill)
-                    {
-                        cboWeaponAppliesTo.Selected = i;
-                         break;
-                    }
-                    i++;
-                }
-            }
-            catch (Exception ex) { LogError(ex); }
-
-            cboMasteryType.Selected = nRuleMasteryType;
-     
-            chkRuleWeaponsa.Checked = Convert.ToBoolean(sRuleWeaponsa);
-            chkRuleWeaponsb.Checked = Convert.ToBoolean(sRuleWeaponsb);
-            chkRuleWeaponsc.Checked = Convert.ToBoolean(sRuleWeaponsc);
-            chkRuleWeaponsd.Checked = Convert.ToBoolean(sRuleWeaponsd);
-
-              
-            txtRuleReqSkilla.Text = sRuleReqSkilla;
-            txtRuleReqSkillb.Text = sRuleReqSkillb;
-            txtRuleReqSkillc.Text = sRuleReqSkillc;
-            txtRuleReqSkilld.Text = sRuleReqSkilld;
-     
-
-         
-            txtRuleNumSpells.Text = nRuleNumSpells.ToString();
-
-            chkRuleFilterLegend.Checked = bRuleFilterLegend;
-            chkRuleFilterEpic.Checked = bRuleFilterEpic;
-            chkRuleFilterCloak.Checked = bRuleFilterCloak;
-            chkRuleFilterMajor.Checked = bRuleFilterMajor;
-            chkRuleFilterlvl8.Checked = bRuleFilterlvl8;
-            populateSpellListBox();
         }
 
 

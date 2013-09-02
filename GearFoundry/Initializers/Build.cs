@@ -54,6 +54,10 @@ namespace GearFoundry
         //Lists for LootObject GearScore Calcs
         private static List<IntDoubleLoadable> ImpenCantripList = new List<IntDoubleLoadable>();
         private static List<IntDoubleLoadable> ImpenList = new List<IntDoubleLoadable>();
+        private static List<IntDoubleLoadable> BaneList = new List<IntDoubleLoadable>();
+        private static List<IntDoubleLoadable> BaneCantripList = new List<IntDoubleLoadable>();
+        
+        
 
 		private static List<IDNameLoadable> ElementalList = new List<IDNameLoadable>();
 		private static List<IDNameLoadable> MasteryIndex = new List<IDNameLoadable>();
@@ -65,7 +69,7 @@ namespace GearFoundry
 		private static List<IDNameLoadable> SlotList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> WeaponTypeList = new List<IDNameLoadable>();
         private static List<IDNameLoadable> AppliesToList = new List<IDNameLoadable>();
-        private static List<IDNameLoadable> EnabledSpellsList = new List<IDNameLoadable>();
+
 
         //From:  Irquk - to replace old dictionary lookups
         private static List<spellinfo> SpellIndex = new List<spellinfo>();
@@ -111,7 +115,6 @@ namespace GearFoundry
             if (SlotList != null) { SlotList.Clear(); }
             if (WeaponTypeList != null) { WeaponTypeList.Clear(); }
             if (AppliesToList != null) { AppliesToList.Clear(); }
-            if (EnabledSpellsList != null) { EnabledSpellsList.Clear(); }
             if (SpellIndex != null) { SpellIndex.Clear(); }
             if (ItemsSpellList != null) { ItemsSpellList.Clear(); }
             if (FilteredSpellIndex != null) { FilteredSpellIndex.Clear(); }
@@ -159,13 +162,16 @@ namespace GearFoundry
 		{
 			public int ID;
 			public double Val;
+			public int Ele;
+			public int Series;
 			
-			public IntDoubleLoadable(int i, double j)
+			public IntDoubleLoadable(int i, double j, int elemental, int stack)
 			{
 				ID =  i;
 				Val = j;
+				Ele = elemental;
+				Series = stack;				
 			}
-
 		}
 		
 		private class IDName
@@ -218,20 +224,7 @@ namespace GearFoundry
             CreateWeaponWieldInvList();
             CreateCoverageInvList();
             CreateEmbueInvList();
-            CreateFilteredSpellIndex();
-            populateListBoxes();
 		}
-
-        private void populateListBoxes()
-        {
-            populateWeaponDamageListBox();
-            populateSlotListBox();
-            populateArmorTypesListBox();
-            populateRulesListBox();
-            populateListRuleAppliesBox();
-            populateSetsListBox();
-            populateSpellListBox();
-        }
 
         private void CreateAppliesToList()
         {
@@ -408,43 +401,44 @@ namespace GearFoundry
 
 		}
 
-        private void WriteEnabledSpellsList(int id, string name)
-        {
-            try
-            {
-
-                IDNameLoadable info = new IDNameLoadable(id, name);
-                     //if there are already spells in the enabled spells list must be certain to include them in new list
-                if (EnabledSpellsList != null && !EnabledSpellsList.Contains(info))
-                {
-
-                    EnabledSpellsList.Add(info);
-               }
-                // if EnabledSpellsList did not exist must create it
-                else
-                {
-                     EnabledSpellsList = new List<IDNameLoadable>();
-                    //Now need to add the new spell to the list
-                    EnabledSpellsList.Add(info);
-                }
-
-               sRuleSpells = String.Empty;
-               nspells = 0;
-
-                //Now resetup the variables nspells and sRuleSpells
-                foreach(IDNameLoadable spl in EnabledSpellsList)
-                {
-                    string sid = spl.ID.ToString();
-                    sRuleSpells = sRuleSpells + sid + ",";
-                    nspells++;
-                }
-                //Now remove the final comma from the variable
-                sRuleSpells = sRuleSpells.Substring(0, sRuleSpells.Length - 1);
-
-
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+		//UNDONE:  Remove if no longer needed.
+//        private void WriteEnabledSpellsList(int id, string name)
+//        {
+//            try
+//            {
+//
+//                IDNameLoadable info = new IDNameLoadable(id, name);
+//                     //if there are already spells in the enabled spells list must be certain to include them in new list
+//                if (EnabledSpellsList != null && !EnabledSpellsList.Contains(info))
+//                {
+//
+//                    EnabledSpellsList.Add(info);
+//               }
+//                // if EnabledSpellsList did not exist must create it
+//                else
+//                {
+//                     EnabledSpellsList = new List<IDNameLoadable>();
+//                    //Now need to add the new spell to the list
+//                    EnabledSpellsList.Add(info);
+//                }
+//
+//                //Now resetup the variables nspells and sRuleSpells
+//                
+//                string sRuleSpells = String.Empty;
+//                foreach(IDNameLoadable spl in EnabledSpellsList)
+//                {
+//                    string sid = spl.ID.ToString();
+//                    sRuleSpells = sRuleSpells + sid + ",";
+//                    nspells++;
+//                }
+//                //Now remove the final comma from the variable
+//                sRuleSpells = sRuleSpells.Substring(0, sRuleSpells.Length - 1);
+//                mSelectedRule.Element("Spells").Value = sRuleSpells;
+//
+//
+//            }
+//            catch (Exception ex) { LogError(ex); }
+//        }
 
       
         private void CreateWeaponTypeList()
@@ -1047,34 +1041,7 @@ namespace GearFoundry
          	}
          	catch{}
          }
-  
-        private void CreateFilteredSpellIndex()
-        {
-        	try
-        	{        		
-        	       		
-        	var spelllist = from tsinfo in ItemsSpellList
-        					where (bRuleFilterlvl8 && tsinfo.spelllevel == 8) || (bRuleFilterMajor && tsinfo.spelllevel == 13) ||
-        						  (bRuleFilterEpic && tsinfo.spelllevel == 14) || (bRuleFilterLegend && tsinfo.spelllevel == 15) ||
-        						  (bRuleFilterCloak && tsinfo.spelllevel == 20)
-							orderby tsinfo.spellname
-        			 		select tsinfo;
-        	
-        	foreach(var spel in spelllist)
-        	{
-        		FilteredSpellIndex.Add(spel);
-        	}
 
-        		
-                }
-                catch
-                {
-                }
-            if (writelists)
-            { doWriteLists(FilteredSpellIndex); }
-         }
-
-       //These are functions to create lists for comboboxes and initialize them
 
         private void CreateClassInvList()
         {
@@ -1397,21 +1364,232 @@ namespace GearFoundry
         
         private void FillLootObjectLists()
         {
-
-        	ImpenCantripList.Add(new IntDoubleLoadable(6095, 4));
-        	ImpenCantripList.Add(new IntDoubleLoadable(4667, 3));
-        	ImpenCantripList.Add(new IntDoubleLoadable(2592, 2));
-        	ImpenCantripList.Add(new IntDoubleLoadable(2604, 1));
         	
-        	ImpenList.Add(new IntDoubleLoadable(4407, 12));
-        	ImpenList.Add(new IntDoubleLoadable(3908, 12));
-        	ImpenList.Add(new IntDoubleLoadable(2108, 11));
-        	ImpenList.Add(new IntDoubleLoadable(1486, 10));
-        	ImpenList.Add(new IntDoubleLoadable(1485, 7.5));
-        	ImpenList.Add(new IntDoubleLoadable(1484, 5));
-        	ImpenList.Add(new IntDoubleLoadable(1483, 3.75));
-        	ImpenList.Add(new IntDoubleLoadable(1482, 2.5));
-        	ImpenList.Add(new IntDoubleLoadable(51, 1));
+//        	private class IntDoubleLoadable
+//			{
+//				public int ID;
+//				public double Val;
+//				public int Ele;
+//				public int Series;
+//				
+//				public IntDoubleLoadable(int i, double j, int elemental, int stack)
+//				{
+//					ID =  i;
+//					Val = j;
+//					Ele = elemental;
+//					Series = stack;				
+//				}
+//			}
+
+									
+							
+//									
+//									//Bludgeon  Modifiers:  4
+//									if(wo.Spell(i) == 4397 && bebonus < 2){bebonus = 2;}
+//									else if(wo.Spell(i) == 2098 && bebonus < 1.70){bebonus = 1.7;}
+//									else if(wo.Spell(i) == 1516 && bebonus < 1.50){bebonus = 1.5;}
+//									else if(wo.Spell(i) == 1515 && bebonus < 1.0){bebonus = 1.0;}
+//									else if(wo.Spell(i) == 1514 && bebonus < 0.75){bebonus = 0.75;}
+//									else if(wo.Spell(i) == 1513 && bebonus < 0.5){bebonus = 0.5;}
+//									else if(wo.Spell(i) == 1512 && bebonus < 0.25){bebonus = 0.25;}
+//									else if(wo.Spell(i) == 1511 && bebonus < 0.1){bebonus = 0.1;}	
+//									if(wo.Spell(i) == 6090 && bcbonus < 0.25){bcbonus = 0.25;}
+//									else if(wo.Spell(i) == 4662 && bcbonus < 0.2){bcbonus = 0.2;}
+//									else if(wo.Spell(i) == 2587 && bcbonus < 0.15){bcbonus = 0.15;}
+//									else if(wo.Spell(i) == 2599 && bcbonus < 0.1){bcbonus = 0.1;}
+//									
+//									//Acid Modifiers:  32
+//									if(wo.Spell(i) == 4391 && aebonus < 2){aebonus = 2;}
+//									else if(wo.Spell(i) == 2092 && aebonus < 1.70){aebonus = 1.7;}
+//									else if(wo.Spell(i) == 1498 && aebonus < 1.50){aebonus = 1.5;}
+//									else if(wo.Spell(i) == 1497 && aebonus < 1.0){aebonus = 1.0;}
+//									else if(wo.Spell(i) == 1496 && aebonus < 0.75){aebonus = 0.75;}
+//									else if(wo.Spell(i) == 1495 && aebonus < 0.5){aebonus = 0.5;}
+//									else if(wo.Spell(i) == 1494 && aebonus < 0.25){aebonus = 0.25;}
+//									else if(wo.Spell(i) == 1493 && aebonus < 0.1){aebonus = 0.1;}	
+//									if(wo.Spell(i) == 6088 && acbonus < 0.25){acbonus = 0.25;}
+//									else if(wo.Spell(i) == 4660 && acbonus < 0.2){acbonus = 0.2;}
+//									else if(wo.Spell(i) == 2585 && acbonus < 0.15){acbonus = 0.15;}
+//									else if(wo.Spell(i) == 2597 && acbonus < 0.1){acbonus = 0.1;}
+//									
+//									//Fire Modifiers: 16
+//									if(wo.Spell(i) == 4401 && febonus < 2){febonus = 2;}
+//									else if(wo.Spell(i) == 2102 && febonus < 1.70){febonus = 1.7;}
+//									else if(wo.Spell(i) == 1552 && febonus < 1.50){febonus = 1.5;}
+//									else if(wo.Spell(i) == 1551 && febonus < 1.0){febonus = 1.0;}
+//									else if(wo.Spell(i) == 1550 && febonus < 0.75){febonus = 0.75;}
+//									else if(wo.Spell(i) == 1549 && febonus < 0.5){febonus = 0.5;}
+//									else if(wo.Spell(i) == 1548 && febonus < 0.25){febonus = 0.25;}
+//									else if(wo.Spell(i) == 1547 && febonus < 0.1){febonus = 0.1;}	
+//									if(wo.Spell(i) == 6092 && fcbonus < 0.25){fcbonus = 0.25;}
+//									else if(wo.Spell(i) == 4664 && fcbonus < 0.2){fcbonus = 0.2;}
+//									else if(wo.Spell(i) == 2589 && fcbonus < 0.15){fcbonus = 0.15;}
+//									else if(wo.Spell(i) == 2601 && fcbonus < 0.1){fcbonus = 0.1;}
+//									
+//									//Cold Modifiers:  8
+//									if(wo.Spell(i) == 4403 && cebonus < 2){cebonus = 2;}
+//									else if(wo.Spell(i) == 2104 && cebonus < 1.70){cebonus = 1.7;}
+//									else if(wo.Spell(i) == 1528 && cebonus < 1.50){cebonus = 1.5;}
+//									else if(wo.Spell(i) == 1527 && cebonus < 1.0){cebonus = 1.0;}
+//									else if(wo.Spell(i) == 1526 && cebonus < 0.75){cebonus = 0.75;}
+//									else if(wo.Spell(i) == 1525 && cebonus < 0.5){cebonus = 0.5;}
+//									else if(wo.Spell(i) == 1524 && cebonus < 0.25){cebonus = 0.25;}
+//									else if(wo.Spell(i) == 1523 && cebonus < 0.1){cebonus = 0.1;}	
+//									if(wo.Spell(i) == 6093 && ccbonus < 0.25){ccbonus = 0.25;}
+//									else if(wo.Spell(i) == 4665 && ccbonus < 0.2){ccbonus = 0.2;}
+//									else if(wo.Spell(i) == 2590 && ccbonus < 0.15){ccbonus = 0.15;}
+//									else if(wo.Spell(i) == 2602 && ccbonus < 0.1){ccbonus = 0.1;}
+//									
+//									//Lightning Modifiers:  64
+//									if(wo.Spell(i) == 4409 && lebonus < 2){lebonus = 2;}
+//									else if(wo.Spell(i) == 2110 && lebonus < 1.70){lebonus = 1.7;}
+//									else if(wo.Spell(i) == 1540 && lebonus < 1.50){lebonus = 1.5;}
+//									else if(wo.Spell(i) == 1539 && lebonus < 1.0){lebonus = 1.0;}
+//									else if(wo.Spell(i) == 1538 && lebonus < 0.75){lebonus = 0.75;}
+//									else if(wo.Spell(i) == 1537 && lebonus < 0.5){lebonus = 0.5;}
+//									else if(wo.Spell(i) == 1536 && lebonus < 0.25){lebonus = 0.25;}
+//									else if(wo.Spell(i) == 1535 && lebonus < 0.1){lebonus = 0.1;}	
+//									if(wo.Spell(i) == 6099 && lcbonus < 0.25){lcbonus = 0.25;}
+//									else if(wo.Spell(i) == 4671 && lcbonus < 0.2){lcbonus = 0.2;}
+//									else if(wo.Spell(i) == 2595 && lcbonus < 0.15){lcbonus = 0.15;}
+//									else if(wo.Spell(i) == 2607 && lcbonus < 0.1){lcbonus = 0.1;}	
+
+
+        	
+        	ImpenList.Add(new IntDoubleLoadable(4407, 12, 0, 0));  //Impen 8a
+        	ImpenList.Add(new IntDoubleLoadable(3908, 12, 0, 0));  //Impen 8b
+        	ImpenList.Add(new IntDoubleLoadable(2108, 11, 0, 0));  //Impen 7
+        	ImpenList.Add(new IntDoubleLoadable(1486, 10, 0, 0));  //Impen 6
+        	ImpenList.Add(new IntDoubleLoadable(1485, 7.5, 0, 0)); //Impen 5
+        	ImpenList.Add(new IntDoubleLoadable(1484, 5, 0, 0));   //Impen 4
+        	ImpenList.Add(new IntDoubleLoadable(1483, 3.75, 0, 0));//Impen 3
+        	ImpenList.Add(new IntDoubleLoadable(1482, 2.5, 0, 0)); //Impen 2
+        	ImpenList.Add(new IntDoubleLoadable(51, 1, 0, 0));  //Impen 1
+        	
+        	//slash 1
+        	BaneList.Add(new IntDoubleLoadable(4293, 2, 1, 0));
+        	BaneList.Add(new IntDoubleLoadable(2094, 1.7, 1, 0));
+        	BaneList.Add(new IntDoubleLoadable(1562, 1.5, 1, 0));
+        	BaneList.Add(new IntDoubleLoadable(1561, 1.0, 1, 0));
+        	BaneList.Add(new IntDoubleLoadable(1560, 0.75, 1, 0));
+        	BaneList.Add(new IntDoubleLoadable(1559, 0.5, 1, 0));
+        	BaneList.Add(new IntDoubleLoadable(1568, 0.25, 1, 0));
+        	BaneList.Add(new IntDoubleLoadable(37, 0.1, 1, 0));
+        	
+        	//Pierce 2
+        	BaneList.Add(new IntDoubleLoadable(4212, 2, 2, 0));
+        	BaneList.Add(new IntDoubleLoadable(2113, 1.7, 2, 0));
+        	BaneList.Add(new IntDoubleLoadable(1574, 1.5, 2, 0));
+        	BaneList.Add(new IntDoubleLoadable(1573, 1.0, 2, 0));
+        	BaneList.Add(new IntDoubleLoadable(1572, 0.75, 2, 0));
+        	BaneList.Add(new IntDoubleLoadable(1571, 0.5, 2, 0));
+        	BaneList.Add(new IntDoubleLoadable(1570, 0.25, 2, 0));
+        	BaneList.Add(new IntDoubleLoadable(1569, 0.1, 2, 0));
+        	
+        	//Bludgeon  Modifiers:  4
+        	BaneList.Add(new IntDoubleLoadable(4397, 2, 4, 0));
+        	BaneList.Add(new IntDoubleLoadable(2098, 1.7, 4, 0));
+        	BaneList.Add(new IntDoubleLoadable(1516, 1.5, 4, 0));
+        	BaneList.Add(new IntDoubleLoadable(1515, 1.0, 4, 0));
+        	BaneList.Add(new IntDoubleLoadable(1514, 0.75, 4, 0));
+        	BaneList.Add(new IntDoubleLoadable(1513, 0.5, 4, 0));
+        	BaneList.Add(new IntDoubleLoadable(1512, 0.25, 4, 0));
+        	BaneList.Add(new IntDoubleLoadable(1511, 0.1, 4, 0));
+        	
+        	//Acid Modifiers:  32
+        	
+        	BaneList.Add(new IntDoubleLoadable(4391, 2, 32, 0));
+        	BaneList.Add(new IntDoubleLoadable(2092, 1.7, 32, 0));
+        	BaneList.Add(new IntDoubleLoadable(1498, 1.5, 32, 0));
+        	BaneList.Add(new IntDoubleLoadable(1497, 1.0, 32, 0));
+        	BaneList.Add(new IntDoubleLoadable(1496, 0.75, 32, 0));
+        	BaneList.Add(new IntDoubleLoadable(1495, 0.5, 32, 0));
+        	BaneList.Add(new IntDoubleLoadable(1494, 0.25, 32, 0));
+        	BaneList.Add(new IntDoubleLoadable(1493, 0.1, 32, 0));
+        	
+        	//Fire Modifiers: 16
+        	BaneList.Add(new IntDoubleLoadable(4401, 2, 16, 0));
+        	BaneList.Add(new IntDoubleLoadable(2102, 1.7, 16, 0));
+        	BaneList.Add(new IntDoubleLoadable(1552, 1.5, 16, 0));
+        	BaneList.Add(new IntDoubleLoadable(1551, 1.0, 16, 0));
+        	BaneList.Add(new IntDoubleLoadable(1550, 0.75, 16, 0));
+        	BaneList.Add(new IntDoubleLoadable(1549, 0.5, 16, 0));
+        	BaneList.Add(new IntDoubleLoadable(1548, 0.25, 16, 0));
+        	BaneList.Add(new IntDoubleLoadable(1547, 0.1, 16, 0));
+        	
+        	//Cold Modifiers:  8
+        	BaneList.Add(new IntDoubleLoadable(4403, 2, 8, 0));
+        	BaneList.Add(new IntDoubleLoadable(2104, 1.7, 8, 0));
+        	BaneList.Add(new IntDoubleLoadable(1528, 1.5, 8, 0));
+        	BaneList.Add(new IntDoubleLoadable(1527, 1.0, 8, 0));
+        	BaneList.Add(new IntDoubleLoadable(1526, 0.75, 8, 0));
+        	BaneList.Add(new IntDoubleLoadable(1525, 0.5, 8, 0));
+        	BaneList.Add(new IntDoubleLoadable(1524, 0.25, 8, 0));
+        	BaneList.Add(new IntDoubleLoadable(1523, 0.1, 8, 0));
+        	
+        	//Lightning Modifiers:  64
+        	BaneList.Add(new IntDoubleLoadable(4409, 2, 64, 0));
+        	BaneList.Add(new IntDoubleLoadable(2110, 1.7, 64, 0));
+        	BaneList.Add(new IntDoubleLoadable(1540, 1.5, 64, 0));
+        	BaneList.Add(new IntDoubleLoadable(1539, 1.0, 64, 0));
+        	BaneList.Add(new IntDoubleLoadable(1538, 0.75, 64, 0));
+        	BaneList.Add(new IntDoubleLoadable(1537, 0.5, 64, 0));
+        	BaneList.Add(new IntDoubleLoadable(1536, 0.25, 64, 0));
+        	BaneList.Add(new IntDoubleLoadable(1535, 0.1, 64, 0));
+        	
+			//Impen        	
+        	ImpenCantripList.Add(new IntDoubleLoadable(6095, 4, 0, 1));  //L Impen
+        	ImpenCantripList.Add(new IntDoubleLoadable(4667, 3, 0, 1));  //E Impen
+        	ImpenCantripList.Add(new IntDoubleLoadable(2592, 2, 0, 1));  //J Impen
+        	ImpenCantripList.Add(new IntDoubleLoadable(2604, 1, 0, 1));  //N Impen
+        	
+        	//Slash 1
+         	BaneCantripList.Add(new IntDoubleLoadable(6097, 0.25, 1, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(4669, 0.2, 1, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(2594, 0.15, 1, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(2606, 0.1, 1, 1));
+        	
+        	//Pierce 2
+        	BaneCantripList.Add(new IntDoubleLoadable(6096, 0.25, 2, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(4668, 0.2, 2, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(2593, 0.15, 2, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(2605, 0.1, 2, 1));
+        	
+        	//Bludgeon 4
+        	BaneCantripList.Add(new IntDoubleLoadable(6090, 0.25, 4, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(4662, 0.2, 4, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(2587, 0.15, 4, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(2599, 0.1, 4, 1));
+        	
+        	
+//									
+//									//Acid Modifiers
+
+//									if(wo.Spell(i) == 6088 && acbonus < 0.25){acbonus = 0.25;}
+//									else if(wo.Spell(i) == 4660 && acbonus < 0.2){acbonus = 0.2;}
+//									else if(wo.Spell(i) == 2585 && acbonus < 0.15){acbonus = 0.15;}
+//									else if(wo.Spell(i) == 2597 && acbonus < 0.1){acbonus = 0.1;}
+//									
+//									//Fire Modifiers
+
+//									if(wo.Spell(i) == 6092 && fcbonus < 0.25){fcbonus = 0.25;}
+//									else if(wo.Spell(i) == 4664 && fcbonus < 0.2){fcbonus = 0.2;}
+//									else if(wo.Spell(i) == 2589 && fcbonus < 0.15){fcbonus = 0.15;}
+//									else if(wo.Spell(i) == 2601 && fcbonus < 0.1){fcbonus = 0.1;}
+//									
+//									//Cold Modifiers
+
+//									if(wo.Spell(i) == 6093 && ccbonus < 0.25){ccbonus = 0.25;}
+//									else if(wo.Spell(i) == 4665 && ccbonus < 0.2){ccbonus = 0.2;}
+//									else if(wo.Spell(i) == 2590 && ccbonus < 0.15){ccbonus = 0.15;}
+//									else if(wo.Spell(i) == 2602 && ccbonus < 0.1){ccbonus = 0.1;}
+//									
+//									//Lightning Modifiers
+	
+//									if(wo.Spell(i) == 6099 && lcbonus < 0.25){lcbonus = 0.25;}
+//									else if(wo.Spell(i) == 4671 && lcbonus < 0.2){lcbonus = 0.2;}
+//									else if(wo.Spell(i) == 2595 && lcbonus < 0.15){lcbonus = 0.15;}
+//									else if(wo.Spell(i) == 2607 && lcbonus < 0.1){lcbonus = 0.1;}	
         	
         	
         	

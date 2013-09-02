@@ -500,21 +500,16 @@ namespace GearFoundry
                 // Controls on Notify.SearchRules.Req Spells
                 lstRuleSpells = (MyClasses.MetaViewWrappers.IList)View["lstRuleSpells"];
                 lstRuleSpellsEnabled = (MyClasses.MetaViewWrappers.IList)View["lstRuleSpellsEnabled"];
-                chkRuleFilterLegend = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterLegend"];
-                chkRuleFilterLegend.Checked = bRuleFilterLegend;
-                
-                chkRuleFilterEpic = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterEpic"];
-                chkRuleFilterEpic.Checked = bRuleFilterEpic;
-                chkRuleFilterCloak = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterCloak"];
-                chkRuleFilterCloak.Checked = bRuleFilterCloak;
-                
-                
-                chkRuleFilterMajor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterMajor"];
-                chkRuleFilterMajor.Checked = bRuleFilterMajor;
-                chkRuleFilterlvl8 = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterlvl8"];
-                chkRuleFilterlvl8.Checked = bRuleFilterlvl8;
 
                 txtRuleNumSpells = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleNumSpells"];
+                
+                chkRuleFilterLegend  = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterLegend"];
+      			chkRuleFilterEpic  = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterEpic"];
+        		chkRuleFilterMajor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterMajor"];
+        		chkRuleFilterlvl8 = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterlvl8"];
+        		chkRuleFilterCloak = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterCloak"];
+                
+                
        			}catch(Exception ex){LogError(ex);}
                   try
                   {

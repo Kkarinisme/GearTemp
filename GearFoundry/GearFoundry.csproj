@@ -118,7 +118,6 @@
       <LogicalName>Settings.xml</LogicalName>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Documents\GuidetoVariablesandFunctions.txt" />
     <Compile Include="HudComponents\ItemTrackerActions.cs" />
     <Compile Include="HudComponents\ItemTrackerIdentify.cs" />
     <Compile Include="HudComponents\ItemTrackerLooter.cs" />
@@ -253,7 +252,6 @@
     <EmbeddedResource Include="Graphics\col.gif">
       <LogicalName>col.gif</LogicalName>
     </EmbeddedResource>
-    <Content Include="Documents\GuidetoVariablesandFunctions.txt" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="D3DService">

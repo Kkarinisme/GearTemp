@@ -67,6 +67,7 @@
 								<column progid="DecalControls.TextColumn" fixedwidth="200"/>
 								<column progid="DecalControls.TextColumn" fixedwidth="160"/>
 								<column progid="DecalControls.IconColumn" fixedwidth="10"/>
+								<column progid="DecalControls.TextColumn" fixedwidth="1"/>
 							</control>
 							<control progid="DecalControls.PushButton" name="btnRuleClear" left="10" top="110" width="110" height="20" text="Clear Previous Rule" />
 							<control progid="DecalControls.PushButton" name="btnRuleNew" left="130" top="110" width="110" height="20" text="Add New Rule" />
@@ -79,7 +80,7 @@
 										<control progid="DecalControls.List" name="lstRuleApplies" left="5" top="70" width="150" height="200" >
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="110" />
-											<column progid="DecalControls.TextColumn" />
+											<column progid="DecalControls.TextColumn" fixedwidth = "1" />
 										</control>
 										<control progid="DecalControls.Checkbox" name="chkRuleEnabled" left="5" top="20" width="60" height="16" text="Enabled" />
 										

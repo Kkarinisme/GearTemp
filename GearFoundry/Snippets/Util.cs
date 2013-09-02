@@ -185,6 +185,26 @@ namespace GearFoundry
             }
 		}
         
+        private List<int> _ConvertCommaStringToIntList(string BaseString)
+        {
+        	try
+        	{
+        		List<int> Ids = new List<int>();
+            	if(BaseString != String.Empty)
+            	{
+            		string[] SplitString = BaseString.Split(',');
+            		foreach(string str in SplitString)
+            		{
+            			Ids.Add(Convert.ToInt32(str));
+            		}
+            	}
+            	
+            	if(Ids.Count > 0) {return Ids;}
+            	else{return new List<int>();}
+        		
+        	}catch(Exception ex){LogError(ex); return new List<int>();}
+        }
+        
 //        private void playSimpleSound()
 //		{
 //		    SoundPlayer simpleSound = new SoundPlayer(@"c:\Windows\Media\chimes.wav");
