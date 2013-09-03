@@ -208,12 +208,12 @@ namespace GearFoundry
             	setUpLists(xdocMobs, mSortedMobsList);
                 setUpLists(xdocTrophies, mSortedTrophiesList);
                 setUpLists(xdocSalvage, mSortedSalvageList);
+                FillSalvageRules();
                 setUpRulesLists();
+                FillItemRules();
                 //Irq:  Builds class mirror lists of Mish's xdocs at load time.
                 setUpSettingsList();
-                FillSalvageRules();
-                FillItemRules();
-                
+                                
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -299,7 +299,7 @@ namespace GearFoundry
 
 
         }
-
+        
         private void _UpdateRulesTabs()
         {
         	try
@@ -307,13 +307,24 @@ namespace GearFoundry
         		string[] SplitString;
         		int HoldScrollPosition = lstRules.ScrollPosition;
         		
-        		if(mSelectedRule == null){mSelectedRule = new XElement("Rule");}
+        		if(mSelectedRule == null){mSelectedRule = mPrioritizedRulesList.First();}
         		
-        		
+        		lstRules.Clear();
+				foreach (XElement element in mPrioritizedRulesList)
+                {
+					MyClasses.MetaViewWrappers.IListRow newRow = lstRules.AddRow();
+					newRow[0][0] = Convert.ToBoolean(element.Element("Enabled").Value);
+					newRow[1][0] = element.Element("Priority").Value;
+					newRow[2][0] = element.Element("Name").Value;
+                    newRow[3][0] = String.Empty;
+                    newRow[4][1] = 0x6005e6a;
+                    newRow[5][0] = element.Element("RuleNum").Value;
+				}
+        		        		
         		//Not Visible:  "RuleNum"
         		txtRuleName.Text = mSelectedRule.Element("Name").Value;
         		txtRulePriority.Text = mSelectedRule.Element("Priority").Value;
-        		chkRuleEnabled.Checked = Convert.ToBoolean(mSelectedRule.Element("bRuleEnabled").Value);
+        		chkRuleEnabled.Checked = Convert.ToBoolean(mSelectedRule.Element("Enabled").Value);
         		txtGearScore.Text = mSelectedRule.Element("GearScore").Value;
         		txtRuleMaxCraft.Text = mSelectedRule.Element("Work").Value;
         		txtRuleArcaneLore.Text = mSelectedRule.Element("ArcaneLore").Value;
@@ -338,20 +349,32 @@ namespace GearFoundry
 				_PopulateList(lstRuleArmorTypes, ArmorIndex, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorType").Value));
 				_PopulateList(lstRuleSets, ArmorSetsList, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorSet").Value));
         		
-        		cboWeaponAppliesTo.Selected = Convert.ToInt32(mSelectedRule.Element("WieldSkill").Value);
+				cboWeaponAppliesTo.Selected = WeaponTypeList.FindIndex(x => x.ID == Convert.ToInt32(mSelectedRule.Element("WieldSkill").Value));
         		cboMasteryType.Selected = Convert.ToInt32(mSelectedRule.Element("MasteryType").Value);
         		
         		_UpdateSpellEnabledListBox();
+        		_UpdateSpellListBox();
         		
         		lstRules.ScrollPosition = HoldScrollPosition;
-        		
-        		//UNDONE:  Spells
         		
         		//UNDONE:  Palettes
         		
         		
         	}catch(Exception ex){LogError(ex);}
         }
+        
+        
+//        										<control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="5" top="15" width="220" height="200">
+//											<column progid="DecalControls.TextColumn" fixedwidth="150" />
+//											<column progid="DecalControls.TextColumn" fixedwidth = "1" />
+//											<column progid="DecalControls.IconColumn" fixedwidth="15"  />
+//										</control>
+//										<control progid="DecalControls.StaticText" name="lblRuleMoreSpells" left="250" top="0" width="180" height="16" text="Available Spells" />
+//										<control progid="DecalControls.List" name="lstRuleSpells" left="230" top="15" width="250" height="200">
+//											<column progid="DecalControls.CheckColumn" fixedwidth ="20"/>
+//											<column progid="DecalControls.TextColumn" fixedwidth = "193" />
+//											<column progid="DecalControls.TextColumn" fixedwidth = "1"/>
+//										</control>
         
         private void _PopulateList(MyClasses.MetaViewWrappers.IList target, List<IDNameLoadable> source, List<int> selected)
         {
@@ -383,16 +406,13 @@ namespace GearFoundry
             	{
             		newRow = lstRuleSpellsEnabled.AddRow();
             		newRow[0][0] = SpellIndex[spelid].spellname;
-            		newRow[1][0] = SpellIndex[spelid].spellid;
+            		newRow[1][0] = SpellIndex[spelid].spellid.ToString();
                     newRow[2][1] = 0x6005e6a;
             	}
             }
 
             catch (Exception ex) { LogError(ex); }
         }
-        
-
-        
         
         private void _UpdateSpellListBox()
         {

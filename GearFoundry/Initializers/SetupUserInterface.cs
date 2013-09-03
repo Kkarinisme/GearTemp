@@ -900,24 +900,7 @@ namespace GearFoundry
         }
         
         
-        private void populateRulesLst()
-        {
-            try
-            {
-                lstRules.Clear();
-				foreach (XElement element in mPrioritizedRulesList)
-                {
-					MyClasses.MetaViewWrappers.IListRow newRow = lstRules.AddRow();
-					newRow[0][0] = Convert.ToBoolean(element.Element("Enabled").Value);
-					newRow[1][0] = element.Element("Priority").Value;
-					newRow[2][0] = element.Element("Name").Value;
-                    newRow[3][0] = String.Empty;
-                    newRow[4][1] = 0x6005e6a;
-                    newRow[5][0] = element.Element("RuleNum").Value;
-				}
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+
 
 
         // Use this for lists simply needing a selection to be made
@@ -954,45 +937,6 @@ namespace GearFoundry
             }
 
         }
-
-        // This is initial function to populate the lstRules (MainView listbox)
-        // This function will also create a sorted mRulesListPrioritized 
-        // and an mRulesListPrioritizedEnabled
-        // Function uses the Xdocument xdocRules created on game initiation
-        //mPrioritizedRulesList  
-
-        private void populateRulesListBox()
-        {
-            try
-            {
-                setUpRulesLists();
-                populateRulesLst();
-                FillItemRules();
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
-        }
-
-        private void populateListRuleAppliesBox()
-        {
-            try
-            {
-                int mList = 3;
-                populateLst(lstRuleApplies, AppliesToList, mList);
-
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
-        }
-
-
-
-        // This is initial function to populate the lstmyTrophies (MainView listbox)
-        // This function will also create a sorted mTrophiesList
-        // Function uses the Xdocument xdocTrophies created on game initiation
-        //mSortedTrophiesList becomes the list to work with throughout Alinco
 
         private void populateTrophysListBox()
         {

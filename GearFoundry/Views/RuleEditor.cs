@@ -274,7 +274,7 @@ namespace GearFoundry
         {
             try
             {
-            	mSelectedRule.Element("WieldSkill").Value = cboWeaponAppliesTo.Selected.ToString();
+            	mSelectedRule.Element("WieldSkill").Value = WeaponTypeList[cboWeaponAppliesTo.Selected].ID.ToString();
                 if(mSelectedRule.Element("WieldSkill").Value == "54") {lblRuleReqSkilla.Text = "Essence Level";}
                 else{lblRuleReqSkilla.Text = "Skill Level";}
             }

@@ -45,7 +45,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>4</RuleNum>
+    <RuleNum>3</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>128</AppliesToFlag>
@@ -67,7 +67,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>3</RuleNum>
+    <RuleNum>4</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>128</AppliesToFlag>
@@ -111,7 +111,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>9</RuleNum>
+    <RuleNum>6</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>4</AppliesToFlag>
@@ -133,7 +133,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>12</RuleNum>
+    <RuleNum>7</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>256</AppliesToFlag>
@@ -155,7 +155,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>15</RuleNum>
+    <RuleNum>8</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>1</AppliesToFlag>
@@ -177,7 +177,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>13</RuleNum>
+    <RuleNum>9</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>1</AppliesToFlag>
@@ -199,7 +199,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>14</RuleNum>
+    <RuleNum>10</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>1</AppliesToFlag>
@@ -221,7 +221,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>16</RuleNum>
+    <RuleNum>11</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>1</AppliesToFlag>
@@ -243,7 +243,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>17</RuleNum>
+    <RuleNum>12</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>32768</AppliesToFlag>
@@ -265,7 +265,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>8</RuleNum>
+    <RuleNum>13</RuleNum>
     <Enabled>true</Enabled>
     <Priority>3</Priority>
     <AppliesToFlag>2,4,8</AppliesToFlag>
@@ -287,7 +287,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>7</RuleNum>
+    <RuleNum>14</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>4,8</AppliesToFlag>
@@ -309,7 +309,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>18</RuleNum>
+    <RuleNum>15</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>2,4</AppliesToFlag>
@@ -331,7 +331,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>11</RuleNum>
+    <RuleNum>16</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>2048</AppliesToFlag>
@@ -353,7 +353,7 @@
     <Palettes></Palettes>
   </Rule>
   <Rule>
-    <RuleNum>10</RuleNum>
+    <RuleNum>17</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
     <AppliesToFlag>2048</AppliesToFlag>

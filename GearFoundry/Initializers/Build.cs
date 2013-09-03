@@ -1340,7 +1340,6 @@ namespace GearFoundry
             cmb.Add(info.name);
         }
 
-
         private void doWriteLists(List<IDNameLoadable> lst)
                      	
           {
