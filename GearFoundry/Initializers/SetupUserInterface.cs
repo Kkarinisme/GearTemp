@@ -258,8 +258,24 @@ namespace GearFoundry
             {
             	
                 MyClasses.MetaViewWrappers.IListRow row = lstRules[e.Row];
-                string RuleNumber = (row[5][0]).ToString();
-                mSelectedRule = mPrioritizedRulesList.Find(x => x.Element("RuleNum").Value == RuleNumber);
+                string RuleNumber = (row[4][0]).ToString();
+                
+                if(e.Column == 3)
+                {
+                	mPrioritizedRulesList.RemoveAll(x =>  x.Element("RuleNum").Value == RuleNumber);
+                	mSelectedRule = new XElement("Rule");
+                }
+                else
+                {
+                	mSelectedRule = mPrioritizedRulesList.Find(x => x.Element("RuleNum").Value == RuleNumber);
+                }
+                
+                if(e.Column == 0)
+                {
+                	mSelectedRule.Element("Enabled").Value = row[0][0].ToString();
+                }
+                
+                MirrorToXdocRules();
                 _UpdateRulesTabs();
                 
             }catch (Exception ex) { LogError(ex); }
@@ -493,79 +509,35 @@ namespace GearFoundry
 
         }
 
-        // [ControlEvent]("lstRuleSpellsEnabled", "Selected") 
         private void lstRuleSpellsEnabled_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  
         {
             try
             {
-                MyClasses.MetaViewWrappers.IListRow row = null;
-                row = lstRuleSpellsEnabled[e.Row];
+                MyClasses.MetaViewWrappers.IListRow row = lstRuleSpellsEnabled[e.Row];
 
-                int nID = (Convert.ToInt32(row[1][0]));
-                List<int> SpellIds = new List<int>();
+                string SpellId = row[1][0].ToString();
                 
-                if(mSelectedRule.Element("Spells").Value != String.Empty)
-                {
-                	string[] SplitString = mSelectedRule.Element("Spells").Value.Split(',');
-                	foreach(string spel in SplitString)
-                	{
-                		SpellIds.Add(Convert.ToInt32(spel));
-                	}
-                }           
+                mSelectedRule.Element("Spells").Value.Replace(SpellId, "");
+                mSelectedRule.Element("Spells").Value.Replace(",,",",");
                 
-                if (e.Column == 2)
-                {
-                	SpellIds.RemoveAll(x => x == nID);
-
-                    if (SpellIds.Count == 0)
-                    { 
-                    	lstRuleSpellsEnabled.Clear(); 
-                    	mSelectedRule.Element("Spells").Value = String.Empty;
-                    }
-                    else 
-                    {
-                    	for(int i = 0; i < SpellIds.Count; i++)
-                    	{
-                    		mSelectedRule.Element("Spells").Value += SpellIds[i].ToString();
-                    		if(i != SpellIds.Count - 1){mSelectedRule.Element("Spells").Value += ",";}
-                    	}
-                    }
-
-                   	populateRuleSpellEnabledListBox(); 
-                    
-                }
+                if(mSelectedRule.Element("Spells").Value == ",") {mSelectedRule.Element("Spells").Value = String.Empty;}
+                
+                _UpdateRulesTabs();
             }
             catch (Exception ex) { LogError(ex); }
         }
 
-        // [ControlEvent]("lstRuleSpells", "Selected") 
         private void lstRuleSpells_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e) 
         {
             try
             {
-                MyClasses.MetaViewWrappers.IListRow row = null;
-                row = lstRuleSpells[e.Row];
-                mchecked = Convert.ToBoolean(row[0][0]);
-                sname = (Convert.ToString(row[1][0]));
-                int nID = (Convert.ToInt32(row[2][0]));
+                MyClasses.MetaViewWrappers.IListRow row = lstRuleSpells[e.Row];
+                int SpellID = Convert.ToInt32(row[1][0]);
+                
+                mSelectedRule.Element("Spells").Value += "," + SpellID.ToString();
+                
+                _UpdateRulesTabs();
 
-
-                switch (e.Column)
-                {
-                    case 0:
-                        break;
-                    case 2:
-                        mgoon = false;
-                        break;
-                    default:
-                        break;
-                }
-                mchecked = Convert.ToBoolean(row[0][0]);
-                if (mchecked)
-                {
-                    //WriteEnabledSpellsList(nID, sname);
-                    populateRuleSpellEnabledListBox();
-                }
             }
             catch (Exception ex) { LogError(ex); }
 

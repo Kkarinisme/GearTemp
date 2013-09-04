@@ -64,14 +64,13 @@
 							<control progid="DecalControls.List" name="lstRules" left="5" top="5" width="480" height="90">
 								<column progid="DecalControls.CheckColumn" />
 								<column progid="DecalControls.TextColumn" fixedwidth="20" />
-								<column progid="DecalControls.TextColumn" fixedwidth="200"/>
-								<column progid="DecalControls.TextColumn" fixedwidth="160"/>
+								<column progid="DecalControls.TextColumn" fixedwidth="350"/>
 								<column progid="DecalControls.IconColumn" fixedwidth="10"/>
 								<column progid="DecalControls.TextColumn" fixedwidth="1"/>
 							</control>
-							<control progid="DecalControls.PushButton" name="btnRuleClear" left="10" top="110" width="110" height="20" text="Clear Previous Rule" />
+							<control progid="DecalControls.PushButton" name="btnRuleClear" left="10" top="110" width="110" height="20" text="Reset Rule Changes" />
 							<control progid="DecalControls.PushButton" name="btnRuleNew" left="130" top="110" width="110" height="20" text="Add New Rule" />
-							<control progid="DecalControls.PushButton" name="btnRuleUpdate" left="250" top="110" width="110" height="20" text="Update Selected Rule" />
+							<control progid="DecalControls.PushButton" name="btnRuleUpdate" left="250" top="110" width="110" height="20" text="Save Rule Changes" />
 
 							<control progid="DecalControls.Notebook" name="nbRulesetup" left="0" top="140" width="520" height="390">
 								<page label="Main">
@@ -182,12 +181,11 @@
 										<control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="5" top="15" width="220" height="200">
 											<column progid="DecalControls.TextColumn" fixedwidth="150" />
 											<column progid="DecalControls.TextColumn" fixedwidth = "1" />
-											<column progid="DecalControls.IconColumn" fixedwidth="15"  />
+
 										</control>
 										<control progid="DecalControls.StaticText" name="lblRuleMoreSpells" left="250" top="0" width="180" height="16" text="Available Spells" />
 										<control progid="DecalControls.List" name="lstRuleSpells" left="230" top="15" width="250" height="200">
-											<column progid="DecalControls.CheckColumn" fixedwidth ="20"/>
-											<column progid="DecalControls.TextColumn" fixedwidth = "193" />
+											<column progid="DecalControls.TextColumn" fixedwidth = "200" />
 											<column progid="DecalControls.TextColumn" fixedwidth = "1"/>
 										</control>
 										

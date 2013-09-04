@@ -316,9 +316,8 @@ namespace GearFoundry
 					newRow[0][0] = Convert.ToBoolean(element.Element("Enabled").Value);
 					newRow[1][0] = element.Element("Priority").Value;
 					newRow[2][0] = element.Element("Name").Value;
-                    newRow[3][0] = String.Empty;
-                    newRow[4][1] = 0x6005e6a;
-                    newRow[5][0] = element.Element("RuleNum").Value;
+                    newRow[3][0] = 0x6005e6a;
+                    newRow[4][0] = element.Element("RuleNum").Value;
 				}
         		        		
         		//Not Visible:  "RuleNum"
@@ -363,19 +362,6 @@ namespace GearFoundry
         	}catch(Exception ex){LogError(ex);}
         }
         
-        
-//        										<control progid="DecalControls.List" name="lstRuleSpellsEnabled" left="5" top="15" width="220" height="200">
-//											<column progid="DecalControls.TextColumn" fixedwidth="150" />
-//											<column progid="DecalControls.TextColumn" fixedwidth = "1" />
-//											<column progid="DecalControls.IconColumn" fixedwidth="15"  />
-//										</control>
-//										<control progid="DecalControls.StaticText" name="lblRuleMoreSpells" left="250" top="0" width="180" height="16" text="Available Spells" />
-//										<control progid="DecalControls.List" name="lstRuleSpells" left="230" top="15" width="250" height="200">
-//											<column progid="DecalControls.CheckColumn" fixedwidth ="20"/>
-//											<column progid="DecalControls.TextColumn" fixedwidth = "193" />
-//											<column progid="DecalControls.TextColumn" fixedwidth = "1"/>
-//										</control>
-        
         private void _PopulateList(MyClasses.MetaViewWrappers.IList target, List<IDNameLoadable> source, List<int> selected)
         {
         	try
@@ -407,7 +393,6 @@ namespace GearFoundry
             		newRow = lstRuleSpellsEnabled.AddRow();
             		newRow[0][0] = SpellIndex[spelid].spellname;
             		newRow[1][0] = SpellIndex[spelid].spellid.ToString();
-                    newRow[2][1] = 0x6005e6a;
             	}
             }
 
@@ -431,13 +416,9 @@ namespace GearFoundry
         		          
 	            foreach (spellinfo element in spelllist)
 	            {	             
-	                    string vname = element.spellname;
-	                    bool mchecked = false;
-	                    string snum = element.spellid.ToString();
 	                    MyClasses.MetaViewWrappers.IListRow newRow = lstRuleSpells.AddRow();
-	                    newRow[0][0] = mchecked;
-	                    newRow[1][0] = vname;
-	                    newRow[2][0] = snum;
+	                    newRow[0][0] = element.spellname;
+	                    newRow[1][0] = element.spellid.ToString();
 	             }
                 
             }catch (Exception ex) { LogError(ex); }
@@ -1558,6 +1539,46 @@ namespace GearFoundry
 
             }
             catch (Exception ex) { LogError(ex); }
+
+        }
+        
+        private XElement CreateRulesXElement()
+        {
+        	
+        	    List<int> NumList = new List<int>();
+           		foreach(XElement xe in mPrioritizedRulesList)
+           		{
+           			NumList.Add(Convert.ToInt32(xe.Element("RuleNum").Value));
+           		}
+           		
+           		int NewRuleNumber = 0;
+           		for(NewRuleNumber = 0; NewRuleNumber < NumList.Count; )
+           		{
+           			if(!NumList.Contains(NewRuleNumber)){break;}
+           			else{NewRuleNumber++;}
+           		}
+
+        		return new XElement("Rule",
+           		                    new XElement("RuleNum", NewRuleNumber.ToString()),
+        		                    new XElement("Enabled", "false"),
+        		                    new XElement("Priority", "999"),
+        		                    new XElement("AppliesToFlag", String.Empty),
+        		                    new XElement("Name", "New Rule " + NewRuleNumber.ToString()),
+        		                    new XElement("ArcaneLore", "-1"),
+        		                    new XElement("Work", "-1"),
+        		                    new XElement("WieldLevel", "-1"),
+        		                    new XElement("WieldSkill", "0"),
+        		                    new XElement("MasteryType", "0"),
+        		                    new XElement("DamageType", "0"),
+        		                    new XElement("GearScore", "-1"),
+        		                    new XElement("WieldEnabled", "false,false,false,false"),
+        		                    new XElement("ReqSkill", ",,,"),
+        		                    new XElement("Slots", String.Empty),
+        		                    new XElement("ArmorType", String.Empty),
+        		                    new XElement("ArmorSet", String.Empty),
+        		                    new XElement("Spells", String.Empty),
+        		                    new XElement("NumSpells", "-1"),
+        		                    new XElement("Palettes", String.Empty));
 
         }
         

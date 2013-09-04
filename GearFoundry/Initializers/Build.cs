@@ -401,45 +401,6 @@ namespace GearFoundry
 
 		}
 
-		//UNDONE:  Remove if no longer needed.
-//        private void WriteEnabledSpellsList(int id, string name)
-//        {
-//            try
-//            {
-//
-//                IDNameLoadable info = new IDNameLoadable(id, name);
-//                     //if there are already spells in the enabled spells list must be certain to include them in new list
-//                if (EnabledSpellsList != null && !EnabledSpellsList.Contains(info))
-//                {
-//
-//                    EnabledSpellsList.Add(info);
-//               }
-//                // if EnabledSpellsList did not exist must create it
-//                else
-//                {
-//                     EnabledSpellsList = new List<IDNameLoadable>();
-//                    //Now need to add the new spell to the list
-//                    EnabledSpellsList.Add(info);
-//                }
-//
-//                //Now resetup the variables nspells and sRuleSpells
-//                
-//                string sRuleSpells = String.Empty;
-//                foreach(IDNameLoadable spl in EnabledSpellsList)
-//                {
-//                    string sid = spl.ID.ToString();
-//                    sRuleSpells = sRuleSpells + sid + ",";
-//                    nspells++;
-//                }
-//                //Now remove the final comma from the variable
-//                sRuleSpells = sRuleSpells.Substring(0, sRuleSpells.Length - 1);
-//                mSelectedRule.Element("Spells").Value = sRuleSpells;
-//
-//
-//            }
-//            catch (Exception ex) { LogError(ex); }
-//        }
-
       
         private void CreateWeaponTypeList()
         {
@@ -999,7 +960,10 @@ namespace GearFoundry
          	    
          	    foreach(var spel in spl2)
          	    {
-         	    	ItemsSpellList.Add(spel);
+         	    	if(!spel.spellname.Contains("Bane") && !spel.spellname.Contains("Hunter") && !spel.spellname.Contains("Thirst") && !spel.spellname.Contains("Link"))
+         	    	{
+         	    		ItemsSpellList.Add(spel);
+         	    	}
          	    }
          	    
          	    foreach(var selectedspell in cspells)

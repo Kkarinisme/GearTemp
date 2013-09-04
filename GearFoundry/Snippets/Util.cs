@@ -205,6 +205,21 @@ namespace GearFoundry
         	}catch(Exception ex){LogError(ex); return new List<int>();}
         }
         
+        private string _ConvertIntListToCommaString(List<int> BaseList)
+        {
+        	try
+        	{
+        		string result = String.Empty;
+        		for(int i = 0; i < BaseList.Count; i++)
+        		{
+        			result += BaseList[i].ToString();
+        			if(i != BaseList.Count -1) {result += ",";}
+        		}
+        		return result;
+        		
+        	}catch(Exception ex){LogError(ex); return String.Empty;}
+        }
+        
 //        private void playSimpleSound()
 //		{
 //		    SoundPlayer simpleSound = new SoundPlayer(@"c:\Windows\Media\chimes.wav");

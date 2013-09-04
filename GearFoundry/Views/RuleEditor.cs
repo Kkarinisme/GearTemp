@@ -28,14 +28,6 @@ namespace GearFoundry
         {
         	try
             {
-            	mSelectedRule = new XElement("Rule");
-            	
-            	chkRuleFilterMajor.Checked = false;
-            	chkRuleFilterCloak.Checked = false;
-            	chkRuleFilterEpic.Checked = false;
-            	chkRuleFilterlvl8.Checked = false;
-            	chkRuleFilterLegend.Checked = false;
-
                 _UpdateRulesTabs();    
             }catch (Exception ex) { LogError(ex); };
         }
@@ -45,26 +37,11 @@ namespace GearFoundry
         {
            try 
             {
-           		List<int> NumList = new List<int>();
-           		foreach(XElement xe in mPrioritizedRulesList)
-           		{
-           			NumList.Add(Convert.ToInt32(xe.Element("RuleNum").Value));
-           		}
-           		
-           		int NewRuleNumber = 0;
-           		for(NewRuleNumber = 0; NewRuleNumber < NumList.Count; )
-           		{
-           			if(!NumList.Contains(NewRuleNumber)){break;}
-           			else{NewRuleNumber++;}
-           		}
-           		
-           		mSelectedRule = new XElement("Rule");
-           		mSelectedRule.Element("RuleNum").Value = NewRuleNumber.ToString();
-           		                    
-           		mPrioritizedRulesList.Add(mSelectedRule);
-           		
-           		writeToXdocRules(xdocRules);
-           		xdocRules.Save(rulesFilename);
+           	
+           		mSelectedRule = CreateRulesXElement();          		                    
+           		mPrioritizedRulesList.Add(mSelectedRule);	
+           		MirrorToXdocRules();           		
+           		_UpdateRulesTabs();
   		
             }
             catch (Exception ex) { LogError(ex); }
@@ -77,11 +54,7 @@ namespace GearFoundry
             {
                 int HoldScrollPostion = lstRules.ScrollPosition;
                 
-                IEnumerable<XElement> elements = xdocRules.Element("Rules").Descendants("Rule");
-                //xdocRules.Descendants("Rule").Where(x => x.Element("RuleNum").Value.ToString().Equals(nRuleNum.ToString())).Remove();
-                
-                writeToXdocRules(xdocRules);
-            	xdocRules.Save(rulesFilename);
+                MirrorToXdocRules();
             	_UpdateRulesTabs();
 
                 lstRules.ScrollPosition = HoldScrollPostion;
@@ -95,89 +68,21 @@ namespace GearFoundry
         private void MirrorToXdocRules()
         {
         	try
-        	{
-        	
-//        		xdoc.Element("Rules").Add(new XElement("Rule",
-//                new XElement("RuleNum", xdocRules),
-//                new XElement("Enabled", bRuleEnabled),
-//                new XElement("Priority", nRulePriority),
-//                new XElement("AppliesToFlag", sRuleAppliesTo),
-//                new XElement("Name", sRuleName),
-//                new XElement("ArcaneLore", nRuleArcaneLore),
-//                new XElement("Work", nRuleWork),
-//                new XElement("WieldLevel", nRuleWieldLevel),
-//                new XElement("WieldSkill", nRuleWieldSkill),
-//                new XElement("MasteryType", nRuleMasteryType),
-//                new XElement("DamageType", sRuleDamageTypes),
-//                new XElement("GearScore", nGearScore),
-//                new XElement("WieldEnabled", sRuleWeapons),
-//                new XElement("ReqSkill", sRuleReqSkill),
-//                new XElement("Slots", sRuleSlots),
-//               new XElement("ArmorType", sRuleArmorType),
-//                 new XElement("ArmorSet", sRuleArmorSet),
-//                new XElement("Spells", sRuleSpells),
-//                new XElement("NumSpells", nRuleNumSpells),
-//                new XElement("Palettes", sRulePalettes)));	
+        	{       
+	            xdocRules = new XDocument(new XElement("Rules"));
+	
+	            try
+	            {
+		            foreach(XElement el in mPrioritizedRulesList)
+		            {
+		                xdocRules.Root.Add(el);
+		            }
+	            }catch (Exception ex) { LogError(ex); }
+
+           		xdocRules.Save(rulesFilename);
+
         	}catch(Exception ex){LogError(ex);}
         }
-
-        
-        
-        private void writeToXdocRules(XDocument xdoc)
-        {
-//            xdoc.Element("Rules").Add(new XElement("Rule",
-//                new XElement("RuleNum", xdocRules),
-//                new XElement("Enabled", bRuleEnabled),
-//                new XElement("Priority", nRulePriority),
-//                new XElement("AppliesToFlag", sRuleAppliesTo),
-//                new XElement("Name", sRuleName),
-//                new XElement("ArcaneLore", nRuleArcaneLore),
-//                new XElement("Work", nRuleWork),
-//                new XElement("WieldLevel", nRuleWieldLevel),
-//                new XElement("WieldSkill", nRuleWieldSkill),
-//                new XElement("MasteryType", nRuleMasteryType),
-//                new XElement("DamageType", sRuleDamageTypes),
-//                new XElement("GearScore", nGearScore),
-//                new XElement("WieldEnabled", sRuleWeapons),
-//                new XElement("ReqSkill", sRuleReqSkill),
-//                new XElement("Slots", sRuleSlots),
-//               new XElement("ArmorType", sRuleArmorType),
-//                 new XElement("ArmorSet", sRuleArmorSet),
-//                new XElement("Spells", sRuleSpells),
-//                new XElement("NumSpells", nRuleNumSpells),
-//                new XElement("Palettes", sRulePalettes)));
-
-        }
-//
-//        private void getVariables(XElement el)
-//        {
-//            try
-//            {
-//                nRuleNum = Convert.ToInt32(el.Element("RuleNum").Value);
-//                bRuleEnabled = Convert.ToBoolean(el.Element("Enabled").Value);
-//                nRulePriority = Convert.ToInt32(el.Element("Priority").Value);
-//                sRuleAppliesTo = el.Element("AppliesToFlag").Value.ToString();
-//                sRuleName = (string)el.Element("Name").Value;
-//                nRuleArcaneLore = Convert.ToInt32(el.Element("ArcaneLore").Value);
-//                nRuleWork = Convert.ToInt32(el.Element("Work").Value);
-//                nRuleWieldLevel = Convert.ToInt32(el.Element("WieldLevel").Value);
-//                nRuleWieldSkill = Convert.ToInt32(el.Element("WieldSkill").Value);
-//                nRuleMasteryType = Convert.ToInt32(el.Element("MasteryType").Value);
-//                sRuleDamageTypes = el.Element("DamageType").Value;
-//                nGearScore = Convert.ToInt32(el.Element("GearScore").Value);
-//                 sRuleWeapons = el.Element("WieldEnabled").Value;
-//                sRuleReqSkill = el.Element("ReqSkill").Value;
-//                sRuleSlots = (string)el.Element("Slots").Value;
-//                sRuleArmorType = (string)el.Element("ArmorType").Value;
-//                sRuleArmorSet = (string)el.Element("ArmorSet").Value;
-//                sRuleSpells = el.Element("Spells").Value;
-//                nRuleNumSpells = Convert.ToInt32(el.Element("NumSpells").Value);
-//                sRulePalettes = (string)el.Element("Palettes").Value;
-// 
-//            }
-//            catch (Exception ex) { LogError(ex); }
-//
-//        }
 
          [ControlEvent("txtRuleName", "End")]
         private void txtRuleName_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
