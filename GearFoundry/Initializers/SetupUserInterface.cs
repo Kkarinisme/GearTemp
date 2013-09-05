@@ -262,8 +262,8 @@ namespace GearFoundry
                 
                 if(e.Column == 3)
                 {
-                	mPrioritizedRulesList.RemoveAll(x =>  x.Element("RuleNum").Value == RuleNumber);
-                	mSelectedRule = new XElement("Rule");
+                	mPrioritizedRulesList.RemoveAll(x => x.Element("RuleNum").Value == RuleNumber);
+                	mSelectedRule = mPrioritizedRulesList.First();
                 }
                 else
                 {

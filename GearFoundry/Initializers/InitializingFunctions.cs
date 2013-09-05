@@ -306,7 +306,7 @@ namespace GearFoundry
         	{
         		string[] SplitString;
         		int HoldScrollPosition = lstRules.ScrollPosition;
-        		
+        		if(mPrioritizedRulesList.Count == 0) {mPrioritizedRulesList.Add(CreateRulesXElement());}
         		if(mSelectedRule == null){mSelectedRule = mPrioritizedRulesList.First();}
         		
         		lstRules.Clear();
