@@ -65,7 +65,7 @@
 								<column progid="DecalControls.CheckColumn" />
 								<column progid="DecalControls.TextColumn" fixedwidth="20" />
 								<column progid="DecalControls.TextColumn" fixedwidth="350"/>
-								<column progid="DecalControls.IconColumn" fixedwidth="10"/>
+								<column progid="DecalControls.IconColumn" fixedwidth="12"/>
 								<column progid="DecalControls.TextColumn" fixedwidth="1"/>
 							</control>
 							<control progid="DecalControls.PushButton" name="btnRuleClear" left="10" top="110" width="110" height="20" text="Reset Rule Changes" />

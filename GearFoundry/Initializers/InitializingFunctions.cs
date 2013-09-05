@@ -316,7 +316,7 @@ namespace GearFoundry
 					newRow[0][0] = Convert.ToBoolean(element.Element("Enabled").Value);
 					newRow[1][0] = element.Element("Priority").Value;
 					newRow[2][0] = element.Element("Name").Value;
-                    newRow[3][0] = 0x6005e6a;
+                    newRow[3][1] = 0x6005e6a;
                     newRow[4][0] = element.Element("RuleNum").Value;
 				}
         		        		
