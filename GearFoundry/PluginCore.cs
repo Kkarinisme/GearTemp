@@ -150,6 +150,10 @@ namespace GearFoundry
                 chkTextFilterAllStatus.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterAllStatus_Change);
 
                 lstRules.Selected -= new EventHandler<MVListSelectEventArgs>(lstRules_Selected);
+                lstRuleApplies.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleApplies_Selected);
+                lstRuleSlots.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleSlots_Selected);
+                lstRuleSets.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleSets_Selected);
+                lstRuleArmorTypes.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleArmorTypes_Selected);
                 btnRuleClear.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleClear_Click);
                 btnRuleNew.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleNew_Click);
                 btnRuleUpdate.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleUpdate_Click);

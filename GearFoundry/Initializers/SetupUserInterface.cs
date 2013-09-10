@@ -176,39 +176,39 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
         }
 
-        //overload for spells listbox which does not  have an associated textfile nor an xdocument and uses a spellinfo type list
-        private void lstSelect(string filename, List<spellinfo> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
-        {
-            try
-            {
-
-                MyClasses.MetaViewWrappers.IListRow row = null;
-                row = lstvue[margs.Row];
-                mchecked = Convert.ToBoolean(row[0][0]);
-                sname = (Convert.ToString(row[1][0]));
-                int nID = (Convert.ToInt32(row[2][0]));
-
-
-                switch (margs.Column)
-                {
-                    case 0:
-                        break;
-                    case 2:
-                        mgoon = false;
-                        break;
-                    default:
-                        break;
-                }
-                mchecked = Convert.ToBoolean(row[0][0]);
-                if (mchecked)
-                {
-                    //UNDONE:  Remove if no longer needed
-                	//WriteEnabledSpellsList(nID, sname);
-                    populateRuleSpellEnabledListBox();
-                }
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
+//        //overload for spells listbox which does not  have an associated textfile nor an xdocument and uses a spellinfo type list
+//        private void lstSelect(string filename, List<spellinfo> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
+//        {
+//            try
+//            {
+//
+//                MyClasses.MetaViewWrappers.IListRow row = null;
+//                row = lstvue[margs.Row];
+//                mchecked = Convert.ToBoolean(row[0][0]);
+//                sname = (Convert.ToString(row[1][0]));
+//                int nID = (Convert.ToInt32(row[2][0]));
+//
+//
+//                switch (margs.Column)
+//                {
+//                    case 0:
+//                        break;
+//                    case 2:
+//                        mgoon = false;
+//                        break;
+//                    default:
+//                        break;
+//                }
+//                mchecked = Convert.ToBoolean(row[0][0]);
+//                if (mchecked)
+//                {
+//                    //UNDONE:  Remove if no longer needed
+//                	//WriteEnabledSpellsList(nID, sname);
+//                    populateRuleSpellEnabledListBox();
+//                }
+//            }
+//            catch (Exception ex) { LogError(ex); }
+//        }
 
 
 
@@ -280,213 +280,121 @@ namespace GearFoundry
                 
             }catch (Exception ex) { LogError(ex); }
         }
-
-        //Loads the controls with the values of the current rules and clears values of previous rule in the rules listview
-        private void loadControls(XElement el)
+        
+        private void lstRuleApplies_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
         {
             try
             {
-            	_UpdateRulesTabs();
-
-
-				  //UNDONE:  Verify if any of this is needed before removing.
-//                //Need to populate textbox and checkboxs controls with data for this rule
-//                //First need to get the variables for this rule
-//                getVariables(el); //works
-//
-//                //Break down strings that are composites
-//                if (sRuleReqSkill.Length > 0)
-//                {
-//                    // strBreakUp(sRuleReqSkill, sRuleReqSkilla, sRuleReqSkillb, sRuleReqSkillc, sRuleReqSkilld);
-//                    string[] SplitReqSkill = sRuleReqSkill.Split(',');
-//                    
-//                    sRuleReqSkilla = SplitReqSkill[0];
-//                    sRuleReqSkillb = SplitReqSkill[1];
-//                    sRuleReqSkillc = SplitReqSkill[2];
-//                    sRuleReqSkilld = SplitReqSkill[3];
-//                    
-//                    string[] SplitRuleWeapons = sRuleWeapons.Split(',');
-//
-//                    sRuleWeaponsa = SplitRuleWeapons[0];
-//                    sRuleWeaponsb = SplitRuleWeapons[1];
-//                    sRuleWeaponsc = SplitRuleWeapons[2];
-//                    sRuleWeaponsd = SplitRuleWeapons[3];
-//                    
-//                }
-//                //Now add variables to text and checkbox controls to clear them
-//
-//                initRulesCtrls();
-//
-//                string flag = "";
-//
-//                //Reset appliestobox
-//                flag = sRuleAppliesTo;
-//                if (flag.Length != 0)
-//                {
-//                    int n = AppliesToList.Count;
-//                    MyClasses.MetaViewWrappers.IList lst = lstRuleApplies;
-//                    setUpForChecks(n, flag, lst);
-//                    lst = null;
-//                    n = 0;
-//                    flag = "";
-//
-//                }
-//
-//                //Reset weapondamagebox
-//                if (sRuleDamageTypes != "")
-//                {
-//                    flag = sRuleDamageTypes;
-//                    int n = ElementalList.Count;
-//                    MyClasses.MetaViewWrappers.IList lst = lstDamageTypes;
-//                    setUpForChecks(n, flag, lst);
-//
-//                }
-//                
-//                if(sRulePalettes != String.Empty)
-//                {
-//                
-//                }
-//
-//                //Reset ArmorTypebox
-//                if (sRuleArmorType != "")
-//                {
-//                    flag = sRuleArmorType;
-//                    int n = ArmorIndex.Count;
-//                    MyClasses.MetaViewWrappers.IList lst = lstRuleArmorTypes;
-//                    setUpForChecks(n, flag, lst);
-//                }
-//                
-//                //Reset Slot List Box
-//                flag = sRuleSlots;
-//                if(flag.Length !=0)
-//                {
-//                	int n = SlotList.Count;
-//                	MyClasses.MetaViewWrappers.IList lst = lstRuleSlots;
-//                	setUpForChecks(n, flag, lst);
-//                }
-//
-//
-//                //Reset ArmorSetsBox
-//                populateSetsListBox();
-//                flag = sRuleArmorSet;
-//                if (flag.Length != 0)
-//                {
-//                    int n = ArmorSetsList.Count;
-//                    MyClasses.MetaViewWrappers.IList lst = lstRuleSets;
-//                    setUpForChecks(n, flag, lst);
-//                }
-//
-//
-//               flag = sRuleSpells;
-//                if (flag.Length != 0)
-//                {
-//                    try
-//                    {
-//                        if (!flag.Contains(","))
-//                        {
-//                            getSpellName(flag);
-//                            WriteEnabledSpellsList(nid, sname);
-//
-//
-//                        }
-//                        else
-//                        {
-//                            List<string> flagList = new List<string>();
-//                            var count = flag.Count(x => x == ',');
-//                            int z = (int)count;
-//
-//                            for (int m = 0; m < z; m++)
-//                            {
-//                                int k = flag.IndexOf(',');
-//                                string item = flag.Substring(0, k);
-//                                flag = flag.Substring(k + 1);
-//
-//                                getSpellName(item);
-//                                WriteEnabledSpellsList(nid, sname);
-//                                populateRuleSpellEnabledListBox();
-//
-//
-//                            }
-//                            getSpellName(flag);
-//                            WriteEnabledSpellsList(nid, sname);
-//
-//
-//
-//                        }
-//                        populateRuleSpellEnabledListBox();
-//
-//
-//                    }
-//                    catch (Exception ex) { LogError(ex); }
-//
-//                }
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
-
-        private void getSpellName(string sid)
-        {
-            nid = Convert.ToInt32(sid);
-            foreach (spellinfo spell in SpellIndex)
-            {
-                if (spell.spellid == nid)
+            	WriteToChat("Rule applies selected.");
+                MyClasses.MetaViewWrappers.IListRow row = lstRuleApplies[e.Row];
+                
+                List<int> AppliesList = _ConvertCommaStringToIntList(mSelectedRule.Element("AppliesToFlag").Value);
+                
+                bool selected = (bool)row[0][0];
+                int AppliesTo = Convert.ToInt32(row[2][0]);
+                
+                if(AppliesList.Contains(AppliesTo) && !selected)
                 {
-                    sname = spell.spellname;
+                	AppliesList.RemoveAll(x => x  == AppliesTo);
                 }
-
-            }
+                
+                if(!AppliesList.Contains(AppliesTo) && selected)
+                {
+                	AppliesList.Add(AppliesTo);
+                }
+                
+                mSelectedRule.Element("AppliesToFlag").Value = _ConvertIntListToCommaString(AppliesList);
+                          
+                _UpdateRulesTabs();
+                
+            }catch (Exception ex) { LogError(ex); }
         }
-
-
-        private void setUpForChecks(int n, string flag, MyClasses.MetaViewWrappers.IList lst)
+        
+        private void lstRuleSlots_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
         {
             try
             {
-                if (!flag.Contains(","))
+            	WriteToChat("Slot List selected.");
+                MyClasses.MetaViewWrappers.IListRow row = lstRuleSlots[e.Row];
+                
+                List<int> sList = _ConvertCommaStringToIntList(mSelectedRule.Element("Slots").Value);
+                
+                bool selected = (bool)row[0][0];
+                int Slot = Convert.ToInt32(row[2][0]);
+                
+                if(sList.Contains(Slot) && !selected)
                 {
-                    setChecked(n, flag, lst);
+                	sList.RemoveAll(x => x  == Slot);
                 }
-                else
+                
+                if(!sList.Contains(Slot) && selected)
                 {
-                    List<string> flagList = new List<string>();
-                    var count = flag.Count(x => x == ',');
-                    int z = (int)count;
-
-                    for (int m = 0; m < z; m++)
-                    {
-                        int k = flag.IndexOf(',');
-                        string item = flag.Substring(0, k);
-                        flag = flag.Substring(k + 1);
-
-                        setChecked(n, item, lst);
-                    }
-                    setChecked(n, flag, lst);
-
+                	sList.Add(Slot);
                 }
-            }
-            catch (Exception ex) { LogError(ex); }
-
+                
+                mSelectedRule.Element("Slots").Value = _ConvertIntListToCommaString(sList);
+                          
+                _UpdateRulesTabs();
+                
+            }catch (Exception ex) { LogError(ex); }
         }
-
-        private void setChecked(int n, string flag, MyClasses.MetaViewWrappers.IList lst)
+        
+        private void lstRuleSets_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
         {
             try
             {
-                bool mchecked = true;
-                IListRow row;
-                for (int i = 0; i < n; i++)
+            	WriteToChat("Set List selected.");
+                MyClasses.MetaViewWrappers.IListRow row = lstRuleSets[e.Row];
+                
+                List<int> sList = _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorSet").Value);
+                
+                bool selected = (bool)row[0][0];
+                int armorset = Convert.ToInt32(row[2][0]);
+                
+                if(sList.Contains(armorset) && !selected)
                 {
-                    row = lst[i];
-                    if (row[2][0].ToString() == flag)
-                    {
-                        row[0][0] = mchecked;
-
-                    }
+                	sList.RemoveAll(x => x  == armorset);
                 }
-            }
-            catch (Exception ex) { LogError(ex); }
+                
+                if(!sList.Contains(armorset) && selected)
+                {
+                	sList.Add(armorset);
+                }
+                
+                mSelectedRule.Element("ArmorSet").Value = _ConvertIntListToCommaString(sList);
+                          
+                _UpdateRulesTabs();
+                
+            }catch (Exception ex) { LogError(ex); }
+        }
 
-
+        private void lstRuleArmorTypes_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
+        {
+            try
+            {
+            	WriteToChat("ARmor List selected.");
+                MyClasses.MetaViewWrappers.IListRow row = lstRuleArmorTypes[e.Row];
+                
+                List<int> aList = _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorType").Value);
+                
+                bool selected = (bool)row[0][0];
+                int armortype = Convert.ToInt32(row[2][0]);
+                
+                if(aList.Contains(armortype) && !selected)
+                {
+                	aList.RemoveAll(x => x  == armortype);
+                }
+                
+                if(!aList.Contains(armortype) && selected)
+                {
+                	aList.Add(armortype);
+                }
+                
+                mSelectedRule.Element("ArmorType").Value = _ConvertIntListToCommaString(aList);
+                          
+                _UpdateRulesTabs();
+                
+            }catch (Exception ex) { LogError(ex); }
         }
 
         // [ControlEvent]("lstmyTrophies", "Selected")
@@ -514,13 +422,16 @@ namespace GearFoundry
             try
             {
                 MyClasses.MetaViewWrappers.IListRow row = lstRuleSpellsEnabled[e.Row];
+                List<int> spellist = _ConvertCommaStringToIntList(mSelectedRule.Element("Spells").Value);
 
-                string SpellId = row[1][0].ToString();
+                int spel = Convert.ToInt32(row[1][0]);
                 
-                mSelectedRule.Element("Spells").Value.Replace(SpellId, "");
-                mSelectedRule.Element("Spells").Value.Replace(",,",",");
+                if(spellist.Contains(spel))
+                {
+                	spellist.RemoveAll(x => x == spel);
+                }
                 
-                if(mSelectedRule.Element("Spells").Value == ",") {mSelectedRule.Element("Spells").Value = String.Empty;}
+                mSelectedRule.Element("Spells").Value = _ConvertIntListToCommaString(spellist);
                 
                 _UpdateRulesTabs();
             }
@@ -532,12 +443,19 @@ namespace GearFoundry
             try
             {
                 MyClasses.MetaViewWrappers.IListRow row = lstRuleSpells[e.Row];
-                int SpellID = Convert.ToInt32(row[1][0]);
+                List<int> spellist = _ConvertCommaStringToIntList(mSelectedRule.Element("Spells").Value);
+
+                int spel = Convert.ToInt32(row[1][0]);
                 
-                mSelectedRule.Element("Spells").Value += "," + SpellID.ToString();
+                if(!spellist.Contains(spel))
+                {
+                	spellist.Add(spel);
+                }
+                
+                mSelectedRule.Element("Spells").Value = _ConvertIntListToCommaString(spellist);
                 
                 _UpdateRulesTabs();
-
+                
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -943,34 +861,7 @@ namespace GearFoundry
 
         }
 
-        private void populateRuleSpellEnabledListBox()
-        {
-            try
-            {
-            	List<int> SpellIds = new List<int>();
-            	MyClasses.MetaViewWrappers.IListRow newRow;
-            	lstRuleSpellsEnabled.Clear();
-            	
-            	if(mSelectedRule.Element("Spells").Value != String.Empty)
-            	{
-            		string[] SplitString = mSelectedRule.Element("Spells").Value.Split(',');
-            		foreach(string spel in SplitString)
-            		{
-            			SpellIds.Add(Convert.ToInt32(spel));
-            		}
-            	}
-            	
-            	foreach(int spelid in SpellIds)
-            	{
-            		newRow = lstRuleSpellsEnabled.AddRow();
-            		newRow[0][0] = SpellIndex[spelid].spellname;
-            		newRow[1][0] = SpellIndex[spelid].spellid;
-                    newRow[2][1] = 0x6005e6a;
-            	}
-            }
 
-            catch (Exception ex) { LogError(ex); }
-        }
 
 
         private void populateSalvageListBox()
@@ -988,58 +879,11 @@ namespace GearFoundry
         }
 
 
-        private void populateWeaponDamageListBox()
-        {
-            try
-            {
-                int mList = 3;
-                populateLst(lstDamageTypes, ElementalList, mList);
 
-            }
+     
 
-            catch (Exception ex) { LogError(ex); }
 
-        }
-        
-        private void populateSlotListBox()
-        {
-            try
-            {
-                int mList = 3;
-                populateLst(lstRuleSlots, SlotList, mList);
 
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
-        }
-
-        private void populateArmorTypesListBox()
-        {
-            try
-            {
-                int mList = 3;
-                populateLst(lstRuleArmorTypes, ArmorIndex, mList);
-
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
-        }
-
-        private void populateSetsListBox()
-        {
-            try
-            {
-
-                int mList = 3;
-                populateLst(lstRuleSets, ArmorSetsList, mList);
-
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
-        }
 
 
         [ControlEvent("btnUpdateSalvage", "Click")]

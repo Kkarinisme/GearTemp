@@ -115,6 +115,7 @@ namespace GearFoundry
         // Controls on Notify.SearchRules.Main Page
         MyClasses.MetaViewWrappers.ICheckBox chkRuleEnabled;
         MyClasses.MetaViewWrappers.IList lstRuleApplies;
+        MyClasses.MetaViewWrappers.IList lstRuleSlots;
 
         MyClasses.MetaViewWrappers.ITextBox txtRuleName;
 
@@ -145,11 +146,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkillc;
        
         MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkilld;
-       
 
-
-        // Controls on Notify.SearchRules.Armor Page
-        MyClasses.MetaViewWrappers.IList lstRuleSlots;
         MyClasses.MetaViewWrappers.IList lstRuleArmorTypes;
 
         MyClasses.MetaViewWrappers.IList lstRuleSets;
@@ -389,10 +386,11 @@ namespace GearFoundry
                 btnRuleNew = (MyClasses.MetaViewWrappers.IButton)View["btnRuleNew"];
                 btnRuleUpdate = (MyClasses.MetaViewWrappers.IButton)View["btnRuleUpdate"];
                 chkRuleEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleEnabled"];
- 				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
+
                 lstRuleApplies = (MyClasses.MetaViewWrappers.IList)View["lstRuleApplies"];
+                lstRuleSlots = (MyClasses.MetaViewWrappers.IList)View["lstRuleSlots"];
+                lstRuleSets = (MyClasses.MetaViewWrappers.IList)View["lstRuleSets"];
+                lstRuleArmorTypes = (MyClasses.MetaViewWrappers.IList)View["lstRuleArmorTypes"];
                 txtRuleName = (MyClasses.MetaViewWrappers.ITextBox)View["txtRuleName"];
                
                 txtRulePriority = (MyClasses.MetaViewWrappers.ITextBox)View["txtRulePriority"];
@@ -408,6 +406,10 @@ namespace GearFoundry
                   {
                 
                 lstRules.Selected += new EventHandler<MVListSelectEventArgs>(lstRules_Selected);
+                lstRuleApplies.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleApplies_Selected);
+                lstRuleSlots.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleSlots_Selected);
+                lstRuleSets.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleSets_Selected);
+                lstRuleArmorTypes.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleArmorTypes_Selected);
                 btnRuleClear.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleClear_Click);
                 btnRuleNew.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleNew_Click);
                 btnRuleUpdate.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleUpdate_Click);

@@ -10,7 +10,7 @@
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
     <WieldSkill>43</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <MasteryType>0</MasteryType>
     <DamageType>1024</DamageType>
     <GearScore>-1</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
@@ -32,7 +32,7 @@
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
     <WieldSkill>34</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <MasteryType>0</MasteryType>
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>-1</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
@@ -120,7 +120,7 @@
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
     <WieldSkill>-1</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <MasteryType>0</MasteryType>
     <DamageType></DamageType>
     <GearScore>5</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
@@ -142,7 +142,7 @@
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
     <WieldSkill>47</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <MasteryType>0</MasteryType>
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>93</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
@@ -164,7 +164,7 @@
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
     <WieldSkill>45</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <MasteryType>0</MasteryType>
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>104</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
@@ -186,7 +186,7 @@
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
     <WieldSkill>46</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <MasteryType>0</MasteryType>
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>104</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
@@ -208,7 +208,7 @@
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
     <WieldSkill>44</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <MasteryType>0</MasteryType>
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>117</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
@@ -230,7 +230,7 @@
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
     <WieldSkill>41</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <MasteryType>0</MasteryType>
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>99</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
@@ -250,9 +250,9 @@
     <Name>GS35 0Wand</Name>
     <ArcaneLore>-1</ArcaneLore>
     <Work>-1</Work>
-    <WieldLevel>0</WieldLevel>
+    <WieldLevel>-1</WieldLevel>
     <WieldSkill>0</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <MasteryType>0</MasteryType>
     <DamageType></DamageType>
     <GearScore>35</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
@@ -339,8 +339,8 @@
     <ArcaneLore>-1</ArcaneLore>
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
-    <WieldSkill>-1</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <WieldSkill>0</WieldSkill>
+    <MasteryType>0</MasteryType>
     <DamageType></DamageType>
     <GearScore>3</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
@@ -361,8 +361,8 @@
     <ArcaneLore>-1</ArcaneLore>
     <Work>-1</Work>
     <WieldLevel>-1</WieldLevel>
-    <WieldSkill>-1</WieldSkill>
-    <MasteryType>-1</MasteryType>
+    <WieldSkill>0</WieldSkill>
+    <MasteryType>0</MasteryType>
     <DamageType></DamageType>
     <GearScore>4</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>

@@ -40,9 +40,10 @@ namespace GearFoundry
            	
            		mSelectedRule = CreateRulesXElement();          		                    
            		mPrioritizedRulesList.Add(mSelectedRule);	
-           		MirrorToXdocRules();           		
+           		MirrorToXdocRules();
+				setUpRulesLists();           		
            		_UpdateRulesTabs();
-  		
+           		FillItemRules();  		
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -55,7 +56,9 @@ namespace GearFoundry
                 int HoldScrollPostion = lstRules.ScrollPosition;
                 
                 MirrorToXdocRules();
+                setUpRulesLists();
             	_UpdateRulesTabs();
+            	FillItemRules();
 
                 lstRules.ScrollPosition = HoldScrollPostion;
             }
@@ -64,7 +67,6 @@ namespace GearFoundry
 
         }
 
-        //TODO:  Make mPrioritizedRulesLIst reconcile with XDocRules
         private void MirrorToXdocRules()
         {
         	try
@@ -84,7 +86,7 @@ namespace GearFoundry
         	}catch(Exception ex){LogError(ex);}
         }
 
-         [ControlEvent("txtRuleName", "End")]
+        [ControlEvent("txtRuleName", "End")]
         private void txtRuleName_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
         {
         	mSelectedRule.Element("Name").Value = txtRuleName.Text.ToString().Trim();
@@ -98,6 +100,13 @@ namespace GearFoundry
         		mSelectedRule.Element("Priority").Value = txtRulePriority.Text;
         	}catch(Exception ex){mSelectedRule.Element("Priority").Value = "-1"; LogError(ex);}
         }
+        
+        
+        
+        
+        
+        
+        
 
 
         [ControlEvent("txtRuleMaxCraft", "End")]
@@ -125,9 +134,7 @@ namespace GearFoundry
         	{
         		mSelectedRule.Element("GearScore").Value = txtGearScore.Text;
         	}catch(Exception ex){mSelectedRule.Element("GearScore").Value = "-1"; LogError(ex);}
-
         }
-
 
         [ControlEvent("txtRuleWieldLevel", "End")]
         private void txtRuleWieldLevel_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)
@@ -144,7 +151,6 @@ namespace GearFoundry
             _UpdateRulesTabs();
         }
 
-
         private void chkRuleFilterEpic_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
             _UpdateRulesTabs();
@@ -155,7 +161,6 @@ namespace GearFoundry
             _UpdateRulesTabs();
         }
         
-
         private void chkRuleFilterMajor_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
         {
             _UpdateRulesTabs();
@@ -184,8 +189,6 @@ namespace GearFoundry
                 else{lblRuleReqSkilla.Text = "Skill Level";}
             }
             catch (Exception ex) { LogError(ex); }
-
-
         }
 
 
@@ -194,8 +197,6 @@ namespace GearFoundry
         {
         	mSelectedRule.Element("MasteryType").Value = cboMasteryType.Selected.ToString();
         }
-
-
 
         [ControlEvent("chkRuleWeaponsa", "Change")]
         private void chkRuleWeaponsa_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
@@ -224,9 +225,6 @@ namespace GearFoundry
         	mSelectedRule.Element("WieldEnabled").Value = chkRuleWeaponsa.Checked.ToString() + "," + chkRuleWeaponsb.Checked.ToString() + "," +
         		chkRuleWeaponsc.Checked.ToString() + "," + chkRuleWeaponsd.Checked.ToString();
         }
-
-
-
 
         [ControlEvent("txtRuleReqSkilla", "End")]
         private void txtRuleReqSkilla_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)  //Decal.Adapter.TextBoxEndEventArgs e)

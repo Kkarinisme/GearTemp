@@ -210,10 +210,15 @@ namespace GearFoundry
         	try
         	{
         		string result = String.Empty;
-        		for(int i = 0; i < BaseList.Count; i++)
+        		if(BaseList.Count != 0)
         		{
-        			result += BaseList[i].ToString();
-        			if(i != BaseList.Count -1) {result += ",";}
+	        		BaseList.Sort();
+	        	
+	        		for(int i = 0; i < BaseList.Count; i++)
+	        		{
+	        			result += BaseList[i].ToString();
+	        			if(i != BaseList.Count -1) {result += ",";}
+	        		}
         		}
         		return result;
         		

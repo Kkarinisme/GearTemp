@@ -389,7 +389,32 @@ namespace GearFoundry
 						}
 						
 					case ObjectClass.Clothing:
-						if(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)
+						
+						if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
+						{
+							WriteToChat("It's a cloak");
+							
+							WriteToChat("Set Matches Count = " + SetMatches.Count());
+							
+							var reducedcloakmatches = from ruls in SetMatches
+								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore)
+								orderby ruls.RulePriority
+								select ruls;
+							
+							WriteToChat("Reduced Cloak Matches Count = " + reducedcloakmatches.Count());
+							
+							if(reducedcloakmatches.Count() > 0)
+							{
+								IOItemWithID.rulename = reducedcloakmatches.First().RuleName; 
+								IOItemWithID.IOR = IOResult.rule; 
+								return;
+							}
+							else
+							{
+								return;
+							}
+						}
+						else if(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)
 						{
 							var reducedarmorclothmatches = from ruls in SetMatches
 								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) &&
@@ -408,24 +433,7 @@ namespace GearFoundry
 								return;
 							}
 						}
-						else if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
-						{
-							var reducedcloakmatches = from ruls in SetMatches
-								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore)
-								orderby ruls.RulePriority
-								select ruls;
-							
-							if(reducedcloakmatches.Count() > 0)
-							{
-								IOItemWithID.rulename = SetMatches.First().RuleName; 
-								IOItemWithID.IOR = IOResult.rule; 
-								return;
-							}
-							else
-							{
-								return;
-							}
-						}
+
 						else
 						{							
 							if(SetMatches.Count() > 0)
@@ -442,10 +450,33 @@ namespace GearFoundry
 					case ObjectClass.MeleeWeapon:
 					case ObjectClass.MissileWeapon:
 					case ObjectClass.WandStaffOrb:
+						WriteToChat("Item GS = " + IOItemWithID.GearScore);
+						WriteToChat("Item DT = " + IOItemWithID.DamageType);
+						WriteToChat("Item WS = " + IOItemWithID.LValue(LongValueKey.WieldReqAttribute));
+						foreach(var rule in SpellListMatches)
+						{
+							
+							WriteToChat(rule.RuleName);
+							if(rule.RuleDamageTypes == 0 || (rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)
+							{
+								WriteToChat("Check 1 true");
+							}
+							if(rule.RuleWieldSkill == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && rule.RuleWieldSkill == 0) ||
+								rule.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute))
+							{
+								WriteToChat("Check 2 true");
+							}
+							if(rule.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == rule.RuleMastery)
+							{
+								WriteToChat("Check 3 true");
+							}
+					
+						}
 						var reducedmeleematches = from ruls in SpellListMatches
 							where IOItemWithID.GearScore >= ruls.GearScore &&
 							(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
-							(ruls.RuleWieldSkill == 0 || ruls.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
+							(ruls.RuleWieldSkill == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && ruls.RuleWieldSkill == 0) ||
+								ruls.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
 							(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
 							((!ruls.RuleWeaponEnabledA && !ruls.RuleWeaponEnabledB && !ruls.RuleWeaponEnabledC && !ruls.RuleWeaponEnabledD) ||
 							 (ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
@@ -454,6 +485,30 @@ namespace GearFoundry
 							 (ruls.RuleWeaponEnabledD && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueD))
 							orderby ruls.RulePriority
 							select ruls;
+						
+//						  <Rule>
+//    <RuleNum>12</RuleNum>
+//    <Enabled>true</Enabled>
+//    <Priority>1</Priority>
+//    <AppliesToFlag>32768</AppliesToFlag>
+//    <Name>GS35 0Wand</Name>
+//    <ArcaneLore>-1</ArcaneLore>
+//    <Work>-1</Work>
+//    <WieldLevel>1</WieldLevel>
+//    <WieldSkill>0</WieldSkill>
+//    <MasteryType>0</MasteryType>
+//    <DamageType></DamageType>
+//    <GearScore>35</GearScore>
+//    <WieldEnabled>false,false,false,false</WieldEnabled>
+//    <ReqSkill>,,,</ReqSkill>
+//    <Slots></Slots>
+//    <ArmorType></ArmorType>
+//    <ArmorSet></ArmorSet>
+//    <Spells></Spells>
+//    <NumSpells>-1</NumSpells>
+//    <Palettes></Palettes>
+//  </Rule
+						
 						if(reducedmeleematches.Count() > 0)
 						{
 							IOItemWithID.rulename = reducedmeleematches.First().RuleName; 

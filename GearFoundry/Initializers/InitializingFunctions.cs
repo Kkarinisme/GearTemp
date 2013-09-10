@@ -305,7 +305,9 @@ namespace GearFoundry
         	try
         	{
         		string[] SplitString;
-        		int HoldScrollPosition = lstRules.ScrollPosition;
+        		int HoldRulesPosition = lstRules.ScrollPosition;
+        		
+        		
         		if(mPrioritizedRulesList.Count == 0) {mPrioritizedRulesList.Add(CreateRulesXElement());}
         		if(mSelectedRule == null){mSelectedRule = mPrioritizedRulesList.First();}
         		
@@ -342,19 +344,34 @@ namespace GearFoundry
         		txtRuleReqSkillc.Text = SplitString[2];
         		txtRuleReqSkilld.Text = SplitString[3];
         		   
+        		int HoldAppliesPosition = lstRuleApplies.ScrollPosition;
         		_PopulateList(lstRuleApplies, AppliesToList, _ConvertCommaStringToIntList(mSelectedRule.Element("AppliesToFlag").Value)); 
+        		int HoldSlotsPosition = lstRuleSlots.ScrollPosition;
 				_PopulateList(lstRuleSlots, SlotList, _ConvertCommaStringToIntList(mSelectedRule.Element("Slots").Value));
+				int HoldDamagePosition = lstDamageTypes.ScrollPosition;
 				_PopulateList(lstDamageTypes, ElementalList, _ConvertCommaStringToIntList(mSelectedRule.Element("DamageType").Value));
+				int HoldArmorPosition = lstRuleArmorTypes.ScrollPosition;
 				_PopulateList(lstRuleArmorTypes, ArmorIndex, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorType").Value));
+				int HoldSetPosition = lstRuleSets.ScrollPosition;
 				_PopulateList(lstRuleSets, ArmorSetsList, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorSet").Value));
         		
 				cboWeaponAppliesTo.Selected = WeaponTypeList.FindIndex(x => x.ID == Convert.ToInt32(mSelectedRule.Element("WieldSkill").Value));
         		cboMasteryType.Selected = Convert.ToInt32(mSelectedRule.Element("MasteryType").Value);
         		
+        		int HoldEnabledSpellsPostion = lstRuleSpellsEnabled.ScrollPosition;
         		_UpdateSpellEnabledListBox();
+        		int HoldSpellListPosition = lstRuleSpells.ScrollPosition;
         		_UpdateSpellListBox();
         		
-        		lstRules.ScrollPosition = HoldScrollPosition;
+        		lstRules.ScrollPosition = HoldRulesPosition;
+        		lstRuleApplies.ScrollPosition = HoldAppliesPosition;
+        		lstRuleSlots.ScrollPosition = HoldSlotsPosition;
+        		lstDamageTypes.ScrollPosition = HoldDamagePosition;
+        		lstRuleArmorTypes.ScrollPosition = HoldArmorPosition;
+        		lstRuleSets.ScrollPosition = HoldSetPosition;
+        		lstRuleSpellsEnabled.ScrollPosition = HoldEnabledSpellsPostion;
+        		lstRuleSpells.ScrollPosition = HoldSpellListPosition;
+        		
         		
         		//UNDONE:  Palettes
         		
@@ -391,8 +408,8 @@ namespace GearFoundry
             	foreach(int spelid in SpellIds)
             	{
             		newRow = lstRuleSpellsEnabled.AddRow();
-            		newRow[0][0] = SpellIndex[spelid].spellname;
-            		newRow[1][0] = SpellIndex[spelid].spellid.ToString();
+            		newRow[0][0] = ItemsSpellList.Find(x => x.spellid == spelid).spellname;
+            		newRow[1][0] = ItemsSpellList.Find(x => x.spellid == spelid).spellid.ToString();
             	}
             }
 
