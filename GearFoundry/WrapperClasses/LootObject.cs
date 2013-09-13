@@ -835,56 +835,6 @@ namespace GearFoundry
 					return 0;					
 				}
 			}
-
-			
-			
-//[VTank] [Meta] Create count: 1
-//[VTank] [Meta] Create time: 8/25/2013 8:38 PM
-//[VTank] [Meta] Has identify data: True
-//[VTank] [Meta] Last ID time: 8/25/2013 8:47 PM
-//[VTank] [Meta] Worldfilter valid: True
-//[VTank] [Meta] Client valid: True
-//[VTank] ID: 8C06BD10
-//[VTank] ObjectClass: WandStaffOrb
-//[VTank] (S) Name: Staff
-//[VTank] (S) FullDescription: Staff of Shockwave
-//[VTank] (I) CreateFlags1: -1855373160
-//[VTank] (I) Type: 2547
-//[VTank] (I) Icon: 5801
-//[VTank] (I) Category: 32768
-//[VTank] (I) Behavior: 18
-//[VTank] (I) Value: 16402
-//[VTank] (I) ItemUsabilityFlags: 6291461
-//[VTank] (I) UsageMask: 16
-//[VTank] (I) IconOutline: 1
-//[VTank] (I) Container: 0
-//[VTank] (I) EquipableSlots: 16777216 (z)
-//[VTank] (I) Burden: 50
-//[VTank] (I) HookMask: 2
-//[VTank] (I) Material: 22
-//[VTank] (I) PhysicsDataFlags: 137345
-//[VTank] (I) GemSettingQty: 3
-//[VTank] (I) GemSettingType: 20
-//[VTank] (I) SkillLevelReq: 0
-//[VTank] (I) Workmanship: 6
-//[VTank] (I) Spellcraft: 328
-//[VTank] (I) CurrentMana: 3267
-//[VTank] (I) DescriptionFormat: 5
-//[VTank] (I) MaximumMana: 3267
-//[VTank] (I) LoreRequirement: 344
-//[VTank] (I) RankRequirement: 0
-//[VTank] (I) EquippedBy: 1343211182
-//[VTank] (I) EquippedSlots: 16777216 (z)
-//[VTank] (D) SalvageWorkmanship: 6
-//[VTank] (D) ManaCBonus: 0.170000004768372
-//[VTank] (D) MeleeDefenseBonus: 1.32000000178814
-//[VTank] (D) ManaRateOfChange: -0.0555555555555556
-//[VTank] (D) ElementalDamageVersusMonsters: 1.07000000029802
-//[VTank] (L) Container: 0
-//[VTank] (L) EquippedBy: 1343211182
-//[VTank] Palette Entry 0: ID 0x000BF1, Ex Color: 000000, 0/0
-			
-
 						
 			public string GearScoreString()
 			{

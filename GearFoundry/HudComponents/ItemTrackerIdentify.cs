@@ -596,7 +596,7 @@ namespace GearFoundry
 				return wrevList;        		
             	
         		
-        	}catch(Exception ex){LogError(ex); return new List<ItemRule.WREV>();}
+        	}catch(Exception ex){LogError(ex); WriteToChat("Wield String = " + WieldString); return new List<ItemRule.WREV>();}
         }
 		
 		

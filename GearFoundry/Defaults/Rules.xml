@@ -14,7 +14,7 @@
     <DamageType>1024</DamageType>
     <GearScore>-1</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>355,375,385,</ReqSkill>
+    <ReqSkill>355,375,385,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -36,7 +36,7 @@
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>-1</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>355,375,385,</ReqSkill>
+    <ReqSkill>355,375,385,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -58,7 +58,7 @@
     <DamageType>1,2,4,8,16,32,64,1024</DamageType>
     <GearScore>60</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>150,180,200,</ReqSkill>
+    <ReqSkill>150,180,200,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -80,7 +80,7 @@
     <DamageType>1,2,4,8,16,32,64,1024</DamageType>
     <GearScore>60</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>150,180,200,</ReqSkill>
+    <ReqSkill>150,180,200,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -102,7 +102,7 @@
     <DamageType>1,2,4,8,16,32,64,1024</DamageType>
     <GearScore>60</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>150,180,200,</ReqSkill>
+    <ReqSkill>150,180,200,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -146,7 +146,7 @@
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>93</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>360,375,385,</ReqSkill>
+    <ReqSkill>360,375,385,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -168,7 +168,7 @@
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>104</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>400,420,430,</ReqSkill>
+    <ReqSkill>400,420,430,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -190,7 +190,7 @@
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>104</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>400,420,430,</ReqSkill>
+    <ReqSkill>400,420,430,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -212,7 +212,7 @@
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>117</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>400,420,430,</ReqSkill>
+    <ReqSkill>400,420,430,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -234,7 +234,7 @@
     <DamageType>1,2,4,8,16,32,64</DamageType>
     <GearScore>99</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>400,420,430,</ReqSkill>
+    <ReqSkill>400,420,430,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
