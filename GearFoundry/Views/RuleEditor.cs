@@ -40,10 +40,8 @@ namespace GearFoundry
            	
            		mSelectedRule = CreateRulesXElement();          		                    
            		mPrioritizedRulesList.Add(mSelectedRule);	
-           		MirrorToXdocRules();
-				setUpRulesLists();           		
-           		_UpdateRulesTabs();
-           		FillItemRules();  		
+           		SyncAndSaveRules();
+           		_UpdateRulesTabs();		
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -55,10 +53,8 @@ namespace GearFoundry
             {
                 int HoldScrollPostion = lstRules.ScrollPosition;
                 
-                MirrorToXdocRules();
-                setUpRulesLists();
+                SyncAndSaveRules();
             	_UpdateRulesTabs();
-            	FillItemRules();
 
                 lstRules.ScrollPosition = HoldScrollPostion;
             }
@@ -66,22 +62,42 @@ namespace GearFoundry
 
 
         }
-
-        private void MirrorToXdocRules()
+        
+        private void InitRules()
         {
         	try
         	{       
-	            xdocRules = new XDocument(new XElement("Rules"));
-	
-	            try
-	            {
-		            foreach(XElement el in mPrioritizedRulesList)
-		            {
-		                xdocRules.Root.Add(el);
-		            }
-	            }catch (Exception ex) { LogError(ex); }
 
+           		
+                mPrioritizedRulesList.Clear();
+                mPrioritizedRulesList = xdocRules.Element("Rules").Descendants("Rule").OrderBy(x => x.Element("Enabled").Value).ToList();
+                
+                FillItemRules();
+
+        	}catch(Exception ex){LogError(ex);}
+        }
+
+        private void SyncAndSaveRules()
+        {
+        	try
+        	{    
+        		WriteToChat("Sync and Save");
+        		
+	            xdocRules = new XDocument(new XElement("Rules"));
+	            
+	            WriteToChat("mPRL Count = " + mPrioritizedRulesList.Count());
+	
+	            foreach(XElement el in mPrioritizedRulesList)
+	            {
+	                xdocRules.Root.Add(el);
+	            }
+	            
            		xdocRules.Save(rulesFilename);
+           		
+                mPrioritizedRulesList.Clear();
+                mPrioritizedRulesList = xdocRules.Element("Rules").Descendants("Rule").OrderBy(x => x.Element("Enabled").Value).ToList();
+                
+                FillItemRules();
 
         	}catch(Exception ex){LogError(ex);}
         }
@@ -175,7 +191,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		mSelectedRule.Element("Enabled").Value = chkRuleEnabled.Checked.ToString();
+        		mSelectedRule.Element("Enabled").Value = chkRuleEnabled.Checked.ToString().ToLower();
         	}catch(Exception ex){LogError(ex);}
 
         }

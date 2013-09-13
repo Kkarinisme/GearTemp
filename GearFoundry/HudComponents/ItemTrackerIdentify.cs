@@ -276,6 +276,15 @@ namespace GearFoundry
 			return;
 		}
 		
+		private void writerulestochat(string stage, List<ItemRule> listorules)
+		{
+			WriteToChat(stage);
+			foreach(var rule in listorules)
+			{
+				WriteToChat(rule.RuleName);
+			}
+		}
+		
 		private void CheckRulesItem(ref LootObject IOItemWithIDReference)
 		{
 			
@@ -286,14 +295,12 @@ namespace GearFoundry
 				ModifiedIOSpells.Clear();
 				LootObject IOItemWithID = IOItemWithIDReference;
 				
-				WriteToChat("ItemRulesList.Count = " + ItemRulesList.Count());
-
-				
 				var AppliesToListMatches = from appliesto in ItemRulesList
 					where (appliesto.RuleAppliesTo & IOItemWithID.LValue(LongValueKey.Category)) == IOItemWithID.LValue(LongValueKey.Category)
 					select appliesto;
 				
 				if(AppliesToListMatches.Count() == 0) {return;}
+				
 				
 				var PropertyListMatches = from properties in AppliesToListMatches
 					where (properties.RuleArcaneLore == -1 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= properties.RuleArcaneLore) &&
@@ -309,32 +316,19 @@ namespace GearFoundry
 					select slots;
 				
 				if(SlotListMatches.Count() == 0) {return;}
-				
-				for(int i = 0; i < IOItemWithID.SpellCount; i ++)
-				{
-					ModifiedIOSpells.Add(IOItemWithID.Spell(i));
-				}			
-				if(IOItemWithID.LValue((LongValueKey)352) ==  2)
-				{
-					ModifiedIOSpells.Add(10000);
-				}
-				
-				var SpellListMatches = from spellmatches in PropertyListMatches
-					where spellmatches.RuleSpellNumber == -1 || ModifiedIOSpells.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
+			
+				var SpellListMatches = from spellmatches in SlotListMatches
+					where spellmatches.RuleSpellNumber == -1 || spellmatches.RuleSpells.Count == 0 || 
+					ModifiedIOSpells.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
 					select spellmatches;
 				
-				WriteToChat("Spell List Match = " + SpellListMatches.Count());
-				
 				if(SpellListMatches.Count() == 0) {return;}
-				else{WriteToChat("Spell Matches works");}
 					
 				var SetMatches = from sets in SpellListMatches
-					where sets.RuleArmorSet == null || sets.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))
-					orderby sets.RulePriority
+					where sets.RuleArmorSet.Count == 0 || sets.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))
 					select sets;
 				
 				if(SetMatches.Count() == 0) {return;}
-				else{WriteToChat("Set Matches Works");}
 								
 				switch(IOItemWithID.ObjectClass)
 				{		
@@ -373,7 +367,7 @@ namespace GearFoundry
 					case ObjectClass.Armor:
 						var reducedarmormatches = from ruls in SetMatches
 							where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) &&
-							(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType))
+							(ruls.RuleArmorTypes.Count == 0 || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType))
 							orderby ruls.RulePriority
 							select ruls;
 						
@@ -391,17 +385,11 @@ namespace GearFoundry
 					case ObjectClass.Clothing:
 						
 						if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
-						{
-							WriteToChat("It's a cloak");
-							
-							WriteToChat("Set Matches Count = " + SetMatches.Count());
-							
+						{														
 							var reducedcloakmatches = from ruls in SetMatches
 								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore)
 								orderby ruls.RulePriority
 								select ruls;
-							
-							WriteToChat("Reduced Cloak Matches Count = " + reducedcloakmatches.Count());
 							
 							if(reducedcloakmatches.Count() > 0)
 							{
@@ -418,7 +406,7 @@ namespace GearFoundry
 						{
 							var reducedarmorclothmatches = from ruls in SetMatches
 								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) &&
-								(ruls.RuleArmorTypes == null || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType))
+								(ruls.RuleArmorTypes.Count == 0  || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType))
 								orderby ruls.RulePriority
 								select ruls;
 						
@@ -450,64 +438,16 @@ namespace GearFoundry
 					case ObjectClass.MeleeWeapon:
 					case ObjectClass.MissileWeapon:
 					case ObjectClass.WandStaffOrb:
-						WriteToChat("Item GS = " + IOItemWithID.GearScore);
-						WriteToChat("Item DT = " + IOItemWithID.DamageType);
-						WriteToChat("Item WS = " + IOItemWithID.LValue(LongValueKey.WieldReqAttribute));
-						foreach(var rule in SpellListMatches)
-						{
-							
-							WriteToChat(rule.RuleName);
-							if(rule.RuleDamageTypes == 0 || (rule.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType)
-							{
-								WriteToChat("Check 1 true");
-							}
-							if(rule.RuleWieldSkill == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && rule.RuleWieldSkill == 0) ||
-								rule.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute))
-							{
-								WriteToChat("Check 2 true");
-							}
-							if(rule.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == rule.RuleMastery)
-							{
-								WriteToChat("Check 3 true");
-							}
-					
-						}
 						var reducedmeleematches = from ruls in SpellListMatches
 							where IOItemWithID.GearScore >= ruls.GearScore &&
 							(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
 							(ruls.RuleWieldSkill == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && ruls.RuleWieldSkill == 0) ||
 								ruls.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
 							(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
-							((!ruls.RuleWeaponEnabledA && !ruls.RuleWeaponEnabledB && !ruls.RuleWeaponEnabledC && !ruls.RuleWeaponEnabledD) ||
-							 (ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
-							 (ruls.RuleWeaponEnabledB && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueB) ||
-							 (ruls.RuleWeaponEnabledC && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueC) ||
-							 (ruls.RuleWeaponEnabledD && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueD))
+							(!ruls.WieldRequirements.Any(x => x.WieldEnabled) || 
+							  ruls.WieldRequirements.Any(x => x.WieldEnabled && IOItemWithID.LValue(LongValueKey.WieldReqValue) == x.WieldReqValue))
 							orderby ruls.RulePriority
 							select ruls;
-						
-//						  <Rule>
-//    <RuleNum>12</RuleNum>
-//    <Enabled>true</Enabled>
-//    <Priority>1</Priority>
-//    <AppliesToFlag>32768</AppliesToFlag>
-//    <Name>GS35 0Wand</Name>
-//    <ArcaneLore>-1</ArcaneLore>
-//    <Work>-1</Work>
-//    <WieldLevel>1</WieldLevel>
-//    <WieldSkill>0</WieldSkill>
-//    <MasteryType>0</MasteryType>
-//    <DamageType></DamageType>
-//    <GearScore>35</GearScore>
-//    <WieldEnabled>false,false,false,false</WieldEnabled>
-//    <ReqSkill>,,,</ReqSkill>
-//    <Slots></Slots>
-//    <ArmorType></ArmorType>
-//    <ArmorSet></ArmorSet>
-//    <Spells></Spells>
-//    <NumSpells>-1</NumSpells>
-//    <Palettes></Palettes>
-//  </Rule
 						
 						if(reducedmeleematches.Count() > 0)
 						{
@@ -528,10 +468,8 @@ namespace GearFoundry
 								where IOItemWithID.GearScore >= ruls.GearScore && ruls.RuleWieldSkill == 54 &&
 								(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
 								(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
-								((ruls.RuleWeaponEnabledA && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueA) ||
-							 	 (ruls.RuleWeaponEnabledB && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueB) ||
-							 	 (ruls.RuleWeaponEnabledC && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueC) ||
-							 	 (ruls.RuleWeaponEnabledD && IOItemWithID.LValue(LongValueKey.WieldReqValue) == ruls.WieldReqValueD))
+								(!ruls.WieldRequirements.Any(x => x.WieldEnabled) || 
+							 	ruls.WieldRequirements.Any(x => x.WieldEnabled && IOItemWithID.LValue(LongValueKey.WieldReqValue) == x.WieldReqValue))
 								
 								orderby ruls.RulePriority
 								select ruls;
@@ -559,63 +497,11 @@ namespace GearFoundry
 			}
 			catch(Exception ex) {LogError(ex);}
 		}
-		
-//[VTank] --------------Object dump--------------
-//[VTank] [Meta] Create count: 1
-//[VTank] [Meta] Create time: 8/26/2013 5:38 AM
-//[VTank] [Meta] Has identify data: True
-//[VTank] [Meta] Last ID time: 8/26/2013 6:00 AM
-//[VTank] [Meta] Worldfilter valid: True
-//[VTank] [Meta] Client valid: True
-//[VTank] ID: 8C06BD10
-//[VTank] ObjectClass: WandStaffOrb
-//[VTank] (S) Name: Staff
-//[VTank] (S) FullDescription: Staff of Shockwave
-//[VTank] (I) CreateFlags1: -1855225704
-//[VTank] (I) Type: 2547
-//[VTank] (I) Icon: 5801
-//[VTank] (I) Category: 32768
-//[VTank] (I) Behavior: 18
-//[VTank] (I) Value: 16402
-//[VTank] (I) ItemUsabilityFlags: 6291461
-//[VTank] (I) UsageMask: 16
-//[VTank] (I) IconOutline: 1
-//[VTank] (I) Container: 1343211182
-//[VTank] (I) Slot: -1
-//[VTank] (I) EquipableSlots: 16777216 (z)
-//[VTank] (I) EquippedSlots: 0 (0)
-//[VTank] (I) Burden: 50
-//[VTank] (I) HookMask: 2
-//[VTank] (I) Material: 22
-//[VTank] (I) PhysicsDataFlags: 170145
-//[VTank] (I) GemSettingQty: 3
-//[VTank] (I) GemSettingType: 20
-//[VTank] (I) SkillLevelReq: 0
-//[VTank] (I) Workmanship: 6
-//[VTank] (I) Spellcraft: 328
-//[VTank] (I) CurrentMana: 3267
-//[VTank] (I) DescriptionFormat: 5
-//[VTank] (I) MaximumMana: 3267
-//[VTank] (I) LoreRequirement: 344
-//[VTank] (I) RankRequirement: 0
-//[VTank] (I) EquippedBy: 0
-//[VTank] (D) SalvageWorkmanship: 6
-//[VTank] (D) ElementalDamageVersusMonsters: 1.07000000029802
-//[VTank] (D) ManaCBonus: 0.1
-//[VTank] (D) MeleeDefenseBonus: 1.15
-//[VTank] (D) ManaRateOfChange: -0.0555555555555556
-//[VTank] (L) EquippedBy: 0
-//[VTank] (L) Container: 1343211182
-//[VTank] Palette Entry 0: ID 0x000BF1, Ex Color: 000000, 0/0
+
 		
 		
 		private void FillItemRules()
 		{
-			string[] splitstring;
-	        string[] splitstringEnabled;
-	        string[] splitstringWield;
-	        int[] sumarray;
-	        int tempint;
 	        List<int> CombineIntList = new List<int>();
 			
 			try
@@ -632,141 +518,24 @@ namespace GearFoundry
 		        	
 		        	if(!Int32.TryParse((XRule.Element("Priority").Value), out tRule.RulePriority)){tRule.RulePriority = 999;}
 		        	
-		        	splitstring = ((string)XRule.Element("AppliesToFlag").Value).Split(',');
-		        	if(splitstring.Length > 0)
-		        	{
-			        	sumarray = new int[splitstring.Length];
-						for(int j = 0; j < splitstring.Length; j++){if(!Int32.TryParse(splitstring[j], out sumarray[j])){sumarray[j] = 0;}}
-						tRule.RuleAppliesTo = sumarray.Sum();
-		        	}
+		        	tRule.RuleAppliesTo = _ConvertCommaStringToIntList((string)XRule.Element("AppliesToFlag").Value).Sum();
 		        		        	
 		        	tRule.RuleName = (string)XRule.Element("Name").Value;
 		        
 		        	if(!Int32.TryParse(XRule.Element("ArcaneLore").Value, out tRule.RuleArcaneLore)){tRule.RuleArcaneLore = -1;}
-		        	if(!Double.TryParse(XRule.Element("Work").Value, out tRule.RuleWork)){tRule.RuleWork = -1;}
-					
+		        	if(!Double.TryParse(XRule.Element("Work").Value, out tRule.RuleWork)){tRule.RuleWork = -1;}					
 					if(!Int32.TryParse(XRule.Element("WieldSkill").Value, out tRule.RuleWieldSkill)) {tRule.RuleWieldSkill = 0;}
 					if(!Int32.TryParse(XRule.Element("MasteryType").Value, out tRule.RuleMastery)){tRule.RuleMastery = 0;}
-					if(!Int32.TryParse(XRule.Element("GearScore").Value, out tRule.GearScore)){tRule.GearScore = -1;}
-		        	
+					if(!Int32.TryParse(XRule.Element("GearScore").Value, out tRule.GearScore)){tRule.GearScore = -1;}		        	
 		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = -1;}
+		        	if(!Int32.TryParse((XRule.Element("NumSpells").Value), out tRule.RuleSpellNumber)){tRule.RuleSpellNumber = -1;}
 
-	        	
-					splitstring = ((string)XRule.Element("DamageType").Value).Split(',');
-					
-					if(splitstring.Length > 0)
-					{
-						sumarray = new int[splitstring.Length];      	
-						for(int j = 0; j < splitstring.Length; j++){if(!Int32.TryParse(splitstring[j], out sumarray[j])){sumarray[j] = 0;}}
-						tRule.RuleDamageTypes = sumarray.Sum();
-					}
-					
-					
-					
-					splitstringEnabled = (XRule.Element("WieldEnabled").Value).Split(',');
-					
-					splitstringWield = (XRule.Element("ReqSkill").Value).Split(',');
-					
-					if(!Boolean.TryParse(splitstringEnabled[0], out tRule.RuleWeaponEnabledA)) {tRule.RuleWeaponEnabledA = false;}
-					if(tRule.RuleWeaponEnabledA)
-					{
-						if(!Int32.TryParse(splitstringWield[0], out tRule.WieldReqValueA)) {tRule.WieldReqValueA = -1;}
-					}
-
-					if(!Boolean.TryParse(splitstringEnabled[1], out tRule.RuleWeaponEnabledB)) {tRule.RuleWeaponEnabledB = false;}
-					if(tRule.RuleWeaponEnabledB)
-					{
-						if(!Int32.TryParse(splitstringWield[1], out tRule.WieldReqValueB)) {tRule.WieldReqValueB = -1;}
-					}
-
-					if(!Boolean.TryParse(splitstringEnabled[2], out tRule.RuleWeaponEnabledC)) {tRule.RuleWeaponEnabledC = false;}
-					if(tRule.RuleWeaponEnabledC)
-					{
-						if(!Int32.TryParse(splitstringWield[2], out tRule.WieldReqValueC)) {tRule.WieldReqValueC = -1;}
-					}
-
-					if(!Boolean.TryParse(splitstringEnabled[3], out tRule.RuleWeaponEnabledD)) {tRule.RuleWeaponEnabledD = false;}
-					if(tRule.RuleWeaponEnabledD)
-					{
-						if(!Int32.TryParse(splitstringWield[3], out tRule.WieldReqValueD)) {tRule.WieldReqValueD = -1;}
-					}		
-					
-					if((string)XRule.Element("ArmorType").Value != String.Empty)
-					{
-						CombineIntList.Clear();
-						splitstring = (XRule.Element("ArmorType").Value).Split(',');				
-						if(splitstring.Length > 0)
-						{
-							for(int j = 0; j < splitstring.Length; j++)
-							{
-								tempint = -1;
-								Int32.TryParse(splitstring[j], out tempint);
-								if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
-							}
-							tRule.RuleArmorTypes = CombineIntList.ToArray();
-						}
-					}
-					else
-					{
-						tRule.RuleArmorTypes = null;
-					}
-					
-					splitstring = ((string)XRule.Element("Slots").Value).Split(',');
-					if(splitstring.Length > 0)
-					{
-						sumarray = new int[splitstring.Length];      	
-						for(int j = 0; j < splitstring.Length; j++){if(!Int32.TryParse(splitstring[j], out sumarray[j])){sumarray[j] = 0;}}
-						tRule.RuleSlots = sumarray.Sum();
-					}
-					
-					if((string)XRule.Element("ArmorSet").Value != String.Empty)
-					{
-						CombineIntList.Clear();
-						splitstring = (XRule.Element("ArmorSet").Value).Split(',');
-						if(splitstring.Length > 0)
-						{
-							for(int j = 0; j < splitstring.Length; j++)
-							{
-								tempint = -1;
-								Int32.TryParse(splitstring[j], out tempint);
-								if(tempint > -1) {CombineIntList.Add(tempint); tempint = -1;}
-							}
-						}
-						tRule.RuleArmorSet = CombineIntList.ToArray();
-						CombineIntList.Clear();
-					}
-					else
-					{
-						tRule.RuleArmorSet = null;
-					}
-					
-					
-					CombineIntList.Clear();
-					
-					if(!Int32.TryParse((XRule.Element("NumSpells").Value), out tRule.RuleSpellNumber)){tRule.RuleSpellNumber = -1;}
-					
-					if((string)XRule.Element("Spells").Value == String.Empty)
-					{
-						tRule.RuleSpells = null;
-						tRule.RuleSpellNumber = -1;
-					}
-					else
-					{
-						if((string)XRule.Element("Spells").Value != String.Empty)
-						{
-							splitstring = ((string)XRule.Element("Spells").Value).Split(',');
-							for(int j = 0; j < splitstring.Length; j++)
-							{
-								tempint = 0;
-								Int32.TryParse(splitstring[j], out tempint);
-								if(tempint > 0) {CombineIntList.Add(tempint);}
-							}
-							
-						}
-
-						tRule.RuleSpells = CombineIntList.ToArray();
-						CombineIntList.Clear();
-					}
+		        	tRule.RuleDamageTypes = _ConvertCommaStringToIntList((string)XRule.Element("DamageType").Value).Sum();
+		        	tRule.WieldRequirements = _ConvertCommaStringsToWREVist((string)XRule.Element("WieldEnabled").Value, (string)XRule.Element("ReqSkill").Value);
+		        	tRule.RuleArmorTypes = _ConvertCommaStringToIntList((string)XRule.Element("ArmorType").Value);
+		        	tRule.RuleSlots = _ConvertCommaStringToIntList((string)XRule.Element("Slots").Value).Sum();
+		        	tRule.RuleArmorSet = _ConvertCommaStringToIntList((string)XRule.Element("ArmorSet").Value);
+		        	tRule.RuleSpells = _ConvertCommaStringToIntList((string)XRule.Element("Spells").Value);
 					
 					ItemRulesList.Add(tRule);
 				}
@@ -788,24 +557,47 @@ namespace GearFoundry
 	        public int RuleMastery = 0;
 	        public int RuleDamageTypes = 0;
 	        
-	        public bool RuleWeaponEnabledA = false;
-	        public int WieldReqValueA = -1;
-	        public bool RuleWeaponEnabledB = false;
-	        public int WieldReqValueB = -1;
-	        public bool RuleWeaponEnabledC = false;
-	        public int WieldReqValueC = -1;
-	        public bool RuleWeaponEnabledD = false;
-	        public int WieldReqValueD = -1;
+	        public List<WREV> WieldRequirements = new List<WREV>();
 
-	        public int[] RuleArmorTypes;
-	        public int[] RuleArmorSet;
+	        public List<int> RuleArmorTypes  = new List<int>();
+	        public List<int> RuleArmorSet = new List<int>();
 	        public int RuleSlots = 0;
 
-	        public int[] RuleSpells = null;
+	        public List<int> RuleSpells = new List<int>();
 	        public int RuleSpellNumber = -1;   
 
-	        public int[] Palattes = null;
+	        public List<int> Palattes = new List<int>();
+	        
+	        public class WREV
+	        {
+	        	public int WieldReqValue = -1;
+	        	public bool WieldEnabled = false;
+	        }
+	        	
 		}
+		
+		private List<ItemRule.WREV> _ConvertCommaStringsToWREVist(string EnabledString, string WieldString)
+        {
+        	try
+        	{
+        		List<ItemRule.WREV> wrevList = new List<ItemRule.WREV>();
+        		
+        		string[] EnabledSplitString = EnabledString.Split(',');
+        		string[] WieldSplitString = WieldString.Split(',');
+        		
+        		for(int i = 0; i < 4; i++)
+        		{
+        			ItemRule.WREV wrev = new ItemRule.WREV();
+        			wrev.WieldReqValue = Convert.ToInt32(WieldSplitString[i]);
+        			wrev.WieldEnabled = Convert.ToBoolean(EnabledSplitString[i]);
+        			wrevList.Add(wrev);
+        		}
+ 				
+				return wrevList;        		
+            	
+        		
+        	}catch(Exception ex){LogError(ex); return new List<ItemRule.WREV>();}
+        }
 		
 		
 

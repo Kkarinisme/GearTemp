@@ -124,7 +124,7 @@
     <DamageType></DamageType>
     <GearScore>5</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
-    <ReqSkill>,,,</ReqSkill>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
     <Slots>134217728</Slots>
     <ArmorType></ArmorType>
     <ArmorSet>49,50,83,52,55,56,59,84,85,58,60,61,76,62,63,64,65,53,67,74,75,79,66,68,69,70,71,72,54,57,77,86,73,87,88,90,78,80,81,82</ArmorSet>
@@ -256,7 +256,7 @@
     <DamageType></DamageType>
     <GearScore>35</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
-    <ReqSkill>,,,</ReqSkill>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -278,7 +278,7 @@
     <DamageType></DamageType>
     <GearScore>-1</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
-    <ReqSkill>,,,</ReqSkill>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
     <Slots>1,2,4,32,256,512,1024,2048,4096,8192,16384,32768,196608,786432,67108864,134217728</Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -300,7 +300,7 @@
     <DamageType></DamageType>
     <GearScore>-1</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
-    <ReqSkill>,,,</ReqSkill>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
     <Slots>2,4,32768,196608,786432,67108864</Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -322,7 +322,7 @@
     <DamageType></DamageType>
     <GearScore>30</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
-    <ReqSkill>,,,</ReqSkill>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
     <Slots>1,32,256,512,1024,2048,4096,8192,16384</Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -344,7 +344,7 @@
     <DamageType></DamageType>
     <GearScore>3</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
-    <ReqSkill>,,,</ReqSkill>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
     <Slots>1073741824</Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -366,7 +366,7 @@
     <DamageType></DamageType>
     <GearScore>4</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
-    <ReqSkill>,,,</ReqSkill>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
     <Slots>268435456,536870912,1073741824</Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>

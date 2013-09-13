@@ -1608,9 +1608,14 @@ namespace GearFoundry
 								result = IORString() +  GearScoreString() + wo.Name + SetString() +  ArmorLevelComaparisonString() + RatingString() + SpellDescriptions();
 								break;
 							case ObjectClass.Clothing:
-								if(wo.Values(LongValueKey.ArmorLevel) > 0 || wo.Values(LongValueKey.EquipableSlots) == 0x8000000)
+								if(wo.Values(LongValueKey.ArmorLevel) > 0)
 								{
 									result = IORString() +  GearScoreString() + wo.Name + SetString() +  ArmorLevelComaparisonString() + RatingString() + SpellDescriptions();
+									break;
+								}
+								else if(wo.Values(LongValueKey.EquipableSlots) == CloakSlot)
+								{
+									result = IORString() +  GearScoreString() + wo.Name + SetString() + RatingString() + SpellDescriptions();
 									break;
 								}
 								else

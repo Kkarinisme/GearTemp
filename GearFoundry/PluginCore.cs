@@ -83,7 +83,6 @@ namespace GearFoundry
 				InitListBuilder();               
                 InitFilenames();
                 loadFiles();
-                loadLists();
                 startRoutines();
                 _UpdateRulesTabs();
                 

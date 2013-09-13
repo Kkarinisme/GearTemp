@@ -272,10 +272,10 @@ namespace GearFoundry
                 
                 if(e.Column == 0)
                 {
-                	mSelectedRule.Element("Enabled").Value = row[0][0].ToString();
+                	WriteToChat(row[0][0].ToString());
+                	mSelectedRule.Element("Enabled").Value = row[0][0].ToString().ToLower();
                 }
                 
-                MirrorToXdocRules();
                 _UpdateRulesTabs();
                 
             }catch (Exception ex) { LogError(ex); }

@@ -190,7 +190,7 @@ namespace GearFoundry
         	try
         	{
         		List<int> Ids = new List<int>();
-            	if(BaseString != String.Empty)
+            	if(BaseString != String.Empty && BaseString != "")
             	{
             		string[] SplitString = BaseString.Split(',');
             		foreach(string str in SplitString)
@@ -198,12 +198,12 @@ namespace GearFoundry
             			Ids.Add(Convert.ToInt32(str));
             		}
             	}
-            	
-            	if(Ids.Count > 0) {return Ids;}
-            	else{return new List<int>();}
-        		
+
+            	return Ids;        		
         	}catch(Exception ex){LogError(ex); return new List<int>();}
         }
+        
+
         
         private string _ConvertIntListToCommaString(List<int> BaseList)
         {

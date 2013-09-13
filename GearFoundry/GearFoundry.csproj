@@ -201,7 +201,6 @@
     <EmbeddedResource Include="Graphics\summonP2.gif">
       <LogicalName>summonP2.gif</LogicalName>
     </EmbeddedResource>
-    <None Include="HudComponents\Text1.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Defaults\Mobs.xml">

@@ -199,24 +199,19 @@ namespace GearFoundry
             xdocRules = XDocument.Load(rulesFilename);
             xdocGenSettings = XDocument.Load(genSettingsFilename);
             xdocSwitchGearSettings = XDocument.Load(switchGearSettingsFilename);
-        }
-
-        public void loadLists()
-        {
+            
             try
             {  
             	setUpLists(xdocMobs, mSortedMobsList);
                 setUpLists(xdocTrophies, mSortedTrophiesList);
                 setUpLists(xdocSalvage, mSortedSalvageList);
                 FillSalvageRules();
-                setUpRulesLists();
-                FillItemRules();
+                InitRules();
                 //Irq:  Builds class mirror lists of Mish's xdocs at load time.
                 setUpSettingsList();
                                 
             }
             catch (Exception ex) { LogError(ex); }
-
         }
 
         public void setUpSettingsList()
@@ -264,41 +259,6 @@ namespace GearFoundry
 
         }
 
-
-
-
-        public void setUpRulesLists()
-        {
-            try
-            {
-            	
-
-                mPrioritizedRulesList.Clear();
-
-                IEnumerable<XElement> myelements = xdocRules.Element("Rules").Descendants("Rule");
-                
-
-                var lstChecked = from element in myelements
-                                   where element.Element("Enabled").Value == "true"
-                                 orderby element.Element("Priority").Value ascending
-                                 select element;
-
-
-                mPrioritizedRulesList.AddRange(lstChecked);
-
-
-               var lstUnChecked = from element in myelements
-                                   where element.Element("Enabled").Value == "false"
-                                   orderby element.Element("Priority").Value ascending
-                                   select element;
-
-                 mPrioritizedRulesList.AddRange(lstUnChecked);
- 
-            }
-            catch (Exception ex) { LogError(ex); }
-
-
-        }
         
         private void _UpdateRulesTabs()
         {
@@ -1589,7 +1549,7 @@ namespace GearFoundry
         		                    new XElement("DamageType", "0"),
         		                    new XElement("GearScore", "-1"),
         		                    new XElement("WieldEnabled", "false,false,false,false"),
-        		                    new XElement("ReqSkill", ",,,"),
+        		                    new XElement("ReqSkill", "-1,-1,-1,-1"),
         		                    new XElement("Slots", String.Empty),
         		                    new XElement("ArmorType", String.Empty),
         		                    new XElement("ArmorSet", String.Empty),
