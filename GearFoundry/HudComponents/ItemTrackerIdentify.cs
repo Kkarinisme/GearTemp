@@ -299,36 +299,42 @@ namespace GearFoundry
 					where (appliesto.RuleAppliesTo & IOItemWithID.LValue(LongValueKey.Category)) == IOItemWithID.LValue(LongValueKey.Category)
 					select appliesto;
 				
-				if(AppliesToListMatches.Count() == 0) {return;}
+				if(AppliesToListMatches.Count() == 0) {return;}	
 				
-				
-				var PropertyListMatches = from properties in AppliesToListMatches
-					where (properties.RuleArcaneLore == -1 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= properties.RuleArcaneLore) &&
-						  (properties.RuleWork == -1 || IOItemWithID.LValue(LongValueKey.Workmanship) <= properties.RuleWork) &&
-						  (properties.RuleWieldLevel == -1 || IOItemWithID.LValue(LongValueKey.WieldReqType) != 7 ||
-					 	  (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= properties.RuleWieldLevel))
-					select properties;	
-				
-				if(PropertyListMatches.Count() == 0) {return;}				
-				
-				var SlotListMatches = from slots in PropertyListMatches
+				var SlotListMatches = from slots in AppliesToListMatches
 					where slots.RuleSlots == 0 || (IOItemWithID.LValue(LongValueKey.EquipableSlots) & slots.RuleSlots) != 0
 					select slots;
 				
 				if(SlotListMatches.Count() == 0) {return;}
+				
+			    var SetMatches = from sets in SlotListMatches
+					where sets.RuleArmorSet.Count == 0 || sets.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))
+					select sets;
+				
+				if(SetMatches.Count() == 0) {return;}
+								
+				var PropertyListMatches = from properties in SetMatches
+					where (properties.RuleArcaneLore == -1 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= properties.RuleArcaneLore) &&
+						  (properties.RuleWork == -1 || IOItemWithID.LValue(LongValueKey.Workmanship) <= properties.RuleWork) &&
+						  (properties.GearScore == -1 || IOItemWithID.GearScore >= properties.GearScore) &&
+						  (properties.RuleWieldLevel == -1 || 
+					       (IOItemWithID.LValue(LongValueKey.WieldReqType) != 7 &&  IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqType2) != 7) ||
+					 	   (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= properties.RuleWieldLevel) ||
+					 	   (IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqType2) == 7 && IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) <= properties.RuleWieldLevel))
+					select properties;	
+				
+				WriteToChat("Property List Matches Count = " + PropertyListMatches.Count());
+				
+				if(PropertyListMatches.Count() == 0) {return;}				
 			
-				var SpellListMatches = from spellmatches in SlotListMatches
+				var SpellListMatches = from spellmatches in PropertyListMatches
 					where spellmatches.RuleSpellNumber == -1 || spellmatches.RuleSpells.Count == 0 || 
 					ModifiedIOSpells.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
 					select spellmatches;
 				
 				if(SpellListMatches.Count() == 0) {return;}
 					
-				var SetMatches = from sets in SpellListMatches
-					where sets.RuleArmorSet.Count == 0 || sets.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))
-					select sets;
-				
-				if(SetMatches.Count() == 0) {return;}
+
 								
 				switch(IOItemWithID.ObjectClass)
 				{		
@@ -462,14 +468,13 @@ namespace GearFoundry
 	
 					case ObjectClass.Misc:
 						if(IOItemWithID.Name.ToLower().Contains("essence"))
-						{
-							
-							var reducedessencematches = from ruls in SetMatches
+						{							
+							var reducedessencematches = from ruls in AppliesToListMatches
 								where IOItemWithID.GearScore >= ruls.GearScore && ruls.RuleWieldSkill == 54 &&
 								(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
 								(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
 								(!ruls.WieldRequirements.Any(x => x.WieldEnabled) || 
-							 	ruls.WieldRequirements.Any(x => x.WieldEnabled && IOItemWithID.LValue(LongValueKey.WieldReqValue) == x.WieldReqValue))
+								 ruls.WieldRequirements.Any(x => x.WieldEnabled && IOItemWithID.LValue((LongValueKey)NewLongKeys.SummoningSkill) == x.WieldReqValue))
 								
 								orderby ruls.RulePriority
 								select ruls;

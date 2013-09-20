@@ -28,6 +28,26 @@ namespace GearFoundry
         {
         	try
             {
+        		
+                mSelectedRule.Element("Enabled").Value = "false";
+                mSelectedRule.Element("Priority").Value = "999";
+                mSelectedRule.Element("AppliesToFlag").Value = String.Empty;
+                mSelectedRule.Element("ArcaneLore").Value = "-1";
+                mSelectedRule.Element("Work").Value = "-1";
+                mSelectedRule.Element("WieldLevel").Value = "-1";
+                mSelectedRule.Element("WieldSkill").Value = "0";
+                mSelectedRule.Element("MasteryType").Value = "0";
+                mSelectedRule.Element("DamageType").Value = "0";
+                mSelectedRule.Element("GearScore").Value = "-1";
+                mSelectedRule.Element("WieldEnabled").Value = "false,false,false,false";
+                mSelectedRule.Element("ReqSkill").Value = "-1,-1,-1,-1";
+                mSelectedRule.Element("NumSpells").Value = "-1";
+                mSelectedRule.Element("Slots").Value = String.Empty;
+                mSelectedRule.Element("ArmorType").Value = String.Empty;
+                mSelectedRule.Element("ArmorSet").Value = String.Empty;
+                mSelectedRule.Element("Spells").Value = String.Empty;
+                mSelectedRule.Element("Palettes").Value = String.Empty;
+        		                      
                 _UpdateRulesTabs();    
             }catch (Exception ex) { LogError(ex); };
         }
@@ -86,6 +106,8 @@ namespace GearFoundry
 	            xdocRules = new XDocument(new XElement("Rules"));
 	            
 	            WriteToChat("mPRL Count = " + mPrioritizedRulesList.Count());
+	            
+	            string saverulenumber = mSelectedRule.Element("RuleNum").Value;
 	
 	            foreach(XElement el in mPrioritizedRulesList)
 	            {
@@ -98,6 +120,8 @@ namespace GearFoundry
                 mPrioritizedRulesList = xdocRules.Element("Rules").Descendants("Rule").OrderBy(x => x.Element("Enabled").Value).ToList();
                 
                 FillItemRules();
+                
+                mSelectedRule = mPrioritizedRulesList.Find(x => x.Element("RuleNum").Value == saverulenumber);
 
         	}catch(Exception ex){LogError(ex);}
         }

@@ -1114,7 +1114,7 @@ namespace GearFoundry
 							case 4154:
 							case 7664:
 							case 29738:
-								return 13;  //Naturalist
+								return 12;  //Naturalist
 								
 							case 6978:
 							case 7285:
@@ -1125,12 +1125,12 @@ namespace GearFoundry
 							case 29744:
 							case 29745:
 							case 29746:
-						    	return 14;  //Primalist
+						    	return 13;  //Primalist
 						    						    
 						    case 4646:
 						    case 5828:
 						    case 13383:
-						    	return 15;  //Necro
+						    	return 14;  //Necro
 						    
 						    default:
 						    	return 0;

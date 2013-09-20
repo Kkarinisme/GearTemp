@@ -286,7 +286,7 @@ namespace GearFoundry
 			SlotList.Add(info);
 			info = new IDNameLoadable(0x2 ,"Shirt");
 			SlotList.Add(info);
-			info = new IDNameLoadable(0x4 ,"Pants");
+			info = new IDNameLoadable(0x40 ,"Pants");
 			SlotList.Add(info);
 //			info = new IDNameLoadable(0x8 ,"UpperArms(Underwear)");
 //			SlotList.Add(info);
@@ -373,7 +373,7 @@ namespace GearFoundry
 		private void CreateArmorIndex()
 		{
 			string[] loadme = {"Alduressa", "Amuli", "Celdon", "Chainmail", "Chiran", "Covenant", "Diforsa", "Haebrean", "Knorr",
-									"Koujia", "Leather", "Lorica", "Nariyid", "Olthoi", "Olthoi Alduressa", "Olthoi Amuli", "Olthoi Celdon",
+									"Koujia", "Leather", "Lorica", "Nariyid", "Olthoi Alduressa", "Olthoi Amuli", "Olthoi Celdon", "Olthoi",
 									"Olthoi Koujia", "Over-robe", "Platemail", "Scalemail", "Sedgemail", "Studded", "Tenassa", "Yoroi", "Other"};	
 			int i = 0;
 			foreach(string load in loadme)
@@ -738,7 +738,7 @@ namespace GearFoundry
 		private void CreateMasteryIndex()
 		{
 			string[] loadme = {"None", "Unarmed", "Sword", "Axe", "Mace", "Spear", "Dagger", "Staff", "Bow", "Crossbow", "Thrown", "TwoHanded", "Naturalist", "Primalist", "Necromancer"};
-			//Nat 13, Prim 14, Necro 15
+			//Nat 11, Prim 12, Necro 13
 			int i = 0;
 			foreach(string load in loadme)
 			{
@@ -960,7 +960,8 @@ namespace GearFoundry
          	    
          	    foreach(var spel in spl2)
          	    {
-         	    	if(!spel.spellname.Contains("Bane") && !spel.spellname.Contains("Hunter") && !spel.spellname.Contains("Thirst") && !spel.spellname.Contains("Link"))
+         	    	if(!spel.spellname.Contains("Bane") && !spel.spellname.Contains("Hunter") && !spel.spellname.Contains("Thirst") && !spel.spellname.Contains("Link") &&
+         	    	   !spel.spellname.Contains("Defender"))
          	    	{
          	    		ItemsSpellList.Add(spel);
          	    	}

@@ -372,7 +372,7 @@ namespace GearFoundry
         {
             try
             {
-            	WriteToChat("ARmor List selected.");
+
                 MyClasses.MetaViewWrappers.IListRow row = lstRuleArmorTypes[e.Row];
                 
                 List<int> aList = _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorType").Value);
@@ -471,13 +471,31 @@ namespace GearFoundry
 
         }
 
-        // [ControlEvent]("lstDamageTypes", "Selected")
         private void lstDamageTypes_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e) 
         {
-
-            int mList = 3;
-            MVListSelectEventArgs args = e;
-            string mDamageTypeNum = lstSelect(ElementalList, lstDamageTypes, args, mList);
+        	try
+        	{
+                MyClasses.MetaViewWrappers.IListRow row = lstDamageTypes[e.Row];
+                
+                List<int> dList = _ConvertCommaStringToIntList(mSelectedRule.Element("DamageType").Value);
+                
+                bool selected = (bool)row[0][0];
+                int damagetype = Convert.ToInt32(row[2][0]);
+                
+                if(dList.Contains(damagetype) && !selected)
+                {
+                	dList.RemoveAll(x => x  == damagetype);
+                }
+                
+                if(!dList.Contains(damagetype) && selected)
+                {
+                	dList.Add(damagetype);
+                }
+                
+                mSelectedRule.Element("DamageType").Value = _ConvertIntListToCommaString(dList);
+                          
+                _UpdateRulesTabs();	
+        	}catch(Exception ex){LogError(ex);}
         }
 
         [ControlEvent("txtTrophyMax", "End")]

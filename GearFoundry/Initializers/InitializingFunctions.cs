@@ -364,12 +364,19 @@ namespace GearFoundry
             	lstRuleSpellsEnabled.Clear();
             	
             	List<int> SpellIds = _ConvertCommaStringToIntList(mSelectedRule.Element("Spells").Value);
+            	List<spellinfo> enabledspells = new List<spellinfo>();
+            	
+            	foreach(int spell in SpellIds)
+            	{
+            		enabledspells.Add(SpellIndex[spell]);
+            	}
 
-            	foreach(int spelid in SpellIds)
+            	
+            	foreach(var spel in enabledspells)
             	{
             		newRow = lstRuleSpellsEnabled.AddRow();
-            		newRow[0][0] = ItemsSpellList.Find(x => x.spellid == spelid).spellname;
-            		newRow[1][0] = ItemsSpellList.Find(x => x.spellid == spelid).spellid.ToString();
+            		newRow[0][0] = spel.spellname;
+            		newRow[1][0] = spel.spellid.ToString();
             	}
             }
 

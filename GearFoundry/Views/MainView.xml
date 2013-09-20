@@ -68,7 +68,7 @@
 								<column progid="DecalControls.IconColumn" fixedwidth="12"/>
 								<column progid="DecalControls.TextColumn" fixedwidth="1"/>
 							</control>
-							<control progid="DecalControls.PushButton" name="btnRuleClear" left="10" top="110" width="110" height="20" text="Reset Rule Changes" />
+							<control progid="DecalControls.PushButton" name="btnRuleClear" left="10" top="110" width="110" height="20" text="Reset Values" />
 							<control progid="DecalControls.PushButton" name="btnRuleNew" left="130" top="110" width="110" height="20" text="Add New Rule" />
 							<control progid="DecalControls.PushButton" name="btnRuleUpdate" left="250" top="110" width="110" height="20" text="Save Rule Changes" />
 
@@ -127,7 +127,7 @@
 										<control progid="DecalControls.List" name="lstDamageTypes" left="5" top="85" width="125" height="90">
 											<column progid="DecalControls.CheckColumn" />
 											<column progid="DecalControls.TextColumn" fixedwidth="110" />
-											<column progid="DecalControls.TextColumn" />
+											<column progid="DecalControls.TextColumn" fixedwidth = "1"/>
 										</control>
 										
 										<control progid="DecalControls.StaticText" name="lblEnabled10025" left="5" top="175" width="40" height="20" text="Enabled" />
@@ -162,10 +162,10 @@
 								<page label="Appearance">
 									<control progid="DecalControls.FixedLayout" clipped="">
 										
-										<control progid="DecalControls.StaticText" name="lblRuleArmorTypes" left="5" top="0" width="80" height="16" text="Armor Models" />
-										<control progid="DecalControls.List" name="lstRuleArmorTypes" left="5" top="15" width="110" height="255">
+										<control progid="DecalControls.StaticText" name="lblRuleArmorTypes" left="5" top="0" width="100" height="16" text="Armor Models" />
+										<control progid="DecalControls.List" name="lstRuleArmorTypes" left="5" top="15" width="150" height="255">
 											<column progid="DecalControls.CheckColumn" />
-											<column progid="DecalControls.TextColumn" fixedwidth="110" />
+											<column progid="DecalControls.TextColumn" fixedwidth="130" />
 											<column progid="DecalControls.TextColumn" fixedwidth = "1" />
 										</control>
 										
