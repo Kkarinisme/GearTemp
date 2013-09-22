@@ -295,46 +295,42 @@ namespace GearFoundry
 				ModifiedIOSpells.Clear();
 				LootObject IOItemWithID = IOItemWithIDReference;
 				
-				var AppliesToListMatches = from appliesto in ItemRulesList
+				List<ItemRule> AppliesToListMatches = (from appliesto in ItemRulesList
 					where (appliesto.RuleAppliesTo & IOItemWithID.LValue(LongValueKey.Category)) == IOItemWithID.LValue(LongValueKey.Category)
-					select appliesto;
+					select appliesto).ToList();
 				
-				if(AppliesToListMatches.Count() == 0) {return;}	
+				if(AppliesToListMatches.Count == 0) {return;}	
 				
-				var SlotListMatches = from slots in AppliesToListMatches
+				List<ItemRule> SlotListMatches = (from slots in AppliesToListMatches
 					where slots.RuleSlots == 0 || (IOItemWithID.LValue(LongValueKey.EquipableSlots) & slots.RuleSlots) != 0
-					select slots;
+					select slots).ToList();
 				
-				if(SlotListMatches.Count() == 0) {return;}
+				if(SlotListMatches.Count == 0) {return;}
 				
-			    var SetMatches = from sets in SlotListMatches
+			    List<ItemRule> SetMatches = (from sets in SlotListMatches
 					where sets.RuleArmorSet.Count == 0 || sets.RuleArmorSet.Contains(IOItemWithID.LValue(LongValueKey.ArmorSet))
-					select sets;
+					select sets).ToList();
 				
-				if(SetMatches.Count() == 0) {return;}
+				if(SetMatches.Count == 0) {return;}
 								
-				var PropertyListMatches = from properties in SetMatches
+				List<ItemRule> PropertyListMatches = (from properties in SetMatches
 					where (properties.RuleArcaneLore == -1 || IOItemWithID.LValue(LongValueKey.LoreRequirement) <= properties.RuleArcaneLore) &&
 						  (properties.RuleWork == -1 || IOItemWithID.LValue(LongValueKey.Workmanship) <= properties.RuleWork) &&
-						  (properties.GearScore == -1 || IOItemWithID.GearScore >= properties.GearScore) &&
 						  (properties.RuleWieldLevel == -1 || 
 					       (IOItemWithID.LValue(LongValueKey.WieldReqType) != 7 &&  IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqType2) != 7) ||
 					 	   (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && IOItemWithID.LValue(LongValueKey.WieldReqValue) <= properties.RuleWieldLevel) ||
 					 	   (IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqType2) == 7 && IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) <= properties.RuleWieldLevel))
-					select properties;	
+					select properties).ToList();
 				
-				WriteToChat("Property List Matches Count = " + PropertyListMatches.Count());
-				
-				if(PropertyListMatches.Count() == 0) {return;}				
+				if(PropertyListMatches.Count == 0) {return;}				
 			
-				var SpellListMatches = from spellmatches in PropertyListMatches
+				List<ItemRule> SpellListMatches = (from spellmatches in PropertyListMatches
 					where spellmatches.RuleSpellNumber == -1 || spellmatches.RuleSpells.Count == 0 || 
 					ModifiedIOSpells.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
-					select spellmatches;
+					select spellmatches).ToList();
 				
-				if(SpellListMatches.Count() == 0) {return;}
+				if(SpellListMatches.Count == 0) {return;}
 					
-
 								
 				switch(IOItemWithID.ObjectClass)
 				{		
@@ -342,14 +338,14 @@ namespace GearFoundry
 					case ObjectClass.Gem:
 							if(!IOItemWithID.Aetheriacheck) {return;}
 							
-						var reducedaetheriamatches = from ruls in SlotListMatches
+						List<ItemRule> reducedaetheriamatches = (from ruls in SpellListMatches
 							where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) 
 							orderby ruls.RulePriority
-							select ruls;
+							select ruls).ToList();
 						
-							if(reducedaetheriamatches.Count() > 0)
+							if(reducedaetheriamatches.Count > 0)
 							{
-								IOItemWithID.rulename = SetMatches.First().RuleName; 
+								IOItemWithID.rulename = reducedaetheriamatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
 								return;
 							}
@@ -358,10 +354,15 @@ namespace GearFoundry
 								return;
 							}
 
-					case ObjectClass.Jewelry:  //Jewelry doesn't have gear scores at this time.						
-							if(SpellListMatches.Count() > 0)
+					case ObjectClass.Jewelry:  //Jewelry doesn't have gear scores at this time.	
+							List<ItemRule> reducedjewelrymatches = (from ruls in SpellListMatches
+									where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) 
+									orderby ruls.RulePriority
+									select ruls).ToList();
+							
+							if(reducedjewelrymatches.Count > 0)
 							{
-								IOItemWithID.rulename = SetMatches.First().RuleName; 
+								IOItemWithID.rulename = reducedjewelrymatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
 								return;
 							}
@@ -371,13 +372,12 @@ namespace GearFoundry
 							}
 						
 					case ObjectClass.Armor:
-						var reducedarmormatches = from ruls in SetMatches
-							where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) &&
-							(ruls.RuleArmorTypes.Count == 0 || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType))
+						List<ItemRule> reducedarmormatches = (from ruls in  SpellListMatches
+							where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) 
 							orderby ruls.RulePriority
-							select ruls;
+							select ruls).ToList();
 						
-						if(reducedarmormatches.Count() > 0)
+						if(reducedarmormatches.Count > 0)
 						{
 							IOItemWithID.rulename = reducedarmormatches.First().RuleName; 
 							IOItemWithID.IOR = IOResult.rule; 
@@ -392,12 +392,12 @@ namespace GearFoundry
 						
 						if(IOItemWithID.LValue(LongValueKey.EquipableSlots) == 0x8000000)
 						{														
-							var reducedcloakmatches = from ruls in SetMatches
+							List<ItemRule> reducedcloakmatches = (from ruls in SpellListMatches
 								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore)
 								orderby ruls.RulePriority
-								select ruls;
+								select ruls).ToList();
 							
-							if(reducedcloakmatches.Count() > 0)
+							if(reducedcloakmatches.Count > 0)
 							{
 								IOItemWithID.rulename = reducedcloakmatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
@@ -410,13 +410,12 @@ namespace GearFoundry
 						}
 						else if(IOItemWithID.LValue(LongValueKey.ArmorLevel) > 0)
 						{
-							var reducedarmorclothmatches = from ruls in SetMatches
-								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) &&
-								(ruls.RuleArmorTypes.Count == 0  || ruls.RuleArmorTypes.Contains(IOItemWithID.ArmorType))
+							List<ItemRule> reducedarmorclothmatches = (from ruls in SpellListMatches
+								where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore)
 								orderby ruls.RulePriority
-								select ruls;
+								select ruls).ToList();
 						
-							if(reducedarmorclothmatches.Count() > 0)
+							if(reducedarmorclothmatches.Count > 0)
 							{
 								IOItemWithID.rulename = reducedarmorclothmatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
@@ -429,10 +428,15 @@ namespace GearFoundry
 						}
 
 						else
-						{							
-							if(SetMatches.Count() > 0)
+						{	
+							List<ItemRule> reducedclothingmatches = (from ruls in SpellListMatches
+									where (ruls.GearScore == -1 || IOItemWithID.GearScore >= ruls.GearScore) 
+									orderby ruls.RulePriority
+									select ruls).ToList();
+							
+							if(reducedclothingmatches.Count > 0)
 							{
-								IOItemWithID.rulename = SetMatches.First().RuleName; 
+								IOItemWithID.rulename = reducedclothingmatches.First().RuleName; 
 								IOItemWithID.IOR = IOResult.rule; 
 								return;
 							}
@@ -444,7 +448,7 @@ namespace GearFoundry
 					case ObjectClass.MeleeWeapon:
 					case ObjectClass.MissileWeapon:
 					case ObjectClass.WandStaffOrb:
-						var reducedmeleematches = from ruls in SpellListMatches
+						List<ItemRule> reducedweaponmatches = (from ruls in SpellListMatches
 							where IOItemWithID.GearScore >= ruls.GearScore &&
 							(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
 							(ruls.RuleWieldSkill == 0 || (IOItemWithID.LValue(LongValueKey.WieldReqType) == 7 && ruls.RuleWieldSkill == 0) ||
@@ -453,11 +457,11 @@ namespace GearFoundry
 							(!ruls.WieldRequirements.Any(x => x.WieldEnabled) || 
 							  ruls.WieldRequirements.Any(x => x.WieldEnabled && IOItemWithID.LValue(LongValueKey.WieldReqValue) == x.WieldReqValue))
 							orderby ruls.RulePriority
-							select ruls;
+							select ruls).ToList();
 						
-						if(reducedmeleematches.Count() > 0)
+						if(reducedweaponmatches.Count > 0)
 						{
-							IOItemWithID.rulename = reducedmeleematches.First().RuleName; 
+							IOItemWithID.rulename = reducedweaponmatches.First().RuleName; 
 							IOItemWithID.IOR = IOResult.rule; 
 							return;
 						}
@@ -469,17 +473,14 @@ namespace GearFoundry
 					case ObjectClass.Misc:
 						if(IOItemWithID.Name.ToLower().Contains("essence"))
 						{							
-							var reducedessencematches = from ruls in AppliesToListMatches
+							List<ItemRule> reducedessencematches = (from ruls in SpellListMatches
 								where IOItemWithID.GearScore >= ruls.GearScore && ruls.RuleWieldSkill == 54 &&
 								(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
 								(ruls.RuleDamageTypes == 0 || (ruls.RuleDamageTypes & IOItemWithID.DamageType) == IOItemWithID.DamageType) &&
 								(!ruls.WieldRequirements.Any(x => x.WieldEnabled) || 
 								 ruls.WieldRequirements.Any(x => x.WieldEnabled && IOItemWithID.LValue((LongValueKey)NewLongKeys.SummoningSkill) == x.WieldReqValue))
-								
 								orderby ruls.RulePriority
-								select ruls;
-							
-
+								select ruls).ToList();
 							
 							if(reducedessencematches.Count() > 0)
 							{

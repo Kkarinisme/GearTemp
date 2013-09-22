@@ -271,8 +271,11 @@ namespace GearFoundry
         		if(mPrioritizedRulesList.Count == 0) {mPrioritizedRulesList.Add(CreateRulesXElement());}
         		if(mSelectedRule == null){mSelectedRule = mPrioritizedRulesList.First();}
         		
-        		lstRules.Clear();
-				foreach (XElement element in mPrioritizedRulesList)
+        		List<XElement> SortedRulesList = mPrioritizedRulesList.OrderBy(x => x.Element("Enabled").Value).ThenBy(y => y.Element("Name").Value).ToList();
+        		
+        		lstRules.Clear();  		
+        		
+				foreach (XElement element in SortedRulesList)
                 {
 					MyClasses.MetaViewWrappers.IListRow newRow = lstRules.AddRow();
 					newRow[0][0] = Convert.ToBoolean(element.Element("Enabled").Value);
@@ -364,19 +367,22 @@ namespace GearFoundry
             	lstRuleSpellsEnabled.Clear();
             	
             	List<int> SpellIds = _ConvertCommaStringToIntList(mSelectedRule.Element("Spells").Value);
-            	List<spellinfo> enabledspells = new List<spellinfo>();
             	
-            	foreach(int spell in SpellIds)
+            	if(SpellIds.Count > 0)
             	{
-            		enabledspells.Add(SpellIndex[spell]);
-            	}
-
-            	
-            	foreach(var spel in enabledspells)
-            	{
-            		newRow = lstRuleSpellsEnabled.AddRow();
-            		newRow[0][0] = spel.spellname;
-            		newRow[1][0] = spel.spellid.ToString();
+	            	List<spellinfo> enabledspells = new List<spellinfo>();
+	            	foreach(int spell in SpellIds)
+	            	{
+	            		enabledspells.Add(SpellIndex[spell]);
+	            	}
+	
+	            	
+	            	foreach(var spel in enabledspells)
+	            	{
+	            		newRow = lstRuleSpellsEnabled.AddRow();
+	            		newRow[0][0] = spel.spellname;
+	            		newRow[1][0] = spel.spellid.ToString();
+	            	}
             	}
             }
 
