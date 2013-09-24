@@ -402,7 +402,7 @@ namespace GearFoundry
 		private void LootContainerOpened(object sender, ContainerOpenedEventArgs e)
 		{
 			try
-			{	
+			{					
 				if(Core.WorldFilter[e.ItemGuid] == null){return;}
 								
 				if(LOList.Any(x => x.Open))
@@ -442,7 +442,7 @@ namespace GearFoundry
 					Core.RenderFrame -= RenderFrame_LootContainerOpened;
 					return;
 				}
-				else if((DateTime.Now - LOList.Find(x => x.ActionTarget).LastActionTime).TotalMilliseconds < 100){return;}
+				else if((DateTime.Now - LOList.Find(x => x.ActionTarget).LastActionTime).TotalMilliseconds < 200){return;}
 				else
 				{
 					Core.RenderFrame -= RenderFrame_LootContainerOpened;
