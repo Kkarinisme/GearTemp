@@ -70,15 +70,16 @@ namespace GearFoundry
 			try 
 			{	
 				fileservice = (FileService)Core.FileService;				
-				Core.CharacterFilter.LoginComplete += OnCharacterFilterLoginCompleted;			
+				Core.CharacterFilter.LoginComplete += OnCharacterFilterLoginCompleted;	
+		        
 			} catch (Exception ex) {LogError(ex);}
 		}
-        
-        
+
         private void OnCharacterFilterLoginCompleted(object sender, System.EventArgs e)
         {
             try
             {
+
             	InitPaths();           	
 				InitListBuilder();               
                 InitFilenames();
@@ -91,7 +92,7 @@ namespace GearFoundry
                 //TODO:  This could be moved to be subscribed situationally.
                 Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
 
-                WriteToChat("Plugin now online. Server population: " + Core.CharacterFilter.ServerPopulation);
+                WriteToChat("GearFoundry now online. Server population: " + Core.CharacterFilter.ServerPopulation);
 
                 MasterTimer.Interval = 1000;
                 MasterTimer.Start();
