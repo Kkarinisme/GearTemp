@@ -35,6 +35,8 @@ namespace GearFoundry
 			public bool Move = false;
 			public bool Process = false;
 			public bool Open = false;
+			public bool NewObject = true;
+			public bool IsContainer = false;
 			
 			public IAction ProcessAction = IAction.None;
 			

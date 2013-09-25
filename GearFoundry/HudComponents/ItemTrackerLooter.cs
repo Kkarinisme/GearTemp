@@ -336,13 +336,13 @@ namespace GearFoundry
 				}
 				else if(e.Change == WorldChangeType.StorageChange)
 				{
-					if(LOList.Any(x => x.Id == e.Changed.Id && x.ActionTarget))
+					if(LOList.Any(x => x.Id == e.Changed.Id && x.ActionTarget && !x.IsContainer))
 					{
 						Core.RenderFrame += InspectorMoveCheckBack;
 						return;
 					}
 					
-					if(LOList.Any(x => x.Id == e.Changed.Id && !x.ActionTarget))
+					if(LOList.Any(x => x.Id == e.Changed.Id && !x.ActionTarget && !x.IsContainer))
 					{
 						if(LOList.Any(x => x.Open)) {return;}
 						LOList.Find(x => x.Id == e.Changed.Id).ActionTarget = true;
@@ -405,7 +405,7 @@ namespace GearFoundry
 			{					
 				if(Core.WorldFilter[e.ItemGuid] == null){return;}
 								
-				if(LOList.Any(x => x.Open))
+				if(LOList.Any(x => x.Open && x.IsContainer))
 				{
 					Core.RenderFrame += OpenContainerCheckback;
 					return;
@@ -415,6 +415,7 @@ namespace GearFoundry
 				if(!LOList.Any(x => x.Id == e.ItemGuid))
 				{
 					lo = new LootObject(Core.WorldFilter[e.ItemGuid]);
+					lo.IsContainer = true;
 					LOList.Add(lo);
 				}
 				else
@@ -437,18 +438,18 @@ namespace GearFoundry
 		{
 			try
 			{	
-				if(!LOList.Any(x => x.ActionTarget))
+				LootObject container = LOList.Find(x => x.ActionTarget && x.IsContainer);
+				if(container == null) 
 				{
 					Core.RenderFrame -= RenderFrame_LootContainerOpened;
 					return;
 				}
-				else if((DateTime.Now - LOList.Find(x => x.ActionTarget).LastActionTime).TotalMilliseconds < 200){return;}
+				else if((DateTime.Now - container.LastActionTime).TotalMilliseconds < 200){return;}
 				else
 				{
 					Core.RenderFrame -= RenderFrame_LootContainerOpened;
 				}
 				
-				LootObject container= LOList.Find(x => x.ActionTarget);
 				container.ActionTarget = false;				
 				
 				if(container.Name.Contains(Core.CharacterFilter.Name)){container.Exclude = true; return;}

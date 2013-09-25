@@ -24,14 +24,13 @@ namespace GearFoundry
 		//Need to complete logging and verify functionality of DEADME
 		//DeadMe Status:  Not really sure if this functionality matters.  Enabling it is under review.
 		
-		private List<string> FellowMemberTrackingList;
-		private List<int> CorpseExclusionList;
-		private List<LandscapeObject> CorpseTrackingList;
-		private List<string> PermittedCorpsesList; 
-		
+		//private List<string> FellowMemberTrackingList =  new List<string>();
+		private List<int> CorpseExclusionList = new List<int>();
+		private List<LandscapeObject> CorpseTrackingList = new List<LandscapeObject>();
+		private List<string> PermittedCorpsesList =  new List<string>(); 	
 		private bool mCorpseTrackerInPoralSpace = true;
-		public GearVisectionSettings ghSettings;	
-		public DateTime LastCorpseHudUpdate;			
+		public GearVisectionSettings ghSettings = new GearVisectionSettings();
+		public DateTime LastCorpseHudUpdate = DateTime.Now;			
 		
 		public class MyCorpses  
 		{
@@ -117,11 +116,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				FellowMemberTrackingList = new List<string>();
-				CorpseExclusionList = new List<int>();
-				CorpseTrackingList = new List<LandscapeObject>();
-				PermittedCorpsesList = new List<string>(); 	
-				LastCorpseHudUpdate = DateTime.Now;
+
 	
 				MasterTimer.Tick += CorpseCheckerTick;
 				Core.WorldFilter.CreateObject += new EventHandler<CreateObjectEventArgs>(OnWorldFilterCreateCorpse);
@@ -129,7 +124,6 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(OnWorldFilterDeleteCorpse);
                 Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(OnCorpseDestroyed);
                 Core.CharacterFilter.ChangePortalMode += new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeCorpses);
-                Core.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxCorpse);
                 Core.ContainerOpened += new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
                 CorpseHudView.Resize += CorpseHudView_Resize; 
 
@@ -147,15 +141,8 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(OnWorldFilterDeleteCorpse);
                 Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(OnCorpseDestroyed);
                 Core.CharacterFilter.ChangePortalMode -= new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeCorpses);
-                Core.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxCorpse);
                 Core.ContainerOpened -= new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
-                CorpseHudView.Resize -= CorpseHudView_Resize; 
-                
-                FellowMemberTrackingList = null; 
-				CorpseExclusionList = null;
-				CorpseTrackingList = null;
-				PermittedCorpsesList = null; 	
-
+                CorpseHudView.Resize -= CorpseHudView_Resize; 	
 			}
 			catch(Exception ex){LogError(ex);}
 		}
@@ -290,24 +277,20 @@ namespace GearFoundry
 								return;
 							}
 						}
-						else if(FellowMemberTrackingList.Count() > 0 && ghSettings.bKillsByFellows)
+						else if(FellowMemberList.Count > 0 && ghSettings.bKillsByFellows)
 						{
-							foreach(string fellow in FellowMemberTrackingList)
+							if(FellowMemberList.Any(x => x.Looting && IOCorpse.SValue(StringValueKey.FullDescription).Contains(x.Name)))
 							{
-								if(IOCorpse.SValue(StringValueKey.FullDescription).Contains(fellow)) 
+								IOCorpse.IOR = IOResult.corpsefellowkill;
+								if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
 								{
-									IOCorpse.IOR = IOResult.corpsefellowkill;
-									if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
-									{
-										CorpseTrackingList.Add(IOCorpse); 
-										CorpseExclusionList.Add(IOCorpse.Id);
-										UpdateCorpseHud();
-									}
-									return;
+									CorpseTrackingList.Add(IOCorpse); 
+									CorpseExclusionList.Add(IOCorpse.Id);
+									UpdateCorpseHud();
 								}
-							}					
+								return;
+							}
 						}
-						
 					}
 				}	
 				
@@ -386,45 +369,6 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 
 		}
-		
-        private void ChatBoxCorpse(object sender, Decal.Adapter.ChatTextInterceptEventArgs e)
-        {
-            try 
-            {
-            	if(e.Color != 0) {return;}
-        		string CBMessage = e.Text.Substring(0, e.Text.Length - 1);
-                
-                if(CBMessage.EndsWith("has given you permission to loot his or her kills."))
-                {
-               		string FellowMemberName = CBMessage.Replace(" has given you permission to loot his or her kills.", "");
-                   	FellowMemberTrackingList.Add(FellowMemberName);
-                }
-                
-                if(CBMessage == "You no longer have permission to loot anyone else's kills.")
-                {
-                	FellowMemberTrackingList.Clear();
-                }
-                
-                if(CBMessage.StartsWith("You have lost permission to loot the kills of"))
-                {
-                	string FellowMemberName = CBMessage.Replace("You have lost permission to loot the kills of ", "");
-                	FellowMemberName.Replace(".", "");
-                	FellowMemberTrackingList.RemoveAll(x => x == FellowMemberName);
-                }
-                
-                if(CBMessage.EndsWith("This permission will last one hour."))
-                {
-                	string LootMyCorpseName = CBMessage.Substring(0, CBMessage.IndexOf(" has given you permission to loot"));
-                	PermittedCorpsesList.Add("Corpse of " + LootMyCorpseName);
-                	if(CorpseTrackingList.FindIndex(x => x.Name == "Corpse of " + LootMyCorpseName) >= 0)
-                	{
-                		CorpseTrackingList.Find(x => x.Name == "Corpse of " + LootMyCorpseName).IOR = IOResult.corpsepermitted;
-                	}
-                	UpdateCorpseHud();
-                }               
-	
-            } catch (Exception ex) {LogError(ex);}
-        }
         
         private void OnCorpseOpened(object sender, Decal.Adapter.ContainerOpenedEventArgs e)
         {
@@ -716,7 +660,7 @@ namespace GearFoundry
     			if(ghSettings.RenderMini)
     			{
     				ghSettings.CorpseHudHeight = 220;
-    				ghSettings.CorpseHudWidth = 150;
+    				ghSettings.CorpseHudWidth = 100;
     			}
     			else
     			{

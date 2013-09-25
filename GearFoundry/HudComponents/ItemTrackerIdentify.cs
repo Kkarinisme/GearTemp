@@ -455,7 +455,9 @@ namespace GearFoundry
 								ruls.RuleWieldSkill == IOItemWithID.LValue(LongValueKey.WieldReqAttribute)) &&
 							(ruls.RuleMastery == 0 || IOItemWithID.WeaponMasteryCategory == ruls.RuleMastery) &&
 							(!ruls.WieldRequirements.Any(x => x.WieldEnabled) || 
-							  ruls.WieldRequirements.Any(x => x.WieldEnabled && IOItemWithID.LValue(LongValueKey.WieldReqValue) == x.WieldReqValue))
+							  ruls.WieldRequirements.Any(x => x.WieldEnabled && IOItemWithID.LValue(LongValueKey.WieldReqValue) == x.WieldReqValue) ||
+							  (ruls.WieldRequirements.Any(x => x.WieldEnabled && x.WieldReqValue == 0) && 
+							   (IOItemWithID.LValue(LongValueKey.WieldReqType) == 0 || IOItemWithID.LValue(LongValueKey.WieldReqType) == 7)))
 							orderby ruls.RulePriority
 							select ruls).ToList();
 						

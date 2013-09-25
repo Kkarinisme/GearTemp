@@ -126,11 +126,6 @@ namespace GearFoundry
 
 		XElement mSelectedRule = null;        
         
-
-        int nItemNum;
-
-        int nTrophyNum;        
-        int nid;
         int nusearrowid;
         int nTrophyRow;
         int nMobRow;

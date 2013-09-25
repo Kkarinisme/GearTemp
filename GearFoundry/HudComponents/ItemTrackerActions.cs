@@ -425,18 +425,18 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(!LOList.Any(x => x.ActionTarget))
+				if(!LOList.Any(x => x.ActionTarget && !x.IsContainer))
 				{
 					Core.RenderFrame -= InspectorMoveCheckBack;
 					return;
 				}
-				else if((DateTime.Now - LOList.Find(x => x.ActionTarget).LastActionTime).TotalMilliseconds < 100) {return;}
+				else if((DateTime.Now - LOList.Find(x => x.ActionTarget && !x.IsContainer).LastActionTime).TotalMilliseconds < 100) {return;}
 				else
 				{
 					Core.RenderFrame -= InspectorMoveCheckBack;
 				}
 				
-				LootObject lo = LOList.Find(x => x.ActionTarget);
+				LootObject lo = LOList.Find(x => x.ActionTarget && !x.IsContainer);
 				
 				if(Core.WorldFilter.GetInventory().Where(x => x.Id == lo.Id).Count() > 0)
 				{
@@ -466,18 +466,18 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(!LOList.Any(x => x.ActionTarget))
+				if(!LOList.Any(x => x.ActionTarget && x.IsContainer))
 				{
 					Core.RenderFrame -= OpenContainerCheckback;
 					return;
 				}
-				else if((DateTime.Now - LOList.Find(x => x.ActionTarget).LastActionTime).TotalMilliseconds < 200) {return;}
+				else if((DateTime.Now - LOList.Find(x => x.ActionTarget && x.IsContainer).LastActionTime).TotalMilliseconds < 200) {return;}
 				else
 				{
 					Core.RenderFrame -= OpenContainerCheckback;
 				}
 				
-				LootObject lo = LOList.Find(x => x.ActionTarget);
+				LootObject lo = LOList.Find(x => x.ActionTarget && x.IsContainer);
 				
 				if(Core.Actions.OpenedContainer == lo.Id)
 				{

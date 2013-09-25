@@ -473,7 +473,7 @@ namespace GearFoundry
     			if(GISettings.RenderMini)
     			{
     				GISettings.ItemHudHeight = 220;
-    				GISettings.ItemHudWidth = 150;
+    				GISettings.ItemHudWidth = 100;
     			}
     			else
     			{
