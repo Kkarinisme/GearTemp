@@ -266,7 +266,6 @@ namespace GearFoundry
 					}					
 					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) 
 					{
-						WriteToChat("Trophy Rejected on LootMax Check.");
 						return;
 					}
 			
@@ -292,7 +291,6 @@ namespace GearFoundry
 			try
 			{
 				
-				ModifiedIOSpells.Clear();
 				LootObject IOItemWithID = IOItemWithIDReference;
 				
 				List<ItemRule> AppliesToListMatches = (from appliesto in ItemRulesList
@@ -322,11 +320,11 @@ namespace GearFoundry
 					 	   (IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqType2) == 7 && IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) <= properties.RuleWieldLevel))
 					select properties).ToList();
 				
-				if(PropertyListMatches.Count == 0) {return;}				
+				if(PropertyListMatches.Count == 0) {return;}	
 			
 				List<ItemRule> SpellListMatches = (from spellmatches in PropertyListMatches
 					where spellmatches.RuleSpellNumber == -1 || spellmatches.RuleSpells.Count == 0 || 
-					ModifiedIOSpells.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
+					IOItemWithID.SpellsOnItem.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
 					select spellmatches).ToList();
 				
 				if(SpellListMatches.Count == 0) {return;}

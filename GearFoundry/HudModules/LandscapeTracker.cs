@@ -24,6 +24,7 @@ namespace GearFoundry
 		private System.Windows.Forms.Timer LandscapeTimer = new System.Windows.Forms.Timer();
 		
 		public GearSenseSettings gsSettings;
+		private bool LandscapeSubscribed = false;
 		
 		public class GearSenseSettings
 		{			
@@ -91,6 +92,7 @@ namespace GearFoundry
 		{
 			try
 			{	
+				if(LandscapeSubscribed) {return;}
 				LandscapeTimer.Interval = 5000;
 				LandscapeTimer.Start();
 				LandscapeTimer.Tick += LandscapeTimerTick;
@@ -98,7 +100,8 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject += OnWorldFilterDeleteLandscape;
                 Core.ItemDestroyed += OnLandscapeDestroyed;
                 Core.WorldFilter.ChangeObject += ChangeObjectLandscape;      
-				Core.CharacterFilter.Logoff += LandscapeLogoff;                
+				Core.CharacterFilter.Logoff += LandscapeLogoff;
+				LandscapeSubscribed = true;				
 			}
 			catch(Exception ex) {LogError(ex);}
 			return;
@@ -108,15 +111,16 @@ namespace GearFoundry
 		{
 			try
 			{				
+				if(!LandscapeSubscribed) {return;}
 				LandscapeTimer.Stop();
 				LandscapeTimer.Tick -= LandscapeTimerTick;
 				Core.WorldFilter.CreateObject -= OnWorldFilterCreateLandscape;
                 Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteLandscape;
                 Core.ItemDestroyed -= OnLandscapeDestroyed;
                 Core.WorldFilter.ChangeObject -= ChangeObjectLandscape;	
-				Core.CharacterFilter.Logoff -= LandscapeLogoff;                  
+				Core.CharacterFilter.Logoff -= LandscapeLogoff;
+				LandscapeSubscribed = false;				
 			}catch(Exception ex) {LogError(ex);}
-			return;
 		}
 		
 		private void LandscapeLogoff(object sender, EventArgs e)

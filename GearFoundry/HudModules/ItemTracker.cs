@@ -22,9 +22,7 @@ namespace GearFoundry
 	public partial class PluginCore
 	{		
 
-		private List<ItemRule> ItemRulesList = new List<ItemRule>();
-		
-		private List<int> ModifiedIOSpells  = new List<int>();		
+		private List<ItemRule> ItemRulesList = new List<ItemRule>();	
  		
 		private GearInspectorSettings GISettings;
 		
