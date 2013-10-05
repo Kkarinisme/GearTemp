@@ -652,7 +652,9 @@ namespace GearFoundry
         {
         	if(!programinv.Contains("armor"))
         	   {
+                
          	   doUpdateInventory();
+
         	   }
         }
 
@@ -835,107 +837,114 @@ namespace GearFoundry
         {
             try
             {
-            	programinv = "inventory";
-                doCheckFiles();
-                //Need a timer for processing inventory
-                mWaitingForIDTimer = new WindowsTimer();
-                //Need a list to hold the inventory
-                mWaitingForID = new List<WorldObject>();
-
-                // If already have an inventory file for a toon, do not need to duplicate already id'd inventory
-                // moldObjsID is a list that contains the object IDs of the previous inventory for that toon
-                moldObjsID = new List<string>();
-                mgoonInv = true;
-                List<string> mtemps = new List<string>();
-
-                if (File.Exists(inventoryFilename))
+                if (programinv.Contains("armor"))
                 {
-                    try
-                    {
-                        xdocToonInventory = XDocument.Load(inventoryFilename);
-
-                        if (getBurden)
-                        {
-                            IEnumerable<XElement> myelements = xdocToonInventory.Element("Objs").Descendants("Obj");
-                            int oldCount = (int)(xdocToonInventory.Element("Objs").Elements("Obj").Count());
-
-                            var obj = from o in xdocToonInventory.Descendants("Obj")
-                                      where o.Element("ObjName").Value.Contains("Stipend") ||
-                                          o.Element("ObjName").Value.Contains("Crystal") || o.Element("ObjName").Value.Contains("Jewel")
-                                          || o.Element("ObjName").Value.Contains("Pearl") || o.Element("ObjName").Value.Contains("Trade Note")
-                                          || o.Element("ObjName").Value.Contains("Society Gem") || o.Element("ObjName").Value.Contains("Token")
-                                          || o.Element("ObjName").Value.Contains("Field Ration") || o.Element("ObjName").Value.Contains("Pea")
-                                          || o.Element("ObjName").Value.Contains("Coin") || o.Element("ObjName").Value.Contains("Sack")
-                                          || o.Element("ObjName").Value.Contains("Venom Sac") || o.Element("ObjName").Value.Contains("Glyph")
-                                          || o.Element("ObjName").Value.Contains("Arrow")
-                                      select o;
-                            obj.Remove();
-                            int newCount = (int)(xdocToonInventory.Element("Objs").Elements("Obj").Count());
-
-
-                            GearFoundry.PluginCore.WriteToChat("Count before removal = " + oldCount + ".  Count after removal = " + newCount);
-                        }
-
-                        IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("ObjID");
-                        foreach (XElement element in elements)
-                        {
-                            //Create list of the ID's currently in the inventory
-                            { moldObjsID.Add(element.Value); }
-                        }
- 
-
-                    }
-                    catch (Exception ex) {mgoonInv = false; doGetInventory(); LogError(ex);}
-
-
+                    WriteToChat("Cannot run general inventory until armor inventory is completed.");
                 }
-  
-               xdocGenInventory = XDocument.Load(genInventoryFilename);
-                // if left this subprogram because of exception in update need a way to avoid returning to this program
-                if (mgoonInv)
+                else
                 {
-                    mCurrID = new List<string>();
+                    programinv = "inventory";
+                    doCheckFiles();
+                    //Need a timer for processing inventory
+                    mWaitingForIDTimer = new WindowsTimer();
+                    //Need a list to hold the inventory
+                    mWaitingForID = new List<WorldObject>();
 
-                    //loop for checking each obj in the current inventory
-                    foreach (Decal.Adapter.Wrappers.WorldObject obj in Core.WorldFilter.GetInventory())
+                    // If already have an inventory file for a toon, do not need to duplicate already id'd inventory
+                    // moldObjsID is a list that contains the object IDs of the previous inventory for that toon
+                    moldObjsID = new List<string>();
+                    mgoonInv = true;
+                    List<string> mtemps = new List<string>();
+
+                    if (File.Exists(inventoryFilename))
                     {
                         try
                         {
-                            //Need to find the current inventory objects and create a list of their ids mCurrID
-                            objID = obj.Id;
-                            string sobjID = objID.ToString();
-                            mCurrID.Add(sobjID);
-                            //Need to compare the ids in mCurrID with those of the previous inventory 
-                            if (!moldObjsID.Contains(sobjID))
+                            xdocToonInventory = XDocument.Load(inventoryFilename);
+
+                            if (getBurden)
                             {
-                                Globals.Host.Actions.RequestId(obj.Id);
-                                mWaitingForID.Add(obj); //if the ID not in previous inventory need to get the data
+                                IEnumerable<XElement> myelements = xdocToonInventory.Element("Objs").Descendants("Obj");
+                                int oldCount = (int)(xdocToonInventory.Element("Objs").Elements("Obj").Count());
+
+                                var obj = from o in xdocToonInventory.Descendants("Obj")
+                                          where o.Element("ObjName").Value.Contains("Stipend") ||
+                                              o.Element("ObjName").Value.Contains("Crystal") || o.Element("ObjName").Value.Contains("Jewel")
+                                              || o.Element("ObjName").Value.Contains("Pearl") || o.Element("ObjName").Value.Contains("Trade Note")
+                                              || o.Element("ObjName").Value.Contains("Society Gem") || o.Element("ObjName").Value.Contains("Token")
+                                              || o.Element("ObjName").Value.Contains("Field Ration") || o.Element("ObjName").Value.Contains("Pea")
+                                              || o.Element("ObjName").Value.Contains("Coin") || o.Element("ObjName").Value.Contains("Sack")
+                                              || o.Element("ObjName").Value.Contains("Venom Sac") || o.Element("ObjName").Value.Contains("Glyph")
+                                              || o.Element("ObjName").Value.Contains("Arrow")
+                                          select o;
+                                obj.Remove();
+                                int newCount = (int)(xdocToonInventory.Element("Objs").Elements("Obj").Count());
+
+
+                                GearFoundry.PluginCore.WriteToChat("Count before removal = " + oldCount + ".  Count after removal = " + newCount);
                             }
 
+                            IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("ObjID");
+                            foreach (XElement element in elements)
+                            {
+                                //Create list of the ID's currently in the inventory
+                                { moldObjsID.Add(element.Value); }
+                            }
+
+
                         }
-                        catch (Exception ex) { LogError(ex); }
+                        catch (Exception ex) { mgoonInv = false; doGetInventory(); LogError(ex); }
 
 
-                    } // endof foreach world object
-
-
-
-                    GearFoundry.PluginCore.WriteToChat("Items being inventoried " + mWaitingForID.Count);
-                    //Do one run through saved ids to get all data that is immediately available
-                    if (mWaitingForID.Count > 0)
-                    {
-                        // initialize event timer for processing inventory
-                        mWaitingForIDTimer.Tick += new EventHandler(TimerEventProcessor);
-
-                       //  Sets the timer interval to 5 seconds.
-                        mWaitingForIDTimer.Interval = 10000;
-                        ProcessDataInventory(); // This one in the doupdate
                     }
-                    //Now need to start routines that will continue to get data as becomes available or will end the search and save the files
-                   mIsFinished();  
 
-  
+                    xdocGenInventory = XDocument.Load(genInventoryFilename);
+                    // if left this subprogram because of exception in update need a way to avoid returning to this program
+                    if (mgoonInv)
+                    {
+                        mCurrID = new List<string>();
 
+                        //loop for checking each obj in the current inventory
+                        foreach (Decal.Adapter.Wrappers.WorldObject obj in Core.WorldFilter.GetInventory())
+                        {
+                            try
+                            {
+                                //Need to find the current inventory objects and create a list of their ids mCurrID
+                                objID = obj.Id;
+                                string sobjID = objID.ToString();
+                                mCurrID.Add(sobjID);
+                                //Need to compare the ids in mCurrID with those of the previous inventory 
+                                if (!moldObjsID.Contains(sobjID))
+                                {
+                                    Globals.Host.Actions.RequestId(obj.Id);
+                                    mWaitingForID.Add(obj); //if the ID not in previous inventory need to get the data
+                                }
+
+                            }
+                            catch (Exception ex) { LogError(ex); }
+
+
+                        } // endof foreach world object
+
+
+
+                        GearFoundry.PluginCore.WriteToChat("Items being inventoried " + mWaitingForID.Count);
+                        //Do one run through saved ids to get all data that is immediately available
+                        if (mWaitingForID.Count > 0)
+                        {
+                            // initialize event timer for processing inventory
+                            mWaitingForIDTimer.Tick += new EventHandler(TimerEventProcessor);
+
+                            //  Sets the timer interval to 5 seconds.
+                            mWaitingForIDTimer.Interval = 10000;
+                            ProcessDataInventory(); // This one in the doupdate
+                        }
+                        //Now need to start routines that will continue to get data as becomes available or will end the search and save the files
+                        mIsFinished();
+
+
+
+                    }
                 }
 
             } //end of try
@@ -1942,20 +1951,19 @@ namespace GearFoundry
                 {
                     objAl = element.Element("ObjAl").Value;
 
-                //   if (Convert.ToInt32(element.Element("ObjAcid").Value) > 0)
-                //  {
-                //    string objAcid = ((Math.Round(Convert.ToDouble(element.Element("ObjAcid").Value), 4))).ToString();
-                //    string objLight = ((Math.Round(Convert.ToDouble(element.Element("ObjLight").Value), 4))).ToString();
-                //    string objFire = ((Math.Round(Convert.ToDouble(element.Element("ObjFire").Value), 4))).ToString();
-                //    string objCold = ((Math.Round(Convert.ToDouble(element.Element("ObjCold").Value), 4))).ToString();
-                //    string objBludg = ((Math.Round(Convert.ToDouble(element.Element("ObjBludg").Value), 4))).ToString();
-                //    string objSlash = ((Math.Round(Convert.ToDouble(element.Element("ObjSlash").Value), 4))).ToString();
-                //    string objPierce = ((Math.Round(Convert.ToDouble(element.Element("ObjPierce").Value), 4))).ToString();
+                    if (Convert.ToDouble(element.Element("ObjAcid").Value) > 0)
+                    {
+                        string objAcid = ((Math.Round(Convert.ToDouble(element.Element("ObjAcid").Value), 4))).ToString();
+                        string objLight = ((Math.Round(Convert.ToDouble(element.Element("ObjLight").Value), 4))).ToString();
+                        string objFire = ((Math.Round(Convert.ToDouble(element.Element("ObjFire").Value), 4))).ToString();
+                        string objCold = ((Math.Round(Convert.ToDouble(element.Element("ObjCold").Value), 4))).ToString();
+                        string objBludg = ((Math.Round(Convert.ToDouble(element.Element("ObjBludg").Value), 4))).ToString();
+                        string objSlash = ((Math.Round(Convert.ToDouble(element.Element("ObjSlash").Value), 4))).ToString();
+                        string objPierce = ((Math.Round(Convert.ToDouble(element.Element("ObjPierce").Value), 4))).ToString();
 
-                //     objProts = objSlash + "/" + objPierce + "/" + objBludg + "/" + objFire + "/" + objCold + "/" + objAcid + "/" + objLight;
-                //  }
-                //  else { objProts = ""; }
-                    objProts = "";
+                        objProts = objSlash + "/" + objPierce + "/" + objBludg + "/" + objFire + "/" + objCold + "/" + objAcid + "/" + objLight;
+                    }
+                    else { objProts = ""; }
                 }
 
 

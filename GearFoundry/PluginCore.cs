@@ -70,15 +70,16 @@ namespace GearFoundry
 			try 
 			{	
 				fileservice = (FileService)Core.FileService;				
-				Core.CharacterFilter.LoginComplete += OnCharacterFilterLoginCompleted;			
+				Core.CharacterFilter.LoginComplete += OnCharacterFilterLoginCompleted;	
+		        
 			} catch (Exception ex) {LogError(ex);}
 		}
-        
-        
+
         private void OnCharacterFilterLoginCompleted(object sender, System.EventArgs e)
         {
             try
             {
+
             	InitPaths();           	
 				InitListBuilder();               
                 InitFilenames();
@@ -91,7 +92,7 @@ namespace GearFoundry
                 //TODO:  This could be moved to be subscribed situationally.
                 Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
 
-                WriteToChat("Plugin now online. Server population: " + Core.CharacterFilter.ServerPopulation);
+                WriteToChat("GearFoundry now online. Server population: " + Core.CharacterFilter.ServerPopulation);
 
                 MasterTimer.Interval = 1000;
                 MasterTimer.Start();
@@ -140,6 +141,8 @@ namespace GearFoundry
                 chkInventory.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventory_Change);
                 chkInventoryBurden.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryBurden_Change);
                 chkInventoryComplete.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryComplete_Change);
+                chkToonStats.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
+                chkToonArmor.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonArmor_Change);
                 if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor); mWaitingForIDTimer = null; }
                 if (mWaitingForID != null) { mWaitingForID = null; }
                 chkToonStats.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
