@@ -206,7 +206,7 @@ namespace GearFoundry
                         long objCatType = (int)currentobj.Values(LongValueKey.Category);
                         long objAtt = (int)currentobj.Values(LongValueKey.Attuned);
                         long objBnd = (int)currentobj.Values(LongValueKey.Bonded);
-                        long objToonLevel = (int)currentobj.Values(LongValueKey.MinLevelRestrict);
+                        long objToonLevel = (long)currentobj.Values((LongValueKey)NewLongKeys.WieldReqValue2);
                         long objLore = (int)currentobj.Values(LongValueKey.LoreRequirement);
                         long objAl = (int)currentobj.Values(LongValueKey.ArmorLevel);
                         long objType = (int)currentobj.Values(LongValueKey.Type);
@@ -222,7 +222,7 @@ namespace GearFoundry
                         long objWieldAttrInt = (int)currentobj.Values(LongValueKey.WieldReqAttribute);
                         long objWieldType = (int)currentobj.Values(LongValueKey.WieldReqType);
                         long objWieldValue = (int)currentobj.Values(LongValueKey.WieldReqValue);
-                        long objDamage = (int)currentobj.Values(LongValueKey.DamageType);
+                         long objDamage = (int)currentobj.Values(LongValueKey.DamageType);
                         long objMissType = (int)currentobj.Values(LongValueKey.MissileType);
                         long objSkillLevReq = (int)currentobj.Values(LongValueKey.SkillLevelReq);
                         double objElemvsMons = currentobj.Values(DoubleValueKey.ElementalDamageVersusMonsters);
@@ -260,6 +260,7 @@ namespace GearFoundry
                         long objUnknown800000 = currentobj.Values(LongValueKey.Unknown800000);
                         long objUnknown8000000 = currentobj.Values(LongValueKey.Unknown8000000);
                         long objUsageMask = currentobj.Values(LongValueKey.UsageMask);
+                        long objEnchant = currentobj.Values(LongValueKey.Unenchantable);
 
                             xdocToonInventory.Element("Objs").Add(new XElement("Obj",
                             new XElement("ObjName", objName),
@@ -321,7 +322,7 @@ namespace GearFoundry
                             new XElement("ObjFlags", objFlags),
                             new XElement("ObjCreateFlag1", objCreateFlag1),
                             new XElement("ObjCreateFlag2", objCreateFlag2),
-                            new XElement("ObjUnknown10", objUnknown10),
+                            new XElement("ObjUnknown10", objEnchant),
                             new XElement("ObjUnknown100000", objUnknown100000),
                             new XElement("ObjUnknown800000", objUnknown800000),
                             new XElement("ObjUnknown8000000", objUnknown8000000),
