@@ -460,9 +460,7 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
 
         }
-
-
-        // [ControlEvent]("lstNotifySalvage", "Selected")
+        
         private void lstNotifySalvage_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
         {
             int mList = 2;

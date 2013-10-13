@@ -144,7 +144,7 @@ namespace GearFoundry
 	   					FellowMember fella = new FellowMember();
 	   					fella.Name = (string)fellow.Value<string>("name");
 	   					fella.Id = (int)fellow.Value<int>("fellow");
-	   					if((int)fellow.Value<int>("shareLoot") == 0x10) {fella.Looting = true;}
+	   					if((int)fellow.Value<int>("shareLoot") == 0x20) {fella.Looting = true;}
 	   					FellowMemberList.Add(fella);
 	   				}
 	   			}	   			

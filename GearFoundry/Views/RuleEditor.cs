@@ -140,15 +140,7 @@ namespace GearFoundry
         		mSelectedRule.Element("Priority").Value = txtRulePriority.Text;
         	}catch(Exception ex){mSelectedRule.Element("Priority").Value = "-1"; LogError(ex);}
         }
-        
-        
-        
-        
-        
-        
-        
-
-
+      
         [ControlEvent("txtRuleMaxCraft", "End")]
         private void txtRuleMaxCraft_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)   //Decal.Adapter.TextBoxEndEventArgs e)
         {
@@ -304,5 +296,342 @@ namespace GearFoundry
         	}
         	catch{mSelectedRule.Element("NumSpells").Value = "-1";}
         }
+        
+        
+        private string[] KeyTypes = {"Double","Long"};
+        private string[] KeyCompare = {"Equals","Not Equals","Equals or Greater","Equals or Less"};
+        private string[] KeyLink = {"End","And","Or"};
+
+        
+        private void chkAdvEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)  //Decal.Adapter.CheckBoxChangeEventArgs e)
+        {
+        	try
+        	{
+	        	if(e.Checked)
+	        	{
+					cboAdv1KeyType.Clear();
+	        		cboAdv1KeyCompare.Clear();
+	        		cboAdv1Key.Clear();
+	        		cboAdv1Link.Clear();
+	        		txtAdv1KeyValue.Text = String.Empty;
+	        		foreach(string item in KeyTypes) {cboAdv1KeyType.Add(item);}
+	        		FillAdvancedKeyList(cboAdv1KeyType.Selected, cboAdv1Key);
+	        		foreach(string item in KeyCompare) {cboAdv1KeyCompare.Add(item);}
+	        		foreach(string item in KeyLink) {cboAdv1Link.Add(item);}	        		
+	        	}
+	        	else
+	        	{
+	        		cboAdv1KeyType.Clear();
+	        		cboAdv1Key.Clear();
+	        		cboAdv1KeyCompare.Clear();
+	        		cboAdv1Link.Clear();
+	        		txtAdv1KeyValue.Text = String.Empty;
+	        	}
+	        	Update_mSelected_Advanced();
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
+
+         
+		private void cboAdv1KeyType_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+			try
+			{
+				FillAdvancedKeyList(cboAdv1KeyType.Selected, cboAdv1Key);
+				Update_mSelected_Advanced();
+			}catch(Exception ex){LogError(ex);}
+        }
+		
+		private void cboAdv1Key_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void cboAdv1KeyCompare_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void txtAdv1KeyValue_Change(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+			Update_mSelected_Advanced();
+        }   
+
+		private void cboAdv1Link_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+			try
+        	{
+	        	if(cboAdv1Link.Selected != 0)
+	        	{
+	        		foreach(string item in KeyTypes) {cboAdv2KeyType.Add(item);}
+	        		foreach(string item in KeyCompare) {cboAdv2KeyCompare.Add(item);}
+	        		FillAdvancedKeyList(cboAdv2KeyType.Selected, cboAdv2Key);
+	        		foreach(string item in KeyLink) {cboAdv2Link.Add(item);}	        		
+	        	}
+	        	else
+	        	{
+	        		cboAdv2KeyType.Clear();
+	        		cboAdv2KeyCompare.Clear();
+	        		cboAdv2KeyType.Clear();
+	        		cboAdv2Link.Clear();
+	        		txtAdv2KeyValue.Text = String.Empty;
+	        	}
+	        	Update_mSelected_Advanced();
+        	}catch(Exception ex){LogError(ex);}
+        }
+		
+		private void cboAdv2KeyType_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+			try
+			{
+				if(cboAdv2KeyType.Selected == 0) {cboAdv2Key.Clear();}
+				else
+				{
+					FillAdvancedKeyList(cboAdv2KeyType.Selected, cboAdv2Key);
+				}
+				Update_mSelected_Advanced();
+			}catch(Exception ex){LogError(ex);}
+        }
+		
+		private void cboAdv2Key_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void cboAdv2KeyCompare_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void txtAdv2KeyValue_Change(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+			Update_mSelected_Advanced();
+        }   
+
+		private void cboAdv2Link_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+			try
+        	{
+	        	if(cboAdv2Link.Selected != 0)
+	        	{
+	        		foreach(string item in KeyTypes) {cboAdv3KeyType.Add(item);}
+	        		foreach(string item in KeyCompare) {cboAdv3KeyCompare.Add(item);}
+	        		FillAdvancedKeyList(cboAdv3KeyType.Selected, cboAdv3Key);
+	        		foreach(string item in KeyLink) {cboAdv3Link.Add(item);}	        		
+	        	}
+	        	else
+	        	{
+	        		cboAdv3KeyType.Clear();
+	        		cboAdv3KeyCompare.Clear();
+	        		cboAdv3KeyType.Clear();
+	        		cboAdv3Link.Clear();
+	        		txtAdv3KeyValue.Text = String.Empty;
+	        	}
+	        	Update_mSelected_Advanced();
+        	}catch(Exception ex){LogError(ex);}
+        }
+		
+		private void cboAdv3KeyType_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+			try
+			{
+				if(cboAdv3KeyType.Selected == 0) {cboAdv3Key.Clear();}
+				else
+				{
+					FillAdvancedKeyList(cboAdv3KeyType.Selected, cboAdv3Key);
+				}
+				Update_mSelected_Advanced();
+			}catch(Exception ex){LogError(ex);}
+        }
+		
+		private void cboAdv3Key_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void cboAdv3KeyCompare_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void txtAdv3KeyValue_Change(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+			Update_mSelected_Advanced();
+        }   
+
+		private void cboAdv3Link_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+			try
+        	{
+	        	if(cboAdv3Link.Selected != 0)
+	        	{
+	        		foreach(string item in KeyTypes) {cboAdv4KeyType.Add(item);}
+	        		foreach(string item in KeyCompare) {cboAdv4KeyCompare.Add(item);}
+	        		FillAdvancedKeyList(cboAdv4KeyType.Selected, cboAdv4Key);
+	        		foreach(string item in KeyLink) {cboAdv4Link.Add(item);}	        		
+	        	}
+	        	else
+	        	{
+	        		cboAdv4KeyType.Clear();
+	        		cboAdv4KeyCompare.Clear();
+	        		cboAdv4KeyType.Clear();
+	        		cboAdv4Link.Clear();
+	        		txtAdv4KeyValue.Text = String.Empty;
+	        	}
+	        	Update_mSelected_Advanced();
+        	}catch(Exception ex){LogError(ex);}
+        }
+		
+		private void cboAdv4KeyType_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+			try
+			{
+				if(cboAdv4KeyType.Selected == 0) {cboAdv4Key.Clear();}
+				else
+				{
+					FillAdvancedKeyList(cboAdv4KeyType.Selected, cboAdv4Key);
+				}
+				Update_mSelected_Advanced();
+			}catch(Exception ex){LogError(ex);}
+        }
+		
+		private void cboAdv4Key_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void cboAdv4KeyCompare_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void txtAdv4KeyValue_Change(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+			Update_mSelected_Advanced();
+        }   
+
+		private void cboAdv4Link_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+			try
+        	{
+	        	if(cboAdv4Link.Selected != 0)
+	        	{
+	        		foreach(string item in KeyTypes) {cboAdv5KeyType.Add(item);}
+	        		foreach(string item in KeyCompare) {cboAdv5KeyCompare.Add(item);}  
+					FillAdvancedKeyList(cboAdv5KeyType.Selected, cboAdv5Key);	        		
+	        	}
+	        	else
+	        	{
+	        		cboAdv5KeyType.Clear();
+	        		cboAdv5KeyCompare.Clear();
+	        		cboAdv5KeyType.Clear();
+	        		txtAdv5KeyValue.Text = String.Empty;
+	        	}
+	        	Update_mSelected_Advanced();
+        	}catch(Exception ex){LogError(ex);}
+        	
+        }
+		
+		private void cboAdv5KeyType_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+			try
+			{
+				if(cboAdv5KeyType.Selected == 0) {cboAdv5Key.Clear();}
+				else
+				{
+					FillAdvancedKeyList(cboAdv5KeyType.Selected, cboAdv5Key);
+				}
+				Update_mSelected_Advanced();
+			}catch(Exception ex){LogError(ex);}
+        }
+		
+		private void cboAdv5Key_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void cboAdv5KeyCompare_Change(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+        	Update_mSelected_Advanced();
+        }
+		
+		private void txtAdv5KeyValue_Change(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        {
+			Update_mSelected_Advanced();
+        }  
+
+		private void FillAdvancedKeyList(int selection, MyClasses.MetaViewWrappers.ICombo cboList)
+		{
+			try
+			{
+				switch(selection)
+				{
+					case 0:
+						cboList.Clear();
+						foreach(IDNameLoadable idl in DoubleKeyList) {cboList.Add(idl.name);}
+						break;
+					case 1:
+						cboList.Clear();
+						foreach(IDNameLoadable idl in LongKeyList) {cboList.Add(idl.name);}
+						break;
+				}
+				
+			}catch(Exception ex){LogError(ex);}
+		}		
+        
+		private void Update_mSelected_Advanced()
+		{
+			try
+			{
+				string savestring = String.Empty;
+				if(!chkAdvEnabled.Checked){savestring = "false";}
+				else
+				{
+					savestring = "true," + AdvancedStringSegement(cboAdv1KeyType.Selected, cboAdv1Key.Selected) +
+						KeyCompare[cboAdv1KeyCompare.Selected] + ":" + txtAdv1KeyValue.Text + ":" + KeyLink[cboAdv1Link.Selected];
+					
+					if(cboAdv1Link.Selected != 0)
+					{
+						savestring += "," + AdvancedStringSegement(cboAdv2KeyType.Selected, cboAdv2Key.Selected) + 
+						KeyCompare[cboAdv2KeyCompare.Selected] + ":" + txtAdv2KeyValue.Text + ":" + KeyLink[cboAdv2Link.Selected];
+						
+						if(cboAdv2Link.Selected != 0)
+						{
+							savestring += "," + AdvancedStringSegement(cboAdv3KeyType.Selected, cboAdv3Key.Selected) +
+							KeyCompare[cboAdv3KeyCompare.Selected] + ":" + txtAdv3KeyValue.Text + ":" + KeyLink[cboAdv3Link.Selected];
+							
+							if(cboAdv3Link.Selected != 0)
+							{
+								savestring += "," + AdvancedStringSegement(cboAdv4KeyType.Selected, cboAdv4Key.Selected) + 
+								KeyCompare[cboAdv4KeyCompare.Selected] + ":" + txtAdv4KeyValue.Text + ":" + KeyLink[cboAdv4Link.Selected];
+								
+								if(cboAdv4Link.Selected != 0)
+								{
+									savestring += "," + AdvancedStringSegement(cboAdv5KeyType.Selected, cboAdv5Key.Selected) + 
+									KeyCompare[cboAdv5KeyCompare.Selected] + ":" + txtAdv5KeyValue.Text + ":" + KeyLink[0];		
+								}
+							}
+						}
+					}		
+				}
+				mSelectedRule.Element("Advanced").Value = savestring;
+			}catch(Exception ex){LogError(ex);}
+			
+		}
+		
+		private string AdvancedStringSegement(int AdvKeyType, int AdvKeyListValue)
+		{
+			string result = String.Empty;
+			switch(AdvKeyType)
+			{
+				case 0:
+					result = "Double:" + DoubleKeyList[AdvKeyListValue].ID.ToString() + ":";
+					break;
+				case 1:
+					result = "Long:" + LongKeyList[AdvKeyListValue].ID.ToString() + ":";
+					break;
+			}
+			return result;
+		}
     }
 }

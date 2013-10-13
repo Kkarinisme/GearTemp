@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0"?>
-<?define GFAddonID="{4be061a1-3f70-423c-8571-3542dd63373e}"?>
-<?define GFVTIAddonID="{cafc3e03-de72-417d-a2b8-aaa8145dc523}"?>
+<?define GFAddonID="{4be062a2-3f70-423c-8572-3542dd63373e}"?>
+<?define GFVTIAddonID="{cafc3e03-de72-427d-a2b8-aaa8245dc523}"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment>
 		<DirectoryRef Id="TARGETDIR">
 			<Directory Id="Games" Name="Games">
 				<Directory Id="INSTALLDIR" Name="GearFoundry">
-					<Component Id="LicenseFile" Guid="59b682e1-c790-43ba-a9e2-54ffad8f4540" DiskId="1">
+					<Component Id="LicenseFile" Guid="59b682e2-c790-43ba-a9e2-54ffad8f4540" DiskId="1">
 						<File Id="LicenseFile" Name="license.rtf" Source="license.rtf"/>
 					</Component>
 					<!-- Switch for Debug vs Release compiles-->
 					<Component Id="GearFoundry" Guid="$(var.GFAddonID)" DiskId="1">
 						<File Id="GearFoundry" Name="GearFoundry.dll" Source="../GearFoundry/bin/release/GearFoundry.dll"/>
 					</Component>
-					<!--Component Id="GearFoundry" Guid="$(var.GFAddonID)" DiskId="1">
+					<!--Component Id="GearFoundry" Guid="$(var.GFAddonID)" DiskId="2">
 						<File Id="GearFoundry" Name="GearFoundry.dll" Source="../GearFoundry/bin/debug/GearFoundry.dll"/>
 					</Component-->
 					<Component Id="GFVTInterop" Guid="$(var.GFVTIAddonID)" DiskId="1">
@@ -24,10 +24,10 @@
 						<RegistryKey Root="HKLM" Key="Software\Decal\Plugins\$(var.GFAddonID)">
 							<RegistryValue Value="GearFoundry" Type="string"/>
 							<RegistryValue Name="Assembly" Value="GearFoundry.dll" Type="string"/>
-							<RegistryValue Name="Enabled" Value="1" Type="integer"/>
+							<RegistryValue Name="Enabled" Value="2" Type="integer"/>
 							<RegistryValue Name="Object" Value="GearFoundry.PluginCore" Type="string"/>
 							<RegistryValue Name="Path" Value="[INSTALLDIR]" Type="string" />
-							<RegistryValue Name="Surrogate" Value="{71A69713-6593-47EC-0002-0000000DECA1}" Type="string" />
+							<RegistryValue Name="Surrogate" Value="{72A69723-6593-47EC-0002-0000000DECA2}" Type="string" />
 						</RegistryKey>
 					</Component>
 					

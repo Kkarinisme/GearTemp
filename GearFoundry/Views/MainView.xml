@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<view icon="28170" title="GearFoundry Beta v0.2.0.0" width="530" height="500">
+<view icon="28170" title="GearFoundry Beta v0.2.0.1" width="530" height="500">
 	<control progid="DecalControls.Notebook" name="mainTabs">
 		<!--settings-->
 	    <page label="Settings">
@@ -152,9 +152,6 @@
 											<column progid="DecalControls.TextColumn" fixedwidth="193" />
 											<column progid="DecalControls.TextColumn" />
 										</control>
-									
-									
-									
 									</control>
 								</page>
 								<!--Weapons-->
@@ -195,14 +192,57 @@
 										<control progid="DecalControls.Checkbox" name="chkRuleFilterMajor" left="160" top="240" width="70" height="16" text="Major" />
 										<control progid="DecalControls.Checkbox" name="chkRuleFilterEpic" left="240" top="240" width="70" height="16" text="Epic" />
 										<control progid="DecalControls.Checkbox" name="chkRuleFilterCloak" left="320" top="240" width="70" height="16" text="Cloak" />
-										
-										
-										
-										
-									
 									</control>
 								</page>
 								<!--Spells-->
+								<page label="Advanced">
+									<control progid="DecalControls.FixedLayout" clipped="">
+										
+										<control progid="DecalControls.Checkbox" name="chkAdvEnabled" left="5" top="5" width="50" height="16" text="Enabled" />
+										
+										<control progid="DecalControls.StaticText" name="lblAdvKey" left="5" top="25" width="100" height="16" text="Key Type" />
+										<control progid="DecalControls.StaticText" name="lblAdvKeyName" left="75" top="25" width="100" height="16" text="Key Name" />
+										<control progid="DecalControls.StaticText" name="lblAdvKeyComparison" left="275" top="25" width="100" height="16" text="Comparison" />
+										<control progid="DecalControls.StaticText" name="lblAdvKeyValue" left="425" top="25" width="100" height="16" text="Key Value" />
+																			
+										<control progid="DecalControls.Choice" name="cboAdv1KeyType" left="5" top="45" width="60" height="16" />
+										<control progid="DecalControls.Choice" name="cboAdv1Key" left="75" top="45" width="175" height="16"  />
+										<control progid="DecalControls.Choice" name="cboAdv1KeyCompare" left="275" top="45" width="125" height="16"  />
+										<control progid="DecalControls.Edit" name="txtAdv1KeyValue" left="425" top="45" width="75" height="16"  text=""/>
+									
+										<control progid="DecalControls.Choice" name="cboAdv1Link" left="5" top="65" width="60" height="16"  />
+									
+										<control progid="DecalControls.Choice" name="cboAdv2KeyType" left="5" top="85" width="60" height="16" />
+										<control progid="DecalControls.Choice" name="cboAdv2Key" left="75" top="85" width="175" height="16"  />
+										<control progid="DecalControls.Choice" name="cboAdv2KeyCompare" left="275" top="85" width="125" height="16"  />
+										<control progid="DecalControls.Edit" name="txtAdv2KeyValue" left="425" top="85" width="75" height="16"  text=""/>
+									
+										<control progid="DecalControls.Choice" name="cboAdv2Link" left="5" top="105" width="60" height="16"  />
+									
+										<control progid="DecalControls.Choice" name="cboAdv3KeyType" left="5" top="125" width="60" height="16" />
+										<control progid="DecalControls.Choice" name="cboAdv3Key" left="75" top="125" width="175" height="16"  />
+										<control progid="DecalControls.Choice" name="cboAdv3KeyCompare" left="275" top="125" width="125" height="16"  />
+										<control progid="DecalControls.Edit" name="txtAdv3KeyValue" left="425" top="125" width="75" height="16"  text=""/>
+									
+										<control progid="DecalControls.Choice" name="cboAdv3Link" left="5" top="145" width="60" height="16"  />
+									
+										<control progid="DecalControls.Choice" name="cboAdv4KeyType" left="5" top="165" width="60" height="16" />
+										<control progid="DecalControls.Choice" name="cboAdv4Key" left="75" top="165" width="175" height="16"  />
+										<control progid="DecalControls.Choice" name="cboAdv4KeyCompare" left="275" top="165" width="125" height="16"  />
+										<control progid="DecalControls.Edit" name="txtAdv4KeyValue" left="425" top="165" width="75" height="16"  text=""/>
+									
+										<control progid="DecalControls.Choice" name="cboAdv4Link" left="5" top="185" width="60" height="16"  />
+									
+										<control progid="DecalControls.Choice" name="cboAdv5KeyType" left="5" top="205" width="60" height="16" />
+										<control progid="DecalControls.Choice" name="cboAdv5Key" left="75" top="205" width="175" height="16"  />
+										<control progid="DecalControls.Choice" name="cboAdv5KeyCompare" left="275" top="205" width="125" height="16"  />
+										<control progid="DecalControls.Edit" name="txtAdv5KeyValue" left="425" top="205" width="75" height="16"  text=""/>
+							
+									</control>
+								</page>
+							
+							
+							
 							</control>
 						</control>
 					</page>

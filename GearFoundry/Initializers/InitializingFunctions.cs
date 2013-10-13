@@ -267,11 +267,10 @@ namespace GearFoundry
         		string[] SplitString;
         		int HoldRulesPosition = lstRules.ScrollPosition;
         		
-        		
         		if(mPrioritizedRulesList.Count == 0) {mPrioritizedRulesList.Add(CreateRulesXElement());}
         		if(mSelectedRule == null){mSelectedRule = mPrioritizedRulesList.First();}
         		
-        		List<XElement> SortedRulesList = mPrioritizedRulesList.OrderBy(x => x.Element("Enabled").Value).ThenBy(y => y.Element("Name").Value).ToList();
+        		List<XElement> SortedRulesList = mPrioritizedRulesList.OrderByDescending(x => x.Element("Enabled").Value).ThenBy(y => y.Element("Name").Value).ToList();
         		
         		lstRules.Clear();  		
         		
@@ -335,10 +334,129 @@ namespace GearFoundry
         		lstRuleSpellsEnabled.ScrollPosition = HoldEnabledSpellsPostion;
         		lstRuleSpells.ScrollPosition = HoldSpellListPosition;
         		
+        		_UpdateAdvancedRulesTab();
+        		
         		
         		//UNDONE:  Palettes
         		
         		
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
+        private void _UpdateAdvancedRulesTab()
+        {
+        	try
+        	{
+        		chkAdvEnabled.Checked = false;
+        		cboAdv1KeyType.Clear();
+        		cboAdv1Key.Clear();
+        		cboAdv1KeyCompare.Clear();
+        		cboAdv1Link.Clear();
+        		txtAdv1KeyValue.Text = String.Empty;
+        		
+        		cboAdv2KeyType.Clear();
+        		cboAdv2Key.Clear();
+        		cboAdv2KeyCompare.Clear();
+        		cboAdv2Link.Clear();
+        		txtAdv2KeyValue.Text = String.Empty;
+        		
+        		cboAdv3KeyType.Clear();
+        		cboAdv3Key.Clear();
+        		cboAdv3KeyCompare.Clear();
+        		cboAdv3Link.Clear();
+        		txtAdv3KeyValue.Text = String.Empty;
+        		
+        		cboAdv4KeyType.Clear();
+        		cboAdv4Key.Clear();
+        		cboAdv4KeyCompare.Clear();
+        		cboAdv4Link.Clear();
+        		txtAdv4KeyValue.Text = String.Empty;
+        		
+        		cboAdv5KeyType.Clear();
+        		cboAdv5Key.Clear();
+        		cboAdv5KeyCompare.Clear();
+        		txtAdv5KeyValue.Text = String.Empty;
+        		
+        		if((string)mSelectedRule.Element("Advanced").Value == "false")
+        		{
+					chkAdvEnabled.Checked = false;
+					return;					
+        		}
+        		else
+        		{
+        			chkAdvEnabled.Checked = true;
+        			List<ItemRule.advsettings> advsettings = _ConvertAdvStringToAdvanced((string)mSelectedRule.Element("Advanced").Value);
+        			
+        			WriteToChat("Advanced Settings Count " + advsettings.Count);
+        			
+        			if(advsettings.Count > 0)
+        			{
+        				foreach(string item in KeyTypes) {cboAdv1KeyType.Add(item);}
+        				cboAdv1KeyType.Selected = advsettings[0].keytype;
+        				FillAdvancedKeyList(cboAdv1KeyType.Selected, cboAdv1Key);	
+        				if(cboAdv1KeyType.Selected == 0) {cboAdv1Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[0].key);}
+        				else{cboAdv1Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[0].key);}		
+          				foreach(string item in KeyCompare) {cboAdv1KeyCompare.Add(item);}
+        				cboAdv1KeyCompare.Selected = advsettings[0].keycompare;
+        				foreach(string item in KeyLink) {cboAdv1Link.Add(item);}	
+        				cboAdv1Link.Selected = advsettings[0].keylink;
+        				txtAdv1KeyValue.Text = advsettings[0].keyvalue.ToString();
+        			}
+        			
+        			if(advsettings.Count > 1)
+        			{
+        				foreach(string item in KeyTypes) {cboAdv2KeyType.Add(item);}
+		        		cboAdv2KeyType.Selected = advsettings[1].keytype;
+		        		FillAdvancedKeyList(cboAdv2KeyType.Selected, cboAdv2Key);	
+		        		if(cboAdv2KeyType.Selected == 0) {cboAdv2Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[1].key);}
+        				else{cboAdv2Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[1].key);}		
+		        		foreach(string item in KeyCompare) {cboAdv2KeyCompare.Add(item);}
+		        		cboAdv2KeyCompare.Selected = advsettings[1].keycompare;
+		        		foreach(string item in KeyLink) {cboAdv2Link.Add(item);}	
+		        		cboAdv2Link.Selected = advsettings[1].keylink;
+		        		txtAdv2KeyValue.Text = advsettings[1].keyvalue.ToString();
+        			}
+	        		
+        			if(advsettings.Count > 2)
+        			{
+        				foreach(string item in KeyTypes) {cboAdv3KeyType.Add(item);}
+        				cboAdv3KeyType.Selected = advsettings[2].keytype;
+        				FillAdvancedKeyList(cboAdv3KeyType.Selected, cboAdv3Key);	
+		        		if(cboAdv3KeyType.Selected == 0) {cboAdv3Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[2].key);}
+        				else{cboAdv3Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[2].key);}		
+		        		foreach(string item in KeyCompare) {cboAdv3KeyCompare.Add(item);}
+		        		cboAdv3KeyCompare.Selected = advsettings[2].keycompare;
+		        		foreach(string item in KeyLink) {cboAdv3Link.Add(item);}	
+		        		cboAdv3Link.Selected = advsettings[2].keylink;
+		        		txtAdv3KeyValue.Text = advsettings[2].keyvalue.ToString();
+        			}
+        			
+        			if(advsettings.Count > 3)
+        			{
+						foreach(string item in KeyTypes) {cboAdv4KeyType.Add(item);}        				
+		        		cboAdv4KeyType.Selected = advsettings[3].keytype;
+		        		FillAdvancedKeyList(cboAdv4KeyType.Selected, cboAdv4Key);	
+		        		if(cboAdv4KeyType.Selected == 0) {cboAdv4Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[3].key);}
+        				else{cboAdv4Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[3].key);}		
+		        		foreach(string item in KeyCompare) {cboAdv4KeyCompare.Add(item);}
+		        		cboAdv4KeyCompare.Selected = advsettings[3].keycompare;
+		        		foreach(string item in KeyLink) {cboAdv4Link.Add(item);}	
+		        		cboAdv4Link.Selected = advsettings[3].keylink;
+		        		txtAdv4KeyValue.Text = advsettings[3].keyvalue.ToString();
+        			}
+        			
+        			if(advsettings.Count > 4)
+        			{		        		
+        				foreach(string item in KeyTypes) {cboAdv5KeyType.Add(item);}
+		        		cboAdv5KeyType.Selected = advsettings[4].keytype;
+		        		FillAdvancedKeyList(cboAdv5KeyType.Selected, cboAdv5Key);	
+		        		if(cboAdv5KeyType.Selected == 0) {cboAdv5Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[4].key);}
+        				else{cboAdv5Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[4].key);}		
+		        		foreach(string item in KeyCompare) {cboAdv5KeyCompare.Add(item);}
+		        		cboAdv5KeyCompare.Selected = advsettings[4].keycompare;	
+		        		txtAdv5KeyValue.Text = advsettings[4].keyvalue.ToString();
+        			}	
+        		}
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -1568,6 +1686,7 @@ namespace GearFoundry
         		                    new XElement("ArmorSet", String.Empty),
         		                    new XElement("Spells", String.Empty),
         		                    new XElement("NumSpells", "-1"),
+        		                    new XElement("Advanced", "false"),
         		                    new XElement("Palettes", String.Empty));
 
         }

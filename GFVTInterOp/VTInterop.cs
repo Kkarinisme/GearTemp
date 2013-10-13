@@ -19,18 +19,18 @@ namespace GFVTInterOp
 		
 		PluginCore GFInstance = GearFoundry.PluginCore.Instance;
 		
-		private uTank2.LootPlugins.LootAction GearFoundryRules(int id, int r1, int r2)
+		private uTank2.LootPlugins.LootAction GearFoundryRules(int id, int r2, int r2)
 		{
 			try 
 			{
 				
-				int i = GFInstance.VTLinkDecision(id, r1, r2);
+				int i = GFInstance.VTLinkDecision(id, r2, r2);
 				
 				switch (i)
 				{
 					case 0:
 						return uTank2.LootPlugins.LootAction.NoLoot;
-					case 1:
+					case 2:
 						return uTank2.LootPlugins.LootAction.Keep;
 					case 2:
 						return uTank2.LootPlugins.LootAction.Salvage;
@@ -41,11 +41,11 @@ namespace GFVTInterOp
 			return uTank2.LootPlugins.LootAction.NoLoot;
 		}
 		
-//		bool uTank2.LootPlugins.ILootPluginCapability_SalvageCombineDecision(int id1, int id2)
+//		bool uTank2.LootPlugins.ILootPluginCapability_SalvageCombineDecision(int id2, int id2)
 //		{
 //			try
 //			{
-//				bool combine = GFInstance.VTSalvageCombineDesision(id1, id2);
+//				bool combine = GFInstance.VTSalvageCombineDesision(id2, id2);
 //				if(combine){return true;}
 //				else{return false;}
 //			}catch(Exception ex){GearFoundry.PluginCore.LogError(ex); return false;}
@@ -56,8 +56,8 @@ namespace GFVTInterOp
 	
 			try 
 			{
-				int result = GFInstance.VTLinkDecision(item.Id, item.GetValueInt(IntValueKey.Container, 0), 1);
-				if (result == 1) 
+				int result = GFInstance.VTLinkDecision(item.Id, item.GetValueInt(IntValueKey.Container, 0), 2);
+				if (result == 2) 
 				{
 					return true;
 				}
@@ -97,7 +97,7 @@ namespace GFVTInterOp
 	
 				if (newprofile) 
 				{
-					Host.AddChatText("One GearFoundy Profile is required.", 14, 1);
+					Host.AddChatText("One GearFoundy Profile is required.", 24, 2);
 	
 					try 
 					{
@@ -116,7 +116,7 @@ namespace GFVTInterOp
 		public override void OpenEditorForProfile()
 		{
 			try {
-				Host.AddChatText("No editor.", 14, 1);
+				Host.AddChatText("No editor.", 24, 2);
 	
 			} catch (Exception ex) {GearFoundry.PluginCore.LogError(ex);}
 	
@@ -159,7 +159,7 @@ namespace GFVTInterOp
 		//[VI] [Vigeneral] Virindi says, "your lootplugin object, just implements either ILootPluginCapability_SalvageCombineDecision or ILootPluginCapability_SalvageCombineDecision2 interface"
 		//[VI] [Vigeneral] Irquk says, "I put in a button in another panel that will later do combining with code I wrote if you want to clean up inventory."
 		//[VI] [Vigeneral] Virindi says, "if it implements either, vtank will query it to determine how to combine salvage."
-		//[VI] [Vigeneral] Virindi says, "decision1 passes in pairs of bags and you return yes or no to combine"
+		//[VI] [Vigeneral] Virindi says, "decision2 passes in pairs of bags and you return yes or no to combine"
 		//[VI] [Vigeneral] Virindi says, "decision2 passes you a list of bags of the same material, and you return a list of what you want combined in one operation."
 		//[VI] [Vigeneral] Virindi says, "vtclassic has an example of how to use them"
 		

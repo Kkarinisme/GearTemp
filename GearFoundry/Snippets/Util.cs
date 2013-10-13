@@ -225,6 +225,58 @@ namespace GearFoundry
         	}catch(Exception ex){LogError(ex); return String.Empty;}
         }
         
+        private List<ItemRule.advsettings> _ConvertAdvStringToAdvanced(string BaseString)
+        {
+        	try
+        	{
+        		List<ItemRule.advsettings> Advanced = new List<ItemRule.advsettings>();
+        		       		 
+        		
+            	if(BaseString != String.Empty && BaseString != "")
+            	{
+            		if(BaseString.StartsWith("false")) 
+            		{
+            			return Advanced;
+            		}
+            		string[] SplitString = BaseString.Split(',');
+            		List<string> SplitList = new List<string>();
+            		foreach(string str in SplitString)
+            		{
+            			SplitList.Add(str);
+            		}
+            		
+            		SplitList.RemoveAt(0);
+            			
+            		foreach(string str in SplitList)
+            		{
+            			string[] splitcolons = str.Split(':');
+            			ItemRule.advsettings adv = new ItemRule.advsettings();
+            			
+            			if(splitcolons[0] == "Long") {adv.keytype = 1;}
+            			else{adv.keytype = 0;}
+            			
+            			adv.key = Convert.ToInt32(splitcolons[1]);
+
+            			if(splitcolons[2] == "Equals") {adv.keycompare = 0;}
+            			else if(splitcolons[2] == "Not Equals") {adv.keycompare = 1;}
+            			else if(splitcolons[2] == "Equals or Greater") {adv.keycompare = 2;}
+            			else if(splitcolons[2] == "Equals or Less") {adv.keycompare = 3;}
+            			
+            			adv.keyvalue = Convert.ToDouble(splitcolons[3]);
+
+            			if(splitcolons[4] == "Or") {adv.keylink = 2;}
+            			else if(splitcolons[4] == "And") {adv.keylink = 1;}
+            			else {adv.keylink = 0;}
+            			
+            			Advanced.Add(adv);
+            		}            		
+            	}
+
+            	return Advanced;    		
+        	}catch(Exception ex){LogError(ex); return new List<ItemRule.advsettings>();}	
+        }
+
+        
 //        private void playSimpleSound()
 //		{
 //		    SoundPlayer simpleSound = new SoundPlayer(@"c:\Windows\Media\chimes.wav");
