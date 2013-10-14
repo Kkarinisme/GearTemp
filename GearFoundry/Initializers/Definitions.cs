@@ -29,7 +29,6 @@ namespace GearFoundry
     	static internal FileService fileservice;
         
         //Operational flags.  Not saved across sessions
-        private bool mCharacterLoginComplete;
 
         private System.Windows.Forms.Timer MasterTimer = new System.Windows.Forms.Timer();
         public static string Log;
@@ -116,7 +115,7 @@ namespace GearFoundry
 
         int mitem;
         Int32 mMaxLoot;
-        private int mintvalue;
+        
         private string sname = String.Empty;
         private string sinput = String.Empty;
         private bool mexact = false;
@@ -124,7 +123,8 @@ namespace GearFoundry
         private bool mgoon;
         bool mgoonInv;
 
-		XElement mSelectedRule = null;        
+		XElement mSelectedRule = null;
+		XElement mSelectedSalvage = null;		
         
         int nusearrowid;
         int nTrophyRow;

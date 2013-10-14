@@ -648,9 +648,6 @@ namespace GearFoundry
                 btnUpdateMobItem = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateMobItem"];
                 chkmyMobExact = (MyClasses.MetaViewWrappers.ICheckBox)View["chkmyMobExact"];
                 txtmyMobName = (MyClasses.MetaViewWrappers.ITextBox)View["txtmyMobName"];
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
                 lstmyMobs.Selected += new EventHandler<MVListSelectEventArgs>(lstmyMobs_Selected);
                 chkmyMobExact.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkmyMobExact_Change);
                 txtmyMobName.End += new EventHandler<MVTextBoxEndEventArgs>(txtmyMobName_End);
@@ -664,16 +661,10 @@ namespace GearFoundry
                 lstNotifySalvage = (MyClasses.MetaViewWrappers.IList)View["lstNotifySalvage"];
                 lblSalvageName = (MyClasses.MetaViewWrappers.IStaticText)View["lblSalvageName"];
                 txtSalvageString = (MyClasses.MetaViewWrappers.ITextBox)View["txtSalvageString"];
-         //       btnNewSalvage = (MyClasses.MetaViewWrappers.IButton)View["btnNewSalvage"];
                 btnUpdateSalvage = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateSalvage"];
                 lblSalvageString = (MyClasses.MetaViewWrappers.IStaticText)View["lblSalvageString"];
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
                 lstNotifySalvage.Selected += new EventHandler<MVListSelectEventArgs>(lstNotifySalvage_Selected);
-              //  btnNewSalvage.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnNewSalvage_Click);
                 btnUpdateSalvage.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateSalvage_Click);
-               // txtSalvageName.End += new EventHandler<MVTextBoxEndEventArgs>(txtSalvageName_End);
                 txtSalvageString.End += new EventHandler<MVTextBoxEndEventArgs>(txtSalvageString_End);
                 }catch(Exception ex){LogError(ex);}
 

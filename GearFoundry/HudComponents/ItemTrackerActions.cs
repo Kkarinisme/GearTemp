@@ -20,6 +20,7 @@ namespace GearFoundry
 	public partial class PluginCore
 	{ 		
 		private List<int> CombineSalvageWOList = new List<int>();
+		private List<WorldObject> InventorySalvage = new List<WorldObject>();
 		private List<PendingActions> InspectorActionList = new List<PendingActions>();
 		
 		private System.Windows.Forms.Timer InspectorActionTimer = new System.Windows.Forms.Timer();
@@ -212,7 +213,6 @@ namespace GearFoundry
 						return;
 					}
 					//Check to see if the open container has any more items pending
-					//TODO:  Determine why it faults.
 					else if(Core.Actions.OpenedContainer != 0 && LOList.Any(x => x.Container == Core.Actions.OpenedContainer && x.InspectList))
 					{
 						return;
@@ -765,6 +765,16 @@ namespace GearFoundry
 				return false;
 //					else if(LOList.Any(x => x.InspectList && x.Container == Core.Actions.OpenedContainer))
 			}catch(Exception ex){LogError(ex); return false;}
+		}
+		
+		
+		private void ScanInventoryForSalvageBags()
+		{
+			try
+			{
+				InventorySalvage.Clear();
+		 		InventorySalvage = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Salvage).OrderBy(x => x.Values(LongValueKey.Material)).ToList();
+			}catch{}
 		}
 	}
 }

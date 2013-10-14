@@ -86,6 +86,7 @@ namespace GearFoundry
                 loadFiles();
                 startRoutines();
                 _UpdateRulesTabs();
+                _UpdateSalvagePanel();
                 
                 SubscribeFellowshipEvents();
 
@@ -96,8 +97,7 @@ namespace GearFoundry
 
                 MasterTimer.Interval = 1000;
                 MasterTimer.Start();
-                
-                mCharacterLoginComplete = true;             
+                           
             }
             catch (Exception ex) { LogError(ex); }
         }  

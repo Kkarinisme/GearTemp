@@ -86,12 +86,9 @@ namespace GearFoundry
         private void InitRules()
         {
         	try
-        	{       
-
-           		
+        	{               		
                 mPrioritizedRulesList.Clear();
-                mPrioritizedRulesList = xdocRules.Element("Rules").Descendants("Rule").OrderBy(x => x.Element("Enabled").Value).ToList();
-                
+                mPrioritizedRulesList = xdocRules.Element("Rules").Descendants("Rule").OrderBy(x => x.Element("Enabled").Value).ToList();                
                 FillItemRules();
 
         	}catch(Exception ex){LogError(ex);}

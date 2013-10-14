@@ -101,7 +101,20 @@ namespace GearFoundry
                 Core.ItemDestroyed += OnLandscapeDestroyed;
                 Core.WorldFilter.ChangeObject += ChangeObjectLandscape;      
 				Core.CharacterFilter.Logoff += LandscapeLogoff;
-				LandscapeSubscribed = true;				
+				foreach(WorldObject wo in Core.WorldFilter.GetByContainer(0).ToArray())
+				{
+					if(wo.ObjectClass != ObjectClass.Unknown)
+					{
+						if(!LandscapeTrackingList.Any(x => x.Id == wo.Id))
+						{
+							LandscapeObject lo = new LandscapeObject(wo);
+							LandscapeTrackingList.Add(lo);
+							CheckLandscape(wo.Id);
+						}
+					}
+				}
+				LandscapeSubscribed = true;		
+				
 			}
 			catch(Exception ex) {LogError(ex);}
 			return;
@@ -388,9 +401,7 @@ namespace GearFoundry
 	     		UpdateLandscapeHud();
 	     	}catch(Exception ex){LogError(ex);}
     	}
-        
-
-				
+        			
 	    private HudView LandscapeHudView = null;
 		private HudTabView LandscapeHudTabView = null;
 		private HudFixedLayout LandscapeHudTabLayout = null;
@@ -411,7 +422,6 @@ namespace GearFoundry
 		private HudCheckBox LandscapeRenderMini;
 		private HudStaticText ForgetLabel;
 		private HudTextBox LandscapeForgetDistance;
-		
 		
 		private bool LandscapeMainTab;
 		private bool LandscapeSettingsTab;
@@ -438,7 +448,8 @@ namespace GearFoundry
     			LandscapeHudView.Ghosted = false;
                 LandscapeHudView.UserMinimizable = true;
                 LandscapeHudView.UserClickThroughable = false;
-                LandscapeHudView.UserResizeable = true;
+                if(gsSettings.bRenderMini) {LandscapeHudView.UserResizeable = false;}
+                else{LandscapeHudView.UserResizeable = true;}
                 LandscapeHudView.LoadUserSettings();
     			
     			LandscapeHudTabView = new HudTabView();
@@ -533,6 +544,8 @@ namespace GearFoundry
     	{
     		try
     		{
+    			//LandscapeHudTabLayout.AddControl(LandscapeHudSettings, new Rectangle(0,0, gsSettings.LandscapeHudWidth,gsSettings.LandscapeHudHeight));
+    			
     			ShowAllMobs = new HudCheckBox();
     			ShowAllMobs.Text = "Trk All Mobs";
     			LandscapeHudSettings.AddControl(ShowAllMobs, new Rectangle(0,0,150,16));
@@ -636,6 +649,7 @@ namespace GearFoundry
     			ShowAllPlayers.Dispose();
     			ShowSelectedMobs.Dispose();
     			ShowAllMobs.Dispose();			
+    			//LandscapeHudSettings.Dispose();
     			
     			LandscapeSettingsTab = false;
     		}catch{}
@@ -648,16 +662,22 @@ namespace GearFoundry
     			gsSettings.bRenderMini = LandscapeRenderMini.Checked;
     			if(gsSettings.bRenderMini)
     			{
+    				LandscapeHudView.UserResizeable = false;
     				gsSettings.LandscapeHudHeight = 220;
-    				gsSettings.LandscapeHudWidth = 100;
+    				gsSettings.LandscapeHudWidth = 80;
     			}
     			else
     			{
+    				LandscapeHudView.UserResizeable = true;
     				gsSettings.LandscapeHudHeight = 220;
     				gsSettings.LandscapeHudWidth = 300;
     			}
+    			LandscapeHudView.Height = gsSettings.LandscapeHudHeight;
+    			LandscapeHudView.Width = gsSettings.LandscapeHudWidth;
     			GearSenseReadWriteSettings(false);
-    			RenderLandscapeHud();
+    			DisposeLandscapeTabLayout();
+    			RenderLandscapeTabLayout();
+    			UpdateLandscapeHud();
     		}catch(Exception ex){LogError(ex);}
     	}
     

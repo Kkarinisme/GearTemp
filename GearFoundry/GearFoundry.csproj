@@ -139,7 +139,6 @@
     <Compile Include="Inventory\Inventory.cs" />
     <Compile Include="Inventory\InventoryUtil.cs" />
     <Compile Include="Inventory\toonStats.cs" />
-    <Compile Include="SalvageFunctions.cs" />
     <Compile Include="TextFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Snippets\Util.cs" />
@@ -223,7 +222,6 @@
     <EmbeddedResource Include="Graphics\facilityhubgem.gif">
       <LogicalName>facilityhubgem.gif</LogicalName>
     </EmbeddedResource>
-    <Content Include="olthoi_north.gif" />
     <EmbeddedResource Include="Graphics\facility.gif">
       <LogicalName>facility.gif</LogicalName>
     </EmbeddedResource>

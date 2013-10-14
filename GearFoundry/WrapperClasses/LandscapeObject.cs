@@ -53,7 +53,7 @@ namespace GearFoundry
 			public bool addtoloot = false;
 			public bool notify = false;
 			public string rulename = string.Empty;
-			public double DistanceAway = 0;							
+			public double DistanceAway = 0;					
 			
 			public string IORString()
 			{
@@ -138,7 +138,7 @@ namespace GearFoundry
 			
 			public string DistanceString()
 			{
-				return " <" + (DistanceAway * 100).ToString("N0") + ">";
+				return (DistanceAway * 100).ToString("N0");
 			}
 				
 			public int SpellCount 
@@ -215,81 +215,6 @@ namespace GearFoundry
 				return result;
 			}
 			
-			public string TruncateName()
-			{
-				try
-				{
-					if(wo.Name.Length > 8)
-					{
-						string ReturnString = wo.Name.Replace("Corpse of ", "");
-						if(ReturnString.Contains("of "))
-						{
-							ReturnString = ReturnString.Replace("of ","");
-						}
-						if(ReturnString.Length > 8)
-						{
-							if(ReturnString.Contains("a"))
-							{
-								ReturnString = ReturnString.Replace("a", "");
-							}
-							if(ReturnString.Contains("e"))
-							{
-								ReturnString = ReturnString.Replace("e", "");
-							}
-							if(ReturnString.Contains("i"))
-							{
-								ReturnString = ReturnString.Replace("i", "");
-							}
-							if(ReturnString.Contains("o"))
-							{
-								ReturnString = ReturnString.Replace("o", "");
-							}
-							if(ReturnString.Contains("u"))
-							{
-								ReturnString = ReturnString.Replace("u", "");
-							}
-							if(ReturnString.Length > 8)
-							{
-								if(ReturnString.Contains(" "))
-								{
-									
-									string[] splitstring = ReturnString.Split(' ');
-									ReturnString = String.Empty;
-									foreach(string piece in splitstring)
-									{
-										if(piece.Length > 2)
-										{
-											ReturnString += piece.Substring(0,2);
-										}
-										else
-										{
-											ReturnString += piece;
-										}
-									}
-									return ReturnString;
-								}
-								else
-								{
-									return ReturnString.Substring(0,10) + ".";
-								}
-							}
-							else
-							{
-								return ReturnString;
-							}	
-						}
-						else
-						{
-							return ReturnString;
-						}
-					}
-					else
-					{
-						return wo.Name;
-					}
-				}catch(Exception ex){LogError(ex); return String.Empty;}
-			}
-			
 			
 			public string HudString()
 			{
@@ -297,11 +222,11 @@ namespace GearFoundry
 				{
 					if(wo.Name.Contains("Corpse of"))
 					{
-						return wo.Name.Replace("Corpse of", "") + DistanceString();
+						return wo.Name.Replace("Corpse of", "") + " " + DistanceString();
 					}
 					else
 					{
-						return wo.Name + DistanceString();
+						return wo.Name + " " + DistanceString();
 					}
 				}catch(Exception ex){LogError(ex); return String.Empty;}
 			}

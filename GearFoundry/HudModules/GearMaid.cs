@@ -34,8 +34,15 @@ namespace GearFoundry
 		
 		private Queue<WorldObject> MaidCannibalizeQueue = new Queue<WorldObject>();
 		private List<int> MaidCannibalizeProcessList = new List<int>();
+		private List<WorldObject> MaidKeyRings = new List<WorldObject>();
+		private List<WorldObject> MaidSalvageList = new List<WorldObject>();
+		private List<WorldObject> MaidStackList = new List<WorldObject>();
+		private List<WorldObject> MaidKeyList = new List<WorldObject>();
+		private Queue<WorldObject> MaidCombineQueue = new Queue<WorldObject>();
 		private System.Windows.Forms.Timer MaidTimer = new System.Windows.Forms.Timer();
 		private List<WorldObject> MaidCompsList = new List<WorldObject>();
+		
+		private bool maidworking = false;
 		
 		private void RenderButlerHudMaidLayout()
     	{
@@ -165,12 +172,19 @@ namespace GearFoundry
 		{
 			try
 			{
-				MaidTimer.Interval = 200;
-				MaidTimer.Start();
-				MaidTimer.Tick += MaidTimerDo;
-				FillMaidStackList();
-				
-						 
+				if(maidworking)
+				{
+					WriteToChat("Maid is currently processing another request.  Please wait for completion.");
+				}
+				else
+				{
+					maidworking = true;
+					WriteToChat("Maid stacking started.");
+					MaidTimer.Interval = 333;
+					MaidTimer.Start();
+					FillMaidStackList();	
+					MaidTimer.Tick += MaidTimerStack;
+				}					 
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -181,36 +195,46 @@ namespace GearFoundry
 				MaidStackList.Clear();
 				
 				MaidStackList = (from allitems in Core.WorldFilter.GetInventory()
-					where allitems.Values(LongValueKey.StackMax) > 0 &&
-					(allitems.Values(LongValueKey.StackCount)) < (allitems.Values(LongValueKey.StackMax)) &&
-					Core.WorldFilter.GetInventory().Where(x => x.Name == allitems.Name && x.Values(LongValueKey.StackCount) < x.Values(LongValueKey.StackMax)).Count() > 1
+					where allitems.Values(LongValueKey.StackMax) > 0 && (allitems.Values(LongValueKey.StackCount) < allitems.Values(LongValueKey.StackMax)) &&
+					Core.WorldFilter.GetInventory().Where(x => x.Name == allitems.Name && x.Type == allitems.Type && x.Values(LongValueKey.StackCount) < x.Values(LongValueKey.StackMax)).Count() > 1
 					select allitems).ToList();
-				WriteToChat("Maid Stack Count = " + MaidStackList.Count());
-				foreach(var item in MaidStackList)
-				{
-					WriteToChat(item.Name);
-				}
-
 				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		private void MaidTimerStack(object sender, EventArgs e)
+		{
+			try
+			{
+				if(MaidStackList.Count > 0) 
+				{
+					MaidProcessStack();
+					return;
+				}
+				else
+				{
+					WriteToChat("Stacking Completed.");
+					MaidTimer.Stop();
+					MaidTimer.Tick -= MaidTimerStack;
+					maidworking = false;
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
+				
 		private void MaidProcessStack()
 		{
 			try
 			{
-				List<WorldObject> stacklist = stacklist = MaidStackList.FindAll(x => x.Name == MaidStackList.First().Name);
-
-				WriteToChat("Stacking " + stacklist.Count());
-				//WriteToChat(stacklist[0].Name + "," + stacklist[1].Name);
-				
-				
-				if(stacklist.Count > 1)
+				List<WorldObject> stacklist = MaidStackList.FindAll(x => x.Name == MaidStackList.First().Name && x.Type == MaidStackList.First().Type);
+				if(stacklist.Count == 1 || stacklist.Count == 0)
 				{
-					Core.Actions.MoveItem(stacklist[0].Id, stacklist[1].Container, stacklist[1].Values(LongValueKey.Slot), true);
+					FillMaidStackList();
+					return;
 				}
-				
-				FillMaidStackList();
+				else
+				{
+					Core.Actions.MoveItem(stacklist[1].Id, stacklist[0].Container, stacklist[0].Values(LongValueKey.Slot), true);
+				}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -407,9 +431,12 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void MaidSalvageCombine_Hit(object sender, System.EventArgs e)
+		private void MaidScanInventoryForSalvageBags()
 		{
-			WriteToChat("Currently Disabled");
+			try
+			{
+				MaidSalvageList = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Salvage).ToList();
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void SellSalvageBags(int bagtype)
@@ -422,15 +449,15 @@ namespace GearFoundry
 				
 				if(bagtype == 0)
 				{
-					tradelist = MaidSalvage.Where(x => x.Values(LongValueKey.UsesRemaining) == 100).OrderBy(x => x.Name).ToList();
+					tradelist = MaidSalvageList.Where(x => x.Values(LongValueKey.UsesRemaining) == 100).OrderBy(x => x.Name).ToList();
 				}
 				else if(bagtype == 1)
 				{
-					tradelist = MaidSalvage.ToList();
+					tradelist = MaidSalvageList.ToList();
 				}
 				else if(bagtype == 2)
 				{
-					tradelist = MaidSalvage.Where(x => x.Values(LongValueKey.UsesRemaining) < 100).OrderBy(x => x.Name).ToList();
+					tradelist = MaidSalvageList.Where(x => x.Values(LongValueKey.UsesRemaining) < 100).OrderBy(x => x.Name).ToList();
 				}
 				else
 				{
@@ -455,15 +482,15 @@ namespace GearFoundry
 				
 				if(bagtype == 0)
 				{
-					tradelist = MaidSalvage.Where(x => x.Values(LongValueKey.UsesRemaining) == 100).OrderBy(x => x.Name).ToList();
+					tradelist = MaidSalvageList.Where(x => x.Values(LongValueKey.UsesRemaining) == 100).OrderBy(x => x.Name).ToList();
 				}
 				else if(bagtype == 1)
 				{
-					tradelist = MaidSalvage.ToList();
+					tradelist = MaidSalvageList.ToList();
 				}
 				else if(bagtype == 2)
 				{
-					tradelist = MaidSalvage.Where(x => x.Values(LongValueKey.UsesRemaining) < 100).OrderBy(x => x.Name).ToList();
+					tradelist = MaidSalvageList.Where(x => x.Values(LongValueKey.UsesRemaining) < 100).OrderBy(x => x.Name).ToList();
 				}
 				else
 				{
@@ -490,16 +517,7 @@ namespace GearFoundry
 				
 			}catch(Exception ex){LogError(ex);}
 		}
-		
-		
-		private void MaidScanInventoryForSalvageBags()
-		{
-			try
-			{
-				MaidSalvage = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower().Contains("salvage")).ToList();
-			}catch(Exception ex){LogError(ex);}
-		}
-		
+				
 		private void ScanInventoryForComps()
 		{
 			try
@@ -550,25 +568,229 @@ namespace GearFoundry
 
 			}catch(Exception ex){LogError(ex);}
 		}
-		
-		private void MaidTimerDo(object sender, EventArgs e)
+				
+		private void MaidSalvageCombine_Hit(object sender, System.EventArgs e)
 		{
 			try
 			{
-				if(MaidStackList.Count > 0) 
+				if(maidworking)
 				{
-					MaidProcessStack();
+					WriteToChat("Maid is currently processing another request.  Please wait for completion.");
+				}
+				else
+				{
+					maidworking = true;
+					WriteToChat("Maid salvage combining started.");
+					MaidUseUst();
+					MaidTimer.Interval = 333;
+					MaidTimer.Start();
+					MaidTimer.Tick += MaidTimerCombine;
+				}
+			}catch(Exception ex){LogError(ex);}
+
+		}
+		
+
+		
+		
+		private void MaidTimerCombine(object sender, EventArgs e)
+		{
+			try
+			{
+				if(MaidCombineQueue.Count > 0) 
+				{
+					MaidCombineAction();
 					return;
 				}
 				else
 				{
+					WriteToChat("Combine Actions Completed.");
 					MaidTimer.Stop();
-					MaidTimer.Tick -= MaidTimerDo;
+					MaidTimer.Tick -= MaidTimerCombine;
+					maidworking = false;
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		private class PartialBags
+		{
+			public int SalvBagID;
+			public int SalvBagUses;
+			public int SalvBagMat;
+			public double SalvBagWork;
+			public string ruleid;
+		}
+		
+		//Irq:  Confirmed Functional...
+		
+		private void CombineSalvageBags()
+		{
+			try
+			{
+				//No sense trying to salvage if you can't....
+				List<WorldObject> UstSearch = Core.WorldFilter.GetInventory().ToList();				
+				WorldObject MyUst = UstSearch[UstSearch.FindIndex(x => x.Name == "Ust")];
+				
+				if (MyUst == null)
+				{
+					WriteToChat("No Ust Found.");
+					return;
+				} 
+
+				//refresh the list of salvagebags in inventory
+				ScanInventoryForSalvageBags();
+
+				//Create a list of partial bags of salvage from inventory
+				var partbagslinq = from bags in InventorySalvage
+								  where bags.Values(LongValueKey.UsesRemaining) < 100
+								  select new PartialBags{ SalvBagID = bags.Id, SalvBagUses = bags.Values(LongValueKey.UsesRemaining), 
+					              SalvBagWork = bags.Values(DoubleValueKey.SalvageWorkmanship), SalvBagMat = bags.Values(LongValueKey.Material)};
+				
+				PartialBags[] partbags = partbagslinq.ToArray();
+				
+				
+				//Build combine rules for all partial bags in inventory
+				foreach(PartialBags pb in partbags)
+				{
+					var materialrules = from allrules in SalvageRulesList
+						where (allrules.material == pb.SalvBagMat) && (pb.SalvBagWork >= allrules.minwork) && (pb.SalvBagWork <= (allrules.maxwork +0.99))
+								select allrules;					
+					
+					if(materialrules.Count() > 0)
+					{
+						SalvageRule sr = materialrules.First();
+						pb.ruleid = sr.ruleid;
+					}
+				}
+				
+
+//				//cycle through rules and combine salvage accordingly
+//				foreach(SalvageRule sr in SalvageRulesList)
+//				{
+//					var partbaggroups = from bags in partbags
+//										where bags.ruleid == sr.ruleid
+//										select bags;
+//					
+//					int salvagesum = 0;
+//					foreach(PartialBags pb in partbaggroups)
+//					{
+//						if(salvagesum < 100)
+//						{
+//							if(salvagesum + pb.SalvBagUses < 110)
+//							{
+//								salvagesum += pb.SalvBagUses;
+//								CombineSalvageBagsList.Add(pb);
+//							}
+//						}			
+//						if(salvagesum > 100)
+//						{
+//							Host.Actions.UseItem(MyUst.Id, 0);
+//							foreach(PartialBags cb in CombineSalvageBagsList)
+//							{
+//								host.Actions.SalvagePanelAdd(cb.SalvBagID);
+//							}
+//							host.Actions.SalvagePanelSalvage();
+//							CombineSalvageBagsList.Clear();
+//							salvagesum = 0;
+//						}
+//								
+//					}
+//					CombineSalvageBagsList.Clear();
+//				}		
+			}
+			catch{}
+			
+		}	
+
+		private void MaidCombineAction()
+		{
+			try
+			{
+				
+				List<WorldObject> PartialSalvageList = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Salvage && x.Values(LongValueKey.UsesRemaining) < 100).ToList();
+				for(int i = 0; i < PartialSalvageList.Count; i++)
+				{								
+					ScanInventoryForSalvageBags();
+					
+					//Find an applicable material rule.
+					var materialrules = from allrules in SalvageRulesList
+						where (allrules.material == PartialSalvageList[i].Values(LongValueKey.Material)) &&
+							  (PartialSalvageList[i].Values(DoubleValueKey.SalvageWorkmanship) >= allrules.minwork) &&
+							  (PartialSalvageList[i].Values(DoubleValueKey.SalvageWorkmanship) <= (allrules.maxwork +0.99))
+							  select allrules;		
+						
+					if(materialrules.Count() > 0)
+					{
+						var sr = materialrules.First();
+						
+						PartialBags[] partbags = (from bags in InventorySalvage
+									  where bags.Values(LongValueKey.UsesRemaining) < 100  &&
+								      	bags.Values(LongValueKey.Material) == sr.material  &&
+									  	bags.Values(DoubleValueKey.SalvageWorkmanship) >= sr.minwork &&
+									 	 bags.Values(DoubleValueKey.SalvageWorkmanship) <= (sr.maxwork + 0.99)
+									  select new PartialBags{ SalvBagID = bags.Id, SalvBagUses = bags.Values(LongValueKey.UsesRemaining), 
+									 	 	SalvBagWork = bags.Values(DoubleValueKey.SalvageWorkmanship), SalvBagMat = bags.Values(LongValueKey.Material)}).ToArray();
+						
+						CombineSalvageWOList.Clear();
+						
+						int salvagesum = 0;
+						salvagesum += PartialSalvageList[i].Values(LongValueKey.UsesRemaining);
+						CombineSalvageWOList.Add(PartialSalvageList[i].Id);
+					
+						for(int j = 0; j < partbags.Count(); j++)
+						{
+							if(salvagesum < 100)
+							{
+								if(salvagesum + partbags[j].SalvBagUses < 110)
+								{
+									if(!CombineSalvageWOList.Contains(partbags[j].SalvBagID))
+								    {
+										salvagesum += partbags[j].SalvBagUses;
+										CombineSalvageWOList.Add(partbags[j].SalvBagID);
+									}
+								}
+							}		
+						}
+						if(CombineSalvageWOList.Count() > 1)
+						{	
+							
+							foreach(int salvageid in CombineSalvageWOList)
+							{
+								Core.Actions.SalvagePanelAdd(salvageid);
+							}
+							Core.Actions.SalvagePanelSalvage();
+							CombineSalvageWOList.Clear();
+							return;
+						}
+					}
+				}
+				
+				WriteToChat("Combine Actions Completed.");
+				MaidTimer.Stop();
+				MaidTimer.Tick -= MaidTimerCombine;
+				maidworking = false;
+				
+				
+			}catch(Exception ex){LogError(ex);}
+		}		
 	
+		
+		private void MaidUseUst()
+		{
+			try
+			{				
+				WorldObject ust = Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").First();
+				
+				if(ust == null)
+				{
+					ToggleInspectorActions(0);
+					WriteToChat("Character Has no Ust. Actions disabled.");
+				}
+				
+				Core.Actions.UseItem(ust.Id,0);					
+				
+			}catch(Exception ex){LogError(ex);}		
+		}
 	
 	}
 }

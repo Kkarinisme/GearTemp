@@ -34,7 +34,7 @@ namespace GearFoundry
         //From: Karin.  Lists for use with XDocuments composed of XElements
         private List<XElement> mSortedMobsList = new List<XElement>();
         private List<XElement> mSortedTrophiesList = new List<XElement>();
-        private List<XElement> mSortedSalvageList = new List<XElement>();
+        private List<XElement> mSalvageList = new List<XElement>();
         private List<XElement> mPrioritizedRulesList = new List<XElement>();
         private List<XElement> mGenSettingsList = new List<XElement>();
         private List<XElement> mSwitchGearSettingsList = new List<XElement>();
@@ -95,7 +95,7 @@ namespace GearFoundry
         {
             if (mSortedMobsList != null) { mSortedMobsList.Clear(); }
             if (mSortedTrophiesList != null) { mSortedTrophiesList.Clear(); }
-            if (mSortedSalvageList != null) { mSortedSalvageList.Clear(); }
+            if (mSalvageList != null) { mSalvageList.Clear(); }
             if (mPrioritizedRulesList != null) { mPrioritizedRulesList.Clear(); }
             if (mGenSettingsList != null) { mGenSettingsList.Clear(); }
             if (mSwitchGearSettingsList != null) { mSwitchGearSettingsList.Clear(); }

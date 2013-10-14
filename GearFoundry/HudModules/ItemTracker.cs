@@ -22,7 +22,7 @@ namespace GearFoundry
 	public partial class PluginCore
 	{		
 
-		private List<ItemRule> ItemRulesList = new List<ItemRule>();	
+		
  		
 		private GearInspectorSettings GISettings;
 		
@@ -34,7 +34,6 @@ namespace GearFoundry
 			public bool AutoLoot = false;
 			public bool AutoProcess = false;
 			public bool AutoDessicate = false;
-			public bool ModifiedLooting = true;
 			public bool CheckForL7Scrolls = false;
 			public bool SalvageHighValue = false;
 			public bool AutoRingKeys = false;
@@ -153,7 +152,6 @@ namespace GearFoundry
 		private HudCheckBox InspectorAutoAetheria = null;
 		private HudCheckBox InspectorAutoProcess = null;
 		private HudCheckBox InspectorAutoLoot = null;
-		private HudCheckBox InspectorModifiedLooting = null;
 		private HudCheckBox InspectorSalvageHighValue = null;
 		private HudCheckBox InspectorCheckForL7Scrolls = null;
 		private HudStaticText InspectorHudValueLabel = null;
@@ -185,7 +183,8 @@ namespace GearFoundry
     			ItemHudView.UserMinimizable = true;
     			ItemHudView.ShowInBar = false;
     			ItemHudView.Visible = true;
-    			ItemHudView.UserResizeable = true;
+    			if(GISettings.RenderMini){ItemHudView.UserResizeable = false;}
+    			else{ItemHudView.UserResizeable = true;}
     			ItemHudView.LoadUserSettings();
     			
     			ItemHudTabView = new HudTabView();
@@ -201,6 +200,7 @@ namespace GearFoundry
     			ItemHudTabView.AddTab(ItemHudSettingsLayout, "Set");
     			
     			ItemHudTabView.OpenTabChange += ItemHudTabView_OpenTabChange;
+    			ItemHudView.Resize += ItemHudView_Resize;
   				
     			RenderItemHudInspectorTab();
     			
@@ -210,29 +210,17 @@ namespace GearFoundry
     		
     	}
        
-//        private void ItemHudView_Resize(object sender, System.EventArgs e)
-//        {
-//            try
-//            {
-//                bool bw = Math.Abs(ItemHudView.Width - GISettings.ItemHudWidth) > 20;
-//                bool bh = Math.Abs(ItemHudView.Height - GISettings.ItemHudHeight) > 20;
-//                if (bh || bw)
-//                {
-//                    MasterTimer.Tick += ItemHudResizeTimerTick;
-//                    return;
-//                }
-//            }
-//            catch (Exception ex) { LogError(ex); }
-//            return;
-//        }
-//
-//        private void ItemHudResizeTimerTick(object sender, EventArgs e)
-//        {
-//        	MasterTimer.Tick -= ItemHudResizeTimerTick;
-//            GISettings.ItemHudWidth = ItemHudView.Width;
-//            GISettings.ItemHudHeight = ItemHudView.Height;
-//            GearInspectorReadWriteSettings(false);
-//        }
+        private void ItemHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+            	GISettings.ItemHudWidth = ItemHudView.Width;
+            	GISettings.ItemHudHeight = ItemHudView.Height;
+            	GearInspectorReadWriteSettings(false);         
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
 
     	
     	private void ItemHudTabView_OpenTabChange(object sender, System.EventArgs e)
@@ -358,12 +346,8 @@ namespace GearFoundry
     	{
     		try
     		{
-    			InspectorModifiedLooting = new HudCheckBox();
-    			InspectorModifiedLooting.Text = "GS Looting";
-                ItemHudSettingsLayout.AddControl(InspectorModifiedLooting, new Rectangle(0, 0, 100, 16));
-    			InspectorModifiedLooting.Checked = GISettings.ModifiedLooting;
-    			InspectorIdentifySalvage = new HudCheckBox();
     			
+    			InspectorIdentifySalvage = new HudCheckBox();
     			InspectorIdentifySalvage.Text = "Ident. Salv.";
                 ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0, 17, 100, 16));
     			InspectorIdentifySalvage.Checked = GISettings.IdentifySalvage;
@@ -430,7 +414,6 @@ namespace GearFoundry
     			InspectorAutoAetheria.Change += InspectorAutoAetheria_Change;
     			InspectorAutoProcess.Change += InspectorAutoProcess_Change;
     			InspectorAutoLoot.Change += InspectorAutoLoot_Change;
-    			InspectorModifiedLooting.Change += InspectorModifiedLooting_Change;
     			InspectorCheckForL7Scrolls.Change += InspectorCheckForL7Scrolls_Change;
     			InspectorLootByValue.LostFocus += InspectorLootByValue_LostFocus;
     			InspectorSalvageHighValue.Change += InspectorSalvageHighValue_Change;
@@ -468,18 +451,22 @@ namespace GearFoundry
     		try
     		{
     			GISettings.RenderMini = InspectorRenderMini.Checked;
+    			
     			if(GISettings.RenderMini)
     			{
+    				ItemHudView.UserResizeable = false;
     				GISettings.ItemHudHeight = 220;
-    				GISettings.ItemHudWidth = 100;
+    				GISettings.ItemHudWidth = 200;
     			}
     			else
     			{
+    				ItemHudView.UserResizeable = true;
     				GISettings.ItemHudHeight = 220;
     				GISettings.ItemHudWidth = 300;
     			}
+    			ItemHudView.Height = GISettings.ItemHudHeight;
+    			ItemHudView.Width = GISettings.ItemHudWidth;
     			GearInspectorReadWriteSettings(false);
-    			RenderItemHud();
     		}catch(Exception ex){LogError(ex);}
     	}
     	
@@ -547,14 +534,6 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	    	
-    	private void InspectorModifiedLooting_Change(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			GISettings.ModifiedLooting = InspectorModifiedLooting.Checked;
-    			GearInspectorReadWriteSettings(false);
-    		}catch(Exception ex){LogError(ex);}
-    	}
     	
     	private void InspectorCheckForL7Scrolls_Change(object sender, System.EventArgs e)
     	{
@@ -574,7 +553,6 @@ namespace GearFoundry
     			InspectorIdentifySalvage.Change -= InspectorIdentifySalvage_Change;
     			InspectorAutoAetheria.Change -= InspectorAutoAetheria_Change;
     			InspectorAutoProcess.Change -= InspectorAutoProcess_Change;
-    			InspectorModifiedLooting.Change -= InspectorModifiedLooting_Change;
     			InspectorCheckForL7Scrolls.Change -= InspectorCheckForL7Scrolls_Change;
     			InspectorLootByValue.LostFocus -= InspectorLootByValue_LostFocus;
     			InspectorLootByMana.LostFocus -= InspectorLootByMana_LostFocus;
@@ -588,7 +566,6 @@ namespace GearFoundry
     			InspectorIdentifySalvage.Dispose();
     			InspectorAutoAetheria.Dispose();
     			InspectorAutoProcess.Dispose();
-    			InspectorModifiedLooting.Dispose();
     			InspectorCheckForL7Scrolls.Dispose();
     			InspectorLootByMana.Dispose();
     			InspectorLootByValue.Dispose();
@@ -641,10 +618,13 @@ namespace GearFoundry
     		{
     			UnsubscribeItemEvents();
     			
+    			if(ItemHudView == null) {return;}
+    			
     			ItemHudUstLayout.Dispose();
     			ItemHudInspectorLayout.Dispose();   			
     			ItemHudTabView.Dispose();
     			ItemHudView.Dispose();
+    			ItemHudView.Resize -= ItemHudView_Resize;
     		}	
     		catch(Exception ex){LogError(ex);}
     	}

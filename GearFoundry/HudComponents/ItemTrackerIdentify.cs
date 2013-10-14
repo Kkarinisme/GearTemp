@@ -25,6 +25,10 @@ namespace GearFoundry
 	{
 		//Item Tracker Manual ID functions begin here
 		
+		private List<ItemRule> ItemRulesList = new List<ItemRule>();	 
+		private List<SalvageRule> SalvageRulesList = new List<SalvageRule>();
+		
+		
 		private int LastReportGUID = 0;
 		private void ManualCheckItemForMatches(LootObject IOItem)
 		{
@@ -507,61 +511,6 @@ namespace GearFoundry
 			}
 			catch(Exception ex) {LogError(ex);}
 		}
-
-		
-		
-		private void FillItemRules()
-		{
-	        List<int> CombineIntList = new List<int>();
-			
-			try
-			{
-				ItemRulesList.Clear();	
-				
-				var ruleslistenabled = from rules in mPrioritizedRulesList
-					where rules.Element("Enabled").Value == "true"
-					select rules;
-				
-				foreach(var XRule in ruleslistenabled)
-				{
-					ItemRule tRule = new ItemRule();
-		        	
-		        	if(!Int32.TryParse((XRule.Element("Priority").Value), out tRule.RulePriority)){tRule.RulePriority = 999;}
-		        	
-		        	tRule.RuleAppliesTo = _ConvertCommaStringToIntList((string)XRule.Element("AppliesToFlag").Value).Sum();
-		        		        	
-		        	tRule.RuleName = (string)XRule.Element("Name").Value;
-		        
-		        	if(!Int32.TryParse(XRule.Element("ArcaneLore").Value, out tRule.RuleArcaneLore)){tRule.RuleArcaneLore = -1;}
-		        	if(!Double.TryParse(XRule.Element("Work").Value, out tRule.RuleWork)){tRule.RuleWork = -1;}					
-					if(!Int32.TryParse(XRule.Element("WieldSkill").Value, out tRule.RuleWieldSkill)) {tRule.RuleWieldSkill = 0;}
-					if(!Int32.TryParse(XRule.Element("MasteryType").Value, out tRule.RuleMastery)){tRule.RuleMastery = 0;}
-					if(!Int32.TryParse(XRule.Element("GearScore").Value, out tRule.GearScore)){tRule.GearScore = -1;}		        	
-		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = -1;}
-		        	if(!Int32.TryParse((XRule.Element("NumSpells").Value), out tRule.RuleSpellNumber)){tRule.RuleSpellNumber = -1;}
-
-		        	tRule.RuleDamageTypes = _ConvertCommaStringToIntList((string)XRule.Element("DamageType").Value).Sum();
-		        	tRule.WieldRequirements = _ConvertCommaStringsToWREVist((string)XRule.Element("WieldEnabled").Value, (string)XRule.Element("ReqSkill").Value);
-		        	tRule.RuleArmorTypes = _ConvertCommaStringToIntList((string)XRule.Element("ArmorType").Value);
-		        	tRule.RuleSlots = _ConvertCommaStringToIntList((string)XRule.Element("Slots").Value).Sum();
-		        	tRule.RuleArmorSet = _ConvertCommaStringToIntList((string)XRule.Element("ArmorSet").Value);
-		        	tRule.RuleSpells = _ConvertCommaStringToIntList((string)XRule.Element("Spells").Value);
-		        	
-		        	if(((string)XRule.Element("Advanced").Value).StartsWith("true"))
-		        	{
-		        		tRule.AdvSettings = true;
-		        		tRule.Advanced = _ConvertAdvStringToAdvanced((string)XRule.Element("Advanced").Value);
-		        	}
-		        	else
-		        	{
-		        		tRule.AdvSettings = false;
-		        	}
-					
-					ItemRulesList.Add(tRule);
-				}
-				
-			} catch(Exception ex){LogError(ex);}
-		}
 		
 		private bool MatchAdvanced(ItemRule rule, LootObject item)
 		{
@@ -746,6 +695,63 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 			return result;
 		}
+
+		
+		
+		private void FillItemRules()
+		{
+	        List<int> CombineIntList = new List<int>();
+			
+			try
+			{
+				ItemRulesList.Clear();	
+				
+				var ruleslistenabled = from rules in mPrioritizedRulesList
+					where rules.Element("Enabled").Value == "true"
+					select rules;
+				
+				foreach(var XRule in ruleslistenabled)
+				{
+					ItemRule tRule = new ItemRule();
+		        	
+		        	if(!Int32.TryParse((XRule.Element("Priority").Value), out tRule.RulePriority)){tRule.RulePriority = 999;}
+		        	
+		        	tRule.RuleAppliesTo = _ConvertCommaStringToIntList((string)XRule.Element("AppliesToFlag").Value).Sum();
+		        		        	
+		        	tRule.RuleName = (string)XRule.Element("Name").Value;
+		        
+		        	if(!Int32.TryParse(XRule.Element("ArcaneLore").Value, out tRule.RuleArcaneLore)){tRule.RuleArcaneLore = -1;}
+		        	if(!Double.TryParse(XRule.Element("Work").Value, out tRule.RuleWork)){tRule.RuleWork = -1;}					
+					if(!Int32.TryParse(XRule.Element("WieldSkill").Value, out tRule.RuleWieldSkill)) {tRule.RuleWieldSkill = 0;}
+					if(!Int32.TryParse(XRule.Element("MasteryType").Value, out tRule.RuleMastery)){tRule.RuleMastery = 0;}
+					if(!Int32.TryParse(XRule.Element("GearScore").Value, out tRule.GearScore)){tRule.GearScore = -1;}		        	
+		        	if(!Int32.TryParse(XRule.Element("WieldLevel").Value, out tRule.RuleWieldLevel)) {tRule.RuleWieldLevel = -1;}
+		        	if(!Int32.TryParse((XRule.Element("NumSpells").Value), out tRule.RuleSpellNumber)){tRule.RuleSpellNumber = -1;}
+
+		        	tRule.RuleDamageTypes = _ConvertCommaStringToIntList((string)XRule.Element("DamageType").Value).Sum();
+		        	tRule.WieldRequirements = _ConvertCommaStringsToWREVist((string)XRule.Element("WieldEnabled").Value, (string)XRule.Element("ReqSkill").Value);
+		        	tRule.RuleArmorTypes = _ConvertCommaStringToIntList((string)XRule.Element("ArmorType").Value);
+		        	tRule.RuleSlots = _ConvertCommaStringToIntList((string)XRule.Element("Slots").Value).Sum();
+		        	tRule.RuleArmorSet = _ConvertCommaStringToIntList((string)XRule.Element("ArmorSet").Value);
+		        	tRule.RuleSpells = _ConvertCommaStringToIntList((string)XRule.Element("Spells").Value);
+		        	
+		        	if(((string)XRule.Element("Advanced").Value).StartsWith("true"))
+		        	{
+		        		tRule.AdvSettings = true;
+		        		tRule.Advanced = _ConvertAdvStringToAdvanced((string)XRule.Element("Advanced").Value);
+		        	}
+		        	else
+		        	{
+		        		tRule.AdvSettings = false;
+		        	}
+					
+					ItemRulesList.Add(tRule);
+				}
+				
+			} catch(Exception ex){LogError(ex);}
+		}
+		
+		
 		
 		private class ItemRule
 		{
@@ -812,7 +818,80 @@ namespace GearFoundry
         	}catch(Exception ex){LogError(ex); WriteToChat("Wield String = " + WieldString); return new List<ItemRule.WREV>();}
         }
 		
+		string[] splitstring;
+		string[] splstr;
+		private void FillSalvageRules()
+		{
+			try
+			{
+				SalvageRulesList.Clear();
+				var EnabledSalvage = from salv in mSalvageList
+					where salv.Element("checked").Value == "true"
+					select salv;
+				
+				foreach(var XSalv in EnabledSalvage)
+				{
+					
+					splitstring = XSalv.Element("combine").Value.Split(',');
+					
+					if(splitstring.Count() == 1)
+					{
+						SalvageRule sr = new SalvageRule();
+						Int32.TryParse(XSalv.Element("intvalue").Value, out sr.material);
+						
+						if(splitstring[0].Contains("-"))
+						{
+							splstr = splitstring[0].Split('-');
+							   	bool success0 = Double.TryParse(splstr[0], out sr.minwork);
+							   	bool success1 = Double.TryParse(splstr[1], out sr.maxwork);
+							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
+							   	if(success0 && success1) {SalvageRulesList.Add(sr);}
+						}
+						else
+						{
+							bool success0 = Double.TryParse(splitstring[0], out sr.minwork);
+							sr.maxwork = 10;
+							sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
+							if(success0) {SalvageRulesList.Add(sr);}
+						}
+					}
+					else
+					{
+						foreach(string salvstring in splitstring)
+						{
+							SalvageRule sr = new SalvageRule();					
+							Int32.TryParse(XSalv.Element("intvalue").Value, out sr.material);
+							
+							if(salvstring.Contains("-"))
+							{
+							   	string[] splstr = salvstring.Split('-');
+							   	bool success0 = Double.TryParse(splstr[0], out sr.minwork);
+							   	bool success1 = Double.TryParse(splstr[1], out sr.maxwork);
+							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
+							   	if(success0 && success1) {SalvageRulesList.Add(sr);}
+							}
+							else
+							{
+								bool success = Double.TryParse(salvstring, out sr.minwork);
+								sr.maxwork = sr.minwork;
+								sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
+								if(success) {SalvageRulesList.Add(sr);}
+							}
+							
+							
+						}
+					}
+				}
+			} catch{}
+		}
 		
+		public class SalvageRule
+		{
+			public string ruleid;
+			public int material;
+			public double minwork;
+			public double maxwork;
+		}
 
 	}
 }
