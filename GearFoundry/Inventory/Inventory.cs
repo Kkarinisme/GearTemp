@@ -109,6 +109,7 @@ namespace GearFoundry
         private static string objSpellXml = null;
         private static string message = null;
         private static string mySelect = null;
+        private List<string> lstMySelects = null;
         private static string objSalvWork = "None";
         private static string objMatName = null;
         private static long objEmbueTypeInt = 0;
@@ -972,15 +973,36 @@ namespace GearFoundry
                     XDocument tempGIDoc = new XDocument(new XElement("Objs"));
                     tempGIDoc.Save(inventorySelect);
                     tempGIDoc = null;
-              //      mySelect = "";
+                    lstMySelects = new List<string>();
 
                     if (txtMyChoice.Text != null)
                     {
                         mySelect = txtMyChoice.Text.Trim();
                         mySelect = mySelect.ToLower();
+                        
+                        if (mySelect.Contains(';'))
+                        {
+                            string [] split = mySelect.Split(new Char [] {';' });
+
+                            foreach (string s in split)
+                            {
+
+                                if (s.Trim() != "")
+                                {
+                                    lstMySelects.Add(s);
+                                    WriteToChat(s);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            lstMySelects.Add(mySelect);
+                        }
+                        WriteToChat("Count of strings = " + lstMySelects.Count);
+
+                        
                     }
-                    else
-                    { mySelect = null; }
+                    else  { mySelect = null; }
                     xdocListInv = XDocument.Load(genInventoryFilename);
                 }//end of try //
 
@@ -998,13 +1020,16 @@ namespace GearFoundry
                     switch (objClass)
                     {
                         case 0:
-                            if (mySelect.Length > 0)
+                            if (lstMySelects.Count > 0)
                             {
-                                newDoc = new XDocument(new XElement("Objs",
-                                  from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                  where p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                  p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect)
-                                  select p));
+                                foreach (string Select in lstMySelects)
+                                {
+                                    newDoc = new XDocument(new XElement("Objs",
+                                      from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                      where p.Element("ObjName").Value.ToLower().Contains(Select) ||
+                                      p.Element("ObjSpellXml").Value.ToLower().Contains(Select)
+                                      select p));
+                                }
                             }
                             else { WriteToChat("You must either select a class or write something in textbox"); }
                             break;
