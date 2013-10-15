@@ -22,10 +22,6 @@ namespace GearFoundry
 	{
 
 		private List<WorldObject> ButlerInventory = new List<WorldObject>();
-		private List<WorldObject> MaidKeyRings = new List<WorldObject>();
-		private List<WorldObject> MaidSalvage = new List<WorldObject>();
-		private List<WorldObject> MaidStackList = new List<WorldObject>();
-		private List<WorldObject> MaidKeyList = new List<WorldObject>();
 		private Queue<WorldObject> UnchargedManaStones = new Queue<WorldObject>();
 		
 		private List<ValetTicket> ValetEquipList = new List<ValetTicket>();

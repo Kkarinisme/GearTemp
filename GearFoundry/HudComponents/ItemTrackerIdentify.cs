@@ -25,6 +25,10 @@ namespace GearFoundry
 	{
 		//Item Tracker Manual ID functions begin here
 		
+		private List<ItemRule> ItemRulesList = new List<ItemRule>();	 
+		private List<SalvageRule> SalvageRulesList = new List<SalvageRule>();
+		
+		
 		private int LastReportGUID = 0;
 		private void ManualCheckItemForMatches(LootObject IOItem)
 		{
@@ -266,7 +270,6 @@ namespace GearFoundry
 					}					
 					if(LootMaxCheck > 0 && InventoryCount >= LootMaxCheck) 
 					{
-						WriteToChat("Trophy Rejected on LootMax Check.");
 						return;
 					}
 			
@@ -292,7 +295,6 @@ namespace GearFoundry
 			try
 			{
 				
-				ModifiedIOSpells.Clear();
 				LootObject IOItemWithID = IOItemWithIDReference;
 				
 				List<ItemRule> AppliesToListMatches = (from appliesto in ItemRulesList
@@ -322,15 +324,19 @@ namespace GearFoundry
 					 	   (IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqType2) == 7 && IOItemWithID.LValue((LongValueKey)NewLongKeys.WieldReqValue2) <= properties.RuleWieldLevel))
 					select properties).ToList();
 				
-				if(PropertyListMatches.Count == 0) {return;}				
+				if(PropertyListMatches.Count == 0) {return;}
+				
+				List<ItemRule> AdvancedMatches = (from advancedmatches in PropertyListMatches
+				               where !advancedmatches.AdvSettings || MatchAdvanced(advancedmatches, IOItemWithID)
+				               select advancedmatches).ToList();
+				
 			
-				List<ItemRule> SpellListMatches = (from spellmatches in PropertyListMatches
+				List<ItemRule> SpellListMatches = (from spellmatches in AdvancedMatches
 					where spellmatches.RuleSpellNumber == -1 || spellmatches.RuleSpells.Count == 0 || 
-					ModifiedIOSpells.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
+					IOItemWithID.SpellsOnItem.Intersect(spellmatches.RuleSpells).Count() >= spellmatches.RuleSpellNumber
 					select spellmatches).ToList();
 				
 				if(SpellListMatches.Count == 0) {return;}
-					
 								
 				switch(IOItemWithID.ObjectClass)
 				{		
@@ -505,6 +511,190 @@ namespace GearFoundry
 			}
 			catch(Exception ex) {LogError(ex);}
 		}
+		
+		private bool MatchAdvanced(ItemRule rule, LootObject item)
+		{
+			bool result = false;
+			bool[] tumbler = {false,false,false,false,false};
+			List<int> ands = new List<int>();
+			
+			try
+			{
+				for(int i = 0; i < rule.Advanced.Count; i ++)
+				{
+					if(rule.Advanced[i].keylink == 1) {ands.Add(i);}
+					
+					if(rule.Advanced[i].keytype == 0)
+					{
+						switch(rule.Advanced[i].keycompare)
+						{
+							case 0:
+								if(item.DValue((DoubleValueKey)rule.Advanced[i].key) == rule.Advanced[i].keyvalue) {tumbler[i] = true;}
+								break;
+							case 1:
+								if(item.DValue((DoubleValueKey)rule.Advanced[i].key) != rule.Advanced[i].keyvalue) {tumbler[i] = true;}
+								break;
+							case 2: 
+								if(item.DValue((DoubleValueKey)rule.Advanced[i].key) >= rule.Advanced[i].keyvalue) {tumbler[i] = true;}
+								break;
+							case 3: 
+								if(item.DValue((DoubleValueKey)rule.Advanced[i].key) <= rule.Advanced[i].keyvalue) {tumbler[i] = true;}
+								break;
+						}
+					}
+					else if(rule.Advanced[i].keytype == 1)
+					{
+						switch(rule.Advanced[i].keycompare)
+						{
+							case 0:
+								if(item.LValue((LongValueKey)rule.Advanced[i].key) == rule.Advanced[i].keyvalue) {tumbler[i] = true;}
+								break;
+							case 1:
+								if(item.LValue((LongValueKey)rule.Advanced[i].key) != rule.Advanced[i].keyvalue) {tumbler[i] = true;}
+								break;
+							case 2: 
+								if(item.LValue((LongValueKey)rule.Advanced[i].key) >= rule.Advanced[i].keyvalue) {tumbler[i] = true;}
+								break;
+							case 3: 
+								if(item.LValue((LongValueKey)rule.Advanced[i].key) <= rule.Advanced[i].keyvalue) {tumbler[i] = true;}
+								break;
+						}
+					}	
+				}
+				
+				switch(rule.Advanced.Count)
+				{
+					case 1:
+						if(tumbler[0]) {result = true;}
+						break;
+					case 2:
+						if(rule.Advanced[0].keylink == 1)
+						{
+							if(tumbler[0] && tumbler[1]) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 2)
+						{
+							if(tumbler[0] || tumbler[1]) {result = true;}
+						}
+						break;
+					case 3:
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1)
+						{
+							if(tumbler[0] && tumbler[1] && tumbler[2]) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2)
+						{
+							if((tumbler[0] && tumbler[1]) || tumbler[2]) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 1)
+						{
+							if(tumbler[0] || (tumbler[1] && tumbler[2])) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2)
+						{
+							if(tumbler[0] || tumbler[1] || tumbler[2]) {result = true;}
+						}
+						break;
+					case 4:
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1)
+						{
+							if(tumbler[0] && tumbler[1] && tumbler[2] && tumbler[3]) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 2)
+						{
+							if((tumbler[0] && tumbler[1] && tumbler[2]) || tumbler[3]) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 1)
+						{
+							if((tumbler[0] && tumbler[1]) || (tumbler[2] && tumbler[3])) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1)
+						{
+							if(tumbler[0] || (tumbler[1] && tumbler[2] && tumbler[3])) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2)
+						{
+							if((tumbler[0] && tumbler[1]) || tumbler[2] || tumbler[3]) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 1)
+						{
+							if(tumbler[0] || tumbler[1] || (tumbler[2] && tumbler[3])) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2)
+						{
+							if(tumbler[0] || tumbler[1] || tumbler[2] || tumbler[3]) {result = true;}
+						}
+						else if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 2)
+						{
+							if(tumbler[0] || (tumbler[1] && tumbler[2]) || tumbler[3]) {result = true;}
+						}
+						break;
+					case 5:
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 1)
+						{
+							if(tumbler[0] && tumbler[1] && tumbler[2] && tumbler[3] && tumbler[4]) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 2)
+						{
+							if((tumbler[0] && tumbler[1] && tumbler[2] && tumbler[3]) || tumbler[4]) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 1)
+						{
+							if((tumbler[0] && tumbler[1] && tumbler[2]) || (tumbler[3] && tumbler[4])) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 1)
+						{
+							if((tumbler[0] && tumbler[1]) || (tumbler[2] && tumbler[3] && tumbler[4])) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 1)
+						{
+							if(tumbler[0] || (tumbler[1] && tumbler[2] && tumbler[3] && tumbler[4])) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
+						{
+							if((tumbler[0] && tumbler[1] && tumbler[2]) || tumbler[3] || tumbler[4]) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 1)
+						{
+							if((tumbler[0] && tumbler[1]) || tumbler[2] || (tumbler[3] && tumbler[4])) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 1)
+						{
+							if(tumbler[0] || tumbler[1] || (tumbler[2] && tumbler[3] && tumbler[4])) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
+						{
+							if((tumbler[0] && tumbler[1]) || tumbler[2] || tumbler[3] || tumbler[4]) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 1)
+						{
+							if(tumbler[0] || tumbler[1] || tumbler[2] || (tumbler[3] && tumbler[4])) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
+						{
+							if(tumbler[0] || tumbler[1] || tumbler[2] || tumbler[3] || tumbler[4]) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 2)
+						{
+							if((tumbler[0] && tumbler[1]) || (tumbler[2] && tumbler[3]) || tumbler[4]) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 1)
+						{
+							if(tumbler[0] || (tumbler[1] && tumbler[2]) || (tumbler[3] && tumbler[4])) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
+						{
+							if(tumbler[0] || (tumbler[1] && tumbler[2]) || tumbler[3] || tumbler[4]) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 2)
+						{
+							if(tumbler[0] || tumbler[1] || (tumbler[2] && tumbler[3]) || tumbler[4]) {result = true;}
+						}
+						break;
+				}	
+			}catch(Exception ex){LogError(ex);}
+			return result;
+		}
 
 		
 		
@@ -544,12 +734,24 @@ namespace GearFoundry
 		        	tRule.RuleSlots = _ConvertCommaStringToIntList((string)XRule.Element("Slots").Value).Sum();
 		        	tRule.RuleArmorSet = _ConvertCommaStringToIntList((string)XRule.Element("ArmorSet").Value);
 		        	tRule.RuleSpells = _ConvertCommaStringToIntList((string)XRule.Element("Spells").Value);
+		        	
+		        	if(((string)XRule.Element("Advanced").Value).StartsWith("true"))
+		        	{
+		        		tRule.AdvSettings = true;
+		        		tRule.Advanced = _ConvertAdvStringToAdvanced((string)XRule.Element("Advanced").Value);
+		        	}
+		        	else
+		        	{
+		        		tRule.AdvSettings = false;
+		        	}
 					
 					ItemRulesList.Add(tRule);
 				}
 				
 			} catch(Exception ex){LogError(ex);}
 		}
+		
+		
 		
 		private class ItemRule
 		{
@@ -575,11 +777,22 @@ namespace GearFoundry
 	        public int RuleSpellNumber = -1;   
 
 	        public List<int> Palattes = new List<int>();
+	        public bool AdvSettings = false;
+	        public List<advsettings> Advanced = new List<advsettings>();
 	        
 	        public class WREV
 	        {
 	        	public int WieldReqValue = -1;
 	        	public bool WieldEnabled = false;
+	        }
+	        
+	        public class advsettings
+	        {
+	        	public int keytype = 0;
+	        	public int key = 0;
+	        	public double keyvalue = 0;
+	        	public int keycompare = 0;
+	        	public int keylink = 0;
 	        }
 	        	
 		}
@@ -601,13 +814,84 @@ namespace GearFoundry
         			wrevList.Add(wrev);
         		}
  				
-				return wrevList;        		
-            	
-        		
+				return wrevList;        		   		
         	}catch(Exception ex){LogError(ex); WriteToChat("Wield String = " + WieldString); return new List<ItemRule.WREV>();}
         }
 		
+		string[] splitstring;
+		string[] splstr;
+		private void FillSalvageRules()
+		{
+			try
+			{
+				SalvageRulesList.Clear();
+				var EnabledSalvage = from salv in mSalvageList
+					where salv.Element("checked").Value == "true"
+					select salv;
+				
+				foreach(var XSalv in EnabledSalvage)
+				{
+					
+					splitstring = XSalv.Element("combine").Value.Split(',');
+					
+					if(splitstring.Count() == 1)
+					{
+						SalvageRule sr = new SalvageRule();
+						Int32.TryParse(XSalv.Element("intvalue").Value, out sr.material);
+						
+						if(splitstring[0].Contains("-"))
+						{
+							splstr = splitstring[0].Split('-');
+							   	bool success0 = Double.TryParse(splstr[0], out sr.minwork);
+							   	bool success1 = Double.TryParse(splstr[1], out sr.maxwork);
+							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
+							   	if(success0 && success1) {SalvageRulesList.Add(sr);}
+						}
+						else
+						{
+							bool success0 = Double.TryParse(splitstring[0], out sr.minwork);
+							sr.maxwork = 10;
+							sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
+							if(success0) {SalvageRulesList.Add(sr);}
+						}
+					}
+					else
+					{
+						foreach(string salvstring in splitstring)
+						{
+							SalvageRule sr = new SalvageRule();					
+							Int32.TryParse(XSalv.Element("intvalue").Value, out sr.material);
+							
+							if(salvstring.Contains("-"))
+							{
+							   	string[] splstr = salvstring.Split('-');
+							   	bool success0 = Double.TryParse(splstr[0], out sr.minwork);
+							   	bool success1 = Double.TryParse(splstr[1], out sr.maxwork);
+							   	sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
+							   	if(success0 && success1) {SalvageRulesList.Add(sr);}
+							}
+							else
+							{
+								bool success = Double.TryParse(salvstring, out sr.minwork);
+								sr.maxwork = sr.minwork;
+								sr.ruleid = MaterialIndex[sr.material].name + " " + sr.minwork.ToString("N0") + "-" + sr.maxwork.ToString("N0");
+								if(success) {SalvageRulesList.Add(sr);}
+							}
+							
+							
+						}
+					}
+				}
+			} catch{}
+		}
 		
+		public class SalvageRule
+		{
+			public string ruleid;
+			public int material;
+			public double minwork;
+			public double maxwork;
+		}
 
 	}
 }

@@ -22,11 +22,7 @@ namespace GearFoundry
             try
             {
 
-                if (e.Index == 3)
-                {
-                    populateSalvageListBox();
-                }
-                else if (e.Index == 2)
+                if (e.Index == 2)
                 {
                     populateMobsListBox();
                 }
@@ -80,11 +76,6 @@ namespace GearFoundry
                     mgoon = true;
                     switch (margs.Column)
                     {
-                        case 0:
-                            mchecked = Convert.ToBoolean(row[0][0]);
-                            doSalvageUpdate();
-                            break;
-
                         case 1:
                             mlbl.Text = sname;
                             break;
@@ -175,41 +166,6 @@ namespace GearFoundry
 
             catch (Exception ex) { LogError(ex); }
         }
-
-//        //overload for spells listbox which does not  have an associated textfile nor an xdocument and uses a spellinfo type list
-//        private void lstSelect(string filename, List<spellinfo> lst, MyClasses.MetaViewWrappers.IList lstvue, MyClasses.MetaViewWrappers.MVListSelectEventArgs margs, int mlist)
-//        {
-//            try
-//            {
-//
-//                MyClasses.MetaViewWrappers.IListRow row = null;
-//                row = lstvue[margs.Row];
-//                mchecked = Convert.ToBoolean(row[0][0]);
-//                sname = (Convert.ToString(row[1][0]));
-//                int nID = (Convert.ToInt32(row[2][0]));
-//
-//
-//                switch (margs.Column)
-//                {
-//                    case 0:
-//                        break;
-//                    case 2:
-//                        mgoon = false;
-//                        break;
-//                    default:
-//                        break;
-//                }
-//                mchecked = Convert.ToBoolean(row[0][0]);
-//                if (mchecked)
-//                {
-//                    //UNDONE:  Remove if no longer needed
-//                	//WriteEnabledSpellsList(nID, sname);
-//                    populateRuleSpellEnabledListBox();
-//                }
-//            }
-//            catch (Exception ex) { LogError(ex); }
-//        }
-
 
 
         //Provides a modified overload for lstSelect to display lists where  only purpose is to select an item for the rules part of the 
@@ -460,17 +416,28 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
 
         }
-
-
-        // [ControlEvent]("lstNotifySalvage", "Selected")
+        
         private void lstNotifySalvage_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e)  // Decal.Adapter.ListSelectEventArgs e)
         {
-            int mList = 2;
-            MVListSelectEventArgs args = e;
-            lstSelect(xdocSalvage, salvageFilename, mSortedSalvageList, lstNotifySalvage, lblSalvageName, args, mList);
+        	try
+        	{
+        		MyClasses.MetaViewWrappers.IListRow row = lstNotifySalvage[e.Row];
+                
+        		string Material = (row[3][0]).ToString();
+                mSelectedSalvage = mSalvageList.Find(x => x.Element("intvalue").Value == Material);
+                                
+                if(e.Column == 0)
+                {
+                	mSelectedSalvage.Element("checked").Value = row[0][0].ToString().ToLower();
+                	SaveSalvage();
+                }
+                
+                _UpdateSalvagePanel();                          
+        	}catch(Exception ex){LogError(ex);}
+
 
         }
-
+        
         private void lstDamageTypes_Selected(object sender, MyClasses.MetaViewWrappers.MVListSelectEventArgs e) 
         {
         	try
@@ -566,14 +533,6 @@ namespace GearFoundry
                             new XElement("isexact", mexact),
                             new XElement("Guid", mMaxLoot)));
                         break;
-                    case 3:
-                        xdoc.Element("GameItems").Add(new XElement("item",
-                          new XElement("key", sname),
-                          new XElement("intvalue", mintvalue),
-                          new XElement("checked", mchecked),
-                          new XElement("combine", sinput),
-                          new XElement("Guid", mid)));
-                        break;
                 }
 
                 xdoc.Save(filename);
@@ -582,11 +541,6 @@ namespace GearFoundry
                 { populateTrophysListBox(); }
                 else if (xdoc == xdocMobs)
                 { populateMobsListBox(); }
-                else if (xdoc == xdocSalvage)
-                { populateSalvageListBox(); }
-
-
-
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -879,90 +833,59 @@ namespace GearFoundry
 
         }
 
-
-
-
-        private void populateSalvageListBox()
+        private void _UpdateSalvagePanel()
         {
-            try
-            {
-                int mList = 2;
-                setUpLists(xdocSalvage, mSortedSalvageList);
-                populateLst(lstNotifySalvage, mSortedSalvageList, mList);
-
-            }
-
-            catch (Exception ex) { LogError(ex); }
-
+        	try
+        	{        		
+        		List<XElement> SortedSalvageList = mSalvageList.OrderByDescending(x => x.Element("checked").Value).ThenBy(y => y.Element("key").Value).ToList();
+        		
+        		lstNotifySalvage.Clear();
+        		
+        		if(mSelectedSalvage == null) {mSelectedSalvage = mSalvageList.Find(x => x.Element("intvalue").Value == SortedSalvageList.First().Element("intvalue").Value);}
+        		
+				foreach (XElement element in SortedSalvageList)
+                {
+					MyClasses.MetaViewWrappers.IListRow newRow = lstNotifySalvage.AddRow();
+					newRow[0][0] = Convert.ToBoolean(element.Element("checked").Value);
+					newRow[1][0] = element.Element("key").Value;
+					newRow[2][0] = element.Element("combine").Value;
+                    newRow[3][0] = element.Element("intvalue").Value;
+				}	
+				
+				lblSalvageName.Text = mSelectedSalvage.Element("key").Value;
+				txtSalvageString.Text = mSelectedSalvage.Element("combine").Value;							
+        	}catch(Exception ex){LogError(ex);}
         }
-
-
-
-     
-
-
-
-
-
-        [ControlEvent("btnUpdateSalvage", "Click")]
+        
         private void btnUpdateSalvage_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)  //Decal.Adapter.ControlEventArgs e)
         {
-
-            if (lblSalvageName == null || txtSalvageString == null)
-            {
-                GearFoundry.PluginCore.WriteToChat("Please select salvage from list to update");
-            }
-
-            else
-            {
-                doSalvageUpdate();
-            }
+			try
+			{
+				
+				mSelectedSalvage.Element("combine").Value = txtSalvageString.Text;
+				SaveSalvage();
+				_UpdateSalvagePanel();
+				
+			}catch(Exception ex){LogError(ex);}
         }
-
-        private void doSalvageUpdate()
+        
+        private void SaveSalvage()
         {
-            try
-            {
-                sname = lblSalvageName.Text.ToString().Trim();
-                sinput = txtSalvageString.Text.ToString().Trim();
-
-                //  IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("item");
-                var el = from item in mSortedSalvageList
-                         where item.Element("key").Value.ToString().Contains(sname)
-                         select item;
-                mintvalue = Convert.ToInt32(el.First().Element("intvalue").Value);
-
-                if (xdocSalvage != null)
-                {
-
-                    IEnumerable<XElement> elements = xdocSalvage.Element("GameItems").Descendants("item");
-                    xdocSalvage.Descendants("item").Where(x => x.Element("key").Value.ToString().Trim().Contains(sname.Trim())).Remove();
-                }
-                string mID = "";
-                bool mexact = false;
-                int mitem = 3;
-
-                addMyItem(xdocSalvage, salvageFilename, mID, mexact, mitem);
-                FillSalvageRules();
-            }
-            catch (Exception ex) { LogError(ex); }
- 
+        	try
+        	{
+        		xdocSalvage = new XDocument(new XElement("GameItems"));
+				
+				foreach(XElement xe in mSalvageList)
+				{
+					xdocSalvage.Root.Add(xe);
+				}
+				
+				xdocSalvage.Save(salvageFilename);
+				
+				FillSalvageRules();
+        	}catch(Exception ex){LogError(ex);}
         }
-
-        private void txtMaxMana_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-
-        }
-        private void txtMaxValue_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
-        {
-
-        }
- 
-        //    #endregion
-
-
-
-
-
+        
+        
     }
 }

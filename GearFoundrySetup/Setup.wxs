@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 
 <?define UpgradeCode="{81b0bc0a-f7a6-4fa5-8699-18f54fb1ab78}"?>
-<?define Version="0.2.0.0"?>
+<?define Version="0.2.0.2"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Product Id="*" Name="GearFoundry" Language="1033" Version="$(var.Version)" UpgradeCode="$(var.UpgradeCode)" Manufacturer="GearFoundry">
@@ -11,13 +11,13 @@
  			Specifies a single cab file to be embedded in the installer's .msi. 
 		-->
 		<Media Id="1" Cabinet="Foundry.cab" EmbedCab="yes" CompressionLevel="high"/>
-		
+
 		<!-- Installation directory and files are defined in Files.wxs -->
 		<Directory Id="TARGETDIR" Name="SourceDir"/>
-		
-		
 
-		
+
+
+
 		<Feature Id="Complete"
 		         Title="GearFoundry"
 		         Description="Asheron's Call Addon"
@@ -28,7 +28,7 @@
 				 <ComponentRef Id="GFRegSettings"/>
 				 <ComponentRef Id="GFVTRegSettings"/>
 		</Feature>
-		
+
 		<!-- 
 			Using the Wix UI library
  
@@ -38,16 +38,16 @@
 		-->
 		<Property Id="WIXUI_INSTALLDIR">INSTALLDIR</Property>
 		<UIRef Id="WixUI_InstallDir"/>
-	
-	
+
+
 		<Upgrade Id="$(var.UpgradeCode)"> 
 			<UpgradeVersion	Maximum="$(var.Version)" OnlyDetect="no" Property="OLDPRODUCTFOUND"	Language="1033"	IncludeMaximum="yes" />
 		</Upgrade> 
-	
+
 		<InstallExecuteSequence>
 			<RemoveExistingProducts Before="InstallInitialize" /> 
 		</InstallExecuteSequence>
 
-	
+
 	</Product>
 </Wix>

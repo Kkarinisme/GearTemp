@@ -137,18 +137,12 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkRuleWeaponsa;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleWeaponsc;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleWeaponsd;
-
         MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkilla;
-        MyClasses.MetaViewWrappers.IStaticText lblRuleReqSkilla;
-       
-        MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkillb;
-        
-        MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkillc;
-       
+        MyClasses.MetaViewWrappers.IStaticText lblRuleReqSkilla;       
+        MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkillb;       
+        MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkillc;       
         MyClasses.MetaViewWrappers.ITextBox txtRuleReqSkilld;
-
         MyClasses.MetaViewWrappers.IList lstRuleArmorTypes;
-
         MyClasses.MetaViewWrappers.IList lstRuleSets;
 
 
@@ -162,7 +156,49 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterlvl8;
         MyClasses.MetaViewWrappers.ICheckBox chkRuleFilterCloak;
         MyClasses.MetaViewWrappers.ITextBox txtRuleNumSpells;
+        
+        
+        //Controls on Advanced Tab
+        
+        MyClasses.MetaViewWrappers.ICheckBox chkAdvEnabled;
+        MyClasses.MetaViewWrappers.ICombo cboAdv1KeyType;
+        MyClasses.MetaViewWrappers.ICombo cboAdv1Key;
+         MyClasses.MetaViewWrappers.ICombo cboAdv1KeyCompare;
+        MyClasses.MetaViewWrappers.ITextBox txtAdv1KeyValue;
+        
+        MyClasses.MetaViewWrappers.ICombo cboAdv1Link;
+        
+        
+        MyClasses.MetaViewWrappers.ICombo cboAdv2KeyType;
+        MyClasses.MetaViewWrappers.ICombo cboAdv2Key;
+         MyClasses.MetaViewWrappers.ICombo cboAdv2KeyCompare;
+        MyClasses.MetaViewWrappers.ITextBox txtAdv2KeyValue;
+        
+        MyClasses.MetaViewWrappers.ICombo cboAdv2Link;
+        
+        
+        MyClasses.MetaViewWrappers.ICombo cboAdv3KeyType;
+        MyClasses.MetaViewWrappers.ICombo cboAdv3Key;
+         MyClasses.MetaViewWrappers.ICombo cboAdv3KeyCompare;
+        MyClasses.MetaViewWrappers.ITextBox txtAdv3KeyValue;
+        
+        MyClasses.MetaViewWrappers.ICombo cboAdv3Link;
+        
+        
+        MyClasses.MetaViewWrappers.ICombo cboAdv4KeyType;
+        MyClasses.MetaViewWrappers.ICombo cboAdv4Key;
+         MyClasses.MetaViewWrappers.ICombo cboAdv4KeyCompare;
+        MyClasses.MetaViewWrappers.ITextBox txtAdv4KeyValue;
+        
+        MyClasses.MetaViewWrappers.ICombo cboAdv4Link;
+        
+        MyClasses.MetaViewWrappers.ICombo cboAdv5KeyType;
+        MyClasses.MetaViewWrappers.ICombo cboAdv5Key;
+         MyClasses.MetaViewWrappers.ICombo cboAdv5KeyCompare;
+        MyClasses.MetaViewWrappers.ITextBox txtAdv5KeyValue;
+        
 
+        
 
         // Controls on Notify.NPC/Trophies Page
 
@@ -251,25 +287,6 @@ namespace GearFoundry
                 //Text Filtering Controls
                 chkEnableTextFiltering = (MyClasses.MetaViewWrappers.ICheckBox)View["chkEnableTextFiltering"];
                 chkTextFilterAllStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterAllStatus"];
-//                chkTextFilterBusyStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterBusyStatus"];
-//                chkTextFilterCastingStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterCastingStatus"];
-//                chkTextFilterMyDefenseMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMyDefenseMessages"];
-//                chkTextFilterMobDefenseMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMobDefenseMessages"];
-//                chkTextFilterMyKillMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMyKillMessages"];
-//                chkTextFilterPKFails = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterPKFails"];
-//                chkTextFilterDirtyFighting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterDirtyFighting"];
-//                chkTextFilterMySpellCasting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMySpellCasting"];
-//                chkTextFilterOthersSpellCasting = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterOthersSpellCasting"];
-//                chkTextFilterSpellExpirations = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterSpellExpirations"];
-//                chkTextFilterManaStoneMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterManaStoneMessages"];
-//                chkTextFilterHealingMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterHealingMessages"];
-//                chkTextFilterSalvageMessages = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterSalvageMessages"];
-//                chkTextFilterBotSpam = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterBotSpam"];
-//                chkTextFilterIdentFailures = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterIdentFailures"];
-//                chkTextFilterKillTaskComplete = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterKillTaskComplete"];
-//                chkTextFilterVendorTells = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterVendorTells"];
-//                chkTextFilterMonsterTells = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterMonsterTells"];
-//                chkTextFilterNPCChatter = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterNPCChatter"];
                 txtItemFontHeight = (MyClasses.MetaViewWrappers.ITextBox)View["txtItemFontHeight"];
                 txtMenuFontHeight = (MyClasses.MetaViewWrappers.ITextBox)View["txtMenuFontHeight"];
 
@@ -349,25 +366,6 @@ namespace GearFoundry
 
                       chkEnableTextFiltering.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkEnableTextFiltering_Change);
                       chkTextFilterAllStatus.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterAllStatus_Change);
-//                      chkTextFilterBusyStatus.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterBusyStatus_Change);
-//                      chkTextFilterCastingStatus.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterCastingStatus_Change);
-//                      chkTextFilterMyDefenseMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMyDefenseMessages_Change);
-//                      chkTextFilterMobDefenseMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMobDefenseMessages_Change);
-//                      chkTextFilterMyKillMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMyKillMessages_Change);
-//                      chkTextFilterPKFails.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterPKFails_Change);
-//                      chkTextFilterDirtyFighting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterDirtyFighting_Change);
-//                      chkTextFilterMySpellCasting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMySpellCasting_Change);
-//                      chkTextFilterOthersSpellCasting.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterOthersSpellCasting_Change);
-//                      chkTextFilterSpellExpirations.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterSpellExpirations_Change);
-//                      chkTextFilterManaStoneMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterManaStoneMessages_Change);
-//                      chkTextFilterHealingMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterHealingMessages_Change);
-//                      chkTextFilterSalvageMessages.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterSalvageMessages_Change);
-//                      chkTextFilterBotSpam.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterBotSpam_Change);
-//                      chkTextFilterIdentFailures.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterIdentFailures_Change);
-//                      chkTextFilterKillTaskComplete.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterKillTaskComplete_Change);
-//                      chkTextFilterVendorTells.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterVendorTells_Change);
-//                      chkTextFilterMonsterTells.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterMonsterTells_Change);
-//                      chkTextFilterNPCChatter.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterNPCChatter_Change);
                       txtItemFontHeight.End += new EventHandler<MVTextBoxEndEventArgs>(txtItemFontHeight_End);
                       txtMenuFontHeight.End += new EventHandler<MVTextBoxEndEventArgs>(txtMenuFontHeight_End);
 
@@ -494,11 +492,7 @@ namespace GearFoundry
               
 
                 lstRuleSets = (MyClasses.MetaViewWrappers.IList)View["lstRuleSets"];
-				}catch(Exception ex){LogError(ex);}
 
-
-                  try
-                  {
                 // Controls on Notify.SearchRules.Req Spells
                 lstRuleSpells = (MyClasses.MetaViewWrappers.IList)View["lstRuleSpells"];
                 lstRuleSpellsEnabled = (MyClasses.MetaViewWrappers.IList)View["lstRuleSpellsEnabled"];
@@ -512,9 +506,7 @@ namespace GearFoundry
         		chkRuleFilterCloak = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleFilterCloak"];
                 
                 
-       			}catch(Exception ex){LogError(ex);}
-                  try
-                  {
+
                 lstRuleSpells.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleSpells_Selected); 
                 lstRuleSpellsEnabled.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleSpellsEnabled_Selected); 
                 chkRuleFilterLegend.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterLegend_Change);
@@ -523,6 +515,108 @@ namespace GearFoundry
                 chkRuleFilterMajor.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterMajor_Change);
                 chkRuleFilterlvl8.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleFilterlvl8_Change);
                 txtRuleNumSpells.End += new EventHandler<MVTextBoxEndEventArgs>(txtRuleNumSpells_End);
+                
+                //Controls on Advanced Tab
+                
+                
+                chkAdvEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkAdvEnabled"];
+		        cboAdv1KeyType = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv1KeyType"];
+		        cboAdv1KeyType.Selected = 0;
+    		    cboAdv1Key = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv1Key"];
+    		    cboAdv1Key.Selected = 0;  		    
+    		    cboAdv1KeyCompare = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv1KeyCompare"];
+    		    cboAdv1KeyCompare.Selected = 0;   		    
+    		    txtAdv1KeyValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtAdv1KeyValue"];
+    		    
+    		    cboAdv1Link = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv1Link"];
+    		    cboAdv1Link.Selected = 0;
+    		    
+    		    chkAdvEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkAdvEnabled"];
+		        cboAdv2KeyType = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv2KeyType"];
+		        cboAdv2KeyType.Selected = 0;
+    		    cboAdv2Key = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv2Key"];
+    		    cboAdv2Key.Selected = 0;  		    
+    		    cboAdv2KeyCompare = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv2KeyCompare"];
+    		    cboAdv2KeyCompare.Selected = 0;   		    
+    		    txtAdv2KeyValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtAdv2KeyValue"];
+    		    
+    		    cboAdv2Link = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv2Link"];
+    		    cboAdv2Link.Selected = 0;
+    		    
+    		    chkAdvEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkAdvEnabled"];
+		        cboAdv3KeyType = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv3KeyType"];
+		        cboAdv3KeyType.Selected = 0;
+    		    cboAdv3Key = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv3Key"];
+    		    cboAdv3Key.Selected = 0;  		    
+    		    cboAdv3KeyCompare = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv3KeyCompare"];
+    		    cboAdv3KeyCompare.Selected = 0;   		    
+    		    txtAdv3KeyValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtAdv3KeyValue"];
+    		    
+    		    cboAdv3Link = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv3Link"];
+    		    cboAdv3Link.Selected = 0;
+    		    
+    		    chkAdvEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkAdvEnabled"];
+		        cboAdv4KeyType = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv4KeyType"];
+		        cboAdv4KeyType.Selected = 0;
+    		    cboAdv4Key = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv4Key"];
+    		    cboAdv4Key.Selected = 0;  		    
+    		    cboAdv4KeyCompare = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv4KeyCompare"];
+    		    cboAdv4KeyCompare.Selected = 0;   		    
+    		    txtAdv4KeyValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtAdv4KeyValue"];
+    		    
+    		    cboAdv4Link = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv4Link"];
+    		    cboAdv4Link.Selected = 0;
+    		    
+    		    chkAdvEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkAdvEnabled"];
+		        cboAdv5KeyType = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv5KeyType"];
+		        cboAdv5KeyType.Selected = 0;
+    		    cboAdv5Key = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv5Key"];
+    		    cboAdv5Key.Selected = 0;  		    
+    		    cboAdv5KeyCompare = (MyClasses.MetaViewWrappers.ICombo)View["cboAdv5KeyCompare"];
+    		    cboAdv5KeyCompare.Selected = 0;   		    
+    		    txtAdv5KeyValue = (MyClasses.MetaViewWrappers.ITextBox)View["txtAdv5KeyValue"];
+    		         
+                
+                chkAdvEnabled.Change += chkAdvEnabled_Change;
+                cboAdv1KeyType.Change += cboAdv1KeyType_Change;
+                cboAdv1Key.Change += cboAdv1Key_Change;
+                cboAdv1KeyCompare.Change += cboAdv1KeyCompare_Change;
+                txtAdv1KeyValue.End += txtAdv1KeyValue_Change;
+                
+                cboAdv1Link.Change += cboAdv1Link_Change;
+                
+                chkAdvEnabled.Change += chkAdvEnabled_Change;
+                cboAdv2KeyType.Change += cboAdv2KeyType_Change;
+                cboAdv2Key.Change += cboAdv2Key_Change;
+                cboAdv2KeyCompare.Change += cboAdv2KeyCompare_Change;
+                txtAdv2KeyValue.End += txtAdv2KeyValue_Change;
+                
+                cboAdv2Link.Change += cboAdv2Link_Change;
+                
+                chkAdvEnabled.Change += chkAdvEnabled_Change;
+                cboAdv3KeyType.Change += cboAdv3KeyType_Change;
+                cboAdv3Key.Change += cboAdv3Key_Change;
+                cboAdv3KeyCompare.Change += cboAdv3KeyCompare_Change;
+                txtAdv3KeyValue.End += txtAdv3KeyValue_Change;
+                
+                cboAdv3Link.Change += cboAdv3Link_Change;
+                
+                chkAdvEnabled.Change += chkAdvEnabled_Change;
+                cboAdv4KeyType.Change += cboAdv4KeyType_Change;
+                cboAdv4Key.Change += cboAdv4Key_Change;
+                cboAdv4KeyCompare.Change += cboAdv4KeyCompare_Change;
+                txtAdv4KeyValue.End += txtAdv4KeyValue_Change;
+                
+                cboAdv4Link.Change += cboAdv4Link_Change;
+                
+                chkAdvEnabled.Change += chkAdvEnabled_Change;
+                cboAdv5KeyType.Change += cboAdv5KeyType_Change;
+                cboAdv5Key.Change += cboAdv5Key_Change;
+                cboAdv5KeyCompare.Change += cboAdv5KeyCompare_Change;
+                txtAdv5KeyValue.End += txtAdv5KeyValue_Change;
+                
+                     
+                                
 				}catch(Exception ex){LogError(ex);}
                   try
                   {
@@ -554,9 +648,6 @@ namespace GearFoundry
                 btnUpdateMobItem = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateMobItem"];
                 chkmyMobExact = (MyClasses.MetaViewWrappers.ICheckBox)View["chkmyMobExact"];
                 txtmyMobName = (MyClasses.MetaViewWrappers.ITextBox)View["txtmyMobName"];
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
                 lstmyMobs.Selected += new EventHandler<MVListSelectEventArgs>(lstmyMobs_Selected);
                 chkmyMobExact.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkmyMobExact_Change);
                 txtmyMobName.End += new EventHandler<MVTextBoxEndEventArgs>(txtmyMobName_End);
@@ -570,16 +661,10 @@ namespace GearFoundry
                 lstNotifySalvage = (MyClasses.MetaViewWrappers.IList)View["lstNotifySalvage"];
                 lblSalvageName = (MyClasses.MetaViewWrappers.IStaticText)View["lblSalvageName"];
                 txtSalvageString = (MyClasses.MetaViewWrappers.ITextBox)View["txtSalvageString"];
-         //       btnNewSalvage = (MyClasses.MetaViewWrappers.IButton)View["btnNewSalvage"];
                 btnUpdateSalvage = (MyClasses.MetaViewWrappers.IButton)View["btnUpdateSalvage"];
                 lblSalvageString = (MyClasses.MetaViewWrappers.IStaticText)View["lblSalvageString"];
-				}catch(Exception ex){LogError(ex);}
-                  try
-                  {
                 lstNotifySalvage.Selected += new EventHandler<MVListSelectEventArgs>(lstNotifySalvage_Selected);
-              //  btnNewSalvage.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnNewSalvage_Click);
                 btnUpdateSalvage.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateSalvage_Click);
-               // txtSalvageName.End += new EventHandler<MVTextBoxEndEventArgs>(txtSalvageName_End);
                 txtSalvageString.End += new EventHandler<MVTextBoxEndEventArgs>(txtSalvageString_End);
                 }catch(Exception ex){LogError(ex);}
 

@@ -24,8 +24,6 @@ namespace GearFoundry
 		//Need to complete logging and verify functionality of DEADME
 		//DeadMe Status:  Not really sure if this functionality matters.  Enabling it is under review.
 		
-		//private List<string> FellowMemberTrackingList =  new List<string>();
-		private List<int> CorpseExclusionList = new List<int>();
 		private List<LandscapeObject> CorpseTrackingList = new List<LandscapeObject>();
 		private List<string> PermittedCorpsesList =  new List<string>(); 	
 		private bool mCorpseTrackerInPoralSpace = true;
@@ -125,7 +123,15 @@ namespace GearFoundry
                 Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(OnCorpseDestroyed);
                 Core.CharacterFilter.ChangePortalMode += new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeCorpses);
                 Core.ContainerOpened += new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
-                CorpseHudView.Resize += CorpseHudView_Resize; 
+                foreach(WorldObject wo in Core.WorldFilter.GetByContainer(0).ToArray())
+                {
+					if(wo.ObjectClass == ObjectClass.Corpse) 
+					{
+						if(!CorpseTrackingList.Any(x => x.Id == wo.Id)){CheckCorpse(new LandscapeObject(wo));}
+					}
+                }
+                
+                
 
 			}
 			catch(Exception ex){LogError(ex);}
@@ -151,11 +157,9 @@ namespace GearFoundry
 		{
 			try 
 			{  	
-				if(!mCharacterLoginComplete || !bCorpseHudEnabled) {return;}
 				if(e.New.ObjectClass == ObjectClass.Corpse) 
 				{
-					if(CorpseExclusionList.Contains(e.New.Id)){return;}
-					else{CheckCorpse(new LandscapeObject(e.New));}
+					if(!CorpseTrackingList.Any(x => x.Id == e.New.Id)){CheckCorpse(new LandscapeObject(e.New));}
 				}
 		
 			} catch (Exception ex){LogError(ex);}
@@ -192,12 +196,10 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(!mCharacterLoginComplete || !bCorpseHudEnabled) {return;}
-				
         		int PossibleCorpseID = Convert.ToInt32(pMsg["object"]);	
         		if(Core.WorldFilter[PossibleCorpseID].ObjectClass == ObjectClass.Corpse)
 				{
-        			if(CorpseExclusionList.Contains(PossibleCorpseID)){return;}
+        			if(CorpseTrackingList.Any(x => x.Id == PossibleCorpseID)){return;}
         			else{CheckCorpse(new LandscapeObject(Core.WorldFilter[PossibleCorpseID]));}
 				}
 			} 
@@ -212,7 +214,7 @@ namespace GearFoundry
 				if(IOCorpse.Name.Contains(Core.CharacterFilter.Name) && ghSettings.bDeadMes)
 				{
 					IOCorpse.IOR = IOResult.corpseofself;
-					if(ghSettings.DeadMeList.FindIndex(x => x.GUID == IOCorpse.Id) < 0)
+					if(!ghSettings.DeadMeList.Any(x => x.GUID == IOCorpse.Id))
 					{
 						MyCorpses DeadMe = new MyCorpses();
 						DeadMe.Name = IOCorpse.Name;
@@ -222,10 +224,10 @@ namespace GearFoundry
 						
 						ghSettings.DeadMeList.Add(DeadMe);
 					}
-					if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
+					if(!CorpseTrackingList.Any(x => x.Id == IOCorpse.Id)) 
 					{
-						CorpseTrackingList.Add(IOCorpse); 
-						CorpseExclusionList.Add(IOCorpse.Id);
+						IOCorpse.notify = true;
+						CorpseTrackingList.Add(IOCorpse);
 						UpdateCorpseHud();
 					}
 					return;
@@ -235,10 +237,10 @@ namespace GearFoundry
 				if(ghSettings.Permitteds && PermittedCorpsesList.Contains(IOCorpse.Name))
 				{
 					IOCorpse.IOR = IOResult.corpsepermitted;
-					if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
+					if(!CorpseTrackingList.Any(x => x.Id == IOCorpse.Id)) 
 					{
+						IOCorpse.notify = true;
 						CorpseTrackingList.Add(IOCorpse); 
-						CorpseExclusionList.Add(IOCorpse.Id);
 						UpdateCorpseHud();
 					}
 					return;
@@ -257,10 +259,10 @@ namespace GearFoundry
 							if (IOCorpse.SValue(StringValueKey.FullDescription).Contains("generated a rare item")) 
 							{
 								IOCorpse.IOR = IOResult.corpsewithrare;
-								if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
+								if(!CorpseTrackingList.Any(x => x.Id == IOCorpse.Id)) 
 								{
+									IOCorpse.notify = true;
 									CorpseTrackingList.Add(IOCorpse); 
-									CorpseExclusionList.Add(IOCorpse.Id);
 									UpdateCorpseHud();
 								}
 								return;
@@ -268,10 +270,10 @@ namespace GearFoundry
 							else 
 							{
 								IOCorpse.IOR = IOResult.corpseselfkill;
-								if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
+								if(!CorpseTrackingList.Any(x => x.Id == IOCorpse.Id)) 
 								{
-									CorpseTrackingList.Add(IOCorpse); 
-									CorpseExclusionList.Add(IOCorpse.Id);
+									IOCorpse.notify = true;
+									CorpseTrackingList.Add(IOCorpse);
 									UpdateCorpseHud();
 								}
 								return;
@@ -282,10 +284,10 @@ namespace GearFoundry
 							if(FellowMemberList.Any(x => x.Looting && IOCorpse.SValue(StringValueKey.FullDescription).Contains(x.Name)))
 							{
 								IOCorpse.IOR = IOResult.corpsefellowkill;
-								if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
+								if(!CorpseTrackingList.Any(x => x.Id == IOCorpse.Id)) 
 								{
-									CorpseTrackingList.Add(IOCorpse); 
-									CorpseExclusionList.Add(IOCorpse.Id);
+									IOCorpse.notify = true;
+									CorpseTrackingList.Add(IOCorpse);
 									UpdateCorpseHud();
 								}
 								return;
@@ -296,11 +298,11 @@ namespace GearFoundry
 				
 				if(ghSettings.bAllCorpses)
 				{
-					if(CorpseTrackingList.FindIndex(x => x.Id == IOCorpse.Id) < 0) 
+					if(!CorpseTrackingList.Any(x => x.Id == IOCorpse.Id)) 
 					{
 						IOCorpse.IOR = IOResult.allcorpses;
-						CorpseTrackingList.Add(IOCorpse); 
-						CorpseExclusionList.Add(IOCorpse.Id);
+						IOCorpse.notify = true;
+						CorpseTrackingList.Add(IOCorpse);
 						UpdateCorpseHud();
 						return;
 					}
@@ -319,7 +321,6 @@ namespace GearFoundry
 				if (CorpseTrackingList.Any(x => x.Id == e.Released.Id))
 				{
 					CorpseTrackingList.RemoveAll(x => x.Id == e.Released.Id);
-					CorpseExclusionList.RemoveAll(x => x == e.Released.Id);
 					UpdateCorpseHud();
 				}
 			} 
@@ -334,7 +335,6 @@ namespace GearFoundry
 				if(CorpseTrackingList.Any(x => x.Id == e.ItemGuid))
 				{
 					CorpseTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
-					CorpseExclusionList.RemoveAll(x => x == e.ItemGuid);
 					UpdateCorpseHud();
 				}
 			}catch(Exception ex){LogError(ex);}
@@ -344,28 +344,26 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(!mCharacterLoginComplete){return;}
-				else
+
+				if(mCorpseTrackerInPoralSpace) {mCorpseTrackerInPoralSpace = false;}
+				else{mCorpseTrackerInPoralSpace = true;}
+				
+				if(mCorpseTrackerInPoralSpace)
 				{
-					if(mCorpseTrackerInPoralSpace) {mCorpseTrackerInPoralSpace = false;}
-					else{mCorpseTrackerInPoralSpace = true;}
-					
-					if(mCorpseTrackerInPoralSpace)
-					{
-						var CTLpurge = from corpses in CorpseTrackingList
-						where Core.WorldFilter.Distance(Core.CharacterFilter.Id, corpses.Id) > 5
-		     			select corpses.Id;
-		     		
-			     		foreach(var corpseID in CTLpurge)
-			     		{
-			     			if(ghSettings.DeadMeList.FindIndex(x => x.GUID == corpseID) < 0)
-			     			{
-			     				CorpseTrackingList.RemoveAll(x => x.Id == corpseID);
-			     			}
-			     		}
-			     		UpdateCorpseHud();
-					}
-				}			
+					var CTLpurge = from corpses in CorpseTrackingList
+					where Core.WorldFilter.Distance(Core.CharacterFilter.Id, corpses.Id) > 5
+	     			select corpses.Id;
+	     		
+		     		foreach(var corpseID in CTLpurge)
+		     		{
+		     			if(ghSettings.DeadMeList.FindIndex(x => x.GUID == corpseID) < 0)
+		     			{
+		     				CorpseTrackingList.RemoveAll(x => x.Id == corpseID);
+		     			}
+		     		}
+		     		UpdateCorpseHud();
+				}
+							
 			}catch(Exception ex){LogError(ex);}
 
 		}
@@ -434,8 +432,7 @@ namespace GearFoundry
     			GearVisectionReadWriteSettings(true);
     	
     		}catch(Exception ex){LogError(ex);}
-    		
-    		
+ 		
     		try
     		{
     			    			
@@ -447,9 +444,11 @@ namespace GearFoundry
                 CorpseHudView = new HudView("GearVisection", ghSettings.CorpseHudWidth, ghSettings.CorpseHudHeight, new ACImage(0x6AA4));
     			CorpseHudView.UserAlphaChangeable = false;
     			CorpseHudView.ShowInBar = false;
-    			CorpseHudView.UserResizeable = false;
+    			if(ghSettings.RenderMini){CorpseHudView.UserResizeable = false;}
+    			else{CorpseHudView.UserResizeable = true;}
     			CorpseHudView.Visible = true;
     			CorpseHudView.Ghosted = false;
+    			CorpseHudView.UserClickThroughable = false;
                 CorpseHudView.UserMinimizable = true;
                 CorpseHudView.LoadUserSettings();
     			
@@ -467,12 +466,8 @@ namespace GearFoundry
 
     			RenderCorpseHudTab();
     			
-
 				SubscribeCorpseEvents();
-                CorpseHudView.UserResizeable = true;
-
-
-			  							
+	  							
     		}catch(Exception ex){LogError(ex);}
     		
     	}
@@ -481,28 +476,13 @@ namespace GearFoundry
         {
             try
             {
-                bool bw = Math.Abs(CorpseHudView.Width - ghSettings.CorpseHudWidth) > 20;
-                bool bh = Math.Abs(CorpseHudView.Height - ghSettings.CorpseHudHeight) > 20;
-                if (bh || bw)
-                {
-                    MasterTimer.Tick += CorpseHudResizeTimerTick;
-                }
+	            ghSettings.CorpseHudWidth = CorpseHudView.Width;
+	            ghSettings.CorpseHudHeight = CorpseHudView.Height;
+	            GearVisectionReadWriteSettings(false);  
             }
             catch (Exception ex) { LogError(ex); }
             return;
-
-
-
         }
-
-        private void CorpseHudResizeTimerTick(object sender, EventArgs e)
-        {
-			MasterTimer.Tick -= CorpseHudResizeTimerTick;
-            ghSettings.CorpseHudWidth = CorpseHudView.Width;
-            ghSettings.CorpseHudHeight = CorpseHudView.Height;
-            GearVisectionReadWriteSettings(false);            
-        }
-
     	
     	private void CorpseHudTabView_OpenTabChange(object sender, System.EventArgs e)
     	{
@@ -530,11 +510,12 @@ namespace GearFoundry
     		try
     		{
     			CorpseHudList = new HudList();
-    			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0,ghSettings.CorpseHudWidth,ghSettings.CorpseHudHeight));
+    			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0, ghSettings.CorpseHudWidth,ghSettings.CorpseHudHeight));
 				CorpseHudList.ControlHeight = 16;	
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				CorpseHudList.AddColumn(typeof(HudStaticText), ghSettings.CorpseHudWidth - 60, null);
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
+				CorpseHudList.AddColumn(typeof(HudStaticText), 1, null);
 				
 				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);	
 				
@@ -657,39 +638,53 @@ namespace GearFoundry
     		try
     		{
     			ghSettings.RenderMini = GVisRenderMini.Checked;
+    			
     			if(ghSettings.RenderMini)
     			{
+    				CorpseHudView.UserResizeable = false;
     				ghSettings.CorpseHudHeight = 220;
-    				ghSettings.CorpseHudWidth = 100;
+    				ghSettings.CorpseHudWidth = 80;
     			}
     			else
     			{
+    				CorpseHudView.UserResizeable = true;
     				ghSettings.CorpseHudHeight = 220;
     				ghSettings.CorpseHudWidth = 300;
     			}
     			GearVisectionReadWriteSettings(false);
-    			RenderCorpseHud();
+    			CorpseHudView.Height = ghSettings.CorpseHudHeight;
+    			CorpseHudView.Width = ghSettings.CorpseHudWidth;
+    			DisposeCorpseHudTab();
+    			RenderCorpseHudTab();
+    			UpdateCorpseHud();
     		}catch(Exception ex){LogError(ex);}
     	}
     	
-    	
-    	void CorpseHudList_Click(object sender, int row, int col)
+    	private HudList.HudListRowAccessor CorpseRow = new HudList.HudListRowAccessor();
+    	private void CorpseHudList_Click(object sender, int row, int col)
     	{
     		try
 			{
+    			
+    			CorpseRow = CorpseHudList[row];
+    			int woId = Convert.ToInt32(((HudStaticText)CorpseRow[3]).Text);
+    			LandscapeObject co = CorpseTrackingList.Find(x => x.Id == woId);
+    			
     			if(col == 0)
     			{
-    				Host.Actions.UseItem(CorpseTrackingList[row].Id, 0);		
+    				Host.Actions.UseItem(co.Id, 0);
+					co.notify = false;    				
     			}
     			if(col == 1)
     			{
-    				Host.Actions.SelectItem(CorpseTrackingList[row].Id);
-    				HudToChat(LandscapeTrackingList[row].LinkString(), 2);
+    				Host.Actions.SelectItem(co.Id);
+    				HudToChat(co.LinkString(), 2);
+    				nusearrowid = co.Id;
+                    ArrowInitiator();
     			}
     			if(col == 2)
     			{    				
-    				CorpseExclusionList.Add(CorpseTrackingList[row].Id);
-    				CorpseTrackingList.RemoveAt(row);
+  					co.notify = false;
     			}
 				UpdateCorpseHud();
 			}
@@ -751,19 +746,22 @@ namespace GearFoundry
   	    		
 	    	    foreach(LandscapeObject corpse in CorpseTrackingList)
 	    	    {
-	    	    	CorpseHudListRow = CorpseHudList.AddRow();
-	    	    	
-	    	    	((HudPictureBox)CorpseHudListRow[0]).Image = corpse.Icon + 0x6000000;
-	    	    	if(ghSettings.RenderMini){((HudStaticText)CorpseHudListRow[1]).Text = corpse.MiniHudString();}
-	    	    	else{((HudStaticText)CorpseHudListRow[1]).Text = corpse.HudString();}
-                    ((HudStaticText)CorpseHudListRow[1]).FontHeight = 10;
-	    	    	if(corpse.IOR == IOResult.corpseselfkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.AntiqueWhite;}
-	    	    	if(corpse.IOR == IOResult.corpsepermitted) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Cyan;}
-	    	    	if(corpse.IOR == IOResult.corpseofself) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Yellow;}
-	    	    	if(corpse.IOR == IOResult.corpsewithrare) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Magenta;}
-	    	    	if(corpse.IOR == IOResult.corpsefellowkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Green;}
-	    	    	if(corpse.IOR == IOResult.allcorpses) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.SlateGray;}
-					((HudPictureBox)CorpseHudListRow[2]).Image = CorpseRemoveCircle;
+	    	    	if(corpse.notify)
+	    	    	{
+		    	    	CorpseHudListRow = CorpseHudList.AddRow();
+		    	    	((HudPictureBox)CorpseHudListRow[0]).Image = corpse.Icon + 0x6000000;
+		    	    	if(ghSettings.RenderMini){((HudStaticText)CorpseHudListRow[1]).Text = corpse.MiniHudString();}
+		    	    	else{((HudStaticText)CorpseHudListRow[1]).Text = corpse.HudString();}
+	                    ((HudStaticText)CorpseHudListRow[1]).FontHeight = 10;
+		    	    	if(corpse.IOR == IOResult.corpseselfkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.AntiqueWhite;}
+		    	    	if(corpse.IOR == IOResult.corpsepermitted) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Cyan;}
+		    	    	if(corpse.IOR == IOResult.corpseofself) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Yellow;}
+		    	    	if(corpse.IOR == IOResult.corpsewithrare) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Magenta;}
+		    	    	if(corpse.IOR == IOResult.corpsefellowkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Green;}
+		    	    	if(corpse.IOR == IOResult.allcorpses) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.SlateGray;}
+						((HudPictureBox)CorpseHudListRow[2]).Image = CorpseRemoveCircle;
+						((HudStaticText)CorpseHudListRow[3]).Text = corpse.Id.ToString();
+	    	    	}
 	    	    }
 	    	}catch(Exception ex){LogError(ex);}
 	    	

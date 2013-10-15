@@ -34,7 +34,7 @@ namespace GearFoundry
         //From: Karin.  Lists for use with XDocuments composed of XElements
         private List<XElement> mSortedMobsList = new List<XElement>();
         private List<XElement> mSortedTrophiesList = new List<XElement>();
-        private List<XElement> mSortedSalvageList = new List<XElement>();
+        private List<XElement> mSalvageList = new List<XElement>();
         private List<XElement> mPrioritizedRulesList = new List<XElement>();
         private List<XElement> mGenSettingsList = new List<XElement>();
         private List<XElement> mSwitchGearSettingsList = new List<XElement>();
@@ -57,6 +57,9 @@ namespace GearFoundry
         private static List<IntDoubleLoadable> BaneList = new List<IntDoubleLoadable>();
         private static List<IntDoubleLoadable> BaneCantripList = new List<IntDoubleLoadable>();
         
+        //Lists for Advaned Editor
+        private static List<IDNameLoadable> LongKeyList = new List<IDNameLoadable>();
+        private static List<IDNameLoadable> DoubleKeyList = new List<IDNameLoadable>();
         
 
 		private static List<IDNameLoadable> ElementalList = new List<IDNameLoadable>();
@@ -92,7 +95,7 @@ namespace GearFoundry
         {
             if (mSortedMobsList != null) { mSortedMobsList.Clear(); }
             if (mSortedTrophiesList != null) { mSortedTrophiesList.Clear(); }
-            if (mSortedSalvageList != null) { mSortedSalvageList.Clear(); }
+            if (mSalvageList != null) { mSalvageList.Clear(); }
             if (mPrioritizedRulesList != null) { mPrioritizedRulesList.Clear(); }
             if (mGenSettingsList != null) { mGenSettingsList.Clear(); }
             if (mSwitchGearSettingsList != null) { mSwitchGearSettingsList.Clear(); }
@@ -123,6 +126,8 @@ namespace GearFoundry
             if (AttribIndex != null) { AttribIndex.Clear(); }
             if (MaterialIndex != null)  {MaterialIndex.Clear(); }
             if (SpeciesIndex != null) { SpeciesIndex.Clear(); }
+            if (LongKeyList != null) {LongKeyList.Clear();}
+            if (DoubleKeyList != null) {DoubleKeyList.Clear();}
 
         }
 
@@ -224,6 +229,88 @@ namespace GearFoundry
             CreateWeaponWieldInvList();
             CreateCoverageInvList();
             CreateEmbueInvList();
+            CreateKeyLists();
+		}
+		
+		private void CreateKeyLists()
+		{
+			try
+			{
+				IDNameLoadable info;
+				info = new IDNameLoadable((int)LongValueKey.ActivationReqSkillId, "ActivationReqSkillId");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.ActiveSpellCount, "ActiveSpellCount");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.ArmorLevel, "ArmorLevel");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.CleaveType, "CleaveType");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.ElementalDmgBonus, "ElementalDmgBonus");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.Heritage, "Heritage");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.MagicDef, "MagicDef");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.MaxDamage, "MaxDamage");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.MissileType, "MissileType");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.RankRequirement, "RankRequirement");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.Unenchantable, "Unenchantable");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.WandElemDmgType, "WandElemDmgType");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.WeapSpeed, "WeapSpeed");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.WieldReqAttribute, "WieldReqAttribute");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)LongValueKey.WieldReqValue, "WieldReqValue");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.Crit, "Crit");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.CritDam, "CritDam");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.CritDamResist, "CritDamResist");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.CritResist, "CritResist");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.Dam, "Dam");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.DamageAbsorb, "DamAbsorb");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.DamResist, "DamResist");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.MaxItemLevel, "MaxItemLevel");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.SummoningSkill, "SummoningSkill");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.WeaponMastery, "WeaponMastery");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.WieldReqAttribute2, "WieldReqAttribute2");
+				LongKeyList.Add(info);
+				info = new IDNameLoadable((int)NewLongKeys.WieldReqValue2, "WieldReqValue2");
+				LongKeyList.Add(info);
+
+				info = new IDNameLoadable((int)DoubleValueKey.AttackBonus, "AttackBonus");
+				DoubleKeyList.Add(info);
+				info = new IDNameLoadable((int)DoubleValueKey.DamageBonus, "DamageBonus");
+				DoubleKeyList.Add(info);
+				info = new IDNameLoadable((int)DoubleValueKey.ElementalDamageVersusMonsters, "ElementalDamVsMonsters");
+				DoubleKeyList.Add(info);
+				info = new IDNameLoadable((int)DoubleValueKey.MagicDBonus, "MagicDBonus");
+				DoubleKeyList.Add(info);
+				info = new IDNameLoadable((int)DoubleValueKey.ManaCBonus, "ManaCBonus");
+				DoubleKeyList.Add(info);
+				info = new IDNameLoadable((int)DoubleValueKey.MeleeDefenseBonus, "MeleeDBonus");
+				DoubleKeyList.Add(info);
+				info = new IDNameLoadable((int)DoubleValueKey.MissileDBonus, "MissileDBonus");
+				DoubleKeyList.Add(info);
+				info = new IDNameLoadable((int)DoubleValueKey.Variance, "Variance");
+				DoubleKeyList.Add(info);
+				
+				
+			}catch(Exception ex){LogError(ex);}
 		}
 
         private void CreateAppliesToList()
@@ -400,8 +487,7 @@ namespace GearFoundry
 			}
 
 		}
-
-      
+		      
         private void CreateWeaponTypeList()
         {
             try
@@ -732,8 +818,7 @@ namespace GearFoundry
 			writer0.Close();
 			}
 			
-		}
-		
+		}	
 		
 		private void CreateMasteryIndex()
 		{
@@ -1583,6 +1668,8 @@ namespace GearFoundry
              writer0.Close();
 
          }
+             
+
     }
 }
 

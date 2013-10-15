@@ -19,7 +19,7 @@
 					<Component Id="GFVTInterop" Guid="$(var.GFVTIAddonID)" DiskId="1">
 						<File Id="GFVTI" Name="GFVTInterop.dll" Source="../GFVTInterOp/bin/release/GFVTInterop.dll"/>
 					</Component>
-				
+
 					<Component Id="GFRegSettings">
 						<RegistryKey Root="HKLM" Key="Software\Decal\Plugins\$(var.GFAddonID)">
 							<RegistryValue Value="GearFoundry" Type="string"/>
@@ -30,8 +30,8 @@
 							<RegistryValue Name="Surrogate" Value="{71A69713-6593-47EC-0002-0000000DECA1}" Type="string" />
 						</RegistryKey>
 					</Component>
-					
-				
+
+
 					<Component Id="GFVTRegSettings">
 						<RegistryKey Root="HKLM" Key="Software\Decal\LootPlugins\$(var.GFVTIAddonID)">
 							<RegistryValue Value="GFVTInterOp" Type="string"/>
@@ -40,12 +40,12 @@
 							<RegistryValue Name="Path" Value="[INSTALLDIR]" Type="string" />
 						</RegistryKey>
 					</Component>
-				
+
 				</Directory>
 			</Directory>
 		</DirectoryRef>
 	</Fragment>
-	
+
 
 
 </Wix>

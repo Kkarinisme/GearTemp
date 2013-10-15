@@ -1019,6 +1019,20 @@ namespace GearFoundry
 				else {return String.Empty;}
 			}
 			
+			public List<int> SpellsOnItem
+			{
+				get
+				{
+					List<int> splz = new List<int>();
+	
+					for (int i = 0; i <= wo.SpellCount - 1; i++) 
+					{
+						splz.Add(wo.Spell(i));
+					}
+					return splz;
+				}
+			}
+			
 			public int ArmorType
 			{
 				get
@@ -1546,9 +1560,25 @@ namespace GearFoundry
 				}
 				else {return String.Empty;}
 			}
+			private void PalatteWrite()
+			{
+				int model = wo.Values(LongValueKey.Model);
+				WriteToChat("Model " + model);
+				WriteToChat("Model - 0x04000000 = " + (model - 0x04000000));
+				WriteToChat("Model Masked &FF = " + (model & 0xFF));
+			}
+			
+			//Core Girth Plating on Vita
+			//
+			// Model Data:   33554647
+			// Binary:  10000000000000000011010111
+			
+
 			
 			public string GSReportString()
 			{
+				PalatteWrite();
+				
 				//builds result string with appropriate goodies to report
 				string result = string.Empty;
 				try {

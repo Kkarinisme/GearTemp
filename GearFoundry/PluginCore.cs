@@ -86,6 +86,7 @@ namespace GearFoundry
                 loadFiles();
                 startRoutines();
                 _UpdateRulesTabs();
+                _UpdateSalvagePanel();
                 
                 SubscribeFellowshipEvents();
 
@@ -96,8 +97,7 @@ namespace GearFoundry
 
                 MasterTimer.Interval = 1000;
                 MasterTimer.Start();
-                
-                mCharacterLoginComplete = true;             
+                           
             }
             catch (Exception ex) { LogError(ex); }
         }  
@@ -210,7 +210,48 @@ namespace GearFoundry
                 btnUpdateSalvage.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnUpdateSalvage_Click);
          
                 txtSalvageString.End -= new EventHandler<MVTextBoxEndEventArgs>(txtSalvageString_End);
- 	 
+                    
+                chkAdvEnabled.Change -= chkAdvEnabled_Change;
+                
+                cboAdv1KeyType.Change -= cboAdv1KeyType_Change;
+                cboAdv1Key.Change -= cboAdv1Key_Change;
+                cboAdv1KeyCompare.Change -= cboAdv1KeyCompare_Change;
+                txtAdv1KeyValue.End -= txtAdv1KeyValue_Change; 	 
+                
+                cboAdv1Link.Change -= cboAdv1Link_Change;
+                
+                cboAdv2KeyType.Change -= cboAdv2KeyType_Change;
+                cboAdv2Key.Change -= cboAdv2Key_Change;
+                cboAdv2KeyCompare.Change -= cboAdv2KeyCompare_Change;
+                txtAdv2KeyValue.End -= txtAdv2KeyValue_Change; 	 
+                
+                cboAdv2Link.Change -= cboAdv2Link_Change;
+                
+                cboAdv3KeyType.Change -= cboAdv3KeyType_Change;
+                cboAdv3Key.Change -= cboAdv3Key_Change;
+                cboAdv3KeyCompare.Change -= cboAdv3KeyCompare_Change;
+                txtAdv3KeyValue.End -= txtAdv3KeyValue_Change; 	 
+                
+                cboAdv3Link.Change -= cboAdv3Link_Change;
+                
+                cboAdv4KeyType.Change -= cboAdv4KeyType_Change;
+                cboAdv4Key.Change -= cboAdv4Key_Change;
+                cboAdv4KeyCompare.Change -= cboAdv4KeyCompare_Change;
+                txtAdv4KeyValue.End -= txtAdv4KeyValue_Change; 	 
+                
+                cboAdv4Link.Change -= cboAdv4Link_Change;
+                
+                cboAdv5KeyType.Change -= cboAdv5KeyType_Change;
+                cboAdv5Key.Change -= cboAdv5Key_Change;
+                cboAdv5KeyCompare.Change -= cboAdv5KeyCompare_Change;
+                txtAdv5KeyValue.End -= txtAdv5KeyValue_Change; 	 
+                
+
+                
+                
+                
+                
+                
 
 				if (MasterTimer != null) {
 					MasterTimer.Stop();

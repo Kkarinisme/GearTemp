@@ -31,34 +31,20 @@ namespace GearFoundry
 		
 		private bool bEnableTextFiltering = false;	//Enable/Disable the module
 		private bool bTextFilterAllStatus = false;  //Removes all red status messages from the display area (overrides Busy and Casting filters)
-		private bool bTextFilterBusyStatus = false;  //Removes only the busy status message from the display area
-		private bool bTextFilterCastingStatus = false;  //Removes the "you cast" red message from the display area	
-		private bool bTextFilterMyDefenseMessages = false;  //You evade, resist, dodge, etc.
-		private bool bTextFilterMobDefenseMessages = false;  //The mob evades, resists, ect.
-		private bool bTextFilterMyKillMessages = false;  //Kill spam for things killed by the player
-		private bool bTextFilterPKFails = false;  //Filter Spell Fails from PK/NPK status errors
-		private bool bTextFilterDirtyFighting = false;  //Dirty Fighting, Sneak Attack, etc.
-		private bool bTextFilterMySpellCasting = false;
-		private bool bTextFilterOthersSpellCasting = false;
-		private bool bTextFilterSpellExpirations = false;
-		private bool bTextFilterManaStoneMessages = false;
-		private bool bTextFilterHealingMessages = false;
-		private bool bTextFilterSalvageMessages = false;
-		private bool bTextFilterBotSpam = false;
-		private bool bTextFilterIdentFailures = false;
-		private bool bTextFilterKillTaskComplete = false;
-		private bool bTextFilterVendorTells = false;
-		private bool bTextFilterMonsterTells = false;
-		private bool bTextFilterNPCChatter = false;
+		
+		private bool ChatSubscribed = false;
 		
 
 		private void SubscribeChatEvents()
 		{
 			try
 			{
+				if(ChatSubscribed){return;}
+				ChatSubscribed = true;
 				BuildTextCollections();
 				Core.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
 				Host.Underlying.Hooks.StatusTextIntercept += new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);			
+			
 			}catch(Exception ex){LogError(ex);}
 		}
 
@@ -66,6 +52,8 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(!ChatSubscribed) {return;}
+				ChatSubscribed = false;
 				Core.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
 				Host.Underlying.Hooks.StatusTextIntercept -= new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);	
 			}catch(Exception ex){LogError(ex);}

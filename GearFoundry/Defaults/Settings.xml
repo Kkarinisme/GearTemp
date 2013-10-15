@@ -19,25 +19,6 @@
     <MuteSounds>false</MuteSounds>
     <EnableTextFiltering>false</EnableTextFiltering>
     <TextFilterAllStatus>false</TextFilterAllStatus>
-    <TextFilterBusyStatus>false</TextFilterBusyStatus>
-    <TextFilterCastingStatus>false</TextFilterCastingStatus>
-    <TextFilterMyDefenseMessages>false</TextFilterMyDefenseMessages>
-    <TextFilterMobDefenseMessages>false</TextFilterMobDefenseMessages>
-    <TextFilterMyKillMessages>false</TextFilterMyKillMessages>
-    <TextFilterPKFails>false</TextFilterPKFails>
-    <TextFilterDirtyFighting>false</TextFilterDirtyFighting>
-    <TextFilterMySpellCasting>false</TextFilterMySpellCasting>
-    <TextFilterOthersSpellCasting>false</TextFilterOthersSpellCasting>
-    <TextFilterSpellExpirations>false</TextFilterSpellExpirations>
-    <TextFilterManaStoneMessages>false</TextFilterManaStoneMessages>
-    <TextFilterHealingMessages>false</TextFilterHealingMessages>
-    <TextFilterSalvageMessages>false</TextFilterSalvageMessages>
-    <TextFilterBotSpam>false</TextFilterBotSpam>
-    <TextFilterIdentFailures>false</TextFilterIdentFailures>
-    <TextFilterKillTaskComplete>false</TextFilterKillTaskComplete>
-    <TextFilterVendorTells>false</TextFilterVendorTells>
-    <TextFilterMonsterTells>false</TextFilterMonsterTells>
-    <TextFilterNPCChatter>false</TextFilterNPCChatter>
     <ItemFontHeight>12</ItemFontHeight>
     <MenuFontHeight>10</MenuFontHeight>
   </Setting>
