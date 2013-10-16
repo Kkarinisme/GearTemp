@@ -56,6 +56,7 @@ namespace GearFoundry
         private HudPictureBox mPortalRecallGear8 = null;
         private HudPictureBox mPortalRecallGear9 = null;
         private HudPictureBox mPortalRecallGear10 = null;
+        private HudPictureBox mPortalRecallGear11 = null;
 
         private int nOrbGuid = 0;
         private int nOrbIcon = 0;
@@ -89,6 +90,7 @@ namespace GearFoundry
             aerlinthe,
             mhoire,
             neftet,
+            rynthid,
             gearknight,
             caul,
             bur,
@@ -309,7 +311,7 @@ namespace GearFoundry
                     DisposePortalRecallGearHud();
                 }
 
-                portalRecallGearHud = new VirindiViewService.HudView("", 360, 40, new ACImage(0x6AA2), false, "PortalRecallGear");
+                portalRecallGearHud = new VirindiViewService.HudView("", 390, 40, new ACImage(0x6AA2), false, "PortalRecallGear");
                 portalRecallGearHud.ShowInBar = false;
                 portalRecallGearHud.UserAlphaChangeable = false;
                 portalRecallGearHud.Visible = true;
@@ -452,6 +454,15 @@ namespace GearFoundry
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear10, "Neftet Recall");
                 mPortalRecallGear10.Hit += (sender, obj) => mPortalRecallGear10_Hit(sender, obj);
 
+                //  RynThid Recall
+                Stream recallRynthidStream = this.GetType().Assembly.GetManifestResourceStream("rynthid.gif");
+                Image RynthidRecallImage = new Bitmap(recallRynthidStream);
+                mPortalRecallGear11 = new HudPictureBox();
+                mPortalRecallGear11.Image = (ACImage)RynthidRecallImage;
+                portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear11, new Rectangle(360, 2, 25, 39));
+                VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear11, "Rynthid Recall");
+                mPortalRecallGear11.Hit += (sender, obj) => mPortalRecallGear11_Hit(sender, obj);
+
 
 
                 SubscribePortalEvents();
@@ -475,6 +486,7 @@ namespace GearFoundry
             if (mPortalRecallGear8 != null) { mPortalRecallGear8.Hit -= (sender, obj) => mPortalRecallGear8_Hit(sender, obj); mPortalRecallGear8.Dispose(); }
             if (mPortalRecallGear9 != null) { mPortalRecallGear9.Hit -= (sender, obj) => mPortalRecallGear9_Hit(sender, obj); mPortalRecallGear9.Dispose(); }
             if (mPortalRecallGear10 != null) { mPortalRecallGear10.Hit -= (sender, obj) => mPortalRecallGear10_Hit(sender, obj); mPortalRecallGear10.Dispose(); }
+            if (mPortalRecallGear11 != null) { mPortalRecallGear11.Hit -= (sender, obj) => mPortalRecallGear11_Hit(sender, obj); mPortalRecallGear11.Dispose(); }
  
             portalRecallGearHud.Dispose();
 
@@ -754,7 +766,15 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
         }
 
-        
+        private void mPortalRecallGear11_Hit(object sender, System.EventArgs e)
+        {
+            try
+            {
+                PortalActionsLoad(RecallTypes.rynthid);
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+     
         private void PortalActionsLoad(RecallTypes recall)
         {
         	
@@ -1136,6 +1156,17 @@ namespace GearFoundry
                         WriteToChat("Recalled to Lost City of Neftet");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(5541, Core.CharacterFilter.Id);
+                        return;
+                    case RecallTypes.rynthid:
+                        if (!Core.CharacterFilter.IsSpellKnown(6149))
+                        {
+                            PortalActionList[3].fireaction = false;
+                            WriteToChat("You do not know the Rynthid Recall.  Action disabled.");
+                            return;
+                        }
+                        WriteToChat("Recalled to Rynthid");
+                        Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
+                        Core.Actions.CastSpell(6149, Core.CharacterFilter.Id);
                         return;
                     case RecallTypes.mhoire:
                         if (!Core.CharacterFilter.IsSpellKnown(4128))
