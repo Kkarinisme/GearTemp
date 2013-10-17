@@ -1562,16 +1562,10 @@ namespace GearFoundry
 			}
 			private void PalatteWrite()
 			{
-				int model = wo.Values(LongValueKey.Model);
-				WriteToChat("Model " + model);
-				WriteToChat("Model - 0x04000000 = " + (model - 0x04000000));
-				WriteToChat("Model Masked &FF = " + (model & 0xFF));
+				byte[] bytes = BitConverter.GetBytes(wo.Values(LongValueKey.Model));
+				WriteToChat("Model Bytes: " + BitConverter.ToString(bytes));
 			}
-			
-			//Core Girth Plating on Vita
-			//
-			// Model Data:   33554647
-			// Binary:  10000000000000000011010111
+
 			
 
 			
@@ -1723,6 +1717,40 @@ namespace GearFoundry
 		}
 	}
 }
+
+//#GearFoundry#: Model Bytes: D7-00-00-02
+//(Gold 1-10) {GS 34 1J} Chainmail Girth, ArmorScore: 34, Major Strength
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 10/15/2013 7:43 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 10/15/2013 7:44 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] [Meta] Client valid: True
+//[VTank] ID: 805FF59E
+//[VTank] ObjectClass: Armor
+//[VTank] (S) Name: Chainmail Girth
+//[VTank] (S) FullDescription: Chainmail Girth of Strength
+//[VTank] Palette Entry 0: ID 0x00068D, Ex Color: 441404, 80/12
+//[VTank] Palette Entry 1: ID 0x00047C, Ex Color: D20000, 92/4
+
+
+//#GearFoundry#: Model Bytes: A6-01-00-02
+//(Armoredillo Hide 1-10) {GS 33 2J} Empyrean Over-robe, ArmorScore: 33, Major Creature Enchantment Aptitude, Major Monster Attunement
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 10/15/2013 7:43 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 10/15/2013 7:45 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] [Meta] Client valid: True
+//[VTank] ID: 805FF59D
+//[VTank] ObjectClass: Armor
+//[VTank] (S) Name: Empyrean Over-robe
+//[VTank] Palette Entry 0: ID 0x001673, Ex Color: 3C2A1E, 174/66
+//[VTank] Palette Entry 1: ID 0x001077, Ex Color: CFCFCF, 216/24
+//[VTank] Palette Entry 2: ID 0x0005D4, Ex Color: 3A3A3A, 186/12
+//[VTank] Palette Entry 3: ID 0x000699, Ex Color: 31055A, 174/12
 
 
 //Studded Leather Coat

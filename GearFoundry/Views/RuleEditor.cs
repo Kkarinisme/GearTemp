@@ -97,12 +97,8 @@ namespace GearFoundry
         private void SyncAndSaveRules()
         {
         	try
-        	{    
-        		WriteToChat("Sync and Save");
-        		
+        	{      		
 	            xdocRules = new XDocument(new XElement("Rules"));
-	            
-	            WriteToChat("mPRL Count = " + mPrioritizedRulesList.Count());
 	            
 	            string saverulenumber = mSelectedRule.Element("RuleNum").Value;
 	
