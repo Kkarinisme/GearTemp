@@ -109,6 +109,7 @@ namespace GearFoundry
         private static string objSpellXml = null;
         private static string message = null;
         private static string mySelect = null;
+        private List<string> lstMySelects = null;
         private static string objSalvWork = "None";
         private static string objMatName = null;
         private static long objEmbueTypeInt = 0;
@@ -972,15 +973,34 @@ namespace GearFoundry
                     XDocument tempGIDoc = new XDocument(new XElement("Objs"));
                     tempGIDoc.Save(inventorySelect);
                     tempGIDoc = null;
-              //      mySelect = "";
+                    lstMySelects = new List<string>();
 
                     if (txtMyChoice.Text != null)
                     {
                         mySelect = txtMyChoice.Text.Trim();
                         mySelect = mySelect.ToLower();
+                        
+                        if (mySelect.Contains(';'))
+                        {
+                            string [] split = mySelect.Split(new Char [] {';' });
+
+                            foreach (string s in split)
+                            {
+
+                                if (s.Trim() != "")
+                                {
+                                    lstMySelects.Add(s);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            lstMySelects.Add(mySelect);
+                        }
+
+                        
                     }
-                    else
-                    { mySelect = null; }
+                    else  { mySelect = null; }
                     xdocListInv = XDocument.Load(genInventoryFilename);
                 }//end of try //
 
@@ -998,13 +1018,29 @@ namespace GearFoundry
                     switch (objClass)
                     {
                         case 0:
-                            if (mySelect.Length > 0)
+                            if (lstMySelects.Count > 0)
                             {
-                                newDoc = new XDocument(new XElement("Objs",
-                                  from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                  where p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                  p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect)
-                                  select p));
+                                int n = lstMySelects.Count;
+                                for (int i = 0; i < n; i++)
+                                {
+                                    newDoc = new XDocument(new XElement("Objs",
+                                    from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                    where p.Element("ObjName").Value.ToLower().Contains(lstMySelects[n]) ||
+                                    p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[n])
+                                    select p));
+                                }
+
+
+
+                                //}
+                                ////foreach (string Select in lstMySelects)
+                                //{
+                                //newDoc = new XDocument(new XElement("Objs",
+                                //  from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                //  where p.Element("ObjName").Value.ToLower().Contains(Select) ||
+                                //  p.Element("ObjSpellXml").Value.ToLower().Contains(Select)
+                                //  select p));
+                                //}
                             }
                             else { WriteToChat("You must either select a class or write something in textbox"); }
                             break;
@@ -1012,15 +1048,19 @@ namespace GearFoundry
                         case 1:
                         case 2:
                         case 11:
-                            if (mySelect != null && mySelect.Trim() != "")
+                            if (lstMySelects != null && lstMySelects[0].Trim() != "")
                             {
+                                int n = lstMySelects.Count;
+                                for(int i = 0;i<n;i++)
+                                {
                                 if (objArmorSet == 0 && objArmorLevel == 1 && objCovers == 0)
                                 {
+
                                     newDoc = new XDocument(new XElement("Objs",
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                     select p));
 
                                 }
@@ -1032,8 +1072,9 @@ namespace GearFoundry
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjSet").Value == objArmorSet.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
+                                        
                                     select p));
 
                                 }
@@ -1043,8 +1084,8 @@ namespace GearFoundry
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
-                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                     select p));
                                 }
                                 else if (objCovers > 0 && objArmorSet == 0 && objArmorLevel == 1)
@@ -1053,8 +1094,8 @@ namespace GearFoundry
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                           p.Element("ObjCovers").Value == objCovers.ToString() &&
-                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                     select p));
                                 }
                                 else if (objArmorSet > 0 && (objArmorLevel < 1 || objArmorLevel > 1) && objCovers == 0)
@@ -1064,8 +1105,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                             p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                            p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
-                                              (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                              p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objArmorSet > 0 && objCovers > 0 && objArmorLevel == 1)
@@ -1075,8 +1116,8 @@ namespace GearFoundry
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                           p.Element("ObjCovers").Value == objCovers.ToString() &&
-                                          (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                     select p));
                                 }
                                 else if (objArmorSet == 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
@@ -1086,8 +1127,8 @@ namespace GearFoundry
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                        p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
                                         p.Element("ObjCovers").Value == objCovers.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                     select p));
                                 }
                                 else if (objArmorSet > 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
@@ -1098,10 +1139,11 @@ namespace GearFoundry
                                          p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                           p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
                                            p.Element("ObjCovers").Value == objCovers.ToString() &&
-                                           (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                           p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                      select p));
                                 }
+                            }
                             }
 
                             else
@@ -1182,15 +1224,15 @@ namespace GearFoundry
                             }  //end of if spells
                             break;
                         case 5:
-                            if (mySelect != null && mySelect != "")
+                            if (lstMySelects != null && lstMySelects[0] != "")
                             {
                                 if (objWieldAttrInt == 0 && objDamageTypeInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
 
@@ -1201,8 +1243,8 @@ namespace GearFoundry
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
 
@@ -1212,8 +1254,8 @@ namespace GearFoundry
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if ((objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objDamageTypeInt == 0 && objEmbueTypeInt == 0)
@@ -1222,8 +1264,8 @@ namespace GearFoundry
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objEmbueTypeInt > 0 && objWieldAttrInt == 0 && objDamageTypeInt == 1 && objLevelInt == 1)
@@ -1232,8 +1274,8 @@ namespace GearFoundry
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
@@ -1243,8 +1285,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objWieldAttrInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objDamageTypeInt == 0 && objEmbueTypeInt == 0)
@@ -1254,8 +1296,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objWieldAttrInt > 0 && objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objLevelInt == 1)
@@ -1265,8 +1307,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objEmbueTypeInt == 0)
@@ -1276,8 +1318,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objEmbueTypeInt == 0)
@@ -1287,8 +1329,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objDamageTypeInt > 0 && objEmbueTypeInt > 0 && objWieldAttrInt == 0 && (objLevelInt == 1))
@@ -1298,8 +1340,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if ((objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0 && objWieldAttrInt == 0 && objDamageTypeInt == 0)
@@ -1309,8 +1351,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt == 0)
@@ -1321,8 +1363,8 @@ namespace GearFoundry
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && objEmbueTypeInt > 0 && objLevelInt == 1)
@@ -1333,8 +1375,8 @@ namespace GearFoundry
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt == 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
@@ -1345,8 +1387,8 @@ namespace GearFoundry
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objWieldAttrInt == 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
@@ -1357,8 +1399,8 @@ namespace GearFoundry
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
@@ -1370,8 +1412,8 @@ namespace GearFoundry
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                         p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                             } //end of case 5 with spells
@@ -1532,15 +1574,15 @@ namespace GearFoundry
                             break;
                         case 4:
                         case 6:
-                            if (mySelect != null && mySelect != "")
+                            if (lstMySelects != null && lstMySelects[0] != "")
                             {
                                 if (objDamageTypeInt == 0 && objMagicDamageInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
                                     newDoc = new XDocument(new XElement("Objs",
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
 
@@ -1552,8 +1594,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 if ((objLevelInt < 1 || objLevelInt > 1) && objDamageTypeInt == 0 && objMagicDamageInt == 0 && objEmbueTypeInt == 0)
@@ -1562,8 +1604,8 @@ namespace GearFoundry
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                        p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 if (objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0 && objLevelInt == 1)
@@ -1572,8 +1614,8 @@ namespace GearFoundry
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                        p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
 
@@ -1585,8 +1627,8 @@ namespace GearFoundry
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
                                         p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                        p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && objEmbueTypeInt > 0 && objLevelInt == 1)
@@ -1597,8 +1639,8 @@ namespace GearFoundry
                                          (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
                                         p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                        p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
                                 if ((objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0)
@@ -1608,8 +1650,8 @@ namespace GearFoundry
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                         p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                        p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
 
@@ -1622,8 +1664,8 @@ namespace GearFoundry
                                           p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
                                         p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                         p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                        p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                         select p));
                                 }
 
@@ -1767,14 +1809,14 @@ namespace GearFoundry
                             break;
                         default:
 
-                            if (objClassName != null && mySelect != null && mySelect.Trim() != "")
+                            if (objClassName != null && lstMySelects != null && lstMySelects[0].Trim() != "")
                             {
 
                                 newDoc = new XDocument(new XElement("Objs",
                                      from p in xdocListInv.Element("Objs").Descendants("Obj")
                                      where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                            (p.Element("ObjName").Value.ToLower().Contains(mySelect) ||
-                                        p.Element("ObjSpellXml").Value.ToLower().Contains(mySelect))
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
                                      select p));
                             }
 
@@ -1793,8 +1835,25 @@ namespace GearFoundry
 
                     } //end of switch
                     //{
-
                     newDoc.Save(inventorySelect);
+                    int m = lstMySelects.Count;
+                    if (m > 1)
+                    {
+                        for (int k = 1; k < m; k++)
+                        {
+                            newDoc = XDocument.Load(inventorySelect);
+                            XDocument tempDoc;
+                            tempDoc = new XDocument(new XElement("Objs",
+                                  from p in newDoc.Element("Objs").Descendants("Obj")
+                                  where
+                                (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[k]) ||
+                                  p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[k]))
+                                  select p));
+                            tempDoc.Save(inventorySelect);
+
+                        }
+                    }
+                    newDoc=null;
                     newDoc = null;
                     //}
                     //else
@@ -1921,7 +1980,6 @@ namespace GearFoundry
                         if (objSkillInt == 7) { objMastery = "Missile Defense"; }
                         objLevel = objWieldValue.ToString();
                         wieldMess = "Level to wield: " + objLevel;
-                        WriteToChat(objName);
 
                        try{
                           
