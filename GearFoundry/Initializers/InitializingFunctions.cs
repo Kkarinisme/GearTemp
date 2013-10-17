@@ -262,7 +262,6 @@ namespace GearFoundry
         {
         	try
         	{
-        		//TODO:  return here
         		mSalvageList.Clear();
         		mSalvageList = xdocSalvage.Element("GameItems").Descendants("item").ToList();
         		FillSalvageRules();

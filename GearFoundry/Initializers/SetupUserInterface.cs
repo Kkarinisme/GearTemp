@@ -270,7 +270,6 @@ namespace GearFoundry
         {
             try
             {
-            	WriteToChat("Slot List selected.");
                 MyClasses.MetaViewWrappers.IListRow row = lstRuleSlots[e.Row];
                 
                 List<int> sList = _ConvertCommaStringToIntList(mSelectedRule.Element("Slots").Value);
@@ -299,7 +298,6 @@ namespace GearFoundry
         {
             try
             {
-            	WriteToChat("Set List selected.");
                 MyClasses.MetaViewWrappers.IListRow row = lstRuleSets[e.Row];
                 
                 List<int> sList = _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorSet").Value);

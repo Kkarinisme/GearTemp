@@ -564,10 +564,10 @@ namespace GearFoundry
 				
 				switch(rule.Advanced.Count)
 				{
-					case 1:
+					case 1:  //2 ^ 0 == 1
 						if(tumbler[0]) {result = true;}
 						break;
-					case 2:
+					case 2:  //2 ^ 1 == 2
 						if(rule.Advanced[0].keylink == 1)
 						{
 							if(tumbler[0] && tumbler[1]) {result = true;}
@@ -577,7 +577,7 @@ namespace GearFoundry
 							if(tumbler[0] || tumbler[1]) {result = true;}
 						}
 						break;
-					case 3:
+					case 3:  //2 ^ 2 == 4
 						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1)
 						{
 							if(tumbler[0] && tumbler[1] && tumbler[2]) {result = true;}
@@ -595,7 +595,7 @@ namespace GearFoundry
 							if(tumbler[0] || tumbler[1] || tumbler[2]) {result = true;}
 						}
 						break;
-					case 4:
+					case 4:  //2 ^ 3 == 8
 						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1)
 						{
 							if(tumbler[0] && tumbler[1] && tumbler[2] && tumbler[3]) {result = true;}
@@ -629,7 +629,7 @@ namespace GearFoundry
 							if(tumbler[0] || (tumbler[1] && tumbler[2]) || tumbler[3]) {result = true;}
 						}
 						break;
-					case 5:
+					case 5:  //2 ^ 4 == 16
 						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 1)
 						{
 							if(tumbler[0] && tumbler[1] && tumbler[2] && tumbler[3] && tumbler[4]) {result = true;}

@@ -179,13 +179,10 @@ namespace GearFoundry
 				else if(InspectorActionList[2].fireaction)
 				{
 					//Quit Actions if backpack is full
-					if(Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count() == 101)
+					if(Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.EquippedSlots) == 0 && x.Values(LongValueKey.Unknown10) != 56).Count() == 100)
 					{
-						ActionsPending = false;
-						InspectorActionTimer.Tick -= InspectorActionInitiator;
-						InspectorActionTimer.Stop();
-						ToggleInspectorActions(0);
-						WriteToChat("You are out of space in your main pack.  Looting disabled.");
+						InspectorActionList[2].fireaction = false;
+						WriteToChat("You are out of space in your main pack.  Looting stopped.");
 						return;
 					}
 					

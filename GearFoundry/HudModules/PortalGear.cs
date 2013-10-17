@@ -324,7 +324,6 @@ namespace GearFoundry
                 portalRecallGearHud.Controls.HeadControl = portalRecallGearTabView;
                 portalRecallGearTabFixedLayout = new HudFixedLayout();
                 portalRecallGearTabView.AddTab(portalRecallGearTabFixedLayout, "");
-                WriteToChat("nFacilityHubGemID = " + nFacilityHubGemID.ToString());
  
                 //FacilityHub Gem
                 if (nFacilityHubGemID == 0)
@@ -981,8 +980,6 @@ namespace GearFoundry
 				Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
     			Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
 					
-				WriteToChat("Cast Spell " + PortalActionList[3].RecallSpell.ToString());
-					
 				switch(PortalActionList[3].RecallSpell)
 				{
 					case RecallTypes.lifestone:
@@ -1032,7 +1029,6 @@ namespace GearFoundry
 							WriteToChat("You do not know Secondary Portal Recall.  Action disabled.");
 							return;
 						}
-						WriteToChat("Recalled secondary");
 						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
 						Core.Actions.CastSpell(2647, Core.CharacterFilter.Id);
 						return;
@@ -1043,7 +1039,6 @@ namespace GearFoundry
 							WriteToChat("You do not know Summon Secondary Portal I.  Action disabled.");
 							return;
 						}
-						WriteToChat("Summoned secondary");
 						Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
 						Core.Actions.CastSpell(2648, Core.CharacterFilter.Id);
 						return;
@@ -1054,7 +1049,6 @@ namespace GearFoundry
                             WriteToChat("You do not know Sanctuary Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Sanctuary Recalled");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(2023, Core.CharacterFilter.Id);
                         return;
@@ -1065,7 +1059,6 @@ namespace GearFoundry
                             WriteToChat("You do not know BananaLand Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Bananaland");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(2931, Core.CharacterFilter.Id);
                         return;
@@ -1076,7 +1069,6 @@ namespace GearFoundry
                             WriteToChat("You do not know Colloseum Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Colloseum");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(4213, Core.CharacterFilter.Id);
                         return;
@@ -1087,7 +1079,6 @@ namespace GearFoundry
                             WriteToChat("You do not know Aerlinthe Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Aerlinthe");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(2041, Core.CharacterFilter.Id);
                         return;
@@ -1098,7 +1089,6 @@ namespace GearFoundry
                             WriteToChat("You do not know Singularity Caul Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Singularity Caul");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(2943, Core.CharacterFilter.Id);
                         return;
@@ -1109,7 +1099,6 @@ namespace GearFoundry
                             WriteToChat("You do not know Bur Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Bur");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(4084, Core.CharacterFilter.Id);
                         return;
@@ -1120,7 +1109,6 @@ namespace GearFoundry
                             WriteToChat("You do not know Paradox-touched Olthoi Infested Area Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Paradox-touched Olthoi Infested Area");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(4198, Core.CharacterFilter.Id);
                         return;
@@ -1131,7 +1119,6 @@ namespace GearFoundry
                             WriteToChat("You do not know the Facility Hub Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Facility Hub");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(5175, Core.CharacterFilter.Id);
                         return;
@@ -1142,7 +1129,6 @@ namespace GearFoundry
                             WriteToChat("You do not know the Gear Knight Invasion Area Camp Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Gear Knight Invasion Area Camp");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(5330, Core.CharacterFilter.Id);
                         return;
@@ -1153,7 +1139,6 @@ namespace GearFoundry
                             WriteToChat("You do not know the Lost City of Neftet Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Lost City of Neftet");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(5541, Core.CharacterFilter.Id);
                         return;
@@ -1175,7 +1160,6 @@ namespace GearFoundry
                             WriteToChat("You do not know the Mhoire Forge Recall.  Action disabled.");
                             return;
                         }
-                        WriteToChat("Recalled to Mhoire Forge");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(4128, Core.CharacterFilter.Id);
                         return;

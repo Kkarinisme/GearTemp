@@ -60,7 +60,7 @@
     <DamageType>1,2,4,8,16,32,64,1024</DamageType>
     <GearScore>60</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>150,180,200,-1</ReqSkill>
+    <ReqSkill>475,530,570,200,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -83,7 +83,7 @@
     <DamageType>1,2,4,8,16,32,64,1024</DamageType>
     <GearScore>60</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>150,180,200,-1</ReqSkill>
+    <ReqSkill>475,530,570,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -106,7 +106,7 @@
     <DamageType>1,2,4,8,16,32,64,1024</DamageType>
     <GearScore>60</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
-    <ReqSkill>150,180,200,-1</ReqSkill>
+    <ReqSkill>475,530,570,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
@@ -291,7 +291,7 @@
     <GearScore>-1</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
     <ReqSkill>-1,-1,-1,-1</ReqSkill>
-    <Slots>1,2,4,32,256,512,1024,2048,4096,8192,16384,32768,196608,786432,67108864,134217728</Slots>
+    <Slots>1,2,32,64,256,512,1024,2048,4096,8192,16384,32768,196608,786432,67108864,134217728</Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
     <Spells>2609,2501,2502,2571,2503,2610,2506,2572,2507,2510,5888,5889,2573,2511,2509,2611,2512,2574,2612,2513,2623,2591,2531,3200,2592,2514,2515,2516,2517,5069,2518,2519,2520,2504,2522,2528,2530,2533,2521,2524,2523,2525,2624,2505,2508,2532,2526,2527,2613,2575,5890,3834,5891,2614,5892,3250,2529,2625,2615,2576,6126,2596,5070,5428,2534,2535,2577</Spells>
@@ -314,7 +314,7 @@
     <GearScore>-1</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
     <ReqSkill>-1,-1,-1,-1</ReqSkill>
-    <Slots>2,4,32768,196608,786432,67108864</Slots>
+    <Slots>1,2,32,64,32768,196608,786432,67108864</Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
     <Spells>6080,6040,6041,6102,6042,6081,6045,6103,6046,6048,6049,6050,6104,6051,6047,6082,6052,6105,6083,6053,6077,6072,6087,6095,6054,6055,6056,6057,6058,6059,6060,6043,6061,6062,6063,6064,6078,6044,6065,6066,6096,6084,6106,6067,6068,6069,6085,6070,6071,6076,6079,6107,6125,6100,6073,6074,6075,6039,6101</Spells>
