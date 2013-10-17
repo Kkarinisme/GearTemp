@@ -1158,7 +1158,7 @@ namespace GearFoundry
                         Core.Actions.CastSpell(5541, Core.CharacterFilter.Id);
                         return;
                     case RecallTypes.rynthid:
-                        if (!Core.CharacterFilter.IsSpellKnown(6149))
+                        if (!Core.CharacterFilter.IsSpellKnown(6150))
                         {
                             PortalActionList[3].fireaction = false;
                             WriteToChat("You do not know the Rynthid Recall.  Action disabled.");
@@ -1166,7 +1166,7 @@ namespace GearFoundry
                         }
                         WriteToChat("Recalled to Rynthid");
                         Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
-                        Core.Actions.CastSpell(6149, Core.CharacterFilter.Id);
+                        Core.Actions.CastSpell(6150, Core.CharacterFilter.Id);
                         return;
                     case RecallTypes.mhoire:
                         if (!Core.CharacterFilter.IsSpellKnown(4128))
