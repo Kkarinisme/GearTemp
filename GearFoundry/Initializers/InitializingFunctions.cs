@@ -573,7 +573,6 @@ namespace GearFoundry
                 binventoryEnabled = Convert.ToBoolean(el.Element("InventoryEnabled").Value);
                 binventoryCompleteEnabled = Convert.ToBoolean(el.Element("InventoryCompleteEnabled").Value);
                 btoonStatsEnabled = Convert.ToBoolean(el.Element("ToonStatsEnabled").Value);
-                btoonArmorEnabled = Convert.ToBoolean(el.Element("ToonArmorEnabled").Value);
                 bArmorHudEnabled = Convert.ToBoolean(el.Element("ArmorHudEnabled").Value);
                 bMuteSounds = Convert.ToBoolean(el.Element("MuteSounds").Value);
                 bEnableTextFiltering = Convert.ToBoolean(el.Element("EnableTextFiltering").Value);
@@ -618,7 +617,6 @@ namespace GearFoundry
                    chkInventory.Checked = binventoryEnabled;
                     chkInventoryComplete.Checked = binventoryCompleteEnabled;
                    chkToonStats.Checked = btoonStatsEnabled;
-                   chkToonArmor.Checked = btoonArmorEnabled;
                    chkArmorHud.Checked = bArmorHudEnabled;
 
  
@@ -678,9 +676,6 @@ namespace GearFoundry
                 m = 500;
                 doGetInventory();
             }
-
-            if (btoonArmorEnabled)
-            { doGetArmor(); }
 
 
             if (bArmorHudEnabled)
@@ -952,19 +947,6 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
 
         }
-        void chkToonArmor_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-            try
-            {
-                btoonArmorEnabled = e.Checked;
-               
-
-                SaveSettings();
-
-            }
-            catch (Exception ex) { LogError(ex); }
-
-        }
  
        //Misc Gear Settings
         void chkMuteSounds_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
@@ -1174,8 +1156,7 @@ namespace GearFoundry
                          new XElement("InventoryEnabled", binventoryEnabled),
                          new XElement("InventoryCompleteEnabled", binventoryCompleteEnabled),
                          new XElement("ToonStatsEnabled", btoonStatsEnabled),
-                         new XElement("ToonArmorEnabled", btoonArmorEnabled),
-                         new XElement("ArmorHudEnabled", bArmorHudEnabled),
+                        new XElement("ArmorHudEnabled", bArmorHudEnabled),
                           new XElement("MuteSounds", bMuteSounds),
                          new XElement("EnableTextFiltering", bEnableTextFiltering),
                          new XElement("TextFilterAllStatus", bTextFilterAllStatus),
