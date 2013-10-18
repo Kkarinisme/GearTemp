@@ -72,7 +72,6 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryComplete;
         MyClasses.MetaViewWrappers.ICheckBox chkInventory;
         MyClasses.MetaViewWrappers.ICheckBox chkToonStats;
-        MyClasses.MetaViewWrappers.ICheckBox chkToonArmor;
 
         //Gears Misc
         MyClasses.MetaViewWrappers.ICheckBox chkMuteSounds;
@@ -268,7 +267,6 @@ namespace GearFoundry
                     chkInventoryBurden = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryBurden"];
                    chkInventoryComplete = (MyClasses.MetaViewWrappers.ICheckBox)View["chkInventoryComplete"];
                    chkToonStats = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonStats"];
-                   chkToonArmor = (MyClasses.MetaViewWrappers.ICheckBox)View["chkToonArmor"];
      			}catch(Exception ex){LogError(ex);}
 
                 //Gears Tactician page
@@ -347,8 +345,7 @@ namespace GearFoundry
                       chkInventoryBurden.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryBurden_Change);
                     chkInventoryComplete.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryComplete_Change);
                     chkToonStats.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
-                   chkToonArmor.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonArmor_Change);
-
+ 
                 }
                 catch (Exception ex) { LogError(ex); }
 

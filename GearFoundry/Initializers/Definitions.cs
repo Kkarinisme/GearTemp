@@ -177,8 +177,6 @@ namespace GearFoundry
         private static bool binventoryBurdenEnabled;
         private static bool binventoryCompleteEnabled;
         private static bool binventoryWaitingEnabled;
-        private static bool btoonArmorEnabled;
-
 
   
 		//Landscape Tracker Flags
