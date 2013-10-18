@@ -23,6 +23,8 @@ namespace GearFoundry
     public partial class PluginCore : PluginBase
     {
         XDocument xdocPortalGear = null;
+        
+        private bool PortalSubscribed = false;
 
         private static VirindiViewService.HudView portalGearHud = null;
         private static VirindiViewService.Controls.HudTabView portalGearTabView = null;
@@ -102,11 +104,13 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(PortalSubscribed) {return;}
 				for(int i = 0; i < 4; i++)
 				{
 					PortalActionList.Add(new PortalActions());
 				}
 				 MasterTimer.Tick += MasterTimer_UpdateClock;	
+				PortalSubscribed = false;			 
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -115,7 +119,9 @@ namespace GearFoundry
 		{
 			try
 			{
-				 MasterTimer.Tick -= MasterTimer_UpdateClock;
+				if(!PortalSubscribed) {return;}
+				MasterTimer.Tick -= MasterTimer_UpdateClock;
+				PortalSubscribed = false;
 			}catch(Exception ex){LogError(ex);}
 		}
 
@@ -139,7 +145,7 @@ namespace GearFoundry
                         XElement elem = xdocPortalGear.Root;
                         if (elem.Element("Setting") == null || elem.Element("FacilityHubGemID") == null) { savePortalSettings(); }
                     }
-                    catch(Exception ex){LogError(ex); nOrbGuid = 0; nOrbIcon = 0;}
+                    catch(Exception ex){LogError(ex); nOrbGuid = 0; nOrbIcon = 0; nFacilityHubGemID = 0;}
                 }
                 try
                 {
@@ -147,7 +153,7 @@ namespace GearFoundry
                     if (el.Element("OrbGuid") != null && el.Element("OrbGuid").Value != null) { nOrbGuid = Convert.ToInt32(el.Element("OrbGuid").Value); }
                     if (el.Element("OrbIcon") == null && el.Element("OrbGuid") != null)
                     {
-                        nOrbIcon = Convert.ToInt32(el.Element("OrbIcond").Value); savePortalSettings();
+                        nOrbIcon = Convert.ToInt32(el.Element("OrbIcond").Value);
                     }
                     else { nOrbIcon = Convert.ToInt32(el.Element("OrbIcon").Value); }
                     if(Convert.ToInt32(el.Element("FacilityHubGemID").Value) > 0 ){nFacilityHubGemID = Convert.ToInt32(el.Element("FacilityHubGemID").Value);}
@@ -180,7 +186,7 @@ namespace GearFoundry
                 //Select Wand
                 mSelectCaster = new HudPictureBox();
                 if(nOrbIcon != 0) {mSelectCaster.Image = nOrbIcon;}
-                else{mSelectCaster.Image = 0x2A38;}
+                else{WriteToChat("selectedcaster = 0"); mSelectCaster.Image = 0x2A38;}
                 portalGearTabFixedLayout.AddControl(mSelectCaster, new Rectangle(60, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mSelectCaster, "Select Caster");
                 mSelectCaster.Hit += (sender, obj) => mSelectCaster_Hit(sender, obj);
@@ -454,10 +460,11 @@ namespace GearFoundry
                 mPortalRecallGear10.Hit += (sender, obj) => mPortalRecallGear10_Hit(sender, obj);
 
                 //  RynThid Recall
-                Stream recallRynthidStream = this.GetType().Assembly.GetManifestResourceStream("rynthid.gif");
-                Image RynthidRecallImage = new Bitmap(recallRynthidStream);
+//                Stream recallRynthidStream = this.GetType().Assembly.GetManifestResourceStream("rynthid.gif");
+//                Image RynthidRecallImage = new Bitmap(recallRynthidStream);
                 mPortalRecallGear11 = new HudPictureBox();
-                mPortalRecallGear11.Image = (ACImage)RynthidRecallImage;
+//                mPortalRecallGear11.Image = (ACImage)RynthidRecallImage;
+				mPortalRecallGear11.Image = new ACImage(Color.Red);
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear11, new Rectangle(360, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear11, "Rynthid Recall");
                 mPortalRecallGear11.Hit += (sender, obj) => mPortalRecallGear11_Hit(sender, obj);
@@ -512,7 +519,8 @@ namespace GearFoundry
 					nOrbGuid = Core.Actions.CurrentSelection;
 					nOrbIcon = Core.WorldFilter[nOrbGuid].Icon;
 					savePortalSettings();
-                    RenderPortalGearHud();
+					
+					mSelectCaster.Image = nOrbIcon;
                 }
             }catch(Exception ex){LogError(ex);}
         }
@@ -523,10 +531,8 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("Please select caster from pack that should be used for spell recalls if not holding a wand when call requested.");
-                 Core.ItemSelected += PortalItemSelected;
-
-
+                WriteToChat("Please select a default caster to wield when one is not equipped.");
+                Core.ItemSelected += PortalItemSelected;
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -795,11 +801,6 @@ namespace GearFoundry
        
         			mSelectCaster.Image = nOrbIcon;
                     savePortalSettings();
-                //    xdoc = new XDocument(new XElement("Settings"));
-                //xdoc.Element("Settings").Add(new XElement("Setting",
-                //        new XElement("OrbGuid", nOrbGuid),
-                //         new XElement("OrbIcon", nOrbIcon)));
-                //        xdoc.Save(portalGearFilename);
                 }
         		
         		//Not holding a caster
@@ -1191,5 +1192,48 @@ namespace GearFoundry
         }
     }
 }//end of namespace
+
+
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 10/17/2013 7:11 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 10/17/2013 7:12 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] [Meta] Client valid: True
+//[VTank] ID: 82B37510
+//[VTank] ObjectClass: WandStaffOrb
+//[VTank] (S) Name: Legendary Seed of Mornings
+//[VTank] (S) FullDescription: A large, glowing seed, empowered by the magics of the Light Falatacot.  This seed was retrieved from the Temple of Mornings, underneath the desert sands.
+//[VTank] (B) Ivoryable: True
+//[VTank] (I) CreateFlags1: 275480728
+//[VTank] (I) Type: 48938
+//[VTank] (I) Icon: 29674
+//[VTank] (I) Category: 32768
+//[VTank] (I) Behavior: 18
+//[VTank] (I) Value: 20000
+//[VTank] (I) ItemUsabilityFlags: 6291464
+//[VTank] (I) UsageMask: 16
+//[VTank] (I) IconOutline: 1
+//[VTank] (I) Container: 1343199287
+//[VTank] (I) Slot: -1
+//[VTank] (I) EquipableSlots: 16777216 (z)
+//[VTank] (I) EquippedSlots: 16777216 (z)
+//[VTank] (I) Burden: 50
+//[VTank] (I) HookMask: 3
+//[VTank] (I) PhysicsDataFlags: 170145
+//[VTank] (I) WieldReqValue: 340
+//[VTank] (I) Bonded: 1
+//[VTank] (I) Attuned: 1
+//[VTank] (I) Spellcraft: 450
+//[VTank] (I) CurrentMana: 2869
+//[VTank] (I) MaximumMana: 5000
+//[VTank] (I) LoreRequirement: 300
+//[VTank] (I) WieldReqType: 2
+//[VTank] (I) WieldReqAttribute: 33
+//[VTank] (D) ElementalDamageVersusMonsters: 1.07999999821186
+//[VTank] (D) ManaCBonus: 0.449999988079071
+//[VTank] (D) MeleeDefenseBonus: 1.40000005066395
+//[VTank] (D) ManaRateOfChange: -0.025000000372529
 
 
