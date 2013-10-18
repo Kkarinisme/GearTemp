@@ -23,6 +23,8 @@ namespace GearFoundry
     public partial class PluginCore : PluginBase
     {
         XDocument xdocPortalGear = null;
+        
+        private bool PortalSubscribed = false;
 
         private static VirindiViewService.HudView portalGearHud = null;
         private static VirindiViewService.Controls.HudTabView portalGearTabView = null;
@@ -58,9 +60,15 @@ namespace GearFoundry
         private HudPictureBox mPortalRecallGear10 = null;
         private HudPictureBox mPortalRecallGear11 = null;
 
-        private int nOrbGuid = 0;
-        private int nOrbIcon = 0;
-        private int nFacilityHubGemID = 0;
+
+        private PortalGearSettings mPortalGearSettings = new PortalGearSettings();
+        
+        public class PortalGearSettings
+        {
+        	public int nOrbGuid = 0;
+        	public int nOrbIcon = 0x2A38;
+        	public int nFacilityHubGemID = 0;
+        }
        
         private List<PortalActions> PortalActionList = new List<PortalActions>();
         private System.Windows.Forms.Timer PortalActionTimer = new System.Windows.Forms.Timer();
@@ -102,11 +110,13 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(PortalSubscribed) {return;}
 				for(int i = 0; i < 4; i++)
 				{
 					PortalActionList.Add(new PortalActions());
 				}
 				 MasterTimer.Tick += MasterTimer_UpdateClock;	
+				PortalSubscribed = false;			 
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -115,7 +125,9 @@ namespace GearFoundry
 		{
 			try
 			{
-				 MasterTimer.Tick -= MasterTimer_UpdateClock;
+				if(!PortalSubscribed) {return;}
+				MasterTimer.Tick -= MasterTimer_UpdateClock;
+				PortalSubscribed = false;
 			}catch(Exception ex){LogError(ex);}
 		}
 
@@ -131,29 +143,38 @@ namespace GearFoundry
                 {
                     savePortalSettings();
                 }
-                else
- 				{
-                    try
-					{
-	                    xdocPortalGear = XDocument.Load(portalGearFilename);
-                        XElement elem = xdocPortalGear.Root;
-                        if (elem.Element("Setting") == null || elem.Element("FacilityHubGemID") == null) { savePortalSettings(); }
-                    }
-                    catch(Exception ex){LogError(ex); nOrbGuid = 0; nOrbIcon = 0;}
-                }
+                
                 try
                 {
-                    XElement el = xdocPortalGear.Root.Element("Setting");
-                    if (el.Element("OrbGuid") != null && el.Element("OrbGuid").Value != null) { nOrbGuid = Convert.ToInt32(el.Element("OrbGuid").Value); }
-                    if (el.Element("OrbIcon") == null && el.Element("OrbGuid") != null)
-                    {
-                        nOrbIcon = Convert.ToInt32(el.Element("OrbIcond").Value); savePortalSettings();
-                    }
-                    else { nOrbIcon = Convert.ToInt32(el.Element("OrbIcon").Value); }
-                    if(Convert.ToInt32(el.Element("FacilityHubGemID").Value) > 0 ){nFacilityHubGemID = Convert.ToInt32(el.Element("FacilityHubGemID").Value);}
-                }
-                catch (Exception ex) { LogError(ex); nOrbGuid = 0; nOrbIcon = 0; }
- 				
+	                 xdocPortalGear = XDocument.Load(portalGearFilename);
+    	             XElement elem = xdocPortalGear.Root;
+    	             if(elem.Element("Setting") == null)
+    	             {
+    	             	savePortalSettings();
+    	             	xdocPortalGear = XDocument.Load(portalGearFilename);
+    	             	elem = xdocPortalGear.Root;
+    	             }
+					
+    	             WriteToChat("OrbGUID = " + elem.Element("Setting").Element("OrbGuid").Value);
+    	             WriteToChat("OrbIcon = " + elem.Element("Setting").Element("OrbIcon").Value);
+    	             
+    	             Int32.TryParse(elem.Element("Setting").Element("OrbGuid").Value, out mPortalGearSettings.nOrbGuid);
+    	             Int32.TryParse(elem.Element("Setting").Element("OrbIcon").Value, out mPortalGearSettings.nOrbIcon);
+    	             Int32.TryParse(elem.Element("Setting").Element("FacilityHubGemID").Value, out mPortalGearSettings.nFacilityHubGemID);   
+					
+					WriteToChat("OrbGUID(TP) = " + mPortalGearSettings.nOrbGuid);
+					WriteToChat("OrbIcon(TP) = " + mPortalGearSettings.nOrbIcon);
+    	             
+    	             if(mPortalGearSettings.nFacilityHubGemID == 0)
+    	             {
+    	             	if(Core.WorldFilter.GetInventory().Where(x => x.Name.Contains("Facility Hub Portal Gem")).Count() > 0)
+    	             	{
+    	             		mPortalGearSettings.nFacilityHubGemID = Core.WorldFilter.GetInventory().Where(x => x.Name.Contains("Facility Hub Portal Gem")).First().Id;
+    	             		savePortalSettings();
+    	             	}
+    	             }
+    	          	             
+                }catch(Exception ex){savePortalSettings(); LogError(ex);}
                
 
                 portalGearHud = new VirindiViewService.HudView("", 390, 40, new ACImage(0x6AA2), false, "PortalGear");
@@ -179,8 +200,7 @@ namespace GearFoundry
                 
                 //Select Wand
                 mSelectCaster = new HudPictureBox();
-                if(nOrbIcon != 0) {mSelectCaster.Image = nOrbIcon;}
-                else{mSelectCaster.Image = 0x2A38;}
+                mSelectCaster.Image = mPortalGearSettings.nOrbIcon;
                 portalGearTabFixedLayout.AddControl(mSelectCaster, new Rectangle(60, 2, 25, 39));
                 VirindiViewService.TooltipSystem.AssociateTooltip(mSelectCaster, "Select Caster");
                 mSelectCaster.Hit += (sender, obj) => mSelectCaster_Hit(sender, obj);
@@ -325,25 +345,7 @@ namespace GearFoundry
                 portalRecallGearTabFixedLayout = new HudFixedLayout();
                 portalRecallGearTabView.AddTab(portalRecallGearTabFixedLayout, "");
  
-                //FacilityHub Gem
-                if (nFacilityHubGemID == 0)
-                {
-                  foreach (Decal.Adapter.Wrappers.WorldObject obj in Core.WorldFilter.GetInventory())
-                  {
-                    try
-                    {
-                        if (obj.Name.Contains("Facility Hub Portal Gem")) 
-                        {
-                            nFacilityHubGemID = obj.Id; 
-                            savePortalSettings();
-                            break;
-                        }
-                    }
-                    catch (Exception ex) { LogError(ex); }
 
-
-                } // endof foreach world object
-               }
                  Stream facilityHubGem = this.GetType().Assembly.GetManifestResourceStream("facilityhubgem.gif");
                 Image FacilityHubGemImage = new Bitmap(facilityHubGem);
                 mPortalRecallGear00 = new HudPictureBox();
@@ -364,8 +366,6 @@ namespace GearFoundry
                 //  BananaLand Recall
                 Stream recallBananaLandStream = this.GetType().Assembly.GetManifestResourceStream("bananaland.gif");
                 Image BananaLandRecallImage = new Bitmap(recallBananaLandStream);
-                //string strBananaLandRecallImage = GearDir + @"\bananaland.gif";
-                //Image BananaLandRecallImage = new Bitmap(strBananaLandRecallImage);
                 mPortalRecallGear1 = new HudPictureBox();
                 mPortalRecallGear1.Image = (ACImage)BananaLandRecallImage;
                 portalRecallGearTabFixedLayout.AddControl(mPortalRecallGear1, new Rectangle(60, 2, 25, 39));
@@ -509,10 +509,10 @@ namespace GearFoundry
 				if(Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.WandStaffOrb && 
 				   Core.WorldFilter.GetInventory().Where(x => x.Id == Core.Actions.CurrentSelection).Count() != 0)
 				{		
-					nOrbGuid = Core.Actions.CurrentSelection;
-					nOrbIcon = Core.WorldFilter[nOrbGuid].Icon;
+					mPortalGearSettings.nOrbGuid = Core.Actions.CurrentSelection;
+					mPortalGearSettings.nOrbIcon = Core.WorldFilter[mPortalGearSettings.nOrbGuid].Icon;
+					mSelectCaster.Image = mPortalGearSettings.nOrbIcon;
 					savePortalSettings();
-                    RenderPortalGearHud();
                 }
             }catch(Exception ex){LogError(ex);}
         }
@@ -523,10 +523,8 @@ namespace GearFoundry
         {
             try
             {
-                WriteToChat("Please select caster from pack that should be used for spell recalls if not holding a wand when call requested.");
-                 Core.ItemSelected += PortalItemSelected;
-
-
+                WriteToChat("Please select a default caster to wield when one is not equipped.");
+                Core.ItemSelected += PortalItemSelected;
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -537,13 +535,10 @@ namespace GearFoundry
            {
                 XDocument xdocPortalSettings = new XDocument(new XElement("Settings"));
                 xdocPortalSettings.Element("Settings").Add(new XElement("Setting",
-                        new XElement("OrbGuid", nOrbGuid),
-                         new XElement("OrbIcon", nOrbIcon),
-                        new XElement("FacilityHubGemID",nFacilityHubGemID)));
+                        new XElement("OrbGuid", mPortalGearSettings.nOrbGuid),
+                         new XElement("OrbIcon", mPortalGearSettings.nOrbIcon),
+                        new XElement("FacilityHubGemID",mPortalGearSettings.nFacilityHubGemID)));
                 xdocPortalSettings.Save(portalGearFilename);
-                xdocPortalGear = XDocument.Load(portalGearFilename);
- 
- 
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -649,29 +644,14 @@ namespace GearFoundry
         {
             try
             {
-                if (nFacilityHubGemID == 0)
-                {
-                    foreach (Decal.Adapter.Wrappers.WorldObject obj in Core.WorldFilter.GetInventory())
-                    {
-                        try
-                        {
-                            if (obj.Name.Contains("Facility Hub Portal Gem"))
-                            {
-                                nFacilityHubGemID = obj.Id;
-                               CoreManager.Current.Actions.UseItem(nFacilityHubGemID, 0);
-                               savePortalSettings();
- 
-                                break;
-                            }
-                            else { CoreManager.Current.Actions.UseItem(nFacilityHubGemID, 0); }
-                        }
-                        catch (Exception ex) { LogError(ex); }
-
-
-                    } // endof foreach world object
-                    
-                }
-                CoreManager.Current.Actions.UseItem(nFacilityHubGemID, 0);
+            	if(mPortalGearSettings.nFacilityHubGemID != 0)
+            	{
+            		Core.Actions.UseItem(mPortalGearSettings.nFacilityHubGemID, 0);
+            	}
+            	else
+            	{
+            		WriteToChat("Character does not have a facility hub gem.");
+            	}
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -785,21 +765,15 @@ namespace GearFoundry
         			return;
         		}
         		
-        		if(nOrbGuid == 0)
+        		if(mPortalGearSettings.nOrbGuid == 0)
         		{
-        			nOrbGuid = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb && 
-        			           (x.Values(LongValueKey.WieldReqValue) == 0 || x.Values(LongValueKey.WieldReqValue) == 150 ||
-        			           x.Values(LongValueKey.WieldReqValue) == 180)).ToList().OrderByDescending(x => x.Values(DoubleValueKey.MeleeDefenseBonus)).First().Id;
+        			mPortalGearSettings.nOrbGuid = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb && 
+        			           (x.Values(LongValueKey.WieldReqValue) == 0 || (x.Values(LongValueKey.WieldReqValue) == 150 && Core.CharacterFilter.Level >= 150) ||
+        			           (x.Values(LongValueKey.WieldReqValue) == 180 && Core.CharacterFilter.Level >= 180))).ToList().OrderByDescending(x => x.Values(DoubleValueKey.MeleeDefenseBonus)).First().Id;
         			
-        			nOrbIcon = Core.WorldFilter[nOrbGuid].Icon;
+        			mPortalGearSettings.nOrbIcon = Core.WorldFilter[mPortalGearSettings.nOrbGuid].Icon;
        
-        			mSelectCaster.Image = nOrbIcon;
-                    savePortalSettings();
-                //    xdoc = new XDocument(new XElement("Settings"));
-                //xdoc.Element("Settings").Add(new XElement("Setting",
-                //        new XElement("OrbGuid", nOrbGuid),
-                //         new XElement("OrbIcon", nOrbIcon)));
-                //        xdoc.Save(portalGearFilename);
+        			mSelectCaster.Image = mPortalGearSettings.nOrbIcon;
                 }
         		
         		//Not holding a caster
@@ -920,7 +894,7 @@ namespace GearFoundry
 					{
 						return;
 					}
-					else if(!PortalCastSuccess && PortalActionList[3].Retries < 3)
+					else if(!PortalCastSuccess && PortalActionList[3].Retries < 2)
 					{
 						PortalActionList[3].pending = true;
 						PortalActionList[3].StartAction = DateTime.Now;
@@ -930,7 +904,7 @@ namespace GearFoundry
 					}	
 					else
 					{
-						if(PortalActionList[3].Retries > 2) {WriteToChat("Recall/Summon Failed. Check ties and other recall requirements.");}
+						if(PortalActionList[3].Retries > 1) {WriteToChat("Recall/Summon Failed. Check ties and other recall requirements.");}
 						PortalActionList[3].pending = false;
 						PortalActionList[3].StartAction = DateTime.MinValue;
 						PortalActionList[3].fireaction = false;
@@ -965,7 +939,7 @@ namespace GearFoundry
 				}
 				else
 				{
-					Core.Actions.UseItem(nOrbGuid, 0);
+					Core.Actions.UseItem(mPortalGearSettings.nOrbGuid, 0);
 					return;
 				}
 					
@@ -1191,5 +1165,48 @@ namespace GearFoundry
         }
     }
 }//end of namespace
+
+
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 10/17/2013 7:11 AM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 10/17/2013 7:12 AM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] [Meta] Client valid: True
+//[VTank] ID: 82B37510
+//[VTank] ObjectClass: WandStaffOrb
+//[VTank] (S) Name: Legendary Seed of Mornings
+//[VTank] (S) FullDescription: A large, glowing seed, empowered by the magics of the Light Falatacot.  This seed was retrieved from the Temple of Mornings, underneath the desert sands.
+//[VTank] (B) Ivoryable: True
+//[VTank] (I) CreateFlags1: 275480728
+//[VTank] (I) Type: 48938
+//[VTank] (I) Icon: 29674
+//[VTank] (I) Category: 32768
+//[VTank] (I) Behavior: 18
+//[VTank] (I) Value: 20000
+//[VTank] (I) ItemUsabilityFlags: 6291464
+//[VTank] (I) UsageMask: 16
+//[VTank] (I) IconOutline: 1
+//[VTank] (I) Container: 1343199287
+//[VTank] (I) Slot: -1
+//[VTank] (I) EquipableSlots: 16777216 (z)
+//[VTank] (I) EquippedSlots: 16777216 (z)
+//[VTank] (I) Burden: 50
+//[VTank] (I) HookMask: 3
+//[VTank] (I) PhysicsDataFlags: 170145
+//[VTank] (I) WieldReqValue: 340
+//[VTank] (I) Bonded: 1
+//[VTank] (I) Attuned: 1
+//[VTank] (I) Spellcraft: 450
+//[VTank] (I) CurrentMana: 2869
+//[VTank] (I) MaximumMana: 5000
+//[VTank] (I) LoreRequirement: 300
+//[VTank] (I) WieldReqType: 2
+//[VTank] (I) WieldReqAttribute: 33
+//[VTank] (D) ElementalDamageVersusMonsters: 1.07999999821186
+//[VTank] (D) ManaCBonus: 0.449999988079071
+//[VTank] (D) MeleeDefenseBonus: 1.40000005066395
+//[VTank] (D) ManaRateOfChange: -0.025000000372529
 
 
