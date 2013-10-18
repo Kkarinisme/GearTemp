@@ -42,6 +42,16 @@ namespace GearFoundry
         private HudList.HudListRowAccessor ArmorHudListRow = null;
         private const int ArmorRemoveCircle = 0x60011F8;
 
+        private HudFixedLayout ArmorUpdateHudTabLayout = null;
+        private HudList ArmorUpdateHudList = null;
+        private HudList.HudListRowAccessor ArmorUpdateHudListRow = null;
+        private const int ArmorUpdateRemoveCircle = 0x60011F8;
+        private HudStaticText lblToonArmorUpdateNameInfo;
+        private HudStaticText lblToonArmorUpdateName;
+        private HudStaticText lblToonArmorUpdateLevel;
+        private HudStaticText lblToonArmorUpdateMaster;
+
+
         private HudFixedLayout ArmorHudSettings;
         private HudStaticText lblToonArmorNameInfo;
         private HudStaticText lblToonArmorName;
@@ -51,6 +61,7 @@ namespace GearFoundry
         private HudButton btnInventoryArmor;
 
         private string toonArmorName = String.Empty;
+        private string toonArmorUpdateName = String.Empty;
 
         WindowsTimer mWaitingForArmorIDTimer = new WindowsTimer();
 
@@ -391,6 +402,7 @@ namespace GearFoundry
 
           
         private bool ArmorMainTab;
+        private bool ArmorUpdateTab;
         private bool ArmorSettingsTab;
         private int ArmorHudWidth = 0;
         private int ArmorHudHeight = 0;
@@ -451,6 +463,9 @@ namespace GearFoundry
                 ArmorHudTabLayout = new HudFixedLayout();
                 ArmorHudTabView.AddTab(ArmorHudTabLayout, "Armor");
 
+                ArmorUpdateHudTabLayout = new HudFixedLayout();
+                ArmorHudTabView.AddTab(ArmorUpdateHudTabLayout, "Update Armor");
+
                 ArmorHudSettings = new HudFixedLayout();
                 ArmorHudTabView.AddTab(ArmorHudSettings, "Settings");
 
@@ -504,11 +519,17 @@ namespace GearFoundry
                 {
                     case 0:
                         DisposeArmorSettingsLayout();
+                        DisposeArmorUpdateTabLayout();
                         RenderArmorTabLayout();
-                        return;
+                        break;
                     case 1:
                         DisposeArmorTabLayout();
-
+                        DisposeArmorSettingsLayout();
+                        RenderArmorUpdateTabLayout();
+                        break;
+                    case 2:
+                        DisposeArmorTabLayout();
+                        DisposeArmorUpdateTabLayout();
                         RenderArmorSettingsTabLayout();
                         break;
                 }
@@ -650,6 +671,150 @@ namespace GearFoundry
             }
             catch (Exception ex) { LogError(ex); }
         }
+
+        private void RenderArmorUpdateTabLayout()
+        {
+            try
+            {
+                WriteToChat("I am in function to render the armorupdatetab");
+                lblToonArmorUpdateName = new HudStaticText();
+                lblToonArmorUpdateName.FontHeight = nmenuFontHeight;
+                lblToonArmorUpdateLevel = new HudStaticText();
+                lblToonArmorUpdateLevel.FontHeight = nmenuFontHeight;
+                lblToonArmorUpdateMaster = new HudStaticText();
+                lblToonArmorUpdateMaster.FontHeight = nmenuFontHeight;
+                ArmorUpdateHudList = new HudList();
+                ArmorUpdateHudTabLayout.AddControl(lblToonArmorUpdateName, new Rectangle(0, 0, 100, 16));
+                ArmorUpdateHudTabLayout.AddControl(lblToonArmorUpdateLevel, new Rectangle(120, 0, 40, 16));
+                ArmorUpdateHudTabLayout.AddControl(lblToonArmorUpdateMaster, new Rectangle(150, 0, 60, 16));
+
+                ArmorUpdateHudTabLayout.AddControl(ArmorUpdateHudList, new Rectangle(0, 30, ArmorHudWidth, ArmorHudHeight - 40));
+
+                //ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
+                ArmorUpdateHudList.AddColumn(typeof(HudPictureBox), 20, null);
+                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.25 * ArmorHudWidth), null);
+                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.18 * ArmorHudWidth), null);
+                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.52 * ArmorHudWidth), null);
+
+                ArmorUpdateHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
+
+
+                ArmorUpdateTab = true;
+                try
+                {
+                    WriteToChat("Toonupdatearmorname: " + toonArmorUpdateName);
+                    if (toonArmorUpdateName == "" || toonArmorUpdateName == "None") { toonArmorName = toonName; }
+                    lblToonArmorUpdateName.Text = toonArmorUpdateName;
+
+                    FillArmorUpdateHudList();
+                }
+
+                catch (Exception ex) { LogError(ex); }
+
+
+
+
+            }
+
+            catch (Exception ex) { LogError(ex); }
+        }
+
+        //private void FillArmorHudList()
+        //{
+        //    try
+        //    {
+
+        //        myChoice = new List<XElement>();
+
+        //        IEnumerable<XElement> marmor = xdocGenArmor.Element("Objs").Descendants("Obj");
+
+        //        foreach (XElement el in marmor)
+        //        {
+        //            if (el.Element("ToonName").Value == toonArmorName)
+        //            {
+        //                myChoice.Add(el);
+
+        //                int icon = Convert.ToInt32(el.Element("ArmorIcon").Value);
+        //                string armorpiece = el.Element("ArmorName").Value;
+        //                string spells = el.Element("ArmorSpellXml").Value;
+        //                string armorclass = el.Element("ArmorClass").Value;
+        //                objArmorSetName = String.Empty;
+        //                if (armorclass == "Armor")
+        //                {
+        //                    if (Convert.ToInt32(el.Element("ArmorSet").Value) > 0)
+        //                    { objArmorSetName = SetsIndex[Convert.ToInt32(el.Element("ArmorSet").Value)].name; }
+        //                }
+
+
+
+        //                ArmorHudListRow = ArmorHudList.AddRow();
+
+        //                ((HudPictureBox)ArmorHudListRow[0]).Image = icon + 0x6000000;
+        //                ((HudStaticText)ArmorHudListRow[1]).Text = armorpiece;
+        //                ((HudStaticText)ArmorHudListRow[1]).FontHeight = nitemFontHeight;
+        //                ((HudStaticText)ArmorHudListRow[2]).Text = objArmorSetName;
+        //                ((HudStaticText)ArmorHudListRow[2]).FontHeight = nitemFontHeight;
+        //                ((HudStaticText)ArmorHudListRow[3]).Text = spells;
+        //                ((HudStaticText)ArmorHudListRow[3]).FontHeight = nitemFontHeight;
+
+        //            }
+        //        }
+        //                           ArmorHudView.UserResizeable = true;
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
+
+        //}
+
+                
+
+                private void FillArmorUpdateHudList()
+                {
+
+                }
+    
+                //if(allStatsFilename != null)
+                //{
+                //    string toonLevel;
+                //    string toonMastery;
+                //    xdocAllStats = new XDocument();
+                //    xdocAllStats = XDocument.Load(allStatsFilename);
+                //    IEnumerable<XElement> mStats = xdocAllStats.Element("Toons").Descendants("Toon");
+
+                //    foreach (XElement elName in mStats)
+                //    {
+                //        WriteToChat("toonArmorName = " + toonArmorName); 
+                //        if (elName.Element("ToonName").Value == toonArmorName)
+                //        {
+                //            WriteToChat("I am in the foreach for mstats");
+                //            toonLevel = elName.Element("Level").Value;
+                //            lblToonLevel.Text = "Level: " + toonLevel;
+                //            //  toonMastery = elName.Element("Mastery").Value;
+                //            break;
+                //        }
+                //    }
+                // }
+ 
+
+
+        private void DisposeArmorUpdateTabLayout()
+        {
+            try
+            {
+                if (!ArmorUpdateTab) { return; }
+
+                ArmorUpdateHudList.Click -= (sender, row, col) => ArmorHudList_Click(sender, row, col);
+                ArmorUpdateHudList.Dispose();
+                lblToonArmorUpdateName.Text = "";
+                lblToonArmorUpdateName = null;
+                toonArmorUpdateName = "";
+
+                ArmorUpdateTab = false;
+
+
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
 
         private void RenderArmorSettingsTabLayout()
         {
