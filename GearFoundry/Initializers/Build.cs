@@ -230,6 +230,7 @@ namespace GearFoundry
             CreateCoverageInvList();
             CreateEmbueInvList();
             CreateKeyLists();
+            InitSoundsFunctions();
 		}
 		
 		private void CreateKeyLists()

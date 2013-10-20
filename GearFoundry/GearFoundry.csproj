@@ -101,6 +101,7 @@
     <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="Initializers\Enums.cs" />
     <Compile Include="HudModules\PortalGear.cs" />
+    <Compile Include="SoundPlayer.cs" />
     <Compile Include="WrapperClasses\LandscapeObject.cs" />
     <Compile Include="WrapperClasses\LootObject.cs" />
     <Compile Include="WrapperClasses\MonsterObject.cs" />

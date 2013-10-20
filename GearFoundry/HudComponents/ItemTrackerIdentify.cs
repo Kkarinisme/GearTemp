@@ -67,6 +67,10 @@ namespace GearFoundry
 				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
 				
+				if(IOItem.IOR == IOResult.rule){playSoundFromResource(mSoundsSettings.CorpseRule);}
+				if(IOItem.IOR == IOResult.salvage){playSoundFromResource(mSoundsSettings.CorpseSalvage);}
+				if(IOItem.IOR == IOResult.trophy){playSoundFromResource(mSoundsSettings.CorpseTrophy);}
+				
 				if(MaidCannibalizeProcessList.Count > 0 && MaidCannibalizeProcessList.Contains(IOItem.Id))
 				{
 					MaidCannibalizeProcessList.RemoveAll(x => x == IOItem.Id);

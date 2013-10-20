@@ -74,39 +74,33 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkToonStats;
 
         //Gears Misc
-        MyClasses.MetaViewWrappers.ICheckBox chkMuteSounds;
         MyClasses.MetaViewWrappers.ICheckBox chkArmorHud;
-
-
-
+        
+        
         MyClasses.MetaViewWrappers.ICheckBox chkEnableTextFiltering;
         MyClasses.MetaViewWrappers.ICheckBox chkTextFilterAllStatus;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterBusyStatus;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterCastingStatus;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMyDefenseMessages;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMobDefenseMessages;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMyKillMessages;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterPKFails;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterDirtyFighting;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMySpellCasting;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterOthersSpellCasting;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterSpellExpirations;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterManaStoneMessages;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterHealingMessages;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterSalvageMessages;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterBotSpam;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterIdentFailures;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterKillTaskComplete;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterVendorTells;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterMonsterTells;
-//        MyClasses.MetaViewWrappers.ICheckBox chkTextFilterNPCChatter;
         MyClasses.MetaViewWrappers.ITextBox txtItemFontHeight;
         MyClasses.MetaViewWrappers.ITextBox txtMenuFontHeight;
+        
+        // Sounds
+        MyClasses.MetaViewWrappers.ICheckBox chkMuteSounds;
+        MyClasses.MetaViewWrappers.ICombo cboTrophyLandscape;
+    	MyClasses.MetaViewWrappers.ICombo cboMobLandscape;
+        MyClasses.MetaViewWrappers.ICombo cboPlayerLandscape;
+        MyClasses.MetaViewWrappers.ICombo cboCorpseRare;
+        MyClasses.MetaViewWrappers.ICombo cboCorpseSelfKill;
+        MyClasses.MetaViewWrappers.ICombo cboCorpseFellowKill;
+        MyClasses.MetaViewWrappers.ICombo cboDeadMe;
+        MyClasses.MetaViewWrappers.ICombo cboDeadPermitted;
+        MyClasses.MetaViewWrappers.ICombo cboTrophyCorpse;
+        MyClasses.MetaViewWrappers.ICombo cboRuleCorpse;
+        MyClasses.MetaViewWrappers.ICombo cboSalvageCorpse;
 
 
         // Controls on Notify.SearchRules Page
         MyClasses.MetaViewWrappers.IButton btnRuleClear;
         MyClasses.MetaViewWrappers.IButton btnRuleNew;
+        MyClasses.MetaViewWrappers.IButton btnRuleClone;
         MyClasses.MetaViewWrappers.IButton btnRuleUpdate;
         MyClasses.MetaViewWrappers.IList lstRules;
 
@@ -279,7 +273,7 @@ namespace GearFoundry
                 chkPortalGearEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkPortalGearEnabled"];
 
                 //Misc Gears
-                chkMuteSounds = (MyClasses.MetaViewWrappers.ICheckBox)View["chkMuteSounds"];
+
                 chkArmorHud = (MyClasses.MetaViewWrappers.ICheckBox)View["chkArmorHud"];
  
                 //Text Filtering Controls
@@ -287,6 +281,20 @@ namespace GearFoundry
                 chkTextFilterAllStatus = (MyClasses.MetaViewWrappers.ICheckBox)View["chkTextFilterAllStatus"];
                 txtItemFontHeight = (MyClasses.MetaViewWrappers.ITextBox)View["txtItemFontHeight"];
                 txtMenuFontHeight = (MyClasses.MetaViewWrappers.ITextBox)View["txtMenuFontHeight"];
+                
+                //Sounds
+                chkMuteSounds = (MyClasses.MetaViewWrappers.ICheckBox)View["chkMuteSounds"];
+                cboTrophyLandscape = (MyClasses.MetaViewWrappers.ICombo)View["cboTrophyLandscape"];
+		    	cboMobLandscape = (MyClasses.MetaViewWrappers.ICombo)View["cboMobLandscape"];
+		      	cboPlayerLandscape = (MyClasses.MetaViewWrappers.ICombo)View["cboPlayerLandscape"];
+		        cboCorpseRare = (MyClasses.MetaViewWrappers.ICombo)View["cboCorpseRare"];
+		        cboCorpseSelfKill = (MyClasses.MetaViewWrappers.ICombo)View["cboCorpseSelfKill"];
+		       	cboCorpseFellowKill = (MyClasses.MetaViewWrappers.ICombo)View["cboCorpseFellowKill"];
+		        cboDeadMe = (MyClasses.MetaViewWrappers.ICombo)View["cboDeadMe"];
+		        cboDeadPermitted = (MyClasses.MetaViewWrappers.ICombo)View["cboDeadPermitted"];
+		        cboTrophyCorpse = (MyClasses.MetaViewWrappers.ICombo)View["cboTrophyCorpse"];
+		        cboRuleCorpse = (MyClasses.MetaViewWrappers.ICombo)View["cboRuleCorpse"];
+		        cboSalvageCorpse = (MyClasses.MetaViewWrappers.ICombo)View["cboSalvageCorpse"];
 
 
 				 try
@@ -352,8 +360,23 @@ namespace GearFoundry
                   //GearsMisc Controls
                   try
                   {
-                      chkMuteSounds.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkMuteSounds_Change);
+
                       chkArmorHud.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkArmorHud_Change);
+                      
+                      //Sounds
+                      	chkMuteSounds.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkMuteSounds_Change);
+                      	cboTrophyLandscape.Change += cboTrophyLandscape_Change;
+				     	cboMobLandscape.Change += cboMobLandscape_Change;
+				        cboPlayerLandscape.Change += cboPlayerLandscape_Change;
+				        cboCorpseRare.Change += cboCorpseRare_Change;
+				        cboCorpseSelfKill.Change += cboCorpseSelfKill_Change;
+				        cboCorpseFellowKill.Change += cboCorpseFellowKill_Change;
+				        cboDeadMe.Change += cboDeadMe_Change;
+				        cboDeadPermitted.Change += cboDeadPermitted_Change;
+				        cboTrophyCorpse.Change += cboTrophyCorpse_Change;
+				        cboRuleCorpse.Change += cboRuleCorpse_Change;
+				        cboSalvageCorpse.Change += cboSalvageCorpse_Change;
+                      
                   }
                   catch (Exception ex) { LogError(ex); }
 
@@ -379,6 +402,7 @@ namespace GearFoundry
 
                 btnRuleClear = (MyClasses.MetaViewWrappers.IButton)View["btnRuleClear"];
                 btnRuleNew = (MyClasses.MetaViewWrappers.IButton)View["btnRuleNew"];
+                btnRuleClone = (MyClasses.MetaViewWrappers.IButton)View["btnRuleClone"];
                 btnRuleUpdate = (MyClasses.MetaViewWrappers.IButton)View["btnRuleUpdate"];
                 chkRuleEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkRuleEnabled"];
 
@@ -407,6 +431,7 @@ namespace GearFoundry
                 lstRuleArmorTypes.Selected += new EventHandler<MVListSelectEventArgs>(lstRuleArmorTypes_Selected);
                 btnRuleClear.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleClear_Click);
                 btnRuleNew.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleNew_Click);
+                btnRuleClone.Click += btnRuleClone_Click;
                 btnRuleUpdate.Click += new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleUpdate_Click);
  				}catch(Exception ex){LogError(ex);}
                   try

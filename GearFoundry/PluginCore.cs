@@ -147,9 +147,26 @@ namespace GearFoundry
                 if (mWaitingForID != null) { mWaitingForID = null; }
                 chkToonStats.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
                 chkCombatHudEnabled.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkCombatHudEnabled_Change);
-                chkMuteSounds.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkMuteSounds_Change);
+                
                 chkEnableTextFiltering.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkEnableTextFiltering_Change);
                 chkTextFilterAllStatus.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterAllStatus_Change);
+                
+                
+                //Sounds
+                chkMuteSounds.Change -= chkMuteSounds_Change;
+                cboTrophyLandscape.Change -= cboTrophyLandscape_Change;
+		     	cboMobLandscape.Change -= cboMobLandscape_Change;
+		        cboPlayerLandscape.Change -= cboPlayerLandscape_Change;
+		        cboCorpseRare.Change -= cboCorpseRare_Change;
+		        cboCorpseSelfKill.Change -= cboCorpseSelfKill_Change;
+		        cboCorpseFellowKill.Change -= cboCorpseFellowKill_Change;
+		        cboDeadMe.Change -= cboDeadMe_Change;
+		        cboDeadPermitted.Change -= cboDeadPermitted_Change;
+		        cboTrophyCorpse.Change -= cboTrophyCorpse_Change;
+		        cboRuleCorpse.Change -= cboRuleCorpse_Change;
+		        cboSalvageCorpse.Change -= cboSalvageCorpse_Change;
+                
+
 
                 lstRules.Selected -= new EventHandler<MVListSelectEventArgs>(lstRules_Selected);
                 lstRuleApplies.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleApplies_Selected);
@@ -158,6 +175,7 @@ namespace GearFoundry
                 lstRuleArmorTypes.Selected -= new EventHandler<MVListSelectEventArgs>(lstRuleArmorTypes_Selected);
                 btnRuleClear.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleClear_Click);
                 btnRuleNew.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleNew_Click);
+                btnRuleClone.Click -= btnRuleClone_Click;
                 btnRuleUpdate.Click -= new EventHandler<MyClasses.MetaViewWrappers.MVControlEventArgs>(btnRuleUpdate_Click);
                 chkRuleEnabled.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkRuleEnabled_Change);
                 txtRulePriority.End -= new EventHandler<MVTextBoxEndEventArgs>(txtRulePriority_End);

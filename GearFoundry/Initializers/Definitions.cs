@@ -183,12 +183,7 @@ namespace GearFoundry
         private static bool bLandscapeHudEnabled;   
 
 
-        //gearmisc variables
-        private static bool bMuteSounds = false;
 
-        //used with switch in util for determining sound to play
-        private static int mSound = 0;
-        private static System.IO.Stream s;
 
 
     }    
