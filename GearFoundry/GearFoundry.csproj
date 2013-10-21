@@ -266,7 +266,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Sounds\cork.wav">
-      <LogicalName>"cork.wav"</LogicalName>
+      <LogicalName>cork.wav</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
