@@ -1571,7 +1571,7 @@ namespace GearFoundry
 			
 			public string GSReportString()
 			{
-				PalatteWrite();
+				//PalatteWrite();
 				
 				//builds result string with appropriate goodies to report
 				string result = string.Empty;

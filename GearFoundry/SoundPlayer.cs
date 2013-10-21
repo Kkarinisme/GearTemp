@@ -122,61 +122,61 @@ namespace GearFoundry
         	tsound = new Sounds();
         	tsound.name = "Blip";
         	tsound.SoundId = 1;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.blip.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("blip.wav");
         	SoundList.Add(tsound);
         	
         	tsound = new Sounds();
         	tsound.name = "Chime";
         	tsound.SoundId = 2;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.chime.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("chime.wav");
         	SoundList.Add(tsound);
         	
         	tsound = new Sounds();
         	tsound.name = "Click 1";
         	tsound.SoundId = 3;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.click.wav");      	
+        	tsound.SoundStream = a.GetManifestResourceStream("click1.wav");      	
         	SoundList.Add(tsound);
         		
         	tsound = new Sounds();
         	tsound.name = "Click 2";
         	tsound.SoundId = 4;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.click2.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("click2.wav");
         	SoundList.Add(tsound);
         		
         	tsound = new Sounds();
         	tsound.name = "Oop";
         	tsound.SoundId = 5;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.oop.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("oop.wav");
         	SoundList.Add(tsound);
         		
         	tsound = new Sounds();
         	tsound.name = "Pluck";
         	tsound.SoundId = 6;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.pluck.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("pluck.wav");
         	SoundList.Add(tsound);
         		
         	tsound = new Sounds();
         	tsound.name = "Splooge";
         	tsound.SoundId = 7;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.splooge.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("splooge.wav");
         	SoundList.Add(tsound);
         	
         	tsound = new Sounds();
         	tsound.name = "Till";
         	tsound.SoundId = 8;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.till.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("till.wav");
         	SoundList.Add(tsound);
         		
         	tsound = new Sounds();
         	tsound.name = "Womp 1";
         	tsound.SoundId = 9;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.womp.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("womp.wav");
         	SoundList.Add(tsound);
         		
         	tsound = new Sounds();
         	tsound.name = "Womp 2";
         	tsound.SoundId = 10;
-        	tsound.SoundStream = a.GetManifestResourceStream("<GearFoundry>.Sounds.womp2.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("womp2.wav");
         	SoundList.Add(tsound);
         	
         	foreach(Sounds s in SoundList)
@@ -222,8 +222,10 @@ namespace GearFoundry
             if (mSoundsSettings.MuteSounds || SoundFileId == 0) { return; }
             else
             {
+            	//WriteToChat("Sound ID = " + SoundFileId.ToString());
             	SoundPlayer player = new SoundPlayer(SoundList.Find(x => x.SoundId == SoundFileId).SoundStream);
                 player.Play();
+                player.Dispose();
             }
 		}
         
@@ -245,6 +247,7 @@ namespace GearFoundry
                 mSoundsSettings.LandscapeTrophies = cboTrophyLandscape.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                 playSoundFromResource(mSoundsSettings.LandscapeTrophies);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -256,6 +259,7 @@ namespace GearFoundry
                 mSoundsSettings.LandscapeMobs = cboMobLandscape.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                playSoundFromResource(mSoundsSettings.LandscapeMobs);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -267,6 +271,7 @@ namespace GearFoundry
                 mSoundsSettings.LandscapePlayers = cboPlayerLandscape.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                playSoundFromResource(mSoundsSettings.LandscapePlayers);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -278,6 +283,7 @@ namespace GearFoundry
                 mSoundsSettings.CorpseRare = cboCorpseRare.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                playSoundFromResource(mSoundsSettings.CorpseRare);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -289,6 +295,7 @@ namespace GearFoundry
                 mSoundsSettings.CorpseSelfKill = cboCorpseSelfKill.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                playSoundFromResource(mSoundsSettings.CorpseSelfKill);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -300,6 +307,7 @@ namespace GearFoundry
                 mSoundsSettings.CorpseFellowKill = cboCorpseFellowKill.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                 playSoundFromResource(mSoundsSettings.CorpseFellowKill);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -311,6 +319,7 @@ namespace GearFoundry
                 mSoundsSettings.DeadMe = cboDeadMe.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                 playSoundFromResource(mSoundsSettings.DeadMe);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -322,6 +331,7 @@ namespace GearFoundry
                 mSoundsSettings.DeadPermitted = cboDeadPermitted.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                 playSoundFromResource(mSoundsSettings.DeadPermitted);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -333,6 +343,7 @@ namespace GearFoundry
                 mSoundsSettings.CorpseTrophy = cboTrophyCorpse.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                 playSoundFromResource(mSoundsSettings.CorpseTrophy);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -343,7 +354,8 @@ namespace GearFoundry
             {
                 mSoundsSettings.CorpseRule = cboRuleCorpse.Selected;
                 SoundsReadWriteSettings(false);
-                UpdateSoundPanel();
+                UpdateSoundPanel(); 
+                playSoundFromResource(mSoundsSettings.CorpseRule);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -355,6 +367,7 @@ namespace GearFoundry
                 mSoundsSettings.CorpseSalvage = cboSalvageCorpse.Selected;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
+                playSoundFromResource(mSoundsSettings.CorpseSalvage);
             }
             catch (Exception ex) { LogError(ex); }
         }

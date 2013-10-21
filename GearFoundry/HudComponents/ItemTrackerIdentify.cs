@@ -681,8 +681,8 @@ namespace GearFoundry
 						}
 						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 2)
 						{
-							if(tumbler[0] || (tumbler[1] && tumbler[2] && tumbler[3}) ||  tumbler[4]) {result = true;}
-						}
+							if(tumbler[0] || (tumbler[1] && tumbler[2] && tumbler[3]) ||  tumbler[4]) {result = true;}
+						}						
 						
 						// 3 Or
 						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
@@ -707,10 +707,6 @@ namespace GearFoundry
 						{
 							if(tumbler[0] || tumbler[1] || tumbler[2] || tumbler[3] || tumbler[4]) {result = true;}
 						}
-						
-						
-						
-						
 						
 						break;
 				}	
