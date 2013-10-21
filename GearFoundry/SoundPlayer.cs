@@ -126,9 +126,9 @@ namespace GearFoundry
         	SoundList.Add(tsound);
         	
         	tsound = new Sounds();
-        	tsound.name = "Chime";
+        	tsound.name = "Cork";
         	tsound.SoundId = 2;
-        	tsound.SoundStream = a.GetManifestResourceStream("chime.wav");
+        	tsound.SoundStream = a.GetManifestResourceStream("cork.wav");
         	SoundList.Add(tsound);
         	
         	tsound = new Sounds();
@@ -219,14 +219,17 @@ namespace GearFoundry
         
         private void playSoundFromResource(int SoundFileId)
 		{
-            if (mSoundsSettings.MuteSounds || SoundFileId == 0) { return; }
-            else
-            {
-            	//WriteToChat("Sound ID = " + SoundFileId.ToString());
-            	SoundPlayer player = new SoundPlayer(SoundList.Find(x => x.SoundId == SoundFileId).SoundStream);
-                player.Play();
-                player.Dispose();
-            }
+        	try
+        	{
+	            if (mSoundsSettings.MuteSounds || SoundFileId == 0) { return; }
+	            else
+	            {
+	            	//WriteToChat("Sound ID = " + SoundFileId.ToString());
+	            	SoundPlayer player = new SoundPlayer(SoundList.Find(x => x.SoundId == SoundFileId).SoundStream);
+	                player.Play();
+	                player.Dispose();
+	            }
+        	}catch(Exception ex){LogError(ex);}
 		}
         
         //Sound Settings

@@ -159,9 +159,6 @@
     <EmbeddedResource Include="Sounds\till.wav">
       <LogicalName>till.wav</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Sounds\chime.wav">
-      <LogicalName>chime.wav</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Sounds\click.wav">
       <LogicalName>click1.wav</LogicalName>
     </EmbeddedResource>
@@ -265,6 +262,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Graphics\rynthid.gif">
       <LogicalName>rynthid.gif</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sounds\cork.wav">
+      <LogicalName>"cork.wav"</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
