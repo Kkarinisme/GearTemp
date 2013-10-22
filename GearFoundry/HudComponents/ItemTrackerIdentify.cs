@@ -67,6 +67,10 @@ namespace GearFoundry
 				if(IOItem.IOR == IOResult.unknown) {CheckValueItem(ref IOItem);}
 				if(IOItem.IOR == IOResult.unknown) {IOItem.IOR = IOResult.nomatch;}
 				
+				if(IOItem.IOR == IOResult.rule){playSoundFromResource(mSoundsSettings.CorpseRule);}
+				if(IOItem.IOR == IOResult.salvage){playSoundFromResource(mSoundsSettings.CorpseSalvage);}
+				if(IOItem.IOR == IOResult.trophy){playSoundFromResource(mSoundsSettings.CorpseTrophy);}
+				
 				if(MaidCannibalizeProcessList.Count > 0 && MaidCannibalizeProcessList.Contains(IOItem.Id))
 				{
 					MaidCannibalizeProcessList.RemoveAll(x => x == IOItem.Id);
@@ -630,10 +634,13 @@ namespace GearFoundry
 						}
 						break;
 					case 5:  //2 ^ 4 == 16
+						// 0 Or
 						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 1)
 						{
 							if(tumbler[0] && tumbler[1] && tumbler[2] && tumbler[3] && tumbler[4]) {result = true;}
 						}
+						
+						// 1 Or
 						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 2)
 						{
 							if((tumbler[0] && tumbler[1] && tumbler[2] && tumbler[3]) || tumbler[4]) {result = true;}
@@ -650,6 +657,8 @@ namespace GearFoundry
 						{
 							if(tumbler[0] || (tumbler[1] && tumbler[2] && tumbler[3] && tumbler[4])) {result = true;}
 						}
+						
+						// 2 Or
 						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
 						{
 							if((tumbler[0] && tumbler[1] && tumbler[2]) || tumbler[3] || tumbler[4]) {result = true;}
@@ -662,18 +671,6 @@ namespace GearFoundry
 						{
 							if(tumbler[0] || tumbler[1] || (tumbler[2] && tumbler[3] && tumbler[4])) {result = true;}
 						}
-						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
-						{
-							if((tumbler[0] && tumbler[1]) || tumbler[2] || tumbler[3] || tumbler[4]) {result = true;}
-						}
-						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 1)
-						{
-							if(tumbler[0] || tumbler[1] || tumbler[2] || (tumbler[3] && tumbler[4])) {result = true;}
-						}
-						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
-						{
-							if(tumbler[0] || tumbler[1] || tumbler[2] || tumbler[3] || tumbler[4]) {result = true;}
-						}
 						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 2)
 						{
 							if((tumbler[0] && tumbler[1]) || (tumbler[2] && tumbler[3]) || tumbler[4]) {result = true;}
@@ -682,14 +679,35 @@ namespace GearFoundry
 						{
 							if(tumbler[0] || (tumbler[1] && tumbler[2]) || (tumbler[3] && tumbler[4])) {result = true;}
 						}
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 2)
+						{
+							if(tumbler[0] || (tumbler[1] && tumbler[2] && tumbler[3]) ||  tumbler[4]) {result = true;}
+						}						
+						
+						// 3 Or
+						if(rule.Advanced[0].keylink == 1 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
+						{
+							if((tumbler[0] && tumbler[1]) || tumbler[2] || tumbler[3] || tumbler[4]) {result = true;}
+						}
 						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 1 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
 						{
 							if(tumbler[0] || (tumbler[1] && tumbler[2]) || tumbler[3] || tumbler[4]) {result = true;}
+						}
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 1)
+						{
+							if(tumbler[0] || tumbler[1] || tumbler[2] || (tumbler[3] && tumbler[4])) {result = true;}
 						}
 						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 1 && rule.Advanced[3].keylink == 2)
 						{
 							if(tumbler[0] || tumbler[1] || (tumbler[2] && tumbler[3]) || tumbler[4]) {result = true;}
 						}
+						
+						// 4 Or
+						if(rule.Advanced[0].keylink == 2 && rule.Advanced[1].keylink == 2 && rule.Advanced[2].keylink == 2 && rule.Advanced[3].keylink == 2)
+						{
+							if(tumbler[0] || tumbler[1] || tumbler[2] || tumbler[3] || tumbler[4]) {result = true;}
+						}
+						
 						break;
 				}	
 			}catch(Exception ex){LogError(ex);}

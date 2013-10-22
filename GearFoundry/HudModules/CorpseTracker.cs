@@ -230,6 +230,7 @@ namespace GearFoundry
 						CorpseTrackingList.Add(IOCorpse);
 						UpdateCorpseHud();
 					}
+					playSoundFromResource(mSoundsSettings.DeadMe);
 					return;
 				}
 				
@@ -243,6 +244,7 @@ namespace GearFoundry
 						CorpseTrackingList.Add(IOCorpse); 
 						UpdateCorpseHud();
 					}
+					playSoundFromResource(mSoundsSettings.DeadPermitted);
 					return;
 				}
 							
@@ -265,6 +267,7 @@ namespace GearFoundry
 									CorpseTrackingList.Add(IOCorpse); 
 									UpdateCorpseHud();
 								}
+								playSoundFromResource(mSoundsSettings.CorpseRare);
 								return;
 							} 
 							else 
@@ -276,6 +279,7 @@ namespace GearFoundry
 									CorpseTrackingList.Add(IOCorpse);
 									UpdateCorpseHud();
 								}
+								playSoundFromResource(mSoundsSettings.CorpseSelfKill);
 								return;
 							}
 						}
@@ -290,6 +294,7 @@ namespace GearFoundry
 									CorpseTrackingList.Add(IOCorpse);
 									UpdateCorpseHud();
 								}
+								playSoundFromResource(mSoundsSettings.CorpseFellowKill);
 								return;
 							}
 						}

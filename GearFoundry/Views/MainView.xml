@@ -42,7 +42,6 @@
           <control progid="DecalControls.Checkbox" name="chkTextFilterAllStatus" left="10" top="240" width="130" height="24" textcolor="16777215" text="Filter Error Messages"/>
 
           <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="390" width="225" height="24" text="Misc Gears"/>
-          <control progid="DecalControls.Checkbox" name="chkMuteSounds" left="10" top="410" width="130" height="24" text="Mute Sound Effects"/>
           <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="430" width="130" height="24" text="Gather Toon Stats"/>
           <control progid="DecalControls.Checkbox" name="chkArmorHud" left="150" top="430" width="130" height="24" text="Use Armor Hud"/>
 			<control progid="DecalControls.StaticText" name="lblItemFontHeight" left="320" top="410" width="100" height="24" textcolor="16777215" text="Item Font Height: "/>
@@ -69,7 +68,9 @@
 							</control>
 							<control progid="DecalControls.PushButton" name="btnRuleClear" left="10" top="110" width="110" height="20" text="Reset Values" />
 							<control progid="DecalControls.PushButton" name="btnRuleNew" left="130" top="110" width="110" height="20" text="Add New Rule" />
-							<control progid="DecalControls.PushButton" name="btnRuleUpdate" left="250" top="110" width="110" height="20" text="Save Rule Changes" />
+							<control progid="DecalControls.PushButton" name="btnRuleClone" left="250" top="110" width="110" height="20" text="Clone Current Rule" />
+							<control progid="DecalControls.PushButton" name="btnRuleUpdate" left="370" top="110" width="110" height="20" text="Save Rule Changes" />
+							
 
 							<control progid="DecalControls.Notebook" name="nbRulesetup" left="0" top="140" width="520" height="390">
 								<page label="Main">
@@ -296,6 +297,42 @@
 				</control>
 				</control>
 			</page>
+		
+		    <page label="Sounds">
+                <control progid="DecalControls.FixedLayout" clipped="">
+		    		<control progid="DecalControls.Checkbox" name="chkMuteSounds" left="10" top="10" width="130" height="16" text="Mute Sound Effects"/>
+                	
+                	<control progid="DecalControls.StaticText" name="lblLandscapeHud" left="8" top="30" width="150" height="16" text="GearSense Sounds: " />
+		    		<control progid="DecalControls.Choice" name="cboTrophyLandscape" left="10" top="50" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound1" left="125" top="50" width="250" height="16" text="Trophies" />
+		    		<control progid="DecalControls.Choice" name="cboMobLandscape" left="10" top="70" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound2" left="125" top="70" width="250" height="16" text="Mobs" />
+		    		<control progid="DecalControls.Choice" name="cboPlayerLandscape" left="10" top="90" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound3" left="125" top="90" width="250" height="16" text="Players" />
+                	
+                	<control progid="DecalControls.StaticText" name="lblCorpseHud" left="8" top="120" width="150" height="16" text="GearVisection Sounds: " />
+                	<control progid="DecalControls.Choice" name="cboCorpseRare" left="10" top="140" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound4" left="125" top="140" width="250" height="16" text="Corpse with Rare" />
+                	<control progid="DecalControls.Choice" name="cboCorpseSelfKill" left="10" top="160" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound5" left="125" top="160" width="250" height="16" text="Lootable Corpse" />
+                	<control progid="DecalControls.Choice" name="cboCorpseFellowKill" left="10" top="180" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound6" left="125" top="180" width="250" height="16" text="Lootable Corpse by Fellow" />
+                	<control progid="DecalControls.Choice" name="cboDeadMe" left="10" top="200" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound7" left="125" top="200" width="250" height="16" text="Dead Me" />
+                	<control progid="DecalControls.Choice" name="cboDeadPermitted" left="10" top="220" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound1" left="125" top="220" width="250" height="16" text="Recovery Corpse" />
+                	
+                	<control progid="DecalControls.StaticText" name="lblInspectorHud" left="8" top="250" width="150" height="16" text="GearInspector Sounds: " />
+		    		<control progid="DecalControls.Choice" name="cboTrophyCorpse" left="10" top="270" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound1" left="125" top="270" width="250" height="16" text="Trophies" />
+		    	  	<control progid="DecalControls.Choice" name="cboRuleCorpse" left="10" top="290" width="100" height="16" />
+                	<control progid="DecalControls.StaticText" name="lblSound1" left="125" top="290" width="250" height="16" text="Rules" />
+		    		<control progid="DecalControls.Choice" name="cboSalvageCorpse" left="10" top="310" width="100" height="16" />
+			    	<control progid="DecalControls.StaticText" name="lblSound1" left="125" top="310" width="250" height="16" text="Salvage" />
+		    	
+		    	
+                </control>
+              </page>
 
     <page label="About">
                 <control progid="DecalControls.FixedLayout" clipped="">

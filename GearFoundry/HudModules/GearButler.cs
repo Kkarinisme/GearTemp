@@ -963,8 +963,9 @@ namespace GearFoundry
 	    	try
 	    	{    	
 	    		if(!ButlerTab) {return;}
-	    		
 	    		if(ButlerInventory == null) {return;}
+	    		
+	    		int ScrollPos = ButlerHudList.ScrollPosition;
 	    		ButlerHudSelectedCount.Text = ButlerInventory.Count().ToString();
 	    	    ButlerBurden.Text = Core.CharacterFilter.Burden.ToString() + "%";
 	    	    if(Core.CharacterFilter.Burden < 100){ButlerBurden.TextColor = Color.Green;}
@@ -993,6 +994,8 @@ namespace GearFoundry
 	    	    	((HudPictureBox)ButlerHudListRow[4]).Image = GB_GIVE_ICON;
 	    	    	((HudPictureBox)ButlerHudListRow[5]).Image = GB_TRADEVENDOR_ICON;    	    	
 	    	    }
+	    	    
+	    	    ButlerHudList.ScrollPosition = ScrollPos;
 	    	}catch(Exception ex){LogError(ex);}
 	    	return;	    	
 	    }

@@ -16,7 +16,6 @@
     <ToonStatsEnabled>false</ToonStatsEnabled>
     <ToonArmorEnabled>false</ToonArmorEnabled>
     <ArmorHudEnabled>false</ArmorHudEnabled>
-    <MuteSounds>false</MuteSounds>
     <EnableTextFiltering>false</EnableTextFiltering>
     <TextFilterAllStatus>false</TextFilterAllStatus>
     <ItemFontHeight>12</ItemFontHeight>

@@ -574,7 +574,7 @@ namespace GearFoundry
                 binventoryCompleteEnabled = Convert.ToBoolean(el.Element("InventoryCompleteEnabled").Value);
                 btoonStatsEnabled = Convert.ToBoolean(el.Element("ToonStatsEnabled").Value);
                 bArmorHudEnabled = Convert.ToBoolean(el.Element("ArmorHudEnabled").Value);
-                bMuteSounds = Convert.ToBoolean(el.Element("MuteSounds").Value);
+      
                 bEnableTextFiltering = Convert.ToBoolean(el.Element("EnableTextFiltering").Value);
                 bTextFilterAllStatus = Convert.ToBoolean(el.Element("TextFilterAllStatus").Value);
                 nitemFontHeight = Convert.ToInt32(el.Element("ItemFontHeight").Value);
@@ -611,7 +611,18 @@ namespace GearFoundry
                    chkPortalGearEnabled.Checked = bPortalGearEnabled;
   
                    //Misc Gears Section
-                   chkMuteSounds.Checked = bMuteSounds;
+                   	chkMuteSounds.Checked = mSoundsSettings.MuteSounds;
+                   	cboTrophyLandscape.Selected = mSoundsSettings.LandscapeTrophies;
+		     		cboMobLandscape.Selected = mSoundsSettings.LandscapeMobs;
+		        	cboPlayerLandscape.Selected = mSoundsSettings.LandscapePlayers;
+		        	cboCorpseRare.Selected = mSoundsSettings.CorpseRare;
+		        	cboCorpseSelfKill.Selected = mSoundsSettings.CorpseSelfKill;
+		        	cboCorpseFellowKill.Selected = mSoundsSettings.CorpseFellowKill;
+		        	cboDeadMe.Selected = mSoundsSettings.DeadMe;
+		        	cboDeadPermitted.Selected = mSoundsSettings.DeadPermitted;
+		        	cboTrophyCorpse.Selected = mSoundsSettings.CorpseTrophy;
+		        	cboRuleCorpse.Selected = mSoundsSettings.CorpseRule;
+			        cboSalvageCorpse.Selected = mSoundsSettings.CorpseSalvage;
 
                    //Inventory Section
                    chkInventory.Checked = binventoryEnabled;
@@ -948,21 +959,7 @@ namespace GearFoundry
 
         }
  
-       //Misc Gear Settings
-        void chkMuteSounds_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-            try
-            {
-                bMuteSounds = e.Checked;
-
-
-                SaveSettings();
-
-            }
-            catch (Exception ex) { LogError(ex); }
-
-        }
-
+		//Misc Gear Settings
         void chkArmorHud_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
             try
@@ -1157,7 +1154,6 @@ namespace GearFoundry
                          new XElement("InventoryCompleteEnabled", binventoryCompleteEnabled),
                          new XElement("ToonStatsEnabled", btoonStatsEnabled),
                         new XElement("ArmorHudEnabled", bArmorHudEnabled),
-                          new XElement("MuteSounds", bMuteSounds),
                          new XElement("EnableTextFiltering", bEnableTextFiltering),
                          new XElement("TextFilterAllStatus", bTextFilterAllStatus),
                          new XElement("ItemFontHeight", nitemFontHeight),

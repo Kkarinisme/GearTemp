@@ -154,16 +154,10 @@ namespace GearFoundry
     	             	xdocPortalGear = XDocument.Load(portalGearFilename);
     	             	elem = xdocPortalGear.Root;
     	             }
-					
-    	             WriteToChat("OrbGUID = " + elem.Element("Setting").Element("OrbGuid").Value);
-    	             WriteToChat("OrbIcon = " + elem.Element("Setting").Element("OrbIcon").Value);
     	             
     	             Int32.TryParse(elem.Element("Setting").Element("OrbGuid").Value, out mPortalGearSettings.nOrbGuid);
     	             Int32.TryParse(elem.Element("Setting").Element("OrbIcon").Value, out mPortalGearSettings.nOrbIcon);
     	             Int32.TryParse(elem.Element("Setting").Element("FacilityHubGemID").Value, out mPortalGearSettings.nFacilityHubGemID);   
-					
-					WriteToChat("OrbGUID(TP) = " + mPortalGearSettings.nOrbGuid);
-					WriteToChat("OrbIcon(TP) = " + mPortalGearSettings.nOrbIcon);
     	             
     	             if(mPortalGearSettings.nFacilityHubGemID == 0)
     	             {

@@ -95,12 +95,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackgroundWorker.cs" />
     <Compile Include="HudComponents\CombatHudMechanics.cs" />
     <Compile Include="HudComponents\Fellowship.cs" />
     <Compile Include="HudModules\GearMaid.cs" />
     <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="Initializers\Enums.cs" />
     <Compile Include="HudModules\PortalGear.cs" />
+    <Compile Include="SoundPlayer.cs" />
     <Compile Include="WrapperClasses\LandscapeObject.cs" />
     <Compile Include="WrapperClasses\LootObject.cs" />
     <Compile Include="WrapperClasses\MonsterObject.cs" />
@@ -157,9 +159,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Sounds\till.wav">
       <LogicalName>till.wav</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Sounds\chime.wav">
-      <LogicalName>chime.wav</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Sounds\click.wav">
       <LogicalName>click1.wav</LogicalName>
@@ -264,6 +263,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Graphics\rynthid.gif">
       <LogicalName>rynthid.gif</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Sounds\cork.wav">
+      <LogicalName>cork.wav</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

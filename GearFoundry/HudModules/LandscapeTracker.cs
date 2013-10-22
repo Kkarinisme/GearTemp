@@ -183,7 +183,14 @@ namespace GearFoundry
 						return;						
 						
 					case ObjectClass.Monster:
-						if(gsSettings.bShowSelectedMobs){MonsterListCheckLandscape(ref IOLandscape);}
+						if(gsSettings.bShowSelectedMobs)
+						{
+							MonsterListCheckLandscape(ref IOLandscape);
+							if(IOLandscape.IOR == IOResult.monster)
+							{
+								playSoundFromResource(mSoundsSettings.LandscapeMobs);
+							}
+						}
 						if(gsSettings.bShowAllMobs && IOLandscape.IOR != IOResult.monster){IOLandscape.IOR = IOResult.allmonster;}
 						goto default;
 						
@@ -208,6 +215,7 @@ namespace GearFoundry
 						if (gsSettings.bShowAllPlayers) 
 						{
 							IOLandscape.IOR = IOResult.players;
+							playSoundFromResource(mSoundsSettings.LandscapePlayers);
 							goto default;
 						}				
 						IOLandscape.IOR = IOResult.nomatch;
@@ -245,6 +253,7 @@ namespace GearFoundry
 							TrophyListCheckLandscape(ref IOLandscape);
 							if(IOLandscape.IOR == IOResult.npc)
 							{
+								playSoundFromResource(mSoundsSettings.LandscapeTrophies);
 								goto default;
 							}
 						}

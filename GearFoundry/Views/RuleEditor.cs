@@ -23,7 +23,6 @@ namespace GearFoundry
     	     
 
 
-       // [ControlEvent", "Click")]
         private void btnRuleClear_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
         	try
@@ -52,7 +51,7 @@ namespace GearFoundry
             }catch (Exception ex) { LogError(ex); };
         }
 
-        [ControlEvent("btnRuleNew", "Click")]
+
         private void btnRuleNew_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
            try 
@@ -65,8 +64,43 @@ namespace GearFoundry
             }
             catch (Exception ex) { LogError(ex); }
         }
+        
+        private void btnRuleClone_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
+        {
+           try 
+            {
+           	
+           		XElement XENew = CreateRulesXElement();
+           		string rulenumber = XENew.Element("RuleNum").Value;
+           		
+           		XENew.Element("Enabled").Value = mSelectedRule.Element("Enabled").Value;
+                XENew.Element("Priority").Value = mSelectedRule.Element("Priority").Value;
+                XENew.Element("AppliesToFlag").Value  = mSelectedRule.Element("AppliesToFlag").Value;
+                XENew.Element("ArcaneLore").Value = mSelectedRule.Element("ArcaneLore").Value;
+                XENew.Element("Work").Value = mSelectedRule.Element("Work").Value;
+                XENew.Element("WieldLevel").Value = mSelectedRule.Element("WieldLevel").Value;
+                XENew.Element("WieldSkill").Value = mSelectedRule.Element("WieldSkill").Value;
+                XENew.Element("MasteryType").Value = mSelectedRule.Element("MasteryType").Value;
+                XENew.Element("DamageType").Value = mSelectedRule.Element("DamageType").Value;
+                XENew.Element("GearScore").Value = mSelectedRule.Element("GearScore").Value;
+                XENew.Element("WieldEnabled").Value = mSelectedRule.Element("WieldEnabled").Value;
+                XENew.Element("ReqSkill").Value = mSelectedRule.Element("ReqSkill").Value;
+                XENew.Element("NumSpells").Value = mSelectedRule.Element("NumSpells").Value;
+                XENew.Element("Slots").Value = mSelectedRule.Element("Slots").Value;
+                XENew.Element("ArmorType").Value = mSelectedRule.Element("ArmorType").Value;
+                XENew.Element("ArmorSet").Value = mSelectedRule.Element("ArmorSet").Value;
+                XENew.Element("Spells").Value = mSelectedRule.Element("Spells").Value;
+                XENew.Element("Palettes").Value = mSelectedRule.Element("Palettes").Value;
+                mPrioritizedRulesList.Add(XENew);
+           	
+                mSelectedRule = mPrioritizedRulesList.Find(x => x.Element("RuleNum").Value == rulenumber);
+           		
+           		SyncAndSaveRules();
+           		_UpdateRulesTabs();		
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
 
-        [ControlEvent("btnRuleupdate", "Click")]
         private void btnRuleUpdate_Click(object sender, MyClasses.MetaViewWrappers.MVControlEventArgs e)
         {
             try
