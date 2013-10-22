@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
@@ -171,7 +171,7 @@ namespace GearFoundry
         {
             //Directory for the alinco Document files
             GearDir = String.Concat(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Decal Plugins\" + Globals.PluginName);
-            //Directory for the current world in Alinco Directory
+            //Directory for the current world in Gear Directory
             currDir = String.Concat(GearDir + @"\" + world);
             //Directory for the toon in the current world
             toonDir = String.Concat(currDir + @"\" + toonName);

@@ -27,11 +27,13 @@ namespace GearFoundry
         private XDocument xdocGenArmor;
         private XDocument xdocArmor;
         private XDocument xdocArmorSettings;
+        private XDocument xdocArmorAvailable;
 
         private string armorFilename = null;
         private string genArmorFilename = null;
         private string holdingArmorFilename = null;
         private string armorSettingsFilename = null;
+
 
 
         private List<String> lstAllToonName;
@@ -42,9 +44,12 @@ namespace GearFoundry
         private HudList.HudListRowAccessor ArmorHudListRow = null;
         private const int ArmorRemoveCircle = 0x60011F8;
 
+        
         private HudFixedLayout ArmorUpdateHudTabLayout = null;
         private HudList ArmorUpdateHudList = null;
+        private HudList ArmorAvailableList = null;
         private HudList.HudListRowAccessor ArmorUpdateHudListRow = null;
+        private HudList.HudListRowAccessor ArmorAvailableListRow = null;
         private const int ArmorUpdateRemoveCircle = 0x60011F8;
         private HudStaticText lblToonArmorUpdateNameInfo;
         private HudStaticText lblToonArmorUpdateName;
@@ -62,6 +67,35 @@ namespace GearFoundry
 
         private string toonArmorName = String.Empty;
         private string toonArmorUpdateName = String.Empty;
+
+        private bool ArmorMainTab;
+        private bool ArmorUpdateTab;
+        private bool ArmorSettingsTab;
+        private int ArmorHudWidth = 0;
+        private int ArmorHudHeight = 0;
+        private int ArmorHudFirstWidth = 400;
+        private int ArmorHudFirstHeight = 300;
+        private int ArmorHudWidthNew;
+        private int ArmorHudHeightNew;
+        private List<XElement> myChoice;
+        private List<XElement> currentArmor;
+        private List<XElement> availableArmor_Spells;
+        private List<XElement> availableArmor;
+        private XElement currentel;
+        private string objArmorCovers;
+        private string updateSpells;
+        private string availableSpells;
+        private string objArmorUpdateSetName;
+        private string objArmorUpdateCovers;
+        private string armorUpdateClass;
+        private string armorpiece;
+        private string armorAvailableSpells = null;
+        private string armorAvailablePiece = null;
+        private string armorAvailableClass = null;
+        private string objArmorAvailableSetName = null;
+        private string objArmorAvailableCovers = null;
+ 
+ 
 
         WindowsTimer mWaitingForArmorIDTimer = new WindowsTimer();
 
@@ -401,18 +435,6 @@ namespace GearFoundry
         }  //endof gogetspells
 
           
-        private bool ArmorMainTab;
-        private bool ArmorUpdateTab;
-        private bool ArmorSettingsTab;
-        private int ArmorHudWidth = 0;
-        private int ArmorHudHeight = 0;
-        private int ArmorHudFirstWidth = 400;
-        private int ArmorHudFirstHeight = 300;
-        private int ArmorHudWidthNew;
-        private int ArmorHudHeightNew;
-        private List<XElement> myChoice;
-        private XElement currentel;
-
 
         private void RenderArmorHud()
         {
@@ -562,7 +584,7 @@ namespace GearFoundry
                 ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.18 * ArmorHudWidth), null);
                 ArmorHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.52 * ArmorHudWidth), null);
 
-                ArmorHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
+                ArmorUpdateHudList.Click += (sender, row, col) => ArmorUpdateHudList_Click(sender, row, col);
 
 
                 ArmorMainTab = true;
@@ -659,7 +681,7 @@ namespace GearFoundry
             {
                 if (!ArmorMainTab) { return; }
 
-                ArmorHudList.Click -= (sender, row, col) => ArmorHudList_Click(sender, row, col);
+                ArmorUpdateHudList.Click -= (sender, row, col) => ArmorUpdateHudList_Click(sender, row, col);
                 ArmorHudList.Dispose();
                 lblToonArmorName.Text = "";
                 lblToonArmorName = null;
@@ -684,94 +706,195 @@ namespace GearFoundry
                 lblToonArmorUpdateMaster = new HudStaticText();
                 lblToonArmorUpdateMaster.FontHeight = nmenuFontHeight;
                 ArmorUpdateHudList = new HudList();
+                ArmorAvailableList = new HudList();
                 ArmorUpdateHudTabLayout.AddControl(lblToonArmorUpdateName, new Rectangle(0, 0, 100, 16));
                 ArmorUpdateHudTabLayout.AddControl(lblToonArmorUpdateLevel, new Rectangle(120, 0, 40, 16));
                 ArmorUpdateHudTabLayout.AddControl(lblToonArmorUpdateMaster, new Rectangle(150, 0, 60, 16));
 
-                ArmorUpdateHudTabLayout.AddControl(ArmorUpdateHudList, new Rectangle(0, 30, ArmorHudWidth, ArmorHudHeight - 40));
+                ArmorUpdateHudTabLayout.AddControl(ArmorUpdateHudList, new Rectangle(0, 30, ArmorHudWidth/3, ArmorHudHeight - 30));
 
                 //ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
-                ArmorUpdateHudList.AddColumn(typeof(HudPictureBox), 20, null);
-                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.25 * ArmorHudWidth), null);
-                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.18 * ArmorHudWidth), null);
-                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.52 * ArmorHudWidth), null);
+                 ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.15 * ArmorHudWidth/3), null);
+                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.15 * ArmorHudWidth)/3, null);
+                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.50 * ArmorHudWidth)/3, null);
 
-                ArmorUpdateHudList.Click += (sender, row, col) => ArmorHudList_Click(sender, row, col);
+                ArmorUpdateHudList.Click += (sender, row, col) => ArmorUpdateHudList_Click(sender, row, col);
+ 
+                ArmorUpdateHudTabLayout.AddControl(ArmorAvailableList, new Rectangle(ArmorHudWidth/3, 30, ArmorHudWidth / 3, ArmorHudHeight - 30));
 
+                //ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
+                ArmorAvailableList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.15 * ArmorHudWidth), null);
+                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.15 * ArmorHudWidth), null);
+                ArmorAvailableList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.50 * ArmorHudWidth), null);
+
+                ArmorAvailableList.Click += (sender, row, col) => ArmorAvailableList_Click(sender, row, col);
 
                 ArmorUpdateTab = true;
-                try
-                {
-                    WriteToChat("Toonupdatearmorname: " + toonArmorUpdateName);
-                    if (toonArmorUpdateName == "" || toonArmorUpdateName == "None") { toonArmorName = toonName; }
-                    lblToonArmorUpdateName.Text = toonArmorUpdateName;
-
-                    FillArmorUpdateHudList();
-                }
-
-                catch (Exception ex) { LogError(ex); }
-
-
-
-
+                  // if (toonArmorUpdateName == "" || toonArmorUpdateName == "None") { toonArmorName = toonName; }
+                   // lblToonArmorUpdateName.Text = toonArmorUpdateName;
+                    toonArmorUpdateName = toonName;
+                   WriteToChat("Toonupdatearmorname: " + toonArmorUpdateName);
+                     FillArmorUpdateHudList();
+                     FillArmorAvailableList();
+ 
             }
 
             catch (Exception ex) { LogError(ex); }
         }
 
-        //private void FillArmorHudList()
-        //{
-        //    try
-        //    {
+        private void FillArmorUpdateHudList()
+        {
+            try
+            {
+                string updateSpells = null;
+                string armorpiece = null;
+                string armorUpdateClass = null;
+                string objArmorUpdateSetName = null;
+                string objArmorUpdateCovers = null;
+                WriteToChat("I am in function to fill list");
+                currentArmor = new List<XElement>();
+                xdocGenArmor = XDocument.Load(genArmorFilename);
+                IEnumerable<XElement> myArmor = xdocGenArmor.Element("Objs").Descendants("Obj");
 
-        //        myChoice = new List<XElement>();
+                foreach (XElement el in myArmor)
+                {
+                    if (el.Element("ToonName").Value == toonArmorUpdateName)
+                    {
+                        currentArmor.Add(el);
+                        int icon = Convert.ToInt32(el.Element("ArmorIcon").Value);
+                        armorpiece = el.Element("ArmorName").Value;
+                        updateSpells = el.Element("ArmorSpellXml").Value;
+                        armorUpdateClass = el.Element("ArmorClass").Value;
+                       objArmorUpdateSetName = String.Empty;
+                        objArmorUpdateCovers = String.Empty;
+                        try
+                        {
+                            if (armorUpdateClass == "Armor")
+                            {
+                                objCovers = Convert.ToInt32(el.Element("ArmorCovers").Value);
+                                 if (Convert.ToInt32(el.Element("ArmorSet").Value) > 0)
+                                { objArmorUpdateSetName = SetsIndex[Convert.ToInt32(el.Element("ArmorSet").Value)].name; WriteToChat("ArmorUpdatesetname " + objArmorUpdateSetName); }
 
-        //        IEnumerable<XElement> marmor = xdocGenArmor.Element("Objs").Descendants("Obj");
+                                if (objCovers > 0)
+                                {
+                                    foreach (IDNameLoadable piece in CoverageInvList)
+                                    {
+                                        if (piece.ID == objCovers)
+                                        {
+                                            objCoversName = piece.name;
+                                            WriteToChat(objCoversName);
+                                            break;
+                                        }
+                                    }
+                                }
 
-        //        foreach (XElement el in marmor)
-        //        {
-        //            if (el.Element("ToonName").Value == toonArmorName)
-        //            {
-        //                myChoice.Add(el);
+                            }
+                            else { WriteToChat("This is not a piece of armor"); }
 
-        //                int icon = Convert.ToInt32(el.Element("ArmorIcon").Value);
-        //                string armorpiece = el.Element("ArmorName").Value;
-        //                string spells = el.Element("ArmorSpellXml").Value;
-        //                string armorclass = el.Element("ArmorClass").Value;
-        //                objArmorSetName = String.Empty;
-        //                if (armorclass == "Armor")
-        //                {
-        //                    if (Convert.ToInt32(el.Element("ArmorSet").Value) > 0)
-        //                    { objArmorSetName = SetsIndex[Convert.ToInt32(el.Element("ArmorSet").Value)].name; }
-        //                }
+                        }
+
+                        catch (Exception ex) { LogError(ex); }
 
 
 
-        //                ArmorHudListRow = ArmorHudList.AddRow();
 
-        //                ((HudPictureBox)ArmorHudListRow[0]).Image = icon + 0x6000000;
-        //                ((HudStaticText)ArmorHudListRow[1]).Text = armorpiece;
-        //                ((HudStaticText)ArmorHudListRow[1]).FontHeight = nitemFontHeight;
-        //                ((HudStaticText)ArmorHudListRow[2]).Text = objArmorSetName;
-        //                ((HudStaticText)ArmorHudListRow[2]).FontHeight = nitemFontHeight;
-        //                ((HudStaticText)ArmorHudListRow[3]).Text = spells;
-        //                ((HudStaticText)ArmorHudListRow[3]).FontHeight = nitemFontHeight;
 
-        //            }
-        //        }
-        //                           ArmorHudView.UserResizeable = true;
-        //    }
-        //    catch (Exception ex) { LogError(ex); }
+                        ArmorUpdateHudListRow = ArmorUpdateHudList.AddRow();
+                        ((HudStaticText)ArmorUpdateHudListRow[0]).Text = objCoversName;
+                        ((HudStaticText)ArmorUpdateHudListRow[0]).FontHeight = nitemFontHeight;
+                        ((HudStaticText)ArmorUpdateHudListRow[1]).Text = objArmorUpdateSetName;
+                        ((HudStaticText)ArmorUpdateHudListRow[1]).FontHeight = nitemFontHeight;
+                        ((HudStaticText)ArmorUpdateHudListRow[2]).Text = updateSpells;
+                        ((HudStaticText)ArmorUpdateHudListRow[2]).FontHeight = nitemFontHeight;
 
-        //}
+                    }
+                }
+                //   ArmorUpdateHudView.UserResizeable = true;
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
+
+        private void FillArmorAvailableList()
+        {
+            try
+            {
+                armorAvailableSpells = null;
+                armorAvailablePiece = null;
+                armorAvailableClass = null;
+                objArmorAvailableSetName = null;
+                objArmorAvailableCovers = null;
+                WriteToChat("I am in function to fill list");
+                availableArmor = new List<XElement>();
+                xdocArmorAvailable = XDocument.Load(genInventoryFilename);
+                IEnumerable<XElement> available = xdocGenArmor.Element("Objs").Descendants("Obj");
+
+                foreach (XElement el in available)
+                {
+                    if (el.Element("ObjClass").Value == "Armor" || el.Element("ObjClass").Value == "Clothing" || el.Element("ObjClass").Value == "Jewelry")
+                    {
+                        availableArmor.Add(el);
+                         armorpiece = el.Element("ArmorName").Value;
+                        WriteToChat(armorpiece);
+                        availableSpells = el.Element("ArmorSpellXml").Value;
+                        WriteToChat(availableSpells);
+                        armorAvailableClass = el.Element("ArmorClass").Value;
+                        WriteToChat(armorUpdateClass);
+                        objArmorUpdateSetName = String.Empty;
+                        objArmorUpdateCovers = String.Empty;
+                        try
+                        {
+                            if (armorUpdateClass == "Armor")
+                            {
+                                objCovers = Convert.ToInt32(el.Element("ArmorCovers").Value);
+                                WriteToChat("Int armor covers: " + objCovers.ToString());
+                                if (Convert.ToInt32(el.Element("ArmorSet").Value) > 0)
+                                { objArmorUpdateSetName = SetsIndex[Convert.ToInt32(el.Element("ArmorSet").Value)].name; WriteToChat("ArmorUpdatesetname " + objArmorUpdateSetName); }
+
+                                if (objCovers > 0)
+                                {
+                                    foreach (IDNameLoadable piece in CoverageInvList)
+                                    {
+                                        if (piece.ID == objCovers)
+                                        {
+                                            objCoversName = piece.name;
+                                            WriteToChat(objCoversName);
+                                            break;
+                                        }
+                                    }
+                                }
+
+                            }
+                            else { WriteToChat("This is not a piece of armor"); }
+
+                        }
+
+                        catch (Exception ex) { LogError(ex); }
+
+
+
+
+
+                        ArmorUpdateHudListRow = ArmorUpdateHudList.AddRow();
+                        ((HudStaticText)ArmorUpdateHudListRow[0]).Text = armorpiece;
+                        ((HudStaticText)ArmorUpdateHudListRow[0]).FontHeight = nitemFontHeight;
+                        ((HudStaticText)ArmorUpdateHudListRow[1]).Text = objCoversName;
+                        ((HudStaticText)ArmorUpdateHudListRow[1]).FontHeight = nitemFontHeight;
+                        ((HudStaticText)ArmorUpdateHudListRow[2]).Text = objArmorUpdateSetName;
+                        ((HudStaticText)ArmorUpdateHudListRow[2]).FontHeight = nitemFontHeight;
+                        ((HudStaticText)ArmorUpdateHudListRow[3]).Text = updateSpells;
+                        ((HudStaticText)ArmorUpdateHudListRow[3]).FontHeight = nitemFontHeight;
+
+                    }
+                }
+                //   ArmorUpdateHudView.UserResizeable = true;
+            }
+            catch (Exception ex) { LogError(ex); }
+
+        }
 
                 
-
-                private void FillArmorUpdateHudList()
-                {
-
-                }
-    
+  
                 //if(allStatsFilename != null)
                 //{
                 //    string toonLevel;
@@ -802,15 +925,14 @@ namespace GearFoundry
             {
                 if (!ArmorUpdateTab) { return; }
 
-                ArmorUpdateHudList.Click -= (sender, row, col) => ArmorHudList_Click(sender, row, col);
+                ArmorUpdateHudList.Click -= (sender, row, col) => ArmorUpdateHudList_Click(sender, row, col);
                 ArmorUpdateHudList.Dispose();
+                ArmorAvailableList.Click -= (sender, row, col) => ArmorAvailableList_Click(sender, row, col);
+                ArmorAvailableList.Dispose();
                 lblToonArmorUpdateName.Text = "";
                 lblToonArmorUpdateName = null;
                 toonArmorUpdateName = "";
-
                 ArmorUpdateTab = false;
-
-
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -961,13 +1083,69 @@ namespace GearFoundry
                 WriteToChat(message);
                 
                    
-                UpdateLandscapeHud();
+            //    UpdateLandscapeHud();
 
             }
             catch (Exception ex) { LogError(ex); }
             return;
         }
 
+        private void ArmorUpdateHudList_Click(object sender, int row, int col)
+        {
+            try
+            {
+                int mrow = row;
+                currentel = myChoice[row];
+                string armorpiece = currentel.Element("ArmorName").Value;
+                string armorobjAl = currentel.Element("ArmorAl").Value;
+                string armorobjWork = currentel.Element("ArmorWork").Value;
+                string armorobjTinks = currentel.Element("ArmorTink").Value;
+                string armorobjLevel = currentel.Element("ArmorWieldValue").Value;
+                int armorobjArmorSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
+                int armorobjCovers = Convert.ToInt32(currentel.Element("ArmorCovers").Value);
+                string objArmorSetName = SetsIndex[armorobjArmorSet].name;
+
+                message = armorpiece + ", Al: " + armorobjAl + " , Work: " + armorobjWork + ", Tinks: " + armorobjTinks + ", Armor Wield Level: " +
+                    armorobjLevel + ", Set: " + objArmorSetName;
+                WriteToChat(message);
+
+
+                UpdateArmorHud();
+
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+        }
+
+
+
+        private void ArmorAvailableList_Click(object sender, int row, int col)
+        {
+            try
+            {
+                int mrow = row;
+                currentel = myChoice[row];
+                string armorAvailableName = currentel.Element("ArmorName").Value;
+                string armorAvailableAl = currentel.Element("ArmorAl").Value;
+                string armorAvailableWork = currentel.Element("ArmorWork").Value;
+                string armorAvailableTinks = currentel.Element("ArmorTink").Value;
+                string armorAvailableLevel = currentel.Element("ArmorWieldValue").Value;
+                int armorAvailableSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
+                int armorobjCovers = Convert.ToInt32(currentel.Element("ArmorCovers").Value);
+      //          string availableArmorSetName = SetsIndex[armorobjArmorSet].name;
+
+                //message = armorobjName + ", Al: " + armorobjAl + " , Work: " + armorobjWork + ", Tinks: " + armorobjTinks + ", Armor Wield Level: " +
+                //    armorobjLevel + ", Set: " + objArmorSetName;
+                //WriteToChat(message);
+
+
+               // UpdateLandscapeHud();
+
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+        }
+ 
         private void UpdateArmorHud()
         {
             try
@@ -977,23 +1155,7 @@ namespace GearFoundry
 
                 ArmorHudList.ClearRows();
 
-                //foreach (IdentifiedObject item in LandscapeTrackingList)
-                //{
-                //    LandscapeHudListRow = LandscapeHudList.AddRow();
-
-                //    ((HudPictureBox)LandscapeHudListRow[0]).Image = item.Icon + 0x6000000;
-                //    ((HudStaticText)LandscapeHudListRow[1]).Text = item.IORString() + item.Name + item.DistanceString();
-                //    if (item.IOR == IOResult.trophy) { ((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Gold; }
-                //    if (item.IOR == IOResult.lifestone) { ((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.SkyBlue; }
-                //    if (item.IOR == IOResult.monster) { ((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Orange; }
-                //    if (item.IOR == IOResult.npc) { ((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Yellow; }
-                //    if (item.IOR == IOResult.portal) { ((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.MediumPurple; }
-                //    if (item.IOR == IOResult.players) { ((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.AntiqueWhite; }
-                //    if (item.IOR == IOResult.fellowplayer) { ((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.LightGreen; }
-                //    if (item.IOR == IOResult.allegplayers) { ((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Tan; }
-                //    ((HudPictureBox)LandscapeHudListRow[2]).Image = LandscapeRemoveCircle;
-                //}
-            }
+             }
             catch (Exception ex) { LogError(ex); }
             return;
         }

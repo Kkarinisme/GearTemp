@@ -2288,8 +2288,8 @@ namespace GearFoundry
             objWieldValue = 0;
             wieldMess = "";
             skillMess = "";
-            
-            
+
+
             objSalvWork = "None";
             objClassName = null;
             objMat = 0;
@@ -2297,15 +2297,15 @@ namespace GearFoundry
             objCoversName = "";
             objArmorLevel = 1;
             objSet = 0;
-            newDoc  = new XDocument(new XElement("Objs"));
+            newDoc = new XDocument(new XElement("Objs"));
             newDoc.Save(inventorySelect);
- 
+
 
             newDoc = null;
 
-        //    xdoc = null;
-//            childElements = null;
-//            elements = null;
+            //    xdoc = null;
+            //            childElements = null;
+            //            elements = null;
             mySelect = "";
             objClass = 0;
         }

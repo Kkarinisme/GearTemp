@@ -261,6 +261,7 @@ namespace GearFoundry
                         long objUnknown8000000 = currentobj.Values(LongValueKey.Unknown8000000);
                         long objUsageMask = currentobj.Values(LongValueKey.UsageMask);
                         long objEnchant = currentobj.Values(LongValueKey.Unenchantable);
+                        long objColor = currentobj.Values(LongValueKey.Model);
 
                             xdocToonInventory.Element("Objs").Add(new XElement("Obj",
                             new XElement("ObjName", objName),
@@ -323,7 +324,7 @@ namespace GearFoundry
                             new XElement("ObjCreateFlag1", objCreateFlag1),
                             new XElement("ObjCreateFlag2", objCreateFlag2),
                             new XElement("ObjUnknown10", objEnchant),
-                            new XElement("ObjUnknown100000", objUnknown100000),
+                            new XElement("ObjUnknown100000", objColor),
                             new XElement("ObjUnknown800000", objUnknown800000),
                             new XElement("ObjUnknown8000000", objUnknown8000000),
                             new XElement("ObjUsageMask", objUsageMask)));
@@ -335,6 +336,7 @@ namespace GearFoundry
                             objID = 0;
                             objIcon = 0;
                             objGearScore = 0;
+                            objColor = 0;
 
                             objAl = 0;
                             objSet = 0;
