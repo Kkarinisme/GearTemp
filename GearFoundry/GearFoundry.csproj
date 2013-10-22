@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackgroundWorker.cs" />
     <Compile Include="HudComponents\CombatHudMechanics.cs" />
     <Compile Include="HudComponents\Fellowship.cs" />
     <Compile Include="HudModules\GearMaid.cs" />

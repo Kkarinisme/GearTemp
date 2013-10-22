@@ -574,7 +574,7 @@ namespace GearFoundry
                 binventoryCompleteEnabled = Convert.ToBoolean(el.Element("InventoryCompleteEnabled").Value);
                 btoonStatsEnabled = Convert.ToBoolean(el.Element("ToonStatsEnabled").Value);
                 bArmorHudEnabled = Convert.ToBoolean(el.Element("ArmorHudEnabled").Value);
-                mSoundsSettings.MuteSounds = Convert.ToBoolean(el.Element("MuteSounds").Value);
+      
                 bEnableTextFiltering = Convert.ToBoolean(el.Element("EnableTextFiltering").Value);
                 bTextFilterAllStatus = Convert.ToBoolean(el.Element("TextFilterAllStatus").Value);
                 nitemFontHeight = Convert.ToInt32(el.Element("ItemFontHeight").Value);
