@@ -456,7 +456,7 @@ namespace GearFoundry
     			{
     				ItemHudView.UserResizeable = false;
     				GISettings.ItemHudHeight = 220;
-    				GISettings.ItemHudWidth = 200;
+    				GISettings.ItemHudWidth = 120;
     			}
     			else
     			{
@@ -672,7 +672,7 @@ namespace GearFoundry
 	    			{
 		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();	
 		    	    	((HudPictureBox)ItemHudListRow[0]).Image = LOListAcessor.Icon + 0x6000000;
-		    	    	if(GISettings.RenderMini){((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.MiniIORString() + LOListAcessor.TruncateName();}
+		    	    	if(GISettings.RenderMini){((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.MiniIORString();}
 		    	    	else{((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.IORString() + LOListAcessor.Name;}
                         ((HudStaticText)ItemHudListRow[1]).FontHeight = nitemFontHeight;
 		    	    	if(LOListAcessor.IOR == IOResult.trophy) {((HudStaticText)ItemHudListRow[1]).TextColor = Color.Wheat;}
@@ -693,7 +693,7 @@ namespace GearFoundry
 	    				else if(LOListAcessor.ProcessAction == IAction.Desiccate) {((HudPictureBox)ItemHudListRow[0]).Image = ItemDesiccantIcon;}
 	    				else if(LOListAcessor.ProcessAction == IAction.ManaStone) {((HudPictureBox)ItemHudListRow[0]).Image = ItemManaStoneIcon;}
 	    				else {((HudPictureBox)ItemHudListRow[0]).Image = LOListAcessor.Icon;}
-	    				if(GISettings.RenderMini) {((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.MiniIORString() + LOListAcessor.TruncateName();}
+	    				if(GISettings.RenderMini) {((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.MiniIORString();}
 	    				else{((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.IORString() + LOListAcessor.Name;}
                         ((HudStaticText)ItemHudListRow[1]).FontHeight = nmenuFontHeight;
                         ((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;	
