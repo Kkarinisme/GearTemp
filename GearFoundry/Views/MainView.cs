@@ -74,7 +74,7 @@ namespace GearFoundry
         MyClasses.MetaViewWrappers.ICheckBox chkToonStats;
 
         //Gears Misc
-        MyClasses.MetaViewWrappers.ICheckBox chkArmorHud;
+     //   MyClasses.MetaViewWrappers.ICheckBox chkArmorHud;
         
         
         MyClasses.MetaViewWrappers.ICheckBox chkEnableTextFiltering;
@@ -274,7 +274,7 @@ namespace GearFoundry
 
                 //Misc Gears
 
-                chkArmorHud = (MyClasses.MetaViewWrappers.ICheckBox)View["chkArmorHud"];
+        //        chkArmorHud = (MyClasses.MetaViewWrappers.ICheckBox)View["chkArmorHud"];
  
                 //Text Filtering Controls
                 chkEnableTextFiltering = (MyClasses.MetaViewWrappers.ICheckBox)View["chkEnableTextFiltering"];
@@ -361,7 +361,7 @@ namespace GearFoundry
                   try
                   {
 
-                      chkArmorHud.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkArmorHud_Change);
+                //      chkArmorHud.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkArmorHud_Change);
                       
                       //Sounds
                       	chkMuteSounds.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkMuteSounds_Change);

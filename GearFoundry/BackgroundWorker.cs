@@ -13,8 +13,8 @@ namespace GearFoundry
 {
 	public partial class PluginCore
 	{
-		private void BackgroundWorker
-		{
+        //private void BackgroundWorker
+        //{
 			
 			//}
 //    private void button1_Click(object sender, EventArgs e)
@@ -57,7 +57,7 @@ namespace GearFoundry
 //        bw.RunWorkerAsync();
 //    }
 			
-		}
+//		}
 		
 	}
 }

@@ -628,7 +628,7 @@ namespace GearFoundry
                    chkInventory.Checked = binventoryEnabled;
                     chkInventoryComplete.Checked = binventoryCompleteEnabled;
                    chkToonStats.Checked = btoonStatsEnabled;
-                   chkArmorHud.Checked = bArmorHudEnabled;
+               //    chkArmorHud.Checked = bArmorHudEnabled;
 
  
 

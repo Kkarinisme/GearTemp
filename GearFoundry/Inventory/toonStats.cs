@@ -196,27 +196,28 @@ namespace GearFoundry
                             if (spellSchool == "Creature Enchantment")
                             {
                                 xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("Creature")
-                                 .Add(new XElement("Spell", spellName));
+                                 .Add(new XElement("Spell", spellName,spellID));
+                                 
                             }
                             if (spellSchool == "Life Magic")
                             {
                                 xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("Life")
-                                 .Add(new XElement("Spell", spellName));
+                                 .Add(new XElement("Spell", spellName,spellID));
                             }
                             if (spellSchool == "Item Enchantment")
                             {
                                 xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("Item")
-                                 .Add(new XElement("Spell", spellName));
+                                 .Add(new XElement("Spell", spellName,spellID));
                             }
                             if (spellSchool == "War Magic")
                             {
                                 xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("War")
-                                 .Add(new XElement("Spell", spellName));
+                                 .Add(new XElement("Spell", spellName,spellID));
                             }
                             if (spellSchool == "Void Magic")
                             {
                                 xdocStats.Element("Toons").Element("Toon").Element("Spells").Element("Void")
-                                 .Add(new XElement("Spell", spellName));
+                                 .Add(new XElement("Spell", spellName,spellID));
                             }
                         } // if spellcomps[]
                     }// end of if spell contains
