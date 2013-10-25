@@ -12,7 +12,7 @@
     <WieldSkill>43</WieldSkill>
     <MasteryType>0</MasteryType>
     <DamageType>1024</DamageType>
-    <GearScore>-1</GearScore>
+    <GearScore>50</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
     <ReqSkill>355,375,385,-1</ReqSkill>
     <Slots></Slots>
@@ -35,7 +35,7 @@
     <WieldSkill>34</WieldSkill>
     <MasteryType>0</MasteryType>
     <DamageType>1,2,4,8,16,32,64</DamageType>
-    <GearScore>-1</GearScore>
+    <GearScore>50</GearScore>
     <WieldEnabled>true,true,true,false</WieldEnabled>
     <ReqSkill>355,375,385,-1</ReqSkill>
     <Slots></Slots>
