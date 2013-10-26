@@ -581,7 +581,7 @@ namespace GearFoundry
 					{
 						if(salvagesum < 100)
 						{
-							if(salvagesum + partbags[i].SalvBagUses < 110)
+							if(salvagesum + partbags[i].SalvBagUses < 125)
 							{
 								if(!CombineSalvageWOList.Contains(partbags[i].SalvBagID))
 							    {

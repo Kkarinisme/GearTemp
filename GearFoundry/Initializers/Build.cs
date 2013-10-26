@@ -199,6 +199,7 @@ namespace GearFoundry
 			public bool isfellowship = false;
 			public int spellicon = 0;
 			public double duration = 0;
+			public int animation = 0;
 		}
 		
 		private void InitListBuilder()
@@ -955,6 +956,7 @@ namespace GearFoundry
 	                 tsinfo.isuntargeted = tspell.IsUntargetted;
 	                 tsinfo.isfellowship = tspell.IsFellowship;
 	                 tsinfo.duration = tspell.Duration;
+	                 tsinfo.animation = tspell.TargetEffect;
 	                 	
 	                 switch (tspell.ComponentIDs[0])
 	                 {

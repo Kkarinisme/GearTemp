@@ -23,8 +23,8 @@ namespace GearFoundry
 	
 		private List<MonsterObject> CombatHudMobTrackingList = new List<MonsterObject>();
 		private MonsterObject CHTargetIO = null;
-		private Queue<SpellCastInfo> SpellCastBuffer = new Queue<SpellCastInfo>();
-		private List<OtherDebuffCastInfo> OtherCastBuffer = new List<OtherDebuffCastInfo>();
+		private List<SpellCastInfo> MyCastList = new List<SpellCastInfo>();
+		private List<OtherDebuffCastInfo> OtherCastList = new List<OtherDebuffCastInfo>();
 
 		private List<Regex> CastFailRegexEx = new List<Regex>();
 		private List<Regex> OtherCastRegexList = new List<Regex>();
@@ -66,11 +66,11 @@ namespace GearFoundry
 		
 		public class SpellCastInfo
 		{
-			public int SpellTargetId;
-			public int SpellCastId;
-			public bool AutoDequeue = false;
+			public int SpellTargetId = 0;
+			public int SpellCastId = 0;
+			public int SpellAnimation = 0;
+			public bool SpellFailure = false;
 			public DateTime CastTime = DateTime.MinValue;
-			public DateTime CompleteTime = DateTime.MinValue;
 		}
 		
 
@@ -161,7 +161,6 @@ namespace GearFoundry
 			{
 								
 				Core.CharacterFilter.SpellCast += CombatHud_SpellCast;
-				Core.CharacterFilter.ActionComplete += CombatHud_ActionComplete;
 				MasterTimer.Tick += CombatHud_OnTimerDo;
 				Core.WorldFilter.ReleaseObject += CombatHud_ReleaseObject;
 				Core.ChatBoxMessage += CombatHud_ChatBoxMessage;
@@ -171,6 +170,11 @@ namespace GearFoundry
 				Core.ItemDestroyed += CombatHud_ItemDestroyed;
 				Core.ItemSelected += CombatHud_ItemSelected;
 				
+				foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Monster))
+				{
+					if(!CombatHudMobTrackingList.Any(x => x.Id == wo.Id)) {CombatHudMobTrackingList.Add(new MonsterObject(wo));}
+				}
+
 				//Host.Actions.InvokeChatParser("@unfilter -spellcasting");
 
 				FillCombatHudLists();
@@ -181,13 +185,12 @@ namespace GearFoundry
 		{
 			try
 			{
-				SpellCastBuffer.Clear();
-				OtherCastBuffer.Clear();
+				MyCastList.Clear();
+				OtherCastList.Clear();
 				OtherCastRegexList.Clear();
 				bsiList.Clear();
 								
 				Core.CharacterFilter.SpellCast -= CombatHud_SpellCast;
-				Core.CharacterFilter.ActionComplete -= CombatHud_ActionComplete;
 				MasterTimer.Tick -= CombatHud_OnTimerDo;
 				Core.WorldFilter.ReleaseObject -= CombatHud_ReleaseObject;
 				Core.ChatBoxMessage -= CombatHud_ChatBoxMessage;
@@ -299,7 +302,7 @@ namespace GearFoundry
 				//AnimationList.Add(new SpellMapLoadable("Equin Quaril",200673979,60,2224));  //Archer Bait
 				//AnimationList.Add(new SpellMapLoadable("Equin Aeril",200676646,58,3266));  //Spirit Pacification
 				//AnimationList.Add(new SpellMapLoadable("Equin Aereth",200673992,60,2228));  //Clouded Motives
-				//AnimationList.Add(new SpellMapLoadable("Equin Aeti",200668402,60,2229));  //Vagabond's Gift
+				AnimationList.Add(new SpellMapLoadable("Equin Aeti",200668402,60,2229));  //Vagabond's Gift
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -393,58 +396,81 @@ namespace GearFoundry
             catch (Exception ex){LogError(ex);}
         }  
 				
+		
+//#GearFoundry#: Cast Time:  10/24/2013 6:36:56 AM
+//#GearFoundry#: Visual Effect:  10/24/2013 6:36:59 AM
+//#GearFoundry#: Action Complete:  10/24/2013 6:37:00 AM
+
 		private void OnVisualSound(Decal.Adapter.Message pMsg)
 		{
 			try
 			{	
-
-				if(OtherCastBuffer.Count == 0) {return;}
-				
-				OtherCastBuffer.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 5);
-				if(OtherCastBuffer.Count == 0) {return;}
-				
-				if(Core.WorldFilter[pMsg.Value<int>(0)].ObjectClass != ObjectClass.Monster) {return;}
-				else
+				if(MyCastList.Count == 0 && OtherCastList.Count == 0) {return;}
+				int AnimationTarget = pMsg.Value<int>(0);
+				if(Core.WorldFilter[AnimationTarget].ObjectClass != ObjectClass.Monster) {return;}
+				if(!CombatHudMobTrackingList.Any(x => x.Id == AnimationTarget))
 				{
-					if(!CombatHudMobTrackingList.Any(x => x.Id == pMsg.Value<int>(0)))
+					CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[AnimationTarget]));
+				}
+				
+				MyCastList.RemoveAll(x => (DateTime.Now - x.CastTime).TotalSeconds > 5);				
+				OtherCastList.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 5);
+				
+				MonsterObject MobTarget = CombatHudMobTrackingList.Find(x => x.Id == AnimationTarget);				
+				int SpellAnimation = pMsg.Value<int>(1);
+				double AnimationDuration = pMsg.Value<double>(2);		
+				
+				if(MyCastList.Count > 0 && MyCastList.Any(x => x.SpellAnimation == SpellAnimation && x.SpellTargetId == AnimationTarget))
+				{
+					SpellCastInfo MyCastSpell = MyCastList.Find(x => x.SpellAnimation == SpellAnimation && x.SpellTargetId == AnimationTarget);
+					int index = MobTarget.DebuffSpellList.FindIndex(x => x.SpellId == MyCastSpell.SpellCastId);
+					
+					if(index >= 0)
+				   	{
+						MobTarget.DebuffSpellList[index].SpellCastTime = DateTime.Now;
+						MobTarget.DebuffSpellList[index].SecondsRemaining = SpellIndex[MyCastSpell.SpellCastId].duration;
+				   	}
+				   	else
+				   	{
+				   		MonsterObject.DebuffSpell dbspellnew = new MonsterObject.DebuffSpell();
+				   		dbspellnew.SpellId = MyCastSpell.SpellCastId;
+				   		dbspellnew.SpellCastTime = DateTime.Now;
+				   		dbspellnew.SecondsRemaining = SpellIndex[MyCastSpell.SpellCastId].duration;
+				   		MobTarget.DebuffSpellList.Add(dbspellnew);	
+				   	}
+				   	MyCastList.Remove(MyCastSpell);
+				   	UpdateCombatHudMainTab();
+					return;				   	
+				}
+				
+				if(OtherCastList.Count > 0)
+				{
+					if(AnimationDuration < 2) {return;}  //Will ignore debuffs under about L6
+					int index_o = OtherCastList.FindIndex(x => x.Animation == SpellAnimation);
+					if(index_o >= 0)
 					{
-						CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[pMsg.Value<int>(0)]));
+						OtherDebuffCastInfo OtherCastSpell = OtherCastList[index_o];
+						int index = MobTarget.DebuffSpellList.FindIndex(x => x.SpellId == OtherCastSpell.SpellId);
+						
+						if(index >= 0)
+					   	{
+							MobTarget.DebuffSpellList[index].SpellCastTime = DateTime.Now;
+							MobTarget.DebuffSpellList[index].SecondsRemaining = SpellIndex[OtherCastSpell.SpellId].duration;
+					   	}
+						else
+					   	{
+					   		MonsterObject.DebuffSpell dbspellnew = new MonsterObject.DebuffSpell();
+					   		dbspellnew.SpellId = OtherCastSpell.SpellId;
+					   		dbspellnew.SpellCastTime = DateTime.Now;
+					   		dbspellnew.SecondsRemaining = SpellIndex[OtherCastSpell.SpellId].duration;
+					   		MobTarget.DebuffSpellList.Add(dbspellnew);	
+					   	}
+					   	OtherCastList.Remove(OtherCastSpell);
+					   	UpdateCombatHudMainTab();
+						return;				 							
 					}
 				}
 	
-				//Will ignore debuffs under L6 (or there abouts).
-				if(pMsg.Value<double>(2) < 2) 
-				{
-					return;
-				}
-								
-				int probablespellid = (from spels in OtherCastBuffer
-										where spels.Animation == pMsg.Value<int>(2)
-										select spels).FirstOrDefault().SpellId;
-				
-				if(probablespellid != 0)
-				{	
-					if(CombatHudMobTrackingList.Any(x => x.Id == pMsg.Value<int>(0)))
-					{
-						
-						MonsterObject CastTarget = CombatHudMobTrackingList.First(x => x.Id == pMsg.Value<int>(0));
-						
-						if(CastTarget.DebuffSpellList.Any(x => x.SpellId == probablespellid))
-					   	{
-							CastTarget.DebuffSpellList.Find(x => x.SpellId == probablespellid).SpellCastTime = DateTime.Now;
-							CastTarget.DebuffSpellList.Find(x => x.SpellId == probablespellid).SecondsRemaining = SpellIndex[probablespellid].duration;
-					   	}
-					   	else
-					   	{
-					   		MonsterObject.DebuffSpell dbspellnew = new MonsterObject.DebuffSpell();
-					   		dbspellnew.SpellId = probablespellid;
-					   		dbspellnew.SpellCastTime = DateTime.Now;
-					   		dbspellnew.SecondsRemaining = SpellIndex[probablespellid].duration;
-					   		CastTarget.DebuffSpellList.Add(dbspellnew);	
-					   	}
-					}
-					UpdateCombatHudMainTab();
-				}
 			}catch(Exception ex){LogError(ex);}
 		}
 				
@@ -529,74 +555,7 @@ namespace GearFoundry
 					UpdateCombatHudMainTab();
 				}
 			}catch(Exception ex){LogError(ex);}
-		}
-
-		private bool CombatActionCompleteDelayRunning = false;
-		private void CombatHud_ActionComplete(object sender, System.EventArgs e)
-		{
-			try
-			{
-				if(SpellCastBuffer.Count > 0)
-				{
-					SpellCastBuffer.First().CompleteTime = DateTime.Now;
-					if((SpellCastBuffer.First().CompleteTime - SpellCastBuffer.First().CastTime).TotalMilliseconds < 200)
-					{
-						SpellCastBuffer.First().AutoDequeue = true;
-					}
-					
-					if(CombatActionCompleteDelayRunning) {return;}
-					else
-					{
-						CombatActionCompleteDelayRunning  = true;
-						Core.RenderFrame += RenderFrame_CombatActionCompleteDelay;
-					}
-				}
-				else{return;}
-			}catch(Exception ex){LogError(ex);}
-		}
-		private void RenderFrame_CombatActionCompleteDelay(object sender, EventArgs e)
-		{
-			try
-			{
-				if((DateTime.Now - SpellCastBuffer.First().CompleteTime).TotalMilliseconds < 2500) {return;}
-				else
-				{
-					Core.RenderFrame -= RenderFrame_CombatActionCompleteDelay;	
-					CombatActionCompleteDelayRunning  = false;
-				}
-				
-				if(SpellCastBuffer.First().AutoDequeue)
-				{
-					SpellCastBuffer.Dequeue();
-					return;
-				}
-				SpellCastInfo spellcast = SpellCastBuffer.Dequeue();
-				
-				if(CombatHudMobTrackingList.Any(x => x.Id == spellcast.SpellTargetId))
-				{
-					MonsterObject CastTarget = CombatHudMobTrackingList.First(x => x.Id == spellcast.SpellTargetId);
-						
-				   	if(CastTarget.DebuffSpellList.Any(x => x.SpellId == spellcast.SpellCastId))
-				   	{
-				   		CastTarget.DebuffSpellList.Find(x => x.SpellId == spellcast.SpellCastId).SpellCastTime = DateTime.Now;
-				   		CastTarget.DebuffSpellList.Find(x => x.SpellId == spellcast.SpellCastId).SecondsRemaining = 
-				   		Convert.ToInt32(SpellIndex[spellcast.SpellCastId].duration);
-				   	}
-				   	else
-				   	{
-				   		MonsterObject.DebuffSpell dbspellnew = new MonsterObject.DebuffSpell();
-				   		dbspellnew.SpellId = spellcast.SpellCastId;
-				   		dbspellnew.SpellCastTime = DateTime.Now;
-				   		dbspellnew.SecondsRemaining = Convert.ToInt32(SpellIndex[spellcast.SpellCastId].duration);
-				   		CastTarget.DebuffSpellList.Add(dbspellnew);	
-				   	}
-				}
-				UpdateCombatHudMainTab();
-
-				
-			}catch(Exception ex){Core.RenderFrame -= RenderFrame_CombatActionCompleteDelay; LogError(ex);}
-		}
-		                                         
+		}		                                         
 		
 		private void CombatHud_OnTimerDo(object sender, System.EventArgs e)
 		{
@@ -639,16 +598,20 @@ namespace GearFoundry
 			try
 			{	
 				if(e.Color != 27 && e.Color != 7){return;}
-				if(e.Text.StartsWith("You cast")) {return;}
-				if(e.Text.StartsWith("You say,")) {return;}
+				if(e.Text.StartsWith("You cast") || e.Text.StartsWith("You say,")) {return;}
 				
 				if(e.Color == 7)
 				{	
-					if(SpellCastBuffer.Count != 0 && CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
+					if(MyCastList.Count != 0 && CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
 					{
-						//WriteToChat("Caught spell failure");
-						SpellCastBuffer.First().AutoDequeue = true;
+						MyCastList.Find(x => (x.CastTime - DateTime.Now).TotalSeconds < 5).SpellFailure = true;
 					}
+					
+//					if(SpellCastBuffer.Count != 0 && CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
+//					{
+//						//WriteToChat("Caught spell failure");
+//						SpellCastBuffer.First().AutoDequeue = true;
+//					}
 					return;
 				}
 				
@@ -656,9 +619,10 @@ namespace GearFoundry
 				if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)))
 				{	
 					OtherDebuffCastInfo odci = new OtherDebuffCastInfo();
-					odci.HeardTime = DateTime.Now;
+					
 					var tanimation = AnimationList.Find(x => e.Text.Contains(x.SpellCastWords));	
-					odci.SpellWords =tanimation.SpellCastWords;
+					odci.HeardTime = DateTime.Now;
+					odci.SpellWords = tanimation.SpellCastWords;
 					odci.SpellId = tanimation.SpellId;
 					odci.Animation = tanimation.SpellAnimation;
 					odci.SpellSchool = SpellIndex[odci.SpellId].spellschool;
@@ -680,7 +644,7 @@ namespace GearFoundry
 						default:
 							return;	
 					}	
-					OtherCastBuffer.Add(odci);
+					OtherCastList.Add(odci);
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -702,7 +666,9 @@ namespace GearFoundry
 								scinfo.SpellTargetId = e.TargetId;
 								scinfo.SpellCastId = e.SpellId;
 								scinfo.CastTime = DateTime.Now;
-								SpellCastBuffer.Enqueue(scinfo);
+								scinfo.SpellAnimation = SpellIndex[e.SpellId].animation;
+								MyCastList.Add(scinfo);
+								//SpellCastBuffer.Enqueue(scinfo);
 							}
 						}
 						return;
@@ -715,7 +681,9 @@ namespace GearFoundry
 								scinfo.SpellTargetId = e.TargetId;
 								scinfo.SpellCastId = e.SpellId;
 								scinfo.CastTime = DateTime.Now;
-								SpellCastBuffer.Enqueue(scinfo);
+								scinfo.SpellAnimation = SpellIndex[e.SpellId].animation;
+								MyCastList.Add(scinfo);
+								//SpellCastBuffer.Enqueue(scinfo);
 							}
 						}
 						return;
@@ -728,7 +696,9 @@ namespace GearFoundry
 								scinfo.SpellTargetId = e.TargetId;
 								scinfo.SpellCastId = e.SpellId;
 								scinfo.CastTime = DateTime.Now;
-								SpellCastBuffer.Enqueue(scinfo);
+								scinfo.SpellAnimation = SpellIndex[e.SpellId].animation;
+								MyCastList.Add(scinfo);
+								//SpellCastBuffer.Enqueue(scinfo);
 							}
 						}
 						return;
@@ -741,7 +711,9 @@ namespace GearFoundry
 								scinfo.SpellTargetId = e.TargetId;
 								scinfo.SpellCastId = e.SpellId;
 								scinfo.CastTime = DateTime.Now;
-								SpellCastBuffer.Enqueue(scinfo);
+								scinfo.SpellAnimation = SpellIndex[e.SpellId].animation;
+								MyCastList.Add(scinfo);
+								//SpellCastBuffer.Enqueue(scinfo);
 							}
 						}
 						return;
