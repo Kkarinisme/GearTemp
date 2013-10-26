@@ -1021,26 +1021,20 @@ namespace GearFoundry
                             if (lstMySelects.Count > 0)
                             {
                                 int n = lstMySelects.Count;
+                                XDocument tempdoc = new XDocument();
+                                newDoc = new XDocument(new XElement("Objs"));
                                 for (int i = 0; i < n; i++)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    tempdoc = new XDocument(new XElement("Objs",
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjName").Value.ToLower().Contains(lstMySelects[n]) ||
                                     p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[n])
                                     select p));
+                                    newDoc.Root.Add(tempdoc);
+                                    tempdoc = null;
                                 }
 
 
-
-                                //}
-                                ////foreach (string Select in lstMySelects)
-                                //{
-                                //newDoc = new XDocument(new XElement("Objs",
-                                //  from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                //  where p.Element("ObjName").Value.ToLower().Contains(Select) ||
-                                //  p.Element("ObjSpellXml").Value.ToLower().Contains(Select)
-                                //  select p));
-                                //}
                             }
                             else { WriteToChat("You must either select a class or write something in textbox"); }
                             break;
@@ -1051,99 +1045,123 @@ namespace GearFoundry
                             if (lstMySelects != null && lstMySelects[0].Trim() != "")
                             {
                                 int n = lstMySelects.Count;
+                                 newDoc = new XDocument(new XElement("Objs"));
                                 for(int i = 0;i<n;i++)
                                 {
-                                if (objArmorSet == 0 && objArmorLevel == 1 && objCovers == 0)
-                                {
+                                  if (objArmorSet == 0 && objArmorLevel == 1 && objCovers == 0)
+                                  {
 
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                    select p));
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                    select p;
+                                    newDoc.Root.Add(temp);
+                                    temp = null;
+ 
+                                  }
 
-                                }
 
-
-                                else if (objArmorSet > 0 && objArmorLevel == 1 && objCovers == 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                  else if (objArmorSet > 0 && objArmorLevel == 1 && objCovers == 0)
+                                  {
+                                   var temp = 
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjSet").Value == objArmorSet.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
                                         
-                                    select p));
-
-                                }
-                                else if ((objArmorLevel > 1 || objArmorLevel < 1) && objArmorSet == 0 && objCovers == 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    select p;
+                                    newDoc.Root.Add(temp);
+                                    temp = null;
+ 
+                                  }
+                                  else if ((objArmorLevel > 1 || objArmorLevel < 1) && objArmorSet == 0 && objCovers == 0)
+                                  {
+                                     var temp = 
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                    select p));
-                                }
-                                else if (objCovers > 0 && objArmorSet == 0 && objArmorLevel == 1)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                    select p;
+                                    newDoc.Root.Add(temp);
+                                    temp = null;
+ 
+                                  }
+                                  else if (objCovers > 0 && objArmorSet == 0 && objArmorLevel == 1)
+                                  {
+                                      
+                                     var temp = 
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                           p.Element("ObjCovers").Value == objCovers.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                    select p));
-                                }
-                                else if (objArmorSet > 0 && (objArmorLevel < 1 || objArmorLevel > 1) && objCovers == 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                    select p;
+                                    newDoc.Root.Add(temp);
+                                    temp = null;
+ 
+                                  }
+                                  else if (objArmorSet > 0 && (objArmorLevel < 1 || objArmorLevel > 1) && objCovers == 0)
+                                  {
+                                      var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                             p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                            p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
-                                else if (objArmorSet > 0 && objCovers > 0 && objArmorLevel == 1)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                    newDoc.Root.Add(temp);
+                                    temp = null;
+ 
+                                  }
+                                  else if (objArmorSet > 0 && objCovers > 0 && objArmorLevel == 1)
+                                  {
+                                   var   temp = new XDocument(new XElement("Objs",
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                         p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                           p.Element("ObjCovers").Value == objCovers.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
                                     select p));
-                                }
-                                else if (objArmorSet == 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    newDoc.Root.Add(temp);
+                                    temp = null;
+ 
+                                 }
+                                 else if (objArmorSet == 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
+                                 {
+                                     var temp = 
                                     from p in xdocListInv.Element("Objs").Descendants("Obj")
                                     where p.Element("ObjClass").Value.Contains(objClassName) &&
                                        p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
                                         p.Element("ObjCovers").Value == objCovers.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                    select p));
-                                }
-                                else if (objArmorSet > 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                    select p;
+                                    newDoc.Root.Add(temp);
+                                    temp = null;
+ 
+                                 }
+                                 else if (objArmorSet > 0 && (objArmorLevel > 1 || objArmorLevel < 1) && objCovers > 0)
+                                 {
+                                      var temp = 
                                      from p in xdocListInv.Element("Objs").Descendants("Obj")
                                      where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjSet").Value == objArmorSet.ToString() &&
                                           p.Element("ObjWieldValue").Value == objArmorLevel.ToString() &&
                                            p.Element("ObjCovers").Value == objCovers.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                     select p));
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                     select p;
+                                    newDoc.Root.Add(temp);
+                                    temp = null;
+ 
                                 }
-                            }
+                              }
                             }
 
                             else
@@ -1224,199 +1242,240 @@ namespace GearFoundry
                             }  //end of if spells
                             break;
                         case 5:
-                            if (lstMySelects != null && lstMySelects[0] != "")
+                            if (lstMySelects != null && lstMySelects[0].Trim() != "")
                             {
-                                if (objWieldAttrInt == 0 && objDamageTypeInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
+                                int n = lstMySelects.Count;
+                                newDoc = new XDocument(new XElement("Objs"));
+                                for (int i = 0; i < n; i++)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    if (objWieldAttrInt == 0 && objDamageTypeInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
+                                {
+                                   var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                   newDoc.Root.Add(temp);
+                                   temp = null;
                                 }
 
 
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                   newDoc.Root.Add(temp);
+                                   temp = null;
+ 
                                 }
 
                                 else if (objDamageTypeInt > 0 && objWieldAttrInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+ 
                                 }
                                 else if ((objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objDamageTypeInt == 0 && objEmbueTypeInt == 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
                                 }
                                 else if (objEmbueTypeInt > 0 && objWieldAttrInt == 0 && objDamageTypeInt == 1 && objLevelInt == 1)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
                                 }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
                                 }
                                 else if (objWieldAttrInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objDamageTypeInt == 0 && objEmbueTypeInt == 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+                               }
                                 else if (objWieldAttrInt > 0 && objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objLevelInt == 1)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                         select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+                               }
                                 else if (objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objEmbueTypeInt == 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
                                 }
                                 else if (objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objWieldAttrInt == 0 && objEmbueTypeInt == 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                         select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+                               }
                                 else if (objDamageTypeInt > 0 && objEmbueTypeInt > 0 && objWieldAttrInt == 0 && (objLevelInt == 1))
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
                                 }
                                 else if ((objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0 && objWieldAttrInt == 0 && objDamageTypeInt == 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                         select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+                              }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt == 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                         select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+                               }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && objEmbueTypeInt > 0 && objLevelInt == 1)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                         select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+                               }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt == 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                         select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+                               }
                                 else if (objWieldAttrInt == 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                        select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+                               }
                                 else if (objWieldAttrInt > 0 && objDamageTypeInt > 0 && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
+                                    var temp = 
                                         from p in xdocListInv.Element("Objs").Descendants("Obj")
                                         where p.Element("ObjClass").Value.Contains(objClassName) &&
                                          p.Element("ObjWieldAttr").Value == objWieldAttrInt.ToString() &&
                                          p.Element("ObjDamage").Value == objDamageTypeInt.ToString() &&
                                          p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
                                          p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
-                            } //end of case 5 with spells
+                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                         select p;
+                                       newDoc.Root.Add(temp);
+                                       temp = null;
+                                 }
+                               } //end of case 5 with spells
+                             }//end  of case 5 with spells
                             else
                             {
                                 if (objWieldAttrInt == 0 && objDamageTypeInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
@@ -1574,101 +1633,122 @@ namespace GearFoundry
                             break;
                         case 4:
                         case 6:
-                            if (lstMySelects != null && lstMySelects[0] != "")
+                            if (lstMySelects.Count > 0)
                             {
-                                if (objDamageTypeInt == 0 && objMagicDamageInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
+                                int n = lstMySelects.Count;
+                                XDocument tempdoc = new XDocument();
+                                newDoc = new XDocument(new XElement("Objs"));
+                                for (int i = 0; i < n; i++)
                                 {
-                                    newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                        where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                    if (objDamageTypeInt == 0 && objMagicDamageInt == 0 && objLevelInt == 1 && objEmbueTypeInt == 0)
+                                    {
+                                        var temp = 
+                                            from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                            where p.Element("ObjClass").Value.Contains(objClassName) &&
+                                            (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                              p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                            select p;
+                                        newDoc.Root.Add(temp);
+                                        temp = null;
+                                    }
 
 
-                                if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt == 1) && objEmbueTypeInt == 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                        where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                         (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
-                                          p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
-                                if ((objLevelInt < 1 || objLevelInt > 1) && objDamageTypeInt == 0 && objMagicDamageInt == 0 && objEmbueTypeInt == 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                        where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                        p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                         (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
-                                if (objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0 && objLevelInt == 1)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                        where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                        p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                    if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt == 1) && objEmbueTypeInt == 0)
+                                    {
+                                        var temp = 
+                                            from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                            where p.Element("ObjClass").Value.Contains(objClassName) &&
+                                             (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
+                                              p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
+                                            (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                              p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                            select p;
+                                        newDoc.Root.Add(temp);
+                                        temp = null;
+                                    }
+                                    if ((objLevelInt < 1 || objLevelInt > 1) && objDamageTypeInt == 0 && objMagicDamageInt == 0 && objEmbueTypeInt == 0)
+                                    {
+                                        var temp = 
+                                            from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                            where p.Element("ObjClass").Value.Contains(objClassName) &&
+                                            p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
+                                             (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                              p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                            select p;
+                                        newDoc.Root.Add(temp);
+                                        temp = null;
+                                    }
+                                    if (objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0 && objLevelInt == 1)
+                                    {
+                                        var temp = 
+                                            from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                            where p.Element("ObjClass").Value.Contains(objClassName) &&
+                                            p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
+                                            (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                              p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                            select p;
+                                        newDoc.Root.Add(temp);
+                                        temp = null;
+                                    }
 
-                                if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt == 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                        where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                         (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
-                                          p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
-                                        p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
-                                if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && objEmbueTypeInt > 0 && objLevelInt == 1)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                        where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                         (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
-                                          p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
-                                        p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
-                                if ((objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                        where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                        p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                        p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
-                                }
+                                    if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt == 0)
+                                    {
+                                        var temp = 
+                                            from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                            where p.Element("ObjClass").Value.Contains(objClassName) &&
+                                             (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
+                                              p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
+                                            p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
+                                            (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                              p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                            select p;
+                                        newDoc.Root.Add(temp);
+                                        temp = null;
+                                    }
+                                    if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && objEmbueTypeInt > 0 && objLevelInt == 1)
+                                    {
+                                        var temp = 
+                                            from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                            where p.Element("ObjClass").Value.Contains(objClassName) &&
+                                             (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
+                                              p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
+                                            p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
+                                            (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                              p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                            select p;
+                                        newDoc.Root.Add(temp);
+                                        temp = null;
+                                    }
+                                    if ((objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0 && objDamageTypeInt == 0 && objMagicDamageInt == 0)
+                                    {
+                                        var temp = 
+                                            from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                            where p.Element("ObjClass").Value.Contains(objClassName) &&
+                                            p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
+                                            p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
+                                            (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[i]) ||
+                                              p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[i]))
+                                            select p;
+                                        newDoc.Root.Add(temp);
+                                        temp = null;
+                                    }
 
-                                if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
-                                {
-                                    newDoc = new XDocument(new XElement("Objs",
-                                        from p in xdocListInv.Element("Objs").Descendants("Obj")
-                                        where p.Element("ObjClass").Value.Contains(objClassName) &&
-                                         (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
-                                          p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
-                                        p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
-                                        p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
-                                        (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
-                                          p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
-                                        select p));
+                                    if ((objDamageTypeInt > 0 || objMagicDamageInt > 0) && (objLevelInt < 1 || objLevelInt > 1) && objEmbueTypeInt > 0)
+                                    {
+                                        var temp = 
+                                            from p in xdocListInv.Element("Objs").Descendants("Obj")
+                                            where p.Element("ObjClass").Value.Contains(objClassName) &&
+                                             (p.Element("ObjDamage").Value == objDamageTypeInt.ToString() ||
+                                              p.Element("ObjMagicDamage").Value == objDamageTypeInt.ToString()) &&
+                                            p.Element("ObjWieldValue").Value == objLevelInt.ToString() &&
+                                            p.Element("ObjEmbue").Value == objEmbueTypeInt.ToString() &&
+                                            (p.Element("ObjName").Value.ToLower().Contains(lstMySelects[0]) ||
+                                              p.Element("ObjSpellXml").Value.ToLower().Contains(lstMySelects[0]))
+                                            select p;
+                                        newDoc.Root.Add(temp);
+                                        temp = null;
+                                    }
                                 }
-
                             }
                             else
                             {
@@ -1957,11 +2037,12 @@ namespace GearFoundry
                     objToonLevel = element.Element("ObjToonLevel").Value;
 
                     objLore = Convert.ToInt32(element.Element("ObjLoreReq").Value);
-
+                    objWieldAttr = "";
                     long nobjWieldAttr = Convert.ToInt32(element.Element("ObjWieldAttr").Value);
                     if (nobjWieldAttr == 7) { objWieldAttr = "Missile Defense"; }
                     if (nobjWieldAttr == 15) { objWieldAttr = "Magic Defense"; }
                     if (nobjWieldAttr == 6) { objWieldAttr = "Melee Defense"; }
+                   
                     
                     objWieldValue = Convert.ToInt32(element.Element("ObjWieldValue").Value);
                     //     if (nobjWieldAttr == 7 || nobjWieldAttr == 6 || nobjWieldAttr == 15)
@@ -2238,11 +2319,7 @@ namespace GearFoundry
 
                     GearFoundry.PluginCore.WriteToChat(message);
                     message = null;
-                    //                elements = null;
-                    //                childElements = null;
-                    //                element = null;
-
-                
+               
 
                }
             
@@ -2288,8 +2365,8 @@ namespace GearFoundry
             objWieldValue = 0;
             wieldMess = "";
             skillMess = "";
-            
-            
+
+
             objSalvWork = "None";
             objClassName = null;
             objMat = 0;
@@ -2297,15 +2374,15 @@ namespace GearFoundry
             objCoversName = "";
             objArmorLevel = 1;
             objSet = 0;
-            newDoc  = new XDocument(new XElement("Objs"));
+            newDoc = new XDocument(new XElement("Objs"));
             newDoc.Save(inventorySelect);
- 
+
 
             newDoc = null;
 
-        //    xdoc = null;
-//            childElements = null;
-//            elements = null;
+            //    xdoc = null;
+            //            childElements = null;
+            //            elements = null;
             mySelect = "";
             objClass = 0;
         }

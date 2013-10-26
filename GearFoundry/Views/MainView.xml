@@ -43,7 +43,7 @@
 
           <Control progid="DecalControls.StaticText" name="lblMisc" left ="5" top="390" width="225" height="24" text="Misc Gears"/>
           <control progid="DecalControls.Checkbox" name="chkToonStats" left="10" top="430" width="130" height="24" text="Gather Toon Stats"/>
-          <control progid="DecalControls.Checkbox" name="chkArmorHud" left="150" top="430" width="130" height="24" text="Use Armor Hud"/>
+       <!--   <control progid="DecalControls.Checkbox" name="chkArmorHud" left="150" top="430" width="130" height="24" text="Use Armor Hud"/> -->
 			<control progid="DecalControls.StaticText" name="lblItemFontHeight" left="320" top="410" width="100" height="24" textcolor="16777215" text="Item Font Height: "/>
 			<control progid="DecalControls.Edit" name="txtItemFontHeight" left="430" top="410" width="40" height="24" textcolor="16777215" text=""/>
 			<control progid="DecalControls.StaticText" name="lblMenuFontHeight" left="320" top="430" width="100" height="24" textcolor="16777215" text="Menu Font Height: "/>
