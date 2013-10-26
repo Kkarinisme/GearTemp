@@ -266,8 +266,8 @@
     <MasteryType>0</MasteryType>
     <DamageType></DamageType>
     <GearScore>35</GearScore>
-    <WieldEnabled>false,false,false,false</WieldEnabled>
-    <ReqSkill>-1,-1,-1,-1</ReqSkill>
+    <WieldEnabled>true,false,false,false</WieldEnabled>
+    <ReqSkill>0,-1,-1,-1</ReqSkill>
     <Slots></Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
