@@ -505,7 +505,9 @@ namespace GearFoundry
 				{		
 					mPortalGearSettings.nOrbGuid = Core.Actions.CurrentSelection;
 					mPortalGearSettings.nOrbIcon = Core.WorldFilter[mPortalGearSettings.nOrbGuid].Icon;
-					mSelectCaster.Image = mPortalGearSettings.nOrbIcon;
+					mSelectCaster.Image = null;
+                	mSelectCaster.Image = mPortalGearSettings.nOrbIcon;
+                	WriteToChat("Selected " + Core.WorldFilter[mPortalGearSettings.nOrbGuid].Name);
 					savePortalSettings();
                 }
             }catch(Exception ex){LogError(ex);}
@@ -898,7 +900,7 @@ namespace GearFoundry
 					}	
 					else
 					{
-						if(PortalActionList[3].Retries > 1) {WriteToChat("Recall/Summon Failed. Check ties and other recall requirements.");}
+						if(PortalActionList[3].Retries > 2) {WriteToChat("Recall/Summon Failed. Check ties and other recall requirements.");}
 						PortalActionList[3].pending = false;
 						PortalActionList[3].StartAction = DateTime.MinValue;
 						PortalActionList[3].fireaction = false;
