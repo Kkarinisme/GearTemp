@@ -121,13 +121,14 @@ namespace GearFoundry
         {
             if (quickieshHud != null) { DisposeHorizontalQuickSlots(); }
             if (quickiesvHud != null) { DisposeVerticalQuickSlots(); }
-            if (ArmorHudView != null) { DisposeArmorHud(); }
        		if(CorpseHudView != null) {DisposeCorpseHud();}
             if(LandscapeHudView != null) {DisposeLandscapeHud();}
             if(ItemHudView != null) {DisposeItemHud();}
             if(ButlerHudView != null){UnsubscribeButlerEvents();}
             if(InventoryHudView != null){DisposeInventoryHud();}
             if (ArmorHudView != null) { DisposeArmorHud(); }
+            if(portalGearHud !=null) {DisposePortalGearHud();}
+            if (portalRecallGearHud != null) { DisposePortalRecallGearHud(); }
 
         }
         
@@ -143,11 +144,10 @@ namespace GearFoundry
                 chkInventoryBurden.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryBurden_Change);
                 chkInventoryComplete.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkInventoryComplete_Change);
                 chkToonStats.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
-                if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor); mWaitingForIDTimer = null; }
                 if (mWaitingForID != null) { mWaitingForID = null; }
                 chkToonStats.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkToonStats_Change);
                 chkCombatHudEnabled.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkCombatHudEnabled_Change);
-                
+                chkArmorHud.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkArmorHud_Change);
                 chkEnableTextFiltering.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkEnableTextFiltering_Change);
                 chkTextFilterAllStatus.Change -= new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkTextFilterAllStatus_Change);
                 

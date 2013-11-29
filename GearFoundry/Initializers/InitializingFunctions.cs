@@ -628,7 +628,7 @@ namespace GearFoundry
                    chkInventory.Checked = binventoryEnabled;
                     chkInventoryComplete.Checked = binventoryCompleteEnabled;
                    chkToonStats.Checked = btoonStatsEnabled;
-               //    chkArmorHud.Checked = bArmorHudEnabled;
+                   chkArmorHud.Checked = bArmorHudEnabled;
 
  
 
@@ -691,6 +691,7 @@ namespace GearFoundry
 
             if (bArmorHudEnabled)
             {
+                WriteToChat("bArmorHudEnabled; I am going to renderarmorhud");
                 RenderArmorHud(); 
             }
 
@@ -988,8 +989,8 @@ namespace GearFoundry
                 xdocArmorSettings = XDocument.Load(armorSettingsFilename);
                 ArmorHudWidth = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudWidth").Value);
                  ArmorHudHeight = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("ArmorHudHeight").Value);
-                 InventoryHudWidth = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("InventoryHudWidth").Value);
-                 InventoryHudHeight = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("InventoryHudHeight").Value);
+                 nInventoryHudWidth = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("InventoryHudWidth").Value);
+                 nInventoryHudHeight = Convert.ToInt32(xdocArmorSettings.Element("Settings").Element("Setting").Element("InventoryHudHeight").Value);
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -1023,8 +1024,8 @@ namespace GearFoundry
             try
             {
                 xdocInventorySettings = XDocument.Load(armorSettingsFilename);
-                InventoryHudWidth = Convert.ToInt32(xdocInventorySettings.Element("Settings").Element("Setting").Element("InventoryHudWidth").Value);
-                InventoryHudHeight = Convert.ToInt32(xdocInventorySettings.Element("Settings").Element("Setting").Element("InventoryHudHeight").Value);
+                nInventoryHudWidth = Convert.ToInt32(xdocInventorySettings.Element("Settings").Element("Setting").Element("InventoryHudWidth").Value);
+                nInventoryHudHeight = Convert.ToInt32(xdocInventorySettings.Element("Settings").Element("Setting").Element("InventoryHudHeight").Value);
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -1042,8 +1043,8 @@ namespace GearFoundry
                 xdocArmorSettings.Element("Settings").Add(new XElement("Setting",
                     new XElement("ArmorHudWidth", ArmorHudWidth),
                     new XElement("ArmorHudHeight", ArmorHudHeight),
-                    new XElement("InventoryHudWidth", InventoryHudWidth),
-                    new XElement("InventoryHudHeight", InventoryHudHeight)));
+                    new XElement("InventoryHudWidth", nInventoryHudWidth),
+                    new XElement("InventoryHudHeight", nInventoryHudHeight)));
 
 
                 xdocArmorSettings.Save(armorSettingsFilename);
