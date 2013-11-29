@@ -1,0 +1,4063 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfKillTask xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <KillTask>
+    <TaskName>Drudge Lurker Kill Task</TaskName>
+    <MobNames>
+      <string>Drudge Lurker</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Drudge Doom</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Drudge Stalker Kill Task</TaskName>
+    <MobNames>
+      <string>Drudge Stalker</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Stalker Stalker</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Altered Drudge Kill Task</TaskName>
+    <MobNames>
+      <string>Drudge Ravener</string>
+      <string>Altered Drudge</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Altered Hunter</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Altered Drudge Kill Task</TaskName>
+    <MobNames>
+      <string>Drudge Ravener</string>
+      <string>Altered Drudge</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Altered Hunter</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Augmented Drudge Kill Task</TaskName>
+    <MobNames>
+      <string>Augmented Drudge</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Augmented Hunter</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Armoredillo Hunting: Lost City of Neftet</TaskName>
+    <MobNames>
+      <string>Guardian Armoredillo</string>
+      <string>Tamed Armoredillo</string>
+      <string>War Armoredillo</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Dame Tularin</NPCName>
+    <NPCInfo>Neftet</NPCInfo>
+    <NPCCoords>22.1S, 6.3E</NPCCoords>
+    <NPCYellowFlagText>If you will kill 30 of the armoredillos within the canyon walls or up on the plateaus, I will reward you for your help.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Golem Hunting: Lost City of Neftet</TaskName>
+    <MobNames>
+      <string>Burning Sands Golem</string>
+      <string>Dust Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Sir Ibreh bin Kassim</NPCName>
+    <NPCInfo>Encampment near Neftet</NPCInfo>
+    <NPCCoords>22.2S, 6.2E</NPCCoords>
+    <NPCYellowFlagText>If you will kill 15 of the golems within the canyon walls or up on the plateaus, I will reward you for your assistance.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mumiyah Hunting: Lost City of Neftet</TaskName>
+    <MobNames>
+      <string>Mu-miyah Channeller</string>
+      <string>Mu-miyah Champion</string>
+      <string>Mu-miyah Guardian</string>
+      <string>Mu-miyah Lord</string>
+      <string>Mu-miyah Sentinel</string>
+      <string>Mu-miyah Soldier</string>
+      <string>Mu-miyah Soothsayer</string>
+      <string>Mu-miyah Vizier</string>
+      <string>Mu-miyah Grand Vizier</string>
+      <string>Mu-miyah Slave Master</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Sir Adarl</NPCName>
+    <NPCInfo> Encampment near Neftet</NPCInfo>
+    <NPCCoords>22.2S, 6.3E</NPCCoords>
+    <NPCYellowFlagText>If you will kill 30 of the Mumiyah within the canyon walls or up on the plateaus, I will reward you for your assistance.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Reedshark Hunting: Lost City of Neftet</TaskName>
+    <MobNames>
+      <string>Reedshark Hunter</string>
+      <string>Reedshark Seeker</string>
+      <string>Tamed Reaper</string>
+      <string>War Reaper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Sir Hassim bin Tamarek</NPCName>
+    <NPCInfo> Encampment near Neftet</NPCInfo>
+    <NPCCoords>22.3S, 6.3E</NPCCoords>
+    <NPCYellowFlagText>If you will kill 30 of the reedsharks within the canyon walls or up on the plateaus, I will reward you for your aid to the crown.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gurog Kill Task (Soldiers)</TaskName>
+    <MobNames>
+      <string>Gurog Soldier</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Gregoria, Gurog Destroyer</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Gurog Soldiers and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! Always a pleasure to meet someone who shares my hatred of these beasts.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gurog Kill Task (Minions)</TaskName>
+    <MobNames>
+      <string>Gurog Minion</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Gregoria, Gurog Destroyer</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Gurog Minions and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! Ugly creatures aren't they? Glad to be rid of them.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gurog Kill Task (Henchman)</TaskName>
+    <MobNames>
+      <string>Gurog Henchmen</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Gregoria, Gurog Destroyer</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Gurog Henchmen and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! Hardly a scratch on you as well, you truly are a great warrior.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Snow Tusker Kill Task (Snow Tusker)</TaskName>
+    <MobNames>
+      <string>Snow Tusker</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Hunter</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Snow Tuskers and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Fantastic job! Those mutated beasts need to be put down, every kill helps.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Snow Tusker Kill Task (Snow Tusker Warrior)</TaskName>
+    <MobNames>
+      <string>Snow Tusker Warrior</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Hunter</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Snow Tusker Warriors and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! Their coats remind me of the creature know as a wolf back on Ispar.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Snow Tusker Kill Task (Snow Tusker Leader)</TaskName>
+    <MobNames>
+      <string>Snow Tusker Leader</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Hunter</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 10 Snow Tusker Leaders and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Amazing that you survived, those tusks can spear a man all the way through.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Frozen Dread Kill Task</TaskName>
+    <MobNames>
+      <string>Frozen Dread</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Kumiko</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 10 of these Frozen Dreads and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Those creatures haunt my dreams.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Frozen Wight Kill Task</TaskName>
+    <MobNames>
+      <string>Frozen Wight</string>
+      <string>Frozen Wight Captain</string>
+      <string>Frozen Wight Sorcerer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Leilah</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Frozen Wights and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Those creatures send chills down my spine.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shadow Flyer Kill Task</TaskName>
+    <MobNames>
+      <string>Shadow Flyer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName> Umbral Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText>Kill 15 Shadow Flyers and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! That should at least keep the corruption from spreading any further.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shadow Kill Task</TaskName>
+    <MobNames>
+      <string>Shadow</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Umbral Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Devourer Margul Kill Task</TaskName>
+    <MobNames>
+      <string>Devourer Margul</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Umbral Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Grievver Shredder Kill Task</TaskName>
+    <MobNames>
+      <string>Grievver Shredder</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Royal Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Void Lord Kill Task</TaskName>
+    <MobNames>
+      <string>Void Lord</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Royal Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Mud Golem Sludge Lord</TaskName>
+    <MobNames>
+      <string>Mud Golem Sludge Lord</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Akuarea</NPCName>
+    <NPCInfo>(near Samsur)</NPCInfo>
+    <NPCCoords>2.6S, 20.0E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Copper Golem Kingpin</TaskName>
+    <MobNames>
+      <string>Copper Golem Kingpin</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Tiulerea</NPCName>
+    <NPCInfo>Eastham</NPCInfo>
+    <NPCCoords>16.5N, 63.6E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Glacial Golem Margrave</TaskName>
+    <MobNames>
+      <string>Glacial Golem Margrave</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Maerirea</NPCName>
+    <NPCInfo>Qalaba'r</NPCInfo>
+    <NPCCoords>74.5S, 19.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Magma Golem Exarch</TaskName>
+    <MobNames>
+      <string>Magma Golem Exarch</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Autuorea</NPCName>
+    <NPCInfo>Candeth Keep</NPCInfo>
+    <NPCCoords>87.5S, 67.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Coral Golem Viceroy</TaskName>
+    <MobNames>
+      <string>Coral Golem Viceroy</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Aukherea</NPCName>
+    <NPCInfo>Ayan Baqur</NPCInfo>
+    <NPCCoords>60.8S, 88.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Platinum Golem Mountain King</TaskName>
+    <MobNames>
+      <string>Platinum Golem Mountain King</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Khekierea</NPCName>
+    <NPCInfo>Ayan Baqur</NPCInfo>
+    <NPCCoords>60.8S, 88.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Crystal Lord</TaskName>
+    <MobNames>
+      <string>Crystal Lord</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCName>Aun Tahuirea</NPCName>
+    <NPCInfo>Camp</NPCInfo>
+    <NPCCoords>24.0N, 72.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Black Coral Golem Kill Task</TaskName>
+    <MobNames>
+      <string>Black Coral Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Chiriko</NPCName>
+    <NPCInfo>Northwatch Castle Black Market</NPCInfo>
+    <NPCCoords>81.5N 25.0E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blessed Moarsman Kill Task</TaskName>
+    <MobNames>
+      <string>Blessed Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gear Knight Phalanx Kill Task</TaskName>
+    <MobNames>
+      <string>Invading Bronze Gauntlet Phalanx</string>
+      <string>Invading Copper Cog Phalanx</string>
+      <string>Invading Iron Blade Phalanx</string>
+      <string>Invading Silver Scope Phalanx</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>High Priest of T'thuun Kill Task</TaskName>
+    <MobNames>
+      <string>High Priest of T'thuun</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Killer Phyntos Wasp Kill Task</TaskName>
+    <MobNames>
+      <string>Killer Phyntos Drone</string>
+      <string>Killer Phyntos Soldier</string>
+      <string>Killer Phyntos Swarm</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Moguth Moarsman Kill Task</TaskName>
+    <MobNames>
+      <string>Moguth Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>60</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Phyntos Larva Kill Task</TaskName>
+    <MobNames>
+      <string>Phyntos Larva</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shoguth Moarsman Kill Task</TaskName>
+    <MobNames>
+      <string>Shoguth Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Wight Blade Sorcerer Kill Task</TaskName>
+    <MobNames>
+      <string>Wight Blade Sorcerer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>12</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blight Spirit Kill Task</TaskName>
+    <MobNames>
+      <string>Blight Spirit</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>8</CompleteCount>
+    <NPCName>Candrus Steady-Hand</NPCName>
+    <NPCInfo>Graveyard</NPCInfo>
+    <NPCCoords>65.8S, 45.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guardian Statue Kill Task</TaskName>
+    <MobNames>
+      <string>Guardian Statue</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Shade of Fordroth</NPCName>
+    <NPCInfo>Mhoire Castle Northeast Tower</NPCInfo>
+    <NPCCoords>64.7S 45.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Noble Remains Kill Task</TaskName>
+    <MobNames>
+      <string>Noble Remain</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Shade of Ormend</NPCName>
+    <NPCInfo>Mhoire Castle Northeast Tower</NPCInfo>
+    <NPCCoords>64.7S 45.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Grave Rat Kill Task</TaskName>
+    <MobNames>
+      <string>Grave Rat</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Lo Shoen</NPCName>
+    <NPCInfo>Graveyard</NPCInfo>
+    <NPCCoords>65.3S, 43.4W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gear Knight Kill Task</TaskName>
+    <MobNames>
+      <string>Gear Knight</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Sir Yanov</NPCName>
+    <NPCInfo>Direlands Gear Knight Resistance Camp</NPCInfo>
+    <NPCCoords>12.3S, 74.9W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Iron Blade Commander</TaskName>
+    <MobNames>
+      <string>Invading Iron Blade Commander</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCName>Dame Trielle</NPCName>
+    <NPCInfo>Direlands Gear Knight Resistance Camp</NPCInfo>
+    <NPCCoords>12.3S 75.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Bronze Gauntlet Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Bronze Gauntlet Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Grenlin</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Copper Cog Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Copper Cog Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Zin</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Iron Blade Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Iron Blade Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Micham</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Silver Scope Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Silver Scope Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Faen</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Golem Samurai Kill Task</TaskName>
+    <MobNames>
+      <string>Bronze Golem Samurai</string>
+      <string>Iron Golem Samurai</string>
+      <string>Clay Golem Samurai</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Lieutenant Aurin</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Archer Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Archer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Sergeant Trebuus</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Bushi Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Bushi</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Corporal Irashi</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Blade and Claw Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Blade Adept</string>
+      <string>Spectral Blade Master</string>
+      <string>Spectral Claw Adept</string>
+      <string>Spectral Claw Master</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Griffon</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Mage Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Bloodmage</string>
+      <string>Spectral Voidmage</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Lord Eorlinde</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Minion Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Minion</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Aun Kirtal</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Nanjou Shou-jen Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Nanjou Shou-jen</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Hanamoto Aki'ko</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Samurai Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Samurai</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Lieutenant Takamaki</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Weeding of the Deru Tree</TaskName>
+    <MobNames>
+      <string>Eyestalk of T'thuun</string>
+      <string>Tendril of T'thuun</string>
+      <string>Tentacle of T'thuun</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Valerian McGreggor</NPCName>
+    <NPCInfo>Freebooter Keep Black Market</NPCInfo>
+    <NPCCoords>64.0S 97.5E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blighted Coral Golem Kill Task</TaskName>
+    <MobNames>
+      <string>Blighted Coral Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Hanzo</NPCName>
+    <NPCInfo>Northwatch Castle Black Market</NPCInfo>
+    <NPCCoords>81.5N 25.0E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Moarsmen Jailbreak</TaskName>
+    <MobNames>
+      <string>Moarsman Prisoners</string>
+      <string>Large Blessed Moarsman</string>
+      <string>Large Ardent Moarsman</string>
+      <string>Large Verdant Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>23</CompleteCount>
+    <NPCName>Avarin</NPCName>
+    <NPCInfo>Freebooter Isle</NPCInfo>
+    <NPCCoords>56.4S 96.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Eye of T'thuun Quest</TaskName>
+    <MobNames>
+      <string>Tentacle of T'thuun</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Tamara du Cinghalle</NPCName>
+    <NPCInfo>Greenspire</NPCInfo>
+    <NPCCoords>43.2N 67.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Torgash's Tasks</TaskName>
+    <MobNames>
+      <string>Viamontian Knight</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Torgash</NPCName>
+    <NPCInfo>Shattered Outlands</NPCInfo>
+    <NPCCoords>94.0N 45.9W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Arctic Mattekar Kill Task</TaskName>
+    <MobNames>
+      <string>Arctic Mattekar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Enzo Ilario</NPCName>
+    <NPCInfo>Silyun</NPCInfo>
+    <NPCCoords>87.4N 70.5W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Banished Creature Kill Task</TaskName>
+    <MobNames>
+      <string>Banished Banderling</string>
+      <string>Banished Drudge</string>
+      <string>Banished Grievver</string>
+      <string>Banished Lugian</string>
+      <string>Banished Monouga</string>
+      <string>Banished Mu-miyah</string>
+      <string>Banished Olthoi</string>
+      <string>Banished Phyntos Wasp</string>
+      <string>Banished Shadow</string>
+      <string>Banished Tumerok</string>
+      <string>Banished Tusker</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Belinda du Loc</NPCName>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.9N 21.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Fallen Creature Kill Task</TaskName>
+    <MobNames>
+      <string>Fallen Crystal Shard</string>
+      <string>Fallen Doll</string>
+      <string>Fallen Drudge</string>
+      <string>Fallen Grievver</string>
+      <string>Fallen Lugian</string>
+      <string>Fallen Margul</string>
+      <string>Fallen Marionette</string>
+      <string>Fallen Mite</string>
+      <string>Fallen Rift</string>
+      <string>Fallen Shadow</string>
+      <string>Fallen Tumerok</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Belinda du Loc</NPCName>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.9N 21.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Benek Niffis Kill Task</TaskName>
+    <MobNames>
+      <string>Benek Niffis</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Colista Fluress</NPCName>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blood Shreth Kill Task</TaskName>
+    <MobNames>
+      <string>Blood Shreth</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>San Ming</NPCName>
+    <NPCInfo>Shoushi</NPCInfo>
+    <NPCCoords>33.5S, 72.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Coral Golem Kill Task</TaskName>
+    <MobNames>
+      <string>Coral Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Malrin</NPCName>
+    <NPCInfo>Sanamar</NPCInfo>
+    <NPCCoords>71.8N, 60.8W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Deathcap Thrungus Kill Task</TaskName>
+    <MobNames>
+      <string>Deathcap Thrungus</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Jiang Li</NPCName>
+    <NPCInfo>Westwatch</NPCInfo>
+    <NPCCoords>72.7N 73.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Dire Mattekar Kill Task</TaskName>
+    <MobNames>
+      <string>Dire Mattekar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Fergal the Dire</NPCName>
+    <NPCInfo>Baishi</NPCInfo>
+    <NPCCoords>49.4S, 62.4E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Ebon Gromnie Kill Task</TaskName>
+    <MobNames>
+      <string>Ebon Gromnie</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Afra bint Abbas</NPCName>
+    <NPCInfo>Redspire</NPCInfo>
+    <NPCCoords>40.8N, 83.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Elemental Kill Task</TaskName>
+    <MobNames>
+      <string>Caustic</string>
+      <string>Synnast</string>
+      <string>Inferno</string>
+      <string>Hyems</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Zahir</NPCName>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.7N, 21.5W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Floeshark Kill Task</TaskName>
+    <MobNames>
+      <string>Floeshark</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Ryuichi Tai</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.3N, 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gold Gear Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Gold Gear Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Sir Stavitor</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Grievver Violator Kill Task</TaskName>
+    <MobNames>
+      <string>Grievver Violator</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Moina</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.4N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Basher Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Basher</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Shiruuk</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Colossus Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Colossi</string>
+      <string>Guruk Colossus</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Brogosh</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Fiend Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Fiend</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Mohor</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Marauder Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Marauder</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Kurket</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Monstrosity Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Monstrosity</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Borsh</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Smasher Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Smasher</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Kushuk</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Hea Windreave Kill Task</TaskName>
+    <MobNames>
+      <string>Hea Windreave</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Susana du Loc</NPCName>
+    <NPCInfo>Redspire</NPCInfo>
+    <NPCCoords>40.7N, 83.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Iron Spined Chittick Kill Task</TaskName>
+    <MobNames>
+      <string>Iron Spined Chittick</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Aidene</NPCName>
+    <NPCInfo>Oolatanga's Refuge</NPCInfo>
+    <NPCCoords>2.0N 95.6E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Kilif Zefir Kill Task</TaskName>
+    <MobNames>
+      <string>Kilif Zefir</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>35</CompleteCount>
+    <NPCName>Hadiya bint Anan</NPCName>
+    <NPCInfo>Shoushi</NPCInfo>
+    <NPCCoords>33.7S 73.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>K'nath An'dras Kill Task</TaskName>
+    <MobNames>
+      <string>K'nath An'dra</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Nona</NPCName>
+    <NPCInfo>Wai Jhou</NPCInfo>
+    <NPCCoords>61.8S 51.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Littoral Siraluun Kill Task</TaskName>
+    <MobNames>
+      <string>Littoral Siraluun</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName> Rico Cellini</NPCName>
+    <NPCInfo>Greenspire</NPCInfo>
+    <NPCCoords>43.2N 67.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Putrid Moar Kill Task</TaskName>
+    <MobNames>
+      <string>Putrid Moar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Tibik</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mosswart Worshipper Kill Task</TaskName>
+    <MobNames>
+      <string>Mosswart Worshipper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>175</CompleteCount>
+    <NPCName>Orfeo Orlando</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N, 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mottled Carenzi Kill Task</TaskName>
+    <MobNames>
+      <string>Mottled Carenzi</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Grania the Bold</NPCName>
+    <NPCInfo>Candeth Keep</NPCInfo>
+    <NPCCoords>87.6S 67.4W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mosswart Townsfolk Kill Task</TaskName>
+    <MobNames>
+      <string>Mosswart Townsfolk</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Corporal Massein</NPCName>
+    <NPCInfo>Kryst</NPCInfo>
+    <NPCCoords>74.4S 84.6E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mucky Moarsman Kill Task</TaskName>
+    <MobNames>
+      <string>Mucky Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Algar Oreksun</NPCName>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Naughty Skeleton Kill Task</TaskName>
+    <MobNames>
+      <string>Naughty Skeleton</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Taku Yukio</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.3N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Drone Kill Task</TaskName>
+    <MobNames>
+      <string>Olthoi Drone</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Olthoi Hunter</NPCName>
+    <NPCInfo>Arwic (South)</NPCInfo>
+    <NPCCoords>30.9N 56.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Nettler Kill Task</TaskName>
+    <MobNames>
+      <string>Olthoi Nettler</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Olthoi Hunter</NPCName>
+    <NPCInfo>Arwic (South)</NPCInfo>
+    <NPCCoords>30.9N 56.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Nymph Kill Task</TaskName>
+    <MobNames>
+      <string>Olthoi Nymph</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Olthoi Hunter</NPCName>
+    <NPCInfo>Arwic (South)</NPCInfo>
+    <NPCCoords>30.9N 56.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Ripper Kill Task</TaskName>
+    <MobNames>
+      <string>Olthoi Ripper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>250</CompleteCount>
+    <NPCName>Marcello</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Paradox-touched Grub Kill Task</TaskName>
+    <MobNames>
+      <string>Paradox-touched Olthoi Noble Grub</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Alicia Swiftblade</NPCName>
+    <NPCInfo>Olthoi North</NPCInfo>
+    <NPCCoords>43.8N 54.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Paradox-touched Nymph Kill Task</TaskName>
+    <MobNames>
+      <string>Paradox-touched Olthoi Warrior Nymph</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Tomihino</NPCName>
+    <NPCInfo>Olthoi North</NPCInfo>
+    <NPCCoords>43.8N 54.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Plate Armoredillo Kill Task</TaskName>
+    <MobNames>
+      <string>Plate Armoredillo</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Saqr</NPCName>
+    <NPCInfo>Fort Tethana</NPCInfo>
+    <NPCCoords>1.5N 71.8W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Polardillo Kill Task</TaskName>
+    <MobNames>
+      <string>Polardillo</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Alessandro Mardor</NPCName>
+    <NPCInfo>Sanamar</NPCInfo>
+    <NPCCoords>72.0N 61.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Polar Ursuin Kill Task</TaskName>
+    <MobNames>
+      <string>Polar Ursuin</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Mariabella Varanese</NPCName>
+    <NPCInfo>Fiun Outpost</NPCInfo>
+    <NPCCoords>95.6N, 56.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Rare Game Kill Task</TaskName>
+    <MobNames>
+      <string>Basalt Golem</string>
+      <string>Cold One</string>
+      <string>Dark Myrmidon</string>
+      <string>Dark Sorcerer</string>
+      <string>Lord of Decay</string>
+      <string>Lugian Warlord</string>
+      <string>Master of the Pack</string>
+      <string>Pure One</string>
+      <string>Sentient Fragment</string>
+      <string>Swamp King</string>
+      <string>Tundra Mattekar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName> Belinda du Loc</NPCName>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.9N 21.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Remoran Sea Raptor Kill Task</TaskName>
+    <MobNames>
+      <string>Remoran Sea Raptor</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Peng-Ya</NPCName>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Repugnant Eater Kill Task</TaskName>
+    <MobNames>
+      <string>Repugnant Eater</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Xun Yu</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Ruschk Kill Task</TaskName>
+    <MobNames>
+      <string>Ruschk Draktehn</string>
+      <string>Ruschk Laktar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Commander Rylane di Cinghalle</NPCName>
+    <NPCInfo>Shattered Outlands</NPCInfo>
+    <NPCCoords>93.2N 48.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shadow-touched Virindi Paradox Kill Task</TaskName>
+    <MobNames>
+      <string>Shadow-touched Virindi Paradox</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>75</CompleteCount>
+    <NPCName>Guard Li</NPCName>
+    <NPCInfo>Wai Jhou</NPCInfo>
+    <NPCCoords>61.8S, 51.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shadow-touched Virindi Quidiox Kill Task</TaskName>
+    <MobNames>
+      <string>Shadow-touched Virindi Quidiox</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>75</CompleteCount>
+    <NPCName>Guard Alfric</NPCName>
+    <NPCInfo>Candeth Keep</NPCInfo>
+    <NPCCoords>87.9S, 67.4W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shallows Gorger Kill Task</TaskName>
+    <MobNames>
+      <string>Shallows Gorger</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Dayla Bint Kazm</NPCName>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Sishalti Slithis Kill Task</TaskName>
+    <MobNames>
+      <string>Sishalti Tentacle</string>
+      <string>Sishalti Tendril</string>
+      <string>Sishalti Eye Stalk</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>150</CompleteCount>
+    <NPCName>Zava bint Laurma</NPCName>
+    <NPCInfo>Zaikhal</NPCInfo>
+    <NPCCoords>13.9N, 0.6E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Small Fledgling Mukkir Kill Task</TaskName>
+    <MobNames>
+      <string>Small Fledgling Mukkir</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Royal Guard</NPCName>
+    <NPCInfo>Holtburg, Shoushi, or Yaraq</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tenebrous Rift Kill Task</TaskName>
+    <MobNames>
+      <string>Tenebrous Rift</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>350</CompleteCount>
+    <NPCName>Solange</NPCName>
+    <NPCInfo>Singularity Caul</NPCInfo>
+    <NPCCoords>97.4S 94.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Three Eyed Snowman Kill Task</TaskName>
+    <MobNames>
+      <string>Three Eyed Snowman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Blind Snowman</NPCName>
+    <NPCInfo>Mountains (north of Holtburg)</NPCInfo>
+    <NPCCoords>46.7N, 48.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tukora Lieutenant Kill Task</TaskName>
+    <MobNames>
+      <string>Tukora Lieutenant</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>250</CompleteCount>
+    <NPCName>Claire Artmad</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N, 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tumerok Gladiator Kill Task</TaskName>
+    <MobNames>
+      <string>Tumerok Gladiator</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Rothe</NPCName>
+    <NPCInfo>Dryreach</NPCInfo>
+    <NPCCoords>8.2S 73.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tusker Guard Kill Task</TaskName>
+    <MobNames>
+      <string>Tusker Guard</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>500</CompleteCount>
+    <NPCName>Shoichi</NPCName>
+    <NPCInfo>Lin</NPCInfo>
+    <NPCCoords>54.4S 72.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Umbral Rift Kill Task	Umbral Rifts</TaskName>
+    <MobNames>
+      <string>Umbral Rift</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Solange</NPCName>
+    <NPCInfo>Singularity Caul</NPCInfo>
+    <NPCCoords>97.4S 94.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Viamontian Man-at-Arms Kill Task</TaskName>
+    <MobNames>
+      <string>Viamontian Man-at-Arm</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Robert Gutsmasher</NPCName>
+    <NPCInfo>Rebel Hideout</NPCInfo>
+    <NPCCoords>43.9N 73.9W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Virindi Paradox Kill Task</TaskName>
+    <MobNames>
+      <string>Virindi Paradox</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>75</CompleteCount>
+    <NPCName>Guard Taziq</NPCName>
+    <NPCInfo>Qalaba'r</NPCInfo>
+    <NPCCoords>74.3S, 19.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Virindi Quidiox Kill Task</TaskName>
+    <MobNames>
+      <string>Virindi Quidiox</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>75</CompleteCount>
+    <NPCName>Guard Q'alia</NPCName>
+    <NPCInfo>Ayan Baqur</NPCInfo>
+    <NPCCoords>60.0S, 88.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Voracious Eater Kill Task</TaskName>
+    <MobNames>
+      <string>Voracious Eater</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Aun Ruperea</NPCName>
+    <NPCInfo>Timaru</NPCInfo>
+    <NPCCoords>44.3N, 77.9W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Wicked Skeleton Kill Task</TaskName>
+    <MobNames>
+      <string>Wicked Skeleton</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Ruqaya al Mubarak</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.3N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Crystalline Killer</TaskName>
+    <MobNames>
+      <string>Crystalline Wisps</string>
+      <string>Aggregate Crystalline Wisp</string>
+      <string>Intense Aggregate Crystalline Wisp</string>
+      <string>Corroding Pillar</string>
+      <string>Incalescent Pillar</string>
+      <string>Shivering Pillar</string>
+      <string>Voltaic Pillar</string>
+      <string>Corroding Crystalline Wisp</string>
+      <string>Incalescent Crystalline Wisp</string>
+      <string>Shivering Crystalline Wisp</string>
+      <string>Voltaic Crystalline Wisp</string>
+      <string>Intense Shivering Pillar</string>
+      <string>Intense Shivering Crystalline Wisp</string>
+      <string>Intense Incalescent Pillar</string>
+      <string>Intense Incalescent Crystalline Wisp</string>
+      <string>Intense Corroding Crystalline Wisp</string>
+      <string>Intense Voltaic Crystalline Wisp</string>
+      <string>Progenitor of Acid</string>
+      <string>Progenitor of Fire</string>
+      <string>Progenitor of Frost</string>
+      <string>Progenitor of Lightning</string>
+      <string>Progenitor of Shadow</string>
+      <string>Spectral Progenitor</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Oorjit</NPCName>
+    <NPCInfo>Crystalline Crag</NPCInfo>
+    <NPCCoords>90.3N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Drudge Lurker Kill Task</TaskName>
+    <MobNames>
+      <string>Drudge Lurker</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Drudge Doom</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Drudge Stalker Kill Task</TaskName>
+    <MobNames>
+      <string>Drudge Stalker</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Stalker Stalker</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Altered Drudge Kill Task</TaskName>
+    <MobNames>
+      <string>Drudge Ravener</string>
+      <string>Altered Drudge</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Altered Hunter</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Altered Drudge Kill Task</TaskName>
+    <MobNames>
+      <string>Drudge Ravener</string>
+      <string>Altered Drudge</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Altered Hunter</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Augmented Drudge Kill Task</TaskName>
+    <MobNames>
+      <string>Augmented Drudge</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Jarvis Hammerstone</NPCName>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>25.6N, 49.4E</NPCCoords>
+    <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Augmented Hunter</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Armoredillo Hunting: Lost City of Neftet</TaskName>
+    <MobNames>
+      <string>Guardian Armoredillo</string>
+      <string>Tamed Armoredillo</string>
+      <string>War Armoredillo</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Dame Tularin</NPCName>
+    <NPCInfo>Neftet</NPCInfo>
+    <NPCCoords>22.1S, 6.3E</NPCCoords>
+    <NPCYellowFlagText>If you will kill 30 of the armoredillos within the canyon walls or up on the plateaus, I will reward you for your help.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Golem Hunting: Lost City of Neftet</TaskName>
+    <MobNames>
+      <string>Burning Sands Golem</string>
+      <string>Dust Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Sir Ibreh bin Kassim</NPCName>
+    <NPCInfo>Encampment near Neftet</NPCInfo>
+    <NPCCoords>22.2S, 6.2E</NPCCoords>
+    <NPCYellowFlagText>If you will kill 15 of the golems within the canyon walls or up on the plateaus, I will reward you for your assistance.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mumiyah Hunting: Lost City of Neftet</TaskName>
+    <MobNames>
+      <string>Mu-miyah Channeller</string>
+      <string>Mu-miyah Champion</string>
+      <string>Mu-miyah Guardian</string>
+      <string>Mu-miyah Lord</string>
+      <string>Mu-miyah Sentinel</string>
+      <string>Mu-miyah Soldier</string>
+      <string>Mu-miyah Soothsayer</string>
+      <string>Mu-miyah Vizier</string>
+      <string>Mu-miyah Grand Vizier</string>
+      <string>Mu-miyah Slave Master</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Sir Adarl</NPCName>
+    <NPCInfo> Encampment near Neftet</NPCInfo>
+    <NPCCoords>22.2S, 6.3E</NPCCoords>
+    <NPCYellowFlagText>If you will kill 30 of the Mumiyah within the canyon walls or up on the plateaus, I will reward you for your assistance.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Reedshark Hunting: Lost City of Neftet</TaskName>
+    <MobNames>
+      <string>Reedshark Hunter</string>
+      <string>Reedshark Seeker</string>
+      <string>Tamed Reaper</string>
+      <string>War Reaper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Sir Hassim bin Tamarek</NPCName>
+    <NPCInfo> Encampment near Neftet</NPCInfo>
+    <NPCCoords>22.3S, 6.3E</NPCCoords>
+    <NPCYellowFlagText>If you will kill 30 of the reedsharks within the canyon walls or up on the plateaus, I will reward you for your aid to the crown.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gurog Kill Task (Soldiers)</TaskName>
+    <MobNames>
+      <string>Gurog Soldier</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Gregoria, Gurog Destroyer</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Gurog Soldiers and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! Always a pleasure to meet someone who shares my hatred of these beasts.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gurog Kill Task (Minions)</TaskName>
+    <MobNames>
+      <string>Gurog Minion</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Gregoria, Gurog Destroyer</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Gurog Minions and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! Ugly creatures aren't they? Glad to be rid of them.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gurog Kill Task (Henchman)</TaskName>
+    <MobNames>
+      <string>Gurog Henchmen</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Gregoria, Gurog Destroyer</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Gurog Henchmen and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! Hardly a scratch on you as well, you truly are a great warrior.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Snow Tusker Kill Task (Snow Tusker)</TaskName>
+    <MobNames>
+      <string>Snow Tusker</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Hunter</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Snow Tuskers and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Fantastic job! Those mutated beasts need to be put down, every kill helps.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Snow Tusker Kill Task (Snow Tusker Warrior)</TaskName>
+    <MobNames>
+      <string>Snow Tusker Warrior</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Hunter</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Snow Tusker Warriors and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! Their coats remind me of the creature know as a wolf back on Ispar.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Snow Tusker Kill Task (Snow Tusker Leader)</TaskName>
+    <MobNames>
+      <string>Snow Tusker Leader</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Hunter</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 10 Snow Tusker Leaders and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Amazing that you survived, those tusks can spear a man all the way through.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Frozen Dread Kill Task</TaskName>
+    <MobNames>
+      <string>Frozen Dread</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Kumiko</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 10 of these Frozen Dreads and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Those creatures haunt my dreams.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Frozen Wight Kill Task</TaskName>
+    <MobNames>
+      <string>Frozen Wight</string>
+      <string>Frozen Wight Captain</string>
+      <string>Frozen Wight Sorcerer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Leilah</NPCName>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>Kill 20 Frozen Wights and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Those creatures send chills down my spine.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shadow Flyer Kill Task</TaskName>
+    <MobNames>
+      <string>Shadow Flyer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName> Umbral Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText>Kill 15 Shadow Flyers and I will reward you for your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done! That should at least keep the corruption from spreading any further.</NPCYellowCompleteText>
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shadow Kill Task</TaskName>
+    <MobNames>
+      <string>Shadow</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Umbral Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Devourer Margul Kill Task</TaskName>
+    <MobNames>
+      <string>Devourer Margul</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Umbral Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Grievver Shredder Kill Task</TaskName>
+    <MobNames>
+      <string>Grievver Shredder</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Royal Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Void Lord Kill Task</TaskName>
+    <MobNames>
+      <string>Void Lord</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Royal Guard</NPCName>
+    <NPCInfo>Tou-Tou</NPCInfo>
+    <NPCCoords>30.3S, 94.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Mud Golem Sludge Lord</TaskName>
+    <MobNames>
+      <string>Mud Golem Sludge Lord</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Akuarea</NPCName>
+    <NPCInfo>(near Samsur)</NPCInfo>
+    <NPCCoords>2.6S, 20.0E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Copper Golem Kingpin</TaskName>
+    <MobNames>
+      <string>Copper Golem Kingpin</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Tiulerea</NPCName>
+    <NPCInfo>Eastham</NPCInfo>
+    <NPCCoords>16.5N, 63.6E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Glacial Golem Margrave</TaskName>
+    <MobNames>
+      <string>Glacial Golem Margrave</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Maerirea</NPCName>
+    <NPCInfo>Qalaba'r</NPCInfo>
+    <NPCCoords>74.5S, 19.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Magma Golem Exarch</TaskName>
+    <MobNames>
+      <string>Magma Golem Exarch</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Autuorea</NPCName>
+    <NPCInfo>Candeth Keep</NPCInfo>
+    <NPCCoords>87.5S, 67.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Coral Golem Viceroy</TaskName>
+    <MobNames>
+      <string>Coral Golem Viceroy</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Aukherea</NPCName>
+    <NPCInfo>Ayan Baqur</NPCInfo>
+    <NPCCoords>60.8S, 88.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Platinum Golem Mountain King</TaskName>
+    <MobNames>
+      <string>Platinum Golem Mountain King</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Aun Khekierea</NPCName>
+    <NPCInfo>Ayan Baqur</NPCInfo>
+    <NPCCoords>60.8S, 88.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Aun Golem Hunters:  Crystal Lord</TaskName>
+    <MobNames>
+      <string>Crystal Lord</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCName>Aun Tahuirea</NPCName>
+    <NPCInfo>Camp</NPCInfo>
+    <NPCCoords>24.0N, 72.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Black Coral Golem Kill Task</TaskName>
+    <MobNames>
+      <string>Black Coral Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Chiriko</NPCName>
+    <NPCInfo>Northwatch Castle Black Market</NPCInfo>
+    <NPCCoords>81.5N 25.0E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blessed Moarsman Kill Task</TaskName>
+    <MobNames>
+      <string>Blessed Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gear Knight Phalanx Kill Task</TaskName>
+    <MobNames>
+      <string>Invading Bronze Gauntlet Phalanx</string>
+      <string>Invading Copper Cog Phalanx</string>
+      <string>Invading Iron Blade Phalanx</string>
+      <string>Invading Silver Scope Phalanx</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>High Priest of T'thuun Kill Task</TaskName>
+    <MobNames>
+      <string>High Priest of T'thuun</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Killer Phyntos Wasp Kill Task</TaskName>
+    <MobNames>
+      <string>Killer Phyntos Drone</string>
+      <string>Killer Phyntos Soldier</string>
+      <string>Killer Phyntos Swarm</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Moguth Moarsman Kill Task</TaskName>
+    <MobNames>
+      <string>Moguth Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>60</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Phyntos Larva Kill Task</TaskName>
+    <MobNames>
+      <string>Phyntos Larva</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shoguth Moarsman Kill Task</TaskName>
+    <MobNames>
+      <string>Shoguth Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Wight Blade Sorcerer Kill Task</TaskName>
+    <MobNames>
+      <string>Wight Blade Sorcerer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>12</CompleteCount>
+    <NPCName>Society</NPCName>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blight Spirit Kill Task</TaskName>
+    <MobNames>
+      <string>Blight Spirit</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>8</CompleteCount>
+    <NPCName>Candrus Steady-Hand</NPCName>
+    <NPCInfo>Graveyard</NPCInfo>
+    <NPCCoords>65.8S, 45.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guardian Statue Kill Task</TaskName>
+    <MobNames>
+      <string>Guardian Statue</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Shade of Fordroth</NPCName>
+    <NPCInfo>Mhoire Castle Northeast Tower</NPCInfo>
+    <NPCCoords>64.7S 45.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Noble Remains Kill Task</TaskName>
+    <MobNames>
+      <string>Noble Remain</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Shade of Ormend</NPCName>
+    <NPCInfo>Mhoire Castle Northeast Tower</NPCInfo>
+    <NPCCoords>64.7S 45.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Grave Rat Kill Task</TaskName>
+    <MobNames>
+      <string>Grave Rat</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Lo Shoen</NPCName>
+    <NPCInfo>Graveyard</NPCInfo>
+    <NPCCoords>65.3S, 43.4W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gear Knight Kill Task</TaskName>
+    <MobNames>
+      <string>Gear Knight</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Sir Yanov</NPCName>
+    <NPCInfo>Direlands Gear Knight Resistance Camp</NPCInfo>
+    <NPCCoords>12.3S, 74.9W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Iron Blade Commander</TaskName>
+    <MobNames>
+      <string>Invading Iron Blade Commander</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCName>Dame Trielle</NPCName>
+    <NPCInfo>Direlands Gear Knight Resistance Camp</NPCInfo>
+    <NPCCoords>12.3S 75.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Bronze Gauntlet Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Bronze Gauntlet Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Grenlin</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Copper Cog Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Copper Cog Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Zin</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Iron Blade Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Iron Blade Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Micham</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Silver Scope Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Silver Scope Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Faen</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Golem Samurai Kill Task</TaskName>
+    <MobNames>
+      <string>Bronze Golem Samurai</string>
+      <string>Iron Golem Samurai</string>
+      <string>Clay Golem Samurai</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Lieutenant Aurin</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Archer Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Archer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Sergeant Trebuus</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Bushi Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Bushi</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Corporal Irashi</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Blade and Claw Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Blade Adept</string>
+      <string>Spectral Blade Master</string>
+      <string>Spectral Claw Adept</string>
+      <string>Spectral Claw Master</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Griffon</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Mage Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Bloodmage</string>
+      <string>Spectral Voidmage</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Lord Eorlinde</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Minion Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Minion</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Aun Kirtal</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Nanjou Shou-jen Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Nanjou Shou-jen</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Hanamoto Aki'ko</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Spectral Samurai Kill Task</TaskName>
+    <MobNames>
+      <string>Spectral Samurai</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Lieutenant Takamaki</NPCName>
+    <NPCInfo>Royal Tent</NPCInfo>
+    <NPCCoords>80.7N 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Weeding of the Deru Tree</TaskName>
+    <MobNames>
+      <string>Eyestalk of T'thuun</string>
+      <string>Tendril of T'thuun</string>
+      <string>Tentacle of T'thuun</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Valerian McGreggor</NPCName>
+    <NPCInfo>Freebooter Keep Black Market</NPCInfo>
+    <NPCCoords>64.0S 97.5E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blighted Coral Golem Kill Task</TaskName>
+    <MobNames>
+      <string>Blighted Coral Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Hanzo</NPCName>
+    <NPCInfo>Northwatch Castle Black Market</NPCInfo>
+    <NPCCoords>81.5N 25.0E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Moarsmen Jailbreak</TaskName>
+    <MobNames>
+      <string>Moarsman Prisoners</string>
+      <string>Large Blessed Moarsman</string>
+      <string>Large Ardent Moarsman</string>
+      <string>Large Verdant Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>23</CompleteCount>
+    <NPCName>Avarin</NPCName>
+    <NPCInfo>Freebooter Isle</NPCInfo>
+    <NPCCoords>56.4S 96.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Eye of T'thuun Quest</TaskName>
+    <MobNames>
+      <string>Tentacle of T'thuun</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Tamara du Cinghalle</NPCName>
+    <NPCInfo>Greenspire</NPCInfo>
+    <NPCCoords>43.2N 67.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Torgash's Tasks</TaskName>
+    <MobNames>
+      <string>Viamontian Knight</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Torgash</NPCName>
+    <NPCInfo>Shattered Outlands</NPCInfo>
+    <NPCCoords>94.0N 45.9W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Arctic Mattekar Kill Task</TaskName>
+    <MobNames>
+      <string>Arctic Mattekar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Enzo Ilario</NPCName>
+    <NPCInfo>Silyun</NPCInfo>
+    <NPCCoords>87.4N 70.5W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Banished Creature Kill Task</TaskName>
+    <MobNames>
+      <string>Banished Banderling</string>
+      <string>Banished Drudge</string>
+      <string>Banished Grievver</string>
+      <string>Banished Lugian</string>
+      <string>Banished Monouga</string>
+      <string>Banished Mu-miyah</string>
+      <string>Banished Olthoi</string>
+      <string>Banished Phyntos Wasp</string>
+      <string>Banished Shadow</string>
+      <string>Banished Tumerok</string>
+      <string>Banished Tusker</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Belinda du Loc</NPCName>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.9N 21.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Fallen Creature Kill Task</TaskName>
+    <MobNames>
+      <string>Fallen Crystal Shard</string>
+      <string>Fallen Doll</string>
+      <string>Fallen Drudge</string>
+      <string>Fallen Grievver</string>
+      <string>Fallen Lugian</string>
+      <string>Fallen Margul</string>
+      <string>Fallen Marionette</string>
+      <string>Fallen Mite</string>
+      <string>Fallen Rift</string>
+      <string>Fallen Shadow</string>
+      <string>Fallen Tumerok</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Belinda du Loc</NPCName>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.9N 21.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Benek Niffis Kill Task</TaskName>
+    <MobNames>
+      <string>Benek Niffis</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Colista Fluress</NPCName>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blood Shreth Kill Task</TaskName>
+    <MobNames>
+      <string>Blood Shreth</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>San Ming</NPCName>
+    <NPCInfo>Shoushi</NPCInfo>
+    <NPCCoords>33.5S, 72.8E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Coral Golem Kill Task</TaskName>
+    <MobNames>
+      <string>Coral Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Malrin</NPCName>
+    <NPCInfo>Sanamar</NPCInfo>
+    <NPCCoords>71.8N, 60.8W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Deathcap Thrungus Kill Task</TaskName>
+    <MobNames>
+      <string>Deathcap Thrungus</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Jiang Li</NPCName>
+    <NPCInfo>Westwatch</NPCInfo>
+    <NPCCoords>72.7N 73.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Dire Mattekar Kill Task</TaskName>
+    <MobNames>
+      <string>Dire Mattekar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Fergal the Dire</NPCName>
+    <NPCInfo>Baishi</NPCInfo>
+    <NPCCoords>49.4S, 62.4E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Ebon Gromnie Kill Task</TaskName>
+    <MobNames>
+      <string>Ebon Gromnie</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Afra bint Abbas</NPCName>
+    <NPCInfo>Redspire</NPCInfo>
+    <NPCCoords>40.8N, 83.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Elemental Kill Task</TaskName>
+    <MobNames>
+      <string>Caustic</string>
+      <string>Synnast</string>
+      <string>Inferno</string>
+      <string>Hyems</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Zahir</NPCName>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.7N, 21.5W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Floeshark Kill Task</TaskName>
+    <MobNames>
+      <string>Floeshark</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Ryuichi Tai</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.3N, 43.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gold Gear Trooper Kill Task</TaskName>
+    <MobNames>
+      <string>Gold Gear Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Sir Stavitor</NPCName>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Grievver Violator Kill Task</TaskName>
+    <MobNames>
+      <string>Grievver Violator</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Moina</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.4N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Basher Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Basher</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Shiruuk</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Colossus Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Colossi</string>
+      <string>Guruk Colossus</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Brogosh</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Fiend Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Fiend</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Mohor</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Marauder Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Marauder</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Kurket</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Monstrosity Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Monstrosity</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Borsh</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Guruk Smasher Kill Task</TaskName>
+    <MobNames>
+      <string>Guruk Smasher</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Kushuk</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Hea Windreave Kill Task</TaskName>
+    <MobNames>
+      <string>Hea Windreave</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Susana du Loc</NPCName>
+    <NPCInfo>Redspire</NPCInfo>
+    <NPCCoords>40.7N, 83.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Iron Spined Chittick Kill Task</TaskName>
+    <MobNames>
+      <string>Iron Spined Chittick</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Aidene</NPCName>
+    <NPCInfo>Oolatanga's Refuge</NPCInfo>
+    <NPCCoords>2.0N 95.6E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Kilif Zefir Kill Task</TaskName>
+    <MobNames>
+      <string>Kilif Zefir</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>35</CompleteCount>
+    <NPCName>Hadiya bint Anan</NPCName>
+    <NPCInfo>Shoushi</NPCInfo>
+    <NPCCoords>33.7S 73.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>K'nath An'dras Kill Task</TaskName>
+    <MobNames>
+      <string>K'nath An'dra</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Nona</NPCName>
+    <NPCInfo>Wai Jhou</NPCInfo>
+    <NPCCoords>61.8S 51.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Littoral Siraluun Kill Task</TaskName>
+    <MobNames>
+      <string>Littoral Siraluun</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName> Rico Cellini</NPCName>
+    <NPCInfo>Greenspire</NPCInfo>
+    <NPCCoords>43.2N 67.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Putrid Moar Kill Task</TaskName>
+    <MobNames>
+      <string>Putrid Moar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Tibik</NPCName>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mosswart Worshipper Kill Task</TaskName>
+    <MobNames>
+      <string>Mosswart Worshipper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>175</CompleteCount>
+    <NPCName>Orfeo Orlando</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N, 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mottled Carenzi Kill Task</TaskName>
+    <MobNames>
+      <string>Mottled Carenzi</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Grania the Bold</NPCName>
+    <NPCInfo>Candeth Keep</NPCInfo>
+    <NPCCoords>87.6S 67.4W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mosswart Townsfolk Kill Task</TaskName>
+    <MobNames>
+      <string>Mosswart Townsfolk</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>40</CompleteCount>
+    <NPCName>Corporal Massein</NPCName>
+    <NPCInfo>Kryst</NPCInfo>
+    <NPCCoords>74.4S 84.6E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mucky Moarsman Kill Task</TaskName>
+    <MobNames>
+      <string>Mucky Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Algar Oreksun</NPCName>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Naughty Skeleton Kill Task</TaskName>
+    <MobNames>
+      <string>Naughty Skeleton</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Taku Yukio</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.3N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Drone Kill Task</TaskName>
+    <MobNames>
+      <string>Olthoi Drone</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Olthoi Hunter</NPCName>
+    <NPCInfo>Arwic (South)</NPCInfo>
+    <NPCCoords>30.9N 56.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Nettler Kill Task</TaskName>
+    <MobNames>
+      <string>Olthoi Nettler</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Olthoi Hunter</NPCName>
+    <NPCInfo>Arwic (South)</NPCInfo>
+    <NPCCoords>30.9N 56.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Nymph Kill Task</TaskName>
+    <MobNames>
+      <string>Olthoi Nymph</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCName>Olthoi Hunter</NPCName>
+    <NPCInfo>Arwic (South)</NPCInfo>
+    <NPCCoords>30.9N 56.3E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Ripper Kill Task</TaskName>
+    <MobNames>
+      <string>Olthoi Ripper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>250</CompleteCount>
+    <NPCName>Marcello</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Paradox-touched Grub Kill Task</TaskName>
+    <MobNames>
+      <string>Paradox-touched Olthoi Noble Grub</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Alicia Swiftblade</NPCName>
+    <NPCInfo>Olthoi North</NPCInfo>
+    <NPCCoords>43.8N 54.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Paradox-touched Nymph Kill Task</TaskName>
+    <MobNames>
+      <string>Paradox-touched Olthoi Warrior Nymph</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Tomihino</NPCName>
+    <NPCInfo>Olthoi North</NPCInfo>
+    <NPCCoords>43.8N 54.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Plate Armoredillo Kill Task</TaskName>
+    <MobNames>
+      <string>Plate Armoredillo</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Saqr</NPCName>
+    <NPCInfo>Fort Tethana</NPCInfo>
+    <NPCCoords>1.5N 71.8W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Polardillo Kill Task</TaskName>
+    <MobNames>
+      <string>Polardillo</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCName>Alessandro Mardor</NPCName>
+    <NPCInfo>Sanamar</NPCInfo>
+    <NPCCoords>72.0N 61.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Polar Ursuin Kill Task</TaskName>
+    <MobNames>
+      <string>Polar Ursuin</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Mariabella Varanese</NPCName>
+    <NPCInfo>Fiun Outpost</NPCInfo>
+    <NPCCoords>95.6N, 56.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Rare Game Kill Task</TaskName>
+    <MobNames>
+      <string>Basalt Golem</string>
+      <string>Cold One</string>
+      <string>Dark Myrmidon</string>
+      <string>Dark Sorcerer</string>
+      <string>Lord of Decay</string>
+      <string>Lugian Warlord</string>
+      <string>Master of the Pack</string>
+      <string>Pure One</string>
+      <string>Sentient Fragment</string>
+      <string>Swamp King</string>
+      <string>Tundra Mattekar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName> Belinda du Loc</NPCName>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.9N 21.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Remoran Sea Raptor Kill Task</TaskName>
+    <MobNames>
+      <string>Remoran Sea Raptor</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Peng-Ya</NPCName>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Repugnant Eater Kill Task</TaskName>
+    <MobNames>
+      <string>Repugnant Eater</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Xun Yu</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Ruschk Kill Task</TaskName>
+    <MobNames>
+      <string>Ruschk Draktehn</string>
+      <string>Ruschk Laktar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Commander Rylane di Cinghalle</NPCName>
+    <NPCInfo>Shattered Outlands</NPCInfo>
+    <NPCCoords>93.2N 48.2W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shadow-touched Virindi Paradox Kill Task</TaskName>
+    <MobNames>
+      <string>Shadow-touched Virindi Paradox</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>75</CompleteCount>
+    <NPCName>Guard Li</NPCName>
+    <NPCInfo>Wai Jhou</NPCInfo>
+    <NPCCoords>61.8S, 51.3W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shadow-touched Virindi Quidiox Kill Task</TaskName>
+    <MobNames>
+      <string>Shadow-touched Virindi Quidiox</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>75</CompleteCount>
+    <NPCName>Guard Alfric</NPCName>
+    <NPCInfo>Candeth Keep</NPCInfo>
+    <NPCCoords>87.9S, 67.4W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shallows Gorger Kill Task</TaskName>
+    <MobNames>
+      <string>Shallows Gorger</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Dayla Bint Kazm</NPCName>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Sishalti Slithis Kill Task</TaskName>
+    <MobNames>
+      <string>Sishalti Tentacle</string>
+      <string>Sishalti Tendril</string>
+      <string>Sishalti Eye Stalk</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>150</CompleteCount>
+    <NPCName>Zava bint Laurma</NPCName>
+    <NPCInfo>Zaikhal</NPCInfo>
+    <NPCCoords>13.9N, 0.6E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Small Fledgling Mukkir Kill Task</TaskName>
+    <MobNames>
+      <string>Small Fledgling Mukkir</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCName>Royal Guard</NPCName>
+    <NPCInfo>Holtburg, Shoushi, or Yaraq</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tenebrous Rift Kill Task</TaskName>
+    <MobNames>
+      <string>Tenebrous Rift</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>350</CompleteCount>
+    <NPCName>Solange</NPCName>
+    <NPCInfo>Singularity Caul</NPCInfo>
+    <NPCCoords>97.4S 94.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Three Eyed Snowman Kill Task</TaskName>
+    <MobNames>
+      <string>Three Eyed Snowman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>5</CompleteCount>
+    <NPCName>Blind Snowman</NPCName>
+    <NPCInfo>Mountains (north of Holtburg)</NPCInfo>
+    <NPCCoords>46.7N, 48.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tukora Lieutenant Kill Task</TaskName>
+    <MobNames>
+      <string>Tukora Lieutenant</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>250</CompleteCount>
+    <NPCName>Claire Artmad</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N, 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tumerok Gladiator Kill Task</TaskName>
+    <MobNames>
+      <string>Tumerok Gladiator</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCName>Lieutenant Rothe</NPCName>
+    <NPCInfo>Dryreach</NPCInfo>
+    <NPCCoords>8.2S 73.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tusker Guard Kill Task</TaskName>
+    <MobNames>
+      <string>Tusker Guard</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>500</CompleteCount>
+    <NPCName>Shoichi</NPCName>
+    <NPCInfo>Lin</NPCInfo>
+    <NPCCoords>54.4S 72.9E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Umbral Rift Kill Task	Umbral Rifts</TaskName>
+    <MobNames>
+      <string>Umbral Rift</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCName>Solange</NPCName>
+    <NPCInfo>Singularity Caul</NPCInfo>
+    <NPCCoords>97.4S 94.6W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Viamontian Man-at-Arms Kill Task</TaskName>
+    <MobNames>
+      <string>Viamontian Man-at-Arm</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Robert Gutsmasher</NPCName>
+    <NPCInfo>Rebel Hideout</NPCInfo>
+    <NPCCoords>43.9N 73.9W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Virindi Paradox Kill Task</TaskName>
+    <MobNames>
+      <string>Virindi Paradox</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>75</CompleteCount>
+    <NPCName>Guard Taziq</NPCName>
+    <NPCInfo>Qalaba'r</NPCInfo>
+    <NPCCoords>74.3S, 19.1E</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Virindi Quidiox Kill Task</TaskName>
+    <MobNames>
+      <string>Virindi Quidiox</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>75</CompleteCount>
+    <NPCName>Guard Q'alia</NPCName>
+    <NPCInfo>Ayan Baqur</NPCInfo>
+    <NPCCoords>60.0S, 88.0W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Voracious Eater Kill Task</TaskName>
+    <MobNames>
+      <string>Voracious Eater</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCName>Aun Ruperea</NPCName>
+    <NPCInfo>Timaru</NPCInfo>
+    <NPCCoords>44.3N, 77.9W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Wicked Skeleton Kill Task</TaskName>
+    <MobNames>
+      <string>Wicked Skeleton</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Ruqaya al Mubarak</NPCName>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.3N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Crystalline Killer</TaskName>
+    <MobNames>
+      <string>Crystalline Wisps</string>
+      <string>Aggregate Crystalline Wisp</string>
+      <string>Intense Aggregate Crystalline Wisp</string>
+      <string>Corroding Pillar</string>
+      <string>Incalescent Pillar</string>
+      <string>Shivering Pillar</string>
+      <string>Voltaic Pillar</string>
+      <string>Corroding Crystalline Wisp</string>
+      <string>Incalescent Crystalline Wisp</string>
+      <string>Shivering Crystalline Wisp</string>
+      <string>Voltaic Crystalline Wisp</string>
+      <string>Intense Shivering Pillar</string>
+      <string>Intense Shivering Crystalline Wisp</string>
+      <string>Intense Incalescent Pillar</string>
+      <string>Intense Incalescent Crystalline Wisp</string>
+      <string>Intense Corroding Crystalline Wisp</string>
+      <string>Intense Voltaic Crystalline Wisp</string>
+      <string>Progenitor of Acid</string>
+      <string>Progenitor of Fire</string>
+      <string>Progenitor of Frost</string>
+      <string>Progenitor of Lightning</string>
+      <string>Progenitor of Shadow</string>
+      <string>Spectral Progenitor</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCName>Oorjit</NPCName>
+    <NPCInfo>Crystalline Crag</NPCInfo>
+    <NPCCoords>90.3N 43.1W</NPCCoords>
+    <NPCYellowFlagText />
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+</ArrayOfKillTask>
