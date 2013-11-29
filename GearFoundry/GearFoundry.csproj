@@ -102,6 +102,7 @@
     <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="Initializers\Enums.cs" />
     <Compile Include="HudModules\PortalGear.cs" />
+    <Compile Include="KillTasks.cs" />
     <Compile Include="SoundPlayer.cs" />
     <Compile Include="WrapperClasses\LandscapeObject.cs" />
     <Compile Include="WrapperClasses\LootObject.cs" />
@@ -268,6 +269,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Sounds\cork.wav">
       <LogicalName>cork.wav</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Defaults\KillTasks.xml">
+      <LogicalName>KillTasks.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

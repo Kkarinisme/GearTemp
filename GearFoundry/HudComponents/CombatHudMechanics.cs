@@ -406,7 +406,11 @@ namespace GearFoundry
 			try
 			{	
 				if(MyCastList.Count == 0 && OtherCastList.Count == 0) {return;}
-				int AnimationTarget = pMsg.Value<int>(0);
+				
+				int AnimationTarget = 0;
+				try{AnimationTarget =  pMsg.Value<int>(0);}catch{}
+				if(AnimationTarget == 0) { return;}
+				
 				if(Core.WorldFilter[AnimationTarget].ObjectClass != ObjectClass.Monster) {return;}
 				if(!CombatHudMobTrackingList.Any(x => x.Id == AnimationTarget))
 				{
