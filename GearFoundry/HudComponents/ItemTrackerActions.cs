@@ -157,10 +157,11 @@ namespace GearFoundry
 					}
 					else if(LOList.Any(x => x.Open))
 					{
+						LootObject lo = LOList.Find(x => x.Open);
 						InspectorActionList[1].pending = true;
 						InspectorActionList[1].StartAction = DateTime.Now;
 						
-						LootObject lo = LOList.Find(x => x.Open);
+						
 						lo.ActionTarget = true;
 						lo.LastActionTime = DateTime.Now;
 						Core.Actions.UseItem(lo.Id,0);
@@ -239,10 +240,13 @@ namespace GearFoundry
 							UpdateItemHud();
 							return;
 						}
-						
-						LOList.Find(x => x.Id == lo.Container).Open = true;
-						InspectorActionList[1].fireaction = true;
-						return;
+						//TODO:  Put in code to keep from attempting to re-open chests here.  Continue testing and see if it is needed.
+//						if(!ChestCheck(Core.WorldFilter[lo.Container].Name))
+//						{
+//							LOList.Find(x => x.Id == lo.Container).Open = true;
+//							InspectorActionList[1].fireaction = true;
+//							return;
+//						}
 					}
 					else
 					{	

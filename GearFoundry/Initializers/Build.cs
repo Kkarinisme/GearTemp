@@ -1434,77 +1434,7 @@ namespace GearFoundry
 //			}
 
 									
-							
-//									
-//									//Bludgeon  Modifiers:  4
-//									if(wo.Spell(i) == 4397 && bebonus < 2){bebonus = 2;}
-//									else if(wo.Spell(i) == 2098 && bebonus < 1.70){bebonus = 1.7;}
-//									else if(wo.Spell(i) == 1516 && bebonus < 1.50){bebonus = 1.5;}
-//									else if(wo.Spell(i) == 1515 && bebonus < 1.0){bebonus = 1.0;}
-//									else if(wo.Spell(i) == 1514 && bebonus < 0.75){bebonus = 0.75;}
-//									else if(wo.Spell(i) == 1513 && bebonus < 0.5){bebonus = 0.5;}
-//									else if(wo.Spell(i) == 1512 && bebonus < 0.25){bebonus = 0.25;}
-//									else if(wo.Spell(i) == 1511 && bebonus < 0.1){bebonus = 0.1;}	
-//									if(wo.Spell(i) == 6090 && bcbonus < 0.25){bcbonus = 0.25;}
-//									else if(wo.Spell(i) == 4662 && bcbonus < 0.2){bcbonus = 0.2;}
-//									else if(wo.Spell(i) == 2587 && bcbonus < 0.15){bcbonus = 0.15;}
-//									else if(wo.Spell(i) == 2599 && bcbonus < 0.1){bcbonus = 0.1;}
-//									
-//									//Acid Modifiers:  32
-//									if(wo.Spell(i) == 4391 && aebonus < 2){aebonus = 2;}
-//									else if(wo.Spell(i) == 2092 && aebonus < 1.70){aebonus = 1.7;}
-//									else if(wo.Spell(i) == 1498 && aebonus < 1.50){aebonus = 1.5;}
-//									else if(wo.Spell(i) == 1497 && aebonus < 1.0){aebonus = 1.0;}
-//									else if(wo.Spell(i) == 1496 && aebonus < 0.75){aebonus = 0.75;}
-//									else if(wo.Spell(i) == 1495 && aebonus < 0.5){aebonus = 0.5;}
-//									else if(wo.Spell(i) == 1494 && aebonus < 0.25){aebonus = 0.25;}
-//									else if(wo.Spell(i) == 1493 && aebonus < 0.1){aebonus = 0.1;}	
-//									if(wo.Spell(i) == 6088 && acbonus < 0.25){acbonus = 0.25;}
-//									else if(wo.Spell(i) == 4660 && acbonus < 0.2){acbonus = 0.2;}
-//									else if(wo.Spell(i) == 2585 && acbonus < 0.15){acbonus = 0.15;}
-//									else if(wo.Spell(i) == 2597 && acbonus < 0.1){acbonus = 0.1;}
-//									
-//									//Fire Modifiers: 16
-//									if(wo.Spell(i) == 4401 && febonus < 2){febonus = 2;}
-//									else if(wo.Spell(i) == 2102 && febonus < 1.70){febonus = 1.7;}
-//									else if(wo.Spell(i) == 1552 && febonus < 1.50){febonus = 1.5;}
-//									else if(wo.Spell(i) == 1551 && febonus < 1.0){febonus = 1.0;}
-//									else if(wo.Spell(i) == 1550 && febonus < 0.75){febonus = 0.75;}
-//									else if(wo.Spell(i) == 1549 && febonus < 0.5){febonus = 0.5;}
-//									else if(wo.Spell(i) == 1548 && febonus < 0.25){febonus = 0.25;}
-//									else if(wo.Spell(i) == 1547 && febonus < 0.1){febonus = 0.1;}	
-//									if(wo.Spell(i) == 6092 && fcbonus < 0.25){fcbonus = 0.25;}
-//									else if(wo.Spell(i) == 4664 && fcbonus < 0.2){fcbonus = 0.2;}
-//									else if(wo.Spell(i) == 2589 && fcbonus < 0.15){fcbonus = 0.15;}
-//									else if(wo.Spell(i) == 2601 && fcbonus < 0.1){fcbonus = 0.1;}
-//									
-//									//Cold Modifiers:  8
-//									if(wo.Spell(i) == 4403 && cebonus < 2){cebonus = 2;}
-//									else if(wo.Spell(i) == 2104 && cebonus < 1.70){cebonus = 1.7;}
-//									else if(wo.Spell(i) == 1528 && cebonus < 1.50){cebonus = 1.5;}
-//									else if(wo.Spell(i) == 1527 && cebonus < 1.0){cebonus = 1.0;}
-//									else if(wo.Spell(i) == 1526 && cebonus < 0.75){cebonus = 0.75;}
-//									else if(wo.Spell(i) == 1525 && cebonus < 0.5){cebonus = 0.5;}
-//									else if(wo.Spell(i) == 1524 && cebonus < 0.25){cebonus = 0.25;}
-//									else if(wo.Spell(i) == 1523 && cebonus < 0.1){cebonus = 0.1;}	
-//									if(wo.Spell(i) == 6093 && ccbonus < 0.25){ccbonus = 0.25;}
-//									else if(wo.Spell(i) == 4665 && ccbonus < 0.2){ccbonus = 0.2;}
-//									else if(wo.Spell(i) == 2590 && ccbonus < 0.15){ccbonus = 0.15;}
-//									else if(wo.Spell(i) == 2602 && ccbonus < 0.1){ccbonus = 0.1;}
-//									
-//									//Lightning Modifiers:  64
-//									if(wo.Spell(i) == 4409 && lebonus < 2){lebonus = 2;}
-//									else if(wo.Spell(i) == 2110 && lebonus < 1.70){lebonus = 1.7;}
-//									else if(wo.Spell(i) == 1540 && lebonus < 1.50){lebonus = 1.5;}
-//									else if(wo.Spell(i) == 1539 && lebonus < 1.0){lebonus = 1.0;}
-//									else if(wo.Spell(i) == 1538 && lebonus < 0.75){lebonus = 0.75;}
-//									else if(wo.Spell(i) == 1537 && lebonus < 0.5){lebonus = 0.5;}
-//									else if(wo.Spell(i) == 1536 && lebonus < 0.25){lebonus = 0.25;}
-//									else if(wo.Spell(i) == 1535 && lebonus < 0.1){lebonus = 0.1;}	
-//									if(wo.Spell(i) == 6099 && lcbonus < 0.25){lcbonus = 0.25;}
-//									else if(wo.Spell(i) == 4671 && lcbonus < 0.2){lcbonus = 0.2;}
-//									else if(wo.Spell(i) == 2595 && lcbonus < 0.15){lcbonus = 0.15;}
-//									else if(wo.Spell(i) == 2607 && lcbonus < 0.1){lcbonus = 0.1;}	
+								
 
 
         	
@@ -1613,38 +1543,29 @@ namespace GearFoundry
         	BaneCantripList.Add(new IntDoubleLoadable(2587, 0.15, 4, 1));
         	BaneCantripList.Add(new IntDoubleLoadable(2599, 0.1, 4, 1));
         	
+        	//Acid 32
+        	BaneCantripList.Add(new IntDoubleLoadable(6088, 0.25, 32, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(4660, 0.2, 32, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(2585, 0.15, 32, 1));
+        	BaneCantripList.Add(new IntDoubleLoadable(2597, 0.1, 32, 1));
         	
-//									
-//									//Acid Modifiers
-
-//									if(wo.Spell(i) == 6088 && acbonus < 0.25){acbonus = 0.25;}
-//									else if(wo.Spell(i) == 4660 && acbonus < 0.2){acbonus = 0.2;}
-//									else if(wo.Spell(i) == 2585 && acbonus < 0.15){acbonus = 0.15;}
-//									else if(wo.Spell(i) == 2597 && acbonus < 0.1){acbonus = 0.1;}
-//									
-//									//Fire Modifiers
-
-//									if(wo.Spell(i) == 6092 && fcbonus < 0.25){fcbonus = 0.25;}
-//									else if(wo.Spell(i) == 4664 && fcbonus < 0.2){fcbonus = 0.2;}
-//									else if(wo.Spell(i) == 2589 && fcbonus < 0.15){fcbonus = 0.15;}
-//									else if(wo.Spell(i) == 2601 && fcbonus < 0.1){fcbonus = 0.1;}
-//									
-//									//Cold Modifiers
-
-//									if(wo.Spell(i) == 6093 && ccbonus < 0.25){ccbonus = 0.25;}
-//									else if(wo.Spell(i) == 4665 && ccbonus < 0.2){ccbonus = 0.2;}
-//									else if(wo.Spell(i) == 2590 && ccbonus < 0.15){ccbonus = 0.15;}
-//									else if(wo.Spell(i) == 2602 && ccbonus < 0.1){ccbonus = 0.1;}
-//									
-//									//Lightning Modifiers
-	
-//									if(wo.Spell(i) == 6099 && lcbonus < 0.25){lcbonus = 0.25;}
-//									else if(wo.Spell(i) == 4671 && lcbonus < 0.2){lcbonus = 0.2;}
-//									else if(wo.Spell(i) == 2595 && lcbonus < 0.15){lcbonus = 0.15;}
-//									else if(wo.Spell(i) == 2607 && lcbonus < 0.1){lcbonus = 0.1;}	
-        	
-        	
-        	
+			//Fire 16
+			BaneCantripList.Add(new IntDoubleLoadable(6092, 0.25, 16, 1));
+			BaneCantripList.Add(new IntDoubleLoadable(4664, 0.2, 16, 1));
+			BaneCantripList.Add(new IntDoubleLoadable(2589, 0.15, 16, 1));
+			BaneCantripList.Add(new IntDoubleLoadable(2601, 0.1, 16, 1));
+			
+			//Cold 8
+			BaneCantripList.Add(new IntDoubleLoadable(6093, 0.25, 8, 1));
+			BaneCantripList.Add(new IntDoubleLoadable(4665, 0.2, 8, 1));
+			BaneCantripList.Add(new IntDoubleLoadable(2590, 0.15, 8, 1));
+			BaneCantripList.Add(new IntDoubleLoadable(2602, 0.1, 8, 1));
+			
+			//Lightning 64
+			BaneCantripList.Add(new IntDoubleLoadable(6099, 0.25, 64, 1));
+			BaneCantripList.Add(new IntDoubleLoadable(4671, 0.2, 64, 1));
+			BaneCantripList.Add(new IntDoubleLoadable(2595, 0.15, 64, 1));
+			BaneCantripList.Add(new IntDoubleLoadable(2607, 0.1, 64, 1));        	
         }
         
         

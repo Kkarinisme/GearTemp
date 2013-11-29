@@ -665,6 +665,8 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
+    	private bool openingcorpse = false;
+    	private int opentarget = 0;
     	private HudList.HudListRowAccessor CorpseRow = new HudList.HudListRowAccessor();
     	private void CorpseHudList_Click(object sender, int row, int col)
     	{
@@ -677,8 +679,14 @@ namespace GearFoundry
     			
     			if(col == 0)
     			{
+    				Core.Actions.CurrentSelection = co.Id;
     				Host.Actions.UseItem(co.Id, 0);
-					co.notify = false;    				
+    				if(!openingcorpse)
+    				{
+    					openingcorpse = true;
+    					opentarget = co.Id;
+    					Core.ContainerOpened += ContainerOpened_Corpse;
+    				}				
     			}
     			if(col == 1)
     			{
@@ -694,6 +702,27 @@ namespace GearFoundry
 				UpdateCorpseHud();
 			}
 			catch (Exception ex) { LogError(ex); }	
+    	}
+    	
+    	private void ContainerOpened_Corpse(object sender, System.EventArgs e)
+    	{
+    		try
+    		{
+    			Core.ContainerOpened -= ContainerOpened_Corpse;
+    			if(Core.Actions.OpenedContainer == opentarget)
+    			{
+	    			CorpseTrackingList.Find(x => x.Id == opentarget).notify = false;
+	    			opentarget = 0;
+	    			UpdateCorpseHud();
+	    			openingcorpse = false;
+    			}
+    			else
+    			{
+    				opentarget = 0;
+	    			UpdateCorpseHud();
+	    			openingcorpse = false;
+    			}
+    		}catch(Exception ex){LogError(ex); Core.ContainerOpened -= ContainerOpened_Corpse;}
     	}
     	
     	private void AllCorpses_Change(object sender, System.EventArgs e)
@@ -774,3 +803,5 @@ namespace GearFoundry
 
 	}
 }
+
+

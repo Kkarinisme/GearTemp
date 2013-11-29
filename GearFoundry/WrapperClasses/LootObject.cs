@@ -203,6 +203,13 @@ namespace GearFoundry
 						if(wo.LongKeys.Contains((int)LongValueKey.ArmorLevel)) {observedarmortinks = wo.Values(LongValueKey.ArmorLevel) / 20;}
 						double availabletinks = 0;
 						if(wo.LongKeys.Contains((int)DoubleValueKey.SalvageWorkmanship)) {availabletinks = 10 - wo.Values(LongValueKey.NumberTimesTinkered);}
+						
+//						double[] ActiveBanes = new double[8];
+//						double[] ActiveCantrips = new double[8];
+//						double[] 
+						
+						
+						
 						double basearmortinks = 0;
 						double cantrippenality = 0;
 						double cantripsteelbonus = 0;
