@@ -1040,8 +1040,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Dame Trielle");
 			t.NPCInfo = "Direlands Gear Knight Resistance Camp";
 			t.NPCCoords = "12.3S 75.0W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
+			t.NPCYellowFlagText = "Near the center of these invading forces, you'll find a Gear Knight called the Iron Blade Commander.";
+			t.NPCYellowCompleteText = "I am pleased to see that you have been successful. Allow me to reward you for your assistance to the Crown.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1051,8 +1051,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Lieutenant Grenlin");
 			t.NPCInfo = "Yaraq to Ijaniya (22.4S, 0.2E)";
 			t.NPCCoords = "33.4S, 6.3E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
+			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Bronze Gauntlet Troopers.";
+			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1062,8 +1062,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Lieutenant Zin");
 			t.NPCInfo = "Yaraq to Ijaniya (22.4S, 0.2E)";
 			t.NPCCoords = "33.4S, 6.3E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
+			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Copper Cog Troopers.";
+			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1073,8 +1073,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Lieutenant Micham");
 			t.NPCInfo = "Yaraq to Ijaniya (22.4S, 0.2E)";
 			t.NPCCoords = "33.4S, 6.3E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
+			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Iron Blade Troopers.";
+			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1084,647 +1084,33 @@ namespace GearFoundry
 			t.NPCNames.Add("Lieutenant Faen");
 			t.NPCInfo = "Yaraq to Ijaniya (22.4S, 0.2E)";
 			t.NPCCoords = "33.4S, 6.3E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-
-			
-//			//TODO:  Fillout mob list
-//			t = new KillTask();
-//			t.TaskName = "Glenden Wood Invaders	Invaders";
-//			t.MobNames.Add("Invader");
-//			t.CompleteCount = 20;
-//			t.NPCNames.Add("Londigul Ellic the Armorer";
-//			t.NPCInfo = "Glenden Wood";
-//			t.NPCCoords = "29.9N, 27.1E";
-//			mKTSet.MyKillTasks.Add(t);	
-
-			//Royal Tent Kill Tasks			
-
-			t = new KillTask();
-			t.TaskName = "Golem Samurai Kill Task";
-			t.MobNames.Add("Bronze Golem Samurai");
-			t.MobNames.Add("Iron Golem Samurai");
-			t.MobNames.Add("Clay Golem Samurai");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Lieutenant Aurin");
-			t.NPCInfo = "Royal Tent";
-			t.NPCCoords = "80.7N 43.0W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);	
-			
-			t = new KillTask();
-			t.TaskName = "Spectral Archer Kill Task";
-			t.MobNames.Add("Spectral Archer");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Sergeant Trebuus");
-			t.NPCInfo = "Royal Tent";
-			t.NPCCoords = "80.7N 43.0W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-
-			t = new KillTask();
-			t.TaskName = "Spectral Bushi Kill Task";
-			t.MobNames.Add("Spectral Bushi");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Corporal Irashi");
-			t.NPCInfo = "Royal Tent";
-			t.NPCCoords = "80.7N 43.0W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Spectral Blade and Claw Kill Task";
-			t.MobNames.Add("Spectral Blade Adept");
-			t.MobNames.Add("Spectral Blade Master");
-			t.MobNames.Add("Spectral Claw Adept");
-			t.MobNames.Add("Spectral Claw Master");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Griffon");
-			t.NPCInfo = "Royal Tent";
-			t.NPCCoords = "80.7N 43.0W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Spectral Mage Kill Task";
-			t.MobNames.Add("Spectral Bloodmage");
-			t.MobNames.Add("Spectral Voidmage");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Lord Eorlinde");
-			t.NPCInfo = "Royal Tent";
-			t.NPCCoords = "80.7N 43.0W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Spectral Minion Kill Task";
-			t.MobNames.Add("Spectral Minion");
-			t.CompleteCount = 15;
-			t.NPCNames.Add("Aun Kirtal");
-			t.NPCInfo = "Royal Tent";
-			t.NPCCoords = "80.7N 43.0W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Spectral Nanjou Shou-jen Kill Task";
-			t.MobNames.Add("Spectral Nanjou Shou-jen");
-			t.CompleteCount = 5;
-			t.NPCNames.Add("Hanamoto Aki'ko");
-			t.NPCInfo = "Royal Tent";
-			t.NPCCoords = "80.7N 43.0W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Spectral Samurai Kill Task";
-			t.MobNames.Add("Spectral Samurai");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Lieutenant Takamaki");
-			t.NPCInfo = "Royal Tent";
-			t.NPCCoords = "80.7N 43.0W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-						
-			
-			t = new KillTask();
-			t.TaskName = "Eye of T'thuun Quest";
-			t.MobNames.Add("Tentacle of T'thuun");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Tamara du Cinghalle");
-			t.NPCInfo = "Greenspire";
-			t.NPCCoords = "43.2N 67.1W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-
-			
-			
-			
-			//TODO:  Viamontian knight types
-			t = new KillTask();
-			t.TaskName = "Torgash's Tasks";
-			t.MobNames.Add("Viamontian Knight");
-			t.CompleteCount = 30;
-			t.NPCNames.Add("Torgash");
-			t.NPCInfo = "Shattered Outlands";
-			t.NPCCoords = "94.0N 45.9W";
+			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Silver Scope Troopers.";
+			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			
-			
-			
-
-			t = new KillTask();
-			t.TaskName = "Arctic Mattekar Kill Task";
-			t.MobNames.Add("Arctic Mattekar");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Enzo Ilario");
-			t.NPCInfo = "Silyun";
-			t.NPCCoords = "87.4N 70.5W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Banished Creature Kill Task";
-			t.MobNames.Add("Banished Banderling");
-			t.MobNames.Add("Banished Drudge");
-			t.MobNames.Add("Banished Grievver");
-			t.MobNames.Add("Banished Lugian");
-			t.MobNames.Add("Banished Monouga");
-			t.MobNames.Add("Banished Mu-miyah");
-			t.MobNames.Add("Banished Olthoi");
-			t.MobNames.Add("Banished Phyntos Wasp");
-			t.MobNames.Add("Banished Shadow");
-			t.MobNames.Add("Banished Tumerok");
-			t.MobNames.Add("Banished Tusker");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Belinda du Loc");
-			t.NPCInfo = "Stonehold";
-			t.NPCCoords = "68.9N 21.6W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Fallen Creature Kill Task";
-			t.MobNames.Add("Fallen Crystal Shard");
-			t.MobNames.Add("Fallen Doll");
-			t.MobNames.Add("Fallen Drudge");
-			t.MobNames.Add("Fallen Grievver");
-			t.MobNames.Add("Fallen Lugian");
-			t.MobNames.Add("Fallen Margul");
-			t.MobNames.Add("Fallen Marionette");
-			t.MobNames.Add("Fallen Mite");
-			t.MobNames.Add("Fallen Rift");
-			t.MobNames.Add("Fallen Shadow");
-			t.MobNames.Add("Fallen Tumerok");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Belinda du Loc");
-			t.NPCInfo = "Stonehold";
-			t.NPCCoords = "68.9N 21.6W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Benek Niffis Kill Task";
-			t.MobNames.Add("Benek Niffis");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Colista Fluress");
-			t.NPCInfo = "The Deep (Vissidal)";
-			t.NPCCoords = "77.8N 67.1E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Blood Shreth Kill Task";
-			t.MobNames.Add("Blood Shreth");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("San Ming");
-			t.NPCInfo = "Shoushi";
-			t.NPCCoords = "33.5S, 72.8E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Coral Golem Kill Task";
-			t.MobNames.Add("Coral Golem");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Malrin");
-			t.NPCInfo = "Sanamar";
-			t.NPCCoords = "71.8N, 60.8W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Deathcap Thrungus Kill Task";
-			t.MobNames.Add("Deathcap Thrungus");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Jiang Li");
-			t.NPCInfo = "Westwatch";
-			t.NPCCoords = "72.7N 73.3W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Dire Mattekar Kill Task";
-			t.MobNames.Add("Dire Mattekar");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Fergal the Dire");
-			t.NPCInfo = "Baishi";
-			t.NPCCoords = "49.4S, 62.4E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Ebon Gromnie Kill Task";
-			t.MobNames.Add("Ebon Gromnie");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Afra bint Abbas");
-			t.NPCInfo = "Redspire";
-			t.NPCCoords = "40.8N, 83.0W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Elemental Kill Task";
-			t.MobNames.Add("Caustic");
-			t.MobNames.Add("Synnast");
-			t.MobNames.Add("Inferno");
-			t.MobNames.Add("Hyems");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Zahir");
-			t.NPCInfo = "Stonehold";
-			t.NPCCoords = "68.7N, 21.5W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Floeshark Kill Task";
-			t.MobNames.Add("Floeshark");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Ryuichi Tai");
-			t.NPCInfo = "Eastwatch";
-			t.NPCCoords = "90.3N, 43.0W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Gold Gear Trooper Kill Task";
-			t.MobNames.Add("Gold Gear Trooper");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Sir Stavitor");
-			t.NPCInfo = "Yaraq to Ijaniya (22.4S, 0.2E)";
-			t.NPCCoords = "33.4S, 6.3E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
-			
-			
-			
-			t = new KillTask();
-			t.TaskName = "Grievver Violator Kill Task";
-			t.MobNames.Add("Grievver Violator");
-			t.CompleteCount = 100;
-			t.NPCNames.Add("Moina");
-			t.NPCInfo = "Eastwatch";
-			t.NPCCoords = "90.4N 43.1W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
-			
-			t = new KillTask();
-			t.TaskName = "Guruk Basher Kill Task";
-			t.MobNames.Add("Guruk Basher");
-			t.CompleteCount = 40;
-			t.NPCNames.Add("Shiruuk");
-			t.NPCInfo = "Kor-Gursha";
-			t.NPCCoords = "Bur";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Guruk Colossus Kill Task";
-			t.MobNames.Add("Guruk Colossi");
-			t.MobNames.Add("Guruk Colossus");
-			t.CompleteCount = 30;
-			t.NPCNames.Add("Brogosh");
-			t.NPCInfo = "Kor-Gursha";
-			t.NPCCoords = "Bur";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Guruk Fiend Kill Task";
-			t.MobNames.Add("Guruk Fiend");
-			t.CompleteCount = 30;
-			t.NPCNames.Add("Mohor");
-			t.NPCInfo = "Kor-Gursha";
-			t.NPCCoords = "Bur";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Guruk Marauder Kill Task";
-			t.MobNames.Add("Guruk Marauder");
-			t.CompleteCount = 40;
-			t.NPCNames.Add("Kurket");
-			t.NPCInfo = "Kor-Gursha";
-			t.NPCCoords = "Bur";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Guruk Monstrosity Kill Task";
-			t.MobNames.Add("Guruk Monstrosity");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Borsh");
-			t.NPCInfo = "Kor-Gursha";
-			t.NPCCoords = "Bur";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Guruk Smasher Kill Task";
-			t.MobNames.Add("Guruk Smasher");
-			t.CompleteCount = 40;
-			t.NPCNames.Add("Kushuk");
-			t.NPCInfo = "Kor-Gursha";
-			t.NPCCoords = "Bur";
-			mKTSet.MyKillTasks.Add(t);
-			
-			//Harvest Reaper Kill Task Omitted due to complexity and seasonal
-			
-			t = new KillTask();
-			t.TaskName = "Hea Windreave Kill Task";
-			t.MobNames.Add("Hea Windreave");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Susana du Loc");
-			t.NPCInfo = "Redspire";
-			t.NPCCoords = "40.7N, 83.2W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
-			
-			t = new KillTask();
-			t.TaskName = "Iron Spined Chittick Kill Task";
-			t.MobNames.Add("Iron Spined Chittick");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Aidene");
-			t.NPCInfo = "Oolatanga's Refuge";
-			t.NPCCoords = "2.0N 95.6E";
-			mKTSet.MyKillTasks.Add(t);
-
-			t = new KillTask();
-			t.TaskName = "Kilif Zefir Kill Task";
-			t.MobNames.Add("Kilif Zefir");
-			t.CompleteCount = 35;
-			t.NPCNames.Add("Hadiya bint Anan");
-			t.NPCInfo = "Shoushi";
-			t.NPCCoords = "33.7S 73.1E";
-			mKTSet.MyKillTasks.Add(t);	
-			
-			t = new KillTask();
-			t.TaskName = "K'nath An'dras Kill Task";
-			t.MobNames.Add("K'nath An'dra");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Nona");
-			t.NPCInfo = "Wai Jhou";
-			t.NPCCoords = "61.8S 51.3W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Littoral Siraluun Kill Task";
-			t.MobNames.Add("Littoral Siraluun");
-			t.CompleteCount = 25;
-			t.NPCNames.Add(" Rico Cellini");
-			t.NPCInfo = "Greenspire";
-			t.NPCCoords = "43.2N 67.1W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Putrid Moar Kill Task";
-			t.MobNames.Add("Putrid Moar");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Tibik");
-			t.NPCInfo = "Kor-Gursha";
-			t.NPCCoords = "Bur";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Mosswart Worshipper Kill Task";
-			t.MobNames.Add("Mosswart Worshipper");
-			t.CompleteCount = 175;
-			t.NPCNames.Add("Orfeo Orlando");
-			t.NPCInfo = "Eastwatch";
-			t.NPCCoords = "90.2N, 43.1W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Mottled Carenzi Kill Task";
-			t.MobNames.Add("Mottled Carenzi");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Grania the Bold");
-			t.NPCInfo = "Candeth Keep";
-			t.NPCCoords = "87.6S 67.4W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Mosswart Townsfolk Kill Task";
-			t.MobNames.Add("Mosswart Townsfolk");
-			t.CompleteCount = 40;
-			t.NPCNames.Add("Corporal Massein");
-			t.NPCInfo = "Kryst";
-			t.NPCCoords = "74.4S 84.6E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Mucky Moarsman Kill Task";
-			t.MobNames.Add("Mucky Moarsman");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Algar Oreksun");
-			t.NPCInfo = "The Deep (Vissidal)";
-			t.NPCCoords = "77.8N 67.1E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Naughty Skeleton Kill Task";
-			t.MobNames.Add("Naughty Skeleton");
-			t.CompleteCount = 100;
-			t.NPCNames.Add("Taku Yukio");
-			t.NPCInfo = "Eastwatch";
-			t.NPCCoords = "90.3N 43.1W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Olthoi Drone Kill Task";
-			t.MobNames.Add("Olthoi Drone");
-			t.CompleteCount = 20;
-			t.NPCNames.Add("Olthoi Hunter");
-			t.NPCInfo = "Arwic (South)";
-			t.NPCCoords = "30.9N 56.3E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Olthoi Nettler Kill Task";
-			t.MobNames.Add("Olthoi Nettler");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Olthoi Hunter");
-			t.NPCInfo = "Arwic (South)";
-			t.NPCCoords = "30.9N 56.3E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Olthoi Nymph Kill Task";
-			t.MobNames.Add("Olthoi Nymph");
-			t.CompleteCount = 20;
-			t.NPCNames.Add("Olthoi Hunter");
-			t.NPCInfo = "Arwic (South)";
-			t.NPCCoords = "30.9N 56.3E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Olthoi Ripper Kill Task";
-			t.MobNames.Add("Olthoi Ripper");
-			t.CompleteCount = 250;
-			t.NPCNames.Add("Marcello");
-			t.NPCInfo = "Eastwatch";
-			t.NPCCoords = "90.2N 43.1W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Paradox-touched Grub Kill Task";
-			t.MobNames.Add("Paradox-touched Olthoi Noble Grub");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Alicia Swiftblade");
-			t.NPCInfo = "Olthoi North";
-			t.NPCCoords = "43.8N 54.9E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Paradox-touched Nymph Kill Task";
-			t.MobNames.Add("Paradox-touched Olthoi Warrior Nymph");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Tomihino");
-			t.NPCInfo = "Olthoi North";
-			t.NPCCoords = "43.8N 54.9E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Plate Armoredillo Kill Task";
-			t.MobNames.Add("Plate Armoredillo");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Saqr");
-			t.NPCInfo = "Fort Tethana";
-			t.NPCCoords = "1.5N 71.8W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Polardillo Kill Task";
-			t.MobNames.Add("Polardillo");
-			t.CompleteCount = 10;
-			t.NPCNames.Add("Alessandro Mardor");
-			t.NPCInfo = "Sanamar";
-			t.NPCCoords = "72.0N 61.2W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Polar Ursuin Kill Task";
-			t.MobNames.Add("Polar Ursuin");
-			t.CompleteCount = 25;
-			t.NPCNames.Add("Mariabella Varanese");
-			t.NPCInfo = "Fiun Outpost";
-			t.NPCCoords = "95.6N, 56.3W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			//Pumpkin Lord Kill Task
-			
-			t = new KillTask();
-			t.TaskName = "Rare Game Kill Task";
-			t.MobNames.Add("Basalt Golem");
-			t.MobNames.Add("Cold One");
-			t.MobNames.Add("Dark Myrmidon");
-			t.MobNames.Add("Dark Sorcerer");
-			t.MobNames.Add("Lord of Decay");
-			t.MobNames.Add("Lugian Warlord");
-			t.MobNames.Add("Master of the Pack");
-			t.MobNames.Add("Pure One");
-			t.MobNames.Add("Sentient Fragment");
-			t.MobNames.Add("Swamp King");
-			t.MobNames.Add("Tundra Mattekar");
-			t.CompleteCount = 50;
-			t.NPCNames.Add(" Belinda du Loc");
-			t.NPCInfo = "Stonehold";
-			t.NPCCoords = "68.9N 21.6W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Remoran Sea Raptor Kill Task";
-			t.MobNames.Add("Remoran Sea Raptor");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Peng-Ya");
-			t.NPCInfo = "The Deep (Vissidal)";
-			t.NPCCoords = "77.8N 67.1E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Repugnant Eater Kill Task";
-			t.MobNames.Add("Repugnant Eater");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Xun Yu");
-			t.NPCInfo = "Eastwatch";
-			t.NPCCoords = "90.2N 43.1W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Ruschk Kill Task";
-			t.MobNames.Add("Ruschk Draktehn");
-			t.MobNames.Add("Ruschk Laktar");
-			t.CompleteCount = 30;
-			t.NPCNames.Add("Commander Rylane di Cinghalle");
-			t.NPCInfo = "Shattered Outlands";
-			t.NPCCoords = "93.2N 48.2W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
-			t = new KillTask();
-			t.TaskName = "Shadow-touched Virindi Paradox Kill Task";
-			t.MobNames.Add("Shadow-touched Virindi Paradox");
-			t.CompleteCount = 75;
-			t.NPCNames.Add("Guard Li");
-			t.NPCInfo = "Wai Jhou";
-			t.NPCCoords = "61.8S, 51.3W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Shadow-touched Virindi Quidiox Kill Task";
-			t.MobNames.Add("Shadow-touched Virindi Quidiox");
-			t.CompleteCount = 75;
-			t.NPCNames.Add("Guard Alfric");
-			t.NPCInfo = "Candeth Keep";
-			t.NPCCoords = "87.9S, 67.4W";
-			mKTSet.MyKillTasks.Add(t);
-
-			t = new KillTask();
-			t.TaskName = "Shallows Gorger Kill Task";
-			t.MobNames.Add("Shallows Gorger");
-			t.CompleteCount = 50;
-			t.NPCNames.Add("Dayla Bint Kazm");
-			t.NPCInfo = "The Deep (Vissidal)";
-			t.NPCCoords = "77.8N 67.1E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
-			
-			t = new KillTask();
-			t.TaskName = "Sishalti Slithis Kill Task";
-			t.MobNames.Add("Sishalti Tentacle");
-			t.MobNames.Add("Sishalti Tendril");
-			t.MobNames.Add("Sishalti Eye Stalk");
-			t.CompleteCount = 150;
-			t.NPCNames.Add("Zava bint Laurma");
-			t.NPCInfo = "Zaikhal";
-			t.NPCCoords = "13.9N, 0.6E";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Small Fledgling Mukkir Kill Task";
-			t.MobNames.Add("Small Fledgling Mukkir");
-			t.CompleteCount = 15;
-			t.NPCNames.Add("Royal Guard");
-			t.NPCInfo = "Holtburg, Shoushi, or Yaraq";
-			t.NPCCoords = "Unknown";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Tenebrous Rift Kill Task";
-			t.MobNames.Add("Tenebrous Rift");
-			t.CompleteCount = 350;
-			t.NPCNames.Add("Solange");
-			t.NPCInfo = "Singularity Caul";
-			t.NPCCoords = "97.4S 94.6W";
-			mKTSet.MyKillTasks.Add(t);
-
-			t = new KillTask();
+						t = new KillTask();
 			t.TaskName = "Three Eyed Snowman Kill Task";
 			t.MobNames.Add("Three Eyed Snowman");
 			t.CompleteCount = 5;
 			t.NPCNames.Add("Blind Snowman");
 			t.NPCInfo = "Mountains (north of Holtburg)";
 			t.NPCCoords = "46.7N, 48.9E";
+			t.NPCYellowFlagText = "Kill him five times and maybe he will learn not to go around stealing other peoples dreams.";
+			t.NPCYellowCompleteText = "Excellent, I hope that teaches ol' Three Eye a lesson.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			//Eastwatch Tasks
+			
+			t = new KillTask();
+			t.TaskName = "Wicked Skeleton Kill Task";
+			t.MobNames.Add("Wicked Skeleton");
+			t.CompleteCount = 100;
+			t.NPCNames.Add("Ruqaya al Mubarak");
+			t.NPCInfo = "Eastwatch";
+			t.NPCCoords = "90.3N 43.1W";
+			t.NPCYellowFlagText = "Track down and slay 100 of the terrible Wicked Skeletons for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend! You have slain many of the terrible beasts! Allow me to reward you!";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1734,6 +1120,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Claire Artmad");
 			t.NPCInfo = "Eastwatch";
 			t.NPCCoords = "90.2N, 43.1W";
+			t.NPCYellowFlagText = "Track down and slay 250 of the terrible Tukora Lieutenants for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1743,6 +1131,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Lieutenant Rothe");
 			t.NPCInfo = "Dryreach";
 			t.NPCCoords = "8.2S 73.1E";
+			t.NPCYellowFlagText = "Track down and slay 25 of the Tumerok Gladiators for me, and I will reward you for your aid in the defense of Dryreach.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1752,15 +1142,19 @@ namespace GearFoundry
 			t.NPCNames.Add("Shoichi");
 			t.NPCInfo = "Lin";
 			t.NPCCoords = "54.4S 72.9E";
+			t.NPCYellowFlagText = "Return to me after you have killed 500 Tusker Guards and I will reward you.";
+			t.NPCYellowCompleteText = "Excellent, now go contemplate what you have learned from fighting the Tusker Guards.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
-			t.TaskName = "Umbral Rift Kill Task	Umbral Rifts";
+			t.TaskName = "Umbral Rift Kill Task";
 			t.MobNames.Add("Umbral Rift");
 			t.CompleteCount = 30;
 			t.NPCNames.Add("Solange");
 			t.NPCInfo = "Singularity Caul";
 			t.NPCCoords = "97.4S 94.6W";
+			t.NPCYellowFlagText = "Kill 30 Umbral Rifts and let me know of your adventures.";
+			t.NPCYellowCompleteText = "Truly amazing isn't it. You are one of us, you are a Rift Walker.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1770,6 +1164,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Robert Gutsmasher");
 			t.NPCInfo = "Rebel Hideout";
 			t.NPCCoords = "43.9N 73.9W";
+			t.NPCYellowFlagText = "Kill 50 of them for me, and I will reward you for your efforts.";
+			t.NPCYellowCompleteText = "You do the Carenzi a great service.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1779,6 +1175,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Guard Taziq");
 			t.NPCInfo = "Qalaba'r";
 			t.NPCCoords = "74.3S, 19.1E";
+			t.NPCYellowFlagText = "If you slay 75 of these strange beings, come to me.";
+			t.NPCYellowCompleteText = "As the hero Yaziq al-Tazar returned triumphant, so do you return to me now.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1788,6 +1186,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Guard Q'alia");
 			t.NPCInfo = "Ayan Baqur";
 			t.NPCCoords = "60.0S, 88.0W";
+			t.NPCYellowFlagText = "Go there now, and slay 75 Virindi Quidioxes.";
+			t.NPCYellowCompleteText = "It is done!";
 			mKTSet.MyKillTasks.Add(t);			
 			
 			t = new KillTask();
@@ -1797,15 +1197,8 @@ namespace GearFoundry
 			t.NPCNames.Add("Aun Ruperea");
 			t.NPCInfo = "Timaru";
 			t.NPCCoords = "44.3N, 77.9W";
-			mKTSet.MyKillTasks.Add(t);
-			
-			t = new KillTask();
-			t.TaskName = "Wicked Skeleton Kill Task";
-			t.MobNames.Add("Wicked Skeleton");
-			t.CompleteCount = 100;
-			t.NPCNames.Add("Ruqaya al Mubarak");
-			t.NPCInfo = "Eastwatch";
-			t.NPCCoords = "90.3N 43.1W";
+			t.NPCYellowFlagText = "Slay 50 of the Voracious Eater and I will sing your name to the elders of my xuta.";
+			t.NPCYellowCompleteText = "Ah, buhdi, you do my xuta a grand service. I thank you.";
 			mKTSet.MyKillTasks.Add(t);
 			
 			t = new KillTask();
@@ -1836,8 +1229,734 @@ namespace GearFoundry
 			t.CompleteCount = 100;
 			t.NPCNames.Add("Oorjit");
 			t.NPCInfo = "Crystalline Crag";
+			t.NPCYellowFlagText = "Go out and kill 100 Wisps in this area and I will reward you.";
+			t.NPCYellowCompleteText = "Excellent work in your hunt. We'll find your reports very useful.";
 			t.NPCCoords = "90.3N 43.1W";
 			mKTSet.MyKillTasks.Add(t);
+
+			//Royal Tent Kill Tasks			
+
+			t = new KillTask();
+			t.TaskName = "Golem Samurai Kill Task";
+			t.MobNames.Add("Bronze Golem Samurai");
+			t.MobNames.Add("Iron Golem Samurai");
+			t.MobNames.Add("Clay Golem Samurai");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Lieutenant Aurin");
+			t.NPCInfo = "Royal Tent";
+			t.NPCCoords = "80.7N 43.0W";
+			t.NPCYellowFlagText = "If you will do me the honor of killing 5 of the Golem Samurai within the towns or up within the walled fortress, I will reward you for your efforts.";
+			t.NPCYellowCompleteText = "Well done, well done indeed.";
+			mKTSet.MyKillTasks.Add(t);	
+			
+			t = new KillTask();
+			t.TaskName = "Spectral Archer Kill Task";
+			t.MobNames.Add("Spectral Archer");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Sergeant Trebuus");
+			t.NPCInfo = "Royal Tent";
+			t.NPCCoords = "80.7N 43.0W";
+			t.NPCYellowFlagText = "If you will do me the honor of killing 15 of the Spectral Archers within the towns or up within the walled fortress, I will reward you for your assistance.";
+			t.NPCYellowCompleteText = "Well done.";
+			mKTSet.MyKillTasks.Add(t);
+
+			t = new KillTask();
+			t.TaskName = "Spectral Bushi Kill Task";
+			t.MobNames.Add("Spectral Bushi");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Corporal Irashi");
+			t.NPCInfo = "Royal Tent";
+			t.NPCCoords = "80.7N 43.0W";
+			t.NPCYellowFlagText = "If you will assist me by killing 10 of the Spectral Bushi within the towns or up within the walled fortress, I will reward you for your efforts.";
+			t.NPCYellowCompleteText = "Thank you for your assistance.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Spectral Blade and Claw Kill Task";
+			t.MobNames.Add("Spectral Blade Adept");
+			t.MobNames.Add("Spectral Blade Master");
+			t.MobNames.Add("Spectral Claw Adept");
+			t.MobNames.Add("Spectral Claw Master");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Griffon");
+			t.NPCInfo = "Royal Tent";
+			t.NPCCoords = "80.7N 43.0W";
+			t.NPCYellowFlagText = "To that end, if you aid me in hunting 10 of the Spectral Claw Adepts, Claw Masters, Blade Adepts or Blade Masters, I'll happily reward you for your help.";
+			t.NPCYellowCompleteText = "Your skill is quite remarkable.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Spectral Mage Kill Task";
+			t.MobNames.Add("Spectral Bloodmage");
+			t.MobNames.Add("Spectral Voidmage");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Lord Eorlinde");
+			t.NPCInfo = "Royal Tent";
+			t.NPCCoords = "80.7N 43.0W";
+			t.NPCYellowFlagText = "While these two types of spirits continue to exist, they pose a tremendous threat to the kingdom.";
+			t.NPCYellowCompleteText = "Your skill is remarkable.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Spectral Minion Kill Task";
+			t.MobNames.Add("Spectral Minion");
+			t.CompleteCount = 15;
+			t.NPCNames.Add("Aun Kirtal");
+			t.NPCInfo = "Royal Tent";
+			t.NPCCoords = "80.7N 43.0W";
+			t.NPCYellowFlagText = "If you will aid me by killing 15 of the Spectral Minions within the towns or up within the walled fortress, I will reward your good work.";
+			t.NPCYellowCompleteText = "Your hunt for today is complete.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Spectral Nanjou Shou-jen Kill Task";
+			t.MobNames.Add("Spectral Nanjou Shou-jen");
+			t.CompleteCount = 5;
+			t.NPCNames.Add("Hanamoto Aki'ko");
+			t.NPCInfo = "Royal Tent";
+			t.NPCCoords = "80.7N 43.0W";
+			t.NPCYellowFlagText = "To that end, if you will do me the honor of killing 5 of the Spectral Nanjou Shou-jen within the towns or up within the walled fortress, I will reward you for your efforts.";
+			t.NPCYellowCompleteText = "Thank you for your aid my assigned task.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Spectral Samurai Kill Task";
+			t.MobNames.Add("Spectral Samurai");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Lieutenant Takamaki");
+			t.NPCInfo = "Royal Tent";
+			t.NPCCoords = "80.7N 43.0W";
+			t.NPCYellowFlagText = "If you will do me the honor of killing 10 of the Spectral Samurai within the towns or up within the walled fortress, I will reward you for your efforts.";
+			t.NPCYellowCompleteText = "Your skill is exceptional.";
+			mKTSet.MyKillTasks.Add(t);						
+			
+			t = new KillTask();
+			t.TaskName = "Eye of T'thuun Quest";
+			t.MobNames.Add("Tentacle of T'thuun");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Tamara du Cinghalle");
+			t.NPCInfo = "Greenspire";
+			t.NPCCoords = "43.2N 67.1W";
+			t.NPCYellowFlagText = "Killing 50 should be enough to get an eye off of the larger, eye covered one.";
+			t.NPCYellowCompleteText = "Ahh, success. The researchers will be very pleased.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Arctic Mattekar Kill Task";
+			t.MobNames.Add("Arctic Mattekar");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Enzo Ilario");
+			t.NPCInfo = "Silyun";
+			t.NPCCoords = "87.4N 70.5W";
+			t.NPCYellowFlagText = "Well then. Track down and slay 25 of the terrible Arctic Mattekars for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Banished Creature Kill Task";
+			t.MobNames.Add("Banished Banderling");
+			t.MobNames.Add("Banished Drudge");
+			t.MobNames.Add("Banished Grievver");
+			t.MobNames.Add("Banished Lugian");
+			t.MobNames.Add("Banished Monouga");
+			t.MobNames.Add("Banished Mu-miyah");
+			t.MobNames.Add("Banished Olthoi");
+			t.MobNames.Add("Banished Phyntos Wasp");
+			t.MobNames.Add("Banished Shadow");
+			t.MobNames.Add("Banished Tumerok");
+			t.MobNames.Add("Banished Tusker");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Belinda du Loc");
+			t.NPCInfo = "Stonehold";
+			t.NPCCoords = "68.9N 21.6W";
+			t.NPCYellowFlagText = "I would like you to experience the hunting of the elusive banished creatures.";
+			t.NPCYellowCompleteText = "Excellent, you are now an experienced hunted of banished creatures.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Fallen Creature Kill Task";
+			t.MobNames.Add("Fallen Crystal Shard");
+			t.MobNames.Add("Fallen Doll");
+			t.MobNames.Add("Fallen Drudge");
+			t.MobNames.Add("Fallen Grievver");
+			t.MobNames.Add("Fallen Lugian");
+			t.MobNames.Add("Fallen Margul");
+			t.MobNames.Add("Fallen Marionette");
+			t.MobNames.Add("Fallen Mite");
+			t.MobNames.Add("Fallen Rift");
+			t.MobNames.Add("Fallen Shadow");
+			t.MobNames.Add("Fallen Tumerok");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Belinda du Loc");
+			t.NPCInfo = "Stonehold";
+			t.NPCCoords = "68.9N 21.6W";
+			t.NPCYellowFlagText = "I would like you to experience the hunting of the elusive fallen creatures.";
+			t.NPCYellowCompleteText = "Excellent, you are now an experienced hunted of fallen creatures.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Benek Niffis Kill Task";
+			t.MobNames.Add("Benek Niffis");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Colista Fluress");
+			t.NPCInfo = "The Deep (Vissidal)";
+			t.NPCCoords = "77.8N 67.1E";
+			t.NPCYellowFlagText = "Kill 50 Benek Niffis and rewards shall be yours.";
+			t.NPCYellowCompleteText = "It is pleased. Rewards unto thee.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Blood Shreth Kill Task";
+			t.MobNames.Add("Blood Shreth");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("San Ming");
+			t.NPCInfo = "Shoushi";
+			t.NPCCoords = "33.5S, 72.8E";
+			t.NPCYellowFlagText = "Track down and slay 10 of the terrible Blood Shreth for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Coral Golem Kill Task";
+			t.MobNames.Add("Coral Golem");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Malrin");
+			t.NPCInfo = "Sanamar";
+			t.NPCCoords = "71.8N, 60.8W";
+			t.NPCYellowFlagText = "It won't make them go away but I'll reward you for every 50 Coral Golems that you kill.";
+			t.NPCYellowCompleteText = "Those Coral Golems won't be scratching my armor again.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Deathcap Thrungus Kill Task";
+			t.MobNames.Add("Deathcap Thrungus");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Jiang Li");
+			t.NPCInfo = "Westwatch";
+			t.NPCCoords = "72.7N 73.3W";
+			t.NPCYellowFlagText = "Track down and slay 25 of the terrible Deathcap Thrungum for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Dire Mattekar Kill Task";
+			t.MobNames.Add("Dire Mattekar");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Fergal the Dire");
+			t.NPCInfo = "Baishi";
+			t.NPCCoords = "49.4S, 62.4E";
+			t.NPCYellowFlagText = "Track down and slay 10 of the terrible Dire Mattekars for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Ebon Gromnie Kill Task";
+			t.MobNames.Add("Ebon Gromnie");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Afra bint Abbas");
+			t.NPCInfo = "Redspire";
+			t.NPCCoords = "40.8N, 83.0W";
+			t.NPCYellowFlagText = "Track down and slay 25 of the terrible Ebon Gromnies for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Elemental Kill Task";
+			t.MobNames.Add("Caustic");
+			t.MobNames.Add("Synnast");
+			t.MobNames.Add("Inferno");
+			t.MobNames.Add("Hyem");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Zahir");
+			t.NPCInfo = "Stonehold";
+			t.NPCCoords = "68.7N, 21.5W";
+			t.NPCYellowFlagText = "Fight twenty-five of these creatures and then return to me and tell me everything you learned about them.";
+			t.NPCYellowCompleteText = "Very interesting, I hope I can use this information to further my research.";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Floeshark Kill Task";
+			t.MobNames.Add("Floeshark");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Ryuichi Tai");
+			t.NPCInfo = "Eastwatch";
+			t.NPCCoords = "90.3N, 43.0W";
+			t.NPCYellowFlagText = "Track down and slay 50 of the terrible Floesharks for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Gold Gear Trooper Kill Task";
+			t.MobNames.Add("Gold Gear Trooper");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Sir Stavitor");
+			t.NPCInfo = "Yaraq to Ijaniya (22.4S, 0.2E)";
+			t.NPCCoords = "33.4S, 6.3E";
+			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Gold Gear Troopers.";
+			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded. ";
+			mKTSet.MyKillTasks.Add(t);
+
+			t = new KillTask();
+			t.TaskName = "Grievver Violator Kill Task";
+			t.MobNames.Add("Grievver Violator");
+			t.CompleteCount = 100;
+			t.NPCNames.Add("Moina");
+			t.NPCInfo = "Eastwatch";
+			t.NPCCoords = "90.4N 43.1W";
+			t.NPCYellowFlagText = "Track down and slay 100 of the terrible Grievver Violators for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			mKTSet.MyKillTasks.Add(t);
+			
+			
+			
+			t = new KillTask();
+			t.TaskName = "Guruk Basher Kill Task";
+			t.MobNames.Add("Guruk Basher");
+			t.CompleteCount = 40;
+			t.NPCNames.Add("Shiruuk");
+			t.NPCInfo = "Kor-Gursha";
+			t.NPCCoords = "Bur";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Guruk Colossus Kill Task";
+			t.MobNames.Add("Guruk Colossi");
+			t.MobNames.Add("Guruk Colossus");
+			t.CompleteCount = 30;
+			t.NPCNames.Add("Brogosh");
+			t.NPCInfo = "Kor-Gursha";
+			t.NPCCoords = "Bur";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Guruk Fiend Kill Task";
+			t.MobNames.Add("Guruk Fiend");
+			t.CompleteCount = 30;
+			t.NPCNames.Add("Mohor");
+			t.NPCInfo = "Kor-Gursha";
+			t.NPCCoords = "Bur";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Guruk Marauder Kill Task";
+			t.MobNames.Add("Guruk Marauder");
+			t.CompleteCount = 40;
+			t.NPCNames.Add("Kurket");
+			t.NPCInfo = "Kor-Gursha";
+			t.NPCCoords = "Bur";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Guruk Monstrosity Kill Task";
+			t.MobNames.Add("Guruk Monstrosity");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Borsh");
+			t.NPCInfo = "Kor-Gursha";
+			t.NPCCoords = "Bur";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Guruk Smasher Kill Task";
+			t.MobNames.Add("Guruk Smasher");
+			t.CompleteCount = 40;
+			t.NPCNames.Add("Kushuk");
+			t.NPCInfo = "Kor-Gursha";
+			t.NPCCoords = "Bur";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			
+			
+			t = new KillTask();
+			t.TaskName = "Hea Windreave Kill Task";
+			t.MobNames.Add("Hea Windreave");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Susana du Loc");
+			t.NPCInfo = "Redspire";
+			t.NPCCoords = "40.7N, 83.2W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			
+			
+			t = new KillTask();
+			t.TaskName = "Iron Spined Chittick Kill Task";
+			t.MobNames.Add("Iron Spined Chittick");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Aidene");
+			t.NPCInfo = "Oolatanga's Refuge";
+			t.NPCCoords = "2.0N 95.6E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+
+			t = new KillTask();
+			t.TaskName = "Kilif Zefir Kill Task";
+			t.MobNames.Add("Kilif Zefir");
+			t.CompleteCount = 35;
+			t.NPCNames.Add("Hadiya bint Anan");
+			t.NPCInfo = "Shoushi";
+			t.NPCCoords = "33.7S 73.1E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);	
+			
+			t = new KillTask();
+			t.TaskName = "K'nath An'dras Kill Task";
+			t.MobNames.Add("K'nath An'dra");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Nona");
+			t.NPCInfo = "Wai Jhou";
+			t.NPCCoords = "61.8S 51.3W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Littoral Siraluun Kill Task";
+			t.MobNames.Add("Littoral Siraluun");
+			t.CompleteCount = 25;
+			t.NPCNames.Add(" Rico Cellini");
+			t.NPCInfo = "Greenspire";
+			t.NPCCoords = "43.2N 67.1W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Putrid Moar Kill Task";
+			t.MobNames.Add("Putrid Moar");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Tibik");
+			t.NPCInfo = "Kor-Gursha";
+			t.NPCCoords = "Bur";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Mosswart Worshipper Kill Task";
+			t.MobNames.Add("Mosswart Worshipper");
+			t.CompleteCount = 175;
+			t.NPCNames.Add("Orfeo Orlando");
+			t.NPCInfo = "Eastwatch";
+			t.NPCCoords = "90.2N, 43.1W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Mottled Carenzi Kill Task";
+			t.MobNames.Add("Mottled Carenzi");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Grania the Bold");
+			t.NPCInfo = "Candeth Keep";
+			t.NPCCoords = "87.6S 67.4W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Mosswart Townsfolk Kill Task";
+			t.MobNames.Add("Mosswart Townsfolk");
+			t.CompleteCount = 40;
+			t.NPCNames.Add("Corporal Massein");
+			t.NPCInfo = "Kryst";
+			t.NPCCoords = "74.4S 84.6E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Mucky Moarsman Kill Task";
+			t.MobNames.Add("Mucky Moarsman");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Algar Oreksun");
+			t.NPCInfo = "The Deep (Vissidal)";
+			t.NPCCoords = "77.8N 67.1E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Naughty Skeleton Kill Task";
+			t.MobNames.Add("Naughty Skeleton");
+			t.CompleteCount = 100;
+			t.NPCNames.Add("Taku Yukio");
+			t.NPCInfo = "Eastwatch";
+			t.NPCCoords = "90.3N 43.1W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Olthoi Drone Kill Task";
+			t.MobNames.Add("Olthoi Drone");
+			t.CompleteCount = 20;
+			t.NPCNames.Add("Olthoi Hunter");
+			t.NPCInfo = "Arwic (South)";
+			t.NPCCoords = "30.9N 56.3E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Olthoi Nettler Kill Task";
+			t.MobNames.Add("Olthoi Nettler");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Olthoi Hunter");
+			t.NPCInfo = "Arwic (South)";
+			t.NPCCoords = "30.9N 56.3E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Olthoi Nymph Kill Task";
+			t.MobNames.Add("Olthoi Nymph");
+			t.CompleteCount = 20;
+			t.NPCNames.Add("Olthoi Hunter");
+			t.NPCInfo = "Arwic (South)";
+			t.NPCCoords = "30.9N 56.3E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Olthoi Ripper Kill Task";
+			t.MobNames.Add("Olthoi Ripper");
+			t.CompleteCount = 250;
+			t.NPCNames.Add("Marcello");
+			t.NPCInfo = "Eastwatch";
+			t.NPCCoords = "90.2N 43.1W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Paradox-touched Grub Kill Task";
+			t.MobNames.Add("Paradox-touched Olthoi Noble Grub");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Alicia Swiftblade");
+			t.NPCInfo = "Olthoi North";
+			t.NPCCoords = "43.8N 54.9E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Paradox-touched Nymph Kill Task";
+			t.MobNames.Add("Paradox-touched Olthoi Warrior Nymph");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Tomihino");
+			t.NPCInfo = "Olthoi North";
+			t.NPCCoords = "43.8N 54.9E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Plate Armoredillo Kill Task";
+			t.MobNames.Add("Plate Armoredillo");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Saqr");
+			t.NPCInfo = "Fort Tethana";
+			t.NPCCoords = "1.5N 71.8W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Polardillo Kill Task";
+			t.MobNames.Add("Polardillo");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Alessandro Mardor");
+			t.NPCInfo = "Sanamar";
+			t.NPCCoords = "72.0N 61.2W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Polar Ursuin Kill Task";
+			t.MobNames.Add("Polar Ursuin");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Mariabella Varanese");
+			t.NPCInfo = "Fiun Outpost";
+			t.NPCCoords = "95.6N, 56.3W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			
+			
+			t = new KillTask();
+			t.TaskName = "Rare Game Kill Task";
+			t.MobNames.Add("Basalt Golem");
+			t.MobNames.Add("Cold One");
+			t.MobNames.Add("Dark Myrmidon");
+			t.MobNames.Add("Dark Sorcerer");
+			t.MobNames.Add("Lord of Decay");
+			t.MobNames.Add("Lugian Warlord");
+			t.MobNames.Add("Master of the Pack");
+			t.MobNames.Add("Pure One");
+			t.MobNames.Add("Sentient Fragment");
+			t.MobNames.Add("Swamp King");
+			t.MobNames.Add("Tundra Mattekar");
+			t.CompleteCount = 50;
+			t.NPCNames.Add(" Belinda du Loc");
+			t.NPCInfo = "Stonehold";
+			t.NPCCoords = "68.9N 21.6W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Remoran Sea Raptor Kill Task";
+			t.MobNames.Add("Remoran Sea Raptor");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Peng-Ya");
+			t.NPCInfo = "The Deep (Vissidal)";
+			t.NPCCoords = "77.8N 67.1E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Repugnant Eater Kill Task";
+			t.MobNames.Add("Repugnant Eater");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Xun Yu");
+			t.NPCInfo = "Eastwatch";
+			t.NPCCoords = "90.2N 43.1W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Ruschk Kill Task";
+			t.MobNames.Add("Ruschk Draktehn");
+			t.MobNames.Add("Ruschk Laktar");
+			t.CompleteCount = 30;
+			t.NPCNames.Add("Commander Rylane di Cinghalle");
+			t.NPCInfo = "Shattered Outlands";
+			t.NPCCoords = "93.2N 48.2W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			
+			t = new KillTask();
+			t.TaskName = "Shadow-touched Virindi Paradox Kill Task";
+			t.MobNames.Add("Shadow-touched Virindi Paradox");
+			t.CompleteCount = 75;
+			t.NPCNames.Add("Guard Li");
+			t.NPCInfo = "Wai Jhou";
+			t.NPCCoords = "61.8S, 51.3W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Shadow-touched Virindi Quidiox Kill Task";
+			t.MobNames.Add("Shadow-touched Virindi Quidiox");
+			t.CompleteCount = 75;
+			t.NPCNames.Add("Guard Alfric");
+			t.NPCInfo = "Candeth Keep";
+			t.NPCCoords = "87.9S, 67.4W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+
+			t = new KillTask();
+			t.TaskName = "Shallows Gorger Kill Task";
+			t.MobNames.Add("Shallows Gorger");
+			t.CompleteCount = 50;
+			t.NPCNames.Add("Dayla Bint Kazm");
+			t.NPCInfo = "The Deep (Vissidal)";
+			t.NPCCoords = "77.8N 67.1E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			
+			
+			t = new KillTask();
+			t.TaskName = "Sishalti Slithis Kill Task";
+			t.MobNames.Add("Sishalti Tentacle");
+			t.MobNames.Add("Sishalti Tendril");
+			t.MobNames.Add("Sishalti Eye Stalk");
+			t.CompleteCount = 150;
+			t.NPCNames.Add("Zava bint Laurma");
+			t.NPCInfo = "Zaikhal";
+			t.NPCCoords = "13.9N, 0.6E";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Small Fledgling Mukkir Kill Task";
+			t.MobNames.Add("Small Fledgling Mukkir");
+			t.CompleteCount = 15;
+			t.NPCNames.Add("Royal Guard");
+			t.NPCInfo = "Holtburg, Shoushi, or Yaraq";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Tenebrous Rift Kill Task";
+			t.MobNames.Add("Tenebrous Rift");
+			t.CompleteCount = 350;
+			t.NPCNames.Add("Solange");
+			t.NPCInfo = "Singularity Caul";
+			t.NPCCoords = "97.4S 94.6W";
+			t.NPCYellowFlagText = "";
+			t.NPCYellowCompleteText = "";
+			mKTSet.MyKillTasks.Add(t);
+			
+			
+//			//TODO:  Fillout mob list
+//			t = new KillTask();
+//			t.TaskName = "Glenden Wood Invaders	Invaders";
+//			t.MobNames.Add("Invader");
+//			t.CompleteCount = 20;
+//			t.NPCNames.Add("Londigul Ellic the Armorer";
+//			t.NPCInfo = "Glenden Wood";
+//			t.NPCCoords = "29.9N, 27.1E";
+//			mKTSet.MyKillTasks.Add(t);	
+			
+//			Flags based only on green text.  Unable to fit into the model.	
+//			//TODO:  Viamontian knight types
+//			t = new KillTask();
+//			t.TaskName = "Torgash's Tasks";
+//			t.MobNames.Add("Royal Inquisitor");
+//			t.MobNames.Add("Viamontian Hand");
+//			t.MobNames.Add("Viamontian Lord");
+//			t.CompleteCount = 30;
+//			t.NPCNames.Add("Torgash");
+//			t.NPCInfo = "Shattered Outlands";
+//			t.NPCCoords = "94.0N 45.9W";
+//			t.NPCYellowFlagText = "";
+//			t.NPCYellowCompleteText = "";
+//			mKTSet.MyKillTasks.Add(t);
+			
+			//Pumpkin Lord Kill Task
+			
+			//Harvest Reaper Kill Task
 			
 			FileInfo TaskFile = new FileInfo(GearDir + @"\Tasks.xml");
 			if(TaskFile.Exists)
