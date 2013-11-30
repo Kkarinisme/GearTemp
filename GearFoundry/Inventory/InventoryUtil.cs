@@ -35,7 +35,6 @@ namespace GearFoundry
                 xdocToonInventory = new XDocument(new XElement("Objs"));
                 xdocGenInventory = XDocument.Load(genInventoryFilename);
                 //Need a list to hold the inventory
-                mWaitingForIDTimer = new WindowsTimer();
                 mWaitingForID = new List<WorldObject>();
                 mCurrID = new List<string>();
 
@@ -58,44 +57,58 @@ namespace GearFoundry
                         Globals.Host.Actions.RequestId(obj.Id);
                         mWaitingForID.Add(obj);
                     }
+
                     catch (Exception ex) { LogError(ex); }
 
 
                 } // endof foreach world object
 
-                ProcessDataInventory(); //This one in the doget inventory
-
-                // initialize event timer for processing inventory
-                mWaitingForIDTimer.Tick += new EventHandler(TimerEventProcessor);
-
-                // Sets the timer interval to 5 seconds.
-                mWaitingForIDTimer.Interval = 10000;
-
-
+                OnInventoryStart();
+            //    ProcessDataInventory(); //This one in the doget inventory
 
                 //Now need to start routines that will continue to get data as becomes available or will end the search and save the files
-                mIsFinished();  
+            //    mIsFinished();  
             	}
             } //end of try
             catch (Exception ex) { LogError(ex); }
         } // end of dogetinventory
 
 
+        private void OnInventoryStart()
+        {
+            WriteToChat("Inventory started with " + mWaitingForID.Count.ToString() + " items to process.");
+            Core.WorldFilter.ChangeObject += Inventory_ObjectIDReceived;
+        }
 
+        private void Inventory_ObjectIDReceived(object sender, ChangeObjectEventArgs e)
+        {
+           //Use a list of waiting IDs so you don't process town criers and door knobs, etc
+            foreach (WorldObject obj in mWaitingForID)
+            {
+                if (obj.Id == e.Changed.Id)
+                {
+              //      mWaitingForID.Remove(obj);
+                    ProcessDataInventory();
+                }
 
+            }
+        }
+
+  
         public void mIsFinished()
         {
             try
             {
-                int n;
-                if (mWaitingForID != null){ n = mWaitingForID.Count; }
-                else {  n = 0; }
-                string s = n.ToString();
-                if (n == 0)
-                {
-                    try
-                    {
-                        if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Tick -= new EventHandler(TimerEventProcessor); mWaitingForIDTimer = null; }
+               // int n;
+               // if (mWaitingForID != null){ n = mWaitingForID.Count; }
+               // string s = n.ToString();
+               //if (n == 0)
+               // {
+               //     try
+               //     {
+               //         Core.RenderFrame -= new EventHandler<EventArgs>(RenderFrame_processInventory);
+                Core.WorldFilter.ChangeObject -= Inventory_ObjectIDReceived;
+
                         removeExcessObjsfromFile();
                         xdocGenInventory.Element("Objs").Descendants("Obj").Where(x => x.Element("ToonName").Value == toonName).Remove();
                         
@@ -111,77 +124,76 @@ namespace GearFoundry
                     }
                     catch (Exception ex) { LogError(ex); }
                  }
-                 else if (n < m )
-                 {
-                        GearFoundry.PluginCore.WriteToChat("Inventory remaining to be ID'd: " + s);
-                        m = n;
-                       // string mname = null;
-                        
+                 //else if (n < m )
+                 //{
+                 //    try{
+                 //    { GearFoundry.PluginCore.WriteToChat("Inventory remaining to be ID'd: " + s); }
+                 //       m = n;
+                 //      // string mname = null;
+                 //       InventoryProcess = DateTime.Now;
 
-                        if (mWaitingForID.Count > 0)
-                        {
-                            //if (binventoryWaitingEnabled)
-                            //{
-                            //    for (int i = 0; i < n; i++)
-                            //    {
-                            //        mname = mWaitingForID[i].Name;
-                            //        GearFoundry.PluginCore.WriteToChat(mname);
+                 //       if (mWaitingForID.Count > 0)
+                 //       {
+                 //           //if (binventoryWaitingEnabled)
+                 //           //{
+                 //           //    for (int i = 0; i < n; i++)
+                 //           //    {
+                 //           //        mname = mWaitingForID[i].Name;
+                 //           //        GearFoundry.PluginCore.WriteToChat(mname);
 
-                            //    }
-                            //}
-                            mDoWait();
-                        }
-                    }
+                 //           //    }
+                 //           //}
+                 //           mDoWait();
+                 //       }
+                 //   }
+                 //    catch (Exception ex) { LogError(ex); }
+                 //}
+
 
 
  
                 
-                }
+        //        }
            
-            catch (Exception ex) { LogError(ex); }
-        }
+        //    catch (Exception ex) { LogError(ex); }
+        //}
 
+        //DateTime InventoryProcess = DateTime.MinValue;
+      
+        // public void mDoWait()
+        //{
+        //    try
+        //    {
+        //           Core.RenderFrame += new EventHandler<EventArgs>(RenderFrame_processInventory);
+        //    }
+        //    catch (Exception ex) { LogError(ex); }
 
+        //}
 
-         public void mDoWait()
-        {
-            try
-            {
-                mWaitingForIDTimer.Start();
-           }
-            catch (Exception ex) { LogError(ex); }
+         //public void RenderFrame_processInventory(object sender, EventArgs e)
+         //{
+         //    try
+         //    {
+         //        if ((DateTime.Now - InventoryProcess).TotalSeconds > 10)
+         //        {
+         //            for (int n = 0; n < mWaitingForID.Count; n++)
+         //            {
+         //                try
+         //                {
+         //                    if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData)
+         //                    {
+         //                        Core.RenderFrame -= new EventHandler<EventArgs>(RenderFrame_processInventory);
 
-        }
-
-        public void TimerEventProcessor(Object Sender, EventArgs mWaitingForIDTimer_Tick)
-
-        {
-            try
-            {
-
-
-                if (mWaitingForIDTimer != null) { mWaitingForIDTimer.Stop(); }
- 
-                if (mWaitingForID.Count > 0)
-                {
-                    for (int n = 0; n < mWaitingForID.Count; n++)
-                    {
-                         if (mWaitingForID[n] != null && mWaitingForID[n].HasIdData)
-                        {
-
-                            ProcessDataInventory();
-                            mIsFinished();
-
-                        }
-                        else { mDoWait(); }
-
-                    }
-                }
-                }
-
-                catch (Exception ex) { LogError(ex); }
-        }
-
+         //                        ProcessDataInventory();
+         //                        mIsFinished();
+         //                    }
+         //                }
+         //                catch (Exception ex) { }
+         //            }
+         //        }
+         //    }
+         //    catch (Exception ex) { LogError(ex); }
+         //}
 
         //This is routine that puts the data of an obj into the inventory file xml
         private void ProcessDataInventory()
@@ -411,8 +423,10 @@ namespace GearFoundry
 
             } // end of for
 
-
-
+            if (mWaitingForID.Count == 0) { mIsFinished(); }
+            else if (mWaitingForID.Count < 4) { WriteToChat("Inventory waiting to be id'd: " + mWaitingForID.Count.ToString()); }
+            else if (mWaitingForID.Count % 25 == 0) { WriteToChat("Inventory waiting to be id'd: " + mWaitingForID.Count.ToString()); }
+            
         } // end of process data
 
         private string GoGetSpells(Decal.Adapter.Wrappers.WorldObject o)
@@ -454,11 +468,23 @@ namespace GearFoundry
 
                         IEnumerable<XElement> elements = xdocToonInventory.Element("Objs").Descendants("Obj");
                         oldCount = elements.Count();
+                       
                         WriteToChat("oldCount: " + oldCount.ToString());
-                        var obj = from o in xdocToonInventory.Descendants("Obj")
-                                  where !mCurrID.Contains(o.Element("ObjID").Value)
-                                  select o;
-                        obj.Remove();
+                        List<XElement> myNewList = new List<XElement>();
+                        if (mCurrID.Count > 0) { WriteToChat("mCurrid.count: " + mCurrID.Count.ToString()); }
+                        else { WriteToChat("Mcurrid does not have a count"); }
+                        foreach (XElement el in elements)
+                        {
+                             if (mCurrID.Contains(el.Element("ObjID").Value)) { myNewList.Add(el); }
+                        }
+                        xdocToonInventory = null;
+                        xdocToonInventory = new XDocument(new XElement("Objs"));
+                        xdocToonInventory.Root.Add(myNewList);
+
+                        //var obj = from o in xdocToonInventory.Descendants("Obj")
+                        //          where !mCurrID.Contains(o.Element("ObjID").Value)
+                        //          select o;
+                        //obj.Remove();
                     }
                     else
                     {

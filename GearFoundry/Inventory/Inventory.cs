@@ -26,20 +26,17 @@ namespace GearFoundry
 {
     public partial class PluginCore : PluginBase
     {
-//        WindowsTimer mInventoryTimer = null;
-//        int inventoryTimer = 0;
-        private bool InventoryMainTab;
-        private bool InventorySettingsTab;
-        private int InventoryHudWidth = 0;
-        private int InventoryHudHeight = 0;
-        private int InventoryHudFirstWidth = 530;
-        private int InventoryHudFirstHeight = 500;
-        private int InventoryHudWidthNew;
-        private int InventoryHudHeightNew;
- //       private HudFixedLayout InventoryHudLayout = null;
+        private bool bInventoryMainTab;
+        private bool bInventorySettingsTab;
+        private int nInventoryHudWidth = 0;
+        private int nInventoryHudHeight = 0;
+        private int nInventoryHudFirstWidth = 530;
+        private int nInventoryHudFirstHeight = 500;
+        private int nInventoryHudWidthNew;
+        private int nInventoryHudHeightNew;
         private HudTabView InventoryHudTabView = null;
         private HudFixedLayout InventoryHudTabLayout = null;
-        private const int InventoryRemoveCircle = 0x60011F8;
+        private const int nInventoryRemoveCircle = 0x60011F8;
             
         private HudFixedLayout InventoryHudSettings;
         private HudView InventoryHudView;
@@ -102,7 +99,7 @@ namespace GearFoundry
         private List<string> mCurrID = new List<string>();
         private List<string> mIcons = new List<string>();
 
-        private static WindowsTimer mWaitingForIDTimer = new WindowsTimer();
+    //    private static WindowsTimer mWaitingForIDTimer = new WindowsTimer();
         private int m = 500;
 
         //Used in inventory functions
@@ -173,6 +170,7 @@ namespace GearFoundry
         private void RenderInventoryHud()
         {
 
+
             try
             {
 
@@ -183,7 +181,7 @@ namespace GearFoundry
                 if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = GearDir + @"\ArmorSettings.xml"; }
 
 
-                if (InventoryHudWidth == 0)
+                if (nInventoryHudWidth == 0)
                 {
                     try
                     {
@@ -192,10 +190,12 @@ namespace GearFoundry
                     catch (Exception ex) { LogError(ex); }
  
                 }
-                if (InventoryHudWidth == 0) { InventoryHudWidth = InventoryHudFirstWidth;  }
-                if (InventoryHudHeight == 0) { InventoryHudHeight = InventoryHudFirstHeight; }
 
-                InventoryHudView = new HudView("Gear", InventoryHudWidth, InventoryHudHeight, new ACImage(0x6AA5));
+
+                if (nInventoryHudWidth == 0) { nInventoryHudWidth = nInventoryHudFirstWidth;  }
+                if (nInventoryHudHeight == 0) { nInventoryHudHeight = nInventoryHudFirstHeight; }
+
+                InventoryHudView = new HudView("Gear", nInventoryHudWidth, nInventoryHudHeight, new ACImage(0x6AA5));
                 InventoryHudView.UserAlphaChangeable = false;
                 InventoryHudView.ShowInBar = false;
                 InventoryHudView.UserResizeable = false;
@@ -203,14 +203,11 @@ namespace GearFoundry
                 InventoryHudView.Ghosted = false;
                 InventoryHudView.UserMinimizable = false;
                 InventoryHudView.UserClickThroughable = false;
-                InventoryHudView.LoadUserSettings();
-
                 InventoryHudTabView = new HudTabView();
                 InventoryHudView.Controls.HeadControl = InventoryHudTabView;
-                 
                 InventoryHudTabLayout = new HudFixedLayout();
-                InventoryHudTabView.AddTab(InventoryHudTabLayout, "Inventory");
-
+                InventoryHudTabView.AddTab(InventoryHudTabLayout,"Inventory");
+                InventoryHudView.LoadUserSettings();
                 InventoryHudSettings = new HudFixedLayout();
                 InventoryHudTabView.AddTab(InventoryHudSettings, "Settings");
 
@@ -219,8 +216,6 @@ namespace GearFoundry
                 InventoryHudView.UserResizeable = true;
                 RenderInventoryTabLayout();
 
-                //      SubscribeArmorEvents();
-
             }
             catch (Exception ex) { LogError(ex); }
             return;
@@ -228,12 +223,12 @@ namespace GearFoundry
 
         private void InventoryHudView_Resize(object sender, System.EventArgs e)
         {
-                bool bw = Math.Abs(InventoryHudView.Width - InventoryHudWidth) > 20;
-                bool bh = Math.Abs(InventoryHudView.Height - InventoryHudHeight) > 20;
+                bool bw = Math.Abs(InventoryHudView.Width - nInventoryHudWidth) > 20;
+                bool bh = Math.Abs(InventoryHudView.Height - nInventoryHudHeight) > 20;
                 if (bh || bw)
                 {
-                    InventoryHudWidthNew = InventoryHudView.Width;
-                    InventoryHudHeightNew = InventoryHudView.Height;
+                    nInventoryHudWidthNew = InventoryHudView.Width;
+                    nInventoryHudHeightNew = InventoryHudView.Height;
                     MasterTimer.Tick += InventoryResizeTimerTick;
                 }
              return;
@@ -244,8 +239,8 @@ namespace GearFoundry
 
         private void InventoryResizeTimerTick(object sender, EventArgs e)
         {
-            InventoryHudWidth = InventoryHudWidthNew;
-            InventoryHudHeight = InventoryHudHeightNew;
+            nInventoryHudWidth = nInventoryHudWidthNew;
+            nInventoryHudHeight = nInventoryHudHeightNew;
             MasterTimer.Tick -= InventoryResizeTimerTick;
             SaveInventorySettings();
             RenderInventoryHud();
@@ -259,8 +254,8 @@ namespace GearFoundry
                 xdocInvenSet.Element("Settings").Add(new XElement("Setting",
                     new XElement("ArmorHudWidth", ArmorHudWidth),
                     new XElement("ArmorHudHeight", ArmorHudHeight),
-                    new XElement("InventoryHudWidth", InventoryHudWidth),
-                    new XElement("InventoryHudHeight", InventoryHudHeight)));
+                    new XElement("InventoryHudWidth", nInventoryHudWidth),
+                    new XElement("InventoryHudHeight", nInventoryHudHeight)));
 
 
                 xdocInvenSet.Save(armorSettingsFilename);
@@ -466,9 +461,9 @@ namespace GearFoundry
                 {
                     lstHudInventory = new HudList();
                     lstHudInventory.AddColumn(typeof(HudPictureBox), 20, null);
-                    lstHudInventory.AddColumn(typeof(HudStaticText), Convert.ToInt32(.5 * InventoryHudWidth), null);
-                    lstHudInventory.AddColumn(typeof(HudStaticText), Convert.ToInt32(.44 * InventoryHudWidth), null);
-                    lstHudInventory.AddColumn(typeof(HudStaticText), Convert.ToInt32(.001 * InventoryHudWidth), null);
+                    lstHudInventory.AddColumn(typeof(HudStaticText), Convert.ToInt32(.5 * nInventoryHudWidth), null);
+                    lstHudInventory.AddColumn(typeof(HudStaticText), Convert.ToInt32(.44 * nInventoryHudWidth), null);
+                    lstHudInventory.AddColumn(typeof(HudStaticText), Convert.ToInt32(.001 * nInventoryHudWidth), null);
 
                     lstHudInventory.Click += (sender, row, col) => lstHudInventory_Click(sender, row, col);
                 }
@@ -479,45 +474,36 @@ namespace GearFoundry
                 InventoryHudTabLayout.AddControl(cboInventoryClasses, new Rectangle(45, 10, 100, 16));
                 InventoryHudTabLayout.AddControl(lblMyChoice, new Rectangle(155, 10, 100, 16));
                 InventoryHudTabLayout.AddControl(txtMyChoice, new Rectangle(260, 10, 280, 16));
-                InventoryHudTabLayout.AddControl(lblWeapons, new Rectangle(10,30,InventoryHudWidth/3,20));
-                InventoryHudTabLayout.AddControl(lblArmor, new Rectangle(InventoryHudWidth/3, 30, InventoryHudWidth / 3, 20));
-                InventoryHudTabLayout.AddControl(lblSalvage, new Rectangle((2 * InventoryHudWidth) / 3, 30, InventoryHudWidth / 3, 20));
+                InventoryHudTabLayout.AddControl(lblWeapons, new Rectangle(10,30,nInventoryHudWidth/3,20));
+                InventoryHudTabLayout.AddControl(lblArmor, new Rectangle(nInventoryHudWidth/3, 30, nInventoryHudWidth / 3, 20));
+                InventoryHudTabLayout.AddControl(lblSalvage, new Rectangle((2 * nInventoryHudWidth) / 3, 30, nInventoryHudWidth / 3, 20));
 
                 InventoryHudTabLayout.AddControl(lblMelee, new Rectangle(10, 50, 25, 16));
                 InventoryHudTabLayout.AddControl(cboWieldAttrib, new Rectangle(40, 50, 100, 16));
-                InventoryHudTabLayout.AddControl(lblSet, new Rectangle(InventoryHudWidth/3, 50, 25, 16));
-                InventoryHudTabLayout.AddControl(cboArmorSet, new Rectangle(InventoryHudWidth/ 3 + 30, 50, 150, 16));
-                InventoryHudTabLayout.AddControl(lblMaterial, new Rectangle((2 * InventoryHudWidth) / 3, 50, 25, 16));
-                InventoryHudTabLayout.AddControl(cboMaterial, new Rectangle((2 * InventoryHudWidth) / 3 + 30, 50, 150, 16));
+                InventoryHudTabLayout.AddControl(lblSet, new Rectangle(nInventoryHudWidth/3, 50, 25, 16));
+                InventoryHudTabLayout.AddControl(cboArmorSet, new Rectangle(nInventoryHudWidth/ 3 + 30, 50, 150, 16));
+                InventoryHudTabLayout.AddControl(lblMaterial, new Rectangle((2 * nInventoryHudWidth) / 3, 50, 25, 16));
+                InventoryHudTabLayout.AddControl(cboMaterial, new Rectangle((2 * nInventoryHudWidth) / 3 + 30, 50, 150, 16));
                 InventoryHudTabLayout.AddControl(lblDamage, new Rectangle(10, 70, 25, 16));
                 InventoryHudTabLayout.AddControl(cboDamageType, new Rectangle(40, 70, 100, 16));
-                InventoryHudTabLayout.AddControl(lblArmorWield, new Rectangle(InventoryHudWidth / 3, 70, 25, 16));
-                InventoryHudTabLayout.AddControl(cboArmorLevel, new Rectangle(InventoryHudWidth / 3 + 30, 70, 100, 16));
-                InventoryHudTabLayout.AddControl(lblWork, new Rectangle((2 * InventoryHudWidth) / 3, 70, 25, 16));
-                InventoryHudTabLayout.AddControl(cboSalvWork, new Rectangle((2 * InventoryHudWidth) / 3 + 30, 70, 100, 16));
+                InventoryHudTabLayout.AddControl(lblArmorWield, new Rectangle(nInventoryHudWidth / 3, 70, 25, 16));
+                InventoryHudTabLayout.AddControl(cboArmorLevel, new Rectangle(nInventoryHudWidth / 3 + 30, 70, 100, 16));
+                InventoryHudTabLayout.AddControl(lblWork, new Rectangle((2 * nInventoryHudWidth) / 3, 70, 25, 16));
+                InventoryHudTabLayout.AddControl(cboSalvWork, new Rectangle((2 * nInventoryHudWidth) / 3 + 30, 70, 100, 16));
                 InventoryHudTabLayout.AddControl(lblWield, new Rectangle(10, 90, 25, 16));
                 InventoryHudTabLayout.AddControl(cboLevel, new Rectangle(40,90, 100, 16));
-                InventoryHudTabLayout.AddControl(lblCovers, new Rectangle(InventoryHudWidth / 3, 90, 25, 16));
-                InventoryHudTabLayout.AddControl(cboCoverage, new Rectangle(InventoryHudWidth / 3 + 30, 90, 100, 16));
+                InventoryHudTabLayout.AddControl(lblCovers, new Rectangle(nInventoryHudWidth / 3, 90, 25, 16));
+                InventoryHudTabLayout.AddControl(cboCoverage, new Rectangle(nInventoryHudWidth / 3 + 30, 90, 100, 16));
                 InventoryHudTabLayout.AddControl(lblEmbues, new Rectangle(10, 110, 25, 16));
                 InventoryHudTabLayout.AddControl(cboEmbues, new Rectangle(40, 110, 100, 16));
 
-                InventoryHudTabLayout.AddControl(btnLstInv, new Rectangle((2* InventoryHudWidth)/3,100,100,16));
-                InventoryHudTabLayout.AddControl(btnClrInv, new Rectangle((2 * InventoryHudWidth) / 3, 120, 100, 16));
-                InventoryHudTabLayout.AddControl(lstHudInventory, new Rectangle(10, 150, InventoryHudWidth, InventoryHudHeight - 155));
+                InventoryHudTabLayout.AddControl(btnLstInv, new Rectangle((2* nInventoryHudWidth)/3,100,100,16));
+                InventoryHudTabLayout.AddControl(btnClrInv, new Rectangle((2 * nInventoryHudWidth) / 3, 120, 100, 16));
+                InventoryHudTabLayout.AddControl(lstHudInventory, new Rectangle(10, 150, nInventoryHudWidth, nInventoryHudHeight - 155));
                 
 
-                InventoryMainTab = true;
-                try
-                {
-                   // FillArmorHudList();
-                }
-
-                catch (Exception ex) { LogError(ex); }
-
-
-
-
+                bInventoryMainTab = true;
+ 
             }
 
             catch (Exception ex) { LogError(ex); }
@@ -528,7 +514,7 @@ namespace GearFoundry
         {
             try
             {
-                if (!InventoryMainTab) { return; }
+                if (!bInventoryMainTab) { return; }
                 clearListVariables();
                 cboInventoryClasses.Change -= (sender, index) => cboInventoryClasses_Change(sender, index);
                 cboWieldAttrib.Change -= (sender, index) => cboWieldAttrib_Change(sender, index);
@@ -559,7 +545,7 @@ namespace GearFoundry
                 cboEmbues = null;
                
 
-                InventoryMainTab = false;
+                bInventoryMainTab = false;
 
 
             }
@@ -591,7 +577,7 @@ namespace GearFoundry
  
 
 
-                InventorySettingsTab = true;
+                bInventorySettingsTab = true;
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -602,7 +588,7 @@ namespace GearFoundry
         {
             try
             {
-                if (!InventorySettingsTab) { return; }
+                if (!bInventorySettingsTab) { return; }
                 btnInventoryUpdate.Hit -= (sender, index) => btnInventoryUpdate_Hit(sender, index);
                 btnInventoryComplete.Hit -= (sender, index) => btnInventoryComplete_Hit(sender, index);
                 btnInventoryStacks.Hit -= (sender, index) => btnInventoryStacks_Hit(sender, index);
@@ -612,7 +598,7 @@ namespace GearFoundry
 
 
 
-                InventorySettingsTab = false;
+                bInventorySettingsTab = false;
             }
             catch { }
         }
@@ -633,7 +619,6 @@ namespace GearFoundry
                 catch { }
 
                 InventoryHudSettings.Dispose();
-           //     InventoryHudLayout.Dispose();
                 InventoryHudTabLayout.Dispose();
                 InventoryHudTabView.Dispose();
                 InventoryHudView.Dispose();
@@ -686,9 +671,12 @@ namespace GearFoundry
 
             try
             {
- 
-                objClass = ClassInvList[cboInventoryClasses.Current].ID;
+                objClass = 0;
+                objClassName = "";
+                 objClass = ClassInvList[cboInventoryClasses.Current].ID;
                 objClassName = ClassInvList[cboInventoryClasses.Current].name;
+                WriteToChat("objClass: " + objClass.ToString());
+
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -700,6 +688,7 @@ namespace GearFoundry
         {
             try
             {
+                objWieldAttrInt = 0;
                 objWieldAttrInt = MeleeTypeInvList[cboWieldAttrib.Current].ID;
             }
             catch (Exception ex) { LogError(ex); }
@@ -709,8 +698,12 @@ namespace GearFoundry
         {
             try
             {
+                objArmorSet = 0;
+                objArmorSetName = "";
                objArmorSet = ArmorSetsInvList[cboArmorSet.Current].ID;
                 objArmorSetName = ArmorSetsInvList[cboArmorSet.Current].name;
+                WriteToChat("objSet: " + objArmorSet.ToString());
+
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -720,6 +713,8 @@ namespace GearFoundry
         {
             try
             {
+                objMat = 0;
+                objMatName = "";
                 objMat = MaterialInvList[cboMaterial.Current].ID;
                 objMatName = MaterialInvList[cboMaterial.Current].name;
 
@@ -731,6 +726,8 @@ namespace GearFoundry
         {
             try
             {
+                objDamageType = "";
+                objDamageTypeInt = 0;
                 objDamageType = ElementalInvList[cboDamageType.Current].name;
                 objDamageTypeInt = ElementalInvList[cboDamageType.Current].ID;
             }
@@ -742,6 +739,7 @@ namespace GearFoundry
         {
             try
             {
+                objArmorLevel = 0;
                 objArmorLevel = Convert.ToInt16(ArmorLevelInvList[cboArmorLevel.Current].name);
 
             }
@@ -752,6 +750,7 @@ namespace GearFoundry
         {
             try
             {
+                objSalvWork = "";
                 objSalvWork = SalvageWorkInvList[cboSalvWork.Current].name;
             }
             catch (Exception ex) { LogError(ex); }
@@ -761,6 +760,7 @@ namespace GearFoundry
         {
             try
             {
+                objLevelInt = 0;
                 objLevelInt = Convert.ToInt32(WeaponWieldInvList[cboLevel.Current].name);
            }
             catch (Exception ex) { LogError(ex); }
@@ -770,8 +770,11 @@ namespace GearFoundry
         {
             try
             {
+                objCovers = 0;
+                objCoversName = "";
                 objCovers = CoverageInvList[cboCoverage.Current].ID;
-                objCoversName = CoverageInvList[cboCoverage.Current].name;
+                WriteToChat("objCovers = " + objCovers.ToString());
+
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -780,9 +783,11 @@ namespace GearFoundry
         {
             try
             {
+                objEmbueTypeInt = 0;
+                objEmbueTypeStr = "";
                 objEmbueTypeInt = EmbueInvList[cboEmbues.Current].ID;
                 objEmbueTypeStr = EmbueInvList[cboEmbues.Current].name;
-
+                WriteToChat("objEmbueTypeStr: " + objEmbueTypeStr);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -850,7 +855,7 @@ namespace GearFoundry
                     programinv = "inventory";
                     doCheckFiles();
                     //Need a timer for processing inventory
-                    mWaitingForIDTimer = new WindowsTimer();
+            //        mWaitingForIDTimer = new WindowsTimer();
                     //Need a list to hold the inventory
                     mWaitingForID = new List<WorldObject>();
 
@@ -917,6 +922,7 @@ namespace GearFoundry
                                 objID = obj.Id;
                                 string sobjID = objID.ToString();
                                 mCurrID.Add(sobjID);
+                                
                                 //Need to compare the ids in mCurrID with those of the previous inventory 
                                 if (!moldObjsID.Contains(sobjID))
                                 {
@@ -936,15 +942,11 @@ namespace GearFoundry
                         //Do one run through saved ids to get all data that is immediately available
                         if (mWaitingForID.Count > 0)
                         {
-                            // initialize event timer for processing inventory
-                            mWaitingForIDTimer.Tick += new EventHandler(TimerEventProcessor);
-
-                            //  Sets the timer interval to 5 seconds.
-                            mWaitingForIDTimer.Interval = 10000;
-                            ProcessDataInventory(); // This one in the doupdate
+                            OnInventoryStart(); // This one in the doupdate
                         }
+                        else { programinv = ""; }
                         //Now need to start routines that will continue to get data as becomes available or will end the search and save the files
-                        mIsFinished();
+                      //  mIsFinished();
 
 
 
@@ -972,6 +974,7 @@ namespace GearFoundry
                 {
                     XDocument tempGIDoc = new XDocument(new XElement("Objs"));
                     tempGIDoc.Save(inventorySelect);
+                    WriteToChat("I have  set  up inventoryselect prior to finding list.");
                     tempGIDoc = null;
                     lstMySelects = new List<string>();
 
@@ -1013,7 +1016,7 @@ namespace GearFoundry
                     {
                         objClass = 0;
                     }
-
+                    WriteToChat("objClass: " + objClass.ToString());
 
                     switch (objClass)
                     {
@@ -1059,7 +1062,7 @@ namespace GearFoundry
                                     select p;
                                     newDoc.Root.Add(temp);
                                     temp = null;
- 
+                                    WriteToChat("In selection of  newDoc for armor");
                                   }
 
 
@@ -1916,6 +1919,7 @@ namespace GearFoundry
                     } //end of switch
                     //{
                     newDoc.Save(inventorySelect);
+                    WriteToChat("I just saved inventorySelect");
                     int m = lstMySelects.Count;
                     if (m > 1)
                     {
@@ -2340,25 +2344,24 @@ namespace GearFoundry
         private void clearListVariables()
         {
 
-           // lstInventory.Clear();
-            lstHudInventory.ClearRows();
-            txtMyChoice.Text = "";
-            cboInventoryClasses.Current = 0;
-            cboWieldAttrib.Current = 0;
-            cboDamageType.Current = 0;
-            cboLevel.Current = 0;
-            cboArmorSet.Current = 0;
-            cboMaterial.Current = 0;
-            cboCoverage.Current = 0;
-            cboArmorLevel.Current = 0;
-            cboSalvWork.Current = 0;
-            cboEmbues.Current = 0;
+            if (lstHudInventory != null) { lstHudInventory.ClearRows(); }
+            if (txtMyChoice != null) { txtMyChoice.Text = ""; }
+            if (cboInventoryClasses != null) { cboInventoryClasses.Current = 0; }
+            if (cboWieldAttrib != null) { cboWieldAttrib.Current = 0; }
+            if (cboDamageType != null) { cboDamageType.Current = 0; }
+            if (cboLevel != null) { cboLevel.Current = 0; }
+            if (cboArmorSet != null) { cboArmorSet.Current = 0; }
+            if (cboMaterial != null) { cboMaterial.Current = 0; }
+            if (cboCoverage != null) { cboCoverage.Current = 0; }
+            if (cboArmorLevel != null) { cboArmorLevel.Current = 0; }
+            if (cboSalvWork != null) { cboSalvWork.Current = 0; }
+            if (cboEmbues != null) { cboEmbues.Current = 0; }
             objEmbueTypeInt = 0;
             objDamageTypeInt = 0;
             objLevelInt = 1;
             objWieldAttrInt = 0;
-            objWieldAttr = null;
-            objMastery = null;
+            objWieldAttr = "";
+            objMastery = "";
             objSkillLevel = 0;
             objLevel = "";
             objToonLevel = "";
@@ -2368,7 +2371,7 @@ namespace GearFoundry
 
 
             objSalvWork = "None";
-            objClassName = null;
+            objClassName = "";
             objMat = 0;
             objCovers = 0;
             objCoversName = "";
@@ -2379,10 +2382,6 @@ namespace GearFoundry
 
 
             newDoc = null;
-
-            //    xdoc = null;
-            //            childElements = null;
-            //            elements = null;
             mySelect = "";
             objClass = 0;
         }
