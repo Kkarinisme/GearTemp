@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfCollectTask xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CollectTask>
+    <TaskName>Prickly Pear Collecting</TaskName>
+    <Item>Prickly Pear</Item>
+    <MobNames>
+      <string>Prickly Pear</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCNames>
+      <string>Hammah al Rundik</string>
+    </NPCNames>
+    <NPCInfo>Neftet Encampment</NPCInfo>
+    <NPCCoords>22.2S, 6.2E</NPCCoords>
+    <NPCYellowFlagText>If you'll bring me 15 Prickly Pears, I'll happily reward you.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Ahh, a full bushel of Prickly Pears, just what every gourmet needs.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Stone Tablet Collecting</TaskName>
+    <Item>Broken Stone Tablet</Item>
+    <MobNames>
+      <string>Cracked Stone Tablet</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCNames>
+      <string>Taylarn bint Tulani</string>
+    </NPCNames>
+    <NPCInfo>Neftet Encampment</NPCInfo>
+    <NPCCoords>22.2S, 6.2E</NPCCoords>
+    <NPCYellowFlagText>If you bring me any tablets you find, I'm prepared to reward any of sufficient experience for bringing me 15 stone tablets.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Ahh, a full stack of 15 stone tablets.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>A'nekshay Bracer Collecting</TaskName>
+    <Item>A'nekshay Bracer</Item>
+    <MobNames>
+      <string>A'nekshay</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCNames>
+      <string>T'ing Setsuko</string>
+    </NPCNames>
+    <NPCInfo>Neftet Encampment</NPCInfo>
+    <NPCCoords>22.2S, 6.2E</NPCCoords>
+    <NPCYellowFlagText>I am prepared to reward Adventurers of sufficient experience for their efforts in collecting 15 of these A'nekshay Bracers.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Ahh, a full stack of 15 A'nekshay Bracers.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Snow Tusker Blood Collection</TaskName>
+    <Item>Snow Tusker Blood Sample</Item>
+    <MobNames>
+      <string>Snow Tusker</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Archmage Ichihiri</string>
+    </NPCNames>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N 4.3W</NPCCoords>
+    <NPCYellowFlagText>If you could bring me 10 samples of Snow Tusker Blood</NPCYellowFlagText>
+    <NPCYellowCompleteText>I see that you have gathered 10 vials of blood from these Snow Tuskers.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Undead Jaw Collection</TaskName>
+    <Item>Pyre Skeleton Jaw</Item>
+    <MobNames>
+      <string>Pyre Minion</string>
+      <string>Pyre Skeleton</string>
+      <string>Pyre Champion</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>8</CompleteCount>
+    <NPCNames>
+      <string>Balon Strongarm</string>
+      <string>Hador the Vengeful</string>
+      <string>Cullum of Celdon</string>
+    </NPCNames>
+    <NPCInfo>Society</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>Be on your way, and come talk to me when you have eight!</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done. Let me take those from you</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Collect Gear Knight Parts</TaskName>
+    <Item>Pile of Gearknight Parts</Item>
+    <MobNames>
+      <string>Invading</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Trathium</string>
+      <string>Dark Reshan</string>
+      <string>Drocogst</string>
+    </NPCNames>
+    <NPCInfo>Society</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>Bring back parts from 10 of the Gearknights and I shall reward you.</NPCYellowFlagText>
+    <NPCYellowCompleteText>A solid blow to their forces.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Falatacot Report Collector</TaskName>
+    <Item>Falatacot Battle Report</Item>
+    <MobNames>
+      <string>Falatacot Blood Prophetess</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Boroth Bearhand</string>
+      <string>Turvald Snorborgson</string>
+      <string>Agbeart</string>
+    </NPCNames>
+    <NPCInfo>Society</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>Go to Dark Isle and collect the Falatacot reports.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Ah, here we go.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Black Coral Collection</TaskName>
+    <Item>Black Coral</Item>
+    <MobNames>
+      <string />
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Hidoshi Kawara</string>
+      <string>Manto Sakara</string>
+      <string>Daisei Chirana</string>
+    </NPCNames>
+    <NPCInfo>Society</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>Bring exactly ten of this black coral to me.</NPCYellowFlagText>
+    <NPCYellowCompleteText>This is sufficient.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Glowing Jungle Lily Collector</TaskName>
+    <Item>Glowing Jungle Lily</Item>
+    <MobNames>
+      <string>Blessed Moarsman</string>
+      <string>Blessed Moar</string>
+      <string>Ashris Niffis</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCNames>
+      <string>Kojina</string>
+      <string>Satsuki</string>
+      <string>Atsuko</string>
+    </NPCNames>
+    <NPCInfo>Society</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>If you get me at least 20 Glowing Jungle Lilies</NPCYellowFlagText>
+    <NPCYellowCompleteText>Ahh, the flowers, here, let me take those from you</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Glowing Moar Gland Collector</TaskName>
+    <Item>Glowing Moar Gland</Item>
+    <MobNames>
+      <string>Blessed Moar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>30</CompleteCount>
+    <NPCNames>
+      <string>Aurellia du Cinghalle</string>
+      <string>Elloisa du Cinghalle</string>
+      <string>Pia du Cinghalle</string>
+    </NPCNames>
+    <NPCInfo>Society</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>kill enough Blessed Moars to collect at least 30 Glowing Moar Glands</NPCYellowFlagText>
+    <NPCYellowCompleteText>Perfect, you have the glands</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Mana-Infused Jungle Flower Collector</TaskName>
+    <Item>Mana-Infused Jungle Flower</Item>
+    <MobNames>
+      <string />
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCNames>
+      <string>Giri bint Ashud</string>
+      <string>Leisall bint Jumadd</string>
+      <string>Ti'alla bint Ashud</string>
+    </NPCNames>
+    <NPCInfo>Society</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>If you get me at least 20 Mana-Infused Jungle Flowers</NPCYellowFlagText>
+    <NPCYellowCompleteText>Ahh, the flowers, here, let me take those from you</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Phyntos Honey Collector</TaskName>
+    <Item>Phyntos Honey</Item>
+    <MobNames>
+      <string>Giant Jungle Phyntos Wasp</string>
+      <string>Killer Phyntos Hive</string>
+      <string>Killer Phyntos Swarm</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Narris</string>
+      <string>Zahid al-Din</string>
+      <string>Kenji</string>
+    </NPCNames>
+    <NPCInfo>Society</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>Bring me anything phyntos related you find</NPCYellowFlagText>
+    <NPCYellowCompleteText>We're studying their honey to see if it will reveal anything about their aggressive nature</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Phyntos Splinter Collector</TaskName>
+    <Item>Hive Splinters</Item>
+    <MobNames>
+      <string>Killer Phyntos Hive</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Narris</string>
+      <string>Zahid al-Din</string>
+      <string>Kenji</string>
+    </NPCNames>
+    <NPCInfo>Society</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText> I'll determine what we can use</NPCYellowFlagText>
+    <NPCYellowCompleteText>These Phyntos Hive Splinters are proof of destroyed hives</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+</ArrayOfCollectTask>

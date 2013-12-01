@@ -230,6 +230,12 @@ namespace GearFoundry
             	return Advanced;    		
         	}catch(Exception ex){LogError(ex); return new List<ItemRule.advsettings>();}	
         }
+        
+		public string CoordsStringLink(string inputcoords)
+		{
+			return " (" + "<Tell:IIDString:" + GOARROWLINK_ID + ":" + inputcoords + ">" + inputcoords + "<\\Tell>" + ")";
+		}
+		
 
         
 //        private void playSimpleSound()

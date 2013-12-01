@@ -20,16 +20,14 @@ namespace GearFoundry
 	public partial class PluginCore
 	{
 
-
-		
-		
+	
 		private KillTaskSettings mKTSet = new KillTaskSettings();
 		private System.Windows.Forms.Timer KTSaveTimer = new System.Windows.Forms.Timer();
 		
 		public class KillTaskSettings
 		{
-			public int HudWidth = 220;
-			public int HudHeight = 100;
+			public int HudWidth = 300;
+			public int HudHeight = 300;
 			public bool RenderMini = false;
 			public bool SquelchTaskReporting = false;
 			public List<KillTask> MyKillTasks = new List<KillTask>();
@@ -48,6 +46,7 @@ namespace GearFoundry
 			public string NPCYellowFlagText = String.Empty;
 			public string NPCYellowCompleteText = String.Empty;
 			public bool track = false;
+			public bool detect = false;
 			public bool active = false;
 			public bool complete = false;
 		}
@@ -59,26 +58,30 @@ namespace GearFoundry
 			public List<string> MobNames = new List<string>();
 			public int CurrentCount = 0;
 			public int CompleteCount = 0;
-			public string NPCName = String.Empty;
+			public List<string> NPCNames = new List<string>();
 			public string NPCInfo = String.Empty;
 			public string NPCCoords = String.Empty;
+			public string NPCYellowFlagText = String.Empty;
 			public string NPCYellowCompleteText = String.Empty;
 			public bool track = false;
 			public bool detect = false;
+			public bool active = false;
 			public bool complete = false;
 		}
 		
 		private void SubscribeKillTasks()
 		{
+			ReadWriteGearTaskSettings(true);
+			
 			Core.ChatBoxMessage += KillTask_ChatBoxMessage;
 			Core.CharacterFilter.Logoff += KillTask_LogOff;
 			KTSaveTimer.Interval = 600000;
 			KTSaveTimer.Start();
 			KTSaveTimer.Tick += KTSaveUpdates;
 			
-			ReadWriteGearTaskSettings(true);
 			RenderKillTaskPanel();
-			BuildKillTaskList();
+			//BuildKillTaskList();
+			//BuildCollectionTaskList();
 		}
 		
 		private void KTSaveUpdates(object sender, EventArgs e)
@@ -115,56 +118,65 @@ namespace GearFoundry
 								
 				if (read)
 				{
-
-					if (!GearTaskSettingsFile.Exists)
-	                {                    	
-                    	FileInfo KillTasksFile = new FileInfo(GearDir + @"\KillTasks.xml");
-                    	FileInfo CollectTasksFile = new FileInfo(GearDir + @"\CollectTasks.xml");
+                  	
+                    FileInfo KillTasksFile = new FileInfo(GearDir + @"\KillTasks.xml");
+                    FileInfo CollectTasksFile = new FileInfo(GearDir + @"\CollectTasks.xml");
                     	
-						try
-						{
-	                    	if(!KillTasksFile.Exists)
-	                    	{
-		                    	string filedefaults =  GetResourceTextFile("KillTasks.xml");		                    	
-		                    	using (StreamWriter writedefaults = new StreamWriter(@KillTasksFile.ToString(), true))
-								{
-									writedefaults.Write(filedefaults);
-									writedefaults.Close();
-								}
-	                    	}
-						}catch(Exception ex){LogError(ex);}
+                	//Makes the master KillTask file
+					try
+					{
+                    	if(!KillTasksFile.Exists)
+                    	{
+	                    	string filedefaults =  GetResourceTextFile("KillTasks.xml");		                    	
+	                    	using (StreamWriter writedefaults = new StreamWriter(@KillTasksFile.ToString(), true))
+							{
+								writedefaults.Write(filedefaults);
+								writedefaults.Close();
+							}
+                    	}
+					}catch(Exception ex){LogError(ex);}
 						
-//						try
-//						{
-//	                    	if(!CollectTasksFile.Exists)
-//	                    	{
-//		                    	string filedefaults = GetResourceTextFile("CollectTasks.xml");
-//		                    	using (StreamWriter writedefaults = new StreamWriter(@CollectTasksFile.ToString(), true))
-//								{
-//									writedefaults.Write(filedefaults);
-//									writedefaults.Close();
-//								}
-//	                    	}
-//                    	}catch(Exception ex){LogError(ex);}
+					//Makes the master Collect Task file
+					try
+					{
+                    	if(!CollectTasksFile.Exists)
+                    	{
+	                    	string filedefaults = GetResourceTextFile("CollectTasks.xml");
+	                    	using (StreamWriter writedefaults = new StreamWriter(@CollectTasksFile.ToString(), true))
+							{
+								writedefaults.Write(filedefaults);
+								writedefaults.Close();
+							}
+                    	}
+                	}catch(Exception ex){LogError(ex);}
 						
-						try
+					try
+					{
+						
+						if(GearTaskSettingsFile.Exists)
 						{
-		                    	
-			                mKTSet = new KillTaskSettings();
-			                 
-			                using (XmlReader reader = XmlReader.Create(@KillTasksFile.ToString(), rsettings))
+							using (XmlReader reader = XmlReader.Create(GearTaskSettingsFile.ToString(), rsettings))
+							{	
+								XmlSerializer serializer = new XmlSerializer(typeof(KillTaskSettings));
+								mKTSet = (KillTaskSettings)serializer.Deserialize(reader);
+								reader.Close();
+							}
+						}
+						else
+						{
+	                        using (XmlReader reader = XmlReader.Create(@KillTasksFile.ToString(), rsettings))
 							{	
 								XmlSerializer kts = new XmlSerializer(typeof(List<KillTask>));
 								mKTSet.MyKillTasks = (List<KillTask>)kts.Deserialize(reader);
 								reader.Close();
 			                }
 			                
-//			                using (XmlReader reader = XmlReader.Create(CollectTasksFile.ToString()))
-//							{	
-//								XmlSerializer cts = new XmlSerializer(typeof(List<CollectTask>));
-//								mKTSet.MyCollectTasks = (List<CollectTask>)cts.Deserialize(reader);
-//								reader.Close();
-//			                }
+			                using (XmlReader reader = XmlReader.Create(CollectTasksFile.ToString()))
+							{	
+								XmlSerializer cts = new XmlSerializer(typeof(List<CollectTask>));
+								mKTSet.MyCollectTasks = (List<CollectTask>)cts.Deserialize(reader);
+								reader.Close();
+			                }
 			                    			                
 	                    	using (XmlWriter writer = XmlWriter.Create(GearTaskSettingsFile.ToString(), wsettings))
 							{
@@ -172,15 +184,9 @@ namespace GearFoundry
 					   			serializer2.Serialize(writer, mKTSet);
 					   			writer.Close();
 							}
-			            						
-							using (XmlReader reader = XmlReader.Create(GearTaskSettingsFile.ToString(), rsettings))
-							{	
-								XmlSerializer serializer = new XmlSerializer(typeof(KillTaskSettings));
-								mKTSet = (KillTaskSettings)serializer.Deserialize(reader);
-								reader.Close();
-							}
-						}catch(Exception ex){LogError(ex);}
-					}
+						}
+					}catch(Exception ex){LogError(ex);}
+					
 				}
 				
 				if(!read)
@@ -213,7 +219,7 @@ namespace GearFoundry
 					//	You have killed 20 Frozen Wights! Your task is complete!
 					//	You have killed 18 Gurog Soldiers! You must kill 20 to complete your task.					
 					
-					if(!e.Text.StartsWith("You have killed")){return;}
+					if(!@e.Text.StartsWith("You have killed")){return;}
 					
 					int mobskilled = 0;
 					int totalmobs = 0;
@@ -224,23 +230,23 @@ namespace GearFoundry
 					Int32.TryParse(nibble.Substring(0, nibble.IndexOf(' ')), out mobskilled);
 					
 					nibble = nibble.Remove(0, nibble.IndexOf(' '));
-					mobname = (nibble.Substring(0, nibble.IndexOf('!'))).Trim();
+					mobname = (@nibble.Substring(0, nibble.IndexOf('!'))).Trim();
 					
-					if(mobname.EndsWith("ies"))
+					if(@mobname.EndsWith("ies"))
 					{
-						mobname = mobname.Replace("ies","y").Trim();
+						@mobname = @mobname.Replace("ies","y").Trim();
 					}
-					else if(mobname.EndsWith("xes"))
+					else if(@mobname.EndsWith("xes"))
 					{
-						mobname = mobname.Remove(mobname.Length - 2, 2).Trim();
+						@mobname = @mobname.Remove(mobname.Length - 2, 2).Trim();
 					}
-					else if(mobname.EndsWith("s"))
+					else if(@mobname.EndsWith("s"))
 					{
-						mobname = mobname.Remove(mobname.Length -1, 1).Trim();
+						@mobname = @mobname.Remove(mobname.Length -1, 1).Trim();
 					}
 					else if(mobname.EndsWith("men"))
 					{
-							mobname = mobname.Replace("men","man");
+						@mobname = @mobname.Replace("men","man");
 					}
 					
 					nibble = nibble.Remove(0, nibble.IndexOf('!') + 2).Trim();
@@ -265,29 +271,76 @@ namespace GearFoundry
 					mKTSet.MyKillTasks[TaskIndex].active = true;
 				}
 				if(e.Color == 3)
-				{
-					int TaskIndex = mKTSet.MyKillTasks.FindIndex(x => x.NPCNames.Any(y => e.Text.StartsWith(y)));
-					
-					WriteToChat("mKT.KillTaskList.Count = " + mKTSet.MyKillTasks.Count());
-					
-					WriteToChat("Task Index = " + TaskIndex.ToString());
-					
-					                                             
-					
-					if(TaskIndex != -1)
+				{   
+					int CollectTasksCount = mKTSet.MyCollectTasks.Count(x => x.NPCNames.Any(y => @e.Text.StartsWith(@y)));
+					int KillTasksCount = mKTSet.MyKillTasks.Count(x => x.NPCNames.Any(y => @e.Text.StartsWith(@y)));
+
+					if (CollectTasksCount > 0)
 					{
-						if(e.Text.IndexOf(mKTSet.MyKillTasks[TaskIndex].NPCYellowCompleteText) != -1)
+						int CollectTaskIndex = -1;
+						
+						if(CollectTasksCount == 1)
 						{
-							mKTSet.MyKillTasks[TaskIndex].active = false;
-							mKTSet.MyKillTasks[TaskIndex].CurrentCount = 0;
+							CollectTaskIndex = 	mKTSet.MyCollectTasks.FindIndex(x => x.NPCNames.Any(y => @e.Text.StartsWith(@y)));
 						}
-						if(e.Text.IndexOf(mKTSet.MyKillTasks[TaskIndex].NPCYellowFlagText) != -1)
-						{						
-							mKTSet.MyKillTasks[TaskIndex].active = true;
-						}					
+						else
+						{
+							CollectTaskIndex = mKTSet.MyCollectTasks.FindIndex(x => x.NPCNames.Any(y => @e.Text.StartsWith(@y)) &&
+							                     	(@e.Text.Contains(@x.NPCYellowFlagText) || @e.Text.Contains(@x.NPCYellowCompleteText)));
+						}
+						
+						if(CollectTaskIndex == -1) {return;}
+						
+						bool flag = @e.Text.Contains(@mKTSet.MyCollectTasks[CollectTaskIndex].NPCYellowFlagText);
+						bool complete = @e.Text.Contains(@mKTSet.MyCollectTasks[CollectTaskIndex].NPCYellowCompleteText);
+								
+						if(flag)
+						{
+							mKTSet.MyCollectTasks[CollectTaskIndex].active = true;
+							mKTSet.MyCollectTasks[CollectTaskIndex].complete = false;
+							return;
+						}
+						if(complete)
+						{
+							mKTSet.MyCollectTasks[CollectTaskIndex].active = false;
+							mKTSet.MyCollectTasks[CollectTaskIndex].complete = false;
+							return;
+						}
 					}
-				}
-				
+					
+					if (KillTasksCount > 0)
+					{
+						int KillTaskIndex = -1;
+						
+						if(CollectTasksCount == 1)
+						{
+							KillTaskIndex = mKTSet.MyKillTasks.FindIndex(x => x.NPCNames.Any(y => @e.Text.StartsWith(@y)));
+						}
+						else
+						{
+							KillTaskIndex = mKTSet.MyKillTasks.FindIndex(x => x.NPCNames.Any(y => @e.Text.StartsWith(@y)) &&
+							                     	(@e.Text.Contains(@x.NPCYellowFlagText) || @e.Text.Contains(@x.NPCYellowCompleteText)));
+						}
+						
+						if(KillTaskIndex == -1) {return;}
+						
+						bool flag = @e.Text.Contains(@mKTSet.MyKillTasks[KillTaskIndex].NPCYellowFlagText);
+						bool complete = @e.Text.Contains(@mKTSet.MyKillTasks[KillTaskIndex].NPCYellowCompleteText);
+								
+						if(flag)
+						{
+							mKTSet.MyKillTasks[KillTaskIndex].active = true;
+							mKTSet.MyKillTasks[KillTaskIndex].complete = false;
+							return;
+						}
+						if(complete)
+						{
+							mKTSet.MyKillTasks[KillTaskIndex].active = false;
+							mKTSet.MyKillTasks[KillTaskIndex].complete = false;
+							return;
+						}
+					}
+				}				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -301,7 +354,7 @@ namespace GearFoundry
 		private HudList TaskIncompleteList = null;
 		private HudList TaskCompleteList = null;
 		private HudList KillTaskList = null;
-		private HudList CollectTaskLis = null;
+		private HudList CollectTaskList = null;
 		private HudList.HudListRowAccessor TaskListRow = null;
 		
 		
@@ -334,9 +387,9 @@ namespace GearFoundry
 	            TaskIncompleteList = new HudList();
 	            TaskIncompleteLayout.AddControl(TaskIncompleteList, new Rectangle(0,0,mKTSet.HudWidth,mKTSet.HudHeight));
 	            TaskIncompleteList.ControlHeight = 16;
-	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3), null);  //MobName
-	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //CurrentCount
-	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //CompleteCount
+	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3), null);  //Mob/Item Name
+	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //Completion
+	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //Report NPC
 	            
 	            TaskCompleteLayout = new HudFixedLayout();
 	            TaskTabView.AddTab(TaskCompleteLayout, "Complete");
@@ -344,8 +397,8 @@ namespace GearFoundry
 	            
 	            TaskCompleteLayout.AddControl(TaskCompleteList, new Rectangle(0,0,mKTSet.HudWidth,mKTSet.HudHeight));
 	            TaskCompleteList.ControlHeight = 16;
-	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3), null);  //MobName
-	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //CurrentCount
+	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3), null);  //Mob/Item Name
+	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //Completion
 	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //CompleteCount
 	            
 	            KillTaskLayout = new HudFixedLayout();
@@ -355,43 +408,127 @@ namespace GearFoundry
 	            KillTaskLayout.AddControl(KillTaskList, new Rectangle(0,0,mKTSet.HudWidth,mKTSet.HudHeight));
 	            KillTaskList.ControlHeight = 16;
 	            KillTaskList.AddColumn(typeof(HudCheckBox), 16, null);  //Track
-	            KillTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3), null);  //TaskName
-	            KillTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //MobName
+	            KillTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth - 16), null);  //TaskName
+	            //KillTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth), null);  //MobName
+	           
 	            
-	            KillTaskList.Click += KTTL_Click;
+	            KillTaskList.Click += KillTaskList_Click;
 	            
 	            CollectTaskLayout = new HudFixedLayout();
 	            TaskTabView.AddTab(CollectTaskLayout, "Collect");
 	            
+	            CollectTaskList = new HudList();
+	            CollectTaskLayout.AddControl(CollectTaskList, new Rectangle(0,0,mKTSet.HudWidth,mKTSet.HudHeight));
+	            CollectTaskList.ControlHeight = 16;
+	            CollectTaskList.AddColumn(typeof(HudCheckBox), 16, null);  //Track
+	            CollectTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth - 16), null);  //TaskName
+	            //CollectTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //ItemName
+	            CollectTaskList.Click += CollectTaskList_Click;
 	            
-
+	            TaskHudView.Resize += TaskHudView_Resize;
+	    		
+	            UpdateKillTaskPanel();
 	            
-	            
-	            
-	            
-	            
-	            //(Detect) (TaskName) (NumberKilled)/(CompleteCount) (Active) (Complete)
-	            
+	            //(Detect) (TaskName) (NumberKilled)/(CompleteCount) (Active) (Complete)			
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TaskHudView_Resize(object sender, EventArgs e)
+		{
+			try
+			{
+				mKTSet.HudHeight = TaskHudView.Height;
+				mKTSet.HudWidth = TaskHudView.Width;
+				
 				
 			}catch(Exception ex){LogError(ex);}
-        
-			
 		}
+		
 		
 		private void UpdateKillTaskPanel()
 		{
 			try
 			{
+				TaskIncompleteList.ClearRows();
+				TaskCompleteList.ClearRows();
+				KillTaskList.ClearRows();
+				CollectTaskList.ClearRows();
+				
+				
+				foreach(var kt in mKTSet.MyKillTasks)
+				{
+					TaskListRow = KillTaskList.AddRow();
+					((HudCheckBox)TaskListRow[0]).Checked = kt.track;
+					((HudStaticText)TaskListRow[1]).Text = kt.TaskName;	
+					((HudStaticText)TaskListRow[1]).TextColor = Color.AntiqueWhite;				
+					if(kt.complete) {((HudStaticText)TaskListRow[1]).TextColor = Color.Gold;}
+					else if(kt.active) {((HudStaticText)TaskListRow[1]).TextColor = Color.LightSeaGreen;}
+				}
+				
+				
+				foreach(var ct in mKTSet.MyCollectTasks)
+				{
+					TaskListRow = CollectTaskList.AddRow();
+					((HudCheckBox)TaskListRow[0]).Checked = ct.track;
+					((HudStaticText)TaskListRow[1]).Text = ct.TaskName;	
+					((HudStaticText)TaskListRow[1]).TextColor = Color.AntiqueWhite;				
+					if(ct.complete) {((HudStaticText)TaskListRow[1]).TextColor = Color.Gold;}
+					else if(ct.active) {((HudStaticText)TaskListRow[1]).TextColor = Color.LightSeaGreen;}
+				}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
 		
-		
-		private void KTTL_Click(object sender, int row, int col)
+		HudList.HudListRowAccessor ClickRow = new HudList.HudListRowAccessor();
+		private void KillTaskList_Click(object sender, int row, int col)
 		{
 			try
 			{
+				ClickRow = KillTaskList[row];
+				
+				if(col == 0)
+				{
+					mKTSet.MyKillTasks.Find(x => x.TaskName == ((HudStaticText)ClickRow[1]).Text).track = ((HudCheckBox)ClickRow[0]).Checked;
+				}
+				if(col == 1)
+				{
+					KillTask kt = mKTSet.MyKillTasks.Find(x => x.TaskName == ((HudStaticText)ClickRow[1]).Text);
+					string NPCs = String.Empty;
+					foreach(string npc in kt.NPCNames)
+					{
+						NPCs += npc + ", ";
+					}
+					WriteToChat(kt.TaskName + ":  " + NPCs + kt.NPCInfo + CoordsStringLink(kt.NPCCoords));
+					
+					
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CollectTaskList_Click(object sender, int row, int col)
+		{
+			try
+			{
+				ClickRow = CollectTaskList[row];
+				
+				if(col == 0)
+				{
+					mKTSet.MyCollectTasks.Find(x => x.TaskName == ((HudStaticText)ClickRow[1]).Text).track = ((HudCheckBox)ClickRow[0]).Checked;
+				}
+				if(col == 1)
+				{
+					CollectTask ct = mKTSet.MyCollectTasks.Find(x => x.TaskName == ((HudStaticText)ClickRow[1]).Text);
+					string NPCs = String.Empty;
+					foreach(string npc in ct.NPCNames)
+					{
+						NPCs += npc + ", ";
+					}
+					
+					WriteToChat(ct.TaskName + ":  " + NPCs + ct.NPCInfo + CoordsStringLink(ct.NPCCoords));
+					
+					
+				}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -405,6 +542,7 @@ namespace GearFoundry
 		
 		private void BuildKillTaskList()
 		{
+			List<KillTask> NewKillTasks = new List<PluginCore.KillTask>();
 			
 			WriteToChat("KillTaskList Building");
 			KillTask t;  
@@ -419,7 +557,7 @@ namespace GearFoundry
 			t.NPCCoords = "25.6N, 49.4E";
 			t.NPCYellowFlagText = "In the meantime I need to rid the surrounding area of some of these Drudges.";
 			t.NPCYellowCompleteText = "Drudge Doom";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Drudge Stalker Kill Task";
@@ -430,7 +568,7 @@ namespace GearFoundry
 			t.NPCCoords = "25.6N, 49.4E";
 			t.NPCYellowFlagText = "In the meantime I need to rid the surrounding area of some of these Drudges.";
 			t.NPCYellowCompleteText = "Stalker Stalker";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 
 			t = new KillTask();
 			t.TaskName = "Drudge Ravener Kill Task";
@@ -441,7 +579,7 @@ namespace GearFoundry
 			t.NPCCoords = "25.6N, 49.4E";
 			t.NPCYellowFlagText = "In the meantime I need to rid the surrounding area of some of these Drudges.";
 			t.NPCYellowCompleteText = "Ravenous";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 						
 			t.TaskName = "Altered Drudge Kill Task";
 			t.MobNames.Add("Altered Drudge");
@@ -451,7 +589,7 @@ namespace GearFoundry
 			t.NPCCoords = "25.6N, 49.4E";
 			t.NPCYellowFlagText = "In the meantime I need to rid the surrounding area of some of these Drudges.";
 			t.NPCYellowCompleteText = "Altered Hunter";
-			mKTSet.MyKillTasks.Add(t);	
+			NewKillTasks.Add(t);	
 
 			t = new KillTask();
 			t.TaskName = "Augmented Drudge Kill Task";
@@ -462,7 +600,7 @@ namespace GearFoundry
 			t.NPCCoords = "25.6N, 49.4E";
 			t.NPCYellowFlagText = "In the meantime I need to rid the surrounding area of some of these Drudges.";
 			t.NPCYellowCompleteText = "Augmented Hunter";
-			mKTSet.MyKillTasks.Add(t);	
+			NewKillTasks.Add(t);	
 
 			
 			//Neftet Quests		
@@ -477,7 +615,7 @@ namespace GearFoundry
 			t.NPCCoords = "22.1S, 6.3E";
 			t.NPCYellowFlagText = "If you will kill 30 of the armoredillos within the canyon walls or up on the plateaus, I will reward you for your help.";
 			t.NPCYellowCompleteText = "Well done.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Golem Hunting: Lost City of Neftet";
@@ -489,7 +627,7 @@ namespace GearFoundry
 			t.NPCCoords = "22.2S, 6.2E";
 			t.NPCYellowFlagText = "If you will kill 15 of the golems within the canyon walls or up on the plateaus, I will reward you for your assistance.";
 			t.NPCYellowCompleteText = "Well done.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Mumiyah Hunting: Lost City of Neftet";
@@ -509,7 +647,7 @@ namespace GearFoundry
 			t.NPCCoords = "22.2S, 6.3E";
 			t.NPCYellowFlagText = "If you will kill 30 of the Mumiyah within the canyon walls or up on the plateaus, I will reward you for your assistance.";
 			t.NPCYellowCompleteText = "Well done.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Reedshark Hunting: Lost City of Neftet";
@@ -523,7 +661,7 @@ namespace GearFoundry
 			t.NPCCoords = "22.3S, 6.3E";
 			t.NPCYellowFlagText = "If you will kill 30 of the reedsharks within the canyon walls or up on the plateaus, I will reward you for your aid to the crown.";
 			t.NPCYellowCompleteText = "Well done.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//Frozen Valley Tasks			
 			t = new KillTask();
@@ -535,7 +673,7 @@ namespace GearFoundry
 			t.NPCCoords = "83.8N 4.3W";
 			t.NPCYellowFlagText = "Kill 20 Gurog Soldiers and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Well done! Always a pleasure to meet someone who shares my hatred of these beasts.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Gurog Kill Task (Minions)";
@@ -546,7 +684,7 @@ namespace GearFoundry
 			t.NPCCoords = "83.8N 4.3W";
 			t.NPCYellowFlagText = "Kill 20 Gurog Minions and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Well done! Ugly creatures aren't they? Glad to be rid of them.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Gurog Kill Task (Henchman)";
@@ -557,7 +695,7 @@ namespace GearFoundry
 			t.NPCCoords = "83.8N 4.3W";
 			t.NPCYellowFlagText = "Kill 20 Gurog Henchmen and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Well done! Hardly a scratch on you as well, you truly are a great warrior.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Snow Tusker Kill Task (Snow Tusker)";
@@ -568,7 +706,7 @@ namespace GearFoundry
 			t.NPCCoords = "83.8N 4.3W";
 			t.NPCYellowFlagText = "Kill 20 Snow Tuskers and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Fantastic job! Those mutated beasts need to be put down, every kill helps.";	
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 
 			t = new KillTask();
 			t.TaskName = "Snow Tusker Kill Task (Snow Tusker Warrior)";
@@ -579,7 +717,7 @@ namespace GearFoundry
 			t.NPCCoords = "83.8N 4.3W";
 			t.NPCYellowFlagText = "Kill 20 Snow Tusker Warriors and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Well done! Their coats remind me of the creature know as a wolf back on Ispar.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Snow Tusker Kill Task (Snow Tusker Leader)";
@@ -590,7 +728,7 @@ namespace GearFoundry
 			t.NPCCoords = "83.8N 4.3W";
 			t.NPCYellowFlagText = "Kill 10 Snow Tusker Leaders and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Amazing that you survived, those tusks can spear a man all the way through.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Frozen Dread Kill Task";
@@ -601,7 +739,7 @@ namespace GearFoundry
 			t.NPCCoords = "83.8N 4.3W";
 			t.NPCYellowFlagText = "Kill 10 of these Frozen Dreads and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Those creatures haunt my dreams.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Frozen Wight Kill Task";
@@ -614,7 +752,7 @@ namespace GearFoundry
 			t.NPCCoords = "83.8N 4.3W";
 			t.NPCYellowFlagText = "Kill 20 Frozen Wights and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Those creatures send chills down my spine.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//Tou-Tou Kill Tasks
 			t = new KillTask();
@@ -626,7 +764,7 @@ namespace GearFoundry
 			t.NPCCoords = "30.3S, 94.8E";
 			t.NPCYellowFlagText = "Kill 15 Shadow Flyers and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Well done! That should at least keep the corruption from spreading any further.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//TODO:  Names of proper shadows for this task
 			t = new KillTask();
@@ -638,7 +776,7 @@ namespace GearFoundry
 			t.NPCCoords = "30.3S, 94.8E";
 			t.NPCYellowFlagText = "Kill 25 of the shadows to fight back this corruption.";
 			t.NPCYellowCompleteText = "Well done! If you keep this up, Tou-Tou may be ours once again.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Devourer Margul Kill Task";
@@ -649,7 +787,7 @@ namespace GearFoundry
 			t.NPCCoords = "30.3S, 94.8E";
 			t.NPCYellowFlagText = "Kill 15 Devourer Marguls and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Well done! The flapping of those leathery wings is quieter already.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Grievver Shredder Kill Task";
@@ -660,7 +798,7 @@ namespace GearFoundry
 			t.NPCCoords = "30.3S, 94.8E";
 			t.NPCYellowFlagText = "Kill 15 Grievver Shredders and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Well done! The clicking of those ";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Void Lord Kill Task";
@@ -671,7 +809,7 @@ namespace GearFoundry
 			t.NPCCoords = "30.3S, 94.8E";
 			t.NPCYellowFlagText = "Kill 15 Void Lords and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Well done! That should help me sleep at night.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//TODO:  Completion Text
 			t = new KillTask();
@@ -683,7 +821,7 @@ namespace GearFoundry
 			t.NPCCoords = "2.6S, 20.0E";
 			t.NPCYellowFlagText = "Kill five of these golems, return to me and I will see that your battles are rewarded!";
 			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//TODO:  Completion Text
 			t = new KillTask();
@@ -695,7 +833,7 @@ namespace GearFoundry
 			t.NPCCoords = "16.5N, 63.6E";
 			t.NPCYellowFlagText = "Kill five of these golems, return to me and I will see that your battles are rewarded!";
 			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//TODO:  Completion Text
 			t = new KillTask();
@@ -707,7 +845,7 @@ namespace GearFoundry
 			t.NPCCoords = "74.5S, 19.3E";
 			t.NPCYellowFlagText = "Kill five of these golems, return to me and I will see that your battles are rewarded!";
 			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//TODO:  Completion Text
 			t = new KillTask();
@@ -719,7 +857,7 @@ namespace GearFoundry
 			t.NPCCoords = "87.5S, 67.0W";
 			t.NPCYellowFlagText = "Kill five of these golems, return to me and I will see that your battles are rewarded!";
 			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//TODO:  Completion Text
 			t = new KillTask();
@@ -731,7 +869,7 @@ namespace GearFoundry
 			t.NPCCoords = "60.8S, 88.0W";
 			t.NPCYellowFlagText = "Kill five of these golems, return to me and I will see that your battles are rewarded!";
 			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//TODO:  Completion Text
 			t = new KillTask();
@@ -743,7 +881,7 @@ namespace GearFoundry
 			t.NPCCoords = "60.8S, 88.0W";
 			t.NPCYellowFlagText = "Kill five of these golems, return to me and I will see that your battles are rewarded!";
 			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Aun Golem Hunters:  Crystal Lord";
@@ -754,7 +892,7 @@ namespace GearFoundry
 			t.NPCCoords = "24.0N, 72.0W";
 			t.NPCYellowFlagText = "Also, if you and your fellows succeed in defeating one, I will be pleased to share with you the bounties I have recovered from my previous victories.";
 			t.NPCYellowCompleteText = "Your tale was truly one of triumph!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			
 			
@@ -769,7 +907,7 @@ namespace GearFoundry
 			t.NPCCoords = "56.4S 96.9E";
 			t.NPCYellowFlagText = "I'm authorized to pay a bounty for culling the population of escaped moarsmen prisoners by twenty.";
 			t.NPCYellowCompleteText = "For culling the moarsman prisoner population here's the bounty you're owed.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Moarsmen Jailbreak (Blessed Leader)";
@@ -780,7 +918,7 @@ namespace GearFoundry
 			t.NPCCoords = "56.4S 96.9E";
 			t.NPCYellowFlagText = "I'm authorized to pay a bounty for the death of the Blessed moarsman leader.";
 			t.NPCYellowCompleteText = "For putting down the Blessed leader here's the bounty you're owed.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Moarsmen Jailbreak (Ardent Leader)";
@@ -791,7 +929,7 @@ namespace GearFoundry
 			t.NPCCoords = "56.4S 96.9E";
 			t.NPCYellowFlagText = "I'm authorized to pay a bounty for the death of the Ardent moarsman leader.";
 			t.NPCYellowCompleteText = "For putting down the Ardent leader here's the bounty you're owed.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Moarsmen Jailbreak (Verdant Leader)";
@@ -802,7 +940,7 @@ namespace GearFoundry
 			t.NPCCoords = "56.4S 96.9E";
 			t.NPCYellowFlagText = "I'm authorized to pay a bounty for the death of the Verdant moarsman leader.";
 			t.NPCYellowCompleteText = "For putting down the Verdant leader here's the bounty you're owed.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Black Coral Golem Kill Task";
@@ -813,7 +951,7 @@ namespace GearFoundry
 			t.NPCCoords = "81.5N 25.0E";
 			t.NPCYellowFlagText = "If you would be willing to go there and prove your prowess by destroying 100 of these strange golems, I will reward you handsomely for your actions.";
 			t.NPCYellowCompleteText = "Well done, well done indeed. You have proven your skill and honored my task. I thank you. Here is the reward promised.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Weeding of the Deru Tree";
@@ -826,7 +964,7 @@ namespace GearFoundry
 			t.NPCCoords = "64.0S 97.5E";
 			t.NPCYellowFlagText = "I'll tell ye what. If ye go out there and kill 50 of those tentacles for me, just the ones on Freebooter, mind ye, I'll make it worth ye while.";
 			t.NPCYellowCompleteText = "That should do it! The Mana flows around the Ruins of Degar'Alesh are moving much better now, thank ye. Here's a little something for yer efforts."; 
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 
 			t = new KillTask();
 			t.TaskName = "Blighted Coral Golem Kill Task";
@@ -837,7 +975,7 @@ namespace GearFoundry
 			t.NPCCoords = "81.5N 25.0E";
 			t.NPCYellowFlagText = "I wish you to destroy 100 of the foul, Blighted Coral Golems upon the isle.";
 			t.NPCYellowCompleteText = "Impressively done, Honored Master. You have accomplished all I have wished from you. Now, for your promised reward.";
-			mKTSet.MyKillTasks.Add(t);		
+			NewKillTasks.Add(t);		
 					
 			t = new KillTask();
 			t.TaskName = "Blessed Moarsman Kill Task";
@@ -850,7 +988,7 @@ namespace GearFoundry
 			t.NPCCoords = "Unknown";
 			t.NPCYellowFlagText = "Survive, kill 50 Blessed Moarsmen, and I'll make sure you are recognized for your valorous service to our Society.";
 			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded. Here, allow me to reward you for your assistance to our Society.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Gear Knight Phalanx Kill Task";
@@ -866,7 +1004,7 @@ namespace GearFoundry
 			t.NPCCoords = "Unknown";
 			t.NPCYellowFlagText = "Go there and defeat 10 Phalanx.";
 			t.NPCYellowCompleteText = "Satisfactory. Take these rewards as compensation for your efforts.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//TODO:  This is actually a collect task, move to collection tashs
 			//Item:  "Holy Symbol"
@@ -881,7 +1019,7 @@ namespace GearFoundry
 //			t.NPCCoords = "Unknown";
 //			t.NPCYellowFlagText = "Kill this Moarsman High Priest and bring back the Holy Symbol he wields as proof of your kill.";
 //			t.NPCYellowCompleteText = "Excellent, you were able to defeat the High Priest!";
-//			mKTSet.MyKillTasks.Add(t);			
+//			NewKillTasks.Add(t);			
 			
 			t = new KillTask();
 			t.TaskName = "Killer Phyntos Wasp Kill Task";
@@ -896,7 +1034,51 @@ namespace GearFoundry
 			t.NPCCoords = "Unknown";
 			t.NPCYellowFlagText = "The society will appreciate any efforts you make towards their extermination.";
 			t.NPCYellowCompleteText = "You've done well in exterminating this aggressive breed of Phyntos.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Nyr'leha Sclavus Kill Task";
+			t.MobNames.Add("Afessa Sclavus Guardian");
+			t.MobNames.Add("Afessa Sclavus Soldier");
+			t.MobNames.Add("Illu Sclavus Soldier");
+			t.MobNames.Add("Sclavus Attacker");
+			t.MobNames.Add("Siessa Sclavus Soldier");
+			t.CompleteCount = 20;
+			t.NPCNames.Add("Bayani");
+			t.NPCInfo = "Freebooter Keep Black Market";
+			t.NPCCoords = "64.0S, 97.5E";
+			t.NPCYellowFlagText = "I wish you to destroy 20 of the Sclavi who roam this isle";
+			t.NPCYellowCompleteText = "";
+			NewKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Nyr'leha Moarsman Kill Task";
+			t.MobNames.Add("Blighted Ardent Moarsman"); 
+			t.MobNames.Add("Blighted Verdant Moarsman"); 
+			t.MobNames.Add("Brood Mother"); 
+			t.MobNames.Add("Icthis Moarsman"); 
+			t.MobNames.Add("Magshuth Moarsman"); 
+			t.MobNames.Add("Maguth Moarsman"); 
+			t.MobNames.Add("Mithmog Moarsman"); 
+			t.MobNames.Add("Moarsman Adherent of T'thuun"); 
+			t.MobNames.Add("Moarsman Attacker"); 
+			t.MobNames.Add("Moarsman Blight-caller"); 
+			t.MobNames.Add("Moarsman Priest of T'thuun"); 
+			t.MobNames.Add("Moarsman Prior"); 
+			t.MobNames.Add("Mogshuth Moarsman"); 
+			t.MobNames.Add("Moguth Moarsman"); 
+			t.MobNames.Add("Shoguth Moarsman"); 
+			t.MobNames.Add("Shuthis Moarsman"); 
+			t.MobNames.Add("Spawn Watcher"); 
+			t.MobNames.Add("Spawnling"); 
+			t.MobNames.Add("Spawn"); 
+			t.CompleteCount = 20;
+			t.NPCNames.Add("Kagani");
+			t.NPCInfo = "Freebooter Keep Black Market";
+			t.NPCCoords = "64.0S, 97.5E";
+			t.NPCYellowFlagText = "If you would rid us of say 20 of those beasts";
+			t.NPCYellowCompleteText = "";
+			NewKillTasks.Add(t);
 				
 			//TODO:  Flag Text
 			t = new KillTask();
@@ -910,7 +1092,7 @@ namespace GearFoundry
 			t.NPCCoords = "Unknown";
 			t.NPCYellowFlagText = "";
 			t.NPCYellowCompleteText = "Well done! Here, allow me to reward you for your assistance to our Society.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Phyntos Larva Kill Task";
@@ -923,7 +1105,7 @@ namespace GearFoundry
 			t.NPCCoords = "Unknown";
 			t.NPCYellowFlagText = "In order to control the population of hyper aggressive Phyntos I'm contracting adventurers to kill their larvae.";
 			t.NPCYellowCompleteText = "Excellent work infiltrating the Phyntos hive and killing their larvae.";
-			mKTSet.MyKillTasks.Add(t);			
+			NewKillTasks.Add(t);			
 			
 			//TODO:  Flag Text
 			t = new KillTask();
@@ -937,7 +1119,7 @@ namespace GearFoundry
 			t.NPCCoords = "Unknown";
 			t.NPCYellowFlagText = "";
 			t.NPCYellowCompleteText = "Well done! Here, allow me to reward you for your assistance to our Society.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Wight Blade Sorcerer Kill Task";
@@ -950,7 +1132,7 @@ namespace GearFoundry
 			t.NPCCoords = "Unknown";
 			t.NPCYellowFlagText = "Just concern yourself with killing 12 Wight Blade Sorcerers, and report back to me when you're done.";
 			t.NPCYellowCompleteText = "Congratulations! Twelve dead Wight Blade Sorcerers. Our field researchers will be quite pleased. I can reward you now.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//Graveyard Kill Tasks
 			
@@ -964,7 +1146,7 @@ namespace GearFoundry
 //			t.NPCCoords = "65.8S, 45.3W";
 //			t.NPCYellowFlagText = "";
 //			t.NPCYellowCompleteText = "";
-//			mKTSet.MyKillTasks.Add(t);
+//			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Guardian Statue Kill Task";
@@ -975,7 +1157,7 @@ namespace GearFoundry
 			t.NPCCoords = "64.7S 45.2W";
 			t.NPCYellowFlagText = "Destroy 10 of these corrupted gargoyles to ease the pain of those that wander these halls and I will reward you.";
 			t.NPCYellowCompleteText = "Well done, champion. You must be skilled indeed. Allow me to reward you.";
-			mKTSet.MyKillTasks.Add(t);	
+			NewKillTasks.Add(t);	
 			
 			//TODO:  This is actually a collection task,  move to collection list.
 //			t = new KillTask();
@@ -987,7 +1169,7 @@ namespace GearFoundry
 //			t.NPCCoords = "64.7S 45.2W";
 //			t.NPCYellowFlagText = "Destroy these corrupted remains and gather the signet rings from the bones. Return them to me and I will reward you.";
 //			t.NPCYellowCompleteText = "I see that you have recovered 10 signet rings of House Mhoire.";
-//			mKTSet.MyKillTasks.Add(t);
+//			NewKillTasks.Add(t);
 			
 			//TODO:  Completion Text
 			t = new KillTask();
@@ -999,7 +1181,7 @@ namespace GearFoundry
 			t.NPCCoords = "65.3S, 43.4W";
 			t.NPCYellowFlagText = "If you want to help me, kill 100 of these Grave Rats. Maybe then I will have more work for you.";
 			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 
 			//Gear Knight Kill Tasks
 			//UNDONE:  complete messages may be reversed.
@@ -1015,7 +1197,7 @@ namespace GearFoundry
 			t.NPCCoords = "12.3S, 74.9W";
 			t.NPCYellowFlagText = "Those Squires are becoming a serious problem. They constantly interupt the supply lines to our camp. Destroy 10 of them and I'll reward you.";
 			t.NPCYellowCompleteText = "Given the time it takes for these things to regroup, I'll have more work for you by this time tomorrow.";
-			mKTSet.MyKillTasks.Add(t);			
+			NewKillTasks.Add(t);			
 			
 			t = new KillTask();
 			t.TaskName = "Gear Knight Kill Task (Knights)";
@@ -1029,7 +1211,7 @@ namespace GearFoundry
 			t.NPCCoords = "12.3S, 74.9W";
 			t.NPCYellowFlagText = "If you wish to help me, just head over to the area these 'Gear Knights' have occupied and kill 10 Knights.";
 			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.  Here, allow me to reward you for your assistance to our Queen.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//TODO:  Insert texts below for flag and complete
 			
@@ -1042,7 +1224,7 @@ namespace GearFoundry
 			t.NPCCoords = "12.3S 75.0W";
 			t.NPCYellowFlagText = "Near the center of these invading forces, you'll find a Gear Knight called the Iron Blade Commander.";
 			t.NPCYellowCompleteText = "I am pleased to see that you have been successful. Allow me to reward you for your assistance to the Crown.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Bronze Gauntlet Trooper Kill Task";
@@ -1053,7 +1235,7 @@ namespace GearFoundry
 			t.NPCCoords = "33.4S, 6.3E";
 			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Bronze Gauntlet Troopers.";
 			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Copper Cog Trooper Kill Task";
@@ -1064,7 +1246,7 @@ namespace GearFoundry
 			t.NPCCoords = "33.4S, 6.3E";
 			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Copper Cog Troopers.";
 			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Iron Blade Trooper Kill Task";
@@ -1075,7 +1257,7 @@ namespace GearFoundry
 			t.NPCCoords = "33.4S, 6.3E";
 			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Iron Blade Troopers.";
 			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Silver Scope Trooper Kill Task";
@@ -1086,7 +1268,7 @@ namespace GearFoundry
 			t.NPCCoords = "33.4S, 6.3E";
 			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Silver Scope Troopers.";
 			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			
 						t = new KillTask();
@@ -1098,7 +1280,7 @@ namespace GearFoundry
 			t.NPCCoords = "46.7N, 48.9E";
 			t.NPCYellowFlagText = "Kill him five times and maybe he will learn not to go around stealing other peoples dreams.";
 			t.NPCYellowCompleteText = "Excellent, I hope that teaches ol' Three Eye a lesson.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			//Eastwatch Tasks
 			
@@ -1111,7 +1293,7 @@ namespace GearFoundry
 			t.NPCCoords = "90.3N 43.1W";
 			t.NPCYellowFlagText = "Track down and slay 100 of the terrible Wicked Skeletons for me, and I will reward you appropriately.";
 			t.NPCYellowCompleteText = "Excellent work, friend! You have slain many of the terrible beasts! Allow me to reward you!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Tukora Lieutenant Kill Task";
@@ -1122,7 +1304,7 @@ namespace GearFoundry
 			t.NPCCoords = "90.2N, 43.1W";
 			t.NPCYellowFlagText = "Track down and slay 250 of the terrible Tukora Lieutenants for me, and I will reward you appropriately.";
 			t.NPCYellowCompleteText = "Excellent work, friend!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Tumerok Gladiator Kill Task";
@@ -1133,7 +1315,7 @@ namespace GearFoundry
 			t.NPCCoords = "8.2S 73.1E";
 			t.NPCYellowFlagText = "Track down and slay 25 of the Tumerok Gladiators for me, and I will reward you for your aid in the defense of Dryreach.";
 			t.NPCYellowCompleteText = "Excellent work, friend!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Tusker Guard Kill Task";
@@ -1144,7 +1326,7 @@ namespace GearFoundry
 			t.NPCCoords = "54.4S 72.9E";
 			t.NPCYellowFlagText = "Return to me after you have killed 500 Tusker Guards and I will reward you.";
 			t.NPCYellowCompleteText = "Excellent, now go contemplate what you have learned from fighting the Tusker Guards.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Umbral Rift Kill Task";
@@ -1155,7 +1337,7 @@ namespace GearFoundry
 			t.NPCCoords = "97.4S 94.6W";
 			t.NPCYellowFlagText = "Kill 30 Umbral Rifts and let me know of your adventures.";
 			t.NPCYellowCompleteText = "Truly amazing isn't it. You are one of us, you are a Rift Walker.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Viamontian Man-at-Arms Kill Task";
@@ -1166,7 +1348,7 @@ namespace GearFoundry
 			t.NPCCoords = "43.9N 73.9W";
 			t.NPCYellowFlagText = "Kill 50 of them for me, and I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "You do the Carenzi a great service.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Virindi Paradox Kill Task";
@@ -1177,7 +1359,7 @@ namespace GearFoundry
 			t.NPCCoords = "74.3S, 19.1E";
 			t.NPCYellowFlagText = "If you slay 75 of these strange beings, come to me.";
 			t.NPCYellowCompleteText = "As the hero Yaziq al-Tazar returned triumphant, so do you return to me now.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Virindi Quidiox Kill Task";
@@ -1188,7 +1370,7 @@ namespace GearFoundry
 			t.NPCCoords = "60.0S, 88.0W";
 			t.NPCYellowFlagText = "Go there now, and slay 75 Virindi Quidioxes.";
 			t.NPCYellowCompleteText = "It is done!";
-			mKTSet.MyKillTasks.Add(t);			
+			NewKillTasks.Add(t);			
 			
 			t = new KillTask();
 			t.TaskName = "Voracious Eater Kill Task";
@@ -1199,7 +1381,7 @@ namespace GearFoundry
 			t.NPCCoords = "44.3N, 77.9W";
 			t.NPCYellowFlagText = "Slay 50 of the Voracious Eater and I will sing your name to the elders of my xuta.";
 			t.NPCYellowCompleteText = "Ah, buhdi, you do my xuta a grand service. I thank you.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Crystalline Killer";
@@ -1232,7 +1414,7 @@ namespace GearFoundry
 			t.NPCYellowFlagText = "Go out and kill 100 Wisps in this area and I will reward you.";
 			t.NPCYellowCompleteText = "Excellent work in your hunt. We'll find your reports very useful.";
 			t.NPCCoords = "90.3N 43.1W";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 
 			//Royal Tent Kill Tasks			
 
@@ -1247,7 +1429,7 @@ namespace GearFoundry
 			t.NPCCoords = "80.7N 43.0W";
 			t.NPCYellowFlagText = "If you will do me the honor of killing 5 of the Golem Samurai within the towns or up within the walled fortress, I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Well done, well done indeed.";
-			mKTSet.MyKillTasks.Add(t);	
+			NewKillTasks.Add(t);	
 			
 			t = new KillTask();
 			t.TaskName = "Spectral Archer Kill Task";
@@ -1258,7 +1440,7 @@ namespace GearFoundry
 			t.NPCCoords = "80.7N 43.0W";
 			t.NPCYellowFlagText = "If you will do me the honor of killing 15 of the Spectral Archers within the towns or up within the walled fortress, I will reward you for your assistance.";
 			t.NPCYellowCompleteText = "Well done.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 
 			t = new KillTask();
 			t.TaskName = "Spectral Bushi Kill Task";
@@ -1269,7 +1451,7 @@ namespace GearFoundry
 			t.NPCCoords = "80.7N 43.0W";
 			t.NPCYellowFlagText = "If you will assist me by killing 10 of the Spectral Bushi within the towns or up within the walled fortress, I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Thank you for your assistance.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Spectral Blade and Claw Kill Task";
@@ -1283,7 +1465,7 @@ namespace GearFoundry
 			t.NPCCoords = "80.7N 43.0W";
 			t.NPCYellowFlagText = "To that end, if you aid me in hunting 10 of the Spectral Claw Adepts, Claw Masters, Blade Adepts or Blade Masters, I'll happily reward you for your help.";
 			t.NPCYellowCompleteText = "Your skill is quite remarkable.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Spectral Mage Kill Task";
@@ -1295,7 +1477,7 @@ namespace GearFoundry
 			t.NPCCoords = "80.7N 43.0W";
 			t.NPCYellowFlagText = "While these two types of spirits continue to exist, they pose a tremendous threat to the kingdom.";
 			t.NPCYellowCompleteText = "Your skill is remarkable.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Spectral Minion Kill Task";
@@ -1306,7 +1488,7 @@ namespace GearFoundry
 			t.NPCCoords = "80.7N 43.0W";
 			t.NPCYellowFlagText = "If you will aid me by killing 15 of the Spectral Minions within the towns or up within the walled fortress, I will reward your good work.";
 			t.NPCYellowCompleteText = "Your hunt for today is complete.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Spectral Nanjou Shou-jen Kill Task";
@@ -1317,7 +1499,7 @@ namespace GearFoundry
 			t.NPCCoords = "80.7N 43.0W";
 			t.NPCYellowFlagText = "To that end, if you will do me the honor of killing 5 of the Spectral Nanjou Shou-jen within the towns or up within the walled fortress, I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Thank you for your aid my assigned task.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Spectral Samurai Kill Task";
@@ -1328,7 +1510,7 @@ namespace GearFoundry
 			t.NPCCoords = "80.7N 43.0W";
 			t.NPCYellowFlagText = "If you will do me the honor of killing 10 of the Spectral Samurai within the towns or up within the walled fortress, I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Your skill is exceptional.";
-			mKTSet.MyKillTasks.Add(t);						
+			NewKillTasks.Add(t);						
 			
 			t = new KillTask();
 			t.TaskName = "Eye of T'thuun Quest";
@@ -1339,7 +1521,7 @@ namespace GearFoundry
 			t.NPCCoords = "43.2N 67.1W";
 			t.NPCYellowFlagText = "Killing 50 should be enough to get an eye off of the larger, eye covered one.";
 			t.NPCYellowCompleteText = "Ahh, success. The researchers will be very pleased.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Arctic Mattekar Kill Task";
@@ -1350,7 +1532,7 @@ namespace GearFoundry
 			t.NPCCoords = "87.4N 70.5W";
 			t.NPCYellowFlagText = "Well then. Track down and slay 25 of the terrible Arctic Mattekars for me, and I will reward you appropriately.";
 			t.NPCYellowCompleteText = "Excellent work, friend!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Banished Creature Kill Task";
@@ -1371,7 +1553,7 @@ namespace GearFoundry
 			t.NPCCoords = "68.9N 21.6W";
 			t.NPCYellowFlagText = "I would like you to experience the hunting of the elusive banished creatures.";
 			t.NPCYellowCompleteText = "Excellent, you are now an experienced hunted of banished creatures.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Fallen Creature Kill Task";
@@ -1392,7 +1574,7 @@ namespace GearFoundry
 			t.NPCCoords = "68.9N 21.6W";
 			t.NPCYellowFlagText = "I would like you to experience the hunting of the elusive fallen creatures.";
 			t.NPCYellowCompleteText = "Excellent, you are now an experienced hunted of fallen creatures.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Benek Niffis Kill Task";
@@ -1403,7 +1585,7 @@ namespace GearFoundry
 			t.NPCCoords = "77.8N 67.1E";
 			t.NPCYellowFlagText = "Kill 50 Benek Niffis and rewards shall be yours.";
 			t.NPCYellowCompleteText = "It is pleased. Rewards unto thee.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Blood Shreth Kill Task";
@@ -1414,7 +1596,7 @@ namespace GearFoundry
 			t.NPCCoords = "33.5S, 72.8E";
 			t.NPCYellowFlagText = "Track down and slay 10 of the terrible Blood Shreth for me, and I will reward you appropriately.";
 			t.NPCYellowCompleteText = "Excellent work, friend!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Coral Golem Kill Task";
@@ -1425,7 +1607,7 @@ namespace GearFoundry
 			t.NPCCoords = "71.8N, 60.8W";
 			t.NPCYellowFlagText = "It won't make them go away but I'll reward you for every 50 Coral Golems that you kill.";
 			t.NPCYellowCompleteText = "Those Coral Golems won't be scratching my armor again.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Deathcap Thrungus Kill Task";
@@ -1436,7 +1618,7 @@ namespace GearFoundry
 			t.NPCCoords = "72.7N 73.3W";
 			t.NPCYellowFlagText = "Track down and slay 25 of the terrible Deathcap Thrungum for me, and I will reward you appropriately.";
 			t.NPCYellowCompleteText = "Excellent work, friend!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Dire Mattekar Kill Task";
@@ -1447,7 +1629,7 @@ namespace GearFoundry
 			t.NPCCoords = "49.4S, 62.4E";
 			t.NPCYellowFlagText = "Track down and slay 10 of the terrible Dire Mattekars for me, and I will reward you appropriately.";
 			t.NPCYellowCompleteText = "Excellent work, friend!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Ebon Gromnie Kill Task";
@@ -1458,7 +1640,7 @@ namespace GearFoundry
 			t.NPCCoords = "40.8N, 83.0W";
 			t.NPCYellowFlagText = "Track down and slay 25 of the terrible Ebon Gromnies for me, and I will reward you appropriately.";
 			t.NPCYellowCompleteText = "Excellent work, friend!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Elemental Kill Task";
@@ -1472,7 +1654,7 @@ namespace GearFoundry
 			t.NPCCoords = "68.7N, 21.5W";
 			t.NPCYellowFlagText = "Fight twenty-five of these creatures and then return to me and tell me everything you learned about them.";
 			t.NPCYellowCompleteText = "Very interesting, I hope I can use this information to further my research.";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Floeshark Kill Task";
@@ -1483,7 +1665,7 @@ namespace GearFoundry
 			t.NPCCoords = "90.3N, 43.0W";
 			t.NPCYellowFlagText = "Track down and slay 50 of the terrible Floesharks for me, and I will reward you appropriately.";
 			t.NPCYellowCompleteText = "Excellent work, friend!";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Gold Gear Trooper Kill Task";
@@ -1494,7 +1676,7 @@ namespace GearFoundry
 			t.NPCCoords = "33.4S, 6.3E";
 			t.NPCYellowFlagText = "Return to me with anything you've learned after destroying 25 Gold Gear Troopers.";
 			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded. ";
-			mKTSet.MyKillTasks.Add(t);
+			NewKillTasks.Add(t);
 
 			t = new KillTask();
 			t.TaskName = "Grievver Violator Kill Task";
@@ -1505,9 +1687,7 @@ namespace GearFoundry
 			t.NPCCoords = "90.4N 43.1W";
 			t.NPCYellowFlagText = "Track down and slay 100 of the terrible Grievver Violators for me, and I will reward you appropriately.";
 			t.NPCYellowCompleteText = "Excellent work, friend!";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
+			NewKillTasks.Add(t);			
 			
 			t = new KillTask();
 			t.TaskName = "Guruk Basher Kill Task";
@@ -1516,9 +1696,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Shiruuk");
 			t.NPCInfo = "Kor-Gursha";
 			t.NPCCoords = "Bur";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "If you want to prove you're a real hunter track down and slay 40 of those lumbering Guruk Bashers and I'll reward you.";
+			t.NPCYellowCompleteText = "Well done!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Guruk Colossus Kill Task";
@@ -1528,9 +1708,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Brogosh");
 			t.NPCInfo = "Kor-Gursha";
 			t.NPCCoords = "Bur";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Search the Southern Catacombs and kill 30 of those colossal brutes!";
+			t.NPCYellowCompleteText = "Good job!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Guruk Fiend Kill Task";
@@ -1539,9 +1719,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Mohor");
 			t.NPCInfo = "Kor-Gursha";
 			t.NPCCoords = "Bur";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Go and kill 30 of the cunning fiends lurking in the lower Southern Catacombs and I'll reward you for your help.";
+			t.NPCYellowCompleteText = "By the fungal roots, you humans can hunt better than anyone I've ever seen!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Guruk Marauder Kill Task";
@@ -1550,9 +1730,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Kurket");
 			t.NPCInfo = "Kor-Gursha";
 			t.NPCCoords = "Bur";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "If you want to prove you're a real hunter, track down and slay 40 of those despicable Guruk Marauders and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "I'm impressed. I didn't think a human could hunt that well.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Guruk Monstrosity Kill Task";
@@ -1561,9 +1741,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Borsh");
 			t.NPCInfo = "Kor-Gursha";
 			t.NPCCoords = "Bur";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Take your weapon and hunt down 10 of the Guruk Monstrosities and I will reward you.";
+			t.NPCYellowCompleteText = "Thank you, I can sleep soundly for a time.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Guruk Smasher Kill Task";
@@ -1572,12 +1752,10 @@ namespace GearFoundry
 			t.NPCNames.Add("Kushuk");
 			t.NPCInfo = "Kor-Gursha";
 			t.NPCCoords = "Bur";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
-			
+			t.NPCYellowFlagText = "Track down and slay 40 of those infuriating Guruk Smashers and I'll reward you well.";
+			t.NPCYellowCompleteText = "Yes! Those vandals got what was coming to them!";
+			NewKillTasks.Add(t);
+						
 			t = new KillTask();
 			t.TaskName = "Hea Windreave Kill Task";
 			t.MobNames.Add("Hea Windreave");
@@ -1585,12 +1763,10 @@ namespace GearFoundry
 			t.NPCNames.Add("Susana du Loc");
 			t.NPCInfo = "Redspire";
 			t.NPCCoords = "40.7N, 83.2W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
-			
+			t.NPCYellowFlagText = "Do me a favor, friend, and kill 25 of these Hea Windreaves for me.";
+			t.NPCYellowCompleteText = "You do my heart much good.";
+			NewKillTasks.Add(t);
+					
 			t = new KillTask();
 			t.TaskName = "Iron Spined Chittick Kill Task";
 			t.MobNames.Add("Iron Spined Chittick");
@@ -1598,9 +1774,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Aidene");
 			t.NPCInfo = "Oolatanga's Refuge";
 			t.NPCCoords = "2.0N 95.6E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = " Track down and slay 50 of the terrible Iron-Spined Chitticks for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 
 			t = new KillTask();
 			t.TaskName = "Kilif Zefir Kill Task";
@@ -1609,9 +1785,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Hadiya bint Anan");
 			t.NPCInfo = "Shoushi";
 			t.NPCCoords = "33.7S 73.1E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);	
+			t.NPCYellowFlagText = "Track down and slay 35 of the cunning Kilif Zefir for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);	
 			
 			t = new KillTask();
 			t.TaskName = "K'nath An'dras Kill Task";
@@ -1620,9 +1796,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Nona");
 			t.NPCInfo = "Wai Jhou";
 			t.NPCCoords = "61.8S 51.3W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 25 of the terrible K'nath An'drases for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Littoral Siraluun Kill Task";
@@ -1631,9 +1807,9 @@ namespace GearFoundry
 			t.NPCNames.Add(" Rico Cellini");
 			t.NPCInfo = "Greenspire";
 			t.NPCCoords = "43.2N 67.1W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "If you would slay 25 of the beasts, I would reward you as a hunter whose prowess is equal to mine own.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Putrid Moar Kill Task";
@@ -1642,9 +1818,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Tibik");
 			t.NPCInfo = "Kor-Gursha";
 			t.NPCCoords = "Bur";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "You kill 25 Moar, and Tibik reward Strong Traveler from Faraway.";
+			t.NPCYellowCompleteText = "Excellent! Tibik be sneaky now.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Mosswart Worshipper Kill Task";
@@ -1653,9 +1829,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Orfeo Orlando");
 			t.NPCInfo = "Eastwatch";
 			t.NPCCoords = "90.2N, 43.1W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 175 of the terrible Mosswart Worshippers for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Mottled Carenzi Kill Task";
@@ -1664,9 +1840,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Grania the Bold");
 			t.NPCInfo = "Candeth Keep";
 			t.NPCCoords = "87.6S 67.4W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 50 of the terrible Mottled Carenzi for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Mosswart Townsfolk Kill Task";
@@ -1675,9 +1851,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Corporal Massein");
 			t.NPCInfo = "Kryst";
 			t.NPCCoords = "74.4S 84.6E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Slay forty of the Mosswart Townsfolk who live in the Mosswart holding, then return back to me.";
+			t.NPCYellowCompleteText = "Well done, warrior.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Mucky Moarsman Kill Task";
@@ -1686,9 +1862,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Algar Oreksun");
 			t.NPCInfo = "The Deep (Vissidal)";
 			t.NPCCoords = "77.8N 67.1E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "A sacrifice of 50 Mucky Moarsmen must be made.";
+			t.NPCYellowCompleteText = "It is pleased.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Naughty Skeleton Kill Task";
@@ -1697,9 +1873,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Taku Yukio");
 			t.NPCInfo = "Eastwatch";
 			t.NPCCoords = "90.3N 43.1W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 100 of the terrible Naughty Skeletons for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Olthoi Drone Kill Task";
@@ -1708,9 +1884,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Olthoi Hunter");
 			t.NPCInfo = "Arwic (South)";
 			t.NPCCoords = "30.9N 56.3E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 20 Olthoi Drones and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "You have slain many Olthoi Drones!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Olthoi Nettler Kill Task";
@@ -1719,9 +1895,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Olthoi Hunter");
 			t.NPCInfo = "Arwic (South)";
 			t.NPCCoords = "30.9N 56.3E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 10 Olthoi Nettlers and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "You have slain many Olthoi Nettlers!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Olthoi Nymph Kill Task";
@@ -1730,9 +1906,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Olthoi Hunter");
 			t.NPCInfo = "Arwic (South)";
 			t.NPCCoords = "30.9N 56.3E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 20 Olthoi Nymphs and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "You have slain many Olthoi Nymphs!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Olthoi Ripper Kill Task";
@@ -1741,9 +1917,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Marcello");
 			t.NPCInfo = "Eastwatch";
 			t.NPCCoords = "90.2N 43.1W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 250 of the terrible Olthoi Rippers for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Paradox-touched Grub Kill Task";
@@ -1752,9 +1928,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Alicia Swiftblade");
 			t.NPCInfo = "Olthoi North";
 			t.NPCCoords = "43.8N 54.9E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Kill, let's say, 50 of these Paradox-touched Grubs, and I'll reward you for your aid in this.";
+			t.NPCYellowCompleteText = "You've done it!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Paradox-touched Nymph Kill Task";
@@ -1763,9 +1939,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Tomihino");
 			t.NPCInfo = "Olthoi North";
 			t.NPCCoords = "43.8N 54.9E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Slay them, 50 should do for now, and return to me.";
+			t.NPCYellowCompleteText = "You have done well.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Plate Armoredillo Kill Task";
@@ -1774,9 +1950,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Saqr");
 			t.NPCInfo = "Fort Tethana";
 			t.NPCCoords = "1.5N 71.8W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Well then. Track down and slay 25 of the terrible Plate Armoredillos for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Polardillo Kill Task";
@@ -1785,9 +1961,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Alessandro Mardor");
 			t.NPCInfo = "Sanamar";
 			t.NPCCoords = "72.0N 61.2W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 10 of the terrible Polardillos for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Polar Ursuin Kill Task";
@@ -1796,12 +1972,10 @@ namespace GearFoundry
 			t.NPCNames.Add("Mariabella Varanese");
 			t.NPCInfo = "Fiun Outpost";
 			t.NPCCoords = "95.6N, 56.3W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
-			
+			t.NPCYellowFlagText = "Track down and slay 25 of the terrible Polar Ursuine for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
+					
 			t = new KillTask();
 			t.TaskName = "Rare Game Kill Task";
 			t.MobNames.Add("Basalt Golem");
@@ -1816,12 +1990,12 @@ namespace GearFoundry
 			t.MobNames.Add("Swamp King");
 			t.MobNames.Add("Tundra Mattekar");
 			t.CompleteCount = 50;
-			t.NPCNames.Add(" Belinda du Loc");
+			t.NPCNames.Add("Belinda du Loc");
 			t.NPCInfo = "Stonehold";
 			t.NPCCoords = "68.9N 21.6W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Use that list as a reference. Kill 50 of the creatures";
+			t.NPCYellowCompleteText = "Excellent, you are now an experienced hunter of the most elusive creatures.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Remoran Sea Raptor Kill Task";
@@ -1830,9 +2004,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Peng-Ya");
 			t.NPCInfo = "The Deep (Vissidal)";
 			t.NPCCoords = "77.8N 67.1E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Kill 50 Remoran Sea Raptors so that they will know their place.";
+			t.NPCYellowCompleteText = "Enough! No more Remoran Sea Raptors need die.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Repugnant Eater Kill Task";
@@ -1841,9 +2015,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Xun Yu");
 			t.NPCInfo = "Eastwatch";
 			t.NPCCoords = "90.2N 43.1W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 50 of the terrible Repugnant Eaters for me, and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Ruschk Kill Task";
@@ -1853,11 +2027,10 @@ namespace GearFoundry
 			t.NPCNames.Add("Commander Rylane di Cinghalle");
 			t.NPCInfo = "Shattered Outlands";
 			t.NPCCoords = "93.2N 48.2W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
+			t.NPCYellowFlagText = "30 of the Ruschk in the valley, and then acquire one of their smaller Ice Totems from the encampment";
+			t.NPCYellowCompleteText = "Ahh, the Ice Totem.";
+			NewKillTasks.Add(t);
+						
 			t = new KillTask();
 			t.TaskName = "Shadow-touched Virindi Paradox Kill Task";
 			t.MobNames.Add("Shadow-touched Virindi Paradox");
@@ -1865,9 +2038,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Guard Li");
 			t.NPCInfo = "Wai Jhou";
 			t.NPCCoords = "61.8S, 51.3W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Slay 75 of these things and return to me, and I shall reward you.";
+			t.NPCYellowCompleteText = "Your task was effectively done.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Shadow-touched Virindi Quidiox Kill Task";
@@ -1876,9 +2049,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Guard Alfric");
 			t.NPCInfo = "Candeth Keep";
 			t.NPCCoords = "87.9S, 67.4W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Kill 75 and come back ta me.";
+			t.NPCYellowCompleteText = "Why, ye've done exactly the task I asked o' ye!";
+			NewKillTasks.Add(t);
 
 			t = new KillTask();
 			t.TaskName = "Shallows Gorger Kill Task";
@@ -1887,12 +2060,10 @@ namespace GearFoundry
 			t.NPCNames.Add("Dayla Bint Kazm");
 			t.NPCInfo = "The Deep (Vissidal)";
 			t.NPCCoords = "77.8N 67.1E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
-			
-			
-			
+			t.NPCYellowFlagText = "It bids me to tell you to kill 50 of the Shallows Gorgers.";
+			t.NPCYellowCompleteText = "It has chosen to reward you for completing the task it set before you.";
+			NewKillTasks.Add(t);
+						
 			t = new KillTask();
 			t.TaskName = "Sishalti Slithis Kill Task";
 			t.MobNames.Add("Sishalti Tentacle");
@@ -1902,9 +2073,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Zava bint Laurma");
 			t.NPCInfo = "Zaikhal";
 			t.NPCCoords = "13.9N, 0.6E";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "Track down and slay 150 of those lurking Sishalti Tentacles, Tendrils and Eye Stalks for me and I will reward you appropriately.";
+			t.NPCYellowCompleteText = "Excellent work, friend!";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Small Fledgling Mukkir Kill Task";
@@ -1913,9 +2084,9 @@ namespace GearFoundry
 			t.NPCNames.Add("Royal Guard");
 			t.NPCInfo = "Holtburg, Shoushi, or Yaraq";
 			t.NPCCoords = "Unknown";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "If you will go thin out their number, say, kill 15 of the Small Mukkir Fledglings, I will reward you for your efforts.";
+			t.NPCYellowCompleteText = "Excellent! The Queen will be most pleased.";
+			NewKillTasks.Add(t);
 			
 			t = new KillTask();
 			t.TaskName = "Tenebrous Rift Kill Task";
@@ -1924,9 +2095,42 @@ namespace GearFoundry
 			t.NPCNames.Add("Solange");
 			t.NPCInfo = "Singularity Caul";
 			t.NPCCoords = "97.4S 94.6W";
-			t.NPCYellowFlagText = "";
-			t.NPCYellowCompleteText = "";
-			mKTSet.MyKillTasks.Add(t);
+			t.NPCYellowFlagText = "If you seek to truely explor your own essence I'd suggest you kill 350 or more Tenebrous Rifts, it's truly amazing.";
+			t.NPCYellowCompleteText = "To have experienced that many rifts you must truly be chosen.";
+			NewKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Desert Cactus Kill Task";
+			t.MobNames.Add("Desert Cactus");
+			t.CompleteCount = 6;
+			t.NPCNames.Add("Sir Unell bin Rakke");
+			t.NPCInfo = "Neftet Encampment";
+			t.NPCCoords = "22.2S, 6.1E";
+			t.NPCYellowFlagText = "Destroy 6 of the Desert Cactus and I will reward your efforts.";
+			t.NPCYellowCompleteText = "The less insects around here, the better!";
+			NewKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Frost Golem Kill Task";
+			t.MobNames.Add("Frost Golem");
+			t.CompleteCount = 20;
+			t.NPCNames.Add("George");
+			t.NPCInfo = "Frozen Valley";
+			t.NPCCoords = "83.8N, 4.3W";
+			t.NPCYellowFlagText = "Watch your step and kill 20 Frost Golems";
+			t.NPCYellowCompleteText = "Those giant beasts of ice fall all the more magnificently.";
+			NewKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Frozen Crystal Kill Task";
+			t.MobNames.Add("Frozen Crystal");
+			t.CompleteCount = 4;
+			t.NPCNames.Add("Boone");
+			t.NPCInfo = "Frozen Valley";
+			t.NPCCoords = "83.7N, 4.3W";
+			t.NPCYellowFlagText = "Destroy 4 of these Frozen Crystals and you will be rewarded.";
+			t.NPCYellowCompleteText = "That was some fine destruction, my friend!";
+			NewKillTasks.Add(t);
 			
 			
 //			//TODO:  Fillout mob list
@@ -1937,7 +2141,7 @@ namespace GearFoundry
 //			t.NPCNames.Add("Londigul Ellic the Armorer";
 //			t.NPCInfo = "Glenden Wood";
 //			t.NPCCoords = "29.9N, 27.1E";
-//			mKTSet.MyKillTasks.Add(t);	
+//			NewKillTasks.Add(t);	
 			
 //			Flags based only on green text.  Unable to fit into the model.	
 //			//TODO:  Viamontian knight types
@@ -1952,7 +2156,7 @@ namespace GearFoundry
 //			t.NPCCoords = "94.0N 45.9W";
 //			t.NPCYellowFlagText = "";
 //			t.NPCYellowCompleteText = "";
-//			mKTSet.MyKillTasks.Add(t);
+//			NewKillTasks.Add(t);
 			
 			//Pumpkin Lord Kill Task
 			
@@ -1971,11 +2175,232 @@ namespace GearFoundry
 			XmlWriter writer = XmlWriter.Create(TaskFile.ToString(), settings);
 			
    			XmlSerializer serializer2 = new XmlSerializer(typeof(List<KillTask>));
-   			serializer2.Serialize(writer, mKTSet.MyKillTasks);
+   			serializer2.Serialize(writer, NewKillTasks);
    			writer.Close();
 			
 			
 			
+		}
+		
+		private void BuildCollectionTaskList()
+		{
+			
+			List<CollectTask> NewCollectTasks = new List<PluginCore.CollectTask>();
+			
+			CollectTask t;
+			
+			t = new CollectTask();
+			t.TaskName = "Prickly Pear Collecting";
+			t.Item = "Prickly Pear";
+			t.MobNames.Add("Prickly Pear");
+			t.CompleteCount = 15;
+			t.NPCNames.Add("Hammah al Rundik");
+			t.NPCInfo = "Neftet Encampment";
+			t.NPCCoords = "22.2S, 6.2E";
+			t.NPCYellowFlagText = "If you'll bring me 15 Prickly Pears, I'll happily reward you.";
+			t.NPCYellowCompleteText = "Ahh, a full bushel of Prickly Pears, just what every gourmet needs.";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Stone Tablet Collecting";
+			t.Item = "Broken Stone Tablet";
+			t.MobNames.Add("Cracked Stone Tablet");
+			t.CompleteCount = 15;
+			t.NPCNames.Add("Taylarn bint Tulani");
+			t.NPCInfo = "Neftet Encampment";
+			t.NPCCoords = "22.2S, 6.2E";
+			t.NPCYellowFlagText = "If you bring me any tablets you find, I'm prepared to reward any of sufficient experience for bringing me 15 stone tablets.";
+			t.NPCYellowCompleteText = "Ahh, a full stack of 15 stone tablets.";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "A'nekshay Bracer Collecting";
+			t.Item = "A'nekshay Bracer";
+			t.MobNames.Add("A'nekshay");
+			t.CompleteCount = 15;
+			t.NPCNames.Add("T'ing Setsuko");
+			t.NPCInfo = "Neftet Encampment";
+			t.NPCCoords = "22.2S, 6.2E";
+			t.NPCYellowFlagText = "I am prepared to reward Adventurers of sufficient experience for their efforts in collecting 15 of these A'nekshay Bracers.";
+			t.NPCYellowCompleteText = "Ahh, a full stack of 15 A'nekshay Bracers.";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Snow Tusker Blood Collection";
+			t.Item = "Snow Tusker Blood Sample";
+			t.MobNames.Add("Snow Tusker");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Archmage Ichihiri");
+			t.NPCInfo = "Frozen Valley";
+			t.NPCCoords = "83.8N 4.3W";
+			t.NPCYellowFlagText = "If you could bring me 10 samples of Snow Tusker Blood";
+			t.NPCYellowCompleteText = "I see that you have gathered 10 vials of blood from these Snow Tuskers.";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Undead Jaw Collection";
+			t.Item = "Pyre Skeleton Jaw";
+			t.MobNames.Add("Pyre Minion");
+			t.MobNames.Add("Pyre Skeleton");
+			t.MobNames.Add("Pyre Champion");
+			t.CompleteCount = 8;
+			t.NPCNames.Add("Balon Strongarm");
+			t.NPCNames.Add("Hador the Vengeful");
+			t.NPCNames.Add("Cullum of Celdon");
+			t.NPCInfo = "Society";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = "Be on your way, and come talk to me when you have eight!";
+			t.NPCYellowCompleteText = "Well done. Let me take those from you";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Collect Gear Knight Parts";
+			t.Item = "Pile of Gearknight Parts";
+			t.MobNames.Add("Invading");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Trathium");
+			t.NPCNames.Add("Dark Reshan");
+			t.NPCNames.Add("Drocogst");
+			t.NPCInfo = "Society";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = "Bring back parts from 10 of the Gearknights and I shall reward you.";
+			t.NPCYellowCompleteText = "A solid blow to their forces.";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Falatacot Report Collector";
+			t.Item = "Falatacot Battle Report";
+			t.MobNames.Add("Falatacot Blood Prophetess");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Boroth Bearhand");
+			t.NPCNames.Add("Turvald Snorborgson");
+			t.NPCNames.Add("Agbeart");
+			t.NPCInfo = "Society";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = "Go to Dark Isle and collect the Falatacot reports.";
+			t.NPCYellowCompleteText = "Ah, here we go.";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Black Coral Collection";
+			t.Item = "Black Coral";
+			t.MobNames.Add("");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Hidoshi Kawara");
+			t.NPCNames.Add("Manto Sakara");
+			t.NPCNames.Add("Daisei Chirana");
+			t.NPCInfo = "Society";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = "Bring exactly ten of this black coral to me.";
+			t.NPCYellowCompleteText = "This is sufficient.";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Glowing Jungle Lily Collector";
+			t.Item = "Glowing Jungle Lily";
+			t.MobNames.Add("Blessed Moarsman");
+			t.MobNames.Add("Blessed Moar");
+			t.MobNames.Add("Ashris Niffis");
+			t.CompleteCount = 20;
+			t.NPCNames.Add("Kojina");
+			t.NPCNames.Add("Satsuki");
+			t.NPCNames.Add("Atsuko");
+			t.NPCInfo = "Society";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = "If you get me at least 20 Glowing Jungle Lilies";
+			t.NPCYellowCompleteText = "Ahh, the flowers, here, let me take those from you";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Glowing Moar Gland Collector";
+			t.Item = "Glowing Moar Gland";
+			t.MobNames.Add("Blessed Moar");
+			t.CompleteCount = 30;
+			t.NPCNames.Add("Aurellia du Cinghalle");
+			t.NPCNames.Add("Elloisa du Cinghalle");
+			t.NPCNames.Add("Pia du Cinghalle");
+			t.NPCInfo = "Society";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = "kill enough Blessed Moars to collect at least 30 Glowing Moar Glands";
+			t.NPCYellowCompleteText = "Perfect, you have the glands";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Mana-Infused Jungle Flower Collector";
+			t.Item = "Mana-Infused Jungle Flower";
+			t.MobNames.Add("");
+			t.CompleteCount = 20;
+			t.NPCNames.Add("Giri bint Ashud");
+			t.NPCNames.Add("Leisall bint Jumadd");
+			t.NPCNames.Add("Ti'alla bint Ashud");
+			t.NPCInfo = "Society";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = "If you get me at least 20 Mana-Infused Jungle Flowers";
+			t.NPCYellowCompleteText = "Ahh, the flowers, here, let me take those from you";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Phyntos Honey Collector";
+			t.Item = "Phyntos Honey";
+			t.MobNames.Add("Giant Jungle Phyntos Wasp");
+			t.MobNames.Add("Killer Phyntos Hive");
+			t.MobNames.Add("Killer Phyntos Swarm");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Narris");
+			t.NPCNames.Add("Zahid al-Din");
+			t.NPCNames.Add("Kenji");
+			t.NPCInfo = "Society";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = "Bring me anything phyntos related you find";
+			t.NPCYellowCompleteText = "We're studying their honey to see if it will reveal anything about their aggressive nature";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Phyntos Splinter Collector";
+			t.Item = "Hive Splinters";
+			t.MobNames.Add("Killer Phyntos Hive");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Narris");
+			t.NPCNames.Add("Zahid al-Din");
+			t.NPCNames.Add("Kenji");
+			t.NPCInfo = "Society";
+			t.NPCCoords = "Unknown";
+			t.NPCYellowFlagText = " I'll determine what we can use";
+			t.NPCYellowCompleteText = "These Phyntos Hive Splinters are proof of destroyed hives";
+			NewCollectTasks.Add(t);
+			
+//			t = new CollectTask();
+//			t.TaskName = "";
+//			t.Item = "";
+//			t.MobNames.Add("");
+//			t.CompleteCount = ;
+//			t.NPCNames.Add("");
+//			t.NPCNames.Add("");
+//			t.NPCNames.Add("");
+//			t.NPCInfo = "Society";
+//			t.NPCCoords = "Unknown";
+//			t.NPCYellowFlagText = "";
+//			t.NPCYellowCompleteText = "";
+//			mKTSet.MyCollectTasks.Add(t);
+			
+
+			
+			
+			FileInfo TaskFile = new FileInfo(GearDir + @"\Collect.xml");
+			if(TaskFile.Exists)
+			{
+				TaskFile.Delete();
+			}
+					
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.Indent = true;
+			settings.NewLineOnAttributes = true;
+			
+			XmlWriter writer = XmlWriter.Create(TaskFile.ToString(), settings);
+			
+   			XmlSerializer serializer2 = new XmlSerializer(typeof(List<CollectTask>));
+   			serializer2.Serialize(writer, NewCollectTasks);
+   			writer.Close();
 		}
 		
 		
