@@ -39,20 +39,19 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Altered Drudge Kill Task</TaskName>
+    <TaskName>Drudge Ravener Kill Task</TaskName>
     <MobNames>
       <string>Drudge Ravener</string>
-      <string>Altered Drudge</string>
     </MobNames>
     <CurrentCount>0</CurrentCount>
-    <CompleteCount>40</CompleteCount>
+    <CompleteCount>100</CompleteCount>
     <NPCNames>
       <string>Jarvis Hammerstone</string>
     </NPCNames>
     <NPCInfo>Cragstone</NPCInfo>
     <NPCCoords>25.6N, 49.4E</NPCCoords>
     <NPCYellowFlagText>In the meantime I need to rid the surrounding area of some of these Drudges.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Altered Hunter</NPCYellowCompleteText>
+    <NPCYellowCompleteText>Ravenous</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
@@ -61,7 +60,6 @@
   <KillTask>
     <TaskName>Altered Drudge Kill Task</TaskName>
     <MobNames>
-      <string>Drudge Ravener</string>
       <string>Altered Drudge</string>
     </MobNames>
     <CurrentCount>0</CurrentCount>

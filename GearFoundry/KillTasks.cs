@@ -104,8 +104,8 @@ namespace GearFoundry
 			
 			
 			RenderKillTaskPanel();
-			//BuildKillTaskList();
-			//BuildCollectionTaskList();
+			BuildKillTaskList();
+			BuildCollectionTaskList();
 		}
 		
 		private void KTSaveUpdates(object sender, EventArgs e)
@@ -149,8 +149,12 @@ namespace GearFoundry
 		{
 			Core.ChatBoxMessage -= KillTask_ChatBoxMessage;
 			Core.CharacterFilter.Logoff -= KillTask_LogOff;
-			DisposeKillTaskPanel();
+			Core.WorldFilter.ChangeObject -= CollectTask_ChangeObject;
+						
+			KTSaveTimer.Tick -= KTSaveUpdates;
 			KTSaveTimer.Stop();
+			
+			DisposeKillTaskPanel();
 			ReadWriteGearTaskSettings(false);
 		}
 		
@@ -408,6 +412,9 @@ namespace GearFoundry
 		private HudList TaskIncompleteList = null;
 		private HudList TaskCompleteList = null;
 		private HudList KillTaskList = null;
+		private HudStaticText KillTaskSelected = null;
+		private HudButton KillTaskNew = null;
+		private HudButton KillTaskEdit = null;
 		private HudList CollectTaskList = null;
 		private HudList.HudListRowAccessor TaskListRow = null;
 		
@@ -461,8 +468,22 @@ namespace GearFoundry
 	            KillTaskLayout = new HudFixedLayout();
 	            TaskTabView.AddTab(KillTaskLayout, "Kill");
 	            
+	            KillTaskSelected = new HudStaticText();
+	            KillTaskLayout.AddControl(KillTaskSelected, new Rectangle(0,0, Convert.ToInt32(mKTSet.HudWidth*3/5), 16));
+	            KillTaskSelected.Text = String.Empty;
+	            
+	            KillTaskEdit = new HudButton();
+	            KillTaskLayout.AddControl(KillTaskEdit, new Rectangle(Convert.ToInt32(mKTSet.HudWidth*7/10), 0, Convert.ToInt32(mKTSet.HudWidth/10), 16));
+	            KillTaskEdit.Text = "Edit";
+	            KillTaskEdit.Hit += KillTaskEdit_Hit;
+	            
+	            KillTaskNew = new HudButton();
+	            KillTaskLayout.AddControl(KillTaskNew, new Rectangle(Convert.ToInt32(mKTSet.HudWidth*17/20), 0, Convert.ToInt32(mKTSet.HudWidth/10), 16));
+	            KillTaskNew.Text = "New";
+	            KillTaskNew.Hit += KillTaskNew_Hit;
+	            
 	            KillTaskList = new HudList();
-	            KillTaskLayout.AddControl(KillTaskList, new Rectangle(0,0,mKTSet.HudWidth,mKTSet.HudHeight));
+	            KillTaskLayout.AddControl(KillTaskList, new Rectangle(0,20,mKTSet.HudWidth,mKTSet.HudHeight-20));
 	            KillTaskList.ControlHeight = 16;
 	            KillTaskList.AddColumn(typeof(HudCheckBox), 16, null);  //Track
 	            KillTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth - 16), null);  //TaskName
@@ -541,9 +562,7 @@ namespace GearFoundry
 					TaskListRow = TaskCompleteList.AddRow();
 					((HudStaticText)TaskListRow[0]).Text = ct.TaskName;
 					((HudStaticText)TaskListRow[1]).Text = ct.NPCInfo;	
-				}
-				
-				
+				}			
 				
 				foreach(var kt in mKTSet.MyKillTasks.OrderBy(x => x.TaskName))
 				{
@@ -574,26 +593,30 @@ namespace GearFoundry
 		{
 			try
 			{
+				int scrollrow = KillTaskList.ScrollPosition;
+				
 				ClickRow = KillTaskList[row];
+				KillTask selected = mKTSet.MyKillTasks.Find(x => x.TaskName == ((HudStaticText)ClickRow[1]).Text);
+				
+				KillTaskSelected.Text = selected.TaskName;
 				
 				if(col == 0)
 				{
-					mKTSet.MyKillTasks.Find(x => x.TaskName == ((HudStaticText)ClickRow[1]).Text).track = ((HudCheckBox)ClickRow[0]).Checked;
+					selected.track = ((HudCheckBox)ClickRow[0]).Checked;
 				}
 				if(col == 1)
 				{
-					KillTask kt = mKTSet.MyKillTasks.Find(x => x.TaskName == ((HudStaticText)ClickRow[1]).Text);
 					string NPCs = String.Empty;
-					foreach(string npc in kt.NPCNames)
+					foreach(string npc in selected.NPCNames)
 					{
 						NPCs += npc + ", ";
 					}
-					WriteToChat(kt.TaskName + ":  " + NPCs + kt.NPCInfo + CoordsStringLink(kt.NPCCoords));
-					
-					
+					WriteToChat(selected.TaskName + ":  " + NPCs + selected.NPCInfo + CoordsStringLink(selected.NPCCoords));
 				}
 				
 				UpdateKillTaskPanel();
+				
+				KillTaskList.ScrollPosition = scrollrow;
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -692,6 +715,151 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		private void KillTaskNew_Hit(object sender, EventArgs e)
+		{
+			try
+			{
+				RenderKillTaskPopUp();
+				
+				
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private HudView KTPopView = null;
+		private HudTabView KTPopTabView = null;
+		private HudFixedLayout KTPopLayout = null;
+		private HudStaticText KTLabel1 = null;
+		private HudTextBox KTPopTaskName = null;
+		private HudStaticText KTLabel2 = null;
+		private HudTextBox KTPopCompleteCount = null;
+		private HudStaticText KTLabel3 = null;
+		private HudList KTPopMobsList = null;
+		private HudTextBox KTPopMobTxt = null;
+		private HudButton KTPopMobAddButton = null;
+		private HudList KTPopNPCList = null;
+		private HudTextBox KTPopNPCTxt = null;
+		private HudButton KTPopNPCAddButton = null;
+		
+		
+		private HudStaticText KTLabel4 = null;
+		
+		private HudTextBox KTPopNPCInfo = null;
+		private HudTextBox KTPopNPCCoords = null;
+		private HudTextBox KTPopNPCFlagTxt = null;
+		private HudTextBox KTPopNPCCompleteTxt = null;
+
+			
+		private HudList.HudListRowAccessor KTPopRow = null;
+		
+		private void RenderKillTaskPopUp()
+		{
+		
+			KillTask selected = mKTSet.MyKillTasks.Find(x => x.TaskName == KillTaskSelected.Text);
+			
+			KTPopView = new HudView(selected.TaskName, 400, 600, null);
+			KTPopView.UserAlphaChangeable = false;
+			KTPopView.ShowInBar = false;
+			KTPopView.UserResizeable = true;
+			KTPopView.Visible = true;
+			KTPopView.Ghosted = false;
+			KTPopView.UserClickThroughable = false;	
+			KTPopView.UserMinimizable = true;	
+			KTPopView.UserGhostable = false;
+
+
+			KTPopTabView = new HudTabView();
+			KTPopView.Controls.HeadControl = KTPopTabView;
+			
+			KTPopLayout = new HudFixedLayout();
+			KTPopTabView.AddTab(KTPopLayout, "Edit");
+			
+			KTLabel1 = new HudStaticText();
+			KTPopLayout.AddControl(KTLabel1, new Rectangle(0,0,100,16));
+			KTLabel1.Text = "Kill Task Name:";
+			
+			KTPopTaskName = new HudTextBox();
+			KTPopLayout.AddControl(KTPopTaskName, new Rectangle(0,20,mKTSet.HudWidth, 16));
+			KTPopTaskName.Text = selected.TaskName;
+			
+			KTLabel2 = new HudStaticText();
+			KTPopLayout.AddControl(KTLabel2, new Rectangle(0,40,120,16));
+			KTLabel2.Text = "Number to Complete:";
+						
+			KTPopCompleteCount = new HudTextBox();
+			KTPopLayout.AddControl(KTPopCompleteCount, new Rectangle(130,40,50,16));
+			KTPopCompleteCount.Text = selected.CompleteCount.ToString();
+			
+			KTLabel3 = new HudStaticText();
+			KTPopLayout.AddControl(KTLabel3, new Rectangle(0,60,100,16));
+			KTLabel3.Text = "Creature List";
+			
+			KTPopMobsList = new HudList();
+			KTPopLayout.AddControl(KTPopMobsList, new Rectangle(0,80,300,90));
+			KTPopMobsList.AddColumn(typeof(HudStaticText),250,null);
+			KTPopMobsList.AddColumn(typeof(HudPictureBox),16,null);
+			
+			foreach(string mob in selected.MobNames)
+			{
+				KTPopRow = KTPopMobsList.AddRow();
+				((HudStaticText)KTPopRow[0]).Text = mob;
+				((HudPictureBox)KTPopRow[1]).Image = CorpseRemoveCircle;
+			}
+			
+			KTPopMobTxt = new HudTextBox();
+			KTPopLayout.AddControl(KTPopMobTxt, new Rectangle(0,180,300,16));
+			
+			KTPopMobAddButton = new HudButton();
+			KTPopLayout.AddControl(KTPopMobAddButton, new Rectangle(310,180,50,20));
+			KTPopMobAddButton.Text = "Add";
+			
+			KTPopNPCList = new HudList();
+			KTPopLayout.AddControl(KTPopNPCList, new Rectangle(0,200,300,90));
+			KTPopNPCList.AddColumn(typeof(HudStaticText),250,null);
+			KTPopNPCList.AddColumn(typeof(HudPictureBox),16,null);
+			
+			foreach(string mob in selected.NPCNames)
+			{
+				KTPopRow = KTPopNPCList.AddRow();
+				((HudStaticText)KTPopRow[0]).Text = mob;
+				((HudPictureBox)KTPopRow[1]).Image = CorpseRemoveCircle;
+			}
+			
+			KTPopNPCTxt = new HudTextBox();
+			KTPopLayout.AddControl(KTPopNPCTxt, new Rectangle(0,300,300,16));
+			
+			KTPopNPCAddButton = new HudButton();
+			KTPopLayout.AddControl(KTPopNPCAddButton, new Rectangle(300,300,50,20));
+			KTPopNPCAddButton.Text = "Add";
+			
+			KTPopNPCInfo = new HudTextBox();
+			KTPopLayout.AddControl(KTPopNPCInfo, new Rectangle(0,320,300,16));
+			KTPopNPCInfo.Text = selected.NPCInfo;
+			
+			KTPopNPCCoords = new HudTextBox();
+			KTPopLayout.AddControl(KTPopNPCCoords, new Rectangle(0,340,300,16));
+			KTPopNPCCoords.Text = selected.NPCCoords;
+			
+			KTPopNPCFlagTxt = new HudTextBox();
+			KTPopLayout.AddControl(KTPopNPCFlagTxt, new Rectangle(0,360,300,16));
+			KTPopNPCFlagTxt.Text = selected.NPCYellowFlagText;
+			
+			KTPopNPCCompleteTxt = new HudTextBox();
+			KTPopLayout.AddControl(KTPopNPCCompleteTxt, new Rectangle(0,380,300,16));
+			KTPopNPCCompleteTxt.Text = selected.NPCYellowCompleteText;
+			
+		}
+		
+		private void KillTaskEdit_Hit(object sender, EventArgs e)
+		{
+			try
+			{
+				
+				RenderKillTaskPopUp();
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		private void DisposeKillTaskPanel()
 		{
 			
@@ -740,6 +908,7 @@ namespace GearFoundry
 			t.NPCYellowCompleteText = "Ravenous";
 			NewKillTasks.Add(t);
 						
+			t = new KillTask();
 			t.TaskName = "Altered Drudge Kill Task";
 			t.MobNames.Add("Altered Drudge");
 			t.CompleteCount = 40;
@@ -1318,17 +1487,6 @@ namespace GearFoundry
 			t.NPCYellowCompleteText = "Well done, champion. You must be skilled indeed. Allow me to reward you.";
 			NewKillTasks.Add(t);	
 			
-			//TODO:  This is actually a collection task,  move to collection list.
-//			t = new KillTask();
-//			t.TaskName = "Noble Remains Kill Task";
-//			t.MobNames.Add("Noble Remain");
-//			t.CompleteCount = 10;
-//			t.NPCNames.Add("Shade of Ormend");
-//			t.NPCInfo = "Mhoire Castle Northeast Tower";
-//			t.NPCCoords = "64.7S 45.2W";
-//			t.NPCYellowFlagText = "Destroy these corrupted remains and gather the signet rings from the bones. Return them to me and I will reward you.";
-//			t.NPCYellowCompleteText = "I see that you have recovered 10 signet rings of House Mhoire.";
-//			NewKillTasks.Add(t);
 			
 			//TODO:  Completion Text
 			t = new KillTask();
@@ -1371,8 +1529,6 @@ namespace GearFoundry
 			t.NPCYellowFlagText = "If you wish to help me, just head over to the area these 'Gear Knights' have occupied and kill 10 Knights.";
 			t.NPCYellowCompleteText = "Congratulations, you survived and succeeded.  Here, allow me to reward you for your assistance to our Queen.";
 			NewKillTasks.Add(t);
-			
-			//TODO:  Insert texts below for flag and complete
 			
 			t = new KillTask();
 			t.TaskName = "Iron Blade Commander";
@@ -2321,7 +2477,7 @@ namespace GearFoundry
 			
 			//Harvest Reaper Kill Task
 			
-			FileInfo TaskFile = new FileInfo(GearDir + @"\Tasks.xml");
+			FileInfo TaskFile = new FileInfo(GearDir + @"\Kill.xml");
 			if(TaskFile.Exists)
 			{
 				TaskFile.Delete();
@@ -2526,6 +2682,19 @@ namespace GearFoundry
 			t.NPCCoords = "Unknown";
 			t.NPCYellowFlagText = " I'll determine what we can use";
 			t.NPCYellowCompleteText = "These Phyntos Hive Splinters are proof of destroyed hives";
+			NewCollectTasks.Add(t);
+			
+						//TODO:  This is actually a collection task,  move to collection list.
+			t = new CollectTask();
+			t.TaskName = "Noble Remains Kill Task";
+			t.Item = "Mhoire Signet Ring";
+			t.MobNames.Add("Noble Remain");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Shade of Ormend");
+			t.NPCInfo = "Mhoire Castle Northeast Tower";
+			t.NPCCoords = "64.7S 45.2W";
+			t.NPCYellowFlagText = "Destroy these corrupted remains and gather the signet rings from the bones. Return them to me and I will reward you.";
+			t.NPCYellowCompleteText = "I see that you have recovered 10 signet rings of House Mhoire.";
 			NewCollectTasks.Add(t);
 			
 //			t = new CollectTask();

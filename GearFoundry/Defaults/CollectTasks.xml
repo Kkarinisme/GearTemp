@@ -42,7 +42,7 @@
   </CollectTask>
   <CollectTask>
     <TaskName>A'nekshay Bracer Collecting</TaskName>
-    <Item>Engraved A'nekshay Bracers</Item>
+    <Item>Engraved A'nekshay Bracer</Item>
     <MobNames>
       <string>A'nekshay</string>
     </MobNames>
@@ -279,6 +279,26 @@
     <NPCCoords>Unknown</NPCCoords>
     <NPCYellowFlagText> I'll determine what we can use</NPCYellowFlagText>
     <NPCYellowCompleteText>These Phyntos Hive Splinters are proof of destroyed hives</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Noble Remains Kill Task</TaskName>
+    <Item>Mhoire Signet Ring</Item>
+    <MobNames>
+      <string>Noble Remain</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Shade of Ormend</string>
+    </NPCNames>
+    <NPCInfo>Mhoire Castle Northeast Tower</NPCInfo>
+    <NPCCoords>64.7S 45.2W</NPCCoords>
+    <NPCYellowFlagText>Destroy these corrupted remains and gather the signet rings from the bones. Return them to me and I will reward you.</NPCYellowFlagText>
+    <NPCYellowCompleteText>I see that you have recovered 10 signet rings of House Mhoire.</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
