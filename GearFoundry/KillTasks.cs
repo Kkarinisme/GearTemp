@@ -75,9 +75,33 @@ namespace GearFoundry
 			
 			Core.ChatBoxMessage += KillTask_ChatBoxMessage;
 			Core.CharacterFilter.Logoff += KillTask_LogOff;
+			Core.WorldFilter.ChangeObject += CollectTask_ChangeObject;
 			KTSaveTimer.Interval = 600000;
 			KTSaveTimer.Start();
 			KTSaveTimer.Tick += KTSaveUpdates;
+			
+			try
+			{
+			
+			foreach(CollectTask coltsk in mKTSet.MyCollectTasks)
+			{
+				if(Core.WorldFilter.GetInventory().Any(x => @x.Name == @coltsk.Item))
+				{
+					List<WorldObject> inventory = Core.WorldFilter.GetInventory().Where(x => @x.Name == @coltsk.Item).ToList();
+					int colcount = 0;
+					foreach(WorldObject item in inventory)
+					{
+						colcount += item.Values(LongValueKey.StackCount);
+					}
+					coltsk.CurrentCount = colcount;
+					if(coltsk.CurrentCount >= coltsk.CompleteCount)
+					{
+						coltsk.complete = true;
+					}
+				}
+			}
+			}catch(Exception ex){LogError(ex);}
+			
 			
 			RenderKillTaskPanel();
 			//BuildKillTaskList();
@@ -92,6 +116,33 @@ namespace GearFoundry
 		private void KillTask_LogOff(object sender, EventArgs e)
 		{
 			UnsubscribeKillTasks();
+		}
+		
+		private void CollectTask_ChangeObject(object sender, ChangeObjectEventArgs e)
+		{
+			try
+			{
+				if(e.Change != WorldChangeType.StorageChange &&  e.Change != WorldChangeType.SizeChange) {return;}
+				int ChangeIndex = mKTSet.MyCollectTasks.FindIndex(x => x.Item == e.Changed.Name);
+				if(ChangeIndex > -1)
+				{
+					List<WorldObject> inventory = Core.WorldFilter.GetInventory().Where(x => @x.Name == @mKTSet.MyCollectTasks[ChangeIndex].Item).ToList();
+					int colcount = 0;
+					foreach(WorldObject item in inventory)
+					{
+						colcount += item.Values(LongValueKey.StackCount);
+					}
+					mKTSet.MyCollectTasks[ChangeIndex].CurrentCount = colcount;	
+					
+					if(mKTSet.MyCollectTasks[ChangeIndex].CurrentCount >= mKTSet.MyCollectTasks[ChangeIndex].CompleteCount)
+					{
+						mKTSet.MyCollectTasks[ChangeIndex].complete = true;
+					}
+				}
+				
+				
+				
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void UnsubscribeKillTasks()
@@ -269,6 +320,8 @@ namespace GearFoundry
 					mKTSet.MyKillTasks[TaskIndex].CurrentCount = mobskilled;
 					mKTSet.MyKillTasks[TaskIndex].complete = taskcomplete;
 					mKTSet.MyKillTasks[TaskIndex].active = true;
+					
+					UpdateKillTaskPanel();
 				}
 				if(e.Color == 3)
 				{   
@@ -340,6 +393,7 @@ namespace GearFoundry
 							return;
 						}
 					}
+					UpdateKillTaskPanel();
 				}				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -387,9 +441,10 @@ namespace GearFoundry
 	            TaskIncompleteList = new HudList();
 	            TaskIncompleteLayout.AddControl(TaskIncompleteList, new Rectangle(0,0,mKTSet.HudWidth,mKTSet.HudHeight));
 	            TaskIncompleteList.ControlHeight = 16;
-	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3), null);  //Mob/Item Name
-	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //Completion
-	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //Report NPC
+	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth*2/3), null);  //Mob/Item Name
+	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3), null);  //Completion
+	            
+	            TaskIncompleteList.Click += TaskIncompleteList_Click;
 	            
 	            TaskCompleteLayout = new HudFixedLayout();
 	            TaskTabView.AddTab(TaskCompleteLayout, "Complete");
@@ -397,9 +452,11 @@ namespace GearFoundry
 	            
 	            TaskCompleteLayout.AddControl(TaskCompleteList, new Rectangle(0,0,mKTSet.HudWidth,mKTSet.HudHeight));
 	            TaskCompleteList.ControlHeight = 16;
-	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3), null);  //Mob/Item Name
-	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //Completion
-	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //CompleteCount
+	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth*2/3), null);  //Mob/Item Name
+	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3), null);  //Completion
+	            
+	            TaskCompleteList.Click += TaskCompleteList_Click;
+
 	            
 	            KillTaskLayout = new HudFixedLayout();
 	            TaskTabView.AddTab(KillTaskLayout, "Kill");
@@ -409,7 +466,7 @@ namespace GearFoundry
 	            KillTaskList.ControlHeight = 16;
 	            KillTaskList.AddColumn(typeof(HudCheckBox), 16, null);  //Track
 	            KillTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth - 16), null);  //TaskName
-	            //KillTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth), null);  //MobName
+	            
 	           
 	            
 	            KillTaskList.Click += KillTaskList_Click;
@@ -422,9 +479,8 @@ namespace GearFoundry
 	            CollectTaskList.ControlHeight = 16;
 	            CollectTaskList.AddColumn(typeof(HudCheckBox), 16, null);  //Track
 	            CollectTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth - 16), null);  //TaskName
-	            //CollectTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/5), null);  //ItemName
-	            CollectTaskList.Click += CollectTaskList_Click;
 	            
+	            CollectTaskList.Click += CollectTaskList_Click;	            
 	            TaskHudView.Resize += TaskHudView_Resize;
 	    		
 	            UpdateKillTaskPanel();
@@ -454,8 +510,42 @@ namespace GearFoundry
 				KillTaskList.ClearRows();
 				CollectTaskList.ClearRows();
 				
+				foreach(var ict in mKTSet.MyKillTasks.Where(x => x.track && x.complete == false).OrderBy(x => x.TaskName))
+				{
+					TaskListRow = TaskIncompleteList.AddRow();
+					
+					((HudStaticText)TaskListRow[0]).Text = ict.TaskName;
+					((HudStaticText)TaskListRow[0]).TextColor = Color.Orange;
+					((HudStaticText)TaskListRow[1]).Text = "(" + ict.CurrentCount.ToString() + "/" + ict.CompleteCount.ToString() + ")";
+					((HudStaticText)TaskListRow[1]).TextColor = Color.Orange;					
+				}
 				
-				foreach(var kt in mKTSet.MyKillTasks)
+				foreach(var ict in mKTSet.MyCollectTasks.Where(x => x.track && x.complete == false).OrderBy(x => x.TaskName))
+				{
+					TaskListRow = TaskIncompleteList.AddRow();
+					((HudStaticText)TaskListRow[0]).Text = ict.TaskName;
+					((HudStaticText)TaskListRow[0]).TextColor = Color.Tan;
+					((HudStaticText)TaskListRow[1]).Text = "(" + ict.CurrentCount.ToString() + "/" + ict.CompleteCount.ToString() + ")";	
+					((HudStaticText)TaskListRow[1]).TextColor = Color.Tan;
+				}
+				
+				foreach(var ct in mKTSet.MyKillTasks.Where(x => x.track && x.complete == true).OrderBy(x => x.TaskName))
+				{
+					TaskListRow = TaskCompleteList.AddRow();
+					((HudStaticText)TaskListRow[0]).Text = ct.TaskName;
+					((HudStaticText)TaskListRow[1]).Text = ct.NPCInfo;
+				}
+				
+				foreach(var ct in mKTSet.MyCollectTasks.Where(x => x.track && x.complete == true).OrderBy(x => x.TaskName))
+				{
+					TaskListRow = TaskCompleteList.AddRow();
+					((HudStaticText)TaskListRow[0]).Text = ct.TaskName;
+					((HudStaticText)TaskListRow[1]).Text = ct.NPCInfo;	
+				}
+				
+				
+				
+				foreach(var kt in mKTSet.MyKillTasks.OrderBy(x => x.TaskName))
 				{
 					TaskListRow = KillTaskList.AddRow();
 					((HudCheckBox)TaskListRow[0]).Checked = kt.track;
@@ -464,9 +554,8 @@ namespace GearFoundry
 					if(kt.complete) {((HudStaticText)TaskListRow[1]).TextColor = Color.Gold;}
 					else if(kt.active) {((HudStaticText)TaskListRow[1]).TextColor = Color.LightSeaGreen;}
 				}
-				
-				
-				foreach(var ct in mKTSet.MyCollectTasks)
+	
+				foreach(var ct in mKTSet.MyCollectTasks.OrderBy(x => x.TaskName))
 				{
 					TaskListRow = CollectTaskList.AddRow();
 					((HudCheckBox)TaskListRow[0]).Checked = ct.track;
@@ -503,6 +592,8 @@ namespace GearFoundry
 					
 					
 				}
+				
+				UpdateKillTaskPanel();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -529,7 +620,75 @@ namespace GearFoundry
 					
 					
 				}
+				UpdateKillTaskPanel();
 				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TaskIncompleteList_Click(object sender, int row, int col)
+		{
+			try
+			{
+				ClickRow = TaskIncompleteList[row];
+				
+				int ctindex = mKTSet.MyCollectTasks.FindIndex(x => x.TaskName == ((HudStaticText)ClickRow[0]).Text);			
+				int ktindex = mKTSet.MyKillTasks.FindIndex(x => x.TaskName == ((HudStaticText)ClickRow[0]).Text);
+				
+				if(ctindex > -1)
+				{
+					WriteToChat(mKTSet.MyCollectTasks[ctindex].TaskName + " (" + mKTSet.MyCollectTasks[ctindex].CurrentCount.ToString() + "/" + mKTSet.MyCollectTasks[ctindex].CompleteCount.ToString() +")");
+					WriteToChat("Drops from the following creature types:");
+					foreach(string creature in mKTSet.MyCollectTasks[ctindex].MobNames)
+					{
+						WriteToChat(creature);
+					}
+				}
+				
+				if(ktindex > -1)
+				{
+					WriteToChat(mKTSet.MyKillTasks[ktindex].TaskName + " (" + mKTSet.MyKillTasks[ktindex].CurrentCount.ToString() + "/" + mKTSet.MyKillTasks[ktindex].CompleteCount.ToString() +")");
+					WriteToChat("Kill any of the following creature types:");
+					foreach(string creature in mKTSet.MyKillTasks[ktindex].MobNames)
+					{
+						WriteToChat(creature);
+					}
+				}
+				
+				UpdateKillTaskPanel();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TaskCompleteList_Click(object sender, int row, int col)
+		{
+			try
+			{
+				ClickRow = TaskCompleteList[row];
+				
+				int ctindex = mKTSet.MyCollectTasks.FindIndex(x => x.TaskName == ((HudStaticText)ClickRow[0]).Text);			
+				int ktindex = mKTSet.MyKillTasks.FindIndex(x => x.TaskName == ((HudStaticText)ClickRow[0]).Text);
+				
+				if(ctindex > -1)
+				{
+					string NPCs = String.Empty;
+					foreach(string name in mKTSet.MyCollectTasks[ctindex].NPCNames)
+					{
+						NPCs += ", " + name;
+					}
+					WriteToChat(mKTSet.MyCollectTasks[ctindex].TaskName + NPCs + mKTSet.MyCollectTasks[ctindex].NPCInfo + CoordsStringLink(mKTSet.MyCollectTasks[ctindex].NPCCoords));
+				}
+				
+				if(ktindex > -1)
+				{
+					string NPCs = String.Empty;
+					foreach(string name in mKTSet.MyKillTasks[ktindex].NPCNames)
+					{
+						NPCs += ", " + name;
+					}
+					WriteToChat(mKTSet.MyKillTasks[ktindex].TaskName + NPCs + mKTSet.MyKillTasks[ktindex].NPCInfo + CoordsStringLink(mKTSet.MyKillTasks[ktindex].NPCCoords));
+					
+				}
+				
+				UpdateKillTaskPanel();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -2215,7 +2374,7 @@ namespace GearFoundry
 			
 			t = new CollectTask();
 			t.TaskName = "A'nekshay Bracer Collecting";
-			t.Item = "A'nekshay Bracer";
+			t.Item = "Engraved A'nekshay Bracer";
 			t.MobNames.Add("A'nekshay");
 			t.CompleteCount = 15;
 			t.NPCNames.Add("T'ing Setsuko");
