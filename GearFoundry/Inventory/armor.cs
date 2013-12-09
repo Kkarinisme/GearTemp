@@ -160,7 +160,10 @@ namespace GearFoundry
         private string availableArmorToon;
         private string availableChoices;
         private string availableClass;
-
+        private string armorSpellXML;
+        private string armorUpdateSpellXML;
+        private string armorAvailableSpellXML;
+ 
 
          private void doGetArmor()
         {
@@ -674,14 +677,14 @@ namespace GearFoundry
 
  
                         ArmorHudListRow = ArmorHudList.AddRow();
-
+                        nitemFontHeight = nitemFontHeight;
                         ((HudPictureBox)ArmorHudListRow[0]).Image = icon + 0x6000000;
                         ((HudStaticText)ArmorHudListRow[1]).Text = armorpiece;
                         ((HudStaticText)ArmorHudListRow[1]).FontHeight = nitemFontHeight;
                         ((HudStaticText)ArmorHudListRow[2]).Text = objArmorSetName;
                         ((HudStaticText)ArmorHudListRow[2]).FontHeight = nitemFontHeight;
                         ((HudStaticText)ArmorHudListRow[3]).Text = spells;
-                        ((HudStaticText)ArmorHudListRow[3]).FontHeight = nitemFontHeight;
+                       ((HudStaticText)ArmorHudListRow[3]).FontHeight = nitemFontHeight;
 
                     }
                 }
@@ -718,19 +721,19 @@ namespace GearFoundry
                 ArmorUpdateHudTabLayout.AddControl(ArmorUpdateHudList, new Rectangle(0, 30, ArmorHudWidth, (ArmorHudHeight) / 3));
 
                 //ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
-                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.25 * ArmorHudWidth), null);
-                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.18 * ArmorHudWidth), null);
+                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.20 * ArmorHudWidth), null);
+                ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.15 * ArmorHudWidth), null);
                 ArmorUpdateHudList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.52 * ArmorHudWidth), null);
 
  
                 ArmorUpdateHudList.Click += (sender, row, col) => ArmorUpdateHudList_Click(sender, row, col);
                 ArmorUpdateHudTabLayout.AddControl(ArmorAvailableList, new Rectangle(0, (ArmorHudHeight)/3 + 50, ArmorHudWidth, (3*(ArmorHudHeight/8))));
 
-                //ArmorHudList.ControlHeight = Convert.ToInt32(.05*ArmorHudHeight);
+                //ArmorHudList.ControlHeight = Convert.ToInt32(.08*ArmorHudHeight);
                 ArmorAvailableList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.15 * ArmorHudWidth), null);
                 ArmorAvailableList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.15 * ArmorHudWidth), null);
-                ArmorAvailableList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.15 * ArmorHudWidth), null);
-                ArmorAvailableList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.15 * ArmorHudWidth), null);
+                ArmorAvailableList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.10 * ArmorHudWidth), null);
+                ArmorAvailableList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.10 * ArmorHudWidth), null);
                 ArmorAvailableList.AddColumn(typeof(HudStaticText), Convert.ToInt32(.52 * ArmorHudWidth), null);
  
                 ArmorAvailableList.Click += (sender, row, col) => ArmorAvailableList_Click(sender, row, col);
@@ -779,16 +782,16 @@ namespace GearFoundry
                 btnListArmorAvailable.Hit += (sender, index) => btnListArmorAvailable_Hit(sender, index);
 
 
-                ArmorUpdateHudTabLayout.AddControl(lblArmorUpdateClass, new Rectangle(0, (5 * (ArmorHudHeight / 6)), ArmorHudWidth/6, 16));
-                ArmorUpdateHudTabLayout.AddControl(txtArmorUpdateClass, new Rectangle(ArmorHudWidth / 6, (5 * (ArmorHudHeight / 6)), 60, 16));
-                ArmorUpdateHudTabLayout.AddControl(lblArmorUpdateChoice, new Rectangle(ArmorHudWidth/6 + 80, (5 * (ArmorHudHeight / 6)), 80, 16));
-                ArmorUpdateHudTabLayout.AddControl(txtArmorUpdateChoice, new Rectangle(ArmorHudWidth/3, (5*(ArmorHudHeight/6)), (ArmorHudWidth / 2), 16));
-               ArmorUpdateHudTabLayout.AddControl(lblArmorUpdateCovers, new Rectangle(0, (5 * (ArmorHudHeight / 6)+30),(30), 16));
-                ArmorUpdateHudTabLayout.AddControl(cboArmorUpdateCovers, new Rectangle(40, (5 * (ArmorHudHeight / 6)+30), 200, 16));
-                ArmorUpdateHudTabLayout.AddControl(lblArmorUpdateSet, new Rectangle(ArmorHudWidth / 2, (5 * (ArmorHudHeight / 6)+30), (ArmorHudWidth / 2) + 30, 16));
-                ArmorUpdateHudTabLayout.AddControl(cboArmorUpdateSet, new Rectangle((ArmorHudWidth / 2) + 30, (5 * (ArmorHudHeight / 6)+30), (ArmorHudWidth / 2) + 100, 16));
-                ArmorUpdateHudTabLayout.AddControl(btnListArmorAvailable, new Rectangle(ArmorHudWidth/3, (5 * (ArmorHudHeight / 6)+60), 100, 16));
-                ArmorUpdateHudTabLayout.AddControl(btnClearListArmorAvailable, new Rectangle(ArmorHudWidth / 2, (5 * (ArmorHudHeight / 6)+60), 100, 16));
+                ArmorUpdateHudTabLayout.AddControl(lblArmorUpdateClass, new Rectangle(0, (5 * (ArmorHudHeight / 6)), ArmorHudWidth/6, 18));
+                ArmorUpdateHudTabLayout.AddControl(txtArmorUpdateClass, new Rectangle(ArmorHudWidth / 6, (5 * (ArmorHudHeight / 6)), 60, 18));
+                ArmorUpdateHudTabLayout.AddControl(lblArmorUpdateChoice, new Rectangle(ArmorHudWidth/6 + 80, (5 * (ArmorHudHeight / 6)), 80, 18));
+                ArmorUpdateHudTabLayout.AddControl(txtArmorUpdateChoice, new Rectangle(ArmorHudWidth/3, (5*(ArmorHudHeight/6)), (ArmorHudWidth / 2), 18));
+               ArmorUpdateHudTabLayout.AddControl(lblArmorUpdateCovers, new Rectangle(0, (5 * (ArmorHudHeight / 6)+30),(30), 18));
+                ArmorUpdateHudTabLayout.AddControl(cboArmorUpdateCovers, new Rectangle(40, (5 * (ArmorHudHeight / 6)+30), 200, 18));
+                ArmorUpdateHudTabLayout.AddControl(lblArmorUpdateSet, new Rectangle(ArmorHudWidth / 2, (5 * (ArmorHudHeight / 6)+30), (ArmorHudWidth / 2) + 30, 18));
+                ArmorUpdateHudTabLayout.AddControl(cboArmorUpdateSet, new Rectangle((ArmorHudWidth / 2) + 30, (5 * (ArmorHudHeight / 6)+30), (ArmorHudWidth / 2) + 100, 18));
+                ArmorUpdateHudTabLayout.AddControl(btnListArmorAvailable, new Rectangle(ArmorHudWidth/3, (5 * (ArmorHudHeight / 6)+60), 100, 18));
+                ArmorUpdateHudTabLayout.AddControl(btnClearListArmorAvailable, new Rectangle(ArmorHudWidth / 2, (5 * (ArmorHudHeight / 6)+60), 100, 18));
 
 
                 ArmorUpdateTab = true;
@@ -927,6 +930,7 @@ namespace GearFoundry
                     {
                         try
                         {
+                            
                             availableSelected.Add(el);
                            // objIcon = Convert.ToInt32(childElement.Element("ObjIcon").Value);
                             armorAvailableClass = txtArmorUpdateClass.Text.ToLower();
@@ -1107,21 +1111,22 @@ namespace GearFoundry
                 ArmorHudTabView.Dispose();
                 ArmorHudView.Dispose();
                 toonArmorName = "";
-                lblToonArmorUpdateLevel.Dispose();
-                lblToonArmorUpdateMaster.Dispose();
-                lblArmorUpdateChoice.Dispose();
-                txtArmorUpdateChoice.Dispose();
-                lblArmorUpdateClass.Dispose();
-                txtArmorUpdateClass.Dispose();
-                lblArmorUpdateCovers.Dispose();
-                cboArmorUpdateCovers.Dispose();
-                lblArmorUpdateSet.Dispose();
-                cboArmorUpdateSet.Dispose();
-                cboToonArmorName.Dispose();
+               // lblToonArmorUpdateLevel.Dispose();
+               // lblToonArmorUpdateMaster.Dispose();
+                if (lblArmorUpdateChoice != null) { lblArmorUpdateChoice.Dispose(); }
+                if (txtArmorUpdateChoice != null) { txtArmorUpdateChoice.Dispose(); }
+                if (lblArmorUpdateClass != null) { lblArmorUpdateClass.Dispose(); }
+                if (txtArmorUpdateClass != null) {txtArmorUpdateClass.Dispose(); }
+                if (txtArmorUpdateClass != null) {txtArmorUpdateClass.Dispose();}
+                if(lblArmorUpdateCovers != null) {lblArmorUpdateCovers.Dispose();}
+                if (cboArmorUpdateCovers != null) {cboArmorUpdateCovers.Dispose();}
+                if (lblArmorUpdateSet != null) {lblArmorUpdateSet.Dispose();}
+                if (cboArmorUpdateSet != null) {cboArmorUpdateSet.Dispose();}
+                if (cboToonArmorName != null) { cboToonArmorName.Dispose(); }
                 
-                btnInventoryArmor.Dispose();
-                btnClearListArmorAvailable.Dispose();
-                btnListArmorAvailable.Dispose();
+                if(btnInventoryArmor != null) btnInventoryArmor.Dispose();
+                if(btnClearListArmorAvailable != null) btnClearListArmorAvailable.Dispose();
+                if (btnListArmorAvailable != null) btnListArmorAvailable.Dispose();
                 
 
 
@@ -1171,6 +1176,8 @@ namespace GearFoundry
                 long armorToonLevel = Convert.ToInt32(currentel.Element("ArmorToonLevel").Value);
                 int armorobjArmorSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
                 int armorobjCovers = Convert.ToInt32(currentel.Element("ArmorCovers").Value);
+                armorSpellXML = currentel.Element("ArmorSpellXml").Value;
+
                  if (armorobjCovers > 0)
                 {
                     foreach (IDNameLoadable piece in CoverageInvList)
@@ -1198,7 +1205,7 @@ namespace GearFoundry
                 int tempNum = 180;
                 if (narmorWieldAttr > 0)
                 { armorWieldLevel = armorToonLevel.ToString(); }
-                else if ((objName.Contains("Radiant")) || (objName.Contains("Eldrytch")) || (objName.Contains("Hand")))
+                else if ((armorobjName.Contains("Radiant")) || (armorobjName.Contains("Eldrytch")) || (armorobjName.Contains("Hand")))
                 { armorWieldLevel = tempNum.ToString(); }
                 else if (narmorWieldAttr <= 1)
                 { armorWieldLevel = armorWieldValue.ToString(); }
@@ -1231,12 +1238,12 @@ namespace GearFoundry
                 armorSkillMess = "; Required for activation: ObjLore - " + objLore.ToString() + ", "
                                + objMastery + " - " + objSkillLevel.ToString();
 
- 
-   
+
+
 
 
                 message = armorobjName + ", Al: " + armorobjAl + " , Work: " + armorobjWork + ", Tinks: " + armorobjTinks + ", Armor Wield Level: " + 
-                    armorobjLevel + ", Covers: " + armorobjCoversName + ", Set: " + objArmorSetName + armorWieldMess + armorSkillMess;
+                    armorobjLevel + ", Covers: " + armorobjCoversName + ", Set: " + objArmorSetName + armorWieldMess + armorSkillMess + ", spells: " + armorSpellXML;
                 WriteToChat(message);
                 
                    
@@ -1262,6 +1269,8 @@ namespace GearFoundry
                 long armorUpdateToonLevel = Convert.ToInt32(currentel.Element("ArmorToonLevel").Value);
                 int armorUpdateSet = Convert.ToInt32(currentel.Element("ArmorSet").Value);
                 int armorUpdateCovers = Convert.ToInt32(currentel.Element("ArmorCovers").Value);
+                armorUpdateSpellXML = currentel.Element("ArmorSpellXml").Value;
+
                 string armorUpdateSetName = SetsIndex[armorUpdateSet].name;
                 armorUpdateWieldAttr = "";
                 narmorUpdateWieldAttr = 0;
@@ -1324,7 +1333,8 @@ namespace GearFoundry
 
 
                 message = armorpiece + ", Al: " + armorUpdateAl + " , Work: " + armorUpdateWork + ", Tinks: " + armorUpdateTinks + ", Armor Wield Level: " +
-                    armorUpdateLevel + ", Covers: " + armorUpdateCoversName + ", Set: " + armorUpdateSetName + armorUpdateWieldMess + armorUpdateSkillMess;
+                    armorUpdateLevel + ", Covers: " + armorUpdateCoversName + ", Set: " + armorUpdateSetName + armorUpdateWieldMess + 
+                    armorUpdateSkillMess + ", Spells: " + armorUpdateSpellXML;
                 WriteToChat(message);
 
 
@@ -1354,6 +1364,8 @@ namespace GearFoundry
                 int armorAvailableSet = Convert.ToInt32(currentel.Element("ObjSet").Value);
                 int armorAvailableToonLevel = Convert.ToInt32(currentel.Element("ObjToonLevel").Value);
                 int armorAvailableCovers = Convert.ToInt32(currentel.Element("ObjCovers").Value);
+                armorAvailableSpellXML = currentel.Element("ObjSpellXml").Value;
+
                 string availableArmorSetName = SetsIndex[armorAvailableSet].name;
 
                 if (armorAvailableCovers > 0)
@@ -1369,7 +1381,7 @@ namespace GearFoundry
                 }
 
                 int availableArmorLore = Convert.ToInt32(currentel.Element("ObjLoreReq").Value);
-
+                availableArmorWieldAttr = "";
                 long navailableArmorWieldAttr = Convert.ToInt32(currentel.Element("ObjWieldAttr").Value);
                 if (navailableArmorWieldAttr == 7) { availableArmorWieldAttr = "Missile Defense"; }
                 if (navailableArmorWieldAttr == 15) { availableArmorWieldAttr = "Magic Defense"; }
@@ -1409,13 +1421,14 @@ namespace GearFoundry
                 catch (Exception ex) { LogError(ex); }
 
                 availableArmorSkillMess = "; Required for activation: ObjLore - " + availableArmorLore.ToString() + ", "
-                               + availableArmorMastery + " - " + availableArmorSkillLevel.ToString();
+                               + availableArmorMastery + " - " + availableArmorSkillLevel.ToString() + ", Spells: " + armorAvailableSpellXML;
 
 
 
 
 
-                message = armorAvailableName + ", Al: " + armorAvailableAl + " , Work: " + armorAvailableWork + ", Tinks: " + armorAvailableTinks +                     armorAvailableLevel + ", Covers: " + armorUpdateCoversName + ", Set: " + armorAvailableSetName + ", " + availableArmorWieldMess + ", " + availableArmorSkillMess;
+                message = armorAvailableName + ", Al: " + armorAvailableAl + " , Work: " + armorAvailableWork + ", Tinks: " + armorAvailableTinks +  
+                    armorAvailableLevel + ", Covers: " + armorUpdateCoversName + ", Set: " + armorAvailableSetName + ", " + availableArmorWieldMess + ", " + availableArmorSkillMess;
                 WriteToChat(message);
 
 
@@ -1643,10 +1656,10 @@ namespace GearFoundry
                 ArmorHudList = null;
                 lblToonArmorName.Text = "";
                 lblToonArmorName = null;
-                lblToonLevel.Text = "";
-                lblToonLevel = null;
-                lblToonMaster.Text = "";
-                lblToonMaster = null;
+              //  lblToonLevel.Text = "";
+              //  lblToonLevel = null;
+              //  lblToonMaster.Text = "";
+              //  lblToonMaster = null;
                 ClearMainArmorHudVariables();
                 ArmorMainTab = false;
 
@@ -1716,8 +1729,8 @@ namespace GearFoundry
                 lblArmorUpdateSet = null;
                 cboArmorUpdateSet.Current = 0;
                 cboArmorUpdateSet = null;
-                lblToonArmorUpdateNameInfo.Text = "";
-                lblToonArmorUpdateNameInfo = null;
+               // lblToonArmorUpdateNameInfo.Text = "";
+                //lblToonArmorUpdateNameInfo = null;
 
                 ClearArmorUpdateTabVariables();
 
