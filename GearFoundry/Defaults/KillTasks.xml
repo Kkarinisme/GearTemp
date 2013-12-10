@@ -96,7 +96,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Armoredillo Hunting: Lost City of Neftet</TaskName>
+    <TaskName>Armoredillo Hunting (Neftet)</TaskName>
     <MobNames>
       <string>Guardian Armoredillo</string>
       <string>Tamed Armoredillo</string>
@@ -117,7 +117,26 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Golem Hunting: Lost City of Neftet</TaskName>
+    <TaskName>Desert Cactus Kill Task (Neftet)</TaskName>
+    <MobNames>
+      <string>Desert Cactus</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>6</CompleteCount>
+    <NPCNames>
+      <string>Sir Unell bin Rakke</string>
+    </NPCNames>
+    <NPCInfo>Neftet Encampment</NPCInfo>
+    <NPCCoords>22.2S, 6.1E</NPCCoords>
+    <NPCYellowFlagText>Destroy 6 of the Desert Cactus and I will reward your efforts.</NPCYellowFlagText>
+    <NPCYellowCompleteText>The less insects around here, the better!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Golem Hunting (Neftet)</TaskName>
     <MobNames>
       <string>Burning Sands Golem</string>
       <string>Dust Golem</string>
@@ -137,7 +156,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Mumiyah Hunting: Lost City of Neftet</TaskName>
+    <TaskName>Mumiyah Hunting (Neftet)</TaskName>
     <MobNames>
       <string>Mu-miyah Channeller</string>
       <string>Mu-miyah Champion</string>
@@ -165,7 +184,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Reedshark Hunting: Lost City of Neftet</TaskName>
+    <TaskName>Reedshark Hunting (Neftet)</TaskName>
     <MobNames>
       <string>Reedshark Hunter</string>
       <string>Reedshark Seeker</string>
@@ -187,7 +206,45 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Gurog Kill Task (Soldiers)</TaskName>
+    <TaskName>Frost Golem Kill Task (Frozen Valley)</TaskName>
+    <MobNames>
+      <string>Frost Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCNames>
+      <string>George</string>
+    </NPCNames>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.8N, 4.3W</NPCCoords>
+    <NPCYellowFlagText>Watch your step and kill 20 Frost Golems</NPCYellowFlagText>
+    <NPCYellowCompleteText>Those giant beasts of ice fall all the more magnificently.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Frozen Crystal Kill Task (Frozen Valley)</TaskName>
+    <MobNames>
+      <string>Frozen Crystal</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>4</CompleteCount>
+    <NPCNames>
+      <string>Boone</string>
+    </NPCNames>
+    <NPCInfo>Frozen Valley</NPCInfo>
+    <NPCCoords>83.7N, 4.3W</NPCCoords>
+    <NPCYellowFlagText>Destroy 4 of these Frozen Crystals and you will be rewarded.</NPCYellowFlagText>
+    <NPCYellowCompleteText>That was some fine destruction, my friend!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gurog Soldier Kill Task (Frozen Valley)</TaskName>
     <MobNames>
       <string>Gurog Soldier</string>
     </MobNames>
@@ -206,7 +263,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Gurog Kill Task (Minions)</TaskName>
+    <TaskName>Gurog Minion Kill Task (Frozen Valley)</TaskName>
     <MobNames>
       <string>Gurog Minion</string>
     </MobNames>
@@ -225,7 +282,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Gurog Kill Task (Henchman)</TaskName>
+    <TaskName>Gurog Henchman Kill Task (Frozen Valley)</TaskName>
     <MobNames>
       <string>Gurog Henchmen</string>
     </MobNames>
@@ -244,7 +301,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Snow Tusker Kill Task (Snow Tusker)</TaskName>
+    <TaskName>Snow Tusker Kill Task (Frozen Valley)</TaskName>
     <MobNames>
       <string>Snow Tusker</string>
     </MobNames>
@@ -263,7 +320,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Snow Tusker Kill Task (Snow Tusker Warrior)</TaskName>
+    <TaskName>Snow Tusker Warrior Kill Task (Frozen Valley)</TaskName>
     <MobNames>
       <string>Snow Tusker Warrior</string>
     </MobNames>
@@ -282,7 +339,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Snow Tusker Kill Task (Snow Tusker Leader)</TaskName>
+    <TaskName>Snow Tusker Leader Kill Task (Frozen Valley)</TaskName>
     <MobNames>
       <string>Snow Tusker Leader</string>
     </MobNames>
@@ -301,12 +358,12 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Frozen Dread Kill Task</TaskName>
+    <TaskName>Frozen Dread Kill Task (Frozen Valley)</TaskName>
     <MobNames>
       <string>Frozen Dread</string>
     </MobNames>
     <CurrentCount>0</CurrentCount>
-    <CompleteCount>20</CompleteCount>
+    <CompleteCount>10</CompleteCount>
     <NPCNames>
       <string>Kumiko</string>
     </NPCNames>
@@ -320,11 +377,12 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Frozen Wight Kill Task</TaskName>
+    <TaskName>Frozen Wight Kill Task (Frozen Valley)</TaskName>
     <MobNames>
       <string>Frozen Wight</string>
       <string>Frozen Wight Captain</string>
       <string>Frozen Wight Sorcerer</string>
+      <string>Frozen Wight Archer</string>
     </MobNames>
     <CurrentCount>0</CurrentCount>
     <CompleteCount>20</CompleteCount>
@@ -341,7 +399,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Shadow Flyer Kill Task</TaskName>
+    <TaskName>Shadow Flyer Kill Task (Tou-Tou)</TaskName>
     <MobNames>
       <string>Shadow Flyer</string>
     </MobNames>
@@ -360,7 +418,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Shadow Kill Task</TaskName>
+    <TaskName>Shadow Kill Task (Tou-Tou)</TaskName>
     <MobNames>
       <string>Shadow</string>
     </MobNames>
@@ -379,7 +437,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Devourer Margul Kill Task</TaskName>
+    <TaskName>Devourer Margul Kill Task (Tou-Tou)</TaskName>
     <MobNames>
       <string>Devourer Margul</string>
     </MobNames>
@@ -398,7 +456,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Grievver Shredder Kill Task</TaskName>
+    <TaskName>Grievver Shredder Kill Task (Tou-Tou)</TaskName>
     <MobNames>
       <string>Grievver Shredder</string>
     </MobNames>
@@ -417,7 +475,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Void Lord Kill Task</TaskName>
+    <TaskName>Void Lord Kill Task (Tou-Tou)</TaskName>
     <MobNames>
       <string>Void Lord</string>
     </MobNames>
@@ -436,7 +494,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Aun Golem Hunters:  Mud Golem Sludge Lord</TaskName>
+    <TaskName>Mud Golem Sludge Lord (Aun Golem Hunters)</TaskName>
     <MobNames>
       <string>Mud Golem Sludge Lord</string>
     </MobNames>
@@ -448,14 +506,14 @@
     <NPCInfo>(near Samsur)</NPCInfo>
     <NPCCoords>2.6S, 20.0E</NPCCoords>
     <NPCYellowFlagText>Kill five of these golems, return to me and I will see that your battles are rewarded!</NPCYellowFlagText>
-    <NPCYellowCompleteText />
+    <NPCYellowCompleteText>Excellent! Your keh burns brightly with victory!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Aun Golem Hunters:  Copper Golem Kingpin</TaskName>
+    <TaskName>Copper Golem Kingpin (Aun Golem Hunters)</TaskName>
     <MobNames>
       <string>Copper Golem Kingpin</string>
     </MobNames>
@@ -467,14 +525,14 @@
     <NPCInfo>Eastham</NPCInfo>
     <NPCCoords>16.5N, 63.6E</NPCCoords>
     <NPCYellowFlagText>Kill five of these golems, return to me and I will see that your battles are rewarded!</NPCYellowFlagText>
-    <NPCYellowCompleteText />
+    <NPCYellowCompleteText>Excellent! Your keh burns brightly with victory!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Aun Golem Hunters:  Glacial Golem Margrave</TaskName>
+    <TaskName>Glacial Golem Margrave (Aun Golem Hunters)</TaskName>
     <MobNames>
       <string>Glacial Golem Margrave</string>
     </MobNames>
@@ -486,14 +544,14 @@
     <NPCInfo>Qalaba'r</NPCInfo>
     <NPCCoords>74.5S, 19.3E</NPCCoords>
     <NPCYellowFlagText>Kill five of these golems, return to me and I will see that your battles are rewarded!</NPCYellowFlagText>
-    <NPCYellowCompleteText />
+    <NPCYellowCompleteText>Excellent! Your keh burns brightly with victory!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Aun Golem Hunters:  Magma Golem Exarch</TaskName>
+    <TaskName>Magma Golem Exarch (Aun Golem Hunters)</TaskName>
     <MobNames>
       <string>Magma Golem Exarch</string>
     </MobNames>
@@ -505,14 +563,14 @@
     <NPCInfo>Candeth Keep</NPCInfo>
     <NPCCoords>87.5S, 67.0W</NPCCoords>
     <NPCYellowFlagText>Kill five of these golems, return to me and I will see that your battles are rewarded!</NPCYellowFlagText>
-    <NPCYellowCompleteText />
+    <NPCYellowCompleteText>Excellent! Your keh burns brightly with victory!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Aun Golem Hunters:  Coral Golem Viceroy</TaskName>
+    <TaskName>Coral Golem Viceroy (Aun Golem Hunters)</TaskName>
     <MobNames>
       <string>Coral Golem Viceroy</string>
     </MobNames>
@@ -524,14 +582,14 @@
     <NPCInfo>Ayan Baqur</NPCInfo>
     <NPCCoords>60.8S, 88.0W</NPCCoords>
     <NPCYellowFlagText>Kill five of these golems, return to me and I will see that your battles are rewarded!</NPCYellowFlagText>
-    <NPCYellowCompleteText />
+    <NPCYellowCompleteText>Excellent! Your keh burns brightly with victory!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Aun Golem Hunters:  Platinum Golem Mountain King</TaskName>
+    <TaskName>Platinum Golem Mountain King (Aun Golem Hunters)</TaskName>
     <MobNames>
       <string>Platinum Golem Mountain King</string>
     </MobNames>
@@ -543,14 +601,14 @@
     <NPCInfo>Ayan Baqur</NPCInfo>
     <NPCCoords>60.8S, 88.0W</NPCCoords>
     <NPCYellowFlagText>Kill five of these golems, return to me and I will see that your battles are rewarded!</NPCYellowFlagText>
-    <NPCYellowCompleteText />
+    <NPCYellowCompleteText>Excellent! Your keh burns brightly with victory!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Aun Golem Hunters:  Crystal Lord</TaskName>
+    <TaskName>Crystal Lord (Aun Golem Hunters)</TaskName>
     <MobNames>
       <string>Crystal Lord</string>
     </MobNames>
@@ -569,7 +627,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Moarsmen Jailbreak (Prisoners)</TaskName>
+    <TaskName>Moarsmen Prisoners (Freebooter)</TaskName>
     <MobNames>
       <string>Moarsman Prisoner</string>
     </MobNames>
@@ -588,7 +646,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Moarsmen Jailbreak (Blessed Leader)</TaskName>
+    <TaskName>Moarsmen Blessed Leader (Freebooter)</TaskName>
     <MobNames>
       <string>Large Blessed Moarsman</string>
     </MobNames>
@@ -607,7 +665,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Moarsmen Jailbreak (Ardent Leader)</TaskName>
+    <TaskName>Moarsmen Ardent Leader (Freebooter)</TaskName>
     <MobNames>
       <string>Large Ardent Moarsman</string>
     </MobNames>
@@ -626,7 +684,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Moarsmen Jailbreak (Verdant Leader)</TaskName>
+    <TaskName>Moarsmen Verdant Leader (Freebooter)</TaskName>
     <MobNames>
       <string>Large Verdant Moarsman</string>
     </MobNames>
@@ -645,26 +703,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Black Coral Golem Kill Task</TaskName>
-    <MobNames>
-      <string>Black Coral Golem</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>100</CompleteCount>
-    <NPCNames>
-      <string>Chiriko</string>
-    </NPCNames>
-    <NPCInfo>Northwatch Castle Black Market</NPCInfo>
-    <NPCCoords>81.5N 25.0E</NPCCoords>
-    <NPCYellowFlagText>If you would be willing to go there and prove your prowess by destroying 100 of these strange golems, I will reward you handsomely for your actions.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Well done, well done indeed. You have proven your skill and honored my task. I thank you. Here is the reward promised.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Weeding of the Deru Tree</TaskName>
+    <TaskName>Weeding of the Deru Tree (Freebooter)</TaskName>
     <MobNames>
       <string>Eyestalk of T'thuun</string>
       <string>Tendril of T'thuun</string>
@@ -685,94 +724,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Blighted Coral Golem Kill Task</TaskName>
-    <MobNames>
-      <string>Blighted Coral Golem</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>100</CompleteCount>
-    <NPCNames>
-      <string>Hanzo</string>
-    </NPCNames>
-    <NPCInfo>Northwatch Castle Black Market</NPCInfo>
-    <NPCCoords>81.5N 25.0E</NPCCoords>
-    <NPCYellowFlagText>I wish you to destroy 100 of the foul, Blighted Coral Golems upon the isle.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Impressively done, Honored Master. You have accomplished all I have wished from you. Now, for your promised reward.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Blessed Moarsman Kill Task</TaskName>
-    <MobNames>
-      <string>Blessed Moarsman</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>50</CompleteCount>
-    <NPCNames>
-      <string>Kieran Stronghammer</string>
-      <string>Alexander Bowspeaker</string>
-      <string>Ian Foefinder</string>
-    </NPCNames>
-    <NPCInfo>Society Stronghold</NPCInfo>
-    <NPCCoords>Unknown</NPCCoords>
-    <NPCYellowFlagText>Survive, kill 50 Blessed Moarsmen, and I'll make sure you are recognized for your valorous service to our Society.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Congratulations, you survived and succeeded. Here, allow me to reward you for your assistance to our Society.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Gear Knight Phalanx Kill Task</TaskName>
-    <MobNames>
-      <string>Invading Bronze Gauntlet Phalanx</string>
-      <string>Invading Copper Cog Phalanx</string>
-      <string>Invading Iron Blade Phalanx</string>
-      <string>Invading Silver Scope Phalanx</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>10</CompleteCount>
-    <NPCNames>
-      <string>Ladice</string>
-      <string>Tressar</string>
-      <string>Aun Quanah</string>
-    </NPCNames>
-    <NPCInfo>Society Stronghold</NPCInfo>
-    <NPCCoords>Unknown</NPCCoords>
-    <NPCYellowFlagText>Go there and defeat 10 Phalanx.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Satisfactory. Take these rewards as compensation for your efforts.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Killer Phyntos Wasp Kill Task</TaskName>
-    <MobNames>
-      <string>Killer Phyntos Drone</string>
-      <string>Killer Phyntos Soldier</string>
-      <string>Killer Phyntos Swarm</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>1</CompleteCount>
-    <NPCNames>
-      <string>Khanldun</string>
-      <string>Jonathan</string>
-      <string>Mik</string>
-    </NPCNames>
-    <NPCInfo>Society Stronghold</NPCInfo>
-    <NPCCoords>Unknown</NPCCoords>
-    <NPCYellowFlagText>The society will appreciate any efforts you make towards their extermination.</NPCYellowFlagText>
-    <NPCYellowCompleteText>You've done well in exterminating this aggressive breed of Phyntos.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Nyr'leha Sclavus Kill Task</TaskName>
+    <TaskName>Nyr'leha Sclavus Kill Task (Freebooter)</TaskName>
     <MobNames>
       <string>Afessa Sclavus Guardian</string>
       <string>Afessa Sclavus Soldier</string>
@@ -795,7 +747,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Nyr'leha Moarsman Kill Task</TaskName>
+    <TaskName>Nyr'leha Moarsman Kill Task (Freebooter)</TaskName>
     <MobNames>
       <string>Blighted Ardent Moarsman</string>
       <string>Blighted Verdant Moarsman</string>
@@ -832,7 +784,113 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Moguth Moarsman Kill Task</TaskName>
+    <TaskName>Black Coral Golem Kill Task (Northwatch)</TaskName>
+    <MobNames>
+      <string>Black Coral Golem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCNames>
+      <string>Chiriko</string>
+    </NPCNames>
+    <NPCInfo>Northwatch Castle Black Market</NPCInfo>
+    <NPCCoords>81.5N 25.0E</NPCCoords>
+    <NPCYellowFlagText>If you would be willing to go there and prove your prowess by destroying 100 of these strange golems, I will reward you handsomely for your actions.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Well done, well done indeed. You have proven your skill and honored my task. I thank you. Here is the reward promised.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blighted Coral Golem Kill Task</TaskName>
+    <MobNames>
+      <string>Blighted Coral Golem (Northwatch)</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCNames>
+      <string>Hanzo</string>
+    </NPCNames>
+    <NPCInfo>Northwatch Castle Black Market</NPCInfo>
+    <NPCCoords>81.5N 25.0E</NPCCoords>
+    <NPCYellowFlagText>I wish you to destroy 100 of the foul, Blighted Coral Golems upon the isle.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Impressively done, Honored Master. You have accomplished all I have wished from you. Now, for your promised reward.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Gear Knight Phalanx Kill Task</TaskName>
+    <MobNames>
+      <string>Invading Bronze Gauntlet Phalanx</string>
+      <string>Invading Copper Cog Phalanx</string>
+      <string>Invading Iron Blade Phalanx</string>
+      <string>Invading Silver Scope Phalanx</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Ladice</string>
+      <string>Tressar</string>
+      <string>Aun Quanah</string>
+    </NPCNames>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>Go there and defeat 10 Phalanx.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Satisfactory. Take these rewards as compensation for your efforts.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Blessed Moarsman Kill Task (Society)</TaskName>
+    <MobNames>
+      <string>Blessed Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCNames>
+      <string>Kieran Stronghammer</string>
+      <string>Alexander Bowspeaker</string>
+      <string>Ian Foefinder</string>
+    </NPCNames>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>Survive, kill 50 Blessed Moarsmen, and I'll make sure you are recognized for your valorous service to our Society.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Congratulations, you survived and succeeded. Here, allow me to reward you for your assistance to our Society.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Killer Phyntos Wasp Kill Task (Society)</TaskName>
+    <MobNames>
+      <string>Killer Phyntos Drone</string>
+      <string>Killer Phyntos Soldier</string>
+      <string>Killer Phyntos Swarm</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCNames>
+      <string>Khanldun</string>
+      <string>Jonathan</string>
+      <string>Mik</string>
+    </NPCNames>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>The society will appreciate any efforts you make towards their extermination.</NPCYellowFlagText>
+    <NPCYellowCompleteText>You've done well in exterminating this aggressive breed of Phyntos.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Moguth Moarsman Kill Task (Society)</TaskName>
     <MobNames>
       <string>Moguth Moarsman</string>
     </MobNames>
@@ -845,7 +903,7 @@
     </NPCNames>
     <NPCInfo>Society Stronghold</NPCInfo>
     <NPCCoords>Unknown</NPCCoords>
-    <NPCYellowFlagText />
+    <NPCYellowFlagText>Go to this city and kill 60 of the 'Moguth Moarsmen'.</NPCYellowFlagText>
     <NPCYellowCompleteText>Well done! Here, allow me to reward you for your assistance to our Society.</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
@@ -853,7 +911,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Phyntos Larva Kill Task</TaskName>
+    <TaskName>Phyntos Larva Kill Task (Society)</TaskName>
     <MobNames>
       <string>Phyntos Larva</string>
     </MobNames>
@@ -874,7 +932,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Shoguth Moarsman Kill Task</TaskName>
+    <TaskName>Shoguth Moarsman Kill Task (Society)</TaskName>
     <MobNames>
       <string>Shoguth Moarsman</string>
     </MobNames>
@@ -887,7 +945,7 @@
     </NPCNames>
     <NPCInfo>Society Stronghold</NPCInfo>
     <NPCCoords>Unknown</NPCCoords>
-    <NPCYellowFlagText />
+    <NPCYellowFlagText>Go to this city and kill 40 of the 'Shoguth Moarsmen'.</NPCYellowFlagText>
     <NPCYellowCompleteText>Well done! Here, allow me to reward you for your assistance to our Society.</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
@@ -895,7 +953,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Wight Blade Sorcerer Kill Task</TaskName>
+    <TaskName>Wight Blade Sorcerer Kill Task (Society)</TaskName>
     <MobNames>
       <string>Wight Blade Sorcerer</string>
     </MobNames>
@@ -916,7 +974,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Guardian Statue Kill Task</TaskName>
+    <TaskName>Guardian Statue Kill Task (Mhoire)</TaskName>
     <MobNames>
       <string>Guardian Statue</string>
     </MobNames>
@@ -935,7 +993,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Grave Rat Kill Task</TaskName>
+    <TaskName>Grave Rat Kill Task (Graveyard)</TaskName>
     <MobNames>
       <string>Grave Rat</string>
     </MobNames>
@@ -954,7 +1012,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Gear Knight Kill Task (Squires)</TaskName>
+    <TaskName>Gear Knight Squire Kill Task (Resistance)</TaskName>
     <MobNames>
       <string>Invading Iron Blade Squire</string>
       <string>Invading Silver Scope Squire</string>
@@ -976,7 +1034,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Gear Knight Kill Task (Knights)</TaskName>
+    <TaskName>Gear Knight Knight Kill Task (Resistance)</TaskName>
     <MobNames>
       <string>Invading Iron Blade Knight</string>
       <string>Invading Silver Scope Knight</string>
@@ -998,7 +1056,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Iron Blade Commander</TaskName>
+    <TaskName>Iron Blade Commander (Resistance)</TaskName>
     <MobNames>
       <string>Invading Iron Blade Commander</string>
     </MobNames>
@@ -1017,7 +1075,26 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Bronze Gauntlet Trooper Kill Task</TaskName>
+    <TaskName>Gold Gear Trooper Kill Task (Ijaniya)</TaskName>
+    <MobNames>
+      <string>Gold Gear Trooper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCNames>
+      <string>Sir Stavitor</string>
+    </NPCNames>
+    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
+    <NPCCoords>33.4S, 6.3E</NPCCoords>
+    <NPCYellowFlagText>Return to me with anything you've learned after destroying 25 Gold Gear Troopers.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Congratulations, you survived and succeeded. </NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Bronze Gauntlet Trooper Kill Task (Ijaniya)</TaskName>
     <MobNames>
       <string>Bronze Gauntlet Trooper</string>
     </MobNames>
@@ -1036,7 +1113,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Copper Cog Trooper Kill Task</TaskName>
+    <TaskName>Copper Cog Trooper Kill Task (Ijaniya)</TaskName>
     <MobNames>
       <string>Copper Cog Trooper</string>
     </MobNames>
@@ -1055,7 +1132,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Iron Blade Trooper Kill Task</TaskName>
+    <TaskName>Iron Blade Trooper Kill Task (Ijaniya)</TaskName>
     <MobNames>
       <string>Iron Blade Trooper</string>
     </MobNames>
@@ -1074,7 +1151,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Silver Scope Trooper Kill Task</TaskName>
+    <TaskName>Silver Scope Trooper Kill Task (Ijaniya)</TaskName>
     <MobNames>
       <string>Silver Scope Trooper</string>
     </MobNames>
@@ -1112,7 +1189,102 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Wicked Skeleton Kill Task</TaskName>
+    <TaskName>Repugnant Eater Kill Task (Eastwatch)</TaskName>
+    <MobNames>
+      <string>Repugnant Eater</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCNames>
+      <string>Xun Yu</string>
+    </NPCNames>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N 43.1W</NPCCoords>
+    <NPCYellowFlagText>Track down and slay 50 of the terrible Repugnant Eaters for me, and I will reward you appropriately.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Ripper Kill Task (Eastwatch)</TaskName>
+    <MobNames>
+      <string>Olthoi Ripper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>250</CompleteCount>
+    <NPCNames>
+      <string>Marcello</string>
+    </NPCNames>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N 43.1W</NPCCoords>
+    <NPCYellowFlagText>Track down and slay 250 of the terrible Olthoi Rippers for me, and I will reward you appropriately.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Naughty Skeleton Kill Task (Eastwatch)</TaskName>
+    <MobNames>
+      <string>Naughty Skeleton</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCNames>
+      <string>Taku Yukio</string>
+    </NPCNames>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.3N 43.1W</NPCCoords>
+    <NPCYellowFlagText>Track down and slay 100 of the terrible Naughty Skeletons for me, and I will reward you appropriately.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mosswart Worshipper Kill Task (Eastwatch)</TaskName>
+    <MobNames>
+      <string>Mosswart Worshipper</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>175</CompleteCount>
+    <NPCNames>
+      <string>Orfeo Orlando</string>
+    </NPCNames>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.2N, 43.1W</NPCCoords>
+    <NPCYellowFlagText>Track down and slay 175 of the terrible Mosswart Worshippers for me, and I will reward you appropriately.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Floeshark Kill Task (Eastwatch)</TaskName>
+    <MobNames>
+      <string>Floeshark</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCNames>
+      <string>Ryuichi Tai</string>
+    </NPCNames>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.3N, 43.0W</NPCCoords>
+    <NPCYellowFlagText>Track down and slay 50 of the terrible Floesharks for me, and I will reward you appropriately.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Wicked Skeleton Kill Task (Eastwatch)</TaskName>
     <MobNames>
       <string>Wicked Skeleton</string>
     </MobNames>
@@ -1131,7 +1303,26 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Tukora Lieutenant Kill Task</TaskName>
+    <TaskName>Grievver Violator Kill Task (Eastwatch)</TaskName>
+    <MobNames>
+      <string>Grievver Violator</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>100</CompleteCount>
+    <NPCNames>
+      <string>Moina</string>
+    </NPCNames>
+    <NPCInfo>Eastwatch</NPCInfo>
+    <NPCCoords>90.4N 43.1W</NPCCoords>
+    <NPCYellowFlagText>Track down and slay 100 of the terrible Grievver Violators for me, and I will reward you appropriately.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tukora Lieutenant Kill Task (Eastwatch)</TaskName>
     <MobNames>
       <string>Tukora Lieutenant</string>
     </MobNames>
@@ -1188,7 +1379,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Umbral Rift Kill Task</TaskName>
+    <TaskName>Umbral Rift Kill Task (Caul)</TaskName>
     <MobNames>
       <string>Umbral Rift</string>
     </MobNames>
@@ -1201,6 +1392,25 @@
     <NPCCoords>97.4S 94.6W</NPCCoords>
     <NPCYellowFlagText>Kill 30 Umbral Rifts and let me know of your adventures.</NPCYellowFlagText>
     <NPCYellowCompleteText>Truly amazing isn't it. You are one of us, you are a Rift Walker.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Tenebrous Rift Kill Task (Caul)</TaskName>
+    <MobNames>
+      <string>Tenebrous Rift</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>350</CompleteCount>
+    <NPCNames>
+      <string>Solange</string>
+    </NPCNames>
+    <NPCInfo>Singularity Caul</NPCInfo>
+    <NPCCoords>97.4S 94.6W</NPCCoords>
+    <NPCYellowFlagText>If you seek to truely explor your own essence I'd suggest you kill 350 or more Tenebrous Rifts, it's truly amazing.</NPCYellowFlagText>
+    <NPCYellowCompleteText>To have experienced that many rifts you must truly be chosen.</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
@@ -1283,7 +1493,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Crystalline Killer</TaskName>
+    <TaskName>Crystalline Killer (Crystalline Crag)</TaskName>
     <MobNames>
       <string>Crystalline Wisps</string>
       <string>Aggregate Crystalline Wisp</string>
@@ -1324,7 +1534,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Golem Samurai Kill Task</TaskName>
+    <TaskName>Golem Samurai Kill Task (Royal Tent)</TaskName>
     <MobNames>
       <string>Bronze Golem Samurai</string>
       <string>Iron Golem Samurai</string>
@@ -1345,7 +1555,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Spectral Archer Kill Task</TaskName>
+    <TaskName>Spectral Archer Kill Task (Royal Tent)</TaskName>
     <MobNames>
       <string>Spectral Archer</string>
     </MobNames>
@@ -1364,7 +1574,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Spectral Bushi Kill Task</TaskName>
+    <TaskName>Spectral Bushi Kill Task (Royal Tent)</TaskName>
     <MobNames>
       <string>Spectral Bushi</string>
     </MobNames>
@@ -1383,7 +1593,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Spectral Blade and Claw Kill Task</TaskName>
+    <TaskName>Spectral Blade and Claw Kill Task (Royal Tent)</TaskName>
     <MobNames>
       <string>Spectral Blade Adept</string>
       <string>Spectral Blade Master</string>
@@ -1405,7 +1615,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Spectral Mage Kill Task</TaskName>
+    <TaskName>Spectral Mage Kill Task (Royal Tent)</TaskName>
     <MobNames>
       <string>Spectral Bloodmage</string>
       <string>Spectral Voidmage</string>
@@ -1425,7 +1635,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Spectral Minion Kill Task</TaskName>
+    <TaskName>Spectral Minion Kill Task (Royal Tent)</TaskName>
     <MobNames>
       <string>Spectral Minion</string>
     </MobNames>
@@ -1444,7 +1654,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Spectral Nanjou Shou-jen Kill Task</TaskName>
+    <TaskName>Spectral Nanjou Shou-jen Kill Task (Royal Tent)</TaskName>
     <MobNames>
       <string>Spectral Nanjou Shou-jen</string>
     </MobNames>
@@ -1463,7 +1673,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Spectral Samurai Kill Task</TaskName>
+    <TaskName>Spectral Samurai Kill Task (Royal Tent)</TaskName>
     <MobNames>
       <string>Spectral Samurai</string>
     </MobNames>
@@ -1520,7 +1730,36 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Banished Creature Kill Task</TaskName>
+    <TaskName>Rare Game Kill Task (Stonehold)</TaskName>
+    <MobNames>
+      <string>Basalt Golem</string>
+      <string>Cold One</string>
+      <string>Dark Myrmidon</string>
+      <string>Dark Sorcerer</string>
+      <string>Lord of Decay</string>
+      <string>Lugian Warlord</string>
+      <string>Master of the Pack</string>
+      <string>Pure One</string>
+      <string>Sentient Fragment</string>
+      <string>Swamp King</string>
+      <string>Tundra Mattekar</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCNames>
+      <string>Belinda du Loc</string>
+    </NPCNames>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.9N 21.6W</NPCCoords>
+    <NPCYellowFlagText>Use that list as a reference. Kill 50 of the creatures</NPCYellowFlagText>
+    <NPCYellowCompleteText>Excellent, you are now an experienced hunter of the most elusive creatures.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Banished Creature Kill Task (Stonehold)</TaskName>
     <MobNames>
       <string>Banished Banderling</string>
       <string>Banished Drudge</string>
@@ -1549,7 +1788,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Fallen Creature Kill Task</TaskName>
+    <TaskName>Fallen Creature Kill Task (Stonehold)</TaskName>
     <MobNames>
       <string>Fallen Crystal Shard</string>
       <string>Fallen Doll</string>
@@ -1578,7 +1817,86 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Benek Niffis Kill Task</TaskName>
+    <TaskName>Elemental Kill Task</TaskName>
+    <MobNames>
+      <string>Caustic</string>
+      <string>Synnast</string>
+      <string>Inferno</string>
+      <string>Hyem</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCNames>
+      <string>Zahir</string>
+    </NPCNames>
+    <NPCInfo>Stonehold</NPCInfo>
+    <NPCCoords>68.7N, 21.5W</NPCCoords>
+    <NPCYellowFlagText>Fight twenty-five of these creatures and then return to me and tell me everything you learned about them.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Very interesting, I hope I can use this information to further my research.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Shallows Gorger Kill Task (Vissidal)</TaskName>
+    <MobNames>
+      <string>Shallows Gorger</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCNames>
+      <string>Dayla Bint Kazm</string>
+    </NPCNames>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText>It bids me to tell you to kill 50 of the Shallows Gorgers.</NPCYellowFlagText>
+    <NPCYellowCompleteText>It has chosen to reward you for completing the task it set before you.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Remoran Sea Raptor Kill Task (Vissidal)</TaskName>
+    <MobNames>
+      <string>Remoran Sea Raptor</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCNames>
+      <string>Peng-Ya</string>
+    </NPCNames>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText>Kill 50 Remoran Sea Raptors so that they will know their place.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Enough! No more Remoran Sea Raptors need die.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Mucky Moarsman Kill Task (Vissidal)</TaskName>
+    <MobNames>
+      <string>Mucky Moarsman</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>50</CompleteCount>
+    <NPCNames>
+      <string>Algar Oreksun</string>
+    </NPCNames>
+    <NPCInfo>The Deep (Vissidal)</NPCInfo>
+    <NPCCoords>77.8N 67.1E</NPCCoords>
+    <NPCYellowFlagText>A sacrifice of 50 Mucky Moarsmen must be made.</NPCYellowFlagText>
+    <NPCYellowCompleteText>It is pleased.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Benek Niffis Kill Task (Vissidal)</TaskName>
     <MobNames>
       <string>Benek Niffis</string>
     </MobNames>
@@ -1692,86 +2010,26 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Elemental Kill Task</TaskName>
+    <TaskName>Putrid Moar Kill Task (Kor-Gursha)</TaskName>
     <MobNames>
-      <string>Caustic</string>
-      <string>Synnast</string>
-      <string>Inferno</string>
-      <string>Hyem</string>
+      <string>Putrid Moar</string>
     </MobNames>
     <CurrentCount>0</CurrentCount>
     <CompleteCount>25</CompleteCount>
     <NPCNames>
-      <string>Zahir</string>
+      <string>Tibik</string>
     </NPCNames>
-    <NPCInfo>Stonehold</NPCInfo>
-    <NPCCoords>68.7N, 21.5W</NPCCoords>
-    <NPCYellowFlagText>Fight twenty-five of these creatures and then return to me and tell me everything you learned about them.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Very interesting, I hope I can use this information to further my research.</NPCYellowCompleteText>
+    <NPCInfo>Kor-Gursha</NPCInfo>
+    <NPCCoords>Bur</NPCCoords>
+    <NPCYellowFlagText>You kill 25 Moar, and Tibik reward Strong Traveler from Faraway.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Excellent! Tibik be sneaky now.</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Floeshark Kill Task</TaskName>
-    <MobNames>
-      <string>Floeshark</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>50</CompleteCount>
-    <NPCNames>
-      <string>Ryuichi Tai</string>
-    </NPCNames>
-    <NPCInfo>Eastwatch</NPCInfo>
-    <NPCCoords>90.3N, 43.0W</NPCCoords>
-    <NPCYellowFlagText>Track down and slay 50 of the terrible Floesharks for me, and I will reward you appropriately.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Gold Gear Trooper Kill Task</TaskName>
-    <MobNames>
-      <string>Gold Gear Trooper</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>25</CompleteCount>
-    <NPCNames>
-      <string>Sir Stavitor</string>
-    </NPCNames>
-    <NPCInfo>Yaraq to Ijaniya (22.4S, 0.2E)</NPCInfo>
-    <NPCCoords>33.4S, 6.3E</NPCCoords>
-    <NPCYellowFlagText>Return to me with anything you've learned after destroying 25 Gold Gear Troopers.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Congratulations, you survived and succeeded. </NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Grievver Violator Kill Task</TaskName>
-    <MobNames>
-      <string>Grievver Violator</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>100</CompleteCount>
-    <NPCNames>
-      <string>Moina</string>
-    </NPCNames>
-    <NPCInfo>Eastwatch</NPCInfo>
-    <NPCCoords>90.4N 43.1W</NPCCoords>
-    <NPCYellowFlagText>Track down and slay 100 of the terrible Grievver Violators for me, and I will reward you appropriately.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Guruk Basher Kill Task</TaskName>
+    <TaskName>Guruk Basher Kill Task (Kor-Gursha)</TaskName>
     <MobNames>
       <string>Guruk Basher</string>
     </MobNames>
@@ -1790,7 +2048,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Guruk Colossus Kill Task</TaskName>
+    <TaskName>Guruk Colossus Kill Task (Kor-Gursha)</TaskName>
     <MobNames>
       <string>Guruk Colossi</string>
       <string>Guruk Colossus</string>
@@ -1810,7 +2068,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Guruk Fiend Kill Task</TaskName>
+    <TaskName>Guruk Fiend Kill Task (Kor-Gursha)</TaskName>
     <MobNames>
       <string>Guruk Fiend</string>
     </MobNames>
@@ -1829,7 +2087,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Guruk Marauder Kill Task</TaskName>
+    <TaskName>Guruk Marauder Kill Task (Kor-Gursha)</TaskName>
     <MobNames>
       <string>Guruk Marauder</string>
     </MobNames>
@@ -1848,7 +2106,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Guruk Monstrosity Kill Task</TaskName>
+    <TaskName>Guruk Monstrosity Kill Task (Kor-Gursha)</TaskName>
     <MobNames>
       <string>Guruk Monstrosity</string>
     </MobNames>
@@ -1867,7 +2125,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Guruk Smasher Kill Task</TaskName>
+    <TaskName>Guruk Smasher Kill Task (Kor-Gursha)</TaskName>
     <MobNames>
       <string>Guruk Smasher</string>
     </MobNames>
@@ -1981,44 +2239,6 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Putrid Moar Kill Task</TaskName>
-    <MobNames>
-      <string>Putrid Moar</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>25</CompleteCount>
-    <NPCNames>
-      <string>Tibik</string>
-    </NPCNames>
-    <NPCInfo>Kor-Gursha</NPCInfo>
-    <NPCCoords>Bur</NPCCoords>
-    <NPCYellowFlagText>You kill 25 Moar, and Tibik reward Strong Traveler from Faraway.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Excellent! Tibik be sneaky now.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Mosswart Worshipper Kill Task</TaskName>
-    <MobNames>
-      <string>Mosswart Worshipper</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>175</CompleteCount>
-    <NPCNames>
-      <string>Orfeo Orlando</string>
-    </NPCNames>
-    <NPCInfo>Eastwatch</NPCInfo>
-    <NPCCoords>90.2N, 43.1W</NPCCoords>
-    <NPCYellowFlagText>Track down and slay 175 of the terrible Mosswart Worshippers for me, and I will reward you appropriately.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
     <TaskName>Mottled Carenzi Kill Task</TaskName>
     <MobNames>
       <string>Mottled Carenzi</string>
@@ -2057,121 +2277,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Mucky Moarsman Kill Task</TaskName>
-    <MobNames>
-      <string>Mucky Moarsman</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>50</CompleteCount>
-    <NPCNames>
-      <string>Algar Oreksun</string>
-    </NPCNames>
-    <NPCInfo>The Deep (Vissidal)</NPCInfo>
-    <NPCCoords>77.8N 67.1E</NPCCoords>
-    <NPCYellowFlagText>A sacrifice of 50 Mucky Moarsmen must be made.</NPCYellowFlagText>
-    <NPCYellowCompleteText>It is pleased.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Naughty Skeleton Kill Task</TaskName>
-    <MobNames>
-      <string>Naughty Skeleton</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>100</CompleteCount>
-    <NPCNames>
-      <string>Taku Yukio</string>
-    </NPCNames>
-    <NPCInfo>Eastwatch</NPCInfo>
-    <NPCCoords>90.3N 43.1W</NPCCoords>
-    <NPCYellowFlagText>Track down and slay 100 of the terrible Naughty Skeletons for me, and I will reward you appropriately.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Olthoi Drone Kill Task</TaskName>
-    <MobNames>
-      <string>Olthoi Drone</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>20</CompleteCount>
-    <NPCNames>
-      <string>Olthoi Hunter</string>
-    </NPCNames>
-    <NPCInfo>Arwic (South)</NPCInfo>
-    <NPCCoords>30.9N 56.3E</NPCCoords>
-    <NPCYellowFlagText>Track down and slay 20 Olthoi Drones and I will reward you appropriately.</NPCYellowFlagText>
-    <NPCYellowCompleteText>You have slain many Olthoi Drones!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Olthoi Nettler Kill Task</TaskName>
-    <MobNames>
-      <string>Olthoi Nettler</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>10</CompleteCount>
-    <NPCNames>
-      <string>Olthoi Hunter</string>
-    </NPCNames>
-    <NPCInfo>Arwic (South)</NPCInfo>
-    <NPCCoords>30.9N 56.3E</NPCCoords>
-    <NPCYellowFlagText>Track down and slay 10 Olthoi Nettlers and I will reward you appropriately.</NPCYellowFlagText>
-    <NPCYellowCompleteText>You have slain many Olthoi Nettlers!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Olthoi Nymph Kill Task</TaskName>
-    <MobNames>
-      <string>Olthoi Nymph</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>20</CompleteCount>
-    <NPCNames>
-      <string>Olthoi Hunter</string>
-    </NPCNames>
-    <NPCInfo>Arwic (South)</NPCInfo>
-    <NPCCoords>30.9N 56.3E</NPCCoords>
-    <NPCYellowFlagText>Track down and slay 20 Olthoi Nymphs and I will reward you appropriately.</NPCYellowFlagText>
-    <NPCYellowCompleteText>You have slain many Olthoi Nymphs!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Olthoi Ripper Kill Task</TaskName>
-    <MobNames>
-      <string>Olthoi Ripper</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>250</CompleteCount>
-    <NPCNames>
-      <string>Marcello</string>
-    </NPCNames>
-    <NPCInfo>Eastwatch</NPCInfo>
-    <NPCCoords>90.2N 43.1W</NPCCoords>
-    <NPCYellowFlagText>Track down and slay 250 of the terrible Olthoi Rippers for me, and I will reward you appropriately.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Paradox-touched Grub Kill Task</TaskName>
+    <TaskName>Paradox-touched Grub Kill Task (Olthoi)</TaskName>
     <MobNames>
       <string>Paradox-touched Olthoi Noble Grub</string>
     </MobNames>
@@ -2190,7 +2296,7 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Paradox-touched Nymph Kill Task</TaskName>
+    <TaskName>Paradox-touched Nymph Kill Task (Olthoi)</TaskName>
     <MobNames>
       <string>Paradox-touched Olthoi Warrior Nymph</string>
     </MobNames>
@@ -2203,6 +2309,63 @@
     <NPCCoords>43.8N 54.9E</NPCCoords>
     <NPCYellowFlagText>Slay them, 50 should do for now, and return to me.</NPCYellowFlagText>
     <NPCYellowCompleteText>You have done well.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Drone Kill Task (Arwic)</TaskName>
+    <MobNames>
+      <string>Olthoi Drone</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCNames>
+      <string>Olthoi Hunter</string>
+    </NPCNames>
+    <NPCInfo>Arwic (South)</NPCInfo>
+    <NPCCoords>30.9N 56.3E</NPCCoords>
+    <NPCYellowFlagText>Track down and slay 20 Olthoi Drones and I will reward you appropriately.</NPCYellowFlagText>
+    <NPCYellowCompleteText>You have slain many Olthoi Drones!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Nettler Kill Task (Arwic)</TaskName>
+    <MobNames>
+      <string>Olthoi Nettler</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Olthoi Hunter</string>
+    </NPCNames>
+    <NPCInfo>Arwic (South)</NPCInfo>
+    <NPCCoords>30.9N 56.3E</NPCCoords>
+    <NPCYellowFlagText>Track down and slay 10 Olthoi Nettlers and I will reward you appropriately.</NPCYellowFlagText>
+    <NPCYellowCompleteText>You have slain many Olthoi Nettlers!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Olthoi Nymph Kill Task (Arwic)</TaskName>
+    <MobNames>
+      <string>Olthoi Nymph</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>20</CompleteCount>
+    <NPCNames>
+      <string>Olthoi Hunter</string>
+    </NPCNames>
+    <NPCInfo>Arwic (South)</NPCInfo>
+    <NPCCoords>30.9N 56.3E</NPCCoords>
+    <NPCYellowFlagText>Track down and slay 20 Olthoi Nymphs and I will reward you appropriately.</NPCYellowFlagText>
+    <NPCYellowCompleteText>You have slain many Olthoi Nymphs!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
@@ -2259,73 +2422,6 @@
     <NPCInfo>Fiun Outpost</NPCInfo>
     <NPCCoords>95.6N, 56.3W</NPCCoords>
     <NPCYellowFlagText>Track down and slay 25 of the terrible Polar Ursuine for me, and I will reward you appropriately.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Rare Game Kill Task</TaskName>
-    <MobNames>
-      <string>Basalt Golem</string>
-      <string>Cold One</string>
-      <string>Dark Myrmidon</string>
-      <string>Dark Sorcerer</string>
-      <string>Lord of Decay</string>
-      <string>Lugian Warlord</string>
-      <string>Master of the Pack</string>
-      <string>Pure One</string>
-      <string>Sentient Fragment</string>
-      <string>Swamp King</string>
-      <string>Tundra Mattekar</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>50</CompleteCount>
-    <NPCNames>
-      <string>Belinda du Loc</string>
-    </NPCNames>
-    <NPCInfo>Stonehold</NPCInfo>
-    <NPCCoords>68.9N 21.6W</NPCCoords>
-    <NPCYellowFlagText>Use that list as a reference. Kill 50 of the creatures</NPCYellowFlagText>
-    <NPCYellowCompleteText>Excellent, you are now an experienced hunter of the most elusive creatures.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Remoran Sea Raptor Kill Task</TaskName>
-    <MobNames>
-      <string>Remoran Sea Raptor</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>50</CompleteCount>
-    <NPCNames>
-      <string>Peng-Ya</string>
-    </NPCNames>
-    <NPCInfo>The Deep (Vissidal)</NPCInfo>
-    <NPCCoords>77.8N 67.1E</NPCCoords>
-    <NPCYellowFlagText>Kill 50 Remoran Sea Raptors so that they will know their place.</NPCYellowFlagText>
-    <NPCYellowCompleteText>Enough! No more Remoran Sea Raptors need die.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Repugnant Eater Kill Task</TaskName>
-    <MobNames>
-      <string>Repugnant Eater</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>50</CompleteCount>
-    <NPCNames>
-      <string>Xun Yu</string>
-    </NPCNames>
-    <NPCInfo>Eastwatch</NPCInfo>
-    <NPCCoords>90.2N 43.1W</NPCCoords>
-    <NPCYellowFlagText>Track down and slay 50 of the terrible Repugnant Eaters for me, and I will reward you appropriately.</NPCYellowFlagText>
     <NPCYellowCompleteText>Excellent work, friend!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
@@ -2391,25 +2487,6 @@
     <complete>false</complete>
   </KillTask>
   <KillTask>
-    <TaskName>Shallows Gorger Kill Task</TaskName>
-    <MobNames>
-      <string>Shallows Gorger</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>50</CompleteCount>
-    <NPCNames>
-      <string>Dayla Bint Kazm</string>
-    </NPCNames>
-    <NPCInfo>The Deep (Vissidal)</NPCInfo>
-    <NPCCoords>77.8N 67.1E</NPCCoords>
-    <NPCYellowFlagText>It bids me to tell you to kill 50 of the Shallows Gorgers.</NPCYellowFlagText>
-    <NPCYellowCompleteText>It has chosen to reward you for completing the task it set before you.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
     <TaskName>Sishalti Slithis Kill Task</TaskName>
     <MobNames>
       <string>Sishalti Tentacle</string>
@@ -2444,82 +2521,6 @@
     <NPCCoords>Unknown</NPCCoords>
     <NPCYellowFlagText>If you will go thin out their number, say, kill 15 of the Small Mukkir Fledglings, I will reward you for your efforts.</NPCYellowFlagText>
     <NPCYellowCompleteText>Excellent! The Queen will be most pleased.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Tenebrous Rift Kill Task</TaskName>
-    <MobNames>
-      <string>Tenebrous Rift</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>350</CompleteCount>
-    <NPCNames>
-      <string>Solange</string>
-    </NPCNames>
-    <NPCInfo>Singularity Caul</NPCInfo>
-    <NPCCoords>97.4S 94.6W</NPCCoords>
-    <NPCYellowFlagText>If you seek to truely explor your own essence I'd suggest you kill 350 or more Tenebrous Rifts, it's truly amazing.</NPCYellowFlagText>
-    <NPCYellowCompleteText>To have experienced that many rifts you must truly be chosen.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Desert Cactus Kill Task</TaskName>
-    <MobNames>
-      <string>Desert Cactus</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>6</CompleteCount>
-    <NPCNames>
-      <string>Sir Unell bin Rakke</string>
-    </NPCNames>
-    <NPCInfo>Neftet Encampment</NPCInfo>
-    <NPCCoords>22.2S, 6.1E</NPCCoords>
-    <NPCYellowFlagText>Destroy 6 of the Desert Cactus and I will reward your efforts.</NPCYellowFlagText>
-    <NPCYellowCompleteText>The less insects around here, the better!</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Frost Golem Kill Task</TaskName>
-    <MobNames>
-      <string>Frost Golem</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>20</CompleteCount>
-    <NPCNames>
-      <string>George</string>
-    </NPCNames>
-    <NPCInfo>Frozen Valley</NPCInfo>
-    <NPCCoords>83.8N, 4.3W</NPCCoords>
-    <NPCYellowFlagText>Watch your step and kill 20 Frost Golems</NPCYellowFlagText>
-    <NPCYellowCompleteText>Those giant beasts of ice fall all the more magnificently.</NPCYellowCompleteText>
-    <track>false</track>
-    <detect>false</detect>
-    <active>false</active>
-    <complete>false</complete>
-  </KillTask>
-  <KillTask>
-    <TaskName>Frozen Crystal Kill Task</TaskName>
-    <MobNames>
-      <string>Frozen Crystal</string>
-    </MobNames>
-    <CurrentCount>0</CurrentCount>
-    <CompleteCount>4</CompleteCount>
-    <NPCNames>
-      <string>Boone</string>
-    </NPCNames>
-    <NPCInfo>Frozen Valley</NPCInfo>
-    <NPCCoords>83.7N, 4.3W</NPCCoords>
-    <NPCYellowFlagText>Destroy 4 of these Frozen Crystals and you will be rewarded.</NPCYellowFlagText>
-    <NPCYellowCompleteText>That was some fine destruction, my friend!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>

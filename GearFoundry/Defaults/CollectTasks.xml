@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCollectTask xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <CollectTask>
-    <TaskName>Prickly Pear Collecting</TaskName>
+    <TaskName>Prickly Pear Collecting (Neftet)</TaskName>
     <Item>Prickly Pear</Item>
     <MobNames>
       <string>Prickly Pear</string>
@@ -21,7 +21,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Stone Tablet Collecting</TaskName>
+    <TaskName>Stone Tablet Collecting (Neftet)</TaskName>
     <Item>Broken Stone Tablet</Item>
     <MobNames>
       <string>Cracked Stone Tablet</string>
@@ -41,7 +41,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>A'nekshay Bracer Collecting</TaskName>
+    <TaskName>A'nekshay Bracer Collecting (Neftet)</TaskName>
     <Item>Engraved A'nekshay Bracer</Item>
     <MobNames>
       <string>A'nekshay</string>
@@ -61,7 +61,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Snow Tusker Blood Collection</TaskName>
+    <TaskName>Snow Tusker Blood Collection (Frozen Valley)</TaskName>
     <Item>Snow Tusker Blood Sample</Item>
     <MobNames>
       <string>Snow Tusker</string>
@@ -81,7 +81,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Undead Jaw Collection</TaskName>
+    <TaskName>Undead Jaw Collection (Society)</TaskName>
     <Item>Pyre Skeleton Jaw</Item>
     <MobNames>
       <string>Pyre Minion</string>
@@ -105,7 +105,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Collect Gear Knight Parts</TaskName>
+    <TaskName>Collect Gear Knight Parts (Society)</TaskName>
     <Item>Pile of Gearknight Parts</Item>
     <MobNames>
       <string>Invading</string>
@@ -127,7 +127,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Falatacot Report Collector</TaskName>
+    <TaskName>Falatacot Report Collector (Society)</TaskName>
     <Item>Falatacot Battle Report</Item>
     <MobNames>
       <string>Falatacot Blood Prophetess</string>
@@ -149,7 +149,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Black Coral Collection</TaskName>
+    <TaskName>Black Coral Collection (Society)</TaskName>
     <Item>Black Coral</Item>
     <MobNames>
       <string />
@@ -171,7 +171,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Glowing Jungle Lily Collector</TaskName>
+    <TaskName>Glowing Jungle Lily Collector (Society)</TaskName>
     <Item>Glowing Jungle Lily</Item>
     <MobNames>
       <string>Blessed Moarsman</string>
@@ -195,7 +195,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Glowing Moar Gland Collector</TaskName>
+    <TaskName>Glowing Moar Gland Collector (Society)</TaskName>
     <Item>Glowing Moar Gland</Item>
     <MobNames>
       <string>Blessed Moar</string>
@@ -217,7 +217,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Mana-Infused Jungle Flower Collector</TaskName>
+    <TaskName>Mana-Infused Jungle Flower Collector (Society)</TaskName>
     <Item>Mana-Infused Jungle Flower</Item>
     <MobNames>
       <string />
@@ -239,7 +239,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Phyntos Honey Collector</TaskName>
+    <TaskName>Phyntos Honey Collector (Society)</TaskName>
     <Item>Phyntos Honey</Item>
     <MobNames>
       <string>Giant Jungle Phyntos Wasp</string>
@@ -263,7 +263,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Phyntos Splinter Collector</TaskName>
+    <TaskName>Phyntos Splinter Collector (Society)</TaskName>
     <Item>Hive Splinters</Item>
     <MobNames>
       <string>Killer Phyntos Hive</string>
@@ -285,7 +285,7 @@
     <complete>false</complete>
   </CollectTask>
   <CollectTask>
-    <TaskName>Noble Remains Kill Task</TaskName>
+    <TaskName>Noble Remains Kill Task (Mhoire)</TaskName>
     <Item>Mhoire Signet Ring</Item>
     <MobNames>
       <string>Noble Remain</string>
@@ -299,6 +299,28 @@
     <NPCCoords>64.7S 45.2W</NPCCoords>
     <NPCYellowFlagText>Destroy these corrupted remains and gather the signet rings from the bones. Return them to me and I will reward you.</NPCYellowFlagText>
     <NPCYellowCompleteText>I see that you have recovered 10 signet rings of House Mhoire.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>High Priest of T'thuun (Society)</TaskName>
+    <Item>Holy Symbol</Item>
+    <MobNames>
+      <string>High Priest of T'thuun</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCNames>
+      <string>Kaymor ibn Dumandi</string>
+      <string>Milos ibn Ashud</string>
+      <string>Lunbal Dolicci</string>
+    </NPCNames>
+    <NPCInfo>Society Stronghold</NPCInfo>
+    <NPCCoords>Unknown</NPCCoords>
+    <NPCYellowFlagText>Kill this Moarsman High Priest and bring back the Holy Symbol he wields as proof of your kill.</NPCYellowFlagText>
+    <NPCYellowCompleteText>Excellent, you were able to defeat the High Priest!</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>
