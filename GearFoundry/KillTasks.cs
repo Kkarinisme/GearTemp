@@ -19,8 +19,6 @@ namespace GearFoundry
 {
 	public partial class PluginCore
 	{
-
-	
 		private KillTaskSettings mKTSet = new KillTaskSettings();
 		private System.Windows.Forms.Timer KTSaveTimer = new System.Windows.Forms.Timer();
 		
@@ -84,16 +82,16 @@ namespace GearFoundry
 			
 			List<CollectTask> CTL = ReadMasterCTList();
 			List<CollectTask> CTAdds = CTL.Where(x => !mKTSet.MyCollectTasks.Any(y => y.TaskName == x.TaskName)).ToList();
-			List<CollectTask> CTRemoves = mKTSet.MyCollectTasks.Where(x => !KTL.Any(y => y.TaskName == x.TaskName)).ToList();
+			List<CollectTask> CTRemoves = mKTSet.MyCollectTasks.Where(x => !CTL.Any(y => y.TaskName == x.TaskName)).ToList();
 			mKTSet.MyCollectTasks.RemoveAll(x => CTRemoves.Any(y => y.TaskName == x.TaskName));
 			mKTSet.MyCollectTasks = mKTSet.MyCollectTasks.Union(CTAdds).ToList();
 			CTL = null;
 			CTAdds = null;
 			CTRemoves = null;
 				
-			Core.ChatBoxMessage += KillTask_ChatBoxMessage;
-			Core.CharacterFilter.Logoff += KillTask_LogOff;
-			Core.WorldFilter.ChangeObject += CollectTask_ChangeObject;
+			Globals.Core.ChatBoxMessage += KillTask_ChatBoxMessage;
+			Globals.Core.CharacterFilter.Logoff += KillTask_LogOff;
+			Globals.Core.WorldFilter.ChangeObject += CollectTask_ChangeObject;
 			KTSaveTimer.Interval = 600000;
 			KTSaveTimer.Start();
 			KTSaveTimer.Tick += KTSaveUpdates;
@@ -102,7 +100,7 @@ namespace GearFoundry
 			{	
 				foreach(CollectTask coltsk in mKTSet.MyCollectTasks)
 				{
-					if(Core.WorldFilter.GetInventory().Any(x => @x.Name == @coltsk.Item))
+					if(GearFoundry.Globals.Core.WorldFilter.GetInventory().Any(x => @x.Name == @coltsk.Item))
 					{
 						List<WorldObject> inventory = Core.WorldFilter.GetInventory().Where(x => @x.Name == @coltsk.Item).ToList();
 						int colcount = 0;
@@ -121,8 +119,6 @@ namespace GearFoundry
 			
 			
 			RenderKillTaskPanel();
-			//BuildKillTaskList();
-			//BuildCollectionTaskList();
 		}
 		
 		private void KTSaveUpdates(object sender, EventArgs e)

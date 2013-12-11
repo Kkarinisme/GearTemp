@@ -420,7 +420,7 @@
   <KillTask>
     <TaskName>Shadow Kill Task (Tou-Tou)</TaskName>
     <MobNames>
-      <string>Shadow</string>
+      <string>Panumbris Shadow</string>
     </MobNames>
     <CurrentCount>0</CurrentCount>
     <CompleteCount>25</CompleteCount>

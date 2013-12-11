@@ -285,7 +285,7 @@ namespace GearFoundry
 			//TODO:  Names of proper shadows for this task
 			t = new KillTask();
 			t.TaskName = "Shadow Kill Task (Tou-Tou)";
-			t.MobNames.Add("Shadow");
+			t.MobNames.Add("Panumbris Shadow");
 			t.CompleteCount = 25;
 			t.NPCNames.Add("Umbral Guard");
 			t.NPCInfo = "Tou-Tou";
