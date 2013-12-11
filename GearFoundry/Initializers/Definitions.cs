@@ -169,6 +169,9 @@ namespace GearFoundry
         //PortalGear Flag
         private static bool bPortalGearEnabled;
 
+        //KillTaskGear Flag
+        private static bool bKillTaskGearEnabled;
+
         //Inventory flags
         private static bool bArmorHudEnabled;
         private static bool binventoryHudEnabled;

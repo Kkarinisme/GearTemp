@@ -27,10 +27,13 @@
           <Control progid="DecalControls.StaticText" name="lbluseRemote" left ="375" top="100" width="150" height="16" text="Use RemoteGear:"/>
           <control progid="DecalControls.Checkbox" name="chkRemoteGearEnabled" left="380" top="120" width="150" height="16" textcolor="16777215" text="Enabled"/>
 
-			<Control progid="DecalControls.StaticText" name="lblportalGear" left ="375" top="150" width="150" height="16" text="Use PortalGear:"/>
-			<control progid="DecalControls.Checkbox" name="chkPortalGearEnabled" left="380" top="170" width="150" height="16" textcolor="16777215" text="Enabled"/>
+          <Control progid="DecalControls.StaticText" name="lblKillTaskGear" left ="225" top="150" width="150" height="16" text="Use KillTaskGear:"/>
+          <control progid="DecalControls.Checkbox" name="chkKillTaskGearEnabled" left="230" top="170" width="150" height="16" textcolor="16777215" text="Enabled"/>
+ 
+          <Control progid="DecalControls.StaticText" name="lblportalGear" left ="375" top="150" width="150" height="16" text="Use PortalGear:"/>
+          <control progid="DecalControls.Checkbox" name="chkPortalGearEnabled" left="380" top="170" width="150" height="16" textcolor="16777215" text="Enabled"/>
 
-			<Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="70" width="225" height="24" text="Gear"/>
+          <Control progid="DecalControls.StaticText" name="lblInventorySetup" left ="5" top="70" width="225" height="24" text="Gear"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryHudEnabled" left="10" top="90" width="225" height="24" text="Enable Inventory"/>
           <control progid="DecalControls.Checkbox" name="chkInventory" left="10" top="110" width="225" height="24" text="Inventory on Startup"/>
           <control progid="DecalControls.Checkbox" name="chkInventoryBurden" left="10" top="130" width="225" height="24" textcolor="16777215" text="Update stacked items on Startup"/>

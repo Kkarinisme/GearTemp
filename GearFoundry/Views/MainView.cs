@@ -66,6 +66,10 @@ namespace GearFoundry
         //Portal Gear
         MyClasses.MetaViewWrappers.ICheckBox chkPortalGearEnabled;
 
+        //KillTask Gear
+        MyClasses.MetaViewWrappers.ICheckBox chkKillTaskGearEnabled;
+
+
         //Gear
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryHudEnabled;
         MyClasses.MetaViewWrappers.ICheckBox chkInventoryBurden;
@@ -272,6 +276,10 @@ namespace GearFoundry
                 //Portal Gear
                 chkPortalGearEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkPortalGearEnabled"];
 
+                //KillTaskGear
+                chkKillTaskGearEnabled = (MyClasses.MetaViewWrappers.ICheckBox)View["chkKillTaskGearEnabled"];
+
+
                 //Misc Gears
 
                 chkArmorHud = (MyClasses.MetaViewWrappers.ICheckBox)View["chkArmorHud"];
@@ -344,6 +352,11 @@ namespace GearFoundry
                   }
                   catch (Exception ex) { LogError(ex); }
 
+                  try
+                  {
+                      chkKillTaskGearEnabled.Change += new EventHandler<MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs>(chkKillTaskGearEnabled_Change);
+                  }
+                  catch (Exception ex) { LogError(ex); }
                   try
                   { 
                     //Inventory Control Section

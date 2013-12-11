@@ -567,6 +567,7 @@ namespace GearFoundry
                bCombatHudEnabled = Convert.ToBoolean(el.Element("CombatHudEnabled").Value);
                bRemoteGearEnabled = Convert.ToBoolean(el.Element("RemoteGearEnabled").Value);
                bPortalGearEnabled = Convert.ToBoolean(el.Element("PortalGearEnabled").Value);
+               bKillTaskGearEnabled = Convert.ToBoolean(el.Element("KillTaskGearEnabled").Value);
                bquickSlotsvEnabled = Convert.ToBoolean(el.Element("QuickSlotsvEnabled").Value);
                 bquickSlotshEnabled = Convert.ToBoolean(el.Element("QuickSlotshEnabled").Value);
                 binventoryHudEnabled = Convert.ToBoolean(el.Element("InventoryHudEnabled").Value);
@@ -609,6 +610,9 @@ namespace GearFoundry
                    
                    //PortalGear 
                    chkPortalGearEnabled.Checked = bPortalGearEnabled;
+
+                   //KillTaskGear
+                   chkKillTaskGearEnabled.Checked = bKillTaskGearEnabled;
   
                    //Misc Gears Section
                    	chkMuteSounds.Checked = mSoundsSettings.MuteSounds;
@@ -678,6 +682,10 @@ namespace GearFoundry
             {
                 RenderPortalGearHud();
                 RenderPortal2GearHud();
+            }
+            if (bKillTaskGearEnabled)
+            {
+                RenderKillTaskPanel();
             }
 
             if (binventoryCompleteEnabled)
@@ -948,6 +956,23 @@ namespace GearFoundry
             catch { }
         }
 
+        void chkKillTaskGearEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        {
+            try
+            {
+                bKillTaskGearEnabled = e.Checked;
+                SaveSettings();
+                if (bKillTaskGearEnabled)
+                {
+                    RenderKillTaskPopUp();
+                }
+                else
+                {
+                    DisposeKillTaskPanel();
+                }
+            }
+            catch { }
+        }
         void chkToonStats_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
             try
@@ -1148,6 +1173,7 @@ namespace GearFoundry
                          new XElement("CombatHudEnabled", bCombatHudEnabled),
                          new XElement("RemoteGearEnabled", bRemoteGearEnabled),
                          new XElement("PortalGearEnabled", bPortalGearEnabled),
+                         new XElement("KillTaskGearEnabled", bKillTaskGearEnabled),
                          new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
                          new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
                          new XElement("InventoryHudEnabled", binventoryHudEnabled),

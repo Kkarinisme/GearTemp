@@ -56,7 +56,7 @@ namespace GearFoundry
 
             xdocRemoteGear = XDocument.Load(remoteGearFilename);
 
-            remoteGearHud = new VirindiViewService.HudView("", 30, 290, RemoteGearIcon, false, "RemoteGear");
+            remoteGearHud = new VirindiViewService.HudView("", 30, 320, RemoteGearIcon, false, "RemoteGear");
             remoteGearHud.ShowInBar = false;
             remoteGearHud.UserAlphaChangeable = false;
             remoteGearHud.Visible = true;
@@ -113,7 +113,8 @@ namespace GearFoundry
             remoteGearTabFixedLayout.AddControl(mRemoteGear4, new Rectangle(2, 125, 25, 25));
             VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear4, "GearTactician");
             mRemoteGear4.Hit += (sender, obj) => mRemoteGear4_Hit(sender, obj);
-            try
+ 
+             try
             {
                 //InventoryHud
                 mRemoteGear5 = new HudPictureBox();
@@ -177,9 +178,19 @@ namespace GearFoundry
             mRemoteGear8.Image = GR_PORTAL_ICON;
             remoteGearTabFixedLayout.AddControl(mRemoteGear8, new Rectangle(2, 235, 25, 25));
             VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear8, "PortalGear");
-            mRemoteGear8.Hit += (sender, obj) => mRemoteGear8_Hit(sender, obj); 
+            mRemoteGear8.Hit += (sender, obj) => mRemoteGear8_Hit(sender, obj);
+
+            //KillTask
+            int GR_KILLTASK_ICON = 0x60067EC;
+
+            mRemoteGear9 = new HudPictureBox();
+            mRemoteGear9.Image = GR_KILLTASK_ICON;
+            remoteGearTabFixedLayout.AddControl(mRemoteGear9, new Rectangle(2, 270, 25, 25));
+            VirindiViewService.TooltipSystem.AssociateTooltip(mRemoteGear9, "KillTaskGear");
+            mRemoteGear9.Hit += (sender, obj) => mRemoteGear9_Hit(sender, obj); 
 
 
+ 
           }
 
         private void DisposeRemoteGearHud()
@@ -424,6 +435,21 @@ namespace GearFoundry
         {
             try
             {
+                if (bKillTaskGearEnabled == true)
+                {
+                    bKillTaskGearEnabled = false;
+                    if (KTPopView != null) { DisposeKillTaskPanel(); }
+                }
+                else
+                {
+
+                    bKillTaskGearEnabled = true;
+                    RenderKillTaskPanel();
+                }
+
+                chkKillTaskGearEnabled.Checked = bKillTaskGearEnabled;
+                SaveSettings();
+ 
             }
             catch (Exception ex) { LogError(ex); }
 

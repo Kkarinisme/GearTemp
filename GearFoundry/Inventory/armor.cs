@@ -1243,7 +1243,8 @@ namespace GearFoundry
 
 
                 message = armorobjName + ", Al: " + armorobjAl + " , Work: " + armorobjWork + ", Tinks: " + armorobjTinks + ", Armor Wield Level: " + 
-                    armorobjLevel + ", Covers: " + armorobjCoversName + ", Set: " + objArmorSetName + armorWieldMess + armorSkillMess + ", spells: " + armorSpellXML;
+                    armorobjLevel + ", Covers: " + armorobjCoversName + ", Set: " + objArmorSetName + armorWieldMess + armorSkillMess + ", spells: " + 
+                    armorSpellXML;
                 WriteToChat(message);
                 
                    
@@ -1643,6 +1644,7 @@ namespace GearFoundry
             txtArmorUpdateClass.Text = "";
             cboArmorUpdateCovers.Current = 0;
             cboArmorUpdateSet.Current = 0;
+
             //    newDoc = new XDocument(new XElement("Objs"));
             //    newDoc.Save(inventorySelect);
         }
