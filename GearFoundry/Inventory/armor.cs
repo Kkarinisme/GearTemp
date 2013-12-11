@@ -1449,13 +1449,13 @@ namespace GearFoundry
                     tempAUIDoc.Save(armorSelectFilename);
                     tempAUIDoc = null;
                     lstArmorUpdateSelects = new List<string>();
-                    WriteToChat("txtArmorUpdateChoice.Text: " + txtArmorUpdateChoice.Text);
+              //      WriteToChat("txtArmorUpdateChoice.Text: " + txtArmorUpdateChoice.Text);
              //       if (txtArmorUpdateChoice.Text != null)
               //      {
                        availableChoices = txtArmorUpdateChoice.Text.Trim();
-                       WriteToChat("availableChoices: " + availableChoices);
+                 //      WriteToChat("availableChoices: " + availableChoices);
                         availableChoices = availableChoices.ToLower();
-                        WriteToChat("AvailableChoices " + availableChoices);
+                    //    WriteToChat("AvailableChoices " + availableChoices);
                         if (availableChoices.Contains(';'))
                         {
                             string[] split = availableChoices.Split(new Char[] { ';' });
@@ -1476,7 +1476,7 @@ namespace GearFoundry
 
                 //    }
                 //    else { lstArmorUpdateSelects = null; }
-                    WriteToChat("Count of selects " + lstArmorUpdateSelects.Count.ToString());
+                 //   WriteToChat("Count of selects " + lstArmorUpdateSelects.Count.ToString());
                 }//end of try //
 
                 catch (Exception ex) { LogError(ex); }
@@ -1486,7 +1486,7 @@ namespace GearFoundry
                 {
                    availableClass = txtArmorUpdateClass.Text.ToLower();
                     armorAvailableClass = txtArmorUpdateClass.Text.ToLower();
-                    WriteToChat("Class: " + armorAvailableClass);
+                 //   WriteToChat("Class: " + armorAvailableClass);
  
                  //   WriteToChat("armorAvailableClass: " + armorAvailableClass);
                     if (armorAvailableClass.Length == 0)
@@ -1509,7 +1509,7 @@ namespace GearFoundry
                     }
                     else if (armorAvailableClass.Contains("armor") || armorAvailableClass.Contains("clothing"))
                     {
-                       WriteToChat("I am in armoravailableclass" );
+                      // WriteToChat("I am in armoravailableclass" );
                         if (lstArmorUpdateSelects != null && lstArmorUpdateSelects[0].Trim() != "")
                         {
                             int n = lstArmorUpdateSelects.Count;

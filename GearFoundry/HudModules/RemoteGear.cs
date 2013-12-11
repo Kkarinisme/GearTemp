@@ -438,7 +438,7 @@ namespace GearFoundry
                 if (bKillTaskGearEnabled == true)
                 {
                     bKillTaskGearEnabled = false;
-                    if (KTPopView != null) { DisposeKillTaskPanel(); }
+                    if (TaskHudView != null) { DisposeKillTaskPanel(); }
                 }
                 else
                 {

@@ -675,7 +675,7 @@ namespace GearFoundry
                 objClassName = "";
                  objClass = ClassInvList[cboInventoryClasses.Current].ID;
                 objClassName = ClassInvList[cboInventoryClasses.Current].name;
-                WriteToChat("objClass: " + objClass.ToString());
+             //   WriteToChat("objClass: " + objClass.ToString());
 
 
             }
@@ -702,7 +702,7 @@ namespace GearFoundry
                 objArmorSetName = "";
                objArmorSet = ArmorSetsInvList[cboArmorSet.Current].ID;
                 objArmorSetName = ArmorSetsInvList[cboArmorSet.Current].name;
-                WriteToChat("objSet: " + objArmorSet.ToString());
+            //    WriteToChat("objSet: " + objArmorSet.ToString());
 
 
             }
@@ -773,7 +773,7 @@ namespace GearFoundry
                 objCovers = 0;
                 objCoversName = "";
                 objCovers = CoverageInvList[cboCoverage.Current].ID;
-                WriteToChat("objCovers = " + objCovers.ToString());
+               // WriteToChat("objCovers = " + objCovers.ToString());
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -787,7 +787,7 @@ namespace GearFoundry
                 objEmbueTypeStr = "";
                 objEmbueTypeInt = EmbueInvList[cboEmbues.Current].ID;
                 objEmbueTypeStr = EmbueInvList[cboEmbues.Current].name;
-                WriteToChat("objEmbueTypeStr: " + objEmbueTypeStr);
+               // WriteToChat("objEmbueTypeStr: " + objEmbueTypeStr);
             }
             catch (Exception ex) { LogError(ex); }
         }
@@ -974,7 +974,7 @@ namespace GearFoundry
                 {
                     XDocument tempGIDoc = new XDocument(new XElement("Objs"));
                     tempGIDoc.Save(inventorySelect);
-                    WriteToChat("I have  set  up inventoryselect prior to finding list.");
+                  //  WriteToChat("I have  set  up inventoryselect prior to finding list.");
                     tempGIDoc = null;
                     lstMySelects = new List<string>();
 
@@ -1016,7 +1016,7 @@ namespace GearFoundry
                     {
                         objClass = 0;
                     }
-                    WriteToChat("objClass: " + objClass.ToString());
+                  //  WriteToChat("objClass: " + objClass.ToString());
 
                     switch (objClass)
                     {
@@ -1062,7 +1062,7 @@ namespace GearFoundry
                                     select p;
                                     newDoc.Root.Add(temp);
                                     temp = null;
-                                    WriteToChat("In selection of  newDoc for armor");
+                                  //  WriteToChat("In selection of  newDoc for armor");
                                   }
 
 
@@ -1919,7 +1919,7 @@ namespace GearFoundry
                     } //end of switch
                     //{
                     newDoc.Save(inventorySelect);
-                    WriteToChat("I just saved inventorySelect");
+                   // WriteToChat("I just saved inventorySelect");
                     int m = lstMySelects.Count;
                     if (m > 1)
                     {
