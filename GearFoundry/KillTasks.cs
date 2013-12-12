@@ -114,10 +114,12 @@ namespace GearFoundry
 							coltsk.complete = true;
 						}
 					}
+					
+					
 				}
 			}catch(Exception ex){LogError(ex);}
 			
-			
+			ReadWriteGearTaskSettings(false);
 			RenderKillTaskPanel();
 		}
 		
@@ -234,8 +236,10 @@ namespace GearFoundry
 					{
 						mKTSet.MyCollectTasks[ChangeIndex].complete = true;
 					}
+					
 				}
 				
+				UpdateTaskPanel();
 				
 				
 			}catch(Exception ex){LogError(ex);}

@@ -42,7 +42,7 @@
   </CollectTask>
   <CollectTask>
     <TaskName>A'nekshay Bracer Collecting (Neftet)</TaskName>
-    <Item>Engraved A'nekshay Bracer</Item>
+    <Item>Engraved A'nekshay Bracers</Item>
     <MobNames>
       <string>A'nekshay</string>
     </MobNames>

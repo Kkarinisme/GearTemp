@@ -499,13 +499,9 @@ namespace GearFoundry
 								}
 								break;	
 							case ObjectClass.Gem:
-								if(IOItem.Aetheriacheck)
-								{
-									IdqueueAdd(IOItem.Id);
-									IOItem.Listen = true;
-									return;	
-								}
-								break;
+								IdqueueAdd(IOItem.Id);
+								IOItem.Listen = true;
+								return;	
 							case ObjectClass.Scroll:
 							case ObjectClass.MeleeWeapon:
 							case ObjectClass.MissileWeapon:
