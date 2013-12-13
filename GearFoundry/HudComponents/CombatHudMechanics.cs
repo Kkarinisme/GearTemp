@@ -417,10 +417,15 @@ namespace GearFoundry
 					CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[AnimationTarget]));
 				}
 				
-				MyCastList.RemoveAll(x => (DateTime.Now - x.CastTime).TotalSeconds > 5);				
-				OtherCastList.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 5);
+				MyCastList.RemoveAll(x => (DateTime.Now - x.CastTime).TotalSeconds > 7);				
+				OtherCastList.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 7);
 				
-				MonsterObject MobTarget = CombatHudMobTrackingList.Find(x => x.Id == AnimationTarget);				
+				MonsterObject MobTarget = CombatHudMobTrackingList.Find(x => x.Id == AnimationTarget);	
+
+				WriteToChat("Found " + Core.WorldFilter[MobTarget.Id].Name);
+				WriteToChat("MyCastList Count = " + MyCastList.Count);
+				WriteToChat("OtherCastList Count = " + OtherCastList.Count);
+				
 				int SpellAnimation = pMsg.Value<int>(1);
 				double AnimationDuration = pMsg.Value<double>(2);		
 				
@@ -449,7 +454,7 @@ namespace GearFoundry
 				
 				if(OtherCastList.Count > 0)
 				{
-					if(AnimationDuration < 2) {return;}  //Will ignore debuffs under about L6
+					//if(AnimationDuration < 2) {return;}  //Will ignore debuffs under about L6
 					int index_o = OtherCastList.FindIndex(x => x.Animation == SpellAnimation);
 					if(index_o >= 0)
 					{
@@ -601,7 +606,7 @@ namespace GearFoundry
 		{
 			try
 			{	
-				if(e.Color != 27 && e.Color != 7){return;}
+				if(e.Color != 17 && e.Color != 7){return;}
 				if(e.Text.StartsWith("You cast") || e.Text.StartsWith("You say,")) {return;}
 				
 				if(e.Color == 7)
