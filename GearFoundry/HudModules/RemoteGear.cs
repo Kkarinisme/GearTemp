@@ -437,6 +437,15 @@ namespace GearFoundry
         {
             try
             {
+            	if(!bKillTaskGearEnabled)
+            	{
+            		SubscribeKillTasks();
+            		RenderKillTaskPanel();
+            		bKillTaskGearEnabled = true;
+            		chkKillTaskGearEnabled.Checked = bKillTaskGearEnabled;
+                	SaveSettings();
+                	return;
+            	}
             	if(TaskHudView != null)
             	{
             		DisposeKillTaskPanel();

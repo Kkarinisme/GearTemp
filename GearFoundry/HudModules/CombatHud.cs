@@ -187,11 +187,16 @@ namespace GearFoundry
 		private ACImage DebuffCurrent  = new ACImage(Color.Green);
 		private ACImage DebuffWarning = new ACImage(Color.Yellow);
 		private ACImage DebuffExpiring = new ACImage(Color.Red);
+		private MonsterObject LastTarget = null;
 		
 		private void RenderDebuffPop(MonsterObject target)
 		{
 			try
 			{
+				if(LastTarget != target)
+				{
+					LastTarget = target;
+				}
 				
 				if(DebuffPopView != null)
 				{

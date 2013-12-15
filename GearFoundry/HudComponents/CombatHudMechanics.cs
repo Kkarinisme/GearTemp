@@ -441,7 +441,6 @@ namespace GearFoundry
 				   	}
 				   	MyCastList.Remove(MyCastSpell);
 				   	UpdateTactician();
-				   	//UpdateCombatHudMainTab();
 				}
 				
 				if(OtherCastList.Count > 0 && OtherCastList.Any(x => x.Animation == SpellAnimation))
@@ -468,8 +467,12 @@ namespace GearFoundry
 					   	}
 					   	OtherCastList.Remove(OtherCastSpell);
 					   	UpdateTactician();
-					   	//UpdateCombatHudMainTab();
 					}
+				}
+				
+				if(MobTarget.Id == LastTarget.Id)
+				{
+					RenderDebuffPop(MobTarget);
 				}
 				
 				MyCastList.RemoveAll(x => (DateTime.Now - x.CastTime).TotalSeconds > 8);				
@@ -516,7 +519,6 @@ namespace GearFoundry
         			}
 				}
         		UpdateTactician();
-        		//UpdateCombatHudMainTab();
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
@@ -544,7 +546,6 @@ namespace GearFoundry
 	        		UpdateMonster.HealthRemaining = Convert.ToInt32(Convert.ToDouble(pMsg["health"])*100);
 				}
         		UpdateTactician();
-        		//UpdateCombatHudMainTab();
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}		                                         
@@ -578,6 +579,7 @@ namespace GearFoundry
 					CombatHudMobTrackingList = CombatHudMobTrackingList.OrderBy(x => x.DistanceAway).ToList();	
 
 					UpdateTactician();
+					RenderDebuffPop(LastTarget);
 
 		
 			}catch(Exception ex){LogError(ex);}
