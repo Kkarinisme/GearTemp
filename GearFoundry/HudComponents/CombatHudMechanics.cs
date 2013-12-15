@@ -22,16 +22,13 @@ namespace GearFoundry
 	{
 	
 		private List<MonsterObject> CombatHudMobTrackingList = new List<MonsterObject>();
-		private MonsterObject CHTargetIO = null;
 		private List<SpellCastInfo> MyCastList = new List<SpellCastInfo>();
 		private List<OtherDebuffCastInfo> OtherCastList = new List<OtherDebuffCastInfo>();
 		private List<Regex> OtherCastRegexList = new List<Regex>();
 		private List<string> OtherCastQuickKeepString = new List<string>();
 		private List<SpellMapLoadable> AnimationList;
-				
-		private int CombatHudFocusTargetGUID = 0;
 		
-		private GearTacticianSettings gtSettings;
+		private GearTacticianSettings gtSettings = new GearTacticianSettings();
 				
 		public class GearTacticianSettings
 		{
@@ -39,11 +36,11 @@ namespace GearFoundry
 			public bool bCombatHudTrackCreatureDebuffs = true;
 			public bool bCombatHudTrackItemDebuffs = true;
 			public bool bCombatHudTrackVoidDebuffs = true;
-			public bool bCombatHudMedium = false;
-			public bool bCombatHudMinimal = false;
 			public bool bShowAll = false;
-            public int CombatHudWidth = 600;
+            public int CombatHudWidth = 150;
             public int CombatHudHeight = 220;
+            public System.Drawing.Point DebuffPopLocation = System.Drawing.Point.Empty;
+           	public bool DebuffPopGhosted = false;
 		}
 				
 		public class BuildSpellInfoHolder
@@ -112,7 +109,6 @@ namespace GearFoundry
 				Host.Actions.InvokeChatParser("@unfilter -spellcasting");
 
 				FillCombatHudLists();
-				RenderCombatHudMainTab();
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -123,6 +119,7 @@ namespace GearFoundry
 			{
 				CombatHudReadWriteSettings(false);
 				UnsubscribeCombatEvents();
+				DisposeTacticianHud();
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -132,7 +129,6 @@ namespace GearFoundry
 			try
 			{
 				CombatHudMobTrackingList.Clear();
-				CHTargetIO = null;
 				MyCastList.Clear();
 				OtherCastList.Clear();
 				OtherCastRegexList.Clear();
@@ -149,6 +145,7 @@ namespace GearFoundry
 				Core.ItemSelected -= CombatHud_ItemSelected;
 				Core.ItemDestroyed -= CombatHud_ItemDestroyed;
 				Core.CharacterFilter.Logoff -= CombatHud_LogOff;
+				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -168,11 +165,11 @@ namespace GearFoundry
 		                {
 		                    try
 		                    {
-		                    	string filedefaults = GetResourceTextFile("GearTactician.xml");
-		                    	using (StreamWriter writedefaults = new StreamWriter(GearTacticianSettingsFile.ToString(), true))
+		                    	using (XmlWriter writer = XmlWriter.Create(GearTacticianSettingsFile.ToString()))
 								{
-									writedefaults.Write(filedefaults);
-									writedefaults.Close();
+						   			XmlSerializer serializer2 = new XmlSerializer(typeof(GearTacticianSettings));
+						   			serializer2.Serialize(writer, gtSettings);
+						   			writer.Close();
 								}
 		                    }
 		                    catch (Exception ex) { LogError(ex); }
@@ -208,10 +205,6 @@ namespace GearFoundry
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
-			
-		
-		
-		
 		
 		private void FillCombatHudLists()
 		{
@@ -290,20 +283,6 @@ namespace GearFoundry
 				AnimationList.Add(new SpellMapLoadable("Yanoi Zhaloi",200668288,263,2180));  //Energy Flux
 				AnimationList.Add(new SpellMapLoadable("Cruath Quaril",200668347,46,2174));  //Archer's Gift
 				
-				
-//#GearFoundry#: SpellCastWords = Equin Opaj
-//#GearFoundry#: SpellID = 2282
-//#GearFoundry#: Spell Name = Futility
-//Irquk says, "Equin Opaj"
-//#GearFoundry#: SpellCastWords = Cruath Quavik
-//#GearFoundry#: SpellID = 2268
-//#GearFoundry#: Spell Name = Fat Fingers
-//Irquk says, "Cruath Quavik"
-//#GearFoundry#: SpellCastWords = Cruath Quafeth
-//#GearFoundry#: SpellID = 2272
-//#GearFoundry#: Spell Name = Light Weapon Ineptitude Other VII
-//Irquk says, "Cruath Quafeth"
-				
 				//Item
 				//AnimationList.Add(new SpellMapLoadable("Equin Qualoi",200673974,64,2093));  //Olthoi Bait
 				//AnimationList.Add(new SpellMapLoadable("Equin Quaguz",200673980,62,2095));  //Swordman Bait
@@ -329,7 +308,8 @@ namespace GearFoundry
 			{
 				if(e.ItemGuid != 0 && Core.WorldFilter[e.ItemGuid].ObjectClass == ObjectClass.Monster)
 				{
-					UpdateCombatHudMainTab();
+					UpdateTactician();
+					//UpdateCombatHudMainTab();
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -345,7 +325,8 @@ namespace GearFoundry
 					{
 						CombatHudMobTrackingList.Add(new MonsterObject(e.New));
 					}
-					UpdateCombatHudMainTab();
+					UpdateTactician();
+					//UpdateCombatHudMainTab();
 				}	
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -357,9 +338,8 @@ namespace GearFoundry
 			{
 				if(!CombatHudMobTrackingList.Any(x => x.Id == e.ItemGuid)){return;}
 				
-				if(CombatHudFocusTargetGUID == e.ItemGuid) {CombatHudFocusTargetGUID = 0;}
 				CombatHudMobTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
-				UpdateCombatHudMainTab();
+				UpdateTactician();
 	
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -369,10 +349,9 @@ namespace GearFoundry
 			try
 			{
 				if(!CombatHudMobTrackingList.Any(x => x.Id == e.Released.Id)){return;}
-				if(CombatHudFocusTargetGUID == e.Released.Id) {CombatHudFocusTargetGUID = 0;}
 	
 				CombatHudMobTrackingList.RemoveAll(x => x.Id == e.Released.Id);	
-				UpdateCombatHudMainTab();
+				UpdateTactician();
 
 			}catch(Exception ex){LogError(ex);}
 		}	
@@ -381,7 +360,6 @@ namespace GearFoundry
 		{
 			try
 			{							
-				CombatHudFocusTargetGUID = 0;
 				CombatHudMobTrackingList.Clear();
 				foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Monster))
 				{
@@ -438,8 +416,6 @@ namespace GearFoundry
 					CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[AnimationTarget]));
 				}
 				
-				
-				
 				MonsterObject MobTarget = CombatHudMobTrackingList.Find(x => x.Id == AnimationTarget);	
 				
 				int SpellAnimation = pMsg.Value<int>(1);
@@ -464,10 +440,9 @@ namespace GearFoundry
 				   		MobTarget.DebuffSpellList.Add(dbspellnew);	
 				   	}
 				   	MyCastList.Remove(MyCastSpell);
-				   	UpdateCombatHudMainTab();				   	
+				   	UpdateTactician();
+				   	//UpdateCombatHudMainTab();
 				}
-				
-				//if(AnimationDuration < 2) {return;}  //Will ignore debuffs under about L6
 				
 				if(OtherCastList.Count > 0 && OtherCastList.Any(x => x.Animation == SpellAnimation))
 				{
@@ -492,7 +467,8 @@ namespace GearFoundry
 					   		MobTarget.DebuffSpellList.Add(dbspellnew);	
 					   	}
 					   	OtherCastList.Remove(OtherCastSpell);
-					   	UpdateCombatHudMainTab();			 							
+					   	UpdateTactician();
+					   	//UpdateCombatHudMainTab();
 					}
 				}
 				
@@ -534,12 +510,13 @@ namespace GearFoundry
 //        				if(pMsg.Value<int>(29) > 0) {CombatHudMobTrackingList.First(x => x.Id == PossibleMobID).ManaCurrent = pMsg.Value<int>(29);}
 						if(UpdateMonster.HealthMax > 0) 
 						{
-							UpdateMonster.HealthRemaining = Convert.ToInt32((double)UpdateMonster.HealthCurrent/(double)UpdateMonster.HealthMax*200);
+							UpdateMonster.HealthRemaining = Convert.ToInt32((double)UpdateMonster.HealthCurrent/(double)UpdateMonster.HealthMax*100);
 						}
 						
         			}
 				}
-        		UpdateCombatHudMainTab();
+        		UpdateTactician();
+        		//UpdateCombatHudMainTab();
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
@@ -564,22 +541,19 @@ namespace GearFoundry
 	        		
 	        		MonsterObject UpdateMonster = CombatHudMobTrackingList.First(x => x.Id == PossibleMobID);
 	        		
-	        		UpdateMonster.HealthRemaining = Convert.ToInt32(Convert.ToDouble(pMsg["health"])*200);
+	        		UpdateMonster.HealthRemaining = Convert.ToInt32(Convert.ToDouble(pMsg["health"])*100);
 				}
-        		UpdateCombatHudMainTab();
+        		UpdateTactician();
+        		//UpdateCombatHudMainTab();
 			} 
 			catch (Exception ex) {LogError(ex);}
-		}
-		
-			                                         
+		}		                                         
 		
 		private void CombatHud_OnTimerDo(object sender, System.EventArgs e)
 		{
 			try
 			{
-				if((DateTime.Now - CombatHudLastUpdate).TotalSeconds < 2) {return;}
-				else
-				{
+
 					if(CombatHudMobTrackingList.Count == 0) {return;}
 					
 					CombatHudMobTrackingList.RemoveAll(x => x.ObjectClass != ObjectClass.Monster);
@@ -602,10 +576,10 @@ namespace GearFoundry
 						}
 					}
 					CombatHudMobTrackingList = CombatHudMobTrackingList.OrderBy(x => x.DistanceAway).ToList();	
-					CombatHudLastUpdate = DateTime.Now;
-					UpdateCombatHudMainTab();
 
-				}		
+					UpdateTactician();
+
+		
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -613,13 +587,11 @@ namespace GearFoundry
 		{
 			try
 			{	
+				WriteToChat("Echo (" + e.Color + ") " + e.Text);
 				
-				
+				if(e.Color == 7) {e.Eat = true; return;}
 				if(e.Color != 17){return;}
-				if(e.Text.Trim().StartsWith("You say,")) {return;}
-				
-				//WriteToChat("Echo: (" + e.Color + ") " + e.Text);
-				
+				if(e.Text.Trim().StartsWith("You say,")) {e.Eat = true; return;}			
 				
 				if(!OtherCastQuickKeepString.Any(x => @e.Text.Contains(x))) {return;}				
 				if(AnimationList.Any(x => @e.Text.Contains(x.SpellCastWords)))
@@ -652,10 +624,10 @@ namespace GearFoundry
 					}	
 					OtherCastList.Add(odci);
 				}
+				e.Eat = true;
 			}catch(Exception ex){LogError(ex);}
 		}
 		                                
-		
 		private void CombatHud_SpellCast(object sender, SpellCastEventArgs e)
 		{
 			try

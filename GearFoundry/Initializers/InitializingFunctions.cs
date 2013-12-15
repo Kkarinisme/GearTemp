@@ -671,7 +671,7 @@ namespace GearFoundry
             if (bCombatHudEnabled)
             {
             	SubscribeCombatEvents();
-                RenderCombatHud();
+            	RenderTacticianHud();
             }
 
             if (bRemoteGearEnabled)
@@ -912,11 +912,12 @@ namespace GearFoundry
                 if (bCombatHudEnabled)
                 {
                 	SubscribeCombatEvents();
-                    RenderCombatHud();
+                	RenderTacticianHud();
                 }
                 else
                 {
-                    DisposeCombatHud();
+                	UnsubscribeCombatEvents();
+                	DisposeTacticianHud();
                 }
             }
             catch { }
@@ -966,11 +967,15 @@ namespace GearFoundry
                 SaveSettings();
                 if (bKillTaskGearEnabled)
                 {
-                    RenderKillTaskPopUp();
+                	SubscribeKillTasks();
+                	RenderKillTaskPanel();
+                	WriteToChat("GearTasker Enabled");
                 }
                 else
                 {
+                	UnsubscribeKillTasks();
                     DisposeKillTaskPanel();
+                    WriteToChat("GearTasker Disabled");
                 }
             }
             catch { }
@@ -1127,7 +1132,7 @@ namespace GearFoundry
             if (binventoryHudEnabled)
                 RenderInventoryHud();
             if (bCombatHudEnabled)
-                RenderCombatHud();
+            	RenderTacticianHud();
             if (bCorpseHudEnabled)
                 RenderCorpseHud();
             if (bLandscapeHudEnabled)
@@ -1147,7 +1152,7 @@ namespace GearFoundry
             if (binventoryHudEnabled)
                 RenderInventoryHud();
             if (bCombatHudEnabled)
-                RenderCombatHud();
+            	RenderTacticianHud();
             if (bCorpseHudEnabled)
                 RenderCorpseHud();
             if (bLandscapeHudEnabled)

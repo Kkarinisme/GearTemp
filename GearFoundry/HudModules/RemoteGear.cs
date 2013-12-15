@@ -314,22 +314,23 @@ namespace GearFoundry
         {
             try
             {
-                if (bCombatHudEnabled == true)
+            	if(!bCombatHudEnabled) 
+            	{
+            		SubscribeCombatEvents();
+            		RenderTacticianHud();
+            		bCombatHudEnabled = true;
+            		chkCombatHudEnabled.Checked = bCombatHudEnabled;
+                	SaveSettings();
+                	return;
+            	}
+            	if (TacticianHudView != null)
                 {
-                    bCombatHudEnabled = false;
-                    DisposeCombatHud();
-
+                    DisposeTacticianHud();
                 }
                 else
                 {
-                    bCombatHudEnabled = true;
-                    SubscribeCombatEvents();
-                    RenderCombatHud();
-
+                    RenderTacticianHud();
                 }
-                chkCombatHudEnabled.Checked = bCombatHudEnabled;
-                SaveSettings();
-
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -436,20 +437,16 @@ namespace GearFoundry
         {
             try
             {
-                if (bKillTaskGearEnabled == true)
-                {
-                    bKillTaskGearEnabled = false;
-                    if (TaskHudView != null) { DisposeKillTaskPanel(); }
-                }
-                else
-                {
+            	if(TaskHudView != null)
+            	{
+            		DisposeKillTaskPanel();
+            	}
+            	else
+            	{
+            		RenderKillTaskPanel();
+            	}
 
-                    bKillTaskGearEnabled = true;
-                    RenderKillTaskPanel();
-                }
-
-                chkKillTaskGearEnabled.Checked = bKillTaskGearEnabled;
-                SaveSettings();
+                
  
             }
             catch (Exception ex) { LogError(ex); }
