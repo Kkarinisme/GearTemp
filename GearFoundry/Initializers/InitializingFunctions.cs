@@ -670,6 +670,7 @@ namespace GearFoundry
 
             if (bCombatHudEnabled)
             {
+            	SubscribeCombatEvents();
                 RenderCombatHud();
             }
 
@@ -910,6 +911,7 @@ namespace GearFoundry
                 SaveSettings();
                 if (bCombatHudEnabled)
                 {
+                	SubscribeCombatEvents();
                     RenderCombatHud();
                 }
                 else

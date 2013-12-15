@@ -323,6 +323,7 @@ namespace GearFoundry
                 else
                 {
                     bCombatHudEnabled = true;
+                    SubscribeCombatEvents();
                     RenderCombatHud();
 
                 }

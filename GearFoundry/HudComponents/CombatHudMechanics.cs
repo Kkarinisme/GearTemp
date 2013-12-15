@@ -25,23 +25,12 @@ namespace GearFoundry
 		private MonsterObject CHTargetIO = null;
 		private List<SpellCastInfo> MyCastList = new List<SpellCastInfo>();
 		private List<OtherDebuffCastInfo> OtherCastList = new List<OtherDebuffCastInfo>();
-
-		private List<Regex> CastFailRegexEx = new List<Regex>();
 		private List<Regex> OtherCastRegexList = new List<Regex>();
 		private List<string> OtherCastQuickKeepString = new List<string>();
-		
 		private List<SpellMapLoadable> AnimationList;
-		
-		public List<BuildSpellInfoHolder> bsiList  = new List<BuildSpellInfoHolder>();
-		public BuildSpellInfoHolder bsi = new BuildSpellInfoHolder();
-		
-		
-		private bool bCombatHudMainTab = false;
-		private bool bCombatHudSettingsTab = false;
-		private bool bCombatHudInPortalSpace = true;
+				
 		private int CombatHudFocusTargetGUID = 0;
 		
-
 		private GearTacticianSettings gtSettings;
 				
 		public class GearTacticianSettings
@@ -73,7 +62,6 @@ namespace GearFoundry
 			public DateTime CastTime = DateTime.MinValue;
 		}
 		
-
 		public class OtherDebuffCastInfo
 		{
 			public string SpellWords = String.Empty;
@@ -98,6 +86,72 @@ namespace GearFoundry
 				SpellId = spellid;
 			}
 		}	
+		
+		private void SubscribeCombatEvents()
+		{
+			try
+			{
+				CombatHudReadWriteSettings(true);	
+				
+				Core.CharacterFilter.SpellCast += CombatHud_SpellCast;
+				MasterTimer.Tick += CombatHud_OnTimerDo;
+				Core.WorldFilter.ReleaseObject += CombatHud_ReleaseObject;
+				Core.ChatBoxMessage += CombatHud_ChatBoxMessage;
+				Core.EchoFilter.ServerDispatch += ServerDispatchCombat;
+				Core.WorldFilter.CreateObject += CombatHud_CreateObject;
+				Core.CharacterFilter.ChangePortalMode += CombatHud_ChangePortalMode;
+				Core.ItemDestroyed += CombatHud_ItemDestroyed;
+				Core.ItemSelected += CombatHud_ItemSelected;
+				Core.CharacterFilter.Logoff += CombatHud_LogOff;
+				
+				foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Monster))
+				{
+					if(!CombatHudMobTrackingList.Any(x => x.Id == wo.Id)) {CombatHudMobTrackingList.Add(new MonsterObject(wo));}
+				}
+
+				Host.Actions.InvokeChatParser("@unfilter -spellcasting");
+
+				FillCombatHudLists();
+				RenderCombatHudMainTab();
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CombatHud_LogOff(object sender, EventArgs e)
+		{
+			try
+			{
+				CombatHudReadWriteSettings(false);
+				UnsubscribeCombatEvents();
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void UnsubscribeCombatEvents()
+		{
+			try
+			{
+				CombatHudMobTrackingList.Clear();
+				CHTargetIO = null;
+				MyCastList.Clear();
+				OtherCastList.Clear();
+				OtherCastRegexList.Clear();
+				OtherCastQuickKeepString.Clear();
+				AnimationList.Clear();
+								
+				Core.CharacterFilter.SpellCast -= CombatHud_SpellCast;
+				MasterTimer.Tick -= CombatHud_OnTimerDo;
+				Core.WorldFilter.ReleaseObject -= CombatHud_ReleaseObject;
+				Core.ChatBoxMessage -= CombatHud_ChatBoxMessage;
+				Core.EchoFilter.ServerDispatch -= ServerDispatchCombat;
+				Core.WorldFilter.CreateObject -= CombatHud_CreateObject;
+				Core.CharacterFilter.ChangePortalMode -= CombatHud_ChangePortalMode;
+				Core.ItemSelected -= CombatHud_ItemSelected;
+				Core.ItemDestroyed -= CombatHud_ItemDestroyed;
+				Core.CharacterFilter.Logoff -= CombatHud_LogOff;
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		
 		private void CombatHudReadWriteSettings(bool read)
 		{
@@ -155,65 +209,14 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 			
-		private void SubscribeCombatEvents()
-		{
-			try
-			{
-								
-				Core.CharacterFilter.SpellCast += CombatHud_SpellCast;
-				MasterTimer.Tick += CombatHud_OnTimerDo;
-				Core.WorldFilter.ReleaseObject += CombatHud_ReleaseObject;
-				Core.ChatBoxMessage += CombatHud_ChatBoxMessage;
-				Core.EchoFilter.ServerDispatch += ServerDispatchCombat;
-				Core.WorldFilter.CreateObject += CombatHud_CreateObject;
-				Core.CharacterFilter.ChangePortalMode += CombatHud_ChangePortalMode;
-				Core.ItemDestroyed += CombatHud_ItemDestroyed;
-				Core.ItemSelected += CombatHud_ItemSelected;
-				
-				foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Monster))
-				{
-					if(!CombatHudMobTrackingList.Any(x => x.Id == wo.Id)) {CombatHudMobTrackingList.Add(new MonsterObject(wo));}
-				}
-
-				//Host.Actions.InvokeChatParser("@unfilter -spellcasting");
-
-				FillCombatHudLists();
-			}catch(Exception ex){LogError(ex);}
-		}
 		
-		private void UnsubscribeCombatEvents()
-		{
-			try
-			{
-				MyCastList.Clear();
-				OtherCastList.Clear();
-				OtherCastRegexList.Clear();
-				bsiList.Clear();
-								
-				Core.CharacterFilter.SpellCast -= CombatHud_SpellCast;
-				MasterTimer.Tick -= CombatHud_OnTimerDo;
-				Core.WorldFilter.ReleaseObject -= CombatHud_ReleaseObject;
-				Core.ChatBoxMessage -= CombatHud_ChatBoxMessage;
-				Core.EchoFilter.ServerDispatch -= ServerDispatchCombat;
-				Core.WorldFilter.CreateObject -= CombatHud_CreateObject;
-				Core.CharacterFilter.ChangePortalMode -= CombatHud_ChangePortalMode;
-				Core.ItemSelected -= CombatHud_ItemSelected;
-				Core.ItemDestroyed -= CombatHud_ItemDestroyed;
-
-			}catch(Exception ex){LogError(ex);}
-		}
+		
+		
 		
 		private void FillCombatHudLists()
 		{
 			try
-			{				
-				CastFailRegexEx.Add(new Regex("^(?<targetname>.+) resists your spell$"));
-				CastFailRegexEx.Add(new Regex("Target is out of range!"));
-				CastFailRegexEx.Add(new Regex("Your spell fizzled."));
-				CastFailRegexEx.Add(new Regex("^(?<targetname>.+) has no appropriate targets equipped for this spell.$"));
-				CastFailRegexEx.Add(new Regex("You fail to affect (?<targetname>.+) because you are not a player killer!$"));	
-				CastFailRegexEx.Add(new Regex("Your spell fizzled."));
-				
+			{								
 				OtherCastQuickKeepString.Add("Bor");
 				OtherCastQuickKeepString.Add("Drosta");
 				OtherCastQuickKeepString.Add("Traku");
@@ -224,11 +227,11 @@ namespace GearFoundry
 										
 				AnimationList = new List<SpellMapLoadable>();
 				//void
-				AnimationList.Add(new SpellMapLoadable("Zojak Bor",200692559,4,5393));  //Corrosion
+				AnimationList.Add(new SpellMapLoadable("Zojak Bor",200692559,4,5394));  //Corrosion
 				AnimationList.Add(new SpellMapLoadable("Jevak Bor",200692562,4,5402));  //Corruption
-				AnimationList.Add(new SpellMapLoadable("Drosta Ves",200692552,268,5377));  //Festering Curse
-				AnimationList.Add(new SpellMapLoadable("Traku Ves",200692553,269,5385));  //Weakening Curse
-				AnimationList.Add(new SpellMapLoadable("Slavu Bor",200692552,267,5337));  //Destructive Curse
+				AnimationList.Add(new SpellMapLoadable("Drosta Ves",200692552,268,5378));  //Festering Curse
+				AnimationList.Add(new SpellMapLoadable("Traku Ves",200692553,269,5386));  //Weakening Curse
+				AnimationList.Add(new SpellMapLoadable("Slavu Bor",200692552,267,5338));  //Destructive Curse
 				
 				//Creature
 				//AnimationList.Add("Equin Eatak",200670578,27);  //Bottle Breaker
@@ -274,18 +277,32 @@ namespace GearFoundry
 				AnimationList.Add(new SpellMapLoadable("Equin Cazael",200668300,7,2088));  //Senescence
 				//AnimationList.Add("Equin Luja",200668357,29);  //Eye of the Grunt
 				
-				//Life
-				AnimationList.Add(new SpellMapLoadable("Cruath Qualoi",200668344,50,2262));  //Olthoi's Gift
-				AnimationList.Add(new SpellMapLoadable("Cruath Quaguz",200668348,48,2264));  //Swordsman's Gift
-				AnimationList.Add(new SpellMapLoadable("Cruath Quareth",200668345,56,2266));  //Tusker's Gift
-				AnimationList.Add(new SpellMapLoadable("Cruath Quavik",200668292,52,2268));  //Gelidite's Gift
-				AnimationList.Add(new SpellMapLoadable("Yanoi Zhavik",200668299,42,2276));  //Enervation
-				AnimationList.Add(new SpellMapLoadable("Yanoi Zhapaj",200668279,38,2278));  //Decrepitude's Grasp
-				AnimationList.Add(new SpellMapLoadable("Cruath Quatak",200668292,44,2270));  //Inferno's Gift
+				//Life  //NOTE:  Many of the 21xx here were typoed as 22xx previously.
+				AnimationList.Add(new SpellMapLoadable("Cruath Qualoi",200668344,50,2162));  //Olthoi's Gift
+				AnimationList.Add(new SpellMapLoadable("Cruath Quaguz",200668348,48,2164));  //Swordsman's Gift
+				AnimationList.Add(new SpellMapLoadable("Cruath Quareth",200668345,56,2166));  //Tusker's Gift
+				AnimationList.Add(new SpellMapLoadable("Cruath Quavik",200668292,52,2168));  //Gelidite's Gift
+				AnimationList.Add(new SpellMapLoadable("Yanoi Zhavik",200668299,42,2176));  //Enervation
+				AnimationList.Add(new SpellMapLoadable("Yanoi Zhapaj",200668279,38,2178));  //Decrepitude's Grasp
+				AnimationList.Add(new SpellMapLoadable("Cruath Quatak",200668292,44,2170));  //Inferno's Gift
 				AnimationList.Add(new SpellMapLoadable("Cruath Quasith",200668293,56,2074));  //Gossamer Flesh
-				AnimationList.Add(new SpellMapLoadable("Cruath Quafeth",200668346,54,2272));  //Astyrrian's Gift
-				AnimationList.Add(new SpellMapLoadable("Yanoi Zhaloi",200668288,263,2280));  //Energy Flux
-				AnimationList.Add(new SpellMapLoadable("Cruath Quaril",200668347,46,2274));  //Archer's Gift
+				AnimationList.Add(new SpellMapLoadable("Cruath Quafeth",200668346,54,2172));  //Astyrrian's Gift
+				AnimationList.Add(new SpellMapLoadable("Yanoi Zhaloi",200668288,263,2180));  //Energy Flux
+				AnimationList.Add(new SpellMapLoadable("Cruath Quaril",200668347,46,2174));  //Archer's Gift
+				
+				
+//#GearFoundry#: SpellCastWords = Equin Opaj
+//#GearFoundry#: SpellID = 2282
+//#GearFoundry#: Spell Name = Futility
+//Irquk says, "Equin Opaj"
+//#GearFoundry#: SpellCastWords = Cruath Quavik
+//#GearFoundry#: SpellID = 2268
+//#GearFoundry#: Spell Name = Fat Fingers
+//Irquk says, "Cruath Quavik"
+//#GearFoundry#: SpellCastWords = Cruath Quafeth
+//#GearFoundry#: SpellID = 2272
+//#GearFoundry#: Spell Name = Light Weapon Ineptitude Other VII
+//Irquk says, "Cruath Quafeth"
 				
 				//Item
 				//AnimationList.Add(new SpellMapLoadable("Equin Qualoi",200673974,64,2093));  //Olthoi Bait
@@ -302,7 +319,7 @@ namespace GearFoundry
 				//AnimationList.Add(new SpellMapLoadable("Equin Quaril",200673979,60,2224));  //Archer Bait
 				//AnimationList.Add(new SpellMapLoadable("Equin Aeril",200676646,58,3266));  //Spirit Pacification
 				//AnimationList.Add(new SpellMapLoadable("Equin Aereth",200673992,60,2228));  //Clouded Motives
-				AnimationList.Add(new SpellMapLoadable("Equin Aeti",200668402,60,2229));  //Vagabond's Gift
+				//AnimationList.Add(new SpellMapLoadable("Equin Aeti",200668402,60,2229));  //Vagabond's Gift
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -317,38 +334,6 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		
-		private void CombatHud_ItemDestroyed(object sender, ItemDestroyedEventArgs e)
-		{
-			try
-			{
-				if(CombatHudFocusTargetGUID == e.ItemGuid) {CombatHudFocusTargetGUID = 0;}
-				if(CombatHudMobTrackingList.Count == 0) {return;}
-				else
-				{
-					CombatHudMobTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
-					UpdateCombatHudMainTab();
-				}
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void CombatHud_ChangePortalMode(object sender, ChangePortalModeEventArgs e)
-		{
-			try
-			{
-				if(bCombatHudInPortalSpace){bCombatHudInPortalSpace = false;}
-				else{bCombatHudInPortalSpace = true;}
-								
-				CombatHudMobTrackingList.Clear();
-				foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Monster))
-				{
-					CombatHudMobTrackingList.Add(new MonsterObject(wo));
-				}
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
 		private void CombatHud_CreateObject(object sender, CreateObjectEventArgs e)
 		{
 			try
@@ -358,13 +343,54 @@ namespace GearFoundry
 				{
 					if(!CombatHudMobTrackingList.Any(x => x.Id == e.New.Id))
 					{
-						CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[e.New.Id]));
+						CombatHudMobTrackingList.Add(new MonsterObject(e.New));
 					}
-					IdqueueAdd(e.New.Id);
-				}
-				
+					UpdateCombatHudMainTab();
+				}	
 			}catch(Exception ex){LogError(ex);}
 		}
+		
+		
+		private void CombatHud_ItemDestroyed(object sender, ItemDestroyedEventArgs e)
+		{
+			try
+			{
+				if(!CombatHudMobTrackingList.Any(x => x.Id == e.ItemGuid)){return;}
+				
+				if(CombatHudFocusTargetGUID == e.ItemGuid) {CombatHudFocusTargetGUID = 0;}
+				CombatHudMobTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
+				UpdateCombatHudMainTab();
+	
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CombatHud_ReleaseObject(object sender, ReleaseObjectEventArgs e)
+		{
+			try
+			{
+				if(!CombatHudMobTrackingList.Any(x => x.Id == e.Released.Id)){return;}
+				if(CombatHudFocusTargetGUID == e.Released.Id) {CombatHudFocusTargetGUID = 0;}
+	
+				CombatHudMobTrackingList.RemoveAll(x => x.Id == e.Released.Id);	
+				UpdateCombatHudMainTab();
+
+			}catch(Exception ex){LogError(ex);}
+		}	
+		
+		private void CombatHud_ChangePortalMode(object sender, ChangePortalModeEventArgs e)
+		{
+			try
+			{							
+				CombatHudFocusTargetGUID = 0;
+				CombatHudMobTrackingList.Clear();
+				foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Monster))
+				{
+					CombatHudMobTrackingList.Add(new MonsterObject(wo));
+				}		
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		
 		
 		private void ServerDispatchCombat(object sender, Decal.Adapter.NetworkMessageEventArgs e)
         {
@@ -395,11 +421,6 @@ namespace GearFoundry
             }
             catch (Exception ex){LogError(ex);}
         }  
-				
-		
-//#GearFoundry#: Cast Time:  10/24/2013 6:36:56 AM
-//#GearFoundry#: Visual Effect:  10/24/2013 6:36:59 AM
-//#GearFoundry#: Action Complete:  10/24/2013 6:37:00 AM
 
 		private void OnVisualSound(Decal.Adapter.Message pMsg)
 		{
@@ -408,7 +429,7 @@ namespace GearFoundry
 				if(MyCastList.Count == 0 && OtherCastList.Count == 0) {return;}
 				
 				int AnimationTarget = 0;
-				try{AnimationTarget =  pMsg.Value<int>(0);}catch{}
+				try{AnimationTarget = pMsg.Value<int>(0);}catch{}
 				if(AnimationTarget == 0) { return;}
 				
 				if(Core.WorldFilter[AnimationTarget].ObjectClass != ObjectClass.Monster) {return;}
@@ -417,14 +438,9 @@ namespace GearFoundry
 					CombatHudMobTrackingList.Add(new MonsterObject(Core.WorldFilter[AnimationTarget]));
 				}
 				
-				MyCastList.RemoveAll(x => (DateTime.Now - x.CastTime).TotalSeconds > 7);				
-				OtherCastList.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 7);
+				
 				
 				MonsterObject MobTarget = CombatHudMobTrackingList.Find(x => x.Id == AnimationTarget);	
-
-				WriteToChat("Found " + Core.WorldFilter[MobTarget.Id].Name);
-				WriteToChat("MyCastList Count = " + MyCastList.Count);
-				WriteToChat("OtherCastList Count = " + OtherCastList.Count);
 				
 				int SpellAnimation = pMsg.Value<int>(1);
 				double AnimationDuration = pMsg.Value<double>(2);		
@@ -448,14 +464,15 @@ namespace GearFoundry
 				   		MobTarget.DebuffSpellList.Add(dbspellnew);	
 				   	}
 				   	MyCastList.Remove(MyCastSpell);
-				   	UpdateCombatHudMainTab();
-					return;				   	
+				   	UpdateCombatHudMainTab();				   	
 				}
 				
-				if(OtherCastList.Count > 0)
+				//if(AnimationDuration < 2) {return;}  //Will ignore debuffs under about L6
+				
+				if(OtherCastList.Count > 0 && OtherCastList.Any(x => x.Animation == SpellAnimation))
 				{
-					//if(AnimationDuration < 2) {return;}  //Will ignore debuffs under about L6
 					int index_o = OtherCastList.FindIndex(x => x.Animation == SpellAnimation);
+					
 					if(index_o >= 0)
 					{
 						OtherDebuffCastInfo OtherCastSpell = OtherCastList[index_o];
@@ -475,10 +492,12 @@ namespace GearFoundry
 					   		MobTarget.DebuffSpellList.Add(dbspellnew);	
 					   	}
 					   	OtherCastList.Remove(OtherCastSpell);
-					   	UpdateCombatHudMainTab();
-						return;				 							
+					   	UpdateCombatHudMainTab();			 							
 					}
 				}
+				
+				MyCastList.RemoveAll(x => (DateTime.Now - x.CastTime).TotalSeconds > 8);				
+				OtherCastList.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 8);
 	
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -552,19 +571,7 @@ namespace GearFoundry
 			catch (Exception ex) {LogError(ex);}
 		}
 		
-		private void CombatHud_ReleaseObject(object sender, ReleaseObjectEventArgs e)
-		{
-			try
-			{
-				if(CombatHudFocusTargetGUID == e.Released.Id) {CombatHudFocusTargetGUID = 0;}
-				if(CombatHudMobTrackingList.Count == 0){return;}
-				else
-				{	
-					CombatHudMobTrackingList.RemoveAll(x => x.Id == e.Released.Id);	
-					UpdateCombatHudMainTab();
-				}
-			}catch(Exception ex){LogError(ex);}
-		}		                                         
+			                                         
 		
 		private void CombatHud_OnTimerDo(object sender, System.EventArgs e)
 		{
@@ -606,35 +613,29 @@ namespace GearFoundry
 		{
 			try
 			{	
-				if(e.Color != 17 && e.Color != 7){return;}
-				if(e.Text.StartsWith("You cast") || e.Text.StartsWith("You say,")) {return;}
 				
-				if(e.Color == 7)
-				{	
-					if(MyCastList.Count != 0 && CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
-					{
-						MyCastList.Find(x => (x.CastTime - DateTime.Now).TotalSeconds < 5).SpellFailure = true;
-					}
-					
-//					if(SpellCastBuffer.Count != 0 && CastFailRegexEx.Any(x => x.IsMatch(e.Text)))
-//					{
-//						//WriteToChat("Caught spell failure");
-//						SpellCastBuffer.First().AutoDequeue = true;
-//					}
-					return;
-				}
 				
-				if(!OtherCastQuickKeepString.Any(x => e.Text.Contains(x))) {return;}			
-				if(AnimationList.Any(x => e.Text.Contains(x.SpellCastWords)))
+				if(e.Color != 17){return;}
+				if(e.Text.Trim().StartsWith("You say,")) {return;}
+				
+				//WriteToChat("Echo: (" + e.Color + ") " + e.Text);
+				
+				
+				if(!OtherCastQuickKeepString.Any(x => @e.Text.Contains(x))) {return;}				
+				if(AnimationList.Any(x => @e.Text.Contains(x.SpellCastWords)))
 				{	
 					OtherDebuffCastInfo odci = new OtherDebuffCastInfo();
 					
-					var tanimation = AnimationList.Find(x => e.Text.Contains(x.SpellCastWords));	
+					var tanimation = AnimationList.Find(x => @e.Text.Contains(x.SpellCastWords));	
 					odci.HeardTime = DateTime.Now;
 					odci.SpellWords = tanimation.SpellCastWords;
 					odci.SpellId = tanimation.SpellId;
 					odci.Animation = tanimation.SpellAnimation;
 					odci.SpellSchool = SpellIndex[odci.SpellId].spellschool;
+					
+					WriteToChat("SpellCastWords = " + tanimation.SpellCastWords);
+					WriteToChat("SpellID = " + tanimation.SpellId);
+					WriteToChat("Spell Name = " + SpellIndex[odci.SpellId].spellname);
 					
 					switch(SpellIndex[odci.SpellId].spellschool.ToLower())
 					{
@@ -663,7 +664,6 @@ namespace GearFoundry
 		{
 			try
 			{
-				bsi.SpellID = e.SpellId;
 				switch(SpellIndex[e.SpellId].spellschool.ToLower())
 				{
 					case "item enchantment":
@@ -677,7 +677,6 @@ namespace GearFoundry
 								scinfo.CastTime = DateTime.Now;
 								scinfo.SpellAnimation = SpellIndex[e.SpellId].animation;
 								MyCastList.Add(scinfo);
-								//SpellCastBuffer.Enqueue(scinfo);
 							}
 						}
 						return;
@@ -692,7 +691,6 @@ namespace GearFoundry
 								scinfo.CastTime = DateTime.Now;
 								scinfo.SpellAnimation = SpellIndex[e.SpellId].animation;
 								MyCastList.Add(scinfo);
-								//SpellCastBuffer.Enqueue(scinfo);
 							}
 						}
 						return;
@@ -707,7 +705,6 @@ namespace GearFoundry
 								scinfo.CastTime = DateTime.Now;
 								scinfo.SpellAnimation = SpellIndex[e.SpellId].animation;
 								MyCastList.Add(scinfo);
-								//SpellCastBuffer.Enqueue(scinfo);
 							}
 						}
 						return;
@@ -722,7 +719,6 @@ namespace GearFoundry
 								scinfo.CastTime = DateTime.Now;
 								scinfo.SpellAnimation = SpellIndex[e.SpellId].animation;
 								MyCastList.Add(scinfo);
-								//SpellCastBuffer.Enqueue(scinfo);
 							}
 						}
 						return;

@@ -28,13 +28,10 @@ namespace GearFoundry
 		private HudTabView CombatHudTabView = null;
 		private HudFixedLayout CombatHudMainTab = null;
 		private HudFixedLayout CombatHudSettingsTab = null;
-		
-		private HudImageStack CombatHudTargetImage = null;
-				
+		private HudImageStack CombatHudTargetImage = null;		
 		private HudProgressBar CombatHudTargetHealth = null;
 		private HudButton CombatHudFocusSet = null;
 		private HudButton CombatHudFocusClear = null;
-		
 		private HudCheckBox CHTrackCreature = null;
 		private HudCheckBox CHTrackItem = null;
 		private HudCheckBox CHTrackLife = null;
@@ -42,14 +39,9 @@ namespace GearFoundry
 		private HudCheckBox CHRenderMedium = null;
 		private HudCheckBox CHRenderMinimal = null;
 		private HudCheckBox CHShowAll = null;
-		
-		
 		private HudImageStack[] CombatHudMiniVulArray = null;
-		
 		private HudList CombatHudDebuffTrackerList = null;
-		
 		private HudList.HudListRowAccessor CombatHudRow = null;
-		
 		private ACImage CombatHudGoodBackground = new ACImage(Color.Green);
 		private ACImage CombatHudWarningBackground = new ACImage(Color.Yellow);
 		private ACImage CombatHudExpiringBackground = new ACImage(Color.Red);
@@ -59,7 +51,7 @@ namespace GearFoundry
 		private ACImage FocusBar = new ACImage(Color.DarkRed);
 		private ACImage CurrentBar =  new ACImage(Color.MediumVioletRed);
 		private ACImage RedBar = new ACImage(Color.Red);
-		private  ACImage EmptyBar = new ACImage(Color.Black);
+		private ACImage EmptyBar = new ACImage(Color.Black);
 				
 		private Rectangle CombatHudTargetRectangle = new Rectangle(0,0,50,50);
 		private Rectangle CombatHudMiniVulsRectangle = new Rectangle(0,0,16,16);
@@ -68,11 +60,6 @@ namespace GearFoundry
 		
 		private void RenderCombatHud()
 		{
-			try
-			{
-				CombatHudReadWriteSettings(true);	
-			}catch(Exception ex){LogError(ex);}
-			
 			try
 			{
 			
@@ -101,131 +88,16 @@ namespace GearFoundry
 				CombatHudSettingsTab = new HudFixedLayout();
 				CombatHudTabView.AddTab(CombatHudSettingsTab, "Settings");
 				
-				CombatHudTabView.OpenTabChange += CombatHudTabView_OpenTabChange;
 				if(CombatHudView.UserResizeable){CombatHudView.Resize += CombatHudView_Resize;}
 				
-                if(bCombatHudSettingsTab) {RenderCombatHudSettingsTab();}
-                else{RenderCombatHudMainTab();}
+				RenderCombatHudMainTab();
+				RenderCombatHudSettingsTab();
                 
 				
-				SubscribeCombatEvents();
-						
-			}catch(Exception ex){LogError(ex);}
-			return;
-		}
-		
-		private void AlterCombatHud()
-		{		
-			try
-			{
-				//Clean up old combathud tabs
-				DisposeCombatHudMainTab();
-				DisposeCombatHudSettingsTab();
-				CombatHudTabView.OpenTabChange -= CombatHudTabView_OpenTabChange;
-				CombatHudTabView.Dispose();
-				CombatHudMainTab.Dispose();
-				CombatHudSettingsTab.Dispose();
 			
-				CombatHudView.Height = gtSettings.CombatHudHeight;
-				CombatHudView.Width = gtSettings.CombatHudWidth;
-
-				if(gtSettings.bCombatHudMinimal){CombatHudView.UserResizeable = false;}
-				else{CombatHudView.UserResizeable = true;}			
-				
-				CombatHudTabView = new HudTabView();
-				CombatHudView.Controls.HeadControl = CombatHudTabView;
-				
-				CombatHudMainTab = new HudFixedLayout();
-				CombatHudTabView.AddTab(CombatHudMainTab, "GearTactician");
-				
-				CombatHudSettingsTab = new HudFixedLayout();
-				CombatHudTabView.AddTab(CombatHudSettingsTab, "Settings");
-				
-				CombatHudTabView.OpenTabChange += CombatHudTabView_OpenTabChange;
-				if(CombatHudView.UserResizeable){CombatHudView.Resize += CombatHudView_Resize;}
-				
-                if(bCombatHudSettingsTab) {RenderCombatHudSettingsTab();}
-                else{RenderCombatHudMainTab();}
 						
 			}catch(Exception ex){LogError(ex);}
-			return;
 		}
-		
-
-        private void CombatHudView_Resize(object sender, System.EventArgs e)
-        {
-            try
-            {
-            	if(bCombatHudSettingsTab) { return;}
-                bool bw = Math.Abs(CombatHudView.Width - gtSettings.CombatHudWidth) > 20;
-                bool bh = Math.Abs(CombatHudView.Height - gtSettings.CombatHudHeight) > 20;
-                if (bh || bw)
-                {
-                    gtSettings.CombatHudWidth = CombatHudView.Width;
-                    gtSettings.CombatHudHeight = CombatHudView.Height;
-                    CombatHudResizeTime = DateTime.Now;
-                    Core.RenderFrame += new EventHandler<EventArgs>(CombatHudResizeWait);
-                }
-            }
-            catch (Exception ex) { LogError(ex); }
-            return;
-
-
-
-        }
-		
-        DateTime CombatHudResizeTime;
-        private void CombatHudResizeWait(object sender, EventArgs e)
-        {
-        	if((DateTime.Now - CombatHudResizeTime).TotalMilliseconds > 500)
-        	{
-	        	Core.RenderFrame -= CombatHudResizeWait;   
-
-           		CombatHudReadWriteSettings(false);
-            	AlterCombatHud();
-        	}
-        }
-
-
-		private void CombatHudTabView_OpenTabChange(object sender, System.EventArgs e)
-		{
-			try
-			{
-				 switch(CombatHudTabView.CurrentTab)
-    			{
-    				case 0:
-				 		DisposeCombatHudSettingsTab();
-    					RenderCombatHudMainTab();
-    					return;
-    				case 1:
-    					DisposeCombatHudMainTab();
-    					RenderCombatHudSettingsTab();
-    					return;
-    			}
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void DisposeCombatHud()
-		{
-			try
-			{
-				UnsubscribeCombatEvents();
-				DisposeCombatHudMainTab();
-				DisposeCombatHudSettingsTab();
-				
-				if(CombatHudView.UserResizeable) {CombatHudView.Resize -= CombatHudView_Resize;}
-				
-				CombatHudTabView.OpenTabChange -= CombatHudTabView_OpenTabChange;
-				
-				CombatHudSettingsTab.Dispose();
-				CombatHudMainTab.Dispose();
-				CombatHudTabView.Dispose();
-				CombatHudView.Dispose();
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
 		
 		private void RenderCombatHudMainTab()
 		{
@@ -284,8 +156,7 @@ namespace GearFoundry
 					CombatHudMainTab.AddControl(CombatHudMiniVulArray[i], new Rectangle((i*18) + 230,0,16,16));
 				}		
 				CombatHudDebuffTrackerList = null;	
-
-				bCombatHudMainTab = true;				
+				
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -312,7 +183,7 @@ namespace GearFoundry
 				}	
 				CombatHudDebuffTrackerList.AddColumn(typeof(HudStaticText), 1, null);	
 			
-				bCombatHudMainTab = true;	
+
 				
 				
 			}catch(Exception ex){LogError(ex);}
@@ -372,83 +243,10 @@ namespace GearFoundry
                 CombatHudDebuffTrackerList.AddColumn((typeof(HudStaticText)), 1, null);
                 
 
-				bCombatHudMainTab = true;
+
 	
 			}catch(Exception ex){LogError(ex);}
 		}
-		
-		
-		private void CombatHudDebuffTrackerList_Click(object sender, int row, int col)
-		{
-			try
-			{
-				if(col == 0)
-				{
-					CombatHudRow = CombatHudDebuffTrackerList[row];
-					Core.Actions.SelectItem(Convert.ToInt32(((HudStaticText)CombatHudRow[11]).Text));
-				}
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void DisposeCombatHudMainTab()
-		{
-			try
-			{
-				if(!bCombatHudMainTab) {return;}
-				
-				if(CombatHudFocusSet != null){CombatHudFocusSet.Hit -= CombatHudFocusSet_Hit;}
-				if(CombatHudFocusClear != null){CombatHudFocusClear.Hit -= CombatHudFocusClear_Hit;}
-				
-				if(CombatHudDebuffTrackerList != null) {CombatHudDebuffTrackerList.Dispose();}
-				
-				if(CombatHudMiniVulArray != null)
-				{
-					for(int i = 0; i < 10; i++)
-					{
-						CombatHudMiniVulArray[i].Dispose();
-					}
-				}
-											
-				if(CombatHudFocusClear != null){CombatHudFocusClear.Dispose();}
-				if(CombatHudFocusSet != null){CombatHudFocusSet.Dispose();}
-				if(CombatHudTargetHealth != null){CombatHudTargetHealth.Dispose();}
-				
-				if(CombatHudTargetImage != null) {CombatHudTargetImage.Dispose();}
-				
-				bCombatHudMainTab = false;
-
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void CombatHudFocusSet_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				if(Core.Actions.CurrentSelection == 0) {return;}
-				if(Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.Monster)
-				{
-					CombatHudFocusTargetGUID = Core.Actions.CurrentSelection;
-					IdqueueAdd(CombatHudFocusTargetGUID);
-					UpdateCombatHudMainTab();
-				}
-				else
-				{
-					WriteToChat("No monster selected.  Hud will not focus on PKs");
-				}
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void CombatHudFocusClear_Hit(object sender, System.EventArgs e)
-		{
-			try
-			{
-				CombatHudFocusTargetGUID = 0;	
-				UpdateCombatHudMainTab();
-			}catch(Exception ex){LogError(ex);}
-			
-		}
-		
 		
 		private void RenderCombatHudSettingsTab()
 		{
@@ -501,11 +299,184 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
+		
+		
+		
+		
+		
+		
+		
+		private void AlterCombatHud()
+		{		
+			try
+			{
+				//Clean up old combathud tabs
+				DisposeCombatHudMainTab();
+				DisposeCombatHudSettingsTab();
+				CombatHudTabView.Dispose();
+				CombatHudMainTab.Dispose();
+				CombatHudSettingsTab.Dispose();
+			
+				CombatHudView.Height = gtSettings.CombatHudHeight;
+				CombatHudView.Width = gtSettings.CombatHudWidth;
+
+				if(gtSettings.bCombatHudMinimal){CombatHudView.UserResizeable = false;}
+				else{CombatHudView.UserResizeable = true;}			
+				
+				CombatHudTabView = new HudTabView();
+				CombatHudView.Controls.HeadControl = CombatHudTabView;
+				
+				CombatHudMainTab = new HudFixedLayout();
+				CombatHudTabView.AddTab(CombatHudMainTab, "GearTactician");
+				
+				CombatHudSettingsTab = new HudFixedLayout();
+				CombatHudTabView.AddTab(CombatHudSettingsTab, "Settings");
+				
+				if(CombatHudView.UserResizeable){CombatHudView.Resize += CombatHudView_Resize;}
+				
+                RenderCombatHudSettingsTab();
+                RenderCombatHudMainTab();
+						
+			}catch(Exception ex){LogError(ex);}
+			return;
+		}
+		
+
+        private void CombatHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+                bool bw = Math.Abs(CombatHudView.Width - gtSettings.CombatHudWidth) > 20;
+                bool bh = Math.Abs(CombatHudView.Height - gtSettings.CombatHudHeight) > 20;
+                if (bh || bw)
+                {
+                    gtSettings.CombatHudWidth = CombatHudView.Width;
+                    gtSettings.CombatHudHeight = CombatHudView.Height;
+                    CombatHudResizeTime = DateTime.Now;
+                    Core.RenderFrame += new EventHandler<EventArgs>(CombatHudResizeWait);
+                }
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+
+
+
+        }
+		
+        DateTime CombatHudResizeTime;
+        private void CombatHudResizeWait(object sender, EventArgs e)
+        {
+        	if((DateTime.Now - CombatHudResizeTime).TotalMilliseconds > 500)
+        	{
+	        	Core.RenderFrame -= CombatHudResizeWait;   
+
+           		CombatHudReadWriteSettings(false);
+            	AlterCombatHud();
+        	}
+        }
+        
+		private void DisposeCombatHud()
+		{
+			try
+			{
+
+				DisposeCombatHudMainTab();
+				DisposeCombatHudSettingsTab();
+				
+				if(CombatHudView.UserResizeable) {CombatHudView.Resize -= CombatHudView_Resize;}
+				
+				
+				CombatHudSettingsTab.Dispose();
+				CombatHudMainTab.Dispose();
+				CombatHudTabView.Dispose();
+				CombatHudView.Dispose();
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		
+		
+		
+		
+		
+		
+		private void CombatHudDebuffTrackerList_Click(object sender, int row, int col)
+		{
+			try
+			{
+				if(col == 0)
+				{
+					CombatHudRow = CombatHudDebuffTrackerList[row];
+					Core.Actions.SelectItem(Convert.ToInt32(((HudStaticText)CombatHudRow[11]).Text));
+				}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void DisposeCombatHudMainTab()
+		{
+			try
+			{
+
+				
+				if(CombatHudFocusSet != null){CombatHudFocusSet.Hit -= CombatHudFocusSet_Hit;}
+				if(CombatHudFocusClear != null){CombatHudFocusClear.Hit -= CombatHudFocusClear_Hit;}
+				
+				if(CombatHudDebuffTrackerList != null) {CombatHudDebuffTrackerList.Dispose();}
+				
+				if(CombatHudMiniVulArray != null)
+				{
+					for(int i = 0; i < 10; i++)
+					{
+						CombatHudMiniVulArray[i].Dispose();
+					}
+				}
+											
+				if(CombatHudFocusClear != null){CombatHudFocusClear.Dispose();}
+				if(CombatHudFocusSet != null){CombatHudFocusSet.Dispose();}
+				if(CombatHudTargetHealth != null){CombatHudTargetHealth.Dispose();}
+				
+				if(CombatHudTargetImage != null) {CombatHudTargetImage.Dispose();}
+				
+
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CombatHudFocusSet_Hit(object sender, System.EventArgs e)
+		{
+			try
+			{
+				if(Core.Actions.CurrentSelection == 0) {return;}
+				if(Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.Monster)
+				{
+					CombatHudFocusTargetGUID = Core.Actions.CurrentSelection;
+					IdqueueAdd(CombatHudFocusTargetGUID);
+					UpdateCombatHudMainTab();
+				}
+				else
+				{
+					WriteToChat("No monster selected.  Hud will not focus on PKs");
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CombatHudFocusClear_Hit(object sender, System.EventArgs e)
+		{
+			try
+			{
+				CombatHudFocusTargetGUID = 0;	
+				UpdateCombatHudMainTab();
+			}catch(Exception ex){LogError(ex);}
+			
+		}
+		
+		
+		
+		
 		private void DisposeCombatHudSettingsTab()
 		{
 			try
 			{
-				if(!bCombatHudSettingsTab) {return;}
 				
 				CHTrackCreature.Change -= CHTrackCreature_Change;
 				CHTrackItem.Change -= CHTrackItem_Change;
@@ -522,7 +493,7 @@ namespace GearFoundry
 				CHRenderMedium.Dispose();			
 				CHRenderMinimal.Dispose();
 				
-				bCombatHudSettingsTab = false;				
+		
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -629,7 +600,6 @@ namespace GearFoundry
 		{
 			try
 			{				
-				if(!bCombatHudMainTab) {return;}
 				
 				if(CombatHudFocusTargetGUID != 0)
 				{
