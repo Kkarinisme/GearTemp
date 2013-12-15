@@ -633,10 +633,6 @@ namespace GearFoundry
 					odci.Animation = tanimation.SpellAnimation;
 					odci.SpellSchool = SpellIndex[odci.SpellId].spellschool;
 					
-					WriteToChat("SpellCastWords = " + tanimation.SpellCastWords);
-					WriteToChat("SpellID = " + tanimation.SpellId);
-					WriteToChat("Spell Name = " + SpellIndex[odci.SpellId].spellname);
-					
 					switch(SpellIndex[odci.SpellId].spellschool.ToLower())
 					{
 						case "item enchantment":
