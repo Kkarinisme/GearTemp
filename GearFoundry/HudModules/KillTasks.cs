@@ -25,7 +25,7 @@ namespace GearFoundry
 		public class KillTaskSettings
 		{
 			public int HudWidth = 300;
-			public int HudHeight = 300;
+			public int HudHeight = 125;
 			public bool RenderMini = false;
 			public bool SquelchTaskReporting = false;
 			public List<KillTask> MyKillTasks = new List<KillTask>();
@@ -562,6 +562,7 @@ namespace GearFoundry
 	            TaskHudView.UserMinimizable = true;
 	            TaskHudView.LoadUserSettings();
 	            
+	            
 	            TaskTabView = new HudTabView();
 	            TaskHudView.Controls.HeadControl = TaskTabView;
 	            
@@ -747,6 +748,8 @@ namespace GearFoundry
 			{
 				mKTSet.HudHeight = TaskHudView.Height;
 				mKTSet.HudWidth = TaskHudView.Width;
+				
+				ReadWriteGearTaskSettings(false);
 				
 			}catch(Exception ex){LogError(ex);}
 		}

@@ -403,7 +403,7 @@ namespace GearFoundry
 				if(MyCastList.Count == 0 && OtherCastList.Count == 0) {return;}
 				
 				int AnimationTarget = 0;
-				try{AnimationTarget = pMsg.Value<int>(0);}catch{}
+				try{AnimationTarget = pMsg.Value<int>(0);}catch{AnimationTarget = 0;}
 				if(AnimationTarget == 0) { return;}
 				
 				if(Core.WorldFilter[AnimationTarget].ObjectClass != ObjectClass.Monster) {return;}
@@ -520,7 +520,7 @@ namespace GearFoundry
 			try
 			{
 				int PossibleMobID = 0;
-				try {PossibleMobID = Convert.ToInt32(pMsg["object"]);}catch{}
+				try {PossibleMobID = Convert.ToInt32(pMsg["object"]);}catch{PossibleMobID = 0;}
 				if(PossibleMobID == 0){return;}
         		if(Core.WorldFilter[PossibleMobID].ObjectClass == ObjectClass.Monster)
 				{
