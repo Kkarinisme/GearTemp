@@ -171,6 +171,10 @@ namespace GearFoundry
 			try
 			{
 				TacticianRowClick = TacticianDiplayList[row];
+				if(col == 0)
+				{
+					Core.Actions.CurrentSelection = Convert.ToInt32(((HudStaticText)TacticianRowClick[2]).Text;
+				}
 				if(col == 1)
 				{
 					RenderDebuffPop(CombatHudMobTrackingList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)TacticianRowClick[2]).Text)));
