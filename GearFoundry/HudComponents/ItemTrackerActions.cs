@@ -130,7 +130,7 @@ namespace GearFoundry
 				//Peace Mode
 				if(InspectorActionList[0].fireaction)
 				{
-					if(InspectorActionList[0].pending && (DateTime.Now - InspectorActionList[0].StartAction).TotalMilliseconds < 750)
+					if(InspectorActionList[0].pending && (DateTime.Now - InspectorActionList[0].StartAction).TotalMilliseconds < 1000)
 					{
 						return;
 					}

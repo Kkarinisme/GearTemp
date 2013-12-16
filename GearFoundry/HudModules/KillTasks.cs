@@ -121,6 +121,8 @@ namespace GearFoundry
 			
 			ReadWriteGearTaskSettings(false);
 			RenderKillTaskPanel();
+			
+			//BuildCollectionTaskList();
 		}
 		
 		private void KTSaveUpdates(object sender, EventArgs e)
@@ -419,11 +421,22 @@ namespace GearFoundry
 										
 					int TaskIndex = mKTSet.MyKillTasks.FindIndex(x => x.CompleteCount == totalmobs && x.MobNames.Any(y => y == mobname));
 					
+					if(TaskIndex == -1)
+					{
+						WriteKillTaskFailureToFile(mobname, mobskilled, totalmobs);
+						WriteToChat("Caught an untrackable killtask.");
+						WriteToChat("You Killed " + mobname + " and need to kill " + totalmobs);
+						WriteToChat("Results saved to file for future inclusion in kill task tracker.");
+						return;
+					}
+					
 					mKTSet.MyKillTasks[TaskIndex].CurrentCount = mobskilled;
 					mKTSet.MyKillTasks[TaskIndex].complete = taskcomplete;
 					mKTSet.MyKillTasks[TaskIndex].active = true;
 					
 					UpdateTaskPanel();
+					
+					e.Eat = true;
 				}
 				if(e.Color == 3)
 				{   
@@ -721,6 +734,8 @@ namespace GearFoundry
 	            CTPanelLabel1.Dispose(); 
 	            CTPanelLabel2.Dispose();
 	            CollectTaskList.Dispose();
+	            
+	            TaskHudView = null;
 	            
 			}catch(Exception ex){LogError(ex);}
 			
@@ -1723,7 +1738,32 @@ namespace GearFoundry
 		}
 		
 		
+		void WriteKillTaskFailureToFile(string mobname, int numberkilled, int totalnumber)
+		{
+			try
+			{
+		
+				FileInfo TaskFile = new FileInfo(GearDir + @"\Taskdebugging.txt");
+            	if(TaskFile.Exists)
+            	{
+            		if(TaskFile.Length > 1000000) {TaskFile.Delete();}
+            	}
+            	
+            	using (StreamWriter writer = new StreamWriter(TaskFile.ToString(), true))
+                {
+                    writer.WriteLine("============================================================================");
+                    writer.WriteLine(DateTime.Now.ToString());
+                    writer.WriteLine("MobName: " + mobname);
+                    writer.WriteLine("NumberKilled: " + numberkilled.ToString());
+                    writer.WriteLine("TotalNumber: " + totalnumber.ToString());
+                    writer.WriteLine("============================================================================");
+                    writer.WriteLine("");
+                    writer.Close();
+                }
+			
 
+             }catch{}
+		}
 		
 		
 		

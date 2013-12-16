@@ -37,10 +37,9 @@ namespace GearFoundry
 			public bool bCombatHudTrackItemDebuffs = true;
 			public bool bCombatHudTrackVoidDebuffs = true;
 			public bool bShowAll = false;
-            public int CombatHudWidth = 250;
+            public int CombatHudWidth = 305;
             public int CombatHudHeight = 220;
-            public System.Drawing.Point DebuffPopLocation = System.Drawing.Point.Empty;
-           	public bool DebuffPopGhosted = false;
+            public bool RenderCurrentTargetDebuffView = false;
 		}
 				
 		public class BuildSpellInfoHolder
@@ -120,6 +119,8 @@ namespace GearFoundry
 				CombatHudReadWriteSettings(false);
 				UnsubscribeCombatEvents();
 				DisposeTacticianHud();
+				DisposeFocusHud();
+				DisposeCurrentTargetDebuffView();
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -509,6 +510,7 @@ namespace GearFoundry
         			}
 				}
         		UpdateTactician();
+        		UpdateFocusHud();
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
@@ -536,6 +538,7 @@ namespace GearFoundry
 	        		UpdateMonster.HealthRemaining = Convert.ToInt32(Convert.ToDouble(pMsg["health"])*100);
 				}
         		UpdateTactician();
+        		UpdateFocusHud();
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}		                                         

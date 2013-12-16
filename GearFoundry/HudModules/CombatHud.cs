@@ -36,11 +36,25 @@ namespace GearFoundry
 		private HudFixedLayout TacticianSettingsLayout = null;
 		private HudList TacticianDiplayList = null;
 		private HudList.HudListRowAccessor TacticianRow = null;
+		private HudCheckBox TacticianTrackCreature = null;
+		private HudCheckBox TacticianTrackItem = null;
+		private HudCheckBox TacticianTrackLife = null;
+		private HudCheckBox TacticianTrackVoid = null;
+		private HudCheckBox TacticianShowAll = null;
+		private HudCheckBox TacticianCurrentTargetBar = null;
+		private HudStaticText TacticianLabel1 = null;
+		private HudStaticText TacticianLabel2 = null;
+		private HudStaticText TacticianLabel3 = null;
 		
 		private void RenderTacticianHud()
 		{
 			try
 			{
+				
+				if(TacticianHudView != null)
+				{
+					DisposeTacticianHud();
+				}
 				
 				TacticianHudView = new HudView("GearTactician", gtSettings.CombatHudWidth, gtSettings.CombatHudHeight, new ACImage(0x6AA8));
 				TacticianHudView.Visible = true;
@@ -57,14 +71,24 @@ namespace GearFoundry
 				TacticianTabLayout = new HudFixedLayout();
 				TacticianHudTabView.AddTab(TacticianTabLayout, "GearTactician");
 				
-				TacticianSettingsLayout = new HudFixedLayout();
-				TacticianHudTabView.AddTab(TacticianSettingsLayout, "Settings");
+				TacticianLabel1 = new HudStaticText();
+				TacticianTabLayout.AddControl(TacticianLabel1, new Rectangle(0,0,75,16));
+				TacticianLabel1.Text = "Health";
+				
+				TacticianLabel2 = new HudStaticText();
+				TacticianTabLayout.AddControl(TacticianLabel2, new Rectangle(110,0,40,16));
+				TacticianLabel2.Text = "F";
+				
+				TacticianLabel3 = new HudStaticText();
+				TacticianTabLayout.AddControl(TacticianLabel3, new Rectangle(TacticianHudView.Width - 100, 0,75,16));
+				TacticianLabel3.Text = "Active Debuffs";
+				
 				
 				TacticianDiplayList = new HudList();
-				TacticianTabLayout.AddControl(TacticianDiplayList, new Rectangle(0,0,TacticianHudView.Width, TacticianHudView.Height));
+				TacticianTabLayout.AddControl(TacticianDiplayList, new Rectangle(0,20,TacticianHudView.Width, TacticianHudView.Height));
 				TacticianDiplayList.ControlHeight = 16;
 				TacticianDiplayList.AddColumn(typeof(HudProgressBar), 100, null);
-				TacticianDiplayList.AddColumn(typeof(HudStaticText), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudButton), 16, null);
 				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
 				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
 				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
@@ -74,12 +98,49 @@ namespace GearFoundry
 				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
 				TacticianDiplayList.AddColumn(typeof(HudStaticText), 1, null);
 				
+				TacticianSettingsLayout = new HudFixedLayout();
+				TacticianHudTabView.AddTab(TacticianSettingsLayout, "Settings");
+											
+				TacticianTrackCreature = new HudCheckBox();
+				TacticianTrackCreature.Text = "Creature Debuffs";
+				TacticianTrackCreature.Checked = gtSettings.bCombatHudTrackCreatureDebuffs;
+				TacticianSettingsLayout.AddControl(TacticianTrackCreature, new Rectangle(0,0,100,16));
+				
+				TacticianTrackItem = new HudCheckBox();
+				TacticianTrackItem.Text = "Item Debuffs";
+				TacticianTrackItem.Checked = gtSettings.bCombatHudTrackItemDebuffs;
+				TacticianSettingsLayout.AddControl(TacticianTrackItem, new Rectangle(0,20,100,16));
+				
+				TacticianTrackLife = new HudCheckBox();
+				TacticianTrackLife.Text = "Life Debuffs";
+				TacticianTrackLife.Checked = gtSettings.bCombatHudTrackLifeDebuffs;
+				TacticianSettingsLayout.AddControl(TacticianTrackLife, new Rectangle(0,40,100,16));
+				
+				TacticianTrackVoid = new HudCheckBox();
+				TacticianTrackVoid.Text = "Void Debuffs";
+				TacticianTrackVoid.Checked = gtSettings.bCombatHudTrackVoidDebuffs;
+				TacticianSettingsLayout.AddControl(TacticianTrackVoid, new Rectangle(0,60,100,16));
+				
+				TacticianShowAll = new HudCheckBox();
+				TacticianShowAll.Text = "Show All Mobs";
+				TacticianShowAll.Checked = gtSettings.bShowAll;
+				TacticianSettingsLayout.AddControl(TacticianShowAll, new Rectangle(0,80,100,16));
+				
+				TacticianCurrentTargetBar = new HudCheckBox();
+				TacticianCurrentTargetBar.Text =  "Show Current Target Bar";
+				TacticianCurrentTargetBar.Checked = gtSettings.RenderCurrentTargetDebuffView;
+				TacticianSettingsLayout.AddControl(TacticianCurrentTargetBar, new Rectangle(0,100,100,16));
+				
 				TacticianDiplayList.Click += TacticianDiplayList_Click;
-				TacticianHudTabView.OpenTabChange += TacticianHudTabView_OpenTabChange;
 				TacticianHudView.VisibleChanged += TacticianHudView_VisibleChanged;
 				TacticianHudView.Resize += TacticianHudView_Resize;
 				
-						
+				TacticianTrackCreature.Change += TacticianTrackCreature_Change;
+				TacticianTrackItem.Change += TacticianTrackItem_Change;
+				TacticianTrackLife.Change += TacticianTrackLife_Change;
+				TacticianTrackVoid.Change += TacticianTrackVoid_Change;
+				TacticianShowAll.Change += TacticianShowAll_Change;
+				TacticianCurrentTargetBar.Change += TacticianCurrentTargetBar_Chanage;
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -93,10 +154,25 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(TacticianHudView == null){return;}
+				TacticianTrackCreature.Change -= TacticianTrackCreature_Change;
+				TacticianTrackItem.Change -= TacticianTrackItem_Change;
+				TacticianTrackLife.Change -= TacticianTrackLife_Change;
+				TacticianTrackVoid.Change -= TacticianTrackVoid_Change;
+				TacticianShowAll.Change -= TacticianShowAll_Change;
+				TacticianCurrentTargetBar.Change -= TacticianCurrentTargetBar_Chanage;
+				
 				TacticianHudView.Resize -= TacticianHudView_Resize;
-				TacticianHudTabView.OpenTabChange -= TacticianHudTabView_OpenTabChange;
 				TacticianHudView.VisibleChanged -= TacticianHudView_VisibleChanged;				
 				TacticianDiplayList.Click -= TacticianDiplayList_Click;
+				
+				
+				TacticianLabel1.Dispose();
+				
+				TacticianLabel2.Dispose();
+				
+				TacticianLabel3.Dispose();
+				
 				TacticianHudView.Dispose();
 				
 				TacticianHudTabView.Dispose();
@@ -105,6 +181,21 @@ namespace GearFoundry
 				TacticianSettingsLayout.Dispose();
 				
 				TacticianDiplayList.Dispose();
+				
+											
+				TacticianTrackCreature.Dispose();
+				
+				TacticianTrackItem.Dispose();
+				
+				TacticianTrackLife.Dispose();
+				
+				TacticianTrackVoid.Dispose();
+				
+				TacticianShowAll.Dispose();
+				
+				TacticianCurrentTargetBar.Dispose();
+				
+				TacticianHudView = null;
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -117,10 +208,106 @@ namespace GearFoundry
 				gtSettings.CombatHudHeight = TacticianHudView.Height;
 				gtSettings.CombatHudWidth = TacticianHudView.Width;
 				
+				
+				AlterTacticianHud();
 				CombatHudReadWriteSettings(false);
 				
 			}catch(Exception ex){LogError(ex);}
 		}
+		
+		private void AlterTacticianHud()
+		{
+			try
+			{
+				TacticianDiplayList.Click -= TacticianDiplayList_Click;
+												
+				TacticianLabel3.Dispose();
+				TacticianLabel3 = new HudStaticText();
+				TacticianTabLayout.AddControl(TacticianLabel3, new Rectangle(TacticianHudView.Width - 100, 0,75,16));
+				TacticianLabel3.Text = "Active Debuffs";
+				
+				TacticianDiplayList.Dispose();
+				TacticianDiplayList = new HudList();
+				TacticianTabLayout.AddControl(TacticianDiplayList, new Rectangle(0,20,TacticianHudView.Width, TacticianHudView.Height));
+				TacticianDiplayList.ControlHeight = 16;
+				TacticianDiplayList.AddColumn(typeof(HudProgressBar), 100, null);
+				TacticianDiplayList.AddColumn(typeof(HudButton), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudStaticText), 1, null);
+				
+				
+				
+				TacticianDiplayList.Click += TacticianDiplayList_Click;
+
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TacticianTrackCreature_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudTrackCreatureDebuffs = TacticianTrackCreature.Checked;
+				CombatHudReadWriteSettings(false);
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TacticianTrackItem_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudTrackItemDebuffs = TacticianTrackItem.Checked;
+				CombatHudReadWriteSettings(false);
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TacticianTrackLife_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudTrackLifeDebuffs = TacticianTrackLife.Checked;
+				CombatHudReadWriteSettings(false);
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TacticianTrackVoid_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bCombatHudTrackVoidDebuffs = TacticianTrackVoid.Checked;
+				CombatHudReadWriteSettings(false);
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TacticianShowAll_Change(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.bShowAll = TacticianShowAll.Checked;
+				CombatHudReadWriteSettings(false);
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TacticianCurrentTargetBar_Chanage(object sender, EventArgs e)
+		{
+			try
+			{
+				gtSettings.RenderCurrentTargetDebuffView = TacticianCurrentTargetBar.Checked;
+				CombatHudReadWriteSettings(false);
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		
 		private void UpdateTactician()
 		{
@@ -135,7 +322,14 @@ namespace GearFoundry
 						TacticianRow = TacticianDiplayList.AddRow();
 						//MobHealthBar
 						((HudProgressBar)TacticianRow[0]).FontHeight = 10;
-						((HudProgressBar)TacticianRow[0]).PreText = CombatHudMobTrackingList[mobindex].Name;
+						if(CombatHudMobTrackingList[mobindex].Name.Length > 15)
+						{
+							((HudProgressBar)TacticianRow[0]).PreText = CombatHudMobTrackingList[mobindex].Name.Substring(0,15);
+						}
+						else
+						{
+							((HudProgressBar)TacticianRow[0]).PreText = CombatHudMobTrackingList[mobindex].Name;
+						}
 						((HudProgressBar)TacticianRow[0]).Min = 0;
 						((HudProgressBar)TacticianRow[0]).Max = 100;
 						((HudProgressBar)TacticianRow[0]).ProgressEmpty = EmptyBar;
@@ -143,7 +337,7 @@ namespace GearFoundry
 						else{((HudProgressBar)TacticianRow[0]).ProgressFilled = RedBar;}
 						((HudProgressBar)TacticianRow[0]).Position = CombatHudMobTrackingList[mobindex].HealthRemaining;
 						
-						((HudStaticText)TacticianRow[1]).Text = CombatHudMobTrackingList[mobindex].DebuffSpellList.Count.ToString();
+						((HudButton)TacticianRow[1]).Text = CombatHudMobTrackingList[mobindex].DebuffSpellList.Count.ToString();
 						for(int i = 0; i < 7; i++)
 						{
 							if(i < CombatHudMobTrackingList[mobindex].DebuffSpellList.Count)
@@ -172,62 +366,96 @@ namespace GearFoundry
 		{
 			try
 			{
+				int scroll = TacticianDiplayList.ScrollPosition;
 				TacticianRowClick = TacticianDiplayList[row];
 				if(col == 0)
 				{
-					Core.Actions.CurrentSelection = Convert.ToInt32(((HudStaticText)TacticianRowClick[9]).Text);
+					Core.Actions.SelectItem(Convert.ToInt32(((HudStaticText)TacticianRowClick[9]).Text));
 				}
 				if(col == 1)
 				{
-					RenderDebuffPop(CombatHudMobTrackingList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)TacticianRowClick[9]).Text)));
+					FocusHudTarget = Convert.ToInt32(((HudStaticText)TacticianRowClick[9]).Text);
+					IdqueueAdd(FocusHudTarget);
+					if(FocusHudView == null)
+					{
+						RenderFocusHud();
+					}
 				}
+				UpdateTactician();
+				TacticianDiplayList.ScrollPosition = scroll;
 				
 			}catch(Exception ex){LogError(ex);}
 		}
 
-		private HudView DebuffPopView = null;
-		private HudTabView DebuffPopTabView = null;
-		private HudFixedLayout DebuffPopLayout = null;
-		private List<HudImageStack> DebuffPopList = null;
+		private HudView CurrentTargetDebuffView = null;
+		private HudTabView CurrentTargetDebuffTabView = null;
+		private HudFixedLayout CurrentTargetDebuffLayout = null;
+		private List<HudImageStack> CurrentTargetDebuffList = null;
 		private Rectangle DebuffRectangle = new Rectangle(0,0,16,16);
 		private ACImage DebuffCurrent  = new ACImage(Color.Green);
 		private ACImage DebuffWarning = new ACImage(Color.Yellow);
 		private ACImage DebuffExpiring = new ACImage(Color.Red);
-		private MonsterObject LastTarget = null;
 		
-		private void RenderDebuffPop(MonsterObject target)
+		private void RenderCurrentTargetDebuffBar()
+		{
+			try
+			{				
+				if(CurrentTargetDebuffView != null)
+				{
+					DisposeCurrentTargetDebuffView();
+				}
+				
+				CurrentTargetDebuffView = new HudView(String.Empty, 120, 40, new ACImage(0x6AA3));
+				CurrentTargetDebuffView.UserAlphaChangeable = false;
+				CurrentTargetDebuffView.ShowInBar = false;
+				CurrentTargetDebuffView.UserResizeable = false;
+				CurrentTargetDebuffView.Visible = true;
+				CurrentTargetDebuffView.UserClickThroughable = false;	
+				CurrentTargetDebuffView.UserMinimizable = true;	
+				CurrentTargetDebuffView.UserGhostable = true;
+				CurrentTargetDebuffView.LoadUserSettings();
+	
+				CurrentTargetDebuffTabView = new HudTabView();
+				CurrentTargetDebuffView.Controls.HeadControl = CurrentTargetDebuffTabView;
+				
+				CurrentTargetDebuffLayout = new HudFixedLayout();
+				CurrentTargetDebuffTabView.AddTab(CurrentTargetDebuffLayout, "Debuffs");
+				
+				CurrentTargetDebuffList = new List<HudImageStack>();
+				
+				CurrentTargetDebuffView.VisibleChanged += CurrentTargetDebuffView_VisibleChanged;	
+				MasterTimer.Tick += CurrentTarget_OnTimerDo;				
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void UpdateCurrentTargetDebuffBar(MonsterObject target)
 		{
 			try
 			{
-				if(LastTarget != target)
+				if(!gtSettings.RenderCurrentTargetDebuffView){return;}
+				
+				CurrentTargetDebuffView.Title = target.Name;
+				
+				if(target.DebuffSpellList.Count > 5)
 				{
-					LastTarget = target;
+					CurrentTargetDebuffView.Width = target.DebuffSpellList.Count * 20;
+				}
+				else
+				{
+					CurrentTargetDebuffView.Width = 120;
 				}
 				
-				if(DebuffPopView != null)
+				try
 				{
-					DisposeDebuffPopView();
-				}
-				
-				DebuffPopView = new HudView(target.Name, target.DebuffSpellList.Count * 20, 40, new ACImage(0x6AA3));
-				if(DebuffPopView.Width < 120) {DebuffPopView.Width = 120;}
-				DebuffPopView.UserAlphaChangeable = false;
-				DebuffPopView.ShowInBar = false;
-				DebuffPopView.UserResizeable = false;
-				DebuffPopView.Visible = true;
-				DebuffPopView.Ghosted = gtSettings.DebuffPopGhosted;
-				DebuffPopView.UserClickThroughable = false;	
-				DebuffPopView.UserMinimizable = true;	
-				DebuffPopView.UserGhostable = true;
-				DebuffPopView.Location = gtSettings.DebuffPopLocation;
-	
-				DebuffPopTabView = new HudTabView();
-				DebuffPopView.Controls.HeadControl = DebuffPopTabView;
-				
-				DebuffPopLayout = new HudFixedLayout();
-				DebuffPopTabView.AddTab(DebuffPopLayout, "Debuffs");
-				
-				DebuffPopList = new List<HudImageStack>();
+					if(CurrentTargetDebuffList.Count != 0)
+					{
+						foreach(var debuff in CurrentTargetDebuffList)
+						{
+							debuff.Dispose();
+						}
+					}
+				}catch(Exception ex){LogError(ex);}
 				
 				foreach(var debuff in target.DebuffSpellList.OrderBy(x => x.SecondsRemaining))
 				{
@@ -236,178 +464,206 @@ namespace GearFoundry
 					else if(debuff.SecondsRemaining <= 30){debufficon.Add(DebuffRectangle, DebuffWarning);}
 					else{debufficon.Add(DebuffRectangle,DebuffCurrent);}
 					debufficon.Add(DebuffRectangle, SpellIndex[debuff.SpellId].spellicon);
-					DebuffPopList.Add(debufficon);	
+					CurrentTargetDebuffList.Add(debufficon);	
 				}
 				
-				for(int i = 0; i < DebuffPopList.Count; i ++)
+				for(int i = 0; i < CurrentTargetDebuffList.Count; i ++)
 				{
-					DebuffPopLayout.AddControl(DebuffPopList[i], new Rectangle((20*i) + 2,2,16,16));
+					CurrentTargetDebuffLayout.AddControl(CurrentTargetDebuffList[i], new Rectangle((20*i) + 2,2,16,16));
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CurrentTargetDebuffView_VisibleChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				DisposeCurrentTargetDebuffView();
+				gtSettings.RenderCurrentTargetDebuffView = CurrentTargetDebuffView.Visible;
+				
+				if(gtSettings.RenderCurrentTargetDebuffView)
+				{
+					RenderCurrentTargetDebuffBar();
+				}
+				else
+				{
+					DisposeCurrentTargetDebuffView();
 				}
 
-				DebuffPopView.VisibleChanged += DebuffPopView_VisibleChanged;
-				DebuffPopView.GhostedChanged += DebuffPopView_GhostedChanged;
-				
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void DebuffPopView_GhostedChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				gtSettings.DebuffPopGhosted = DebuffPopView.Ghosted;
-				gtSettings.DebuffPopLocation = DebuffPopView.Location;
-				
-				CombatHudReadWriteSettings(false);		
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void DebuffPopView_VisibleChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				gtSettings.DebuffPopGhosted = DebuffPopView.Ghosted;
-				gtSettings.DebuffPopLocation = DebuffPopView.Location;
-				
 				CombatHudReadWriteSettings(false);
-				DisposeDebuffPopView();		
+				if(!CurrentTargetDebuffView.Visible)
+				{
+					DisposeCurrentTargetDebuffView();
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void DisposeDebuffPopView()
+		private void DisposeCurrentTargetDebuffView()
 		{
 			try
 			{
-				DebuffPopView.VisibleChanged -= DebuffPopView_VisibleChanged;
-				DebuffPopView.GhostedChanged -= DebuffPopView_GhostedChanged;
-				if(DebuffPopList.Count != 0)
+				if(CurrentTargetDebuffView == null){return;}
+				MasterTimer.Tick -= CurrentTarget_OnTimerDo;	
+				CurrentTargetDebuffView.VisibleChanged -= CurrentTargetDebuffView_VisibleChanged;	
+				if(CurrentTargetDebuffList.Count != 0)
 				{
-					foreach(var debuff in DebuffPopList)
+					foreach(var debuff in CurrentTargetDebuffList)
 					{
 						debuff.Dispose();
 					}
-				}
-				DebuffPopList = null;
-				DebuffPopView.Dispose();
-				DebuffPopTabView.Dispose();
-				DebuffPopLayout.Dispose();
+				}	
+				CurrentTargetDebuffList = null;
 				
+				CurrentTargetDebuffView.Dispose();
+				CurrentTargetDebuffTabView.Dispose();
+				CurrentTargetDebuffLayout.Dispose();
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CurrentTarget_OnTimerDo(object sender, EventArgs e)
+		{
+			try
+			{
+				if(Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.Monster)
+				{
+					UpdateCurrentTargetDebuffBar(CombatHudMobTrackingList.Find(x => x.Id == Core.Actions.CurrentSelection));
+				}
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private HudView FocusHudView = null;
+		private HudTabView FocusHudTabView = null;
+		private HudFixedLayout FocusHudLayout = null;
+		private HudPictureBox FocusTargetPicture = null;
+		private HudProgressBar FocusTargetHealth = null;
+		private HudStaticText FocusTargetName = null;
+		private int FocusHudTarget = 0;
+		
+		private void RenderFocusHud()
+		{
+			try
+			{
+				
+				if(FocusHudView != null)
+				{
+					DisposeFocusHud();
+				}
+				
+				FocusHudView = new HudView(String.Empty, 110, 130, new ACImage(0x6AA3));
+				FocusHudView.UserAlphaChangeable = false;
+				FocusHudView.ShowInBar = false;
+				FocusHudView.UserResizeable = false;
+				FocusHudView.Visible = true;
+				FocusHudView.UserClickThroughable = false;	
+				FocusHudView.UserMinimizable = true;	
+				FocusHudView.UserGhostable = true;
+				FocusHudView.LoadUserSettings();
+	
+				FocusHudTabView = new HudTabView();
+				FocusHudView.Controls.HeadControl = FocusHudTabView;
+				
+				FocusHudLayout = new HudFixedLayout();
+				FocusHudTabView.AddTab(FocusHudLayout, "Focus");
+				
+				FocusTargetName = new HudStaticText();
+				FocusHudLayout.AddControl(FocusTargetName, new Rectangle(0,0,100,16));
+				FocusTargetName.Text = String.Empty;
+				
+				FocusTargetPicture = new HudPictureBox();
+				FocusHudLayout.AddControl(FocusTargetPicture, new Rectangle(20,20,60,60));
+				FocusTargetPicture.Image = new ACImage(Color.Black);
+				
+				FocusTargetHealth = new HudProgressBar();
+				FocusHudLayout.AddControl(FocusTargetHealth, new Rectangle(5,90,100,20));
+				FocusTargetHealth.ProgressEmpty = EmptyBar;
+				FocusTargetHealth.ProgressFilled = RedBar;
+				FocusTargetHealth.Position = 0;
+				FocusTargetHealth.Max = 100;
+				FocusTargetHealth.Min = 0;
+				
+				
+				
+				
+				FocusHudView.VisibleChanged += FocusHudView_VisibleChanged;	
+				MasterTimer.Tick += Focus_OnTimerDo;	
+				
+
+							
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void FocusHudView_VisibleChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				FocusHudTarget = 0;
+				DisposeFocusHud();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void DisposeFocusHud()
+		{
+			try
+			{	
+				if(FocusHudView == null){return;}
+				FocusHudView.VisibleChanged -= FocusHudView_VisibleChanged;	
+				MasterTimer.Tick -= Focus_OnTimerDo;	
+				FocusHudTarget = 0;				
+				FocusHudView.Dispose();
+				FocusHudTabView.Dispose();	
+				FocusHudLayout.Dispose();	
+				FocusTargetName.Dispose();	
+				FocusTargetPicture.Dispose();	
+				FocusTargetHealth.Dispose();
+				FocusHudView = null;
 			}catch(Exception ex){LogError(ex);}
 		}
 			
-		private void TacticianHudTabView_OpenTabChange(object sender, EventArgs e)
+		private void UpdateFocusHud()
 		{
 			try
 			{
-				if(TacticianHudTabView.CurrentTab == 1)
+				int MobIndex = CombatHudMobTrackingList.FindIndex(x => x.Id == FocusHudTarget);
+				if(MobIndex == -1) {DisposeFocusHud(); FocusHudTarget = 0; return;}
+				
+				FocusTargetName.Text = CombatHudMobTrackingList[MobIndex].Name;
+				FocusTargetPicture.Image = CombatHudMobTrackingList[MobIndex].Icon;
+				FocusTargetHealth.Position = CombatHudMobTrackingList[MobIndex].HealthRemaining;
+				FocusTargetHealth.TextColor = Color.AntiqueWhite;
+				
+				if(CombatHudMobTrackingList[MobIndex].HealthMax != 0)
 				{
-					RenderCombatHudSettingsPopUp();
+					FocusTargetHealth.PreText = (CombatHudMobTrackingList[MobIndex].HealthCurrent).ToString();
 				}
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private HudView CHSetPopView = null;
-		private HudTabView CHSetPopTabView = null;
-		private HudFixedLayout CHSetPopLayout = null;
-		private HudCheckBox CHTrackCreature = null;
-		private HudCheckBox CHTrackItem = null;
-		private HudCheckBox CHTrackLife = null;
-		private HudCheckBox CHTRackVoid = null;
-		private HudCheckBox CHShowAll = null;
-		
-		private void RenderCombatHudSettingsPopUp()
-		{
-			try
-			{
-				if(CHSetPopView != null)
+				else
 				{
-					DisposeCombatHudSettingsPopUp();
+					FocusTargetHealth.PreText = (CombatHudMobTrackingList[MobIndex].HealthRemaining).ToString() + "%";
+				}	
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		int FocusSeconds = 0;
+		private void Focus_OnTimerDo(object sender, EventArgs e)
+		{
+			try
+			{
+				if(FocusHudTarget != 0 && FocusSeconds > 4)
+				{
+					IdqueueAdd(FocusHudTarget);
+					FocusSeconds = 0;
+					return;
 				}
-				
-				
-				CHSetPopView = new HudView("Tactician Settings", 200, 200, null);
-				CHSetPopView.UserAlphaChangeable = false;
-				CHSetPopView.ShowInBar = false;
-				CHSetPopView.UserResizeable = true;
-				CHSetPopView.Visible = true;
-				CHSetPopView.Ghosted = false;
-				CHSetPopView.UserClickThroughable = false;	
-				CHSetPopView.UserMinimizable = true;	
-				CHSetPopView.UserGhostable = false;
-				CHSetPopView.Location = TacticianHudView.Location;
-				
-				CHSetPopTabView = new HudTabView();
-				CHSetPopView.Controls.HeadControl = CHSetPopTabView;
-				
-				CHSetPopLayout =  new HudFixedLayout();
-				CHSetPopTabView.AddTab(CHSetPopLayout, "Settings");
-							
-				CHTrackCreature = new HudCheckBox();
-				CHTrackCreature.Text = "Creature Debuffs";
-				CHTrackCreature.Checked = gtSettings.bCombatHudTrackCreatureDebuffs;
-				CHSetPopLayout.AddControl(CHTrackCreature, new Rectangle(0,0,100,16));
-				
-				CHTrackItem = new HudCheckBox();
-				CHTrackItem.Text = "Item Debuffs";
-				CHTrackItem.Checked = gtSettings.bCombatHudTrackItemDebuffs;
-				CHSetPopLayout.AddControl(CHTrackItem, new Rectangle(0,20,100,16));
-				
-				CHTrackLife = new HudCheckBox();
-				CHTrackLife.Text = "Life Debuffs";
-				CHTrackLife.Checked = gtSettings.bCombatHudTrackLifeDebuffs;
-				CHSetPopLayout.AddControl(CHTrackLife, new Rectangle(0,40,100,16));
-				
-				CHTRackVoid = new HudCheckBox();
-				CHTRackVoid.Text = "Void Debuffs";
-				CHTRackVoid.Checked = gtSettings.bCombatHudTrackVoidDebuffs;
-				CHSetPopLayout.AddControl(CHTRackVoid, new Rectangle(0,80,100,16));
-				
-				CHShowAll = new HudCheckBox();
-				CHShowAll.Text = "Show All Mobs";
-				CHShowAll.Checked = gtSettings.bShowAll;
-				CHSetPopLayout.AddControl(CHShowAll, new Rectangle(0,100,100,16));
-				
-				CHSetPopView.VisibleChanged += CHSetPopView_VisibleChanged;		
-				
+				FocusSeconds++;
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void CHSetPopView_VisibleChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				
-				gtSettings.bCombatHudTrackCreatureDebuffs = CHTrackCreature.Checked; 
-				gtSettings.bCombatHudTrackItemDebuffs = CHTrackItem.Checked;
-				gtSettings.bCombatHudTrackLifeDebuffs = CHTrackLife.Checked;
-				gtSettings.bCombatHudTrackVoidDebuffs = CHTRackVoid.Checked;
-				gtSettings.bShowAll = CHShowAll.Checked;
-				
-				CombatHudReadWriteSettings(false);
-				
-				DisposeCombatHudSettingsPopUp();
-				
-				TacticianHudTabView.CurrentTab = 0;
-								
-			}catch(Exception ex){LogError(ex);}
-		}
 		
-		private void DisposeCombatHudSettingsPopUp()
-		{
-			try
-			{
-				CHSetPopView.VisibleChanged -= CHSetPopView_VisibleChanged;		
-				
-				CHSetPopView.Dispose();
-				CHSetPopTabView.Dispose();
-				CHSetPopLayout.Dispose();
-				CHTrackCreature.Dispose();
-				CHTrackItem.Dispose();
-				CHTrackLife.Dispose();
-				CHTRackVoid.Dispose();
-				CHShowAll.Dispose();
-			}catch(Exception ex){LogError(ex);}
-		}		
+		
+		
+		
 	}
 }
 

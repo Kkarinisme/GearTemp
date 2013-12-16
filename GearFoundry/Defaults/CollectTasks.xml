@@ -42,7 +42,7 @@
   </CollectTask>
   <CollectTask>
     <TaskName>A'nekshay Bracer Collecting (Neftet)</TaskName>
-    <Item>Engraved A'nekshay Bracers</Item>
+    <Item>Engraved A'nekshay Bracer</Item>
     <MobNames>
       <string>A'nekshay</string>
     </MobNames>
@@ -321,6 +321,86 @@
     <NPCCoords>Unknown</NPCCoords>
     <NPCYellowFlagText>Kill this Moarsman High Priest and bring back the Holy Symbol he wields as proof of your kill.</NPCYellowFlagText>
     <NPCYellowCompleteText>Excellent, you were able to defeat the High Priest!</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Alb'arean Ore Collection</TaskName>
+    <Item>Alb'arean Ore</Item>
+    <MobNames>
+      <string />
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Lady Dan'eel Trianna</string>
+    </NPCNames>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>26.2N, 47.1E</NPCCoords>
+    <NPCYellowFlagText>collecting 10 pieces of Alb'arean Ore</NPCYellowFlagText>
+    <NPCYellowCompleteText>Ahh, a full stack of 10 Alb'arean Ore.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Bloodroot Vine Collection</TaskName>
+    <Item>Bloodroot Vine</Item>
+    <MobNames>
+      <string />
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Lady Sherath Trianna</string>
+    </NPCNames>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>26.2N, 47.1E</NPCCoords>
+    <NPCYellowFlagText>collecting 10 Bloodroot Vines</NPCYellowFlagText>
+    <NPCYellowCompleteText />
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Rez'arean Ore Collection</TaskName>
+    <Item>Rez'arean Ore</Item>
+    <MobNames>
+      <string />
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Lady Kiara Trianna</string>
+    </NPCNames>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>26.2N, 47.1E</NPCCoords>
+    <NPCYellowFlagText>collecting 10 pieces of Rez'arean Ore</NPCYellowFlagText>
+    <NPCYellowCompleteText>Ahh, a full stack of 10 Rez'arean Ore</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </CollectTask>
+  <CollectTask>
+    <TaskName>Desert Flower Collection</TaskName>
+    <Item>Desert Flower</Item>
+    <MobNames>
+      <string />
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Lady Mashal Trianna</string>
+    </NPCNames>
+    <NPCInfo>Cragstone</NPCInfo>
+    <NPCCoords>26.2N, 47.1E</NPCCoords>
+    <NPCYellowFlagText>collecting 10 Desert Flowers</NPCYellowFlagText>
+    <NPCYellowCompleteText />
     <track>false</track>
     <detect>false</detect>
     <active>false</active>

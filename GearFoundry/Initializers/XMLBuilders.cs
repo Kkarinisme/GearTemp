@@ -1857,6 +1857,57 @@ namespace GearFoundry
 			t.NPCYellowCompleteText = "Excellent, you were able to defeat the High Priest!";
 			NewCollectTasks.Add(t);		
 
+			t = new CollectTask();
+			t.TaskName = "Alb'arean Ore Collection";
+			t.Item = "Alb'arean Ore";
+			t.MobNames.Add("");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Lady Dan'eel Trianna");
+			t.NPCInfo = "Cragstone";
+			t.NPCCoords = "26.2N, 47.1E";
+			t.NPCYellowFlagText = "collecting 10 pieces of Alb'arean Ore";
+			t.NPCYellowCompleteText = "Ahh, a full stack of 10 Alb'arean Ore.";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Bloodroot Vine Collection";
+			t.Item = "Bloodroot Vine";
+			t.MobNames.Add("");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Lady Sherath Trianna");
+			t.NPCInfo = "Cragstone";
+			t.NPCCoords = "26.2N, 47.1E";
+			t.NPCYellowFlagText = "collecting 10 Bloodroot Vines";
+			t.NPCYellowCompleteText = "";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Rez'arean Ore Collection";
+			t.Item = "Rez'arean Ore";
+			t.MobNames.Add("");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Lady Kiara Trianna");
+			t.NPCInfo = "Cragstone";
+			t.NPCCoords = "26.2N, 47.1E";
+			t.NPCYellowFlagText = "collecting 10 pieces of Rez'arean Ore";
+			t.NPCYellowCompleteText = "Ahh, a full stack of 10 Rez'arean Ore";
+			NewCollectTasks.Add(t);
+			
+			t = new CollectTask();
+			t.TaskName = "Desert Flower Collection";
+			t.Item = "Desert Flower";
+			t.MobNames.Add("");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Lady Mashal Trianna");
+			t.NPCInfo = "Cragstone";
+			t.NPCCoords = "26.2N, 47.1E";
+			t.NPCYellowFlagText = "collecting 10 Desert Flowers";
+			t.NPCYellowCompleteText = "";
+			NewCollectTasks.Add(t);
+
+			
+			
+
 			
 //			t = new CollectTask();
 //			t.TaskName = "";
