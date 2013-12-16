@@ -37,7 +37,7 @@ namespace GearFoundry
 			public bool bCombatHudTrackItemDebuffs = true;
 			public bool bCombatHudTrackVoidDebuffs = true;
 			public bool bShowAll = false;
-            public int CombatHudWidth = 150;
+            public int CombatHudWidth = 250;
             public int CombatHudHeight = 220;
             public System.Drawing.Point DebuffPopLocation = System.Drawing.Point.Empty;
            	public bool DebuffPopGhosted = false;
@@ -306,11 +306,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(e.ItemGuid != 0 && Core.WorldFilter[e.ItemGuid].ObjectClass == ObjectClass.Monster)
-				{
-					UpdateTactician();
-					//UpdateCombatHudMainTab();
-				}
+				UpdateTactician();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -326,7 +322,6 @@ namespace GearFoundry
 						CombatHudMobTrackingList.Add(new MonsterObject(e.New));
 					}
 					UpdateTactician();
-					//UpdateCombatHudMainTab();
 				}	
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -470,11 +465,6 @@ namespace GearFoundry
 					}
 				}
 				
-				if(MobTarget.Id == LastTarget.Id)
-				{
-					RenderDebuffPop(MobTarget);
-				}
-				
 				MyCastList.RemoveAll(x => (DateTime.Now - x.CastTime).TotalSeconds > 8);				
 				OtherCastList.RemoveAll(x => (DateTime.Now - x.HeardTime).TotalSeconds > 8);
 	
@@ -579,8 +569,6 @@ namespace GearFoundry
 					CombatHudMobTrackingList = CombatHudMobTrackingList.OrderBy(x => x.DistanceAway).ToList();	
 
 					UpdateTactician();
-					RenderDebuffPop(LastTarget);
-
 		
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -589,7 +577,7 @@ namespace GearFoundry
 		{
 			try
 			{	
-				WriteToChat("Echo (" + e.Color + ") " + e.Text);
+				//WriteToChat("Echo (" + e.Color + ") " + e.Text);
 				
 				if(e.Color == 7) {e.Eat = true; return;}
 				if(e.Color != 17){return;}

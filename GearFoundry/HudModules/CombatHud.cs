@@ -28,9 +28,7 @@ namespace GearFoundry
 		private ACImage RedBar = new ACImage(Color.Red);
 		private ACImage EmptyBar = new ACImage(Color.Black);
 		private ACImage DebuffedBar = new ACImage(Color.Goldenrod);
-		private ACImage DebuffedCurrentBar = new ACImage(Color.DarkGoldenrod);
-				
-		
+		private ACImage DebuffedCurrentBar = new ACImage(Color.DarkGoldenrod);	
 		
 		private HudView TacticianHudView = null;
 		private HudTabView TacticianHudTabView = null;
@@ -65,8 +63,15 @@ namespace GearFoundry
 				TacticianDiplayList = new HudList();
 				TacticianTabLayout.AddControl(TacticianDiplayList, new Rectangle(0,0,TacticianHudView.Width, TacticianHudView.Height));
 				TacticianDiplayList.ControlHeight = 16;
-				TacticianDiplayList.AddColumn(typeof(HudPictureBox), 16, null);
 				TacticianDiplayList.AddColumn(typeof(HudProgressBar), 100, null);
+				TacticianDiplayList.AddColumn(typeof(HudStaticText), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
+				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
 				TacticianDiplayList.AddColumn(typeof(HudStaticText), 1, null);
 				
 				TacticianDiplayList.Click += TacticianDiplayList_Click;
@@ -128,37 +133,34 @@ namespace GearFoundry
 					if(CombatHudMobTrackingList[mobindex].DebuffSpellList.Count > 0 || gtSettings.bShowAll)
 					{
 						TacticianRow = TacticianDiplayList.AddRow();
-						((HudPictureBox)TacticianRow[0]).Image = CombatHudMobTrackingList[mobindex].Icon;
-						((HudProgressBar)TacticianRow[1]).FontHeight = 10;
-						((HudProgressBar)TacticianRow[1]).PreText = CombatHudMobTrackingList[mobindex].DebuffSpellList.Count.ToString() + " Debuffs";
-						((HudProgressBar)TacticianRow[1]).Min = 0;
-						((HudProgressBar)TacticianRow[1]).Max = 100;
-						((HudProgressBar)TacticianRow[1]).ProgressEmpty = EmptyBar;
-						if(CombatHudMobTrackingList[mobindex].Id == Core.Actions.CurrentSelection)
-						{
-							if(CombatHudMobTrackingList[mobindex].DebuffSpellList.Count > 0)
-							{
-								((HudProgressBar)TacticianRow[1]).ProgressFilled = DebuffedCurrentBar;
-							}
-							else
-							{
-								((HudProgressBar)TacticianRow[1]).ProgressFilled = CurrentBar;
-							}
-						}
-						else
-						{
-							if(CombatHudMobTrackingList[mobindex].DebuffSpellList.Count > 0)
-							{
-								((HudProgressBar)TacticianRow[1]).ProgressFilled = DebuffedBar;
-							}
-							else
-							{
-								((HudProgressBar)TacticianRow[1]).ProgressFilled = RedBar;
-							}	
-						}
+						//MobHealthBar
+						((HudProgressBar)TacticianRow[0]).FontHeight = 10;
+						((HudProgressBar)TacticianRow[0]).PreText = CombatHudMobTrackingList[mobindex].Name;
+						((HudProgressBar)TacticianRow[0]).Min = 0;
+						((HudProgressBar)TacticianRow[0]).Max = 100;
+						((HudProgressBar)TacticianRow[0]).ProgressEmpty = EmptyBar;
+						if(CombatHudMobTrackingList[mobindex].Id == Core.Actions.CurrentSelection){((HudProgressBar)TacticianRow[0]).ProgressFilled = CurrentBar;}
+						else{((HudProgressBar)TacticianRow[0]).ProgressFilled = RedBar;}
+						((HudProgressBar)TacticianRow[0]).Position = CombatHudMobTrackingList[mobindex].HealthRemaining;
 						
-						((HudProgressBar)TacticianRow[1]).Position = CombatHudMobTrackingList[mobindex].HealthRemaining;
-						((HudStaticText)TacticianRow[2]).Text = CombatHudMobTrackingList[mobindex].Id.ToString();
+						((HudStaticText)TacticianRow[1]).Text = CombatHudMobTrackingList[mobindex].DebuffSpellList.Count.ToString();
+						for(int i = 0; i < 7; i++)
+						{
+							if(i < CombatHudMobTrackingList[mobindex].DebuffSpellList.Count)
+							{
+								MonsterObject.DebuffSpell debuff = CombatHudMobTrackingList[mobindex].DebuffSpellList[i];
+								if(debuff.SecondsRemaining <= 15) {((HudImageStack)TacticianRow[i+2]).Add(DebuffRectangle, DebuffExpiring);}
+								else if(debuff.SecondsRemaining <= 30){((HudImageStack)TacticianRow[i+2]).Add(DebuffRectangle, DebuffWarning);}
+								else{((HudImageStack)TacticianRow[i+2]).Add(DebuffRectangle, DebuffCurrent);}
+								((HudImageStack)TacticianRow[i+2]).Add(DebuffRectangle, SpellIndex[debuff.SpellId].spellicon);
+							}
+							else
+							{
+								((HudImageStack)TacticianRow[i+2]).Add(DebuffRectangle, new ACImage(Color.Black));
+							}
+							
+						}
+						((HudStaticText)TacticianRow[9]).Text = CombatHudMobTrackingList[mobindex].Id.ToString();
 	
 					}
 				}	
@@ -173,11 +175,11 @@ namespace GearFoundry
 				TacticianRowClick = TacticianDiplayList[row];
 				if(col == 0)
 				{
-					Core.Actions.CurrentSelection = Convert.ToInt32(((HudStaticText)TacticianRowClick[2]).Text;
+					Core.Actions.CurrentSelection = Convert.ToInt32(((HudStaticText)TacticianRowClick[9]).Text);
 				}
 				if(col == 1)
 				{
-					RenderDebuffPop(CombatHudMobTrackingList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)TacticianRowClick[2]).Text)));
+					RenderDebuffPop(CombatHudMobTrackingList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)TacticianRowClick[9]).Text)));
 				}
 				
 			}catch(Exception ex){LogError(ex);}
