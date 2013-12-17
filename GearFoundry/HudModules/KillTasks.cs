@@ -120,9 +120,6 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 			
 			ReadWriteGearTaskSettings(false);
-			RenderKillTaskPanel();
-			
-			//BuildCollectionTaskList();
 		}
 		
 		private void KTSaveUpdates(object sender, EventArgs e)
@@ -978,7 +975,14 @@ namespace GearFoundry
 		{
 			try
 			{
-				KTHolder = mKTSet.MyKillTasks.Find(x => x.TaskName == KillTaskSelected.Text);
+				int Index = mKTSet.MyKillTasks.FindIndex(x => x.TaskName == KillTaskSelected.Text);
+				if(Index == -1)
+				{
+					WriteToChat("First select a kill task.");
+					return;
+				}
+				
+				KTHolder = mKTSet.MyKillTasks[Index];
 				OldKTName = KTHolder.TaskName;				
 				RenderKillTaskPopUp();
 			}catch(Exception ex){LogError(ex);}
@@ -989,6 +993,13 @@ namespace GearFoundry
 			try
 			{
 				int scroll = KillTaskList.ScrollPosition;
+				
+				int Index = mKTSet.MyKillTasks.FindIndex(x => x.TaskName == KillTaskSelected.Text);
+				if(Index == -1)
+				{
+					WriteToChat("First select a kill task.");
+					return;
+				}
 				
 			    List<KillTask> MasterKTList = ReadMasterKTList();
 				if(MasterKTList.Any(x => x.TaskName == KillTaskSelected.Text))
@@ -1029,7 +1040,14 @@ namespace GearFoundry
 		{
 			try
 			{
-				CTHolder = mKTSet.MyCollectTasks.Find(x => x.TaskName == CollectTaskSelected.Text);
+				int Index = mKTSet.MyCollectTasks.FindIndex(x => x.TaskName == CollectTaskSelected.Text);
+				if(Index == -1)
+				{
+					WriteToChat("First select a collect task.");
+					return;
+				}
+				
+				CTHolder = mKTSet.MyCollectTasks[Index];
 				OldCTName = CTHolder.TaskName;				
 				RenderCollectTaskPopUp();
 			}catch(Exception ex){LogError(ex);}
@@ -1040,6 +1058,13 @@ namespace GearFoundry
 			try
 			{
 				int scroll = CollectTaskList.ScrollPosition;
+				
+				int Index = mKTSet.MyCollectTasks.FindIndex(x => x.TaskName == CollectTaskSelected.Text);
+				if(Index == -1)
+				{
+					WriteToChat("First select a collect task.");
+					return;
+				}
 				
 				List<CollectTask> MasterCTList = ReadMasterCTList();
 				if(MasterCTList.Any(x => x.TaskName == CollectTaskSelected.Text))
@@ -1139,7 +1164,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopMobsList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = mob;
-					((HudPictureBox)KTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				KTPopMobsList.Click += KTPopMobsList_Click;
@@ -1166,7 +1191,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopNPCList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = mob;
-					((HudPictureBox)KTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				KTPopNPCList.Click += KTPopNPCList_Click;
@@ -1270,7 +1295,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopMobsList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = mob;
-					((HudPictureBox)KTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				KTPopMobsList.ScrollPosition = scroll;
@@ -1292,7 +1317,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopMobsList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = mob;
-					((HudPictureBox)KTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				KTPopMobsList.ScrollPosition = scroll;
@@ -1318,7 +1343,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopNPCList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = npc;
-					((HudPictureBox)KTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				KTPopNPCList.ScrollPosition = scroll;
@@ -1340,7 +1365,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopNPCList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = npc;
-					((HudPictureBox)KTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				KTPopNPCList.ScrollPosition = scroll;
@@ -1485,7 +1510,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopMobsList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = mob;
-					((HudPictureBox)CTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				CTPopMobsList.Click += CTPopMobsList_Click;
@@ -1512,7 +1537,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopNPCList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = mob;
-					((HudPictureBox)CTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				CTPopNPCList.Click += CTPopNPCList_Click;
@@ -1616,7 +1641,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopMobsList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = mob;
-					((HudPictureBox)CTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				CTPopMobsList.ScrollPosition = scroll;
@@ -1638,7 +1663,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopMobsList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = mob;
-					((HudPictureBox)CTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				CTPopMobsList.ScrollPosition = scroll;
@@ -1664,7 +1689,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopNPCList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = npc;
-					((HudPictureBox)CTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				CTPopNPCList.ScrollPosition = scroll;
@@ -1686,7 +1711,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopNPCList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = npc;
-					((HudPictureBox)CTPopRow[1]).Image = CorpseRemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
 				}
 				
 				CTPopNPCList.ScrollPosition = scroll;

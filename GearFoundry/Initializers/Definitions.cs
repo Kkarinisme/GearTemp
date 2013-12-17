@@ -186,7 +186,8 @@ namespace GearFoundry
         private static bool bLandscapeHudEnabled;   
 
 
-
+		//Graphics
+		private const int RemoveCircle = 0x60011F8;
 
 
     }    

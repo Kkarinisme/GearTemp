@@ -314,7 +314,6 @@ namespace GearFoundry
 //[VTank] Palette Entry 3: ID 0x0015D4, Ex Color: 879800, 148/4
 //[VTank] Palette Entry 4: ID 0x0015D4, Ex Color: 050505, 152/4
 //[VTank] Palette Entry 5: ID 0x0015D4, Ex Color: 7E8E00, 156/4
-		
 		private void ItemTrackerActions_ObjectChanged(object sender, ChangeObjectEventArgs e)
 		{
 			try
@@ -336,16 +335,10 @@ namespace GearFoundry
 				}
 				else if(e.Change == WorldChangeType.StorageChange)
 				{
-					if(LOList.Any(x => x.Id == e.Changed.Id && x.ActionTarget && !x.IsContainer))
+					if(LOList.Any(x => x.Id == e.Changed.Id && !x.IsContainer))
 					{
-						Core.RenderFrame += InspectorMoveCheckBack;
-						return;
-					}
-					
-					if(LOList.Any(x => x.Id == e.Changed.Id && !x.ActionTarget && !x.IsContainer))
-					{
-						if(LOList.Any(x => x.Open)) {return;}
-						LOList.Find(x => x.Id == e.Changed.Id).ActionTarget = true;
+						LOList.Find(x => x.Id == e.Changed.Id && !x.IsContainer).StorageChangeTime = DateTime.Now;
+						LOList.Find(x => x.Id == e.Changed.Id && !x.IsContainer).StorageChange = true;
 						Core.RenderFrame += InspectorMoveCheckBack;
 						return;
 					}

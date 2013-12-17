@@ -43,6 +43,7 @@ namespace GearFoundry
 			try
 			{
 				Core.EchoFilter.ServerDispatch += ServerDispatchFellow;	
+				Core.CharacterFilter.Logoff += FellowshipLogoff;
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -51,8 +52,18 @@ namespace GearFoundry
 			try
 			{
 				Core.EchoFilter.ServerDispatch -= ServerDispatchFellow;	
+				Core.CharacterFilter.Logoff -= FellowshipLogoff;
+				FellowMemberList.Clear();
 			}catch(Exception ex){LogError(ex);}
 		}
+		
+		private void FellowshipLogoff(object sender, EventArgs e)
+		{
+			UnSubscribeFellowshipEvents();
+		}
+		
+		
+		
 		private void ServerDispatchFellow(object sender, NetworkMessageEventArgs e)
 		{
 		int iEvent = 0;

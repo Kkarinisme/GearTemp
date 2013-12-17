@@ -447,6 +447,8 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(CurrentTargetDebuffView == null) {return;}
+				
 				try
 				{
 					if(CurrentTargetDebuffList.Count != 0)
@@ -598,6 +600,7 @@ namespace GearFoundry
 				
 				
 				FocusHudView.VisibleChanged += FocusHudView_VisibleChanged;	
+				FocusTargetPicture.Hit += FocusTargetPicture_Hit;
 				MasterTimer.Tick += Focus_OnTimerDo;	
 				
 
@@ -621,6 +624,7 @@ namespace GearFoundry
 			{	
 				if(FocusHudView == null){return;}
 				FocusHudView.VisibleChanged -= FocusHudView_VisibleChanged;	
+				FocusTargetPicture.Hit -= FocusTargetPicture_Hit;
 				MasterTimer.Tick -= Focus_OnTimerDo;	
 				FocusHudTarget = 0;				
 				FocusHudView.Dispose();
@@ -653,6 +657,14 @@ namespace GearFoundry
 				{
 					FocusTargetHealth.PreText = (CombatHudMobTrackingList[MobIndex].HealthRemaining).ToString() + "%";
 				}	
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void FocusTargetPicture_Hit(object sender, EventArgs e)
+		{
+			try
+			{
+				Core.Actions.SelectItem(FocusHudTarget);
 			}catch(Exception ex){LogError(ex);}
 		}
 		

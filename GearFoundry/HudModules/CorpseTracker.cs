@@ -26,7 +26,6 @@ namespace GearFoundry
 		
 		private List<LandscapeObject> CorpseTrackingList = new List<LandscapeObject>();
 		private List<string> PermittedCorpsesList =  new List<string>(); 	
-		private bool mCorpseTrackerInPoralSpace = true;
 		public GearVisectionSettings ghSettings = new GearVisectionSettings();
 		public DateTime LastCorpseHudUpdate = DateTime.Now;			
 		
@@ -51,6 +50,54 @@ namespace GearFoundry
             public int CorpseHudHeight = 220;
 
     	}
+		
+		
+		private void SubscribeCorpseEvents()
+		{
+			try
+			{
+
+				GearVisectionReadWriteSettings(true);
+				
+				MasterTimer.Tick += CorpseCheckerTick;
+				Core.WorldFilter.CreateObject += OnWorldFilterCreateCorpse;
+             	Core.EchoFilter.ServerDispatch += ServerDispatchCorpse;
+                Core.WorldFilter.ReleaseObject += OnWorldFilterDeleteCorpse;
+                Core.ItemDestroyed += OnCorpseDestroyed;
+                Core.CharacterFilter.ChangePortalMode += ChangePortalModeCorpses;
+                Core.ContainerOpened += OnCorpseOpened;
+                Core.CharacterFilter.Logoff += Corpse_Logoff;
+                foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Corpse))
+                {
+					if(!CorpseTrackingList.Any(x => x.Id == wo.Id)){CheckCorpse(new LandscapeObject(wo));}
+                }
+
+			}
+			catch(Exception ex){LogError(ex);}
+		}
+		
+		private void UnsubscribeCorpseEvents()
+		{
+			try
+			{
+				
+				
+				MasterTimer.Tick -= CorpseCheckerTick;
+				Core.WorldFilter.CreateObject -= OnWorldFilterCreateCorpse;
+             	Core.EchoFilter.ServerDispatch -= ServerDispatchCorpse;
+                Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteCorpse;
+                Core.ItemDestroyed -= OnCorpseDestroyed;
+                Core.CharacterFilter.ChangePortalMode -= ChangePortalModeCorpses;
+                Core.ContainerOpened -= OnCorpseOpened;
+				Core.CharacterFilter.Logoff -= Corpse_Logoff;   
+
+				CorpseTrackingList.Clear();
+				PermittedCorpsesList.Clear();
+                
+                GearVisectionReadWriteSettings(false);
+			}
+			catch(Exception ex){LogError(ex);}
+		}
 		
 		private void GearVisectionReadWriteSettings(bool read)
 		{
@@ -109,49 +156,15 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		
-		private void SubscribeCorpseEvents()
+		private void Corpse_Logoff(object sender, EventArgs e)
 		{
 			try
 			{
-
-	
-				MasterTimer.Tick += CorpseCheckerTick;
-				Core.WorldFilter.CreateObject += new EventHandler<CreateObjectEventArgs>(OnWorldFilterCreateCorpse);
-             	Core.EchoFilter.ServerDispatch += new EventHandler<NetworkMessageEventArgs>(ServerDispatchCorpse);
-                Core.WorldFilter.ReleaseObject += new EventHandler<ReleaseObjectEventArgs>(OnWorldFilterDeleteCorpse);
-                Core.ItemDestroyed += new EventHandler<ItemDestroyedEventArgs>(OnCorpseDestroyed);
-                Core.CharacterFilter.ChangePortalMode += new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeCorpses);
-                Core.ContainerOpened += new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
-                foreach(WorldObject wo in Core.WorldFilter.GetByContainer(0).ToArray())
-                {
-					if(wo.ObjectClass == ObjectClass.Corpse) 
-					{
-						if(!CorpseTrackingList.Any(x => x.Id == wo.Id)){CheckCorpse(new LandscapeObject(wo));}
-					}
-                }
-                
-                
-
-			}
-			catch(Exception ex){LogError(ex);}
+				DisposeCorpseHud();
+				UnsubscribeCorpseEvents();
+			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void UnsubscribeCorpseEvents()
-		{
-			try
-			{
-				MasterTimer.Tick -= CorpseCheckerTick;
-				Core.WorldFilter.CreateObject -= new EventHandler<CreateObjectEventArgs>(OnWorldFilterCreateCorpse);
-             	Core.EchoFilter.ServerDispatch -= new EventHandler<NetworkMessageEventArgs>(ServerDispatchCorpse);
-                Core.WorldFilter.ReleaseObject -= new EventHandler<ReleaseObjectEventArgs>(OnWorldFilterDeleteCorpse);
-                Core.ItemDestroyed -= new EventHandler<ItemDestroyedEventArgs>(OnCorpseDestroyed);
-                Core.CharacterFilter.ChangePortalMode -= new EventHandler<ChangePortalModeEventArgs>(ChangePortalModeCorpses);
-                Core.ContainerOpened -= new EventHandler<ContainerOpenedEventArgs>(OnCorpseOpened);
-                CorpseHudView.Resize -= CorpseHudView_Resize; 	
-			}
-			catch(Exception ex){LogError(ex);}
-		}
 		
 		private void OnWorldFilterCreateCorpse(object sender, Decal.Adapter.Wrappers.CreateObjectEventArgs e)
 		{
@@ -322,12 +335,8 @@ namespace GearFoundry
 		{
 			try 
 			{
-				CorpseTrackingList.RemoveAll(x => !x.isvalid);
-				if (CorpseTrackingList.Any(x => x.Id == e.Released.Id))
-				{
-					CorpseTrackingList.RemoveAll(x => x.Id == e.Released.Id);
-					UpdateCorpseHud();
-				}
+				CorpseTrackingList.RemoveAll(x => x.Id == e.Released.Id);
+				UpdateCorpseHud();
 			} 
 			catch (Exception ex) {LogError(ex);}
 		}
@@ -336,12 +345,8 @@ namespace GearFoundry
 		{
 			try
 			{
-				CorpseTrackingList.RemoveAll(x => !x.isvalid);
-				if(CorpseTrackingList.Any(x => x.Id == e.ItemGuid))
-				{
-					CorpseTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
-					UpdateCorpseHud();
-				}
+				CorpseTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
+				UpdateCorpseHud();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -349,25 +354,12 @@ namespace GearFoundry
 		{
 			try
 			{
-
-				if(mCorpseTrackerInPoralSpace) {mCorpseTrackerInPoralSpace = false;}
-				else{mCorpseTrackerInPoralSpace = true;}
-				
-				if(mCorpseTrackerInPoralSpace)
-				{
-					var CTLpurge = from corpses in CorpseTrackingList
-					where Core.WorldFilter.Distance(Core.CharacterFilter.Id, corpses.Id) > 5
-	     			select corpses.Id;
-	     		
-		     		foreach(var corpseID in CTLpurge)
-		     		{
-		     			if(ghSettings.DeadMeList.FindIndex(x => x.GUID == corpseID) < 0)
-		     			{
-		     				CorpseTrackingList.RemoveAll(x => x.Id == corpseID);
-		     			}
-		     		}
-		     		UpdateCorpseHud();
-				}
+				CorpseTrackingList.Clear();
+				foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Corpse))
+                {
+					if(!CorpseTrackingList.Any(x => x.Id == wo.Id)){CheckCorpse(new LandscapeObject(wo));}
+                }
+	     		UpdateCorpseHud();
 							
 			}catch(Exception ex){LogError(ex);}
 
@@ -422,22 +414,17 @@ namespace GearFoundry
 		private HudFixedLayout CorpseHudTabLayout = null;
 		private HudFixedLayout CorpseHudSettingsTab = null;
 		private HudList CorpseHudList = null;
+		private HudCheckBox AllCorpses;
+    	private HudCheckBox KillsBySelf;
+    	private HudCheckBox KillsByFellows;
+    	private HudCheckBox DeadMes;
+    	private HudCheckBox Permitteds;
+    	private HudCheckBox GVisRenderMini;
 		private HudList.HudListRowAccessor CorpseHudListRow = null;
 		
-		private bool CorpseMainTab;
-		private bool CorpseSettingsTab;
-		
-		private const int CorpseRemoveCircle = 0x60011F8;
-
 			
     	private void RenderCorpseHud()
-    	{
-    		try
-    		{
-    			GearVisectionReadWriteSettings(true);
-    	
-    		}catch(Exception ex){LogError(ex);}
- 		
+    	{		
     		try
     		{
     			    			
@@ -463,57 +450,6 @@ namespace GearFoundry
     			CorpseHudTabLayout = new HudFixedLayout();
     			CorpseHudTabView.AddTab(CorpseHudTabLayout, "Corpses");
     			
-    			CorpseHudSettingsTab = new HudFixedLayout();
-    			CorpseHudTabView.AddTab(CorpseHudSettingsTab, "Set");
-    			
-    			CorpseHudTabView.OpenTabChange += CorpseHudTabView_OpenTabChange;
-                CorpseHudView.Resize += CorpseHudView_Resize; 
-
-    			RenderCorpseHudTab();
-    			
-				SubscribeCorpseEvents();
-	  							
-    		}catch(Exception ex){LogError(ex);}
-    		
-    	}
-
-        private void CorpseHudView_Resize(object sender, System.EventArgs e)
-        {
-            try
-            {
-	            ghSettings.CorpseHudWidth = CorpseHudView.Width;
-	            ghSettings.CorpseHudHeight = CorpseHudView.Height;
-	            GearVisectionReadWriteSettings(false);  
-            }
-            catch (Exception ex) { LogError(ex); }
-            return;
-        }
-    	
-    	private void CorpseHudTabView_OpenTabChange(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			switch(CorpseHudTabView.CurrentTab)
-    			{
-    				case 0:
-    					DisposeCorpseHudSettingsTab();
-    					RenderCorpseHudTab();
-    					return;
-    				case 1:
-    					DisposeCorpseHudTab();
-    					RenderCorpseHudSettingsTab();
-    					return;
-    			}
-    			
-    		}catch(Exception ex){LogError(ex);}
-    		
-    	}
-    	
-    	
-    	private void RenderCorpseHudTab()
-    	{
-    		try
-    		{
     			CorpseHudList = new HudList();
     			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0, ghSettings.CorpseHudWidth,ghSettings.CorpseHudHeight));
 				CorpseHudList.ControlHeight = 16;	
@@ -522,54 +458,11 @@ namespace GearFoundry
 				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
 				CorpseHudList.AddColumn(typeof(HudStaticText), 1, null);
 				
-				CorpseHudList.Click += (sender, row, col) => CorpseHudList_Click(sender, row, col);	
 				
-				CorpseMainTab = true;
+    				
+    			CorpseHudSettingsTab = new HudFixedLayout();
+    			CorpseHudTabView.AddTab(CorpseHudSettingsTab, "Set");
     			
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-    	private void DisposeCorpseHudTab()
-    	{
-    		try
-    		{
-    			if(!CorpseMainTab) { return;}
-    			CorpseHudList.Click -= (sender, row, col) => CorpseHudList_Click(sender, row, col);	
-    			CorpseHudList.Dispose();	
-				CorpseMainTab = false;    			
-    			
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-    	private void DisposeCorpseHud()
-    	{
-    			
-    		try
-    		{
-    			UnsubscribeCorpseEvents();
-    			DisposeCorpseHudTab();
-    			DisposeCorpseHudSettingsTab();
-
-    			CorpseHudSettingsTab.Dispose();
-    			CorpseHudTabLayout.Dispose();
-                CorpseHudTabView.Dispose();
-                CorpseHudView.Dispose();
-				
-    		}	
-    		catch(Exception ex){LogError(ex);}
-    	}
-    	   	
-    	HudCheckBox AllCorpses;
-    	HudCheckBox KillsBySelf;
-    	HudCheckBox KillsByFellows;
-    	HudCheckBox DeadMes;
-    	HudCheckBox Permitteds;
-    	HudCheckBox GVisRenderMini;
-    	
-    	private void RenderCorpseHudSettingsTab()
-    	{
-    		try
-    		{
     			AllCorpses = new HudCheckBox();
     			AllCorpses.Text = "Trk All";
     			CorpseHudSettingsTab.AddControl(AllCorpses, new Rectangle(0,0,150,16));
@@ -600,43 +493,85 @@ namespace GearFoundry
     			CorpseHudSettingsTab.AddControl(GVisRenderMini, new Rectangle(0,90,150,16));
     			GVisRenderMini.Checked = ghSettings.RenderMini;
     			
-    			
+    			CorpseHudList.Click += CorpseHudList_Click;
     			GVisRenderMini.Change += GVisRenderMini_Change;    			
     			AllCorpses.Change += AllCorpses_Change;
     			KillsBySelf.Change += KillsBySelf_Change;
     			KillsByFellows.Change += KillsByFellows_Change;
     			DeadMes.Change += DeadMes_Change;
     			Permitteds.Change += Permitteds_Change;
+    				
+                CorpseHudView.Resize += CorpseHudView_Resize; 
     			
-    			CorpseSettingsTab = true;
-    			
+	  							
     		}catch(Exception ex){LogError(ex);}
-    	}
     		
-    	private void DisposeCorpseHudSettingsTab()
+    	}
+
+        private void CorpseHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+	            ghSettings.CorpseHudWidth = CorpseHudView.Width;
+	            ghSettings.CorpseHudHeight = CorpseHudView.Height;
+	            GearVisectionReadWriteSettings(false); 
+
+				CorpseHudList.Click -= CorpseHudList_Click;	            
+	            
+	            CorpseHudList.Dispose();
+	            CorpseHudList = new HudList();
+    			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0, ghSettings.CorpseHudWidth,ghSettings.CorpseHudHeight));
+				CorpseHudList.ControlHeight = 16;	
+				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
+				CorpseHudList.AddColumn(typeof(HudStaticText), ghSettings.CorpseHudWidth - 60, null);
+				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
+				CorpseHudList.AddColumn(typeof(HudStaticText), 1, null);
+				
+				CorpseHudList.Click += CorpseHudList_Click;
+	            
+            }
+            catch (Exception ex) { LogError(ex); }
+            return;
+        }
+    	    	
+    	
+    	private void DisposeCorpseHud()
     	{
+    			
     		try
     		{
-    			if(!CorpseSettingsTab) { return;}
-    			AllCorpses.Change -= AllCorpses_Change;
-    			KillsBySelf.Change -= KillsBySelf_Change;
-    			KillsByFellows.Change -= KillsByFellows_Change;
-    			DeadMes.Change -= DeadMes_Change;
-    			Permitteds.Change -= Permitteds_Change;
-    			GVisRenderMini.Change -= GVisRenderMini_Change;  
     			
-    			GVisRenderMini.Dispose();
-    			Permitteds.Dispose();
-    			DeadMes.Dispose();
-    			KillsByFellows.Dispose();
-    			KillsBySelf.Dispose();
-    			AllCorpses.Dispose();
-    			
-    			CorpseSettingsTab = false;
-    			
-    		}catch(Exception ex){LogError(ex);}
+    			if(CorpseHudView != null)
+    			{
+	    			CorpseHudList.Click -= CorpseHudList_Click;
+	    			AllCorpses.Change -= AllCorpses_Change;
+	    			KillsBySelf.Change -= KillsBySelf_Change;
+	    			KillsByFellows.Change -= KillsByFellows_Change;
+	    			DeadMes.Change -= DeadMes_Change;
+	    			Permitteds.Change -= Permitteds_Change;
+	    			GVisRenderMini.Change -= GVisRenderMini_Change;
+					CorpseHudView.Resize -= CorpseHudView_Resize;     			
+	    			
+	    			GVisRenderMini.Dispose();
+	    			Permitteds.Dispose();
+	    			DeadMes.Dispose();
+	    			KillsByFellows.Dispose();
+	    			KillsBySelf.Dispose();
+	    			AllCorpses.Dispose();
+	    			
+	    			CorpseHudList.Dispose();
+	
+	    			CorpseHudSettingsTab.Dispose();
+	    			CorpseHudTabLayout.Dispose();
+	                CorpseHudTabView.Dispose();
+	                CorpseHudView.Dispose();
+	                CorpseHudView = null;
+    			}
+				
+    		}	
+    		catch(Exception ex){LogError(ex);}
     	}
-    	
+    	   	    	
     	
     	private void GVisRenderMini_Change(object sender, System.EventArgs e)
     	{
@@ -656,11 +591,24 @@ namespace GearFoundry
     				ghSettings.CorpseHudHeight = 220;
     				ghSettings.CorpseHudWidth = 300;
     			}
-    			GearVisectionReadWriteSettings(false);
+    			
+    			CorpseHudList.Click -= CorpseHudList_Click;
     			CorpseHudView.Height = ghSettings.CorpseHudHeight;
     			CorpseHudView.Width = ghSettings.CorpseHudWidth;
-    			DisposeCorpseHudTab();
-    			RenderCorpseHudTab();
+    			
+    			CorpseHudList.Dispose();
+	            CorpseHudList = new HudList();
+    			CorpseHudTabLayout.AddControl(CorpseHudList, new Rectangle(0,0, ghSettings.CorpseHudWidth,ghSettings.CorpseHudHeight));
+				CorpseHudList.ControlHeight = 16;	
+				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
+				CorpseHudList.AddColumn(typeof(HudStaticText), ghSettings.CorpseHudWidth - 60, null);
+				CorpseHudList.AddColumn(typeof(HudPictureBox), 16, null);
+				CorpseHudList.AddColumn(typeof(HudStaticText), 1, null);
+				
+				CorpseHudList.Click += CorpseHudList_Click;
+    			
+    			GearVisectionReadWriteSettings(false);
+    			
     			UpdateCorpseHud();
     		}catch(Exception ex){LogError(ex);}
     	}
@@ -774,7 +722,6 @@ namespace GearFoundry
 	    {  	
 	    	try
 	    	{    			    		
-	    		if(!CorpseMainTab) {return;}
 	    		
 	    		CorpseHudList.ClearRows();
   	    		
@@ -793,7 +740,7 @@ namespace GearFoundry
 		    	    	if(corpse.IOR == IOResult.corpsewithrare) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Magenta;}
 		    	    	if(corpse.IOR == IOResult.corpsefellowkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Green;}
 		    	    	if(corpse.IOR == IOResult.allcorpses) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.SlateGray;}
-						((HudPictureBox)CorpseHudListRow[2]).Image = CorpseRemoveCircle;
+						((HudPictureBox)CorpseHudListRow[2]).Image = RemoveCircle;
 						((HudStaticText)CorpseHudListRow[3]).Text = corpse.Id.ToString();
 	    	    	}
 	    	    }

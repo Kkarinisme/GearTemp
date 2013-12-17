@@ -241,19 +241,23 @@ namespace GearFoundry
         {
             try
             {
-                if (bCorpseHudEnabled == true)
+            	if(!bCorpseHudEnabled)
+            	{
+            		bCorpseHudEnabled = true;
+            		chkGearVisectionEnabled.Checked = bCorpseHudEnabled;
+					SaveSettings();            		
+            		SubscribeCorpseEvents();
+            		RenderCorpseHud();
+            	}
+                if (CorpseHudView == null)
                 {
-                    bCorpseHudEnabled = false;
-                    DisposeCorpseHud();
-
+                	RenderCorpseHud();
                 }
                 else
                 {
-                    bCorpseHudEnabled = true;
-                    RenderCorpseHud();
-
+                	DisposeCorpseHud();
                 }
-                    chkGearVisectionEnabled.Checked = bCorpseHudEnabled;
+                
 
             }
             catch (Exception ex) { LogError(ex); }

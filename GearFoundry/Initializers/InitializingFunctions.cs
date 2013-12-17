@@ -655,6 +655,7 @@ namespace GearFoundry
 
             if (bCorpseHudEnabled)
             {
+            	SubscribeCorpseEvents();
                 RenderCorpseHud();
             }
 
@@ -686,6 +687,7 @@ namespace GearFoundry
             }
             if (bKillTaskGearEnabled)
             {
+            	SubscribeKillTasks();
                 RenderKillTaskPanel();
             }
 
@@ -834,10 +836,12 @@ namespace GearFoundry
 				SaveSettings();
 				if(e.Checked)
 				{
+					SubscribeCorpseEvents();
 					RenderCorpseHud();
 				}
 				else
 				{
+					UnsubscribeCorpseEvents();
 					DisposeCorpseHud();
 				}
 			}

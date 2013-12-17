@@ -37,10 +37,12 @@ namespace GearFoundry
 			public bool Open = false;
 			public bool NewObject = true;
 			public bool IsContainer = false;
+			public bool StorageChange = false;
 			
 			public IAction ProcessAction = IAction.None;
 			
 			public DateTime LastActionTime = DateTime.MinValue;
+			public DateTime StorageChangeTime = DateTime.MinValue;
 			
 			public List<pale> Palettes = new List<pale>();
 			

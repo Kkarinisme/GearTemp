@@ -1,6 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Rules>
   <Rule>
+    <RuleNum>21</RuleNum>
+    <Enabled>true</Enabled>
+    <Priority>2</Priority>
+    <AppliesToFlag>2</AppliesToFlag>
+    <Name>GS25 Shield</Name>
+    <ArcaneLore>-1</ArcaneLore>
+    <Work>-1</Work>
+    <WieldLevel>-1</WieldLevel>
+    <WieldSkill>0</WieldSkill>
+    <MasteryType>0</MasteryType>
+    <DamageType>0</DamageType>
+    <GearScore>25</GearScore>
+    <WieldEnabled>false,false,false,false</WieldEnabled>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
+    <Slots>2097152</Slots>
+    <ArmorType></ArmorType>
+    <ArmorSet></ArmorSet>
+    <Spells></Spells>
+    <NumSpells>-1</NumSpells>
+    <Advanced>false</Advanced>
+    <Palettes></Palettes>
+  </Rule>
+  <Rule>
     <RuleNum>1</RuleNum>
     <Enabled>true</Enabled>
     <Priority>1</Priority>
@@ -20,7 +43,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -43,7 +66,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -66,7 +89,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -89,7 +112,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -112,7 +135,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -135,7 +158,7 @@
     <ArmorSet>49,50,83,52,55,56,59,84,85,58,60,61,76,62,63,64,65,53,67,74,75,79,66,68,69,70,71,72,54,57,77,86,73,87,88,90,78,80,81,82</ArmorSet>
     <Spells>5753,10000,5754,5755,5756</Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -158,7 +181,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -181,7 +204,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -204,7 +227,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -227,7 +250,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -250,7 +273,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -273,7 +296,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -296,14 +319,14 @@
     <ArmorSet></ArmorSet>
     <Spells>2609,2501,2502,2571,2503,2610,2506,2572,2507,2510,5888,5889,2573,2511,2509,2611,2512,2574,2612,2513,2623,2591,2531,3200,2592,2514,2515,2516,2517,5069,2518,2519,2520,2504,2522,2528,2530,2533,2521,2524,2523,2525,2624,2505,2508,2532,2526,2527,2613,2575,5890,3834,5891,2614,5892,3250,2529,2625,2615,2576,6126,2596,5070,5428,2534,2535,2577</Spells>
     <NumSpells>3</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
     <RuleNum>14</RuleNum>
     <Enabled>true</Enabled>
-    <Priority>1</Priority>
-    <AppliesToFlag>4,8</AppliesToFlag>
+    <Priority>2</Priority>
+    <AppliesToFlag>2,4,8</AppliesToFlag>
     <Name>1L</Name>
     <ArcaneLore>-1</ArcaneLore>
     <Work>-1</Work>
@@ -314,12 +337,12 @@
     <GearScore>-1</GearScore>
     <WieldEnabled>false,false,false,false</WieldEnabled>
     <ReqSkill>-1,-1,-1,-1</ReqSkill>
-    <Slots>1,2,32,64,32768,196608,786432,67108864</Slots>
+    <Slots>1,2,32,64,256,512,1024,2048,4096,8192,16384,32768,196608,786432,67108864</Slots>
     <ArmorType></ArmorType>
     <ArmorSet></ArmorSet>
     <Spells>6080,6040,6041,6102,6042,6081,6045,6103,6046,6048,6049,6050,6104,6051,6047,6082,6052,6105,6083,6053,6077,6072,6087,6095,6054,6055,6056,6057,6058,6059,6060,6043,6061,6062,6063,6064,6078,6044,6065,6066,6096,6084,6106,6067,6068,6069,6085,6070,6071,6076,6079,6107,6125,6100,6073,6074,6075,6039,6101</Spells>
     <NumSpells>1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -342,7 +365,7 @@
     <ArmorSet></ArmorSet>
     <Spells>6080,6040,6041,6102,6042,6081,6045,6103,6046,6048,6049,6050,6104,6051,6047,6082,6052,6105,6083,6053,6077,6072,6087,6095,6054,6055,6056,6057,6058,6059,6060,6043,6061,6062,6063,6064,6078,6044,6065,6066,6096,6084,6106,6067,6068,6069,6085,6070,6071,6076,6079,6107,6125,6100,6073,6074,6075,6039,6101</Spells>
     <NumSpells>1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -365,7 +388,7 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
   <Rule>
@@ -388,7 +411,122 @@
     <ArmorSet></ArmorSet>
     <Spells></Spells>
     <NumSpells>-1</NumSpells>
-  	<Advanced>false</Advanced>
+    <Advanced>false</Advanced>
+    <Palettes></Palettes>
+  </Rule>
+  <Rule>
+    <RuleNum>0</RuleNum>
+    <Enabled>true</Enabled>
+    <Priority>2</Priority>
+    <AppliesToFlag>2,4,8</AppliesToFlag>
+    <Name>2E</Name>
+    <ArcaneLore>-1</ArcaneLore>
+    <Work>-1</Work>
+    <WieldLevel>-1</WieldLevel>
+    <WieldSkill>0</WieldSkill>
+    <MasteryType>0</MasteryType>
+    <DamageType></DamageType>
+    <GearScore>-1</GearScore>
+    <WieldEnabled>false,false,false,false</WieldEnabled>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
+    <Slots>1,2,32,64,256,512,1024,2048,4096,8192,16384,32768,196608,786432,67108864</Slots>
+    <ArmorType></ArmorType>
+    <ArmorSet></ArmorSet>
+    <Spells>3955,3956,3957,3963,3964,3965,4019,4020,4226,4227,4232,4667,4673,4674,4675,4676,4677,4678,4679,4680,4681,4682,4683,4684,4685,4686,4687,4688,4689,4690,4691,4692,4693,4694,4695,4696,4697,4698,4699,4700,4701,4702,4703,4704,4705,4706,4707,4708,4709,4710,4711,4712,4713,4714,4715,4911,4912,5033,5034,5429,5893,5894,5895,5896,5897,6124</Spells>
+    <NumSpells>2</NumSpells>
+    <Advanced>false</Advanced>
+    <Palettes></Palettes>
+  </Rule>
+  <Rule>
+    <RuleNum>18</RuleNum>
+    <Enabled>true</Enabled>
+    <Priority>1</Priority>
+    <AppliesToFlag>2,4</AppliesToFlag>
+    <Name>Set L</Name>
+    <ArcaneLore>-1</ArcaneLore>
+    <Work>-1</Work>
+    <WieldLevel>-1</WieldLevel>
+    <WieldSkill>0</WieldSkill>
+    <MasteryType>0</MasteryType>
+    <DamageType></DamageType>
+    <GearScore>-1</GearScore>
+    <WieldEnabled>false,false,false,false</WieldEnabled>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
+    <Slots>1,2,32,64,256,512,1024,2048,4096,8192,16384,32768,196608,786432,67108864</Slots>
+    <ArmorType></ArmorType>
+    <ArmorSet>9,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,40,41</ArmorSet>
+    <Spells>6080,6040,6041,6102,6042,6081,6045,6103,6046,6048,6049,6050,6104,6051,6047,6082,6052,6105,6083,6053,6077,6072,6087,6095,6054,6055,6056,6057,6058,6059,6060,6043,6061,6062,6063,6064,6078,6044,6065,6066,6096,6084,6106,6067,6068,6069,6085,6070,6071,6076,6079,6107,6125,6100,6073,6074,6075,6039,6101</Spells>
+    <NumSpells>1</NumSpells>
+    <Advanced>false</Advanced>
+    <Palettes></Palettes>
+  </Rule>
+  <Rule>
+    <RuleNum>19</RuleNum>
+    <Enabled>true</Enabled>
+    <Priority>2</Priority>
+    <AppliesToFlag>2,4</AppliesToFlag>
+    <Name>Set 2EL</Name>
+    <ArcaneLore>-1</ArcaneLore>
+    <Work>-1</Work>
+    <WieldLevel>-1</WieldLevel>
+    <WieldSkill>0</WieldSkill>
+    <MasteryType>0</MasteryType>
+    <DamageType></DamageType>
+    <GearScore>-1</GearScore>
+    <WieldEnabled>false,false,false,false</WieldEnabled>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
+    <Slots>1,2,32,64,256,512,1024,2048,4096,8192,16384,32768,196608,786432,67108864</Slots>
+    <ArmorType></ArmorType>
+    <ArmorSet>9,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,40,41</ArmorSet>
+    <Spells>3955,3956,3957,3963,3964,3965,4019,4020,4226,4227,4232,4667,4673,4674,4675,4676,4677,4678,4679,4680,4681,4682,4683,4684,4685,4686,4687,4688,4689,4690,4691,4692,4693,4694,4695,4696,4697,4698,4699,4700,4701,4702,4703,4704,4705,4706,4707,4708,4709,4710,4711,4712,4713,4714,4715,4911,4912,5033,5034,5429,5893,5894,5895,5896,5897,6039,6040,6041,6042,6043,6044,6045,6046,6047,6048,6049,6050,6051,6052,6053,6054,6055,6056,6057,6058,6059,6060,6061,6062,6063,6064,6065,6066,6067,6068,6069,6070,6071,6072,6073,6074,6075,6076,6077,6078,6079,6080,6081,6082,6083,6084,6085,6087,6095,6096,6100,6101,6102,6103,6104,6105,6106,6107,6124,6125</Spells>
+    <NumSpells>1</NumSpells>
+    <Advanced>false</Advanced>
+    <Palettes></Palettes>
+  </Rule>
+  <Rule>
+    <RuleNum>20</RuleNum>
+    <Enabled>true</Enabled>
+    <Priority>1</Priority>
+    <AppliesToFlag>4</AppliesToFlag>
+    <Name>Cloak 4</Name>
+    <ArcaneLore>-1</ArcaneLore>
+    <Work>-1</Work>
+    <WieldLevel>-1</WieldLevel>
+    <WieldSkill>-1</WieldSkill>
+    <MasteryType>0</MasteryType>
+    <DamageType></DamageType>
+    <GearScore>4</GearScore>
+    <WieldEnabled>false,false,false,false</WieldEnabled>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
+    <Slots>134217728</Slots>
+    <ArmorType></ArmorType>
+    <ArmorSet>49,50,83,52,55,56,59,84,85,58,60,61,76,62,63,64,65,53,67,74,75,79,66,68,69,70,71,72,54,57,77,86,73,87,88,90,78,80,81,82</ArmorSet>
+    <Spells>5753,10000,5754,5755,5756</Spells>
+    <NumSpells>-1</NumSpells>
+    <Advanced>false</Advanced>
+    <Palettes></Palettes>
+  </Rule>
+  <Rule>
+    <RuleNum>22</RuleNum>
+    <Enabled>true</Enabled>
+    <Priority>1</Priority>
+    <AppliesToFlag>2</AppliesToFlag>
+    <Name>GS25 L Shield</Name>
+    <ArcaneLore>-1</ArcaneLore>
+    <Work>-1</Work>
+    <WieldLevel>-1</WieldLevel>
+    <WieldSkill>0</WieldSkill>
+    <MasteryType>0</MasteryType>
+    <DamageType>0</DamageType>
+    <GearScore>25</GearScore>
+    <WieldEnabled>false,false,false,false</WieldEnabled>
+    <ReqSkill>-1,-1,-1,-1</ReqSkill>
+    <Slots>2097152</Slots>
+    <ArmorType></ArmorType>
+    <ArmorSet></ArmorSet>
+    <Spells>6039,6040,6041,6042,6043,6044,6045,6046,6047,6048,6049,6050,6051,6052,6053,6054,6055,6056,6057,6058,6059,6060,6061,6062,6063,6064,6065,6066,6067,6068,6069,6070,6071,6072,6073,6074,6075,6076,6077,6078,6079,6080,6081,6082,6083,6084,6085,6095,6101,6102,6103,6104,6105,6106,6107,6125</Spells>
+    <NumSpells>-1</NumSpells>
+    <Advanced>false</Advanced>
     <Palettes></Palettes>
   </Rule>
 </Rules>

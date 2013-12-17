@@ -88,9 +88,7 @@ namespace GearFoundry
                 _UpdateRulesTabs();
                 _UpdateSalvagePanel();
                 
-                //TODO:  Add these to clear on logoff
                 SubscribeFellowshipEvents();
-                SubscribeKillTasks();
 
                 //TODO:  This could be moved to be subscribed situationally.
                 Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);
