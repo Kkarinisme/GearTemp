@@ -1902,7 +1902,7 @@ namespace GearFoundry
 			t.NPCInfo = "Cragstone";
 			t.NPCCoords = "26.2N, 47.1E";
 			t.NPCYellowFlagText = "collecting 10 Desert Flowers";
-			t.NPCYellowCompleteText = "";
+			t.NPCYellowCompleteText = "Ahh, a full stack of 10 Desert Flowers.";
 			NewCollectTasks.Add(t);
 
 			

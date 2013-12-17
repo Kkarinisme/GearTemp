@@ -228,6 +228,7 @@ namespace GearFoundry
 	            	SoundPlayer player = new SoundPlayer(SoundList.Find(x => x.SoundId == SoundFileId).SoundStream);
 	                player.Play();
 	                player.Dispose();
+	                SoundList.Find(x => x.SoundId == SoundFileId).SoundStream.Position = 0;  
 	            }
         	}catch(Exception ex){LogError(ex);}
 		}

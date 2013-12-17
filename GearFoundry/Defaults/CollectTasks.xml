@@ -400,7 +400,7 @@
     <NPCInfo>Cragstone</NPCInfo>
     <NPCCoords>26.2N, 47.1E</NPCCoords>
     <NPCYellowFlagText>collecting 10 Desert Flowers</NPCYellowFlagText>
-    <NPCYellowCompleteText />
+    <NPCYellowCompleteText>Ahh, a full stack of 10 Desert Flowers.</NPCYellowCompleteText>
     <track>false</track>
     <detect>false</detect>
     <active>false</active>

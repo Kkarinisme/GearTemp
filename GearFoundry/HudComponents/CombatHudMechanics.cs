@@ -109,6 +109,8 @@ namespace GearFoundry
 
 				FillCombatHudLists();
 				
+				if(gtSettings.RenderCurrentTargetDebuffView) {RenderCurrentTargetDebuffBar();}
+				
 			}catch(Exception ex){LogError(ex);}
 		}
 		

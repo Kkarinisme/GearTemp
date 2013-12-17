@@ -303,6 +303,14 @@ namespace GearFoundry
 			try
 			{
 				gtSettings.RenderCurrentTargetDebuffView = TacticianCurrentTargetBar.Checked;
+				if(gtSettings.RenderCurrentTargetDebuffView)
+				{
+					RenderCurrentTargetDebuffBar();
+				}
+				else
+				{
+					DisposeCurrentTargetDebuffView();
+				}
 				CombatHudReadWriteSettings(false);
 				
 			}catch(Exception ex){LogError(ex);}
@@ -321,10 +329,10 @@ namespace GearFoundry
 					{
 						TacticianRow = TacticianDiplayList.AddRow();
 						//MobHealthBar
-						((HudProgressBar)TacticianRow[0]).FontHeight = 10;
-						if(CombatHudMobTrackingList[mobindex].Name.Length > 15)
+						((HudProgressBar)TacticianRow[0]).FontHeight = 8;
+						if(CombatHudMobTrackingList[mobindex].Name.Length > 12)
 						{
-							((HudProgressBar)TacticianRow[0]).PreText = CombatHudMobTrackingList[mobindex].Name.Substring(0,15);
+							((HudProgressBar)TacticianRow[0]).PreText = CombatHudMobTrackingList[mobindex].Name.Substring(0,12);
 						}
 						else
 						{
@@ -358,6 +366,13 @@ namespace GearFoundry
 	
 					}
 				}	
+				if(gtSettings.RenderCurrentTargetDebuffView) 
+				{
+					if(Core.Actions.CurrentSelection != 0 && Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.Monster)
+					{
+						UpdateCurrentTargetDebuffBar(CombatHudMobTrackingList.Find(x => x.Id == Core.Actions.CurrentSelection));
+					}
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -405,7 +420,7 @@ namespace GearFoundry
 					DisposeCurrentTargetDebuffView();
 				}
 				
-				CurrentTargetDebuffView = new HudView(String.Empty, 120, 40, new ACImage(0x6AA3));
+				CurrentTargetDebuffView = new HudView("Current Target", 120, 40, new ACImage(0x6AA3));
 				CurrentTargetDebuffView.UserAlphaChangeable = false;
 				CurrentTargetDebuffView.ShowInBar = false;
 				CurrentTargetDebuffView.UserResizeable = false;
@@ -423,8 +438,7 @@ namespace GearFoundry
 				
 				CurrentTargetDebuffList = new List<HudImageStack>();
 				
-				CurrentTargetDebuffView.VisibleChanged += CurrentTargetDebuffView_VisibleChanged;	
-				MasterTimer.Tick += CurrentTarget_OnTimerDo;				
+				CurrentTargetDebuffView.VisibleChanged += CurrentTargetDebuffView_VisibleChanged;				
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -433,19 +447,6 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(!gtSettings.RenderCurrentTargetDebuffView){return;}
-				
-				CurrentTargetDebuffView.Title = target.Name;
-				
-				if(target.DebuffSpellList.Count > 5)
-				{
-					CurrentTargetDebuffView.Width = target.DebuffSpellList.Count * 20;
-				}
-				else
-				{
-					CurrentTargetDebuffView.Width = 120;
-				}
-				
 				try
 				{
 					if(CurrentTargetDebuffList.Count != 0)
@@ -455,22 +456,41 @@ namespace GearFoundry
 							debuff.Dispose();
 						}
 					}
+					CurrentTargetDebuffList.Clear();
 				}catch(Exception ex){LogError(ex);}
 				
-				foreach(var debuff in target.DebuffSpellList.OrderBy(x => x.SecondsRemaining))
-				{
-					HudImageStack debufficon = new HudImageStack();
-					if(debuff.SecondsRemaining <= 15) {debufficon.Add(DebuffRectangle, DebuffExpiring);}
-					else if(debuff.SecondsRemaining <= 30){debufficon.Add(DebuffRectangle, DebuffWarning);}
-					else{debufficon.Add(DebuffRectangle,DebuffCurrent);}
-					debufficon.Add(DebuffRectangle, SpellIndex[debuff.SpellId].spellicon);
-					CurrentTargetDebuffList.Add(debufficon);	
+				if(target.Id != 0)
+				{				
+				
+					if(target.DebuffSpellList.Count > 5)
+					{
+						CurrentTargetDebuffView.Width = target.DebuffSpellList.Count * 20;
+					}
+					else
+					{
+						CurrentTargetDebuffView.Width = 120;
+					}
+					
+					if(target.DebuffSpellList.Count > 0)
+					{
+						foreach(var debuff in target.DebuffSpellList.OrderBy(x => x.SecondsRemaining))
+						{
+							HudImageStack debufficon = new HudImageStack();
+							if(debuff.SecondsRemaining <= 15) {debufficon.Add(DebuffRectangle, DebuffExpiring);}
+							else if(debuff.SecondsRemaining <= 30){debufficon.Add(DebuffRectangle, DebuffWarning);}
+							else{debufficon.Add(DebuffRectangle,DebuffCurrent);}
+							debufficon.Add(DebuffRectangle, SpellIndex[debuff.SpellId].spellicon);
+							CurrentTargetDebuffList.Add(debufficon);	
+						}
+						
+						for(int i = 0; i < CurrentTargetDebuffList.Count; i ++)
+						{
+							CurrentTargetDebuffLayout.AddControl(CurrentTargetDebuffList[i], new Rectangle((20*i) + 2,2,16,16));
+						}
+					}
 				}
 				
-				for(int i = 0; i < CurrentTargetDebuffList.Count; i ++)
-				{
-					CurrentTargetDebuffLayout.AddControl(CurrentTargetDebuffList[i], new Rectangle((20*i) + 2,2,16,16));
-				}
+				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -502,8 +522,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(CurrentTargetDebuffView == null){return;}
-				MasterTimer.Tick -= CurrentTarget_OnTimerDo;	
+				if(CurrentTargetDebuffView == null){return;}	
 				CurrentTargetDebuffView.VisibleChanged -= CurrentTargetDebuffView_VisibleChanged;	
 				if(CurrentTargetDebuffList.Count != 0)
 				{
@@ -512,26 +531,18 @@ namespace GearFoundry
 						debuff.Dispose();
 					}
 				}	
-				CurrentTargetDebuffList = null;
+				
+				CurrentTargetDebuffList.Clear();
 				
 				CurrentTargetDebuffView.Dispose();
 				CurrentTargetDebuffTabView.Dispose();
 				CurrentTargetDebuffLayout.Dispose();
 				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
-		private void CurrentTarget_OnTimerDo(object sender, EventArgs e)
-		{
-			try
-			{
-				if(Core.WorldFilter[Core.Actions.CurrentSelection].ObjectClass == ObjectClass.Monster)
-				{
-					UpdateCurrentTargetDebuffBar(CombatHudMobTrackingList.Find(x => x.Id == Core.Actions.CurrentSelection));
-				}
+				CurrentTargetDebuffView = null;
 				
 			}catch(Exception ex){LogError(ex);}
 		}
+
 		
 		private HudView FocusHudView = null;
 		private HudTabView FocusHudTabView = null;
