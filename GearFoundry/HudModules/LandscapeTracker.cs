@@ -801,6 +801,7 @@ namespace GearFoundry
     	{
     		try
 			{
+    			int scroll = LandscapeHudList.ScrollPosition;
     			LandscapeRow = LandscapeHudList[row];
     			int woId = Convert.ToInt32(((HudStaticText)LandscapeRow[3]).Text);
     			LandscapeObject lo = LandscapeTrackingList.Find(x => x.Id == woId);
@@ -837,6 +838,7 @@ namespace GearFoundry
 					lo.notify = false;
     			}
 				UpdateLandscapeHud();
+				LandscapeHudList.ScrollPosition = scroll;
 			}
 			catch (Exception ex) { LogError(ex); }		
     	}
