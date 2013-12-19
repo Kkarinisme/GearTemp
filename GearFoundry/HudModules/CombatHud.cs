@@ -321,6 +321,8 @@ namespace GearFoundry
 		{
 			try
 			{
+				int scroll = TacticianDiplayList.ScrollPosition;
+				
 				TacticianDiplayList.ClearRows();
 				
 				for(int mobindex = 0; mobindex < CombatHudMobTrackingList.Count; mobindex++)
@@ -373,6 +375,9 @@ namespace GearFoundry
 						UpdateCurrentTargetDebuffBar(CombatHudMobTrackingList.Find(x => x.Id == Core.Actions.CurrentSelection));
 					}
 				}
+				
+				TacticianDiplayList.ScrollPosition = scroll;
+				
 			}catch(Exception ex){LogError(ex);}
 		}
 		

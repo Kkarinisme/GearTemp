@@ -849,6 +849,8 @@ namespace GearFoundry
 	    	{       			    			    		
 	    		if(!LandscapeMainTab) {return;}
 	    		
+	    		int scroll = LandscapeHudList.ScrollPosition;
+	    		
 	    		var HudUpdateList = from allitems in LandscapeTrackingList
 	    					where allitems.notify
 	    					orderby allitems.DistanceAway
@@ -875,6 +877,8 @@ namespace GearFoundry
 					((HudPictureBox)LandscapeHudListRow[2]).Image = LandscapeRemoveCircle;
 					((HudStaticText)LandscapeHudListRow[3]).Text = item.Id.ToString();
 	    	    }
+	    	    
+	    	    LandscapeHudList.ScrollPosition = scroll;
 	    	}catch(Exception ex){LogError(ex);}  	
 	    }
 	}

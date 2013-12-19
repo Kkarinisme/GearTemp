@@ -463,7 +463,12 @@ namespace GearFoundry
 		{
 			try
 			{
-				if((DateTime.Now - LOList.Find(x => x.StorageChange && !x.IsContainer).StorageChangeTime).TotalMilliseconds < 200) {return;}
+				if(LOList.FindIndex(x => x.StorageChange && !x.IsContainer) == -1)
+				{
+					Core.RenderFrame -= InspectorMoveCheckBack;
+					return;
+				}
+				else if((DateTime.Now - LOList.Find(x => x.StorageChange && !x.IsContainer).StorageChangeTime).TotalMilliseconds < 200) {return;}
 				else
 				{
 					Core.RenderFrame -= InspectorMoveCheckBack;

@@ -69,53 +69,58 @@ namespace GearFoundry
 		
 		private void SubscribeKillTasks()
 		{
+			
 			ReadWriteGearTaskSettings(true);
 			
-			List<KillTask> KTL = ReadMasterKTList();
-			List<KillTask> KTAdds = KTL.Where(x => !mKTSet.MyKillTasks.Any(y => y.TaskName == x.TaskName)).ToList();
-			List<KillTask> KTRemoves = mKTSet.MyKillTasks.Where(x => !KTL.Any(y => y.TaskName == x.TaskName)).ToList();
-			mKTSet.MyKillTasks.RemoveAll(x => KTRemoves.Any(y => y.TaskName == x.TaskName));
-			mKTSet.MyKillTasks = mKTSet.MyKillTasks.Union(KTAdds).ToList();
-			KTL = null;
-			KTAdds = null;
-			KTRemoves = null;
-			
-			List<CollectTask> CTL = ReadMasterCTList();
-			List<CollectTask> CTAdds = CTL.Where(x => !mKTSet.MyCollectTasks.Any(y => y.TaskName == x.TaskName)).ToList();
-			List<CollectTask> CTRemoves = mKTSet.MyCollectTasks.Where(x => !CTL.Any(y => y.TaskName == x.TaskName)).ToList();
-			mKTSet.MyCollectTasks.RemoveAll(x => CTRemoves.Any(y => y.TaskName == x.TaskName));
-			mKTSet.MyCollectTasks = mKTSet.MyCollectTasks.Union(CTAdds).ToList();
-			CTL = null;
-			CTAdds = null;
-			CTRemoves = null;
+			try
+			{
+				List<KillTask> KTL = ReadMasterKTList();
+				List<KillTask> KTAdds = KTL.Where(x => !mKTSet.MyKillTasks.Any(y => y.TaskName == x.TaskName)).ToList();
+				List<KillTask> KTRemoves = mKTSet.MyKillTasks.Where(x => !KTL.Any(y => y.TaskName == x.TaskName)).ToList();
+				mKTSet.MyKillTasks.RemoveAll(x => KTRemoves.Any(y => y.TaskName == x.TaskName));
+				mKTSet.MyKillTasks = mKTSet.MyKillTasks.Union(KTAdds).ToList();
+				KTL = null;
+				KTAdds = null;
+				KTRemoves = null;
 				
-			Globals.Core.ChatBoxMessage += KillTask_ChatBoxMessage;
-			Globals.Core.CharacterFilter.Logoff += KillTask_LogOff;
-			Globals.Core.WorldFilter.ChangeObject += CollectTask_ChangeObject;
-			KTSaveTimer.Interval = 600000;
-			KTSaveTimer.Start();
-			KTSaveTimer.Tick += KTSaveUpdates;
+				List<CollectTask> CTL = ReadMasterCTList();
+				List<CollectTask> CTAdds = CTL.Where(x => !mKTSet.MyCollectTasks.Any(y => y.TaskName == x.TaskName)).ToList();
+				List<CollectTask> CTRemoves = mKTSet.MyCollectTasks.Where(x => !CTL.Any(y => y.TaskName == x.TaskName)).ToList();
+				mKTSet.MyCollectTasks.RemoveAll(x => CTRemoves.Any(y => y.TaskName == x.TaskName));
+				mKTSet.MyCollectTasks = mKTSet.MyCollectTasks.Union(CTAdds).ToList();
+				CTL = null;
+				CTAdds = null;
+				CTRemoves = null;
+					
+				Core.ChatBoxMessage += KillTask_ChatBoxMessage;
+				Core.CharacterFilter.Logoff += KillTask_LogOff;
+				Core.WorldFilter.ChangeObject += CollectTask_ChangeObject;
+				
+				KTSaveTimer.Interval = 600000;
+				KTSaveTimer.Start();
+				KTSaveTimer.Tick += KTSaveUpdates;
+			}catch(Exception ex){LogError(ex);}
 			
 			try
 			{	
 				foreach(CollectTask coltsk in mKTSet.MyCollectTasks)
 				{
+					int colcount = 0;
 					if(GearFoundry.Globals.Core.WorldFilter.GetInventory().Any(x => @x.Name == @coltsk.Item))
 					{
 						List<WorldObject> inventory = Core.WorldFilter.GetInventory().Where(x => @x.Name == @coltsk.Item).ToList();
-						int colcount = 0;
+						
 						foreach(WorldObject item in inventory)
 						{
 							colcount += item.Values(LongValueKey.StackCount);
 						}
-						coltsk.CurrentCount = colcount;
-						if(coltsk.CurrentCount >= coltsk.CompleteCount)
-						{
-							coltsk.complete = true;
-						}
+						
 					}
-					
-					
+					coltsk.CurrentCount = colcount;
+					if(coltsk.CurrentCount >= coltsk.CompleteCount)
+					{
+						coltsk.complete = true;
+					}	
 				}
 			}catch(Exception ex){LogError(ex);}
 			
@@ -469,6 +474,30 @@ namespace GearFoundry
 						{
 							mKTSet.MyCollectTasks[CollectTaskIndex].active = false;
 							mKTSet.MyCollectTasks[CollectTaskIndex].complete = false;
+							
+							try
+							{	
+								foreach(CollectTask coltsk in mKTSet.MyCollectTasks)
+								{
+									int colcount = 0;
+									if(GearFoundry.Globals.Core.WorldFilter.GetInventory().Any(x => @x.Name == @coltsk.Item))
+									{
+										List<WorldObject> inventory = Core.WorldFilter.GetInventory().Where(x => @x.Name == @coltsk.Item).ToList();
+										
+										foreach(WorldObject item in inventory)
+										{
+											colcount += item.Values(LongValueKey.StackCount);
+										}
+										
+									}
+									coltsk.CurrentCount = colcount;
+									if(coltsk.CurrentCount >= coltsk.CompleteCount)
+									{
+										coltsk.complete = true;
+									}	
+								}
+							}catch(Exception ex){LogError(ex);}
+							
 							return;
 						}
 					}
@@ -755,7 +784,7 @@ namespace GearFoundry
 		private void UpdateTaskPanel()
 		{
 			try
-			{
+			{		
 				TaskIncompleteList.ClearRows();
 				TaskCompleteList.ClearRows();
 				KillTaskList.ClearRows();

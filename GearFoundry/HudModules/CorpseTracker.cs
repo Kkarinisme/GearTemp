@@ -722,6 +722,7 @@ namespace GearFoundry
 	    {  	
 	    	try
 	    	{    			    		
+	    		int scroll = CorpseHudList.ScrollPosition;
 	    		
 	    		CorpseHudList.ClearRows();
   	    		
@@ -744,6 +745,8 @@ namespace GearFoundry
 						((HudStaticText)CorpseHudListRow[3]).Text = corpse.Id.ToString();
 	    	    	}
 	    	    }
+	    	    
+	    	    CorpseHudList.ScrollPosition = scroll;
 	    	}catch(Exception ex){LogError(ex);}
 	    	
 	    }	    
