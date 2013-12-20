@@ -172,7 +172,7 @@ namespace GearFoundry
 				Core.WorldFilter.ReleaseObject += ButlerReleased;
 				MasterTimer.Tick += ButlerTimerDo;
 				Core.EchoFilter.ServerDispatch += ButlerServerDispatch;
-                ButlerHudView.Resize += ButlerHudView_Resize; 
+                
 
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -189,7 +189,7 @@ namespace GearFoundry
 				Core.WorldFilter.ReleaseObject -= ButlerReleased;
 				MasterTimer.Tick -= ButlerTimerDo;
 				Core.EchoFilter.ServerDispatch -= ButlerServerDispatch;
-                ButlerHudView.Resize -= ButlerHudView_Resize; 
+                
 			}
 			catch(Exception ex){LogError(ex);}
 		}	
@@ -351,6 +351,7 @@ namespace GearFoundry
  				
  				SubscribeButlerEvents();
                 ButlerHudView.UserResizeable = true;
+                ButlerHudView.Resize += ButlerHudView_Resize; 
 
  				
  				ButlerTab = true;
@@ -420,19 +421,22 @@ namespace GearFoundry
     	{	
     		try
     		{
+    			if(ButlerHudView == null) {return;}
     			UnsubscribeButlerEvents();
     			
     			DisposeValetTabLayout();
     			DisposeButlerHudButlerLayout();
     			DisposeButlerHudMaidLayout();
     			
+    			ButlerHudView.Resize -= ButlerHudView_Resize; 
     			ButlerHudTabView.OpenTabChange -= ButlerHudTabView_OpenTabChange;
     			
     			ValetTabLayout.Dispose();
     			MaidTabLayout.Dispose();
     			ButlerHudTabLayout.Dispose();
     			ButlerHudTabView.Dispose();
-    			ButlerHudView.Dispose();    									
+    			ButlerHudView.Dispose();
+				ButlerHudView = null;    			
   			
     		}catch(Exception ex) {LogError(ex);}
     		return;

@@ -385,10 +385,11 @@ namespace GearFoundry
         {
             try
             {
-            	mMainSettings.bquickSlotsvEnabled = chkQuickSlotsv.Checked;
+            	mMainSettings.bquickSlotsvEnabled = false; 
+            	chkQuickSlotsv.Checked = mMainSettings.bquickSlotsvEnabled;
                 SaveSettings();
             	
-                if (!mMainSettings.bquickSlotsvEnabled)
+                if (quickiesvHud != null)
                 {
                     DisposeVerticalQuickSlots();
                 }
@@ -404,9 +405,10 @@ namespace GearFoundry
         {
             try
             {
-        		mMainSettings.bquickSlotshEnabled = chkQuickSlotsh.Checked;
+        		mMainSettings.bquickSlotshEnabled = false;
+       			chkQuickSlotsh.Checked = mMainSettings.bquickSlotshEnabled;
         		SaveSettings();
-                if (!mMainSettings.bquickSlotshEnabled)
+                if (quickieshHud != null)
                 {
                     DisposeHorizontalQuickSlots();
                 }

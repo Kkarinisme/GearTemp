@@ -736,6 +736,8 @@ namespace GearFoundry
 		{
 			try
 			{
+				
+				if(TaskHudView == null) {return;}
 				TaskIncompleteList.Click -= TaskIncompleteList_Click;
 				TaskCompleteList.Click -= TaskCompleteList_Click;
 				KillTaskList.Click -= KillTaskList_Click;
@@ -820,7 +822,8 @@ namespace GearFoundry
 	            CompTaskLabel2.Text = "Return";
 	            
 	            TaskCompleteList.Click -= TaskCompleteList_Click;
-	            TaskCompleteLayout.Dispose();
+	            TaskCompleteList.Dispose();
+	            TaskCompleteList = new HudList();
 	            TaskCompleteLayout.AddControl(TaskCompleteList, new Rectangle(0,20,mKTSet.HudWidth,mKTSet.HudHeight -20));
 	            TaskCompleteList.ControlHeight = 16;
 	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth*2/3), null);  //Mob/Item Name

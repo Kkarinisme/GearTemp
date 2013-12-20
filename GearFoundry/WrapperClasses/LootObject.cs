@@ -44,13 +44,13 @@ namespace GearFoundry
 			public DateTime LastActionTime = DateTime.MinValue;
 			public DateTime StorageChangeTime = DateTime.MinValue;
 			
-			public List<pale> Palettes = new List<pale>();
+//			public List<pale> Palettes = new List<pale>();
 			
-			public class pale
-			{
-				int entry = 0;
-				int color = 0;
-			}
+//			public class pale
+//			{
+//				int entry = 0;
+//				int color = 0;
+//			}
 					
 			private WorldObject wo;
 		

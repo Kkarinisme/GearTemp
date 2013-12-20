@@ -39,7 +39,7 @@ namespace GearFoundry
         //Interop Codes
 		private const int NOTIFYLINK_ID = 221112;
 		private const int GOARROWLINK_ID = 110011;
-		
+	
 		//EchoFilter decoding constants
 		private const int AC_DESTROY_OBJECT = 0x24;
 		private const int AC_ADJUST_STACK = 0x197;
