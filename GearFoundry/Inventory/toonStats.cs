@@ -30,11 +30,11 @@ namespace GearFoundry
         {
             try
             {
-                btoonStatsEnabled = e.Checked; 
+                mMainSettings.btoonStatsEnabled = e.Checked; 
                 SaveSettings();
 
 
-                if (btoonStatsEnabled)
+                if (mMainSettings.btoonStatsEnabled)
                 {
                     getStats();
                 }

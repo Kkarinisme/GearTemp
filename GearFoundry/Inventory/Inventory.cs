@@ -817,10 +817,10 @@ namespace GearFoundry
         {
         	if(!programinv.Contains("armor"))
         	{
-              if (!binventoryWaitingEnabled)
-                { binventoryWaitingEnabled = true; }
+              if (!mMainSettings.binventoryWaitingEnabled)
+                { mMainSettings.binventoryWaitingEnabled = true; }
               else
-                { binventoryWaitingEnabled = false; }
+                { mMainSettings.binventoryWaitingEnabled = false; }
         	}
         }
 

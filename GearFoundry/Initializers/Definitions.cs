@@ -194,53 +194,6 @@ namespace GearFoundry
 	
 			
         }
-
-
-         
-        //variables used to hold settings
-        private static bool bquickSlotsvEnabled;
-        private static bool bquickSlotshEnabled;
- 
- 
-        //Corpsehud flag
-        private static bool bCorpseHudEnabled;
- 
-        //Loot Flags
-        private static bool bGearInspectorEnabled;
-
-        //Butler Flags
-        private static bool bGearButlerEnabled;
-        
-        //CombatHud Flags
-        private static bool bCombatHudEnabled;
-
-        //RemoteGear Flag
-        private static bool bRemoteGearEnabled;
-
-        //PortalGear Flag
-        private static bool bPortalGearEnabled;
-
-        //KillTaskGear Flag
-        private static bool bKillTaskGearEnabled;
-
-        //Inventory flags
-        private static bool bArmorHudEnabled;
-        private static bool binventoryHudEnabled;
-        private static bool btoonStatsEnabled;
-        private static bool binventoryEnabled;
-        private static bool binventoryBurdenEnabled;
-        private static bool binventoryCompleteEnabled;
-        private static bool binventoryWaitingEnabled;
-
-  
-		//Landscape Tracker Flags
-        private static bool bLandscapeHudEnabled;   
-
-
-		//Graphics
-		
-
-
     }    
 }
         

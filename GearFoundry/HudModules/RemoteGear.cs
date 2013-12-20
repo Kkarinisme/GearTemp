@@ -217,12 +217,12 @@ namespace GearFoundry
         {
             try
             {
-            	if(!bGearButlerEnabled)
+            	if(!mMainSettings.bGearButlerEnabled)
             	{
             		SubscribeButlerEvents();
             		RenderButlerHud();
-            		bGearButlerEnabled = true;
-            		chkGearButlerEnabled.Checked = bGearButlerEnabled;
+            		mMainSettings.bGearButlerEnabled = true;
+            		chkGearButlerEnabled.Checked = mMainSettings.bGearButlerEnabled;
                 	SaveSettings();
                 	return;
             	}
@@ -244,10 +244,10 @@ namespace GearFoundry
         {
             try
             {
-            	if(!bCorpseHudEnabled)
+            	if(!mMainSettings.bGearVisection)
             	{
-            		bCorpseHudEnabled = true;
-            		chkGearVisectionEnabled.Checked = bCorpseHudEnabled;
+            		mMainSettings.bGearVisection = true;
+            		chkGearVisectionEnabled.Checked = mMainSettings.bGearVisection;
 					SaveSettings();            		
             		SubscribeCorpseEvents();
             		RenderCorpseHud();
@@ -275,10 +275,10 @@ namespace GearFoundry
         {
             try
             {
-            	if(!bGearInspectorEnabled)
+            	if(!mMainSettings.bGearInspectorEnabled)
             	{
-            		bGearInspectorEnabled = true;
-            		chkGearInspectorEnabled.Checked = bGearInspectorEnabled;
+            		mMainSettings.bGearInspectorEnabled = true;
+            		chkGearInspectorEnabled.Checked = mMainSettings.bGearInspectorEnabled;
 					SaveSettings();            		
 					SubscribeItemEvents();
 					RenderItemHud();
@@ -304,10 +304,10 @@ namespace GearFoundry
         {
             try
             {
-            	if(!bLandscapeHudEnabled)
+            	if(!mMainSettings.bGearSenseHudEnabled)
             	{
-            		bLandscapeHudEnabled = true;
-            		chkGearSenseEnabled.Checked = bLandscapeHudEnabled;
+            		mMainSettings.bGearSenseHudEnabled = true;
+            		chkGearSenseEnabled.Checked = mMainSettings.bGearSenseHudEnabled;
             		SaveSettings();
             		SubscribeLandscapeEvents();
             		RenderLandscapeHud();
@@ -332,12 +332,12 @@ namespace GearFoundry
         {
             try
             {
-            	if(!bCombatHudEnabled) 
+            	if(!mMainSettings.bGearTacticianEnabled) 
             	{
             		SubscribeCombatEvents();
             		RenderTacticianHud();
-            		bCombatHudEnabled = true;
-            		chkCombatHudEnabled.Checked = bCombatHudEnabled;
+            		mMainSettings.bGearTacticianEnabled = true;
+            		chkCombatHudEnabled.Checked = mMainSettings.bGearTacticianEnabled;
                 	SaveSettings();
                 	WriteToChat("GearTactician Enabled.");
                 	return;
@@ -360,20 +360,20 @@ namespace GearFoundry
         {
             try
             {
-                if (binventoryHudEnabled == true)
+                if (mMainSettings.binventoryHudEnabled == true)
                 {
-                    binventoryHudEnabled = false;
+                    mMainSettings.binventoryHudEnabled = false;
                     DisposeInventoryHud();
 
                 }
                 else
                 {
 
-                    binventoryHudEnabled = true;
+                    mMainSettings.binventoryHudEnabled = true;
                     RenderInventoryHud();
 
                 }
-                chkInventoryHudEnabled.Checked = binventoryHudEnabled;
+                chkInventoryHudEnabled.Checked = mMainSettings.binventoryHudEnabled;
                 SaveSettings();
 
             }
@@ -385,44 +385,36 @@ namespace GearFoundry
         {
             try
             {
-                if (bquickSlotsvEnabled == true)
+            	mMainSettings.bquickSlotsvEnabled = chkQuickSlotsv.Checked;
+                SaveSettings();
+            	
+                if (!mMainSettings.bquickSlotsvEnabled)
                 {
-                    bquickSlotsvEnabled = false;
                     DisposeVerticalQuickSlots();
                 }
                 else
                 {
-
-                    bquickSlotsvEnabled = true;
                     RenderVerticalQuickSlots();
-
                 }
-                chkQuickSlotsv.Checked = bquickSlotsvEnabled;
-                SaveSettings();
-
             }
             catch (Exception ex) { LogError(ex); }
 
         }
         private void mRemoteGear7_Hit(object sender, System.EventArgs e)
         {
-            try{
-                if (bquickSlotshEnabled == true)
+            try
+            {
+        		mMainSettings.bquickSlotshEnabled = chkQuickSlotsh.Checked;
+        		SaveSettings();
+                if (!mMainSettings.bquickSlotshEnabled)
                 {
-                    bquickSlotshEnabled = false;
                     DisposeHorizontalQuickSlots();
                 }
                 else
                 {
-
-                    bquickSlotshEnabled = true;
                     RenderHorizontalQuickSlots();
-
                 }
-                chkQuickSlotsh.Checked = bquickSlotshEnabled;
-                SaveSettings();
-
-            
+                SaveSettings(); 
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -431,23 +423,34 @@ namespace GearFoundry
         {
             try
             {
-                if (bPortalGearEnabled == true)
+            	if(!mMainSettings.bPortalGearEnabled)
+            	{
+            		SubscribePortalEvents();
+            		RenderPortalGearHud();
+            		RenderPortal2GearHud();
+            		mMainSettings.bPortalGearEnabled = true;
+            		chkPortalGearEnabled.Checked = mMainSettings.bPortalGearEnabled;
+                	SaveSettings();
+                	WriteToChat("PortalGear Enabled.");
+                	return;
+            	}
+            	
+            	if (portalGearHud == null) 
+            	{
+            		RenderPortalGearHud();
+            	}
+            	else
+            	{
+            		DisposePortalGearHud();
+            	}
+                if (portalRecallGearHud == null) 
                 {
-                    bPortalGearEnabled = false;
-                    if (portalGearHud != null) { DisposePortalGearHud(); }
-                    if (portalRecallGearHud != null) { DisposePortalRecallGearHud(); }
+                	RenderPortal2GearHud();
                 }
                 else
                 {
-                    
-                    bPortalGearEnabled = true;
-                    RenderPortalGearHud();
-                    RenderPortal2GearHud();
-
+                	DisposePortalRecallGearHud();
                 }
-
-                chkPortalGearEnabled.Checked = bPortalGearEnabled;
-                SaveSettings();
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -456,12 +459,12 @@ namespace GearFoundry
         {
             try
             {
-            	if(!bKillTaskGearEnabled)
+            	if(!mMainSettings.bGearTaskerEnabled)
             	{
             		SubscribeKillTasks();
             		RenderKillTaskPanel();
-            		bKillTaskGearEnabled = true;
-            		chkKillTaskGearEnabled.Checked = bKillTaskGearEnabled;
+            		mMainSettings.bGearTaskerEnabled = true;
+            		chkKillTaskGearEnabled.Checked = mMainSettings.bGearTaskerEnabled;
                 	SaveSettings();
                 	WriteToChat("GearTasker Enabled.");
                 	return;

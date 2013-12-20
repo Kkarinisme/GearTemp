@@ -151,8 +151,8 @@ namespace GearFoundry
                     {                    
                         xdocSwitchGearSettings = new XDocument(new XElement("Settings"));
                         xdocSwitchGearSettings.Element("Settings").Add(new XElement("Setting",
-                        new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
-                        new XElement("QuickSlotshEnabled", bquickSlotshEnabled)));
+                        new XElement("QuickSlotsvEnabled", mMainSettings.bquickSlotsvEnabled),
+                        new XElement("QuickSlotshEnabled", mMainSettings.bquickSlotshEnabled)));
                         xdocSwitchGearSettings.Save(switchGearSettingsFilename);
                       
                     }
@@ -549,21 +549,21 @@ namespace GearFoundry
                 
                 XElement el = xdocGenSet.Root.Element("Setting");
 
-                bCorpseHudEnabled = Convert.ToBoolean(el.Element("CorpseHudEnabled").Value);
-               bLandscapeHudEnabled = Convert.ToBoolean(el.Element("LandscapeHudEnabled").Value);
-                bGearInspectorEnabled = Convert.ToBoolean(el.Element("InspectorHudEnabled").Value);
-                bGearButlerEnabled = Convert.ToBoolean(el.Element("ButlerHudEnabled").Value);
-               bCombatHudEnabled = Convert.ToBoolean(el.Element("CombatHudEnabled").Value);
-               bRemoteGearEnabled = Convert.ToBoolean(el.Element("RemoteGearEnabled").Value);
-               bPortalGearEnabled = Convert.ToBoolean(el.Element("PortalGearEnabled").Value);
-               bKillTaskGearEnabled = Convert.ToBoolean(el.Element("KillTaskGearEnabled").Value);
-               bquickSlotsvEnabled = Convert.ToBoolean(el.Element("QuickSlotsvEnabled").Value);
-                bquickSlotshEnabled = Convert.ToBoolean(el.Element("QuickSlotshEnabled").Value);
-                binventoryHudEnabled = Convert.ToBoolean(el.Element("InventoryHudEnabled").Value);
-                binventoryEnabled = Convert.ToBoolean(el.Element("InventoryEnabled").Value);
-                binventoryCompleteEnabled = Convert.ToBoolean(el.Element("InventoryCompleteEnabled").Value);
-                btoonStatsEnabled = Convert.ToBoolean(el.Element("ToonStatsEnabled").Value);
-                bArmorHudEnabled = Convert.ToBoolean(el.Element("ArmorHudEnabled").Value);
+                mMainSettings.bGearVisection = Convert.ToBoolean(el.Element("CorpseHudEnabled").Value);
+               	mMainSettings.bGearSenseHudEnabled = Convert.ToBoolean(el.Element("LandscapeHudEnabled").Value);
+                mMainSettings.bGearInspectorEnabled = Convert.ToBoolean(el.Element("InspectorHudEnabled").Value);
+                mMainSettings.bGearButlerEnabled = Convert.ToBoolean(el.Element("ButlerHudEnabled").Value);
+               	mMainSettings.bGearTacticianEnabled = Convert.ToBoolean(el.Element("CombatHudEnabled").Value);
+               	mMainSettings.bRemoteGearEnabled = Convert.ToBoolean(el.Element("RemoteGearEnabled").Value);
+               	mMainSettings.bPortalGearEnabled = Convert.ToBoolean(el.Element("PortalGearEnabled").Value);
+               	mMainSettings.bGearTaskerEnabled = Convert.ToBoolean(el.Element("KillTaskGearEnabled").Value);
+               	mMainSettings.bquickSlotsvEnabled = Convert.ToBoolean(el.Element("QuickSlotsvEnabled").Value);
+				mMainSettings.bquickSlotshEnabled = Convert.ToBoolean(el.Element("QuickSlotshEnabled").Value);
+                mMainSettings.binventoryHudEnabled = Convert.ToBoolean(el.Element("InventoryHudEnabled").Value);
+                mMainSettings.binventoryEnabled = Convert.ToBoolean(el.Element("InventoryEnabled").Value);
+                mMainSettings.binventoryCompleteEnabled = Convert.ToBoolean(el.Element("InventoryCompleteEnabled").Value);
+                mMainSettings.btoonStatsEnabled = Convert.ToBoolean(el.Element("ToonStatsEnabled").Value);
+                mMainSettings.bArmorHudEnabled = Convert.ToBoolean(el.Element("ArmorHudEnabled").Value);
       
                 bEnableTextFiltering = Convert.ToBoolean(el.Element("EnableTextFiltering").Value);
                 bTextFilterAllStatus = Convert.ToBoolean(el.Element("TextFilterAllStatus").Value);
@@ -577,31 +577,31 @@ namespace GearFoundry
                 txtMenuFontHeight.Text = nmenuFontHeight.ToString();
 
  
-                    chkQuickSlotsv.Checked = bquickSlotsvEnabled;
-                    chkQuickSlotsh.Checked = bquickSlotshEnabled;
+                    chkQuickSlotsv.Checked = mMainSettings.bquickSlotsvEnabled;
+                    chkQuickSlotsh.Checked = mMainSettings.bquickSlotshEnabled;
  
                    // GearVisection Section                   
-                    chkGearVisectionEnabled.Checked = bCorpseHudEnabled;
+                    chkGearVisectionEnabled.Checked = mMainSettings.bGearVisection;
                     
                     //GearSense Section
-                    chkGearSenseEnabled.Checked = bLandscapeHudEnabled;
+                    chkGearSenseEnabled.Checked = mMainSettings.bGearSenseHudEnabled;
                     //GearInspector Section
-                    chkGearInspectorEnabled.Checked = bGearInspectorEnabled;
+                    chkGearInspectorEnabled.Checked = mMainSettings.bGearInspectorEnabled;
                     
                    //GearButler Section
-                   chkGearButlerEnabled.Checked = bGearButlerEnabled;
+                   chkGearButlerEnabled.Checked = mMainSettings.bGearButlerEnabled;
 
                    //Gear Tactician Section
-                   chkCombatHudEnabled.Checked = bCombatHudEnabled;
+                   chkCombatHudEnabled.Checked = mMainSettings.bGearTacticianEnabled;
 
                    //RemoteGear 
-                   chkRemoteGearEnabled.Checked = bRemoteGearEnabled;
+                   chkRemoteGearEnabled.Checked = mMainSettings.bRemoteGearEnabled;
                    
                    //PortalGear 
-                   chkPortalGearEnabled.Checked = bPortalGearEnabled;
+                   chkPortalGearEnabled.Checked = mMainSettings.bPortalGearEnabled;
 
                    //KillTaskGear
-                   chkKillTaskGearEnabled.Checked = bKillTaskGearEnabled;
+                   chkKillTaskGearEnabled.Checked = mMainSettings.bGearTaskerEnabled;
   
                    //Misc Gears Section
                    	chkMuteSounds.Checked = mSoundsSettings.MuteSounds;
@@ -618,10 +618,10 @@ namespace GearFoundry
 			        cboSalvageCorpse.Selected = mSoundsSettings.CorpseSalvage;
 
                    //Inventory Section
-                   chkInventory.Checked = binventoryEnabled;
-                    chkInventoryComplete.Checked = binventoryCompleteEnabled;
-                   chkToonStats.Checked = btoonStatsEnabled;
-                   chkArmorHud.Checked = bArmorHudEnabled;
+                   chkInventory.Checked = mMainSettings.binventoryEnabled;
+                    chkInventoryComplete.Checked = mMainSettings.binventoryCompleteEnabled;
+                   chkToonStats.Checked = mMainSettings.btoonStatsEnabled;
+                   chkArmorHud.Checked = mMainSettings.bArmorHudEnabled;
 
  
 
@@ -637,93 +637,91 @@ namespace GearFoundry
 
         private void startRoutines()
         {
-            if (bLandscapeHudEnabled)
+            if (mMainSettings.bGearSenseHudEnabled)
             {
             	SubscribeLandscapeEvents();
                 RenderLandscapeHud();
             }
 
-            if (bCorpseHudEnabled)
+            if (mMainSettings.bGearVisection)
             {
             	SubscribeCorpseEvents();
                 RenderCorpseHud();
             }
 
-            if (bGearInspectorEnabled)
+            if (mMainSettings.bGearInspectorEnabled)
             {
             	SubscribeItemEvents();
             	RenderItemHud();
             }
 
-            if (bGearButlerEnabled)
+            if (mMainSettings.bGearButlerEnabled)
             {
                 RenderButlerHud();
             }
 
-            if (bCombatHudEnabled)
+            if (mMainSettings.bGearTacticianEnabled)
             {
             	SubscribeCombatEvents();
             	RenderTacticianHud();
             }
 
-            if (bRemoteGearEnabled)
+            if (mMainSettings.bRemoteGearEnabled)
             {
                 RenderRemoteGearHud();
             }
 
-            if (bPortalGearEnabled)
+            if (mMainSettings.bPortalGearEnabled)
             {
             	SubscribePortalEvents();
                 RenderPortalGearHud();
                 RenderPortal2GearHud();
             }
-            if (bKillTaskGearEnabled)
+            if (mMainSettings.bGearTaskerEnabled)
             {
             	SubscribeKillTasks();
                 RenderKillTaskPanel();
             }
 
-            if (binventoryCompleteEnabled)
+            if (mMainSettings.binventoryCompleteEnabled)
             {
-                binventoryBurdenEnabled = false;
-                binventoryEnabled = false;
+                mMainSettings.binventoryBurdenEnabled = false;
+                mMainSettings.binventoryEnabled = false;
                 m = 500;
                 doGetInventory();
             }
 
 
-            if (bArmorHudEnabled)
+            if (mMainSettings.bArmorHudEnabled)
             {
                 WriteToChat("bArmorHudEnabled; I am going to renderarmorhud");
                 RenderArmorHud(); 
             }
 
-            if (binventoryHudEnabled)
+            if (mMainSettings.binventoryHudEnabled)
             { RenderInventoryHud(); }
 
 
 
-            if (binventoryBurdenEnabled)
+            if (mMainSettings.binventoryBurdenEnabled)
             {
-                binventoryEnabled = false;
+                mMainSettings.binventoryEnabled = false;
                 getBurden = true;
                 doUpdateInventory();
             }
-            if (binventoryEnabled)
+            if (mMainSettings.binventoryEnabled)
             { doUpdateInventory(); }
 
-            if (btoonStatsEnabled)
+            if (mMainSettings.btoonStatsEnabled)
             { getStats(); }
 
-            if (bquickSlotsvEnabled)
+            if (mMainSettings.bquickSlotsvEnabled)
             {
-
                 RenderVerticalQuickSlots(); 
             }
 
-            if (bquickSlotshEnabled)
+            if (mMainSettings.bquickSlotshEnabled)
             {
-
                 RenderHorizontalQuickSlots();
             }
 
@@ -739,7 +737,7 @@ namespace GearFoundry
         {
             try
             {
-                binventoryEnabled = e.Checked;
+                mMainSettings.binventoryEnabled = e.Checked;
 
                 SaveSettings();
             }
@@ -751,7 +749,7 @@ namespace GearFoundry
         {
             try
             {
-                binventoryBurdenEnabled = e.Checked;
+                mMainSettings.binventoryBurdenEnabled = e.Checked;
 
                 SaveSettings();
             }
@@ -763,7 +761,7 @@ namespace GearFoundry
         {
             try
             {
-                binventoryCompleteEnabled = e.Checked;
+                mMainSettings.binventoryCompleteEnabled = e.Checked;
 
                 SaveSettings();
             }
@@ -777,12 +775,10 @@ namespace GearFoundry
         {
             try
             {
-                bquickSlotsvEnabled = e.Checked;
-
-
+                mMainSettings.bquickSlotsvEnabled = e.Checked;
                 SaveSettings();
 
-                if (bquickSlotsvEnabled)
+                if (mMainSettings.bquickSlotsvEnabled)
                 {
                 	RenderVerticalQuickSlots();
                 }
@@ -800,22 +796,19 @@ namespace GearFoundry
         {
             try
             {
-                bquickSlotshEnabled = e.Checked;
-
+                mMainSettings.bquickSlotshEnabled = e.Checked;
                 SaveSettings();
 
-                if (bquickSlotshEnabled)
+                if (mMainSettings.bquickSlotshEnabled)
                 {
                     RenderHorizontalQuickSlots();
                 }
-                else if (!bquickSlotshEnabled)
+                else
                 {
                     DisposeHorizontalQuickSlots();
                 }
-
             }
             catch (Exception ex) { LogError(ex); }
-
         }
 
 
@@ -824,7 +817,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				bCorpseHudEnabled = e.Checked;
+				mMainSettings.bGearVisection = e.Checked;
 				SaveSettings();
 				if(e.Checked)
 				{
@@ -848,7 +841,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		bLandscapeHudEnabled = e.Checked;
+        		mMainSettings.bGearSenseHudEnabled = e.Checked;
 				SaveSettings();
 				if(e.Checked)
 				{
@@ -871,9 +864,9 @@ namespace GearFoundry
         {
         	try
         	{
-        		bGearButlerEnabled = e.Checked;
+        		mMainSettings.bGearButlerEnabled = e.Checked;
         		SaveSettings();
-        		if(bGearButlerEnabled)
+        		if(mMainSettings.bGearButlerEnabled)
         		{
         			RenderButlerHud();
         		}
@@ -891,9 +884,9 @@ namespace GearFoundry
         {
             try
             {
-                bGearInspectorEnabled = e.Checked;
+                mMainSettings.bGearInspectorEnabled = e.Checked;
                 SaveSettings();
-                if (e.Checked)
+                if (mMainSettings.bGearInspectorEnabled)
                 {
                 	SubscribeItemEvents();
                 	RenderItemHud();
@@ -913,9 +906,9 @@ namespace GearFoundry
         {
             try
             {
-                bCombatHudEnabled = e.Checked;
+                mMainSettings.bGearTacticianEnabled = e.Checked;
                 SaveSettings();
-                if (bCombatHudEnabled)
+                if (mMainSettings.bGearTacticianEnabled)
                 {
                 	SubscribeCombatEvents();
                 	RenderTacticianHud();
@@ -935,9 +928,9 @@ namespace GearFoundry
         {
             try
             {
-                bRemoteGearEnabled = e.Checked;
+                mMainSettings.bRemoteGearEnabled = e.Checked;
                 SaveSettings();
-                if (bRemoteGearEnabled)
+                if (mMainSettings.bRemoteGearEnabled)
                 {
                     RenderRemoteGearHud();
                 }
@@ -953,9 +946,9 @@ namespace GearFoundry
         {
             try
             {
-                bPortalGearEnabled = e.Checked;
+                mMainSettings.bPortalGearEnabled = e.Checked;
                 SaveSettings();
-                if (bPortalGearEnabled)
+                if (mMainSettings.bPortalGearEnabled)
                 {
                 	SubscribePortalEvents();
                     RenderPortalGearHud();
@@ -977,9 +970,9 @@ namespace GearFoundry
         {
             try
             {
-                bKillTaskGearEnabled = e.Checked;
+                mMainSettings.bGearTaskerEnabled = e.Checked;
                 SaveSettings();
-                if (bKillTaskGearEnabled)
+                if (mMainSettings.bGearTaskerEnabled)
                 {
                 	SubscribeKillTasks();
                 	RenderKillTaskPanel();
@@ -998,7 +991,7 @@ namespace GearFoundry
         {
             try
             {
-                btoonStatsEnabled = e.Checked;
+                mMainSettings.btoonStatsEnabled = e.Checked;
 
                 SaveSettings();
             }
@@ -1011,10 +1004,10 @@ namespace GearFoundry
         {
             try
             {
-                bArmorHudEnabled = e.Checked;
+                mMainSettings.bArmorHudEnabled = e.Checked;
                 
                 SaveSettings();
-                if (bArmorHudEnabled) 
+                if (mMainSettings.bArmorHudEnabled) 
                 {
                     RenderArmorHud();
 
@@ -1046,10 +1039,10 @@ namespace GearFoundry
         {
             try
             {
-                binventoryHudEnabled = e.Checked;
+                mMainSettings.binventoryHudEnabled = e.Checked;
 
                 SaveSettings();
-                if (binventoryHudEnabled)
+                if (mMainSettings.binventoryHudEnabled)
                 {
                     if (File.Exists(armorSettingsFilename))
                     { getInventoryHudSettings(); }
@@ -1143,19 +1136,19 @@ namespace GearFoundry
         void txtItemFontHeight_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
         {
             nitemFontHeight = Convert.ToInt32(txtItemFontHeight.Text);
-            if (binventoryHudEnabled)
+            if (mMainSettings.binventoryHudEnabled)
                 RenderInventoryHud();
-            if (bCombatHudEnabled)
+            if (mMainSettings.bGearTacticianEnabled)
             	RenderTacticianHud();
-            if (bCorpseHudEnabled)
+            if (mMainSettings.bGearVisection)
                 RenderCorpseHud();
-            if (bLandscapeHudEnabled)
+            if (mMainSettings.bGearSenseHudEnabled)
                 RenderLandscapeHud();
-            if (bGearInspectorEnabled)
+            if (mMainSettings.bGearInspectorEnabled)
                 RenderItemHud();
-            if (bGearButlerEnabled)
+            if (mMainSettings.bGearButlerEnabled)
                 RenderButlerHud();
-            if (bArmorHudEnabled)
+            if (mMainSettings.bArmorHudEnabled)
                 RenderArmorHud();
             SaveSettings();
         }
@@ -1163,19 +1156,19 @@ namespace GearFoundry
         void txtMenuFontHeight_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
         {
             nmenuFontHeight = Convert.ToInt32(txtMenuFontHeight.Text);
-            if (binventoryHudEnabled)
+            if (mMainSettings.binventoryHudEnabled)
                 RenderInventoryHud();
-            if (bCombatHudEnabled)
+            if (mMainSettings.bGearTacticianEnabled)
             	RenderTacticianHud();
-            if (bCorpseHudEnabled)
+            if (mMainSettings.bGearVisection)
                 RenderCorpseHud();
-            if (bLandscapeHudEnabled)
+            if (mMainSettings.bGearSenseHudEnabled)
                 RenderLandscapeHud();
-            if (bGearInspectorEnabled)
+            if (mMainSettings.bGearInspectorEnabled)
                 RenderItemHud();
-            if (bGearButlerEnabled)
+            if (mMainSettings.bGearButlerEnabled)
                 RenderButlerHud();
-            if (bArmorHudEnabled)
+            if (mMainSettings.bArmorHudEnabled)
                 RenderArmorHud();
             SaveSettings();
         }
@@ -1187,21 +1180,21 @@ namespace GearFoundry
             {
                 XDocument xdocGeneralSet = new XDocument(new XElement("Settings"));
                 xdocGeneralSet.Element("Settings").Add(new XElement("Setting",
-                        new XElement("CorpseHudEnabled", bCorpseHudEnabled),
-                         new XElement("LandscapeHudEnabled", bLandscapeHudEnabled),
-                         new XElement("InspectorHudEnabled", bGearInspectorEnabled),
-                         new XElement("ButlerHudEnabled", bGearButlerEnabled),
-                         new XElement("CombatHudEnabled", bCombatHudEnabled),
-                         new XElement("RemoteGearEnabled", bRemoteGearEnabled),
-                         new XElement("PortalGearEnabled", bPortalGearEnabled),
-                         new XElement("KillTaskGearEnabled", bKillTaskGearEnabled),
-                         new XElement("QuickSlotsvEnabled", bquickSlotsvEnabled),
-                         new XElement("QuickSlotshEnabled", bquickSlotshEnabled),
-                         new XElement("InventoryHudEnabled", binventoryHudEnabled),
-                         new XElement("InventoryEnabled", binventoryEnabled),
-                         new XElement("InventoryCompleteEnabled", binventoryCompleteEnabled),
-                         new XElement("ToonStatsEnabled", btoonStatsEnabled),
-                        new XElement("ArmorHudEnabled", bArmorHudEnabled),
+                        new XElement("CorpseHudEnabled", mMainSettings.bGearVisection),
+                         new XElement("LandscapeHudEnabled", mMainSettings.bGearSenseHudEnabled),
+                         new XElement("InspectorHudEnabled", mMainSettings.bGearInspectorEnabled),
+                         new XElement("ButlerHudEnabled", mMainSettings.bGearButlerEnabled),
+                         new XElement("CombatHudEnabled", mMainSettings.bGearTacticianEnabled),
+                         new XElement("RemoteGearEnabled", mMainSettings.bRemoteGearEnabled),
+                         new XElement("PortalGearEnabled", mMainSettings.bPortalGearEnabled),
+                         new XElement("KillTaskGearEnabled", mMainSettings.bGearTaskerEnabled),
+                         new XElement("QuickSlotsvEnabled", mMainSettings.bquickSlotsvEnabled),
+                         new XElement("QuickSlotshEnabled", mMainSettings.bquickSlotshEnabled),
+                         new XElement("InventoryHudEnabled", mMainSettings.binventoryHudEnabled),
+                         new XElement("InventoryEnabled", mMainSettings.binventoryEnabled),
+                         new XElement("InventoryCompleteEnabled", mMainSettings.binventoryCompleteEnabled),
+                         new XElement("ToonStatsEnabled", mMainSettings.btoonStatsEnabled),
+                        new XElement("ArmorHudEnabled", mMainSettings.bArmorHudEnabled),
                          new XElement("EnableTextFiltering", bEnableTextFiltering),
                          new XElement("TextFilterAllStatus", bTextFilterAllStatus),
                          new XElement("ItemFontHeight", nitemFontHeight),
