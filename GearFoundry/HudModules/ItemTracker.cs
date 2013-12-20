@@ -21,10 +21,7 @@ namespace GearFoundry
 {
 	public partial class PluginCore
 	{		
-
-		
- 		
-		private GearInspectorSettings GISettings;
+		private GearInspectorSettings GISettings = new GearInspectorSettings();
 		
 		public List<LootObject> LOList = new List<LootObject>();
 			
@@ -47,26 +44,7 @@ namespace GearFoundry
 			
     	}
 		
-		private void SubscribeItemEvents()
-		{
-			try
-			{	
-				for(int i = 0; i < 10; i++)
-				{
-					InspectorActionList.Add(new PendingActions());
-				}
-             	SubscribeItemTrackerLooterEvents();           	
-			}
-			catch(Exception ex){LogError(ex);}
-		}
 		
-		private void UnsubscribeItemEvents()
-		{
-			try
-			{						
-             	UnSubscribeItemTrackerLooterEvents();         	         	
-			}catch(Exception ex){LogError(ex);}
-		}
 		
 		
 		private void GearInspectorReadWriteSettings(bool read)
@@ -126,10 +104,6 @@ namespace GearFoundry
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
-				
-		private bool InspectorTab = false;
-		private bool InspectorUstTab = false;
-		private bool InspectorSettingsTab = false;
 		
 		private HudView ItemHudView = null;
 		private HudTabView ItemHudTabView = null;
@@ -143,7 +117,6 @@ namespace GearFoundry
 		private HudList ItemHudUstList = null;
 		private HudButton ItemHudUstButton = null;
 		
-		private const int ItemRemoveCircle = 0x60011F8;
 		private const int ItemUstIcon = 0x60026BA;
 		private const int ItemManaStoneIcon = 0x60032D4;
 		private const int ItemDesiccantIcon = 0x6006C0D;
@@ -163,13 +136,7 @@ namespace GearFoundry
 		private HudCheckBox InspectorAlincoStrings = null;
 	
     	private void RenderItemHud()
-    	{
-    		try
-    		{
-    			GearInspectorReadWriteSettings(true);
-    	
-    		}catch{}
-    		
+    	{  		
     		
     		try{
     			    			
@@ -198,65 +165,18 @@ namespace GearFoundry
     			
     			ItemHudSettingsLayout = new HudFixedLayout();
     			ItemHudTabView.AddTab(ItemHudSettingsLayout, "Set");
-    			
-    			ItemHudTabView.OpenTabChange += ItemHudTabView_OpenTabChange;
-    			ItemHudView.Resize += ItemHudView_Resize;
   				
-    			RenderItemHudInspectorTab();
-    			
-				SubscribeItemEvents();
-			  							
-    		}catch(Exception ex) {LogError(ex);}
-    		
-    	}
-       
-        private void ItemHudView_Resize(object sender, System.EventArgs e)
-        {
-            try
-            {
-            	GISettings.ItemHudWidth = ItemHudView.Width;
-            	GISettings.ItemHudHeight = ItemHudView.Height;
-            	GearInspectorReadWriteSettings(false);         
-            }
-            catch (Exception ex) { LogError(ex); }
-
-        }
-
-    	
-    	private void ItemHudTabView_OpenTabChange(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			switch(ItemHudTabView.CurrentTab)
-    			{
-    				case 0:
-    					DisposeItemHudUstTab();
-    					DisposeItemHudSettingsTab();
-    					RenderItemHudInspectorTab();
-    					UpdateItemHud();
-    					return;
-    				case 1:
-    					DisposeItemHudInspectorTab();
-    					DisposeItemHudSettingsTab();
-    					RenderItemHudUstTab();
-    					UpdateItemHud();
-    					return;
-    				case 2:
-    					DisposeItemHudInspectorTab();
-    					DisposeItemHudUstTab();
-    					RenderItemHudSettingsTab();
-    					return;
-    			}
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-    	private void RenderItemHudUstTab()
-    	{
-    		try
-    		{
-    			ItemHudUstButton = new HudButton();
+    			ItemHudInspectorList = new HudList();
+    			ItemHudInspectorLayout.AddControl(ItemHudInspectorList, new Rectangle(0,0,GISettings.ItemHudWidth,GISettings.ItemHudHeight));
+				ItemHudInspectorList.ControlHeight = 16;	
+				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
+				ItemHudInspectorList.AddColumn(typeof(HudStaticText), GISettings.ItemHudWidth - 60, null);
+				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
+				ItemHudInspectorList.AddColumn(typeof(HudStaticText), 1, null);
+				
+				ItemHudUstButton = new HudButton();
     			ItemHudUstButton.Text = "Proc. List";
-    			ItemHudUstLayout.AddControl(ItemHudUstButton, new Rectangle(Convert.ToInt32(((double)GISettings.ItemHudWidth - (double)100) /(double)2),0,100,20));
+    			ItemHudUstLayout.AddControl(ItemHudUstButton, new Rectangle(Convert.ToInt32((GISettings.ItemHudWidth - 100) /2),0,100,20));
     			
     			ItemHudUstList = new HudList();
     			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
@@ -265,89 +185,7 @@ namespace GearFoundry
     			ItemHudUstList.AddColumn(typeof(HudStaticText), 1, null);
     			ItemHudUstLayout.AddControl(ItemHudUstList, new Rectangle(0,30,GISettings.ItemHudWidth,GISettings.ItemHudHeight - 30));
     			
-    			
-    			ItemHudUstList.Click += ItemHudUstList_Click;
-    			ItemHudUstButton.Hit += ItemHudUstButton_Hit;
-				
-    			InspectorUstTab = true;
-    			
-    			UpdateItemHud();
-    			
-    			
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-  
-    	private void ItemHudUstButton_Hit(object sender, EventArgs e)
-    	{
-    		try
-    		{
-    			if(ActionsPending)
-    			{
-    				WriteToChat("Wait for it!");
-    				return;
-    			}
-    			
-    			foreach(LootObject lo in  LOList.FindAll(x => x.ProcessList).ToList())
-    			{
-    				lo.Process = true;
-    			}
-    			ToggleInspectorActions(2);
-    			InitiateInspectorActionSequence();
-    			WriteToChat("Prosessing List.");
-    			
-    		}catch(Exception ex){LogError(ex);}
-    	}    
-    	
-    	HudList.HudListRowAccessor UstListAcessor = null;
-    	private void ItemHudUstList_Click(object sender, int row, int col)
-    	{
-    		try
-    		{
-    			UstListAcessor = ItemHudUstList[row];
-    			LootObject lo = LOList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)UstListAcessor[3]).Text));
-    			if(col == 0)
-    			{  
-    				lo.Process = true;
-    				ToggleInspectorActions(2);
-	    			InitiateInspectorActionSequence();
-    			}
-    			if(col == 1)
-    			{
-    				if(GISettings.GSStrings) {HudToChat(lo.GSReportString(), 1);}
-    				if(GISettings.AlincoStrings){HudToChat(lo.LinkString(), 1);}
-    			}
-    			if(col == 2)
-    			{    				
-    				lo.ProcessList = false;
-    			}
-    			
-    			UpdateItemHud();
-    			
-    		}catch(Exception ex){LogError(ex);}
-    		
-    	}
-    	
-    	private void DisposeItemHudUstTab()
-    	{
-    		try
-    		{
-    			if(!InspectorUstTab){return;}
-    			
-    			ItemHudUstList.Dispose();
-    			ItemHudUstButton.Dispose();
-    			
-    			InspectorUstTab = false;
-    			
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-    	private void RenderItemHudSettingsTab()
-    	{
-    		try
-    		{
-    			
-    			InspectorIdentifySalvage = new HudCheckBox();
+				InspectorIdentifySalvage = new HudCheckBox();
     			InspectorIdentifySalvage.Text = "Ident. Salv.";
                 ItemHudSettingsLayout.AddControl(InspectorIdentifySalvage, new Rectangle(0, 17, 100, 16));
     			InspectorIdentifySalvage.Checked = GISettings.IdentifySalvage;
@@ -409,6 +247,14 @@ namespace GearFoundry
     			InspectorAlincoStrings.Text = "Alinco Str.";
     			ItemHudSettingsLayout.AddControl(InspectorAlincoStrings, new Rectangle(0,187,100,16));
     			InspectorAlincoStrings.Checked = GISettings.AlincoStrings;
+    			
+    			ItemHudView.Resize += ItemHudView_Resize;
+    			ItemHudView.VisibleChanged += ItemHudView_VisisbleChanged;
+    			
+    			ItemHudInspectorList.Click += ItemHudInspectorList_Click;
+    			
+    			ItemHudUstList.Click += ItemHudUstList_Click;
+    			ItemHudUstButton.Hit += ItemHudUstButton_Hit;
     				
     			InspectorIdentifySalvage.Change += InspectorIdentifySalvage_Change;
     			InspectorAutoAetheria.Change += InspectorAutoAetheria_Change;
@@ -421,11 +267,176 @@ namespace GearFoundry
     			InspectorRenderMini.Change += InspectorRenderMini_Change;
     			InspectorGSStrings.Change += InspectorGSStrings_Change;
     			InspectorAlincoStrings.Change += InspectorAlincoStrings_Change;
-    			  			
-    			InspectorSettingsTab = true;
     			
-   
+    			UpdateItemHud();
+				
+				
+			  							
+    		}catch(Exception ex) {LogError(ex);}
+    		
+    	}
+    	
+    	private void ItemHudView_VisisbleChanged(object sender, EventArgs e)
+    	{
+    		try
+    		{
+    			DisposeItemHud();
     		}catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	
+    	private void DisposeItemHud()
+    	{    			
+    		try
+    		{
+
+    			if(ItemHudView == null) {return;}
+    			
+    			ItemHudUstLayout.Dispose();
+    			ItemHudInspectorLayout.Dispose();   			
+    			ItemHudTabView.Dispose();
+    			ItemHudView.Dispose();
+    			
+    			ItemHudView.Resize -= ItemHudView_Resize;
+    			ItemHudView.VisibleChanged += ItemHudView_VisisbleChanged;
+    			
+    			ItemHudInspectorList.Click -= ItemHudInspectorList_Click;	 			
+    			ItemHudInspectorList.Dispose(); 
+    			ItemHudUstList.Dispose();
+    			ItemHudUstButton.Dispose();
+    			
+    			InspectorIdentifySalvage.Change -= InspectorIdentifySalvage_Change;
+    			InspectorAutoAetheria.Change -= InspectorAutoAetheria_Change;
+    			InspectorAutoProcess.Change -= InspectorAutoProcess_Change;
+    			InspectorCheckForL7Scrolls.Change -= InspectorCheckForL7Scrolls_Change;
+    			InspectorLootByValue.LostFocus -= InspectorLootByValue_LostFocus;
+    			InspectorLootByMana.LostFocus -= InspectorLootByMana_LostFocus;
+    			InspectorSalvageHighValue.Change -= InspectorSalvageHighValue_Change;
+    			InspectorGSStrings.Change -= InspectorGSStrings_Change;
+    			InspectorAlincoStrings.Change -= InspectorAlincoStrings_Change;
+    			InspectorAutoLoot.Change -= InspectorAutoLoot_Change;
+    			
+    			   			
+    			InspectorAutoLoot.Dispose();
+    			InspectorIdentifySalvage.Dispose();
+    			InspectorAutoAetheria.Dispose();
+    			InspectorAutoProcess.Dispose();
+    			InspectorCheckForL7Scrolls.Dispose();
+    			InspectorLootByMana.Dispose();
+    			InspectorLootByValue.Dispose();
+    			InspectorHudManaLabel.Dispose();
+    			InspectorHudValueLabel.Dispose();
+    			InspectorGSStrings.Dispose();
+    			InspectorAlincoStrings.Dispose();
+    			
+    			ItemHudView = null;
+    		}	
+    		catch(Exception ex){LogError(ex);}
+    	}
+    	
+    	
+       
+        private void ItemHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+            	GISettings.ItemHudWidth = ItemHudView.Width;
+            	GISettings.ItemHudHeight = ItemHudView.Height;
+            	
+            	AlterItemHud();
+            	GearInspectorReadWriteSettings(false);         
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+        
+        private void AlterItemHud()
+        {
+        	try
+        	{
+        		ItemHudInspectorList.Click -= ItemHudInspectorList_Click;
+    			ItemHudUstList.Click -= ItemHudUstList_Click;
+    			ItemHudUstButton.Hit -= ItemHudUstButton_Hit;
+    			
+    			ItemHudInspectorList.Dispose();
+    			ItemHudUstButton.Dispose();
+    			ItemHudUstList.Dispose();
+    			
+    			ItemHudInspectorList = new HudList();
+    			ItemHudInspectorLayout.AddControl(ItemHudInspectorList, new Rectangle(0,0,GISettings.ItemHudWidth,GISettings.ItemHudHeight));
+				ItemHudInspectorList.ControlHeight = 16;	
+				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
+				ItemHudInspectorList.AddColumn(typeof(HudStaticText), GISettings.ItemHudWidth - 60, null);
+				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
+				ItemHudInspectorList.AddColumn(typeof(HudStaticText), 1, null);
+				
+				ItemHudUstButton = new HudButton();
+    			ItemHudUstButton.Text = "Proc. List";
+    			ItemHudUstLayout.AddControl(ItemHudUstButton, new Rectangle(Convert.ToInt32((GISettings.ItemHudWidth - 100) /2),0,100,20));
+    			
+    			ItemHudUstList = new HudList();
+    			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
+    			ItemHudUstList.AddColumn(typeof(HudStaticText), GISettings.ItemHudWidth - 60, null);
+    			ItemHudUstList.AddColumn(typeof(HudPictureBox), 16, null);
+    			ItemHudUstList.AddColumn(typeof(HudStaticText), 1, null);
+    			ItemHudUstLayout.AddControl(ItemHudUstList, new Rectangle(0,30,GISettings.ItemHudWidth,GISettings.ItemHudHeight - 30));
+    			
+    			ItemHudInspectorList.Click += ItemHudInspectorList_Click;
+    			ItemHudUstList.Click += ItemHudUstList_Click;
+    			ItemHudUstButton.Hit += ItemHudUstButton_Hit;
+    			
+    			UpdateItemHud();
+        		
+        	}catch(Exception ex){LogError(ex);}
+        }
+
+    	private void ItemHudUstButton_Hit(object sender, EventArgs e)
+    	{
+    		try
+    		{
+    			if(ActionsPending)
+    			{
+    				WriteToChat("Wait for it!");
+    				return;
+    			}
+    			
+    			foreach(LootObject lo in  LOList.FindAll(x => x.ProcessList).ToList())
+    			{
+    				lo.Process = true;
+    			}
+    			ToggleInspectorActions(2);
+    			InitiateInspectorActionSequence();
+    			WriteToChat("Prosessing List.");
+    			
+    		}catch(Exception ex){LogError(ex);}
+    	}    
+    	
+    	HudList.HudListRowAccessor UstListAcessor = null;
+    	private void ItemHudUstList_Click(object sender, int row, int col)
+    	{
+    		try
+    		{
+    			UstListAcessor = ItemHudUstList[row];
+    			LootObject lo = LOList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)UstListAcessor[3]).Text));
+    			if(col == 0)
+    			{  
+    				lo.Process = true;
+    				ToggleInspectorActions(2);
+	    			InitiateInspectorActionSequence();
+    			}
+    			if(col == 1)
+    			{
+    				if(GISettings.GSStrings) {HudToChat(lo.GSReportString(), 1);}
+    				if(GISettings.AlincoStrings){HudToChat(lo.LinkString(), 1);}
+    			}
+    			if(col == 2)
+    			{    				
+    				lo.ProcessList = false;
+    			}
+    			
+    			UpdateItemHud();
+    			
+    		}catch(Exception ex){LogError(ex);}
+    		
     	}
     			
     	private void InspectorGSStrings_Change(object sender, System.EventArgs e)
@@ -464,8 +475,11 @@ namespace GearFoundry
     				GISettings.ItemHudHeight = 220;
     				GISettings.ItemHudWidth = 300;
     			}
-    			ItemHudView.Height = GISettings.ItemHudHeight;
+    					
     			ItemHudView.Width = GISettings.ItemHudWidth;
+    			ItemHudView.Height = GISettings.ItemHudHeight;
+    			
+    			AlterItemHud();
     			GearInspectorReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
@@ -543,91 +557,8 @@ namespace GearFoundry
     			GearInspectorReadWriteSettings(false);
     		}catch(Exception ex){LogError(ex);}
     	}
-    		
-    	private void DisposeItemHudSettingsTab()
-    	{
-    		try
-    		{
-    			if(!InspectorSettingsTab){return;}
-    			
-    			InspectorIdentifySalvage.Change -= InspectorIdentifySalvage_Change;
-    			InspectorAutoAetheria.Change -= InspectorAutoAetheria_Change;
-    			InspectorAutoProcess.Change -= InspectorAutoProcess_Change;
-    			InspectorCheckForL7Scrolls.Change -= InspectorCheckForL7Scrolls_Change;
-    			InspectorLootByValue.LostFocus -= InspectorLootByValue_LostFocus;
-    			InspectorLootByMana.LostFocus -= InspectorLootByMana_LostFocus;
-    			InspectorSalvageHighValue.Change -= InspectorSalvageHighValue_Change;
-    			InspectorGSStrings.Change -= InspectorGSStrings_Change;
-    			InspectorAlincoStrings.Change -= InspectorAlincoStrings_Change;
-    			InspectorAutoLoot.Change -= InspectorAutoLoot_Change;
-    			
-    			   			
-    			InspectorAutoLoot.Dispose();
-    			InspectorIdentifySalvage.Dispose();
-    			InspectorAutoAetheria.Dispose();
-    			InspectorAutoProcess.Dispose();
-    			InspectorCheckForL7Scrolls.Dispose();
-    			InspectorLootByMana.Dispose();
-    			InspectorLootByValue.Dispose();
-    			InspectorHudManaLabel.Dispose();
-    			InspectorHudValueLabel.Dispose();
-    			InspectorGSStrings.Dispose();
-    			InspectorAlincoStrings.Dispose();
-    			  			
-    			InspectorSettingsTab = false;
-    			
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	   	
-    	private void RenderItemHudInspectorTab()
-    	{
-    		try
-    		{
-    			ItemHudInspectorList = new HudList();
-    			ItemHudInspectorLayout.AddControl(ItemHudInspectorList, new Rectangle(0,0,GISettings.ItemHudWidth,GISettings.ItemHudHeight));
-				ItemHudInspectorList.ControlHeight = 16;	
-				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
-				ItemHudInspectorList.AddColumn(typeof(HudStaticText), GISettings.ItemHudWidth - 60, null);
-				ItemHudInspectorList.AddColumn(typeof(HudPictureBox), 16, null);
-				ItemHudInspectorList.AddColumn(typeof(HudStaticText), 1, null);
-				
-				ItemHudInspectorList.Click += (sender, row, col) => ItemHudInspectorList_Click(sender, row, col);	
+   	   	      		
 
-				InspectorTab = true;				
-
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-    	private void DisposeItemHudInspectorTab()
-    	{
-    		try
-    		{
-    			if(!InspectorTab){return;}
-    			
-    			ItemHudInspectorList.Click -= (sender, row, col) => ItemHudInspectorList_Click(sender, row, col);	 			
-    			ItemHudInspectorList.Dispose(); 
-    			
-    			InspectorTab = false;
-    			
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    		
-    	private void DisposeItemHud()
-    	{    			
-    		try
-    		{
-    			UnsubscribeItemEvents();
-    			
-    			if(ItemHudView == null) {return;}
-    			
-    			ItemHudUstLayout.Dispose();
-    			ItemHudInspectorLayout.Dispose();   			
-    			ItemHudTabView.Dispose();
-    			ItemHudView.Dispose();
-    			ItemHudView.Resize -= ItemHudView_Resize;
-    		}	
-    		catch(Exception ex){LogError(ex);}
-    	}
     		    	
     	HudList.HudListRowAccessor InspectorListRow = null;
     	private void ItemHudInspectorList_Click(object sender, int row, int col)
@@ -662,13 +593,16 @@ namespace GearFoundry
 	    {  	
 	    	try
 	    	{    
-	    		if(InspectorTab){ItemHudInspectorList.ClearRows();}
-	    		if(InspectorUstTab){ItemHudUstList.ClearRows();}
+	    		
+	    		if(ItemHudView == null) {return;}
+	    		
+	    		ItemHudInspectorList.ClearRows();
+	    		ItemHudUstList.ClearRows();
 	    		
 	    		for(int i = LOList.Count - 1; i >= 0; i--)
 	    		{
 	    			LOListAcessor = LOList[i];
-	    			if(InspectorTab && LOListAcessor.InspectList)
+	    			if(LOListAcessor.InspectList)
 	    			{
 		    	    	ItemHudListRow = ItemHudInspectorList.AddRow();	
 		    	    	((HudPictureBox)ItemHudListRow[0]).Image = LOListAcessor.Icon + 0x6000000;
@@ -682,11 +616,11 @@ namespace GearFoundry
 		    	    	if(LOListAcessor.IOR == IOResult.rule)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.LightGreen;}
 		    	    	if(LOListAcessor.IOR == IOResult.rare)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.HotPink;}
 		    	    	if(LOListAcessor.IOR == IOResult.manatank)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.CornflowerBlue;}
-						((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;
+						((HudPictureBox)ItemHudListRow[2]).Image = RemoveCircle;
 						((HudStaticText)ItemHudListRow[3]).Text = LOListAcessor.Id.ToString();
 	    			}
 	    			
-	    			if(InspectorUstTab && LOListAcessor.ProcessList)
+	    			if(LOListAcessor.ProcessList)
 		    		{
 	    				ItemHudListRow = ItemHudUstList.AddRow();
 	    				if(LOListAcessor.ProcessAction == IAction.Salvage) {((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;}
@@ -696,7 +630,7 @@ namespace GearFoundry
 	    				if(GISettings.RenderMini) {((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.MiniIORString();}
 	    				else{((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.IORString() + LOListAcessor.Name;}
                         ((HudStaticText)ItemHudListRow[1]).FontHeight = nmenuFontHeight;
-                        ((HudPictureBox)ItemHudListRow[2]).Image = ItemRemoveCircle;	
+                        ((HudPictureBox)ItemHudListRow[2]).Image = RemoveCircle;	
                         ((HudStaticText)ItemHudListRow[3]).Text = LOListAcessor.Id.ToString();
 		    		}
 	    			

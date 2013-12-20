@@ -23,8 +23,7 @@ namespace GearFoundry
 		private List<LandscapeObject> LandscapeTrackingList = new List<PluginCore.LandscapeObject>();
 		private System.Windows.Forms.Timer LandscapeTimer = new System.Windows.Forms.Timer();
 		
-		public GearSenseSettings gsSettings;
-		private bool LandscapeSubscribed = false;
+		public GearSenseSettings gsSettings = new GearSenseSettings();
 		
 		public class GearSenseSettings
 		{			
@@ -41,6 +40,65 @@ namespace GearFoundry
 			public int LandscapeForgetDistance = 100;
             public int LandscapeHudWidth = 300;
             public int LandscapeHudHeight = 220;
+		}
+		
+		private void SubscribeLandscapeEvents()
+		{
+			try
+			{	
+				GearSenseReadWriteSettings(true);
+				
+				LandscapeTimer.Interval = 5000;
+				LandscapeTimer.Start();
+				LandscapeTimer.Tick += LandscapeTimerTick;
+				Core.WorldFilter.CreateObject += OnWorldFilterCreateLandscape;
+                Core.WorldFilter.ReleaseObject += OnWorldFilterDeleteLandscape;
+                Core.ItemDestroyed += OnLandscapeDestroyed;
+                Core.WorldFilter.ChangeObject += ChangeObjectLandscape;      
+				Core.CharacterFilter.Logoff += LandscapeLogoff;
+				
+				foreach(WorldObject wo in Core.WorldFilter.GetByContainer(0))
+				{
+					if(wo.ObjectClass != ObjectClass.Unknown)
+					{
+						if(!LandscapeTrackingList.Any(x => x.Id == wo.Id))
+						{
+							LandscapeObject lo = new LandscapeObject(wo);
+							LandscapeTrackingList.Add(lo);
+							CheckLandscape(wo.Id);
+						}
+					}
+				}		
+				
+			}
+			catch(Exception ex) {LogError(ex);}
+		}
+		
+		private void LandscapeLogoff(object sender, EventArgs e)
+		{
+			try
+			{
+				UnsubscribeLandscapeEvents();
+				DisposeLandscapeHud();
+				LandscapeTrackingList.Clear();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void UnsubscribeLandscapeEvents()
+		{
+			try
+			{				
+
+				LandscapeTimer.Stop();
+				LandscapeTimer.Tick -= LandscapeTimerTick;
+				Core.WorldFilter.CreateObject -= OnWorldFilterCreateLandscape;
+                Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteLandscape;
+                Core.ItemDestroyed -= OnLandscapeDestroyed;
+                Core.WorldFilter.ChangeObject -= ChangeObjectLandscape;	
+				Core.CharacterFilter.Logoff -= LandscapeLogoff;	
+
+				
+			}catch(Exception ex) {LogError(ex);}
 		}
 				
 		private void GearSenseReadWriteSettings(bool read)
@@ -88,63 +146,6 @@ namespace GearFoundry
 			}catch(Exception ex){WriteToChat(ex.ToString());}
 		}
 				
-		private void SubscribeLandscapeEvents()
-		{
-			try
-			{	
-				if(LandscapeSubscribed) {return;}
-				LandscapeTimer.Interval = 5000;
-				LandscapeTimer.Start();
-				LandscapeTimer.Tick += LandscapeTimerTick;
-				Core.WorldFilter.CreateObject += OnWorldFilterCreateLandscape;
-                Core.WorldFilter.ReleaseObject += OnWorldFilterDeleteLandscape;
-                Core.ItemDestroyed += OnLandscapeDestroyed;
-                Core.WorldFilter.ChangeObject += ChangeObjectLandscape;      
-				Core.CharacterFilter.Logoff += LandscapeLogoff;
-				foreach(WorldObject wo in Core.WorldFilter.GetByContainer(0).ToArray())
-				{
-					if(wo.ObjectClass != ObjectClass.Unknown)
-					{
-						if(!LandscapeTrackingList.Any(x => x.Id == wo.Id))
-						{
-							LandscapeObject lo = new LandscapeObject(wo);
-							LandscapeTrackingList.Add(lo);
-							CheckLandscape(wo.Id);
-						}
-					}
-				}
-				LandscapeSubscribed = true;		
-				
-			}
-			catch(Exception ex) {LogError(ex);}
-			return;
-		}
-		
-		private void UnsubscribeLandscapeEvents()
-		{
-			try
-			{				
-				if(!LandscapeSubscribed) {return;}
-				LandscapeTimer.Stop();
-				LandscapeTimer.Tick -= LandscapeTimerTick;
-				Core.WorldFilter.CreateObject -= OnWorldFilterCreateLandscape;
-                Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteLandscape;
-                Core.ItemDestroyed -= OnLandscapeDestroyed;
-                Core.WorldFilter.ChangeObject -= ChangeObjectLandscape;	
-				Core.CharacterFilter.Logoff -= LandscapeLogoff;
-				LandscapeSubscribed = false;				
-			}catch(Exception ex) {LogError(ex);}
-		}
-		
-		private void LandscapeLogoff(object sender, EventArgs e)
-		{
-			try
-			{
-				LandscapeTrackingList.Clear();
-				UnsubscribeLandscapeEvents();
-			}catch(Exception ex){LogError(ex);}
-		}
-		
 		private void OnWorldFilterCreateLandscape(object sender, Decal.Adapter.Wrappers.CreateObjectEventArgs e)
 		{
 			try 
@@ -416,7 +417,6 @@ namespace GearFoundry
 		private HudFixedLayout LandscapeHudTabLayout = null;
 		private HudList LandscapeHudList = null;
 		private HudList.HudListRowAccessor LandscapeHudListRow = null;
-		private const int LandscapeRemoveCircle = 0x60011F8;
 		
 		private HudFixedLayout LandscapeHudSettings;
 		private HudCheckBox ShowAllMobs;
@@ -431,17 +431,10 @@ namespace GearFoundry
 		private HudCheckBox LandscapeRenderMini;
 		private HudStaticText ForgetLabel;
 		private HudTextBox LandscapeForgetDistance;
-		
-		private bool LandscapeMainTab;
-		private bool LandscapeSettingsTab;
 
 					
     	private void RenderLandscapeHud()
     	{
-    		try
-    		{
-    			GearSenseReadWriteSettings(true);
-    		}catch{}
     		
     		try
     		{
@@ -470,54 +463,6 @@ namespace GearFoundry
     			LandscapeHudSettings = new HudFixedLayout();
     			LandscapeHudTabView.AddTab(LandscapeHudSettings, "Set");
     			
-    			LandscapeHudTabView.OpenTabChange += LandscapeHudTabView_OpenTabChange;
-                LandscapeHudView.Resize += LandscapeHudView_Resize; 
-    			
-    			RenderLandscapeTabLayout();    			
-    			SubscribeLandscapeEvents();
-						
-    		}catch(Exception ex) {LogError(ex);}
-    	}
-
-        private void LandscapeHudView_Resize(object sender, System.EventArgs e)
-        {
-            try
-            {
-            	gsSettings.LandscapeHudWidth = LandscapeHudView.Width;
-            	gsSettings.LandscapeHudHeight = LandscapeHudView.Height;
-            	GearSenseReadWriteSettings(false);
-            }
-            catch (Exception ex) { LogError(ex); }
-        }
-
-   	
-    	private void LandscapeHudTabView_OpenTabChange(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			switch(LandscapeHudTabView.CurrentTab)
-    			{
-    				case 0:
-    					DisposeLandscapeSettingsLayout();
-    					RenderLandscapeTabLayout();
-    					UpdateLandscapeHud();
-    					return;
-    				case 1:
-    					DisposeLandscapeTabLayout();
-    					RenderLandscapeSettingsTabLayout();
-    					break;
-    			}
-    			    			
-    		}catch{}
-    		
-    	}
-    	
-    	   	
-    	private void RenderLandscapeTabLayout()
-    	{
-    		try
-    		{
-    			
     			LandscapeHudList = new HudList();
     			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0, gsSettings.LandscapeHudWidth,gsSettings.LandscapeHudHeight));
 				LandscapeHudList.ControlHeight = 16;	
@@ -526,36 +471,7 @@ namespace GearFoundry
 				LandscapeHudList.AddColumn(typeof(HudPictureBox), 14, null);	
 				LandscapeHudList.AddColumn(typeof(HudStaticText), 1, null);
 				
-				LandscapeHudList.Click += LandscapeHudList_Click; 
-
-				UpdateLandscapeHud();
-				
-				LandscapeMainTab = true;
-    			
-    		}catch{}
-    	}
-    	
-    	private void DisposeLandscapeTabLayout()
-    	{
-    		try
-    		{	
-    			if(!LandscapeMainTab) {return;}
-    			
-    			LandscapeHudList.Click -= LandscapeHudList_Click;   
-    			LandscapeHudList.Dispose();
-    			
-    			LandscapeMainTab = false;
-    						
-    		}catch{}
-    	}
-    	
-    	private void RenderLandscapeSettingsTabLayout()
-    	{
-    		try
-    		{
-    			//LandscapeHudTabLayout.AddControl(LandscapeHudSettings, new Rectangle(0,0, gsSettings.LandscapeHudWidth,gsSettings.LandscapeHudHeight));
-    			
-    			ShowAllMobs = new HudCheckBox();
+				ShowAllMobs = new HudCheckBox();
     			ShowAllMobs.Text = "Trk All Mobs";
     			LandscapeHudSettings.AddControl(ShowAllMobs, new Rectangle(0,0,150,16));
     			ShowAllMobs.Checked = gsSettings.bShowAllMobs;
@@ -623,18 +539,72 @@ namespace GearFoundry
     			ShowAllPortals.Change += ShowAllPortals_Change;
     			LandscapeForgetDistance.LostFocus += LandscapeForgetDistance_LostFocus;
     			LandscapeRenderMini.Change += LandscapeRenderMini_Change;
+				
+				LandscapeHudList.Click += LandscapeHudList_Click; 
     			
-    			LandscapeSettingsTab = true;
-    		}catch{}
+                LandscapeHudView.Resize += LandscapeHudView_Resize; 
+                LandscapeHudView.VisibleChanged += LandscapeHudView_VisibleChanged;
+
+    			UpdateLandscapeHud();
+						
+    		}catch(Exception ex) {LogError(ex);}
     	}
+
+        private void LandscapeHudView_Resize(object sender, System.EventArgs e)
+        {
+            try
+            {
+            	gsSettings.LandscapeHudWidth = LandscapeHudView.Width;
+            	gsSettings.LandscapeHudHeight = LandscapeHudView.Height;
+            	
+            	AlterLandscapeHud();
+            	GearSenseReadWriteSettings(false);
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+        
+        private void AlterLandscapeHud()
+        {
+        	try
+        	{
+        		LandscapeHudList.Click -= LandscapeHudList_Click; 
+        		
+        		LandscapeHudList.Dispose();
+        		LandscapeHudList.Click -= LandscapeHudList_Click; 
+    			LandscapeHudList = new HudList();
+    			LandscapeHudTabLayout.AddControl(LandscapeHudList, new Rectangle(0,0, gsSettings.LandscapeHudWidth,gsSettings.LandscapeHudHeight));
+				LandscapeHudList.ControlHeight = 16;	
+				LandscapeHudList.AddColumn(typeof(HudPictureBox), 14, null);
+				LandscapeHudList.AddColumn(typeof(HudStaticText), gsSettings.LandscapeHudWidth - 60, null);
+				LandscapeHudList.AddColumn(typeof(HudPictureBox), 14, null);	
+				LandscapeHudList.AddColumn(typeof(HudStaticText), 1, null);
+				LandscapeHudList.Click -= LandscapeHudList_Click; 
+				
+				LandscapeHudList.Click += LandscapeHudList_Click; 
+				
+				UpdateLandscapeHud();
+				
+        	}catch(Exception ex){LogError(ex);}
+        }
+
+        private void LandscapeHudView_VisibleChanged(object sender, EventArgs e)
+        {
+        	try
+        	{
+        		DisposeLandscapeHud();
+        	}catch(Exception ex){LogError(ex);}
+        }
+    	   	
     	
-    	
-    	private void DisposeLandscapeSettingsLayout()
+    	private void DisposeLandscapeHud()
     	{
+    			
     		try
     		{
-    			if(!LandscapeSettingsTab) {return;}
-    			ShowAllMobs.Change -= ShowAllMobs_Change;
+    			if(LandscapeHudView == null) {return;}
+	   			LandscapeHudList.Click -= LandscapeHudList_Click;  			
+                LandscapeHudView.Resize -= LandscapeHudView_Resize; 
+				ShowAllMobs.Change -= ShowAllMobs_Change;
     			ShowSelectedMobs.Change -= ShowSelectedMobs_Change;
     			ShowAllPlayers.Change -= ShowAllPlayers_Change;
     			ShowFellowPlayers.Change -= ShowFellowPlayers_Change;
@@ -645,8 +615,12 @@ namespace GearFoundry
     			ShowAllPortals.Change -= ShowAllPortals_Change;
     			LandscapeForgetDistance.LostFocus -= LandscapeForgetDistance_LostFocus;
     			LandscapeRenderMini.Change -= LandscapeRenderMini_Change;
+    			                
+
     			
-    			LandscapeRenderMini.Dispose();
+    			LandscapeHudList.Dispose();
+    			
+				LandscapeRenderMini.Dispose();
     			ForgetLabel.Dispose();
     			LandscapeForgetDistance.Dispose();
     			ShowAllPortals.Dispose();
@@ -658,10 +632,17 @@ namespace GearFoundry
     			ShowAllPlayers.Dispose();
     			ShowSelectedMobs.Dispose();
     			ShowAllMobs.Dispose();			
-    			//LandscapeHudSettings.Dispose();
+    			    			
+    			LandscapeHudSettings.Dispose();
+    			LandscapeHudTabLayout.Dispose();
+    			LandscapeHudTabView.Dispose();
+    			LandscapeHudView.Dispose();	
     			
-    			LandscapeSettingsTab = false;
-    		}catch{}
+    			
+
+				LandscapeHudView = null;    			
+    		}catch(Exception ex) {LogError(ex);}
+    		return;
     	}
     	
     	private void LandscapeRenderMini_Change(object sender, System.EventArgs e)
@@ -683,10 +664,10 @@ namespace GearFoundry
     			}
     			LandscapeHudView.Height = gsSettings.LandscapeHudHeight;
     			LandscapeHudView.Width = gsSettings.LandscapeHudWidth;
+    			
+    			AlterLandscapeHud();
+    			
     			GearSenseReadWriteSettings(false);
-    			DisposeLandscapeTabLayout();
-    			RenderLandscapeTabLayout();
-    			UpdateLandscapeHud();
     		}catch(Exception ex){LogError(ex);}
     	}
     
@@ -778,23 +759,6 @@ namespace GearFoundry
     			GearSenseReadWriteSettings(false);
     		}catch{}
     	}
-   
-    	private void DisposeLandscapeHud()
-    	{
-    			
-    		try
-    		{
-    			UnsubscribeLandscapeEvents();
-    			try{DisposeLandscapeTabLayout();}catch{}
-    			try{DisposeLandscapeSettingsLayout();}catch{}
-    			
-    			LandscapeHudSettings.Dispose();
-    			LandscapeHudTabLayout.Dispose();
-    			LandscapeHudTabView.Dispose();
-    			LandscapeHudView.Dispose();		
-    		}catch(Exception ex) {LogError(ex);}
-    		return;
-    	}
     		
     	private HudList.HudListRowAccessor LandscapeRow = new HudList.HudListRowAccessor();
     	private void LandscapeHudList_Click(object sender, int row, int col)
@@ -847,7 +811,7 @@ namespace GearFoundry
 	    {  	
 	    	try
 	    	{       			    			    		
-	    		if(!LandscapeMainTab) {return;}
+	    		if(LandscapeHudView == null){return;}
 	    		
 	    		int scroll = LandscapeHudList.ScrollPosition;
 	    		
@@ -874,7 +838,7 @@ namespace GearFoundry
 	    	    	if(item.IOR == IOResult.players)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.AntiqueWhite;}
 	    	    	if(item.IOR == IOResult.fellowplayer)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.LightGreen;}
 	    	    	if(item.IOR == IOResult.allegplayers)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Tan;}
-					((HudPictureBox)LandscapeHudListRow[2]).Image = LandscapeRemoveCircle;
+					((HudPictureBox)LandscapeHudListRow[2]).Image = RemoveCircle;
 					((HudStaticText)LandscapeHudListRow[3]).Text = item.Id.ToString();
 	    	    }
 	    	    

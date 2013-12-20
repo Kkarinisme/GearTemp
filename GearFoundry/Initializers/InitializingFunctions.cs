@@ -650,6 +650,7 @@ namespace GearFoundry
         {
             if (bLandscapeHudEnabled)
             {
+            	SubscribeLandscapeEvents();
                 RenderLandscapeHud();
             }
 
@@ -661,7 +662,8 @@ namespace GearFoundry
 
             if (bGearInspectorEnabled)
             {
-                RenderItemHud();
+            	SubscribeItemEvents();
+            	RenderItemHud();
             }
 
             if (bGearButlerEnabled)
@@ -838,11 +840,13 @@ namespace GearFoundry
 				{
 					SubscribeCorpseEvents();
 					RenderCorpseHud();
+					WriteToChat("GearVisection Enabled.");
 				}
 				else
 				{
 					UnsubscribeCorpseEvents();
 					DisposeCorpseHud();
+					WriteToChat("GearVisection Disabled.");
 				}
 			}
 			catch(Exception ex){LogError(ex);}
@@ -858,11 +862,15 @@ namespace GearFoundry
 				SaveSettings();
 				if(e.Checked)
 				{
+					SubscribeLandscapeEvents();
 					RenderLandscapeHud();
+					WriteToChat("GearSense Enabled.");
 				}
 				else
 				{
+					UnsubscribeLandscapeEvents();
 					DisposeLandscapeHud();
+					WriteToChat("GearSense Disabled.");
 				}	
         	}catch{}
         }
@@ -897,11 +905,15 @@ namespace GearFoundry
                 SaveSettings();
                 if (e.Checked)
                 {
-                    RenderItemHud();
+                	SubscribeItemEvents();
+                	RenderItemHud();
+                	WriteToChat("GearInspector Enabled.");
                 }
                 else
                 {
+                	UnsubscribeItemEvents();
                     DisposeItemHud();
+                    WriteToChat("GearInspector Disabled.");
                 }
             }
             catch { }
@@ -917,11 +929,13 @@ namespace GearFoundry
                 {
                 	SubscribeCombatEvents();
                 	RenderTacticianHud();
+                	WriteToChat("GearTactician Enabled.");
                 }
                 else
                 {
                 	UnsubscribeCombatEvents();
                 	DisposeTacticianHud();
+                	WriteToChat("GearTactician Disabled.");
                 }
             }
             catch { }

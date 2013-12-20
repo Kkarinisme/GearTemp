@@ -23,12 +23,7 @@ namespace GearFoundry
 {
 
 	public partial class PluginCore
-	{
-		
-		//ToMish:  Need to add the following to Settings!
-		//ToMish:  Standard treatment with bEnableTextFiltering.  Call SubscribeChatEvents() on startup if enabled.  Call SubscribeChatEvents when enabled
-		//ToMish:  Call UnsubscribeChatEvents() when disabled.
-		
+	{	
 		private bool bEnableTextFiltering = false;	//Enable/Disable the module
 		private bool bTextFilterAllStatus = false;  //Removes all red status messages from the display area (overrides Busy and Casting filters)
 		
@@ -43,11 +38,20 @@ namespace GearFoundry
 				ChatSubscribed = true;
 				BuildTextCollections();
 				Core.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
-				Host.Underlying.Hooks.StatusTextIntercept += new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);			
+				Host.Underlying.Hooks.StatusTextIntercept += new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);	
+				Core.CharacterFilter.Logoff += ChatChannels_LogOff;				
 			
 			}catch(Exception ex){LogError(ex);}
 		}
 
+		private void ChatChannels_LogOff(object sender, EventArgs e)
+		{
+			try
+			{
+				UnsubscribeChatEvents();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		private void UnsubscribeChatEvents()
 		{
 			try
@@ -56,48 +60,15 @@ namespace GearFoundry
 				ChatSubscribed = false;
 				Core.ChatBoxMessage -= new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
 				Host.Underlying.Hooks.StatusTextIntercept -= new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);	
+				Core.CharacterFilter.Logoff -= ChatChannels_LogOff;		
+				ChatChannelPass.Clear();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		// Text filter sourced from Mag-Tools.
-		// Thanks to Mag-nus for the excellent chat filtering using RegEx. His code definitions are used heavily below.
-		// Sorry Mag-nus.  I just can't leave anything alone.....I heavily repurposed your Regex expressions.
-		// For original Mag-Tools source code, go to http://http://magtools.codeplex.com/
-			
-		private static Collection<Regex> ChatTypes = new Collection<Regex>();	
-		private static List<string> CastWords = new List<string>();
 		private static List<int> ChatChannelPass = new List<int>();
 
 		private void BuildTextCollections()
 		{
-			ChatTypes.Add(new Regex("^You say, \"(?<msg>.*)\"$"));
-			ChatTypes.Add(new Regex("^<Tell:IIDString:[0-9]+:(?<name>[\\w\\s'-]+)>[\\w\\s'-]+<\\\\Tell> says, \"(?<msg>.*)\"$"));
-			ChatTypes.Add(new Regex("^(?<name>[\\w\\s'-]+) says, \"(?<msg>.*)\"$"));
-			ChatTypes.Add(new Regex("^\\[(?<channel>.+)]+ <Tell:IIDString:[0-9]+:(?<name>[\\w\\s'-]+)>[\\w\\s'-]+<\\\\Tell> says, \"(?<msg>.*)\"$"));
-			ChatTypes.Add(new Regex("^You tell .+, \"(?<msg>.*)\"$"));
-			ChatTypes.Add(new Regex("^<Tell:IIDString:[0-9]+:(?<name>[\\w\\s'-]+)>[\\w\\s'-]+<\\\\Tell> tells you, \"(?<msg>.*)\"$"));
-			ChatTypes.Add(new Regex("^(?<name>[\\w\\s'-]+) tells you, \"(?<msg>.*)\"$"));	
-			
-			CastWords.Add(", \"Zojak");
-			CastWords.Add(", \"Malar");
-			CastWords.Add(", \"Puish");
-			CastWords.Add(", \"Curath");
-			CastWords.Add(", \"Volae");
-			CastWords.Add(", \"Quavosh");
-			CastWords.Add(", \"Shurov");
-			CastWords.Add(", \"Boquar");
-			CastWords.Add(", \"Helkas");
-			CastWords.Add(", \"Equin");
-			CastWords.Add(", \"Roiga");
-			CastWords.Add(", \"Malar");
-			CastWords.Add(", \"Jevak");
-			CastWords.Add(", \"Tugak");
-			CastWords.Add(", \"Slavu");
-			CastWords.Add(", \"Drostu");
-			CastWords.Add(", \"Traku");
-			CastWords.Add(", \"Yanoi");
-			CastWords.Add(", \"Drosta");
-			CastWords.Add(", \"Feazh");	
 
 			ChatChannelPass.Add(0);
 			ChatChannelPass.Add(1);

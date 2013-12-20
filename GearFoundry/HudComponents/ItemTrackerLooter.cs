@@ -19,25 +19,41 @@ namespace GearFoundry
 {
 	public partial class PluginCore
 	{
-		private int LooterLastItemSelected;
 		private string[] RingableKeysArray = {"legendary", "black marrow", "directive", "granite", "mana forge", "master", "marble", "singularity",	"skeletal falatacot"};
 		
-		private void SubscribeItemTrackerLooterEvents()
+		
+		private void SubscribeItemEvents()
 		{
 			try
-			{
-				LooterLastItemSelected = 0;	
+			{	
+				GearInspectorReadWriteSettings(true);
+				
+				for(int i = 0; i < 10; i++)
+				{
+					InspectorActionList.Add(new PendingActions());
+				}
+				
 				Core.ContainerOpened += LootContainerOpened;
 				Core.ItemDestroyed += ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased; 
 				Core.WorldFilter.ChangeObject += ItemTrackerActions_ObjectChanged;
-				Core.ItemSelected += ItemTracker_ItemSelected;
 				Core.WorldFilter.CreateObject += SalvageCreated;
-				//Core.EchoFilter.ServerDispatch += ItemTracker_ServerDispatch;
+				Core.CharacterFilter.Logoff += ItemHudLogOff;          	
+			}
+			catch(Exception ex){LogError(ex);}
+		}
+		
+		private void ItemHudLogOff(object sender, EventArgs e)
+		{
+			try
+			{
+				UnsubscribeItemEvents();
+				DisposeItemHud();
+				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void UnSubscribeItemTrackerLooterEvents()
+		private void UnsubscribeItemEvents()
 		{
 			try
 			{	
@@ -45,21 +61,15 @@ namespace GearFoundry
 				Core.ItemDestroyed -= ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject -= ItemTracker_ObjectReleased;
 				Core.WorldFilter.ChangeObject -= ItemTrackerActions_ObjectChanged;
-				Core.ItemSelected -= ItemTracker_ItemSelected;
 				Core.WorldFilter.CreateObject -= SalvageCreated;
-				//Core.EchoFilter.ServerDispatch -= ItemTracker_ServerDispatch;
-			}catch(Exception ex){LogError(ex);}
-		}		
-		
-		private void ItemTracker_ItemSelected(object sender, ItemSelectedEventArgs e)
-		{
-			try
-			{
-				if(Core.WorldFilter[e.ItemGuid] != null)
-				{
-					LooterLastItemSelected = e.ItemGuid;
-				}
+				Core.CharacterFilter.Logoff -= ItemHudLogOff;	
+
+				CombineSalvageWOList.Clear();
+				InventorySalvage.Clear();
+				InspectorActionList.Clear();
 				
+				GearInspectorReadWriteSettings(false);
+			
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -306,14 +316,6 @@ namespace GearFoundry
 //			}
 //		}
 			
-			
-//
-//[VTank] Palette Entry 0: ID 0x0015D4, Ex Color: 161616, 72/12
-//[VTank] Palette Entry 1: ID 0x0015D4, Ex Color: B0C600, 84/8
-//[VTank] Palette Entry 2: ID 0x0015D4, Ex Color: 0F0F0F, 136/12
-//[VTank] Palette Entry 3: ID 0x0015D4, Ex Color: 879800, 148/4
-//[VTank] Palette Entry 4: ID 0x0015D4, Ex Color: 050505, 152/4
-//[VTank] Palette Entry 5: ID 0x0015D4, Ex Color: 7E8E00, 156/4
 		private void ItemTrackerActions_ObjectChanged(object sender, ChangeObjectEventArgs e)
 		{
 			try

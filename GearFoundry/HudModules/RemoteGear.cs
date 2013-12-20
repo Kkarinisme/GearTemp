@@ -217,21 +217,24 @@ namespace GearFoundry
         {
             try
             {
-                if (bGearButlerEnabled == true)
+            	if(!bGearButlerEnabled)
+            	{
+            		SubscribeButlerEvents();
+            		RenderButlerHud();
+            		bGearButlerEnabled = true;
+            		chkGearButlerEnabled.Checked = bGearButlerEnabled;
+                	SaveSettings();
+                	return;
+            	}
+            	
+                if (ButlerHudView != null)
                 {
-                    bGearButlerEnabled = false;
-                    DisposeButlerHud();
-
+                	DisposeButlerHud();
                 }
                 else
                 {
-                    bGearButlerEnabled = true;
-                    RenderButlerHud();
-
+                	RenderButlerHud();
                 }
-                chkGearButlerEnabled.Checked = bGearButlerEnabled;
-                SaveSettings();
-
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -248,6 +251,8 @@ namespace GearFoundry
 					SaveSettings();            		
             		SubscribeCorpseEvents();
             		RenderCorpseHud();
+            		WriteToChat("GearVisection Enabled.");
+            		return;
             	}
                 if (CorpseHudView == null)
                 {
@@ -270,21 +275,25 @@ namespace GearFoundry
         {
             try
             {
-                if (bGearInspectorEnabled == true)
+            	if(!bGearInspectorEnabled)
+            	{
+            		bGearInspectorEnabled = true;
+            		chkGearInspectorEnabled.Checked = bGearInspectorEnabled;
+					SaveSettings();            		
+					SubscribeItemEvents();
+					RenderItemHud();
+					WriteToChat("GearInspector Enabled.");
+					return;
+            	}
+            	
+                if (ItemHudView != null)
                 {
-                    bGearInspectorEnabled = false;
                     DisposeItemHud();
-
                 }
                 else
                 {
-                    bGearInspectorEnabled = true;
-                    RenderItemHud();
-
+                	RenderItemHud();
                 }
-                chkGearInspectorEnabled.Checked = bGearInspectorEnabled;
-                SaveSettings();
-
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -293,22 +302,27 @@ namespace GearFoundry
 
         private void mRemoteGear3_Hit(object sender, System.EventArgs e)
         {
-            try{
-                if (bLandscapeHudEnabled == true)
+            try
+            {
+            	if(!bLandscapeHudEnabled)
+            	{
+            		bLandscapeHudEnabled = true;
+            		chkGearSenseEnabled.Checked = bLandscapeHudEnabled;
+            		SaveSettings();
+            		SubscribeLandscapeEvents();
+            		RenderLandscapeHud();
+            		WriteToChat("GearSense Enabled.");
+            		return;
+            	}
+            	
+                if (LandscapeHudView != null)
                 {
-                    bLandscapeHudEnabled = false;
-                    DisposeLandscapeHud();
-
+                	DisposeLandscapeHud();
                 }
                 else
                 {
-                    bLandscapeHudEnabled = true;
                     RenderLandscapeHud();
-
                 }
-                   chkGearSenseEnabled.Checked = bLandscapeHudEnabled;
-                   SaveSettings();
-
             }
             catch (Exception ex) { LogError(ex); }
 
@@ -325,6 +339,7 @@ namespace GearFoundry
             		bCombatHudEnabled = true;
             		chkCombatHudEnabled.Checked = bCombatHudEnabled;
                 	SaveSettings();
+                	WriteToChat("GearTactician Enabled.");
                 	return;
             	}
             	if (TacticianHudView != null)
@@ -448,6 +463,7 @@ namespace GearFoundry
             		bKillTaskGearEnabled = true;
             		chkKillTaskGearEnabled.Checked = bKillTaskGearEnabled;
                 	SaveSettings();
+                	WriteToChat("GearTasker Enabled.");
                 	return;
             	}
             	if(TaskHudView != null)

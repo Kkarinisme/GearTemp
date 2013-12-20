@@ -21,8 +21,7 @@ namespace GearFoundry
 {
 	public partial class PluginCore
 	{
-	
-		
+
 	
 		private ACImage CurrentBar =  new ACImage(Color.DarkRed);
 		private ACImage RedBar = new ACImage(Color.Red);
@@ -142,12 +141,17 @@ namespace GearFoundry
 				TacticianShowAll.Change += TacticianShowAll_Change;
 				TacticianCurrentTargetBar.Change += TacticianCurrentTargetBar_Chanage;
 				
+				UpdateTactician();
+				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void TacticianHudView_VisibleChanged(object sender, EventArgs e)
 		{
-			DisposeTacticianHud();
+			try
+			{
+				DisposeTacticianHud();
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void DisposeTacticianHud()
@@ -166,35 +170,20 @@ namespace GearFoundry
 				TacticianHudView.VisibleChanged -= TacticianHudView_VisibleChanged;				
 				TacticianDiplayList.Click -= TacticianDiplayList_Click;
 				
-				
-				TacticianLabel1.Dispose();
-				
+				TacticianLabel1.Dispose();	
 				TacticianLabel2.Dispose();
-				
 				TacticianLabel3.Dispose();
-				
 				TacticianHudView.Dispose();
-				
 				TacticianHudTabView.Dispose();
-				
 				TacticianTabLayout.Dispose();
 				TacticianSettingsLayout.Dispose();
-				
-				TacticianDiplayList.Dispose();
-				
-											
+				TacticianDiplayList.Dispose();							
 				TacticianTrackCreature.Dispose();
-				
 				TacticianTrackItem.Dispose();
-				
 				TacticianTrackLife.Dispose();
-				
 				TacticianTrackVoid.Dispose();
-				
 				TacticianShowAll.Dispose();
-				
 				TacticianCurrentTargetBar.Dispose();
-				
 				TacticianHudView = null;
 				
 			}catch(Exception ex){LogError(ex);}
@@ -207,8 +196,7 @@ namespace GearFoundry
 				
 				gtSettings.CombatHudHeight = TacticianHudView.Height;
 				gtSettings.CombatHudWidth = TacticianHudView.Width;
-				
-				
+								
 				AlterTacticianHud();
 				CombatHudReadWriteSettings(false);
 				
@@ -241,9 +229,9 @@ namespace GearFoundry
 				TacticianDiplayList.AddColumn(typeof(HudImageStack), 16, null);
 				TacticianDiplayList.AddColumn(typeof(HudStaticText), 1, null);
 				
-				
-				
 				TacticianDiplayList.Click += TacticianDiplayList_Click;
+				
+				UpdateTactician();
 
 				
 			}catch(Exception ex){LogError(ex);}
@@ -321,6 +309,8 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(TacticianHudView == null) {return;}
+				
 				int scroll = TacticianDiplayList.ScrollPosition;
 				
 				TacticianDiplayList.ClearRows();
@@ -646,6 +636,8 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(FocusHudView == null) {return;}
+				
 				int MobIndex = CombatHudMobTrackingList.FindIndex(x => x.Id == FocusHudTarget);
 				if(MobIndex == -1) {DisposeFocusHud(); FocusHudTarget = 0; return;}
 				

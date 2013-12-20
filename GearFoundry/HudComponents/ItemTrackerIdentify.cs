@@ -283,15 +283,6 @@ namespace GearFoundry
 			return;
 		}
 		
-		private void writerulestochat(string stage, List<ItemRule> listorules)
-		{
-			WriteToChat(stage);
-			foreach(var rule in listorules)
-			{
-				WriteToChat(rule.RuleName);
-			}
-		}
-		
 		private void CheckRulesItem(ref LootObject IOItemWithIDReference)
 		{
 			

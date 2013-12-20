@@ -127,15 +127,29 @@ namespace GearFoundry
 			ReadWriteGearTaskSettings(false);
 		}
 		
-		private void KTSaveUpdates(object sender, EventArgs e)
-		{
-			ReadWriteGearTaskSettings(false);
-		}
+		
 		
 		private void KillTask_LogOff(object sender, EventArgs e)
 		{
 			UnsubscribeKillTasks();
 		}
+		
+		private void UnsubscribeKillTasks()
+		{
+			try
+			{
+				Core.ChatBoxMessage -= KillTask_ChatBoxMessage;
+				Core.CharacterFilter.Logoff -= KillTask_LogOff;
+				Core.WorldFilter.ChangeObject -= CollectTask_ChangeObject;
+							
+				KTSaveTimer.Tick -= KTSaveUpdates;
+				KTSaveTimer.Stop();
+				
+				DisposeKillTaskPanel();
+				ReadWriteGearTaskSettings(false);
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		
 		private List<KillTask> ReadMasterKTList()
 		{
@@ -249,16 +263,8 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void UnsubscribeKillTasks()
+		private void KTSaveUpdates(object sender, EventArgs e)
 		{
-			Core.ChatBoxMessage -= KillTask_ChatBoxMessage;
-			Core.CharacterFilter.Logoff -= KillTask_LogOff;
-			Core.WorldFilter.ChangeObject -= CollectTask_ChangeObject;
-						
-			KTSaveTimer.Tick -= KTSaveUpdates;
-			KTSaveTimer.Stop();
-			
-			DisposeKillTaskPanel();
 			ReadWriteGearTaskSettings(false);
 		}
 		
@@ -714,10 +720,16 @@ namespace GearFoundry
 	            
 	            CollectTaskList.Click += CollectTaskList_Click;	            
 	            TaskHudView.Resize += TaskHudView_Resize;
+	            TaskHudView.VisibleChanged += TaskHudView_VisibleChanged;
 	    		
 	            UpdateTaskPanel();
 	            			
 			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void TaskHudView_VisibleChanged (object sender, EventArgs e)
+		{
+			DisposeKillTaskPanel();
 		}
 		
 		private void DisposeKillTaskPanel()
@@ -775,7 +787,123 @@ namespace GearFoundry
 				mKTSet.HudHeight = TaskHudView.Height;
 				mKTSet.HudWidth = TaskHudView.Width;
 				
+				AlterTaskHud();
 				ReadWriteGearTaskSettings(false);
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void AlterTaskHud()
+		{
+			try
+			{
+
+	            
+				IncTaskLabel2.Dispose();
+	            IncTaskLabel2 = new HudStaticText();
+	            TaskIncompleteLayout.AddControl(IncTaskLabel2, new Rectangle(Convert.ToInt32(mKTSet.HudWidth - mKTSet.HudWidth/3), 0,Convert.ToInt32(mKTSet.HudWidth/3),16));
+	            IncTaskLabel2.Text = "Status";
+				
+	            TaskIncompleteList.Click -= TaskIncompleteList_Click;
+	            TaskIncompleteList.Dispose();
+	            TaskIncompleteList = new HudList();
+	            TaskIncompleteLayout.AddControl(TaskIncompleteList, new Rectangle(0,20,mKTSet.HudWidth,mKTSet.HudHeight -20));
+	            TaskIncompleteList.ControlHeight = 16;
+	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth*2/3), null);  //Mob/Item Name
+	            TaskIncompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3 + 5), null);  //Completion
+	            VirindiViewService.TooltipSystem.AssociateTooltip(TaskIncompleteList, "Click for task completion info."); 
+	            TaskIncompleteList.Click += TaskIncompleteList_Click;
+	           
+	            CompTaskLabel2.Dispose();
+	            CompTaskLabel2 = new HudStaticText();
+	            TaskCompleteLayout.AddControl(CompTaskLabel2, new Rectangle(Convert.ToInt32(mKTSet.HudWidth*2/3), 0,Convert.ToInt32(mKTSet.HudWidth/3),16));
+	            CompTaskLabel2.Text = "Return";
+	            
+	            TaskCompleteList.Click -= TaskCompleteList_Click;
+	            TaskCompleteLayout.Dispose();
+	            TaskCompleteLayout.AddControl(TaskCompleteList, new Rectangle(0,20,mKTSet.HudWidth,mKTSet.HudHeight -20));
+	            TaskCompleteList.ControlHeight = 16;
+	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth*2/3), null);  //Mob/Item Name
+	            TaskCompleteList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth/3 + 5), null);  //Completion
+	            VirindiViewService.TooltipSystem.AssociateTooltip(TaskCompleteList, "Click for turn in info."); 
+	            TaskCompleteList.Click += TaskCompleteList_Click;
+	            
+	           
+	            KillTaskSelected.Dispose();
+	            KillTaskSelected = new HudStaticText();
+	            KillTaskLayout.AddControl(KillTaskSelected, new Rectangle(0,0, TaskHudView.Width - 110, 16));
+	            KillTaskSelected.Text = String.Empty;
+	            
+	            KillTaskNew.Hit -= KillTaskNew_Hit;
+	            KillTaskNew.Dispose();
+	            KillTaskNew = new HudButton();
+	            KillTaskLayout.AddControl(KillTaskNew, new Rectangle(TaskHudView.Width - 105, 0, 30, 16));
+	            KillTaskNew.Text = "New";
+	            KillTaskNew.Hit += KillTaskNew_Hit;
+	            
+	            KillTaskDelete.Hit -= KillTaskDelete_Hit;
+	            KillTaskDelete.Dispose();
+	            KillTaskDelete = new HudButton();
+	            KillTaskLayout.AddControl(KillTaskDelete, new Rectangle(TaskHudView.Width - 70, 0, 30, 16));
+	            KillTaskDelete.Text = "Del";
+	            KillTaskDelete.Hit += KillTaskDelete_Hit; 
+	            
+	            KillTaskEdit.Hit -= KillTaskEdit_Hit;
+	            KillTaskEdit.Dispose();
+	            KillTaskEdit = new HudButton();
+	            KillTaskLayout.AddControl(KillTaskEdit, new Rectangle(TaskHudView.Width - 35, 0, 30, 16));
+	            KillTaskEdit.Text = "Edit";
+	            KillTaskEdit.Hit += KillTaskEdit_Hit;            
+	            
+	            
+	            KillTaskList.Click -= KillTaskList_Click;
+	            KillTaskList.Dispose();
+	            KillTaskList = new HudList();
+	            KillTaskLayout.AddControl(KillTaskList, new Rectangle(0,40,mKTSet.HudWidth,mKTSet.HudHeight-20));
+	            KillTaskList.ControlHeight = 16;
+	            KillTaskList.AddColumn(typeof(HudCheckBox), 16, null);  //Track
+	            KillTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth - 16), null);  //TaskName
+	            VirindiViewService.TooltipSystem.AssociateTooltip(KillTaskList, "Enable Tracking or Click for info."); 
+	            KillTaskList.Click += KillTaskList_Click;
+	            
+	            CollectTaskSelected.Dispose();
+	            CollectTaskSelected = new HudStaticText();
+	            CollectTaskLayout.AddControl(CollectTaskSelected, new Rectangle(0,0, TaskHudView.Width - 110, 16));
+	            CollectTaskSelected.Text = String.Empty;
+	            
+	            CollectTaskNew.Hit -= CollectTaskNew_Hit;
+	            CollectTaskNew.Dispose();
+	            CollectTaskNew = new HudButton();
+	            CollectTaskLayout.AddControl(CollectTaskNew, new Rectangle(TaskHudView.Width - 105, 0, 30, 16));
+	            CollectTaskNew.Text = "New";
+	            CollectTaskNew.Hit += CollectTaskNew_Hit;
+	            
+	            CollectTaskDelete.Hit -= CollectTaskDelete_Hit;
+	            CollectTaskDelete.Dispose();
+	            CollectTaskDelete = new HudButton();
+	            CollectTaskLayout.AddControl(CollectTaskDelete, new Rectangle(TaskHudView.Width - 70, 0, 30, 16));
+	            CollectTaskDelete.Text = "Del";
+	            CollectTaskDelete.Hit += CollectTaskDelete_Hit; 
+	            
+	            CollectTaskEdit.Hit -= CollectTaskEdit_Hit;
+	            CollectTaskEdit.Dispose();
+	            CollectTaskEdit = new HudButton();
+	            CollectTaskLayout.AddControl(CollectTaskEdit, new Rectangle(TaskHudView.Width - 35, 0, 30, 16));
+	            CollectTaskEdit.Text = "Edit";
+	            CollectTaskEdit.Hit += CollectTaskEdit_Hit;            
+	            
+	          	CollectTaskList.Click -= CollectTaskList_Click;	 
+	            CollectTaskList.Dispose();
+	            CollectTaskList = new HudList();
+	            CollectTaskLayout.AddControl(CollectTaskList, new Rectangle(0,40,mKTSet.HudWidth,mKTSet.HudHeight));
+	            CollectTaskList.ControlHeight = 16;
+	            CollectTaskList.AddColumn(typeof(HudCheckBox), 16, null);  //Track
+	            CollectTaskList.AddColumn(typeof(HudStaticText), Convert.ToInt32(mKTSet.HudWidth - 16), null);  //TaskName
+	            VirindiViewService.TooltipSystem.AssociateTooltip(CollectTaskList, "Enable Tracking or Click for info."); 
+	            CollectTaskList.Click += CollectTaskList_Click;	 
+
+	            UpdateTaskPanel();
+
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -784,7 +912,9 @@ namespace GearFoundry
 		private void UpdateTaskPanel()
 		{
 			try
-			{		
+			{	
+				if(TaskHudView == null) {return;}
+				
 				TaskIncompleteList.ClearRows();
 				TaskCompleteList.ClearRows();
 				KillTaskList.ClearRows();
