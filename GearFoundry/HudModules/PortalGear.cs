@@ -24,8 +24,6 @@ namespace GearFoundry
     {
         XDocument xdocPortalGear = null;
         
-        private bool PortalSubscribed = false;
-
         private static VirindiViewService.HudView portalGearHud = null;
         private static VirindiViewService.Controls.HudTabView portalGearTabView = null;
         private static VirindiViewService.Controls.HudFixedLayout portalGearTabFixedLayout = null;
@@ -110,24 +108,27 @@ namespace GearFoundry
 		{
 			try
 			{
-				if(PortalSubscribed) {return;}
 				for(int i = 0; i < 4; i++)
 				{
 					PortalActionList.Add(new PortalActions());
 				}
-				 MasterTimer.Tick += MasterTimer_UpdateClock;	
-				PortalSubscribed = false;			 
+				Core.CharacterFilter.Logoff += PortalGear_Logoff;
+				MasterTimer.Tick += MasterTimer_UpdateClock;				 
 				
 			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void PortalGear_Logoff(object sender, EventArgs e)
+		{
+			UnsubscribePortalEvents();
 		}
 		
 		private void UnsubscribePortalEvents()
 		{
 			try
 			{
-				if(!PortalSubscribed) {return;}
+				PortalActionList.Clear();
 				MasterTimer.Tick -= MasterTimer_UpdateClock;
-				PortalSubscribed = false;
 			}catch(Exception ex){LogError(ex);}
 		}
 
@@ -292,14 +293,11 @@ namespace GearFoundry
             mPortalGear9.Hit += (sender, obj) => mPortalGear9_Hit(sender, obj);
             
            
-            SubscribePortalEvents();
             }catch(Exception ex){LogError(ex);}
  
         }
         private void DisposePortalGearHud()
         {
-        	UnsubscribePortalEvents();
-
             if (mSelectCaster != null) { mSelectCaster.Hit -= (sender, obj) => mSelectCaster_Hit(sender, obj); mSelectCaster.Dispose(); }
             if (mPortalGear0 != null) { mPortalGear0.Hit -= (sender, obj) => mPortalGear0_Hit(sender, obj); mPortalGear0.Dispose(); }
             if (mPortalGear1 != null) { mPortalGear1.Hit -= (sender, obj) => mPortalGear1_Hit(sender, obj); mPortalGear1.Dispose(); }
@@ -313,6 +311,7 @@ namespace GearFoundry
             if (mPortalGear9 != null) { mPortalGear9.Hit -= (sender, obj) => mPortalGear9_Hit(sender, obj); mPortalGear9.Dispose(); }
 
             portalGearHud.Dispose();
+            portalGearHud = null;
 
         }
 
@@ -456,17 +455,12 @@ namespace GearFoundry
                 VirindiViewService.TooltipSystem.AssociateTooltip(mPortalRecallGear11, "Rynthid Recall");
                 mPortalRecallGear11.Hit += (sender, obj) => mPortalRecallGear11_Hit(sender, obj);
 
-
-
-                SubscribePortalEvents();
-
             }
             catch (Exception ex) { LogError(ex); }
 
         }
         private void DisposePortalRecallGearHud()
         {
-            UnsubscribePortalEvents();
 
             if (mPortalRecallGear0 != null) { mPortalRecallGear0.Hit -= (sender, obj) => mPortalRecallGear0_Hit(sender, obj); mPortalRecallGear0.Dispose(); }
             if (mPortalRecallGear1 != null) { mPortalRecallGear1.Hit -= (sender, obj) => mPortalRecallGear1_Hit(sender, obj); mPortalRecallGear1.Dispose(); }
@@ -1162,47 +1156,5 @@ namespace GearFoundry
     }
 }//end of namespace
 
-
-//[VTank] --------------Object dump--------------
-//[VTank] [Meta] Create count: 1
-//[VTank] [Meta] Create time: 10/17/2013 7:11 AM
-//[VTank] [Meta] Has identify data: True
-//[VTank] [Meta] Last ID time: 10/17/2013 7:12 AM
-//[VTank] [Meta] Worldfilter valid: True
-//[VTank] [Meta] Client valid: True
-//[VTank] ID: 82B37510
-//[VTank] ObjectClass: WandStaffOrb
-//[VTank] (S) Name: Legendary Seed of Mornings
-//[VTank] (S) FullDescription: A large, glowing seed, empowered by the magics of the Light Falatacot.  This seed was retrieved from the Temple of Mornings, underneath the desert sands.
-//[VTank] (B) Ivoryable: True
-//[VTank] (I) CreateFlags1: 275480728
-//[VTank] (I) Type: 48938
-//[VTank] (I) Icon: 29674
-//[VTank] (I) Category: 32768
-//[VTank] (I) Behavior: 18
-//[VTank] (I) Value: 20000
-//[VTank] (I) ItemUsabilityFlags: 6291464
-//[VTank] (I) UsageMask: 16
-//[VTank] (I) IconOutline: 1
-//[VTank] (I) Container: 1343199287
-//[VTank] (I) Slot: -1
-//[VTank] (I) EquipableSlots: 16777216 (z)
-//[VTank] (I) EquippedSlots: 16777216 (z)
-//[VTank] (I) Burden: 50
-//[VTank] (I) HookMask: 3
-//[VTank] (I) PhysicsDataFlags: 170145
-//[VTank] (I) WieldReqValue: 340
-//[VTank] (I) Bonded: 1
-//[VTank] (I) Attuned: 1
-//[VTank] (I) Spellcraft: 450
-//[VTank] (I) CurrentMana: 2869
-//[VTank] (I) MaximumMana: 5000
-//[VTank] (I) LoreRequirement: 300
-//[VTank] (I) WieldReqType: 2
-//[VTank] (I) WieldReqAttribute: 33
-//[VTank] (D) ElementalDamageVersusMonsters: 1.07999999821186
-//[VTank] (D) ManaCBonus: 0.449999988079071
-//[VTank] (D) MeleeDefenseBonus: 1.40000005066395
-//[VTank] (D) ManaRateOfChange: -0.025000000372529
 
 

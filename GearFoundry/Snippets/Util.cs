@@ -12,6 +12,19 @@ using Decal.Adapter.Wrappers;
 using Decal.Interop.D3DService;
 using Decal.Interop;
 using System.Media;
+using System.Text;
+using VirindiViewService;
+using MyClasses.MetaViewWrappers;
+using System.Drawing;
+using Decal.Filters;
+using System.ComponentModel;
+using System.Xml.Linq;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Threading;
+
+
 namespace GearFoundry
 {
 	public partial class PluginCore
@@ -235,6 +248,17 @@ namespace GearFoundry
 		{
 			return " (" + "<Tell:IIDString:" + GOARROWLINK_ID + ":" + inputcoords + ">" + inputcoords + "<\\Tell>" + ")";
 		}
+		
+		private ACImage CreateIconFromResource(string pngname)
+        {
+        	try
+            {
+        		Stream imagestream = this.GetType().Assembly.GetManifestResourceStream(pngname);
+                Image tempimage = new Bitmap(imagestream);
+                return (ACImage)tempimage;
+            }
+        	catch (Exception ex) { LogError(ex); return new ACImage(Color.Black);}
+        }
 		
 
         

@@ -838,7 +838,7 @@ namespace GearFoundry
 	    	    	if(item.IOR == IOResult.players)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.AntiqueWhite;}
 	    	    	if(item.IOR == IOResult.fellowplayer)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.LightGreen;}
 	    	    	if(item.IOR == IOResult.allegplayers)  {((HudStaticText)LandscapeHudListRow[1]).TextColor = Color.Tan;}
-					((HudPictureBox)LandscapeHudListRow[2]).Image = RemoveCircle;
+					((HudPictureBox)LandscapeHudListRow[2]).Image = GearGraphics.RemoveCircle;
 					((HudStaticText)LandscapeHudListRow[3]).Text = item.Id.ToString();
 	    	    }
 	    	    

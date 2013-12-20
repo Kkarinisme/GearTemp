@@ -289,7 +289,8 @@ namespace GearFoundry
                 { vID[i] = 0; }
             }
             catch (Exception ex) { LogError(ex); }
-
+            
+			quickiesvHud = null;
 
         }
 
@@ -449,6 +450,8 @@ namespace GearFoundry
                     }
            
             catch (Exception ex) { LogError(ex); }
+            
+            quickieshHud = null;
         }
 
         

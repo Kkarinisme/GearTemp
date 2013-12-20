@@ -724,7 +724,7 @@ namespace GearFoundry
 		    	    	if(corpse.IOR == IOResult.corpsewithrare) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Magenta;}
 		    	    	if(corpse.IOR == IOResult.corpsefellowkill) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.Green;}
 		    	    	if(corpse.IOR == IOResult.allcorpses) {((HudStaticText)CorpseHudListRow[1]).TextColor = Color.SlateGray;}
-						((HudPictureBox)CorpseHudListRow[2]).Image = RemoveCircle;
+						((HudPictureBox)CorpseHudListRow[2]).Image = GearGraphics.RemoveCircle;
 						((HudStaticText)CorpseHudListRow[3]).Text = corpse.Id.ToString();
 	    	    	}
 	    	    }

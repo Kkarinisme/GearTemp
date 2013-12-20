@@ -268,17 +268,6 @@ namespace GearFoundry
         	}catch(Exception ex){LogError(ex);}
         }
         
-        //xdocRules.Element("Rules").Descendants("Rule").OrderBy(x => x.Element("Enabled").Value).ToList();  
-//        <GameItems>
-//  <item>
-//    <key>BlackGarnet</key>
-//    <intvalue>15</intvalue>
-//    <checked>true</checked>
-//    <combine>1</combine>
-//    <Guid></Guid>
-//  </item>
-
-        
         private void _UpdateRulesTabs()
         {
         	try
@@ -684,6 +673,7 @@ namespace GearFoundry
 
             if (bPortalGearEnabled)
             {
+            	SubscribePortalEvents();
                 RenderPortalGearHud();
                 RenderPortal2GearHud();
             }
@@ -967,11 +957,17 @@ namespace GearFoundry
                 SaveSettings();
                 if (bPortalGearEnabled)
                 {
+                	SubscribePortalEvents();
                     RenderPortalGearHud();
+                    RenderPortal2GearHud();
+                    WriteToChat("PortalGear Enabled.");
                 }
                 else
                 {
+                	UnsubscribePortalEvents();
                     DisposePortalGearHud();
+                    DisposePortalRecallGearHud();
+                    WriteToChat("PortalGear Disabled.");
                 }
             }
             catch { }

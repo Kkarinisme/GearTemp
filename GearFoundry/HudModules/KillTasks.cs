@@ -1323,7 +1323,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopMobsList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = mob;
-					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				KTPopMobsList.Click += KTPopMobsList_Click;
@@ -1350,7 +1350,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopNPCList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = mob;
-					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				KTPopNPCList.Click += KTPopNPCList_Click;
@@ -1454,7 +1454,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopMobsList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = mob;
-					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				KTPopMobsList.ScrollPosition = scroll;
@@ -1476,7 +1476,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopMobsList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = mob;
-					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				KTPopMobsList.ScrollPosition = scroll;
@@ -1502,7 +1502,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopNPCList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = npc;
-					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				KTPopNPCList.ScrollPosition = scroll;
@@ -1524,7 +1524,7 @@ namespace GearFoundry
 				{
 					KTPopRow = KTPopNPCList.AddRow();
 					((HudStaticText)KTPopRow[0]).Text = npc;
-					((HudPictureBox)KTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)KTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				KTPopNPCList.ScrollPosition = scroll;
@@ -1669,7 +1669,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopMobsList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = mob;
-					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				CTPopMobsList.Click += CTPopMobsList_Click;
@@ -1696,7 +1696,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopNPCList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = mob;
-					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				CTPopNPCList.Click += CTPopNPCList_Click;
@@ -1800,7 +1800,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopMobsList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = mob;
-					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				CTPopMobsList.ScrollPosition = scroll;
@@ -1822,7 +1822,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopMobsList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = mob;
-					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				CTPopMobsList.ScrollPosition = scroll;
@@ -1848,7 +1848,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopNPCList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = npc;
-					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				CTPopNPCList.ScrollPosition = scroll;
@@ -1870,7 +1870,7 @@ namespace GearFoundry
 				{
 					CTPopRow = CTPopNPCList.AddRow();
 					((HudStaticText)CTPopRow[0]).Text = npc;
-					((HudPictureBox)CTPopRow[1]).Image = RemoveCircle;
+					((HudPictureBox)CTPopRow[1]).Image = GearGraphics.RemoveCircle;
 				}
 				
 				CTPopNPCList.ScrollPosition = scroll;

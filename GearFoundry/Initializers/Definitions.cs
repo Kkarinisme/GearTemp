@@ -142,7 +142,58 @@ namespace GearFoundry
         // Name of toon in inventory program whose inventory item is being identified
         private string toonInvName;
         private string world;
+        
+        private MainSettings mMainSettings = new MainSettings();
 
+        public class MainSettings
+        {
+        	//Individual Huds
+        	public bool bquickSlotsvEnabled = false;
+	        public bool bquickSlotshEnabled = false;
+	        public bool bGearVisection =  false;
+	        public bool bGearInspectorEnabled = false;
+	        public bool bGearButlerEnabled = false;
+	        public bool bGearTacticianEnabled = false;	
+	        public bool bRemoteGearEnabled = false;
+			public bool bPortalGearEnabled = false;
+			public bool bGearTaskerEnabled = false;
+			public bool bGearSenseHudEnabled = false; 
+	
+			//Inventory flags
+	        public bool bArmorHudEnabled = false;
+	        public bool binventoryHudEnabled = false;
+	        public bool btoonStatsEnabled = false;
+	        public bool binventoryEnabled = false;
+	        public bool binventoryBurdenEnabled = false;
+	        public bool binventoryCompleteEnabled= false;
+	        public bool binventoryWaitingEnabled = false;
+
+        }
+        
+        public class GearGraphics 
+        {
+        	
+        	public const int RemoveCircle = 0x60011F8;
+        	
+        	public const int ItemUstIcon = 0x60026BA;
+			public const int ItemManaStoneIcon = 0x60032D4;
+			public const int ItemDesiccantIcon = 0x6006C0D;
+			
+			public const int RemoteGearIcon = 0x6006E0A;
+			public const int GearBulterIcon = 0x6006533;
+			public const int GearVisectionIcon = 0x6001070;
+			public const int GearInspectorIcon = 0x600218D;
+			public const int GearSenseIcon = 0x6001355;
+			public const int GearTacticianIcon = 0x6004D06;
+			public const int GearInventoryIcon = 0x600127E;
+			public const int GearTaskerIcon = 0x60067EC;
+			public const int GearPortalIcon = 0x60022BE;
+			public const int GearArmorIcon = 0x6001EE2;
+			public const int HoriSwitchGearIcon = 0;
+			public const int VertSwitchGearIcon = 0;
+	
+			
+        }
 
 
          
@@ -187,7 +238,7 @@ namespace GearFoundry
 
 
 		//Graphics
-		private const int RemoveCircle = 0x60011F8;
+		
 
 
     }    

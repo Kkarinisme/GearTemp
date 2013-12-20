@@ -117,9 +117,7 @@ namespace GearFoundry
 		private HudList ItemHudUstList = null;
 		private HudButton ItemHudUstButton = null;
 		
-		private const int ItemUstIcon = 0x60026BA;
-		private const int ItemManaStoneIcon = 0x60032D4;
-		private const int ItemDesiccantIcon = 0x6006C0D;
+		
 		
 		private HudCheckBox InspectorIdentifySalvage = null;
 		private HudCheckBox InspectorAutoAetheria = null;
@@ -616,21 +614,21 @@ namespace GearFoundry
 		    	    	if(LOListAcessor.IOR == IOResult.rule)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.LightGreen;}
 		    	    	if(LOListAcessor.IOR == IOResult.rare)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.HotPink;}
 		    	    	if(LOListAcessor.IOR == IOResult.manatank)  {((HudStaticText)ItemHudListRow[1]).TextColor = Color.CornflowerBlue;}
-						((HudPictureBox)ItemHudListRow[2]).Image = RemoveCircle;
+						((HudPictureBox)ItemHudListRow[2]).Image = GearGraphics.RemoveCircle;
 						((HudStaticText)ItemHudListRow[3]).Text = LOListAcessor.Id.ToString();
 	    			}
 	    			
 	    			if(LOListAcessor.ProcessList)
 		    		{
 	    				ItemHudListRow = ItemHudUstList.AddRow();
-	    				if(LOListAcessor.ProcessAction == IAction.Salvage) {((HudPictureBox)ItemHudListRow[0]).Image = ItemUstIcon;}
-	    				else if(LOListAcessor.ProcessAction == IAction.Desiccate) {((HudPictureBox)ItemHudListRow[0]).Image = ItemDesiccantIcon;}
-	    				else if(LOListAcessor.ProcessAction == IAction.ManaStone) {((HudPictureBox)ItemHudListRow[0]).Image = ItemManaStoneIcon;}
+	    				if(LOListAcessor.ProcessAction == IAction.Salvage) {((HudPictureBox)ItemHudListRow[0]).Image = GearGraphics.ItemUstIcon;}
+	    				else if(LOListAcessor.ProcessAction == IAction.Desiccate) {((HudPictureBox)ItemHudListRow[0]).Image = GearGraphics.ItemDesiccantIcon;}
+	    				else if(LOListAcessor.ProcessAction == IAction.ManaStone) {((HudPictureBox)ItemHudListRow[0]).Image = GearGraphics.ItemManaStoneIcon;}
 	    				else {((HudPictureBox)ItemHudListRow[0]).Image = LOListAcessor.Icon;}
 	    				if(GISettings.RenderMini) {((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.MiniIORString();}
 	    				else{((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.IORString() + LOListAcessor.Name;}
                         ((HudStaticText)ItemHudListRow[1]).FontHeight = nmenuFontHeight;
-                        ((HudPictureBox)ItemHudListRow[2]).Image = RemoveCircle;	
+                        ((HudPictureBox)ItemHudListRow[2]).Image = GearGraphics.RemoveCircle;	
                         ((HudStaticText)ItemHudListRow[3]).Text = LOListAcessor.Id.ToString();
 		    		}
 	    			

@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="HudComponents\CombatHudMechanics.cs" />
     <Compile Include="HudComponents\Fellowship.cs" />
+    <None Include="HudModules\DynamicRemoteGear.cs" />
     <Compile Include="HudModules\GearMaid.cs" />
     <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="HudModules\KillTasks.cs" />
