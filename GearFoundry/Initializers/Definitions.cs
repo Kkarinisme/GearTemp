@@ -41,40 +41,44 @@ namespace GearFoundry
 		private const int GOARROWLINK_ID = 110011;
 	
 		//EchoFilter decoding constants
-		private const int AC_DESTROY_OBJECT = 0x24;
-		private const int AC_ADJUST_STACK = 0x197;
-		private const int AC_PLAYER_KILLED = 0x19E;
-        private const int AC_SET_OBJECT_LINK = 0x2DA;
-        private const int AC_GAME_EVENT = 0xF7B0;
-        private const int AC_GAME_ACTION = 0xF7B1;
-        private const int AC_CREATE_OBJECT = 0xF745;
-        private const int AC_SET_OBJECT_DWORD = 0x2CE;
-        private const int AC_CLOSE_CONTAINER = 0x0052;
-        private const int AC_APPLY_VISUALSOUND = 0xF755;
-        private const int AC_MOVE_OBJECT_INTO_INVENTORY = 0xF74A;
-        
-        private const int GE_MESSAGE_BOX = 0x4;
-        
-        private const int GE_SETPACK_CONTENTS = 0x196;
-        private const int GE_IDENTIFY_OBJECT = 0xC9;
-        private const int GE_APPROACH_VENDOR = 0x62;
-        private const int GE_FAILURE_TO_GIVE_ITEM = 0xA0;
-        private const int GE_READY_PREV_ACTION_COMPLETE = 0x1C7;
-        private const int GE_ENTER_TRADE = 0x1FD;
-        private const int GE_EXIT_TRADE = 0x1FF;
-        private const int GE_INSERT_INVENTORY_ITEM = 0x22;
-        private const int GE_WEAR_ITEM = 0x23;
-        private const int GE_UPDATE_HEALTH = 0x01C0;
-        
-        private const int GA_USE_ITEM = 0x0036;
-        
-        
-        //Fellowship Packets
-        private const int GE_ADD_FELLOWMEMBER = 0x2C0;
-        private const int GE_FELLOWSHIP_MEMBER_QUIT = 0x00A3;
-        private const int GE_FELLOWSHIP_MEMBER_DISMISSED = 0x00A4;
-		private const int GE_CREATE_FELLOWSHIP = 0x02BE;
-		private const int GE_DISBAND_FELLOWSHIP = 0x02BF;
+		
+		public class EchoConstants
+		{
+			public const int AC_DESTROY_OBJECT = 0x24;
+			public const int AC_ADJUST_STACK = 0x197;
+			public const int AC_PLAYER_KILLED = 0x19E;
+	        public const int AC_SET_OBJECT_LINK = 0x2DA;
+	        public const int AC_GAME_EVENT = 0xF7B0;
+	        public const int AC_GAME_ACTION = 0xF7B1;
+	        public const int AC_CREATE_OBJECT = 0xF745;
+	        public const int AC_SET_OBJECT_DWORD = 0x2CE;
+	        public const int AC_CLOSE_CONTAINER = 0x0052;
+	        public const int AC_APPLY_VISUALSOUND = 0xF755;
+	        public const int AC_MOVE_OBJECT_INTO_INVENTORY = 0xF74A;
+	        
+	        public const int GE_MESSAGE_BOX = 0x4;
+	        
+	        public const int GE_SETPACK_CONTENTS = 0x196;
+	        public const int GE_IDENTIFY_OBJECT = 0xC9;
+	        public const int GE_APPROACH_VENDOR = 0x62;
+	        public const int GE_FAILURE_TO_GIVE_ITEM = 0xA0;
+	        public const int GE_READY_PREV_ACTION_COMPLETE = 0x1C7;
+	        public const int GE_ENTER_TRADE = 0x1FD;
+	        public const int GE_EXIT_TRADE = 0x1FF;
+	        public const int GE_INSERT_INVENTORY_ITEM = 0x22;
+	        public const int GE_WEAR_ITEM = 0x23;
+	        public const int GE_UPDATE_HEALTH = 0x01C0;
+	        
+	        public const int GA_USE_ITEM = 0x0036;
+	        
+	        
+	        //Fellowship Packets
+	        public const int GE_ADD_FELLOWMEMBER = 0x2C0;
+	        public const int GE_FELLOWSHIP_MEMBER_QUIT = 0x00A3;
+	        public const int GE_FELLOWSHIP_MEMBER_DISMISSED = 0x00A4;
+			public const int GE_CREATE_FELLOWSHIP = 0x02BE;
+			public const int GE_DISBAND_FELLOWSHIP = 0x02BF;
+		}
 		        
       //  XDocument xdoc = null;
         XDocument xdocGenSettings = null;
@@ -191,6 +195,26 @@ namespace GearFoundry
 			public const int GearArmorIcon = 0x6001EE2;
 			public const int HoriSwitchGearIcon = 0;
 			public const int VertSwitchGearIcon = 0;
+			
+			public const int GB_USE_ICON = 0x6000FB7;
+			public const int GB_GIVE_ICON = 0x60011F7;
+			public const int GB_TRADEVENDOR_ICON = 0x6001080;
+			public const int GB_EQUIPPED_ICON = 0x600136F;
+			public const int GB_UNEQUIPPED_ICON = 0x600127E;
+			public const int GB_MELEE_ICON = 0x60010BC;
+			public const int GB_MISSILE_ICON = 0x6001302;
+			public const int GB_ARMOR_ICON = 0x6000FC7;
+			public const int GB_CASTER_ICON = 0x6001066;
+			public const int GB_KEY_ICON = 0x6001ED3;
+			public const int GB_KEYRING_ICON = 0x6002C3F;
+			public const int GB_LOCKPICK_ICON = 0x6001D6E;
+			public const int GB_MANASTONE_ICON = 0x60032D4;
+			public const int GB_HEALKIT_ICON = 0X60032F3;
+			public const int GB_POTION_ICON = 0x60019FD;
+			
+			public const int GB_SELECT = 0x60011F9;
+			public const int GB_BACKGROUND = 0x60011D1;
+		
 	
 			
         }

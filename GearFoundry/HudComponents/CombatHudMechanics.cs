@@ -373,22 +373,22 @@ namespace GearFoundry
         	int iEvent = 0;
             try
             {
-            	if(e.Message.Type == AC_APPLY_VISUALSOUND)
+            	if(e.Message.Type == EchoConstants.AC_APPLY_VISUALSOUND)
                 {
                     OnVisualSound(e.Message);
                 }
-            	if(e.Message.Type == AC_GAME_EVENT)
+            	if(e.Message.Type == EchoConstants.AC_GAME_EVENT)
             	{
             		try
                     {
                     	iEvent = Convert.ToInt32(e.Message["event"]);
                     }
             		catch{}
-            		if(iEvent == GE_UPDATE_HEALTH)
+            		if(iEvent == EchoConstants.GE_UPDATE_HEALTH)
             		{
             			OnUpdateHealth(e.Message);
             		}
-            		if(iEvent == GE_IDENTIFY_OBJECT)
+            		if(iEvent == EchoConstants.GE_IDENTIFY_OBJECT)
                     {
                     	 OnIdentCombat(e.Message);
                     } 

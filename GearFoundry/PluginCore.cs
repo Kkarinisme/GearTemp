@@ -121,10 +121,6 @@ namespace GearFoundry
         {
             if (quickieshHud != null) { DisposeHorizontalQuickSlots(); }
             if (quickiesvHud != null) { DisposeVerticalQuickSlots(); }
-       		if(CorpseHudView != null) {DisposeCorpseHud();}
-            if(LandscapeHudView != null) {DisposeLandscapeHud();}
-            if(ItemHudView != null) {DisposeItemHud();}
-            if(ButlerHudView != null){UnsubscribeButlerEvents();}
             if(InventoryHudView != null){DisposeInventoryHud();}
             if (ArmorHudView != null) { DisposeArmorHud(); }
             if(portalGearHud !=null) {DisposePortalGearHud();}

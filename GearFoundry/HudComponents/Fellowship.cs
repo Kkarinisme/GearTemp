@@ -69,26 +69,26 @@ namespace GearFoundry
 		int iEvent = 0;
             try
             {
-            	if(e.Message.Type == AC_GAME_EVENT)
+            	if(e.Message.Type == EchoConstants.AC_GAME_EVENT)
             	{
             		try
                     {
             			iEvent = (int)e.Message["event"];
                     }
                     catch{}
-                    if(iEvent == GE_ADD_FELLOWMEMBER)
+                    if(iEvent == EchoConstants.GE_ADD_FELLOWMEMBER)
                     {
                     	AddFellowLandscape(e);
                     }
-                    if(iEvent == GE_FELLOWSHIP_MEMBER_QUIT || iEvent == GE_FELLOWSHIP_MEMBER_DISMISSED)
+                    if(iEvent == EchoConstants.GE_FELLOWSHIP_MEMBER_QUIT || iEvent == EchoConstants.GE_FELLOWSHIP_MEMBER_DISMISSED)
                     {
                     	RemoveFellowLandscape(e);
                     }
-                    if(iEvent == GE_DISBAND_FELLOWSHIP)
+                    if(iEvent == EchoConstants.GE_DISBAND_FELLOWSHIP)
                     {
                     	ClearFellowLandscape(e);
                     }
-                    if(iEvent == GE_CREATE_FELLOWSHIP)
+                    if(iEvent == EchoConstants.GE_CREATE_FELLOWSHIP)
                     {
                     	CreateorJoinFellowLandscape(e);
                     }                    

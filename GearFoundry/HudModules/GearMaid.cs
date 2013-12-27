@@ -21,16 +21,7 @@ namespace GearFoundry
 	public partial class PluginCore
 	{
 
-		private HudFixedLayout MaidTabLayout = null;
-		private HudButton MaidStackInventory = null;
-		private HudButton MaidRingKeys = null;
-		private HudButton MaidTradeAllSalvage = null;
-		private HudButton MaidTradeParialSalvage = null;
-		private HudButton MaidTradeFilledSalvage = null;
-		private HudButton MaidTradeAllEightComps = null;
-		private HudButton MaidSalvageCombine = null;
-		private HudButton MaidCannibalizeInventory = null;
-		private HudCheckBox MaidCannibalizeEnable = null;
+		
 		
 		private Queue<WorldObject> MaidCannibalizeQueue = new Queue<WorldObject>();
 		private List<int> MaidCannibalizeProcessList = new List<int>();
@@ -48,88 +39,18 @@ namespace GearFoundry
     	{
     		try
     		{	
-    			MaidStackInventory = new HudButton();
-    			MaidStackInventory.Text = "Stack Inventory";
-    			MaidTabLayout.AddControl(MaidStackInventory, new Rectangle(0,0,150,20));
     			
-    			MaidRingKeys = new HudButton();
-    			MaidRingKeys.Text = "Ring Keys";
-    			MaidTabLayout.AddControl(MaidRingKeys, new Rectangle(0,30,150,20));
-    			
-    			MaidTradeAllSalvage = new HudButton();
-    			MaidTradeAllSalvage.Text = "Window All Salvage";    			
-    			MaidTabLayout.AddControl(MaidTradeAllSalvage, new Rectangle(0,60,150,20));
-    			
-    			MaidTradeFilledSalvage = new HudButton();
-    			MaidTradeFilledSalvage.Text = "Window Filled Salvage";
-    			MaidTabLayout.AddControl(MaidTradeFilledSalvage, new Rectangle(0,90,150,20));
-    			
-    			MaidTradeParialSalvage = new HudButton();
-    			MaidTradeParialSalvage.Text = "Window Partial Salvage";
-    			MaidTabLayout.AddControl(MaidTradeParialSalvage, new Rectangle(0,120,150,20));
-    			
-    			MaidSalvageCombine = new HudButton();
-    			MaidSalvageCombine.Text = "Combine Salvage Bags";
-    			MaidTabLayout.AddControl(MaidSalvageCombine, new Rectangle(0,150,150,20));
-    			
-    			MaidTradeAllEightComps = new HudButton();
-    			MaidTradeAllEightComps.Text = "Window All L8 Spell Components";
-    			MaidTabLayout.AddControl(MaidTradeAllEightComps, new Rectangle(0, 180, 150,20));
-    			
-    			MaidCannibalizeEnable = new HudCheckBox();
-    			MaidCannibalizeEnable.Text = "Enable Cannibalize Button";
-    			MaidTabLayout.AddControl(MaidCannibalizeEnable, new Rectangle(0,210,150,20));
-    			
-    			MaidStackInventory.Hit += MaidStackInventory_Hit;
-    			MaidRingKeys.Hit += MaidRingKeys_Hit;
-    			MaidTradeAllSalvage.Hit += MaidTradeAllSalvage_Hit;
-    			MaidTradeFilledSalvage.Hit += MaidTradeFilledSalvage_Hit;
-    			MaidTradeParialSalvage.Hit += MaidTradeParialSalvage_Hit;
-    			MaidSalvageCombine.Hit += MaidSalvageCombine_Hit;
-    			MaidCannibalizeEnable.Hit += MaidCannibalizeEnable_Hit;
-    			MaidTradeAllEightComps.Hit += MaidTradeAllEightComps_Hit;
-    			
-    			MaidTab = true;
-    			
-    		}catch(Exception ex){LogError(ex);}
-    	}
-    	
-    	private void DisposeButlerHudMaidLayout()
-    	{
-    		try
-    		{
-    			if(!MaidTab) { return;}
-    			
-    			MaidStackInventory.Hit -= MaidStackInventory_Hit;
-    			MaidRingKeys.Hit -= MaidRingKeys_Hit;
-    			MaidTradeAllSalvage.Hit -= MaidTradeAllSalvage_Hit;
-    			MaidTradeFilledSalvage.Hit -= MaidTradeFilledSalvage_Hit;
-    			MaidTradeParialSalvage.Hit -= MaidTradeParialSalvage_Hit;
-    			MaidSalvageCombine.Hit -= MaidSalvageCombine_Hit;
-    			MaidTradeAllEightComps.Hit -= MaidTradeAllEightComps_Hit;
-    			if(MaidCannibalizeInventory != null) {MaidCannibalizeInventory.Hit -= MaidCannibalizeInventory_Hit;}
-    			
-    			if(MaidCannibalizeInventory != null){MaidCannibalizeInventory.Dispose();}
     			    			
-    			MaidCannibalizeEnable.Dispose();
-    			MaidSalvageCombine.Dispose();
-    			MaidTradeParialSalvage.Dispose();
-    			MaidTradeFilledSalvage.Dispose();
-    			MaidTradeAllSalvage.Dispose();
-    			MaidRingKeys.Dispose();
-    			MaidStackInventory.Dispose();	
-    			
-    			MaidTab = false;
     		}catch(Exception ex){LogError(ex);}
     	}
-		
+    			
     	private void MaidCannibalizeEnable_Hit(object sender, EventArgs e)
     	{
     		try
     		{
     			WriteToChat("This will eat your stuff.  You were warned.");
     			
-    			if(MaidCannibalizeEnable.Checked)
+    			if(MaidCannibalizeInventory == null)
     			{
     			
     				MaidCannibalizeInventory = new HudButton();
@@ -140,9 +61,7 @@ namespace GearFoundry
     			else
     			{
     				  if(MaidCannibalizeInventory != null) {MaidCannibalizeInventory.Hit -= MaidCannibalizeInventory_Hit;}
-    			
-    				  if(MaidCannibalizeInventory != null){MaidCannibalizeInventory.Dispose();}
-    				
+    				  if(MaidCannibalizeInventory != null){MaidCannibalizeInventory.Dispose(); MaidCannibalizeInventory = null;}	
     			}
 
     		}catch(Exception ex){LogError(ex);}

@@ -21,20 +21,8 @@ namespace GearFoundry
 	/// Description of GearValet.
 	/// </summary>
 	public partial class PluginCore
-	{
-		private HudFixedLayout ValetTabLayout = null;
-		private HudButton ValetDisrobe = null;
-		private HudButton ValetEquipSuit = null;		
-		private HudButton ValetCreateSuit = null;
-		private HudList ValetSuitList = null;
-		private HudList ValetSuitPiecesList = null;
-		private HudStaticText ValetTextBoxLabel = null;
-		private HudStaticText ValetSuitListLabel = null;
-		private HudStaticText ValetSuitPiecesListLabel = null;
+	{	
 		
-		private HudList.HudListRowAccessor ValetRow = null;
-		private HudTextBox ValetNameBox = null;
-		private const int GearValetRemoveCircle = 0x60011F8;
 		private int ValetCurrentSuit = 0;
 		
 		public class ValetTicket
@@ -50,100 +38,7 @@ namespace GearFoundry
 			public int Icon = 0;
 			public List<ValetTicket> SuitPieces = new List<ValetTicket>();
 		}
-		
-		private void RenderButlerHudValetTab()
-		{
-			try
-			{   
-				int split3horizontal = Convert.ToInt32((double)GearButlerSettings.ButlerHudWidth /(double)3);
-				int splithalf = Convert.ToInt32((double)GearButlerSettings.ButlerHudWidth/(double)2);
-				int halfsplit3horizontal = Convert.ToInt32((double)split3horizontal/(double)2);
-				int splitbottomvertical = Convert.ToInt32(((double)100 - GearButlerSettings.ButlerHudHeight) /2);
-				
-				
-				ValetDisrobe = new HudButton();
-				ValetDisrobe.Text = "Disrobe";
-				ValetTabLayout.AddControl(ValetDisrobe, new Rectangle(10,5,split3horizontal-20,20));
-				
-				ValetEquipSuit = new HudButton();
-				ValetEquipSuit.Text = "Equip";
-				ValetTabLayout.AddControl(ValetEquipSuit, new Rectangle(splithalf - halfsplit3horizontal ,5,split3horizontal-20,20));
-				
-				ValetCreateSuit = new HudButton();
-				ValetCreateSuit.Text = "Create";
-				ValetTabLayout.AddControl(ValetCreateSuit, new Rectangle(splithalf + halfsplit3horizontal,5,split3horizontal-20,20));
-				
-				ValetTextBoxLabel = new HudStaticText();
-				ValetTextBoxLabel.Text = "Suit Label:";
-				ValetTabLayout.AddControl(ValetTextBoxLabel, new Rectangle(0,30,50,16));
-				
-				ValetNameBox = new HudTextBox();
-				ValetNameBox.Text = String.Empty;
-				ValetTabLayout.AddControl(ValetNameBox, new Rectangle(10,55,GearButlerSettings.ButlerHudWidth -20, 20));
-				
-				ValetSuitListLabel = new HudStaticText();
-				ValetSuitListLabel.Text = "Suits:";
-				ValetTabLayout.AddControl(ValetSuitListLabel, new Rectangle(0,80,50,16));			
-	
-				ValetSuitList = new HudList();
-				ValetSuitList.AddColumn(typeof(HudPictureBox), 16, null);
-				ValetSuitList.AddColumn(typeof(HudStaticText), GearButlerSettings.ButlerHudWidth - 80, null);
-				ValetSuitList.AddColumn(typeof(HudPictureBox), 16, null);
-				ValetSuitList.AddColumn(typeof(HudStaticText), 1, null);
-				ValetTabLayout.AddControl(ValetSuitList, new Rectangle(0,100,GearButlerSettings.ButlerHudWidth - 20,100));
-				
-				ValetSuitPiecesListLabel = new HudStaticText();
-				ValetSuitPiecesListLabel.Text = "Pieces:";
-				ValetTabLayout.AddControl(ValetSuitPiecesListLabel, new Rectangle(0,210,50,16));	
-				
-				ValetSuitPiecesList = new HudList();
-				ValetSuitPiecesList.AddColumn(typeof(HudPictureBox), 16, null);
-				ValetSuitPiecesList.AddColumn(typeof(HudStaticText), GearButlerSettings.ButlerHudWidth - 80, null);
-				ValetSuitPiecesList.AddColumn(typeof(HudPictureBox), 16, null);
-				ValetSuitPiecesList.AddColumn(typeof(HudStaticText), 1, null);
-				ValetTabLayout.AddControl(ValetSuitPiecesList, new Rectangle(0, 230 ,GearButlerSettings.ButlerHudWidth - 20,100));
-				
-				ValetDisrobe.Hit += ValetDisrobe_Hit;
-				ValetEquipSuit.Hit += ValetEquipSuit_Hit;
-				ValetCreateSuit.Hit += ValetCreateSuit_Hit;
-				ValetSuitList.Click += ValetSuitList_Click;
-				ValetSuitPiecesList.Click += ValetSuitPiecesList_Click;
-				
-				ValetTab = true;
-				
-				UpdateValetHud();
-				
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-			
-		private void DisposeValetTabLayout()
-		{
-			try
-			{
-				if(!ValetTab) { return;}
-				
-				ValetDisrobe.Hit -= ValetDisrobe_Hit;
-				ValetEquipSuit.Hit -= ValetEquipSuit_Hit;
-				ValetCreateSuit.Hit -= ValetCreateSuit_Hit;
-				ValetSuitList.Click -= ValetSuitList_Click;
-				ValetSuitPiecesList.Click -= ValetSuitPiecesList_Click;
-				
-				ValetDisrobe.Dispose();
-				ValetEquipSuit.Dispose();
-				ValetCreateSuit.Dispose();
-				ValetTextBoxLabel.Dispose();
-				ValetNameBox.Dispose();				
-				ValetSuitListLabel.Dispose();			
-				ValetSuitList.Dispose();				
-				ValetSuitPiecesListLabel.Dispose();				
-				ValetSuitPiecesList.Dispose();
-				
-				ValetTab = false;
-				
-			}catch(Exception ex){LogError(ex);}
-		}
-		
+					
 		private void ValetSuitList_Click(object sender, int row, int col)
 		{
 			try
@@ -221,7 +116,7 @@ namespace GearFoundry
 					((HudPictureBox)ValetRow[0]).Image = vs.Icon + 0x6000000;
                     ((HudStaticText)ValetRow[1]).Text = vs.SuitName;
                     if(vs.TicketStub == ValetCurrentSuit) {((HudStaticText)ValetRow[1]).TextColor = Color.Gold;}
-                    ((HudPictureBox)ValetRow[2]).Image = GearValetRemoveCircle;
+                    ((HudPictureBox)ValetRow[2]).Image = GearGraphics.RemoveCircle;
                     ((HudStaticText)ValetRow[3]).Text = vs.TicketStub.ToString();
 				}
 				
@@ -233,7 +128,7 @@ namespace GearFoundry
 					((HudPictureBox)ValetRow[0]).Image = Core.WorldFilter[vt.ItemId].Icon + 0x6000000;
 					((HudStaticText)ValetRow[1]).Text = Core.WorldFilter[vt.ItemId].Name;
 					if(vt.ItemId == Core.Actions.CurrentSelection){((HudStaticText)ValetRow[1]).TextColor = Color.Gold;}
-                    ((HudPictureBox)ValetRow[2]).Image = GearValetRemoveCircle;
+                    ((HudPictureBox)ValetRow[2]).Image = GearGraphics.RemoveCircle;
                     ((HudStaticText)ValetRow[3]).Text = vt.ItemId.ToString();
 				}
 			}catch(Exception ex){LogError(ex);}

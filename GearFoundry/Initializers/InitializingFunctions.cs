@@ -657,6 +657,7 @@ namespace GearFoundry
 
             if (mMainSettings.bGearButlerEnabled)
             {
+            	SubscribeButlerEvents();
                 RenderButlerHud();
             }
 
@@ -868,10 +869,12 @@ namespace GearFoundry
         		SaveSettings();
         		if(mMainSettings.bGearButlerEnabled)
         		{
+        			SubscribeButlerEvents();
         			RenderButlerHud();
         		}
         		else
         		{
+        			UnsubscribeButlerEvents();
         			DisposeButlerHud();
         		}
 
