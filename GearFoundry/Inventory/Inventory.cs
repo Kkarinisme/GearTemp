@@ -201,7 +201,7 @@ namespace GearFoundry
                 InventoryHudView.UserResizeable = false;
                 InventoryHudView.Visible = true;
                 InventoryHudView.Ghosted = false;
-                InventoryHudView.UserMinimizable = false;
+                InventoryHudView.UserMinimizable = true;
                 InventoryHudView.UserClickThroughable = false;
                 InventoryHudTabView = new HudTabView();
                 InventoryHudView.Controls.HeadControl = InventoryHudTabView;
@@ -215,10 +215,19 @@ namespace GearFoundry
                 InventoryHudView.Resize += InventoryHudView_Resize;
                 InventoryHudView.UserResizeable = true;
                 RenderInventoryTabLayout();
+                InventoryHudView.VisibleChanged += InventoryHudView_VisibleChanged;
 
             }
             catch (Exception ex) { LogError(ex); }
             return;
+        }
+        
+        private void InventoryHudView_VisibleChanged(object sender, EventArgs e)
+        {
+        	try
+        	{
+        		DisposeInventoryHud();
+        	}catch(Exception ex){LogError(ex);}
         }
 
         private void InventoryHudView_Resize(object sender, System.EventArgs e)
@@ -622,6 +631,8 @@ namespace GearFoundry
                 InventoryHudTabLayout.Dispose();
                 InventoryHudTabView.Dispose();
                 InventoryHudView.Dispose();
+                
+                InventoryHudView = null;
             }
             catch (Exception ex) { LogError(ex); }
             return;

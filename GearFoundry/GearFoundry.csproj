@@ -97,7 +97,7 @@
   <ItemGroup>
     <Compile Include="HudComponents\CombatHudMechanics.cs" />
     <Compile Include="HudComponents\Fellowship.cs" />
-    <None Include="HudModules\DynamicRemoteGear.cs" />
+    <Compile Include="HudModules\DynamicRemoteGear.cs" />
     <Compile Include="HudModules\GearMaid.cs" />
     <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="HudModules\KillTasks.cs" />
@@ -133,7 +133,7 @@
     <Compile Include="Initializers\Build.cs" />
     <Compile Include="Inventory\armor.cs" />
     <Compile Include="PluginCore.cs" />
-    <Compile Include="HudModules\RemoteGear.cs" />
+    <None Include="HudModules\RemoteGear.cs" />
     <Compile Include="Views\MainView.cs" />
     <Compile Include="HudModules\QuickSlotsHud.cs" />
     <Compile Include="Initializers\Definitions.cs" />

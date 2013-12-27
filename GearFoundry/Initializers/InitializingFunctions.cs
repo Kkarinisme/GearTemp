@@ -669,7 +669,8 @@ namespace GearFoundry
 
             if (mMainSettings.bRemoteGearEnabled)
             {
-                RenderRemoteGearHud();
+            	RenderDynamicRemoteGear();
+                //RenderRemoteGearHud();
             }
 
             if (mMainSettings.bPortalGearEnabled)
@@ -787,6 +788,7 @@ namespace GearFoundry
                 {
                 	DisposeVerticalQuickSlots();
                 }
+                RenderDynamicRemoteGear();
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -808,12 +810,11 @@ namespace GearFoundry
                 {
                     DisposeHorizontalQuickSlots();
                 }
+                RenderDynamicRemoteGear();
             }
             catch (Exception ex) { LogError(ex); }
         }
 
-
-		//Gear Hound Contols	
 		void chkGearVisectionEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
 		{
 			try
@@ -832,6 +833,7 @@ namespace GearFoundry
 					DisposeCorpseHud();
 					WriteToChat("GearVisection Disabled.");
 				}
+				RenderDynamicRemoteGear();
 			}
 			catch(Exception ex){LogError(ex);}
 			
@@ -855,12 +857,11 @@ namespace GearFoundry
 					UnsubscribeLandscapeEvents();
 					DisposeLandscapeHud();
 					WriteToChat("GearSense Disabled.");
-				}	
+				}
+				RenderDynamicRemoteGear();				
         	}catch{}
         }
         
-        
-        //GearButler Settings
         void chkGearButlerEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
         	try
@@ -871,18 +872,18 @@ namespace GearFoundry
         		{
         			SubscribeButlerEvents();
         			RenderButlerHud();
+        			WriteToChat("GearButler Enabled.");
         		}
         		else
         		{
         			UnsubscribeButlerEvents();
         			DisposeButlerHud();
+        			WriteToChat("GearButler Disabled.");
         		}
-
+        		RenderDynamicRemoteGear();
         	}catch{}
         }
      
-
-
         void chkGearInspectorEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
         {
             try
@@ -901,6 +902,7 @@ namespace GearFoundry
                     DisposeItemHud();
                     WriteToChat("GearInspector Disabled.");
                 }
+                RenderDynamicRemoteGear();
             }
             catch { }
         }
@@ -923,6 +925,7 @@ namespace GearFoundry
                 	DisposeTacticianHud();
                 	WriteToChat("GearTactician Disabled.");
                 }
+                RenderDynamicRemoteGear();
             }
             catch { }
         }
@@ -935,11 +938,13 @@ namespace GearFoundry
                 SaveSettings();
                 if (mMainSettings.bRemoteGearEnabled)
                 {
-                    RenderRemoteGearHud();
+                	RenderDynamicRemoteGear();
+                	//RenderRemoteGearHud();
                 }
                 else
                 {
-                    DisposeRemoteGearHud();
+                	DisposeDynamicRemote();
+                    //DisposeRemoteGearHud();
                 }
             }
             catch { }
@@ -965,6 +970,7 @@ namespace GearFoundry
                     DisposePortalRecallGearHud();
                     WriteToChat("PortalGear Disabled.");
                 }
+                RenderDynamicRemoteGear();
             }
             catch { }
         }
@@ -987,6 +993,7 @@ namespace GearFoundry
                     DisposeKillTaskPanel();
                     WriteToChat("GearTasker Disabled");
                 }
+                RenderDynamicRemoteGear();
             }
             catch { }
         }
@@ -1016,6 +1023,7 @@ namespace GearFoundry
 
                 }
                 else { DisposeArmorHud(); }
+                RenderDynamicRemoteGear();
 
             }
             catch (Exception ex) { LogError(ex); }
@@ -1053,6 +1061,7 @@ namespace GearFoundry
 
                 }
                 else { DisposeInventoryHud(); }
+                RenderDynamicRemoteGear();
 
             }
             catch (Exception ex) { LogError(ex); }
