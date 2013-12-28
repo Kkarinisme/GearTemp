@@ -26,7 +26,8 @@ namespace GearFoundry
     	private List<PortalIcons> TextRecallList = new List<PortalIcons>();
     	private List<PortalIcons> PortalSpellList = new List<PortalIcons>();
     	private List<PortalIcons> RecallSpellList = new List<PortalIcons>();
-    
+    	private List<string> MissingSpellsList = new List<string>();
+    	
     	internal class PortalIcons
     	{
     		internal HudPictureBox PortalIcon = new HudPictureBox();
@@ -80,7 +81,11 @@ namespace GearFoundry
             facilityhub,
             lifestonetie,
             tieprimary,
-            tiesecondary
+            tiesecondary,
+            lethe,
+            ulgrim,
+            candeth,
+            glendenwood
 		}
 		
 		private void SubscribePortalEvents()
@@ -159,7 +164,9 @@ namespace GearFoundry
 				
 		private HudView DynamicPortalGearView = null;
 		private HudTabView DynamicPortalGearTabView = null;
-		private HudFixedLayout DynamicPortalGearLayout = null;	
+		private HudFixedLayout DynamicPortalGearLayout = null;
+		private HudFixedLayout DynamicPortalGearMissingLayout = null;
+		private HudList DynaicPortalGearMissingSpellsList = null;
 
         private void RenderPortalGearHud()
         {
@@ -197,13 +204,21 @@ namespace GearFoundry
                 DynamicPortalGearView.Controls.HeadControl = DynamicPortalGearTabView;
                 
                 DynamicPortalGearLayout = new HudFixedLayout();
-                DynamicPortalGearTabView.AddTab(DynamicPortalGearLayout, "");
+                DynamicPortalGearTabView.AddTab(DynamicPortalGearLayout, "Portals");
                 
-               	int shiftbase = 0;		
+               	int shiftbase = 0;	
+               	for(int i = 0; i < MiscRecallList.Count; i++)
+                {
+                	DynamicPortalGearLayout.AddControl(MiscRecallList[i].PortalIcon, new Rectangle(i*30, 0, 25, 25));
+                	if(MiscRecallList[i].Identifier == "caster") VirindiViewService.TooltipSystem.AssociateTooltip(MiscRecallList[i].PortalIcon, "Select Caster");
+                	if(MiscRecallList[i].Identifier == "hubgem") VirindiViewService.TooltipSystem.AssociateTooltip(MiscRecallList[i].PortalIcon, "Facility Hub Gem");
+                }
+               	shiftbase = MiscRecallList.Count * 30;
+               	
                 //Text based recall Tiles
                 for(int i = 0; i < TextRecallList.Count; i++)
                 {
-                	DynamicPortalGearLayout.AddControl(TextRecallList[i].PortalIcon, new Rectangle(i * 30, 0, 25, 25));
+                	DynamicPortalGearLayout.AddControl(TextRecallList[i].PortalIcon, new Rectangle(shiftbase + i * 30, 0, 25, 25));
                 	if(TextRecallList[i].Identifier == "atlifestone") VirindiViewService.TooltipSystem.AssociateTooltip(TextRecallList[i].PortalIcon, "Lifestone Recall (/@ls)");
                 	if(TextRecallList[i].Identifier == "athouse") VirindiViewService.TooltipSystem.AssociateTooltip(TextRecallList[i].PortalIcon, "House Recall (/@hr)");
                 	if(TextRecallList[i].Identifier == "atmansion") VirindiViewService.TooltipSystem.AssociateTooltip(TextRecallList[i].PortalIcon, "Mansion recall (/@hom)");
@@ -231,21 +246,13 @@ namespace GearFoundry
 	                } 
                 }
                 
-                shiftbase = 0;
-                //Misc tiles
-                for(int i = 0; i < MiscRecallList.Count; i++)
-                {
-                	DynamicPortalGearLayout.AddControl(MiscRecallList[i].PortalIcon, new Rectangle(i*30, 30, 25, 25));
-                	if(MiscRecallList[i].Identifier == "caster") VirindiViewService.TooltipSystem.AssociateTooltip(MiscRecallList[i].PortalIcon, "Select Caster");
-                	if(MiscRecallList[i].Identifier == "hubgem") VirindiViewService.TooltipSystem.AssociateTooltip(MiscRecallList[i].PortalIcon, "Facility Hub Gem");
-                }
-                shiftbase += MiscRecallList.Count * 30;
+
                 //Recall spell tiles
                 if(RecallSpellList.Count > 0)
                 {
                 	for(int i = 0; i < RecallSpellList.Count; i++)
                 	{
-                		DynamicPortalGearLayout.AddControl(RecallSpellList[i].PortalIcon, new Rectangle(shiftbase + i * 30, 30, 25, 25));
+                		DynamicPortalGearLayout.AddControl(RecallSpellList[i].PortalIcon, new Rectangle(i * 30, 30, 25, 25));
                 		if(RecallSpellList[i].Identifier == "sanctuary") VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "Sanctuary Recall");
                 		if(RecallSpellList[i].Identifier == "bananaland") VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "BananaLand Recall");
                 		if(RecallSpellList[i].Identifier == "colo")  VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "Coloseum Recall");
@@ -258,8 +265,26 @@ namespace GearFoundry
                 		if(RecallSpellList[i].Identifier == "neftet") VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "Neftet Recall");
                 		if(RecallSpellList[i].Identifier == "rynthid")  VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "Rynthid Recall");
                 		if(RecallSpellList[i].Identifier == "mhoire") VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "Mhoire Recall");
+                		if(RecallSpellList[i].Identifier == "glendenwood") VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "Glendenwood Recall");
+                		if(RecallSpellList[i].Identifier == "mtlethe") VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "Mount Lethe Recall");
+                		if(RecallSpellList[i].Identifier == "ulgrim") VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "Ulgrim's Recall");
+                		if(RecallSpellList[i].Identifier == "candeth") VirindiViewService.TooltipSystem.AssociateTooltip(RecallSpellList[i].PortalIcon, "Candeth Keep Recall");
                 	}
                 }
+                
+                DynamicPortalGearMissingLayout = new HudFixedLayout();
+                DynamicPortalGearTabView.AddTab(DynamicPortalGearMissingLayout, "Missing");
+                
+                DynaicPortalGearMissingSpellsList = new HudList();
+                DynamicPortalGearMissingLayout.AddControl(DynaicPortalGearMissingSpellsList, new Rectangle(0,0,DynamicPortalGearView.Width, DynamicPortalGearView.Height));
+                DynaicPortalGearMissingSpellsList.AddColumn(typeof(HudStaticText),DynamicPortalGearView.Width,null);
+                
+                HudList.HudListRowAccessor nrow;
+                foreach(string spell in MissingSpellsList)
+                {
+                	nrow = DynaicPortalGearMissingSpellsList.AddRow();
+                	((HudStaticText)nrow[0]).Text = spell;
+                }    
                 
             }catch(Exception ex){LogError(ex);}
  
@@ -274,6 +299,8 @@ namespace GearFoundry
         		DynamicPortalGearView.Dispose();
         		DynamicPortalGearTabView.Dispose();
         		DynamicPortalGearLayout.Dispose();
+        		DynamicPortalGearMissingLayout.Dispose();
+        		DynaicPortalGearMissingSpellsList.Dispose();
         		DynamicPortalGearView = null;
         		
         	}catch(Exception ex){LogError(ex);}
@@ -433,12 +460,27 @@ namespace GearFoundry
         {
             try{PortalActionsLoad(RecallTypes.neftet);}catch(Exception ex){LogError(ex);}
         }
-
         private void Rynthid_Hit(object sender, System.EventArgs e)
         {
             try{PortalActionsLoad(RecallTypes.rynthid);}catch (Exception ex){LogError(ex);}
         }
-     
+     	private void Glendenwood_Hit(object sender, System.EventArgs e)
+        {
+     		try{PortalActionsLoad(RecallTypes.glendenwood);}catch (Exception ex){LogError(ex);}
+        }
+     	private void MtLethe_Hit(object sender, System.EventArgs e)
+        {
+            try{PortalActionsLoad(RecallTypes.lethe);}catch (Exception ex){LogError(ex);}
+        }
+     	private void Ulgrim_Hit(object sender, System.EventArgs e)
+        {
+            try{PortalActionsLoad(RecallTypes.ulgrim);}catch (Exception ex){LogError(ex);}
+        }
+     	private void Candeth_Hit(object sender, System.EventArgs e)
+        {
+            try{PortalActionsLoad(RecallTypes.candeth);}catch (Exception ex){LogError(ex);}
+        }
+     	
         private void PortalActionsLoad(RecallTypes recall)
         {
         	
@@ -727,8 +769,22 @@ namespace GearFoundry
                     case RecallTypes.tiesecondary:
                         Core.Actions.CastSpell(2646, Core.Actions.CurrentSelection);
                         return;
-                       
-													
+                    
+                    case RecallTypes.glendenwood:
+                        Core.Actions.CastSpell(3865, Core.Actions.CurrentSelection);
+                        return;
+                        
+                    case RecallTypes.lethe:
+                        Core.Actions.CastSpell(2813, Core.Actions.CurrentSelection);
+                        return;
+                        
+                    case RecallTypes.ulgrim:
+                        Core.Actions.CastSpell(2941, Core.Actions.CurrentSelection);
+                        return;
+                    
+                    case RecallTypes.candeth:
+                        Core.Actions.CastSpell(4214, Core.Actions.CurrentSelection);
+                        return;													
 				}	
         	}catch(Exception ex){LogError(ex);}
         }
@@ -773,6 +829,10 @@ namespace GearFoundry
 	        		picon.Identifier = "hubgem";
 	        		MiscRecallList.Add(picon);
         		}
+        		else
+        		{
+        			MissingSpellsList.Add("Facility Hub Gem");
+        		}
         		
         		picon = new PortalIcons();
         		picon.PortalIcon.Image = GearGraphics.GR_LifestoneRecall_ICON;
@@ -811,81 +871,81 @@ namespace GearFoundry
         			picon.PortalIcon.Image = CreateIconFromResource("recall.gif");
         			picon.PortalIcon.Hit += PortalRecall_Hit;
         			picon.Identifier = "portalrecall";
-        			
         			PortalSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Portal Recall");
         		if(Core.CharacterFilter.IsSpellKnown(2644))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = new ACImage(Color.Blue);
         			picon.PortalIcon.Hit += LifestoneTie_Hit;
         			picon.Identifier = "lifestonetie";
-        			
         			PortalSpellList.Add(picon);	
         		}
+        		else MissingSpellsList.Add("Lifestone Tie");
         		if(Core.CharacterFilter.IsSpellKnown(1635))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("lsrecall.gif");
         			picon.PortalIcon.Hit += LifestoneRecall_Hit;
         			picon.Identifier = "lifestonerecall";
-        			
         			PortalSpellList.Add(picon);	
         		}
+        		else MissingSpellsList.Add("Lifestone Recall");
         		if(Core.CharacterFilter.IsSpellKnown(47))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = new ACImage(Color.MediumPurple);
         			picon.PortalIcon.Hit += TiePortalOne_Hit;
         			picon.Identifier = "tieportalone";
-        			
         			PortalSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Primary Portal Tie");
           		if(Core.CharacterFilter.IsSpellKnown(48))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("recallP1.gif");
         			picon.PortalIcon.Hit += RecallPortalOne_Hit;
         			picon.Identifier = "recallportalone";
-        			
         			PortalSpellList.Add(picon);
         		}
+          		else MissingSpellsList.Add("Primary Portal Recall");
         		if(Core.CharacterFilter.IsSpellKnown(157))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("summonP1.gif");
         			picon.PortalIcon.Hit += SummonPortalOne_Hit;
         			picon.Identifier = "summonportalone";
-        			
         			PortalSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Summon Primary Portal");
         		if(Core.CharacterFilter.IsSpellKnown(2646))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = new ACImage(Color.MediumPurple);
         			picon.PortalIcon.Hit += TiePortalTwo_Hit;
-        			picon.Identifier = "tieportaltwo";
-        			
+        			picon.Identifier = "tieportaltwo";		
         			PortalSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Secondary Portal Tie");
         		if(Core.CharacterFilter.IsSpellKnown(2647))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("recallP2.gif");
         			picon.PortalIcon.Hit += RecallPortalTwo_Hit;
         			picon.Identifier = "recallportaltwo";
-        			
         			PortalSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Secondary Portal Recall");
         		if(Core.CharacterFilter.IsSpellKnown(2648))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("summonP2.gif");
         			picon.PortalIcon.Hit += SummonPortalTwo_Hit;
         			picon.Identifier = "summonportaltwo";
-        			
         			PortalSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Summon Secondary Portal");
         		//Recall Spells
         		if(Core.CharacterFilter.IsSpellKnown(2023))
         		{
@@ -893,108 +953,145 @@ namespace GearFoundry
         			picon.PortalIcon.Image = CreateIconFromResource("sanctuary.gif");
         			picon.PortalIcon.Hit += Sanctuary_Hit;
         			picon.Identifier = "sanctuary";
-        			
         			RecallSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Recall the Sanctuary");
         		if(Core.CharacterFilter.IsSpellKnown(2931))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("bananaland.gif");
         			picon.PortalIcon.Hit += BananaLand_Hit;
         			picon.Identifier = "bananaland";
-        			
         			RecallSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Recall Aphus Lassel");
         		if(Core.CharacterFilter.IsSpellKnown(4213))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("col.gif");
         			picon.PortalIcon.Hit += Colo_Hit;
         			picon.Identifier = "colo";
-        			
         			RecallSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Colosseum Recall");
         		if(Core.CharacterFilter.IsSpellKnown(2041))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("aerlinthe.gif");
         			picon.Identifier = "aerlinthe";
         			picon.PortalIcon.Hit +=  Aerlinthe_Hit;
-        			
         			RecallSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Aerlinthe Recall");
         		if(Core.CharacterFilter.IsSpellKnown(2943))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("caul.gif");
         			picon.Identifier = "caul";
         			picon.PortalIcon.Hit += Caul_Hit;
-        			
         			RecallSpellList.Add(picon);
         		}
+        		else MissingSpellsList.Add("Recall to the Singularity Caul");
 				if(Core.CharacterFilter.IsSpellKnown(4084))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("bur.gif");
         			picon.Identifier = "bur";
         			picon.PortalIcon.Hit += Bur_Hit;
-        			
         			RecallSpellList.Add(picon);
         		}
+				else MissingSpellsList.Add("Bur Recall");
 				if(Core.CharacterFilter.IsSpellKnown(4198))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("olthoi_north.gif");
         			picon.Identifier = "olthoi";
         			picon.PortalIcon.Hit += Olthoi_Hit;
-        			
         			RecallSpellList.Add(picon);
         		}
+				else MissingSpellsList.Add("Paradox-touched Olthoi Infested Area Recall");
 				if(Core.CharacterFilter.IsSpellKnown(5175))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("facility.gif");
         			picon.Identifier = "facility";
-        			picon.PortalIcon.Hit += Facility_Hit;
-        			
+        			picon.PortalIcon.Hit += Facility_Hit;	
         			RecallSpellList.Add(picon);
         		}
+				else MissingSpellsList.Add("Facility Hub Recall");
 				if(Core.CharacterFilter.IsSpellKnown(5330))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("gearknight.gif");
         			picon.Identifier = "gearknight";
         			picon.PortalIcon.Hit += GearKnight_Hit;
-        			
         			RecallSpellList.Add(picon);
         		}
+				else MissingSpellsList.Add("Gear Knight Invasion Area Camp Recall");
 				if(Core.CharacterFilter.IsSpellKnown(5541))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("neftet.gif");
         			picon.Identifier = "neftet";
         			picon.PortalIcon.Hit += Neftet_Hit;
-        			
         			RecallSpellList.Add(picon);
         		}
+				else MissingSpellsList.Add("Lost City of Neftet Recall");
 				if(Core.CharacterFilter.IsSpellKnown(6150))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("rynthid.gif");
         			picon.Identifier = "rynthid";
         			picon.PortalIcon.Hit += Rynthid_Hit;
-        			
         			RecallSpellList.Add(picon);
         		}
+				else MissingSpellsList.Add("Rynthid Recall");
 				if(Core.CharacterFilter.IsSpellKnown(4128))
         		{
         			picon = new PortalIcons();
         			picon.PortalIcon.Image = CreateIconFromResource("mhoire.gif");
         			picon.Identifier = "mhoire";
         			picon.PortalIcon.Hit += Mhoire_Hit;
-        			
         			RecallSpellList.Add(picon);
-        		}	
+        		}
+				else MissingSpellsList.Add("Call of the Mhoire Forge");
+				if(Core.CharacterFilter.IsSpellKnown(3865))
+        		{
+        			picon = new PortalIcons();
+        			picon.PortalIcon.Image = new ACImage(Color.Red);
+        			picon.Identifier = "glendenwood";
+        			picon.PortalIcon.Hit += Glendenwood_Hit;
+        			RecallSpellList.Add(picon);
+        		}
+				else MissingSpellsList.Add("Glenden Wood Recall");
+				if(Core.CharacterFilter.IsSpellKnown(2813))
+        		{
+        			picon = new PortalIcons();
+        			picon.PortalIcon.Image = new ACImage(Color.Blue);
+        			picon.Identifier = "mtlethe";
+        			picon.PortalIcon.Hit += MtLethe_Hit;
+        			RecallSpellList.Add(picon);
+        		}
+				else MissingSpellsList.Add("Mount Lethe Recall");
+				if(Core.CharacterFilter.IsSpellKnown(2941))
+        		{
+        			picon = new PortalIcons();
+        			picon.PortalIcon.Image = new ACImage(Color.Gold);
+        			picon.Identifier = "ulgrim";
+        			picon.PortalIcon.Hit += Ulgrim_Hit;
+        			RecallSpellList.Add(picon);
+        		}
+				else MissingSpellsList.Add("Ulgrim's Recall");
+				if(Core.CharacterFilter.IsSpellKnown(4214))
+        		{
+        			picon = new PortalIcons();
+        			picon.PortalIcon.Image = new ACImage(Color.PeachPuff);
+        			picon.Identifier = "candeth";
+        			picon.PortalIcon.Hit += Candeth_Hit;
+        			RecallSpellList.Add(picon);
+        		}
+				else MissingSpellsList.Add("Return to the Keep");
+				
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -1051,9 +1148,16 @@ namespace GearFoundry
         			if(picon.Identifier == "neftet") picon.PortalIcon.Hit -= Neftet_Hit;
         			if(picon.Identifier == "rynthid") picon.PortalIcon.Hit -= Rynthid_Hit;
         			if(picon.Identifier == "mhoire") picon.PortalIcon.Hit -= Mhoire_Hit;
+        			if(picon.Identifier == "glendenwood") picon.PortalIcon.Hit -= Glendenwood_Hit;
+        			if(picon.Identifier == "mtlethe") picon.PortalIcon.Hit -= MtLethe_Hit;
+        			if(picon.Identifier == "ulgrim") picon.PortalIcon.Hit -= Ulgrim_Hit;
+        			if(picon.Identifier == "candeth") picon.PortalIcon.Hit -= Candeth_Hit;
+
         			picon.PortalIcon.Dispose();
         		}
         		RecallSpellList.Clear();
+        		
+        		MissingSpellsList.Clear();
 	
         	}catch(Exception ex){LogError(ex);}
         }
