@@ -261,7 +261,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		if(DynamicPortalGearView != null)
+        		if(DynamicPortalGearView == null)
                 {
                 	RenderPortalGearHud();
                 }
