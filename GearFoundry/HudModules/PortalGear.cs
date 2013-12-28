@@ -940,9 +940,6 @@ namespace GearFoundry
         {
         	try
         	{
-        		//Clean up listens in cast
-				Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
-    			Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
 					
 				switch(PortalActionList[3].RecallSpell)
 				{

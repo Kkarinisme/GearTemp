@@ -118,7 +118,10 @@ namespace GearFoundry
 					PortalActionList.Add(new PortalActions());
 				}
 				
-				Core.CharacterFilter.Logoff += PortalGear_Logoff;			 			
+				Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
+				Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
+				Core.CharacterFilter.Logoff += PortalGear_Logoff;
+				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -148,6 +151,9 @@ namespace GearFoundry
 			{
 				PortalActionList.Clear();
 				savePortalSettings();
+				Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
+				Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
+				Core.CharacterFilter.Logoff -= PortalGear_Logoff;
 			}catch(Exception ex){LogError(ex);}
 		}
 				
@@ -468,7 +474,8 @@ namespace GearFoundry
         			PortalActionList[2].fireaction = true;
           		}
         		PortalActionList[3].fireaction = true;
-        		PortalActionList[3].RecallSpell = recall;        		
+        		PortalActionList[3].RecallSpell = recall; 
+				PortalCastSuccess = false;        		
 
         		InitiatePortalActions();
 		
@@ -567,32 +574,33 @@ namespace GearFoundry
 				}
 				else if(PortalActionList[3].fireaction)
 				{
-					WriteToChat("Enters portal action");
-					if(PortalActionList[3].pending && (DateTime.Now - PortalActionList[3].StartAction).TotalSeconds < 7)
+					if(PortalCastSuccess)
 					{
-						WriteToChat("Return 1");
+						PortalActionsPending = false;
+						PortalActionList[3].pending = false;
+						PortalActionTimer.Tick -= PortalActionInitiator;	
+						PortalActionTimer.Stop();
+						return;	
+					}
+					else if(PortalActionList[3].pending && (DateTime.Now - PortalActionList[3].StartAction).TotalSeconds < 5)
+					{
 						return;
 					}
 					else if(!PortalCastSuccess && PortalActionList[3].Retries < 3)
 					{
-						WriteToChat("Casts recall");
 						PortalActionList[3].pending = true;
 						PortalActionList[3].StartAction = DateTime.Now;
 						PortalActionList[3].Retries++;
 						PortalActionsCastSpell();
 						return;
 					}	
-					else
+					else if(!PortalCastSuccess && PortalActionList[3].Retries >= 3)
 					{
-						WriteToChat("Hits Fail");
 						if(PortalActionList[3].Retries >= 3) {WriteToChat("Recall/Summon Failed. Check ties and other recall requirements.");}
 						PortalActionList[3].pending = false;
 						PortalActionList[3].StartAction = DateTime.MinValue;
 						PortalActionList[3].fireaction = false;
 						PortalActionList[3].Retries = 0;	
-						PortalCastSuccess = false;
-						Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
-    					Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
 					}
 
 				}
@@ -602,7 +610,6 @@ namespace GearFoundry
 					PortalActionList[3].pending = false;
 					PortalActionTimer.Tick -= PortalActionInitiator;	
 					PortalActionTimer.Stop();
-					WriteToChat("PortalActions Shut down");
 					return;
 				}
 			}catch(Exception ex){LogError(ex);}
@@ -634,112 +641,90 @@ namespace GearFoundry
         	try
         	{
         		//Clean up listens in cast
-				Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
-    			Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
+
 					
 				switch(PortalActionList[3].RecallSpell)
 				{
 					case RecallTypes.lifestone:
-						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
 						Core.Actions.CastSpell(1635, Core.CharacterFilter.Id);
 						return;
 						
 					case RecallTypes.portal:
-						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
 						Core.Actions.CastSpell(2645, Core.CharacterFilter.Id);
 						return;
 						
 					case RecallTypes.primaryporal:
-						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
 						Core.Actions.CastSpell(48, Core.CharacterFilter.Id);
 						return;
 						
 					case RecallTypes.summonprimary:
-						Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
 						Core.Actions.CastSpell(157, Core.CharacterFilter.Id);
 						return;
 						
 					case RecallTypes.secondaryportal:
-						Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
 						Core.Actions.CastSpell(2647, Core.CharacterFilter.Id);
 						return;
 						
 					case RecallTypes.summonsecondary:
-						Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
 						Core.Actions.CastSpell(2648, Core.CharacterFilter.Id);
 						return;
 						
                     case RecallTypes.sanctuary:
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(2023, Core.CharacterFilter.Id);
                         return;
                         
                     case RecallTypes.bananaland:
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(2931, Core.CharacterFilter.Id);
                         return;
                         
                     case RecallTypes.col:
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(4213, Core.CharacterFilter.Id);
                         return;
                         
                     case RecallTypes.aerlinthe:
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(2041, Core.CharacterFilter.Id);
                         return;
                         
                     case RecallTypes.caul:
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(2943, Core.CharacterFilter.Id);
                         return;
                         
                     case RecallTypes.bur:
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(4084, Core.CharacterFilter.Id);
                         return;
                         
                     case RecallTypes.olthoi_north:
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(4198, Core.CharacterFilter.Id);
                         return;
                         
                     case RecallTypes.facilityhub:
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(5175, Core.CharacterFilter.Id);
                         return;
                     case RecallTypes.gearknight:
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(5330, Core.CharacterFilter.Id);
                         return;
                         
                     case RecallTypes.neftet:
-						Core.CharacterFilter.ActionComplete += PortalCast_Listen;
                         Core.Actions.CastSpell(5541, Core.CharacterFilter.Id);
                         return;
                         
-                    case RecallTypes.rynthid:                       
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
+                    case RecallTypes.rynthid:
                         Core.Actions.CastSpell(6150, Core.CharacterFilter.Id);
                         return;
                         
-                    case RecallTypes.mhoire:                        
-                        Core.CharacterFilter.ActionComplete += PortalCast_Listen;
+                    case RecallTypes.mhoire: 
                         Core.Actions.CastSpell(4128, Core.CharacterFilter.Id);
                         return;
                         
                     case RecallTypes.lifestonetie:
-                        Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(2644, Core.Actions.CurrentSelection);
                         return;
                         
                     case RecallTypes.tieprimary:
-                        Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(47, Core.Actions.CurrentSelection);
                         return;
                         
                     case RecallTypes.tiesecondary:
-                        Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
                         Core.Actions.CastSpell(2646, Core.Actions.CurrentSelection);
                         return;
                        
@@ -753,9 +738,8 @@ namespace GearFoundry
         {
         	try
         	{
-        		WriteToChat("Portal Cast Success True");
+        		if(!PortalActionsPending) {return;}
         		PortalCastSuccess = true;
-        		Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -763,9 +747,8 @@ namespace GearFoundry
         {
         	try
         	{
-        		WriteToChat("Portal Cast Success True");
+        		if(!PortalActionsPending) {return;}
         		PortalCastSuccess = true;
-        		Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
         		
         	}catch(Exception ex){LogError(ex);}
         }
