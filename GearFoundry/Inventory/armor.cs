@@ -520,7 +520,7 @@ namespace GearFoundry
                 ArmorHudView.UserResizeable = false;
                 ArmorHudView.Visible = true;
                 ArmorHudView.Ghosted = false;
-                ArmorHudView.UserMinimizable = false;
+                ArmorHudView.UserMinimizable = true;
                 ArmorHudView.UserClickThroughable = false;
                 ArmorHudView.LoadUserSettings();
 
@@ -537,6 +537,7 @@ namespace GearFoundry
                 ArmorHudTabView.AddTab(ArmorHudSettings, "Settings");
 
                 ArmorHudTabView.OpenTabChange += ArmorHudTabView_OpenTabChange;
+                ArmorHudView.VisibleChanged += ArmorHudView_VisibleChanged;
                 ArmorHudView.Resize += ArmorHudView_Resize; 
 
                 RenderArmorTabLayout();
@@ -547,6 +548,14 @@ namespace GearFoundry
             return;
         }
 
+        private void ArmorHudView_VisibleChanged(object sender, EventArgs e)
+        {
+        	try
+        	{
+        		DisposeArmorHud();
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
         private void ArmorHudView_Resize(object sender, System.EventArgs e)
         {
             try{
@@ -1128,7 +1137,7 @@ namespace GearFoundry
                 if(btnClearListArmorAvailable != null) btnClearListArmorAvailable.Dispose();
                 if (btnListArmorAvailable != null) btnListArmorAvailable.Dispose();
                 
-
+				ArmorHudView = null;
 
             }
             catch (Exception ex) { LogError(ex); }

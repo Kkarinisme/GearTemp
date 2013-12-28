@@ -677,7 +677,7 @@ namespace GearFoundry
             {
             	SubscribePortalEvents();
                 RenderPortalGearHud();
-                RenderPortal2GearHud();
+                //RenderPortal2GearHud();
             }
             if (mMainSettings.bGearTaskerEnabled)
             {
@@ -960,14 +960,14 @@ namespace GearFoundry
                 {
                 	SubscribePortalEvents();
                     RenderPortalGearHud();
-                    RenderPortal2GearHud();
+                    //RenderPortal2GearHud();
                     WriteToChat("PortalGear Enabled.");
                 }
                 else
                 {
                 	UnsubscribePortalEvents();
                     DisposePortalGearHud();
-                    DisposePortalRecallGearHud();
+                    //DisposePortalRecallGearHud();
                     WriteToChat("PortalGear Disabled.");
                 }
                 RenderDynamicRemoteGear();

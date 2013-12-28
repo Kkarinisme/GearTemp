@@ -66,15 +66,35 @@ namespace GearFoundry
 
 	            DynamicGearRemoteClock = new HudStaticText();
 	            DynamicGearRemoteLayout.AddControl(DynamicGearRemoteClock, new Rectangle(0,0,30,30));
-	            DynamicGearRemoteClock.Text = DateTime.Now.ToShortTimeString();
 	            DynamicGearRemoteClock.FontHeight = 10;
-	                      
-//	            //TODO:  Make the clock tick.
+	            
+				MasterTimer.Tick += DynamicGearClock;	            
+
 	            
 	            for(int i = 0; i < DGRControlsList.Count; i++)
 	            {
 	            	DynamicGearRemoteLayout.AddControl(DGRControlsList[i].ControlPictureBox, new Rectangle(2, 35 + 35 * i, 25,25));
+	            	if(DGRControlsList[i].ControlName == "Butler") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "GearButler"); 
+	            	if(DGRControlsList[i].ControlName == "Visection") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "GearVisection");
+	            	if(DGRControlsList[i].ControlName == "Inspector") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "GearInspector");
+	            	if(DGRControlsList[i].ControlName == "Sense") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "GearSense");
+	            	if(DGRControlsList[i].ControlName == "Tactician") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "GearTactician");
+	            	if(DGRControlsList[i].ControlName == "Inventory") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "Gear");
+	            	if(DGRControlsList[i].ControlName == "Armor") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "Armor");
+	            	if(DGRControlsList[i].ControlName == "VSG") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "Vertical SwitchGear");
+	            	if(DGRControlsList[i].ControlName == "HSG") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "Horizontal SwitchGear");
+	            	if(DGRControlsList[i].ControlName == "Portal") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "PortalGear");
+	            	if(DGRControlsList[i].ControlName == "Tasker") VirindiViewService.TooltipSystem.AssociateTooltip(DGRControlsList[i].ControlPictureBox, "GearTasker");
+
 	            }
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
+        private void DynamicGearClock(object sender, EventArgs e)
+        {
+        	try
+        	{
+        		 DynamicGearRemoteClock.Text = DateTime.Now.ToShortTimeString();
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -82,6 +102,7 @@ namespace GearFoundry
         {
         	try
         	{
+        		MasterTimer.Tick -= DynamicGearClock;
         		DestroyDGRControls();
            
 	            DynamicGearRemoteClock.Dispose();
@@ -193,7 +214,14 @@ namespace GearFoundry
         {
         	try
         	{
-       			//TODO:  Enable Armor Hud
+        		if(ArmorHudView == null)
+        		{
+        			RenderArmorHud();
+        		}
+        		else
+        		{
+        			DisposeArmorHud();
+        		}
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -233,21 +261,13 @@ namespace GearFoundry
         {
         	try
         	{
-        		if(portalGearHud != null)
+        		if(DynamicPortalGearView != null)
                 {
                 	RenderPortalGearHud();
                 }
                 else
                 {
                 	DisposePortalGearHud();
-                }
-                if(portalRecallGearHud != null)
-                {
-                	RenderPortal2GearHud();
-                }
-                else
-                {
-                	DisposePortalRecallGearHud();
                 }
        		
         	}catch(Exception ex){LogError(ex);}

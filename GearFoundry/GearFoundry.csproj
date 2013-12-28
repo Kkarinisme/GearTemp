@@ -97,12 +97,13 @@
   <ItemGroup>
     <Compile Include="HudComponents\CombatHudMechanics.cs" />
     <Compile Include="HudComponents\Fellowship.cs" />
+    <Compile Include="HudModules\DynamicPortalGear.cs" />
     <Compile Include="HudModules\DynamicRemoteGear.cs" />
     <Compile Include="HudModules\GearMaid.cs" />
     <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="HudModules\KillTasks.cs" />
     <Compile Include="Initializers\Enums.cs" />
-    <Compile Include="HudModules\PortalGear.cs" />
+    <None Include="HudModules\PortalGear.cs" />
     <Compile Include="Initializers\XMLBuilders.cs" />
     <Compile Include="SoundPlayer.cs" />
     <Compile Include="WrapperClasses\LandscapeObject.cs" />

@@ -884,7 +884,7 @@ namespace GearFoundry
 					{
 						return;
 					}
-					else if(!PortalCastSuccess && PortalActionList[3].Retries < 2)
+					else if(!PortalCastSuccess && PortalActionList[3].Retries < 3)
 					{
 						PortalActionList[3].pending = true;
 						PortalActionList[3].StartAction = DateTime.Now;
@@ -894,7 +894,7 @@ namespace GearFoundry
 					}	
 					else
 					{
-						if(PortalActionList[3].Retries > 2) {WriteToChat("Recall/Summon Failed. Check ties and other recall requirements.");}
+						if(PortalActionList[3].Retries >= 3) {WriteToChat("Recall/Summon Failed. Check ties and other recall requirements.");}
 						PortalActionList[3].pending = false;
 						PortalActionList[3].StartAction = DateTime.MinValue;
 						PortalActionList[3].fireaction = false;

@@ -123,8 +123,6 @@ namespace GearFoundry
             if (quickiesvHud != null) { DisposeVerticalQuickSlots(); }
             if(InventoryHudView != null){DisposeInventoryHud();}
             if (ArmorHudView != null) { DisposeArmorHud(); }
-            if(portalGearHud !=null) {DisposePortalGearHud();}
-            if (portalRecallGearHud != null) { DisposePortalRecallGearHud(); }
 
         }
         

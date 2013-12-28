@@ -174,47 +174,52 @@ namespace GearFoundry
 
         }
         
-        public class GearGraphics 
+        internal class GearGraphics 
         {
         	
-        	public const int RemoveCircle = 0x60011F8;
+        	internal const int RemoveCircle = 0x60011F8;
         	
-        	public const int ItemUstIcon = 0x60026BA;
-			public const int ItemManaStoneIcon = 0x60032D4;
-			public const int ItemDesiccantIcon = 0x6006C0D;
+        	internal const int ItemUstIcon = 0x60026BA;
+			internal const int ItemManaStoneIcon = 0x60032D4;
+			internal const int ItemDesiccantIcon = 0x6006C0D;
 			
-			public const int RemoteGearIcon = 0x6006E0A;
-			public const int GearBulterIcon = 0x6006533;
-			public const int GearVisectionIcon = 0x6001070;
-			public const int GearInspectorIcon = 0x600218D;
-			public const int GearSenseIcon = 0x6001355;
-			public const int GearTacticianIcon = 0x6004D06;
-			public const int GearInventoryIcon = 0x600127E;
-			public const int GearTaskerIcon = 0x60067EC;
-			public const int GearPortalIcon = 0x60022BE;
-			public const int GearArmorIcon = 0x6001EE2;
-			public const int HoriSwitchGearIcon = 0;
-			public const int VertSwitchGearIcon = 0;
+			internal const int RemoteGearIcon = 0x6006E0A;
+			internal const int GearBulterIcon = 0x6006533;
+			internal const int GearVisectionIcon = 0x6001070;
+			internal const int GearInspectorIcon = 0x600218D;
+			internal const int GearSenseIcon = 0x6001355;
+			internal const int GearTacticianIcon = 0x6004D06;
+			internal const int GearInventoryIcon = 0x600127E;
+			internal const int GearTaskerIcon = 0x60067EC;
+			internal const int GearPortalIcon = 0x60022BE;
+			internal const int GearArmorIcon = 0x6001EE2;
+			internal const int HoriSwitchGearIcon = 0;
+			internal const int VertSwitchGearIcon = 0;
 			
-			public const int GB_USE_ICON = 0x6000FB7;
-			public const int GB_GIVE_ICON = 0x60011F7;
-			public const int GB_TRADEVENDOR_ICON = 0x6001080;
-			public const int GB_EQUIPPED_ICON = 0x600136F;
-			public const int GB_UNEQUIPPED_ICON = 0x600127E;
-			public const int GB_MELEE_ICON = 0x60010BC;
-			public const int GB_MISSILE_ICON = 0x6001302;
-			public const int GB_ARMOR_ICON = 0x6000FC7;
-			public const int GB_CASTER_ICON = 0x6001066;
-			public const int GB_KEY_ICON = 0x6001ED3;
-			public const int GB_KEYRING_ICON = 0x6002C3F;
-			public const int GB_LOCKPICK_ICON = 0x6001D6E;
-			public const int GB_MANASTONE_ICON = 0x60032D4;
-			public const int GB_HEALKIT_ICON = 0X60032F3;
-			public const int GB_POTION_ICON = 0x60019FD;
+			internal const int GB_USE_ICON = 0x6000FB7;
+			internal const int GB_GIVE_ICON = 0x60011F7;
+			internal const int GB_TRADEVENDOR_ICON = 0x6001080;
+			internal const int GB_EQUIPPED_ICON = 0x600136F;
+			internal const int GB_UNEQUIPPED_ICON = 0x600127E;
+			internal const int GB_MELEE_ICON = 0x60010BC;
+			internal const int GB_MISSILE_ICON = 0x6001302;
+			internal const int GB_ARMOR_ICON = 0x6000FC7;
+			internal const int GB_CASTER_ICON = 0x6001066;
+			internal const int GB_KEY_ICON = 0x6001ED3;
+			internal const int GB_KEYRING_ICON = 0x6002C3F;
+			internal const int GB_LOCKPICK_ICON = 0x6001D6E;
+			internal const int GB_MANASTONE_ICON = 0x60032D4;
+			internal const int GB_HEALKIT_ICON = 0X60032F3;
+			internal const int GB_POTION_ICON = 0x60019FD;
 			
-			public const int GB_SELECT = 0x60011F9;
-			public const int GB_BACKGROUND = 0x60011D1;
-		
+			internal const int GB_SELECT = 0x60011F9;
+			internal const int GB_BACKGROUND = 0x60011D1;
+			
+			internal const int GR_LifestoneRecall_ICON = 0x60024E1;
+			internal const int GR_HouseRecall_ICON = 0x6001A2A;
+			internal const int GR_MansionRecall_ICON = 0x60022DE;
+			internal const int GR_AHRecall_ICON = 0x60024DD;
+			internal const int GR_Market_ICON = 0x600107E;
 	
 			
         }
