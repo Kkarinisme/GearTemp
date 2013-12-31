@@ -912,16 +912,24 @@ namespace GearFoundry
 		}
 		
 		
+		private int[] taskscrollholder = new int[4];
 		private void UpdateTaskPanel()
 		{
 			try
 			{	
 				if(TaskHudView == null) {return;}
 				
+				taskscrollholder[0] = TaskIncompleteList.ScrollPosition;
+				taskscrollholder[1] = TaskCompleteList.ScrollPosition;
+				taskscrollholder[2] = KillTaskList.ScrollPosition;
+				taskscrollholder[3] = CollectTaskList.ScrollPosition;
+				
 				TaskIncompleteList.ClearRows();
 				TaskCompleteList.ClearRows();
 				KillTaskList.ClearRows();
 				CollectTaskList.ClearRows();
+				
+				
 				
 				foreach(var ict in mKTSet.MyKillTasks.Where(x => x.track && x.active && x.complete == false).OrderBy(x => x.TaskName))
 				{
@@ -975,6 +983,11 @@ namespace GearFoundry
 					if(ct.complete) {((HudStaticText)TaskListRow[1]).TextColor = Color.Gold;}
 					else if(ct.active) {((HudStaticText)TaskListRow[1]).TextColor = Color.LightSeaGreen;}
 				}
+				
+				TaskIncompleteList.ScrollPosition = taskscrollholder[0]; 
+				TaskCompleteList.ScrollPosition = taskscrollholder[1];
+				KillTaskList.ScrollPosition = taskscrollholder[2];
+				CollectTaskList.ScrollPosition = taskscrollholder[3];
 				
 			}catch(Exception ex){LogError(ex);}
 		}

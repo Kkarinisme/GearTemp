@@ -180,13 +180,13 @@ namespace GearFoundry
                 AssembleRecallSpellsList();
                 
                 int PortalHudWidth = 0;
-                if(TextRecallList.Count + PortalSpellList.Count  > MiscRecallList.Count + RecallSpellList.Count)
+                if(TextRecallList.Count + PortalSpellList.Count + MiscRecallList.Count > RecallSpellList.Count)
                 {
-                	PortalHudWidth = (TextRecallList.Count + PortalSpellList.Count) * 30;
+                	PortalHudWidth = (TextRecallList.Count + PortalSpellList.Count + MiscRecallList.Count) * 30;
                 }
                 else
                 {
-                	PortalHudWidth = (MiscRecallList.Count + RecallSpellList.Count) * 30;
+                	PortalHudWidth = (RecallSpellList.Count) * 30;
                 }
                 int PortalHudHeight = 70;
                 

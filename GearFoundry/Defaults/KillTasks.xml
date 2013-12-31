@@ -2526,4 +2526,120 @@
     <active>false</active>
     <complete>false</complete>
   </KillTask>
+  <KillTask>
+    <TaskName>Rynthid Rifts</TaskName>
+    <MobNames>
+      <string>Rynthid Rift</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>10</CompleteCount>
+    <NPCNames>
+      <string>Rhys</string>
+    </NPCNames>
+    <NPCInfo>Encampment near Rynthid Infested Plains</NPCInfo>
+    <NPCCoords>61.6S, 63.3W</NPCCoords>
+    <NPCYellowFlagText>Defeat 10 of the Rynthid Rifts</NPCYellowFlagText>
+    <NPCYellowCompleteText>You have done well.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Rynthid Ravagers</TaskName>
+    <MobNames>
+      <string>Rynthid Ravager</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCNames>
+      <string>Ranulf</string>
+    </NPCNames>
+    <NPCInfo>Encampment near Rynthid Infested Plains</NPCInfo>
+    <NPCCoords>61.6S, 63.3W</NPCCoords>
+    <NPCYellowFlagText>Defeat 15 of these Rynthid Ragers</NPCYellowFlagText>
+    <NPCYellowCompleteText>Fine work my friend</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Rynthid Sorcerers</TaskName>
+    <MobNames>
+      <string>Rynthid Sorcerer</string>
+      <string>Raging Rynthid Sorcerer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCNames>
+      <string>Wido</string>
+    </NPCNames>
+    <NPCInfo>Encampment near Rynthid Infested Plains</NPCInfo>
+    <NPCCoords>61.6S, 63.3W</NPCCoords>
+    <NPCYellowFlagText>Defeat 15 of the Rynthid Sorcerers</NPCYellowFlagText>
+    <NPCYellowCompleteText>Fantastic.</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Rynthid Slayers</TaskName>
+    <MobNames>
+      <string>Rynthid Slayer</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>15</CompleteCount>
+    <NPCNames>
+      <string>Sylvanus</string>
+    </NPCNames>
+    <NPCInfo>Encampment near Rynthid Infested Plains</NPCInfo>
+    <NPCCoords>61.6S, 63.3W</NPCCoords>
+    <NPCYellowFlagText>Defeat 15 of the Rynthid Slayers</NPCYellowFlagText>
+    <NPCYellowCompleteText>Impressive work friend</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Rynthid Rare Boss</TaskName>
+    <MobNames>
+      <string>Rynthid Rare Boss</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>1</CompleteCount>
+    <NPCNames>
+      <string>Hernd</string>
+    </NPCNames>
+    <NPCInfo>Encampment near Rynthid Infested Plains</NPCInfo>
+    <NPCCoords>61.6S, 63.3W</NPCCoords>
+    <NPCYellowFlagText>slaughter it with haste and return</NPCYellowFlagText>
+    <NPCYellowCompleteText>Hernd is impressed</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
+  <KillTask>
+    <TaskName>Rynthid Minions</TaskName>
+    <MobNames>
+      <string>Rynthid Minion</string>
+      <string>Rynthid Minion of Rage</string>
+    </MobNames>
+    <CurrentCount>0</CurrentCount>
+    <CompleteCount>25</CompleteCount>
+    <NPCNames>
+      <string>Marcus</string>
+    </NPCNames>
+    <NPCInfo>Encampment near Rynthid Infested Plains</NPCInfo>
+    <NPCCoords>61.6S, 63.3W</NPCCoords>
+    <NPCYellowFlagText>Defeat 25 of the Rynthid Minions</NPCYellowFlagText>
+    <NPCYellowCompleteText>Hernd is impressed</NPCYellowCompleteText>
+    <track>false</track>
+    <detect>false</detect>
+    <active>false</active>
+    <complete>false</complete>
+  </KillTask>
 </ArrayOfKillTask>

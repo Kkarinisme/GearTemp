@@ -1586,9 +1586,74 @@ namespace GearFoundry
 			t.NPCYellowFlagText = "If you will go thin out their number, say, kill 15 of the Small Mukkir Fledglings, I will reward you for your efforts.";
 			t.NPCYellowCompleteText = "Excellent! The Queen will be most pleased.";
 			NewKillTasks.Add(t);
-			//Jump
+
+			t = new KillTask();
+			t.TaskName = "Rynthid Rifts";
+			t.MobNames.Add("Rynthid Rift");
+			t.CompleteCount = 10;
+			t.NPCNames.Add("Rhys");
+			t.NPCInfo = "Encampment near Rynthid Infested Plains";
+			t.NPCCoords = "61.6S, 63.3W";
+			t.NPCYellowFlagText = "Defeat 10 of the Rynthid Rifts";
+			t.NPCYellowCompleteText = "You have done well.";
+			NewKillTasks.Add(t);
+				
+			t = new KillTask();
+			t.TaskName = "Rynthid Ravagers";
+			t.MobNames.Add("Rynthid Ravager");
+			t.CompleteCount = 15;
+			t.NPCNames.Add("Ranulf");
+			t.NPCInfo = "Encampment near Rynthid Infested Plains";
+			t.NPCCoords = "61.6S, 63.3W";
+			t.NPCYellowFlagText = "Defeat 15 of these Rynthid Ragers";
+			t.NPCYellowCompleteText = "Fine work my friend";
+			NewKillTasks.Add(t);
+				
+			t = new KillTask();
+			t.TaskName = "Rynthid Sorcerers";
+			t.MobNames.Add("Rynthid Sorcerer");
+			t.MobNames.Add("Raging Rynthid Sorcerer");
+			t.CompleteCount = 15;
+			t.NPCNames.Add("Wido");
+			t.NPCInfo = "Encampment near Rynthid Infested Plains";
+			t.NPCCoords = "61.6S, 63.3W";
+			t.NPCYellowFlagText = "Defeat 15 of the Rynthid Sorcerers";
+			t.NPCYellowCompleteText = "Fantastic.";
+			NewKillTasks.Add(t);
 			
+			t = new KillTask();
+			t.TaskName = "Rynthid Slayers";
+			t.MobNames.Add("Rynthid Slayer");
+			t.CompleteCount = 15;
+			t.NPCNames.Add("Sylvanus");
+			t.NPCInfo = "Encampment near Rynthid Infested Plains";
+			t.NPCCoords = "61.6S, 63.3W";
+			t.NPCYellowFlagText = "Defeat 15 of the Rynthid Slayers";
+			t.NPCYellowCompleteText = "Impressive work friend";
+			NewKillTasks.Add(t);
 			
+			t = new KillTask();
+			t.TaskName = "Rynthid Rare Boss";
+			t.MobNames.Add("Rynthid Rare Boss");
+			t.CompleteCount = 1;
+			t.NPCNames.Add("Hernd");
+			t.NPCInfo = "Encampment near Rynthid Infested Plains";
+			t.NPCCoords = "61.6S, 63.3W";
+			t.NPCYellowFlagText = "slaughter it with haste and return";
+			t.NPCYellowCompleteText = "Hernd is impressed";
+			NewKillTasks.Add(t);
+			
+			t = new KillTask();
+			t.TaskName = "Rynthid Minions";
+			t.MobNames.Add("Rynthid Minion");
+			t.MobNames.Add("Rynthid Minion of Rage");
+			t.CompleteCount = 25;
+			t.NPCNames.Add("Marcus");
+			t.NPCInfo = "Encampment near Rynthid Infested Plains";
+			t.NPCCoords = "61.6S, 63.3W";
+			t.NPCYellowFlagText = "Defeat 25 of the Rynthid Minions";
+			t.NPCYellowCompleteText = "Hernd is impressed";
+			NewKillTasks.Add(t);
 			
 			
 			

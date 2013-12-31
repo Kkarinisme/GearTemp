@@ -71,6 +71,7 @@ namespace GearFoundry
 			{	
 				fileservice = (FileService)Core.FileService;				
 				Core.CharacterFilter.LoginComplete += OnCharacterFilterLoginCompleted;	
+				
 		        
 			} catch (Exception ex) {LogError(ex);}
 		}
@@ -97,6 +98,7 @@ namespace GearFoundry
 
                 MasterTimer.Interval = 1000;
                 MasterTimer.Start();
+                
                            
             }
             catch (Exception ex) { LogError(ex); }
