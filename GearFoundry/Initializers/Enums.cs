@@ -75,6 +75,7 @@ namespace GearFoundry
             manatank,
             npc,
             allnpcs,
+            aetheria,
            	unknown
         }
 	}

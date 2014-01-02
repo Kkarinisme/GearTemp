@@ -13,7 +13,7 @@ namespace GFVTInterOp
 {
 
 
-	public class LootPlugin : LootPluginBase
+	public class LootPlugin : LootPluginBase, ILootPluginCapability_SalvageCombineDecision
 	{
 
 
@@ -41,15 +41,19 @@ namespace GFVTInterOp
 			return uTank2.LootPlugins.LootAction.NoLoot;
 		}
 
-//		bool uTank2.LootPlugins.ILootPluginCapability_SalvageCombineDecision(int id1, int id2)
-//		{
-//			try
-//			{
-//				bool combine = GFInstance.VTSalvageCombineDesision(id1, id2);
-//				if(combine){return true;}
-//				else{return false;}
-//			}catch(Exception ex){GearFoundry.PluginCore.LogError(ex); return false;}
-//		}
+		bool uTank2.LootPlugins.ILootPluginCapability_SalvageCombineDecision.CanCombineBags(double bag1workmanship, double bag2workmanship, int material)
+		{
+			
+			try
+			{
+				bool combine = GFInstance.VTSalvageCombineDecision(bag1workmanship, bag2workmanship, material);
+				if(combine){return true;}
+				else{return false;}
+			}catch(Exception ex){GearFoundry.PluginCore.LogError(ex); return false;}
+			
+		return false;
+		}
+
 
 		public override bool DoesPotentialItemNeedID(uTank2.LootPlugins.GameItemInfo item)
 		{
@@ -71,6 +75,7 @@ namespace GFVTInterOp
 					case uTank2.LootPlugins.ObjectClass.MeleeWeapon:
 					case uTank2.LootPlugins.ObjectClass.MissileWeapon:
 					case uTank2.LootPlugins.ObjectClass.WandStaffOrb:
+					case uTank2.LootPlugins.ObjectClass.Scroll:
 					case uTank2.LootPlugins.ObjectClass.Misc:
 						return true;
 				}

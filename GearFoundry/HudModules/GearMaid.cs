@@ -254,7 +254,6 @@ namespace GearFoundry
 		{
 			try
 			{
-				string[] RingableKeysArray = {"legendary key", "black marrow key", "directive key", "granite key", "mana forge key", "master key", "marble key", "singularity key",	"skeletal falatacot key", "sturdy iron key", "sturdy steel key"};
 				string[] KeyringMatchingArray = {"burning sands", "black marrow", "directive", "granite", "black coral", "master", "marble", "singularity", "skeletal falatacot", "sturdy iron", "sturdy steel"};
 							
 				MaidKeyRings = (from keyrings in Core.WorldFilter.GetInventory()

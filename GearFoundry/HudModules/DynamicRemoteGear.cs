@@ -65,7 +65,7 @@ namespace GearFoundry
 	            DynamicGearRemoteTabView.AddTab(DynamicGearRemoteLayout, ""); 
 
 	            DynamicGearRemoteClock = new HudStaticText();
-	            DynamicGearRemoteLayout.AddControl(DynamicGearRemoteClock, new Rectangle(2,4,25,16));
+	            DynamicGearRemoteLayout.AddControl(DynamicGearRemoteClock, new Rectangle(0,4,25,16));
 	            DynamicGearRemoteClock.FontHeight = 8;
 	            
 				MasterTimer.Tick += DynamicGearClock;	            

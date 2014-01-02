@@ -189,6 +189,10 @@ namespace GearFoundry
                 	PortalHudWidth = (RecallSpellList.Count) * 30;
                 }
                 int PortalHudHeight = 70;
+                if(RecallSpellList.Count == 0)
+                {
+                	PortalHudHeight = 35;
+                }
                 
                 DynamicPortalGearView = new VirindiViewService.HudView("", PortalHudWidth, PortalHudHeight, new ACImage(0x6AA2), false, "PortalGear");
  				DynamicPortalGearView.ShowInBar = false;

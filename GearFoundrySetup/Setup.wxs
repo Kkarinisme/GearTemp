@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 
 <?define UpgradeCode="{81b0bc0a-f7a6-4fa5-8699-18f54fb1ab78}"?>
-<?define Version="0.2.0.11"?>
+<?define Version="0.2.0.20"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Product Id="*" Name="GearFoundry" Language="1033" Version="$(var.Version)" UpgradeCode="$(var.UpgradeCode)" Manufacturer="GearFoundry">

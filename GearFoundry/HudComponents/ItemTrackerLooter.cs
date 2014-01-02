@@ -18,17 +18,14 @@ using System.Xml;
 namespace GearFoundry
 {
 	public partial class PluginCore
-	{
-		private string[] RingableKeysArray = {"legendary", "black marrow", "directive", "granite", "mana forge", "master", "marble", "singularity",	"skeletal falatacot"};
-		
-		
+	{		
 		private void SubscribeItemEvents()
 		{
 			try
 			{	
 				GearInspectorReadWriteSettings(true);
 				
-				for(int i = 0; i < 10; i++)
+				for(int i = 0; i < 11; i++)
 				{
 					InspectorActionList.Add(new PendingActions());
 				}
@@ -38,7 +35,9 @@ namespace GearFoundry
 				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased; 
 				Core.WorldFilter.ChangeObject += ItemTrackerActions_ObjectChanged;
 				Core.WorldFilter.CreateObject += SalvageCreated;
-				Core.CharacterFilter.Logoff += ItemHudLogOff;          	
+				Core.CharacterFilter.Logoff += ItemHudLogOff;  
+
+				SetKnownSpellSchools();
 			}
 			catch(Exception ex){LogError(ex);}
 		}
@@ -49,6 +48,15 @@ namespace GearFoundry
 			{
 				UnsubscribeItemEvents();
 				DisposeItemHud();
+				ClearKnownSpellSchools();
+				
+				WaitingVTIOs.Clear();
+				
+				if(WaitingVTIOs.Count == 0) 
+				{
+					Core.RenderFrame -= DoesVTIOHaveID;
+					return;
+				}
 				
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -62,11 +70,12 @@ namespace GearFoundry
 				Core.WorldFilter.ReleaseObject -= ItemTracker_ObjectReleased;
 				Core.WorldFilter.ChangeObject -= ItemTrackerActions_ObjectChanged;
 				Core.WorldFilter.CreateObject -= SalvageCreated;
-				Core.CharacterFilter.Logoff -= ItemHudLogOff;	
+				Core.CharacterFilter.Logoff -= ItemHudLogOff;			
 
 				CombineSalvageWOList.Clear();
 				InventorySalvage.Clear();
 				InspectorActionList.Clear();
+				LOList.Clear();
 				
 				GearInspectorReadWriteSettings(false);
 			
@@ -613,8 +622,6 @@ namespace GearFoundry
 				
 				LootObject VTIO = new LootObject(Core.WorldFilter[id]);	
 				
-				
-				
 				if(!VTIO.HasIdData)
 				{
 					Core.RenderFrame += DoesVTIOHaveID;
@@ -624,6 +631,8 @@ namespace GearFoundry
 				}
 				
 				CheckRulesItem(ref VTIO);
+				
+				if(VTIO.IOR == IOResult.unknown) {CheckRare(ref VTIO);}
 				if(VTIO.ObjectClass == ObjectClass.Scroll){CheckUnknownScrolls(ref VTIO);}
 				if(VTIO.IOR == IOResult.unknown) {TrophyListCheckItem(ref VTIO);}
 				if(VTIO.IOR == IOResult.unknown && GISettings.IdentifySalvage) {CheckSalvageItem(ref VTIO);}
@@ -656,7 +665,7 @@ namespace GearFoundry
 			{
 				if(WaitingVTIOs.Count == 0) 
 				{
-					Core.RenderFrame -= new EventHandler<EventArgs>(DoesVTIOHaveID);
+					Core.RenderFrame -= DoesVTIOHaveID;
 					return;
 				}
 			}catch(Exception ex){LogError(ex);}
@@ -670,12 +679,22 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		public bool VTSalvageCombineDesision(int id1, int id2)
+		public bool VTSalvageCombineDecision(double work1, double work2, int material)
 		{
 			try
 			{
-				return false;
+				var salvagerules =  from allrules in SalvageRulesList
+					where (allrules.material == material) && 
+					(allrules.minwork <= work1) && 
+					(allrules.minwork <= work2) &&                       
+					(allrules.maxwork >= work1) && 
+					(allrules.maxwork >= work2)
+				    select allrules;
+				                           
+				if(salvagerules.Count() > 0) {return true;}
+				else {return false;}
 			}catch(Exception ex){LogError(ex); return  false;}
 		}
+		
 	}
 }

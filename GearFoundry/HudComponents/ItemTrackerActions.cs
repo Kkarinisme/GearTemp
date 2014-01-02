@@ -23,6 +23,9 @@ namespace GearFoundry
 		private List<WorldObject> InventorySalvage = new List<WorldObject>();
 		private List<PendingActions> InspectorActionList = new List<PendingActions>();
 		
+		private string[] RingableKeysArray = {"legendary key", "black marrow key", "directive key", "granite key", "mana forge key", "master key", "marble key", 
+					"singularity key",	"skeletal falatacot key", "sturdy iron key", "sturdy steel key"};
+		
 		private System.Windows.Forms.Timer InspectorActionTimer = new System.Windows.Forms.Timer();
 	
 		
@@ -41,7 +44,8 @@ namespace GearFoundry
 			Salvage,
 			Combine,
 			Read,
-			ManaStone
+			ManaStone,
+			Reveal
 		}
 		
 		private void ToggleInspectorActions(int toggle)
@@ -205,6 +209,15 @@ namespace GearFoundry
 								
 								InspectorActionList[2].pending = false;
 								
+								if(lo.Aetheriacheck && lo.IOR == IOResult.rule)
+								{
+									lo.ProcessAction = IAction.Reveal;
+								}
+								if(RingableKeysArray.Contains(lo.Name))
+								{
+									lo.ProcessAction = IAction.Ring;
+								}
+								
 								if(lo.ProcessAction != IAction.None) 
 								{
 									lo.ProcessList = true;
@@ -263,6 +276,16 @@ namespace GearFoundry
 							lo.Move = false;
 							lo.ActionTarget = false;
 							lo.InspectList = false;
+							
+							if(lo.Aetheriacheck && lo.IOR == IOResult.rule)
+							{
+								lo.ProcessAction = IAction.Reveal;
+							}
+							if(RingableKeysArray.Contains(lo.Name))
+							{
+								lo.ProcessAction = IAction.Ring;
+							}
+							
 							
 							if(lo.ProcessAction != IAction.None) 
 							{
@@ -449,6 +472,36 @@ namespace GearFoundry
 					}
 					
 				}
+				//Open Aetheria
+				else if(InspectorActionList[9].fireaction)
+				{
+					if(InspectorActionList[9].pending && (DateTime.Now - InspectorActionList[9].StartAction).TotalMilliseconds < 450)
+					{
+						return;
+					}
+					else if(LOList.Any(x => x.Process && x.ProcessAction == IAction.Reveal))
+					{
+						if(Core.WorldFilter.GetInventory().Where(x => x.Name == "Aetheria Mana Stone").Count() == 0) 
+						{
+							WriteToChat("No Aetheria Mana Stone found.");
+							InspectorActionList[9].fireaction = false;
+							LOList.Find(x => x.Process && x.ProcessAction == IAction.Reveal).Process = false;
+							return;
+						}
+						
+						InspectorActionList[9].pending = true;
+						InspectorActionList[9].StartAction = DateTime.Now;
+						Core.Actions.SelectItem(LOList.Find(x => x.Process && x.ProcessAction == IAction.Reveal).Id);
+						Core.RenderFrame += InspectorReveal;
+						return;
+					}
+					else
+					{
+						InspectorActionList[9].pending = false;
+						InspectorActionList[9].StartAction = DateTime.MinValue;
+						InspectorActionList[9].fireaction = false;
+					}
+				}
 				//Stop
 				else
 				{
@@ -485,6 +538,15 @@ namespace GearFoundry
 					lo.Move = false;
 					lo.ActionTarget = false;
 					lo.InspectList = false;
+					
+					if(lo.Aetheriacheck && lo.IOR == IOResult.rule)
+					{
+						lo.ProcessAction = IAction.Reveal;
+					}
+					if(RingableKeysArray.Contains(lo.Name))
+					{
+						lo.ProcessAction = IAction.Ring;
+					}
 						
 					if(lo.ProcessAction != IAction.None) 
 					{
@@ -684,6 +746,22 @@ namespace GearFoundry
 				Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.Name == "Aetheria Desiccant").First().Id, 1);
 								                     
 			}catch(Exception ex){LogError(ex);}	
+		}
+		
+		private void InspectorReveal(object sender, EventArgs e)
+		{
+			try
+			{
+				if((DateTime.Now - InspectorActionList[9].StartAction).TotalMilliseconds < 100){return;}
+				else
+				{
+
+					Core.RenderFrame -= InspectorReveal;
+				}
+								
+				Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.Name == "Aetheria Mana Stone").First().Id, 1);
+				
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void InspectorDrainMana(object sender, System.EventArgs e)

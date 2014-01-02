@@ -28,6 +28,19 @@ namespace GearFoundry
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();	 
 		private List<SalvageRule> SalvageRulesList = new List<SalvageRule>();
 		
+		//TODO:  set cast skills to false on logout
+		//TODO:  set on login.
+		internal CastSkills ScrollCheck = new CastSkills();
+		
+		internal class CastSkills
+		{
+			internal bool Item = false;
+			internal bool Life = false;
+			internal bool War = false;
+			internal bool Void = false;
+			internal bool Creature = false;
+		}
+		
 		
 		private int LastReportGUID = 0;
 		private void ManualCheckItemForMatches(LootObject IOItem)
@@ -166,44 +179,139 @@ namespace GearFoundry
 			} catch(Exception ex){LogError(ex);}
 		}
 		
+		private void SetKnownSpellSchools()
+		{
+			try
+			{
+				Decal.Interop.Filters.SkillInfo itemskill = Core.CharacterFilter.Underlying.get_Skill((Decal.Interop.Filters.eSkillID)32);
+				Decal.Interop.Filters.SkillInfo creatureskill = Core.CharacterFilter.Underlying.get_Skill((Decal.Interop.Filters.eSkillID)31);
+				Decal.Interop.Filters.SkillInfo lifeskill = Core.CharacterFilter.Underlying.get_Skill((Decal.Interop.Filters.eSkillID)33);
+				Decal.Interop.Filters.SkillInfo warskill = Core.CharacterFilter.Underlying.get_Skill((Decal.Interop.Filters.eSkillID)34);
+				Decal.Interop.Filters.SkillInfo voidskill = Core.CharacterFilter.Underlying.get_Skill((Decal.Interop.Filters.eSkillID)43);
+				
+				if(itemskill.Training.ToString() == "eTrainSpecialized" || itemskill.Training.ToString() == "eTrainTrained")
+				{
+					ScrollCheck.Item = true;
+				}
+				if(creatureskill.Training.ToString() == "eTrainSpecialized" || creatureskill.Training.ToString() == "eTrainTrained")
+				{
+					ScrollCheck.Creature = true;
+				}
+				if(lifeskill.Training.ToString() == "eTrainSpecialized" || lifeskill.Training.ToString() == "eTrainTrained")
+				{
+					ScrollCheck.Life = true;
+				}
+				if(warskill.Training.ToString() == "eTrainSpecialized" || warskill.Training.ToString() == "eTrainTrained")
+				{
+					ScrollCheck.War = true;
+				}
+				if(voidskill.Training.ToString() == "eTrainSpecialized" || voidskill.Training.ToString() == "eTrainTrained")
+				{
+					ScrollCheck.Void = true;
+				}				
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void ClearKnownSpellSchools()
+		{
+			try
+			{
+				ScrollCheck.Item = false;	
+				ScrollCheck.Creature = false;
+				ScrollCheck.Life = false;
+				ScrollCheck.War = false;
+				ScrollCheck.Void = false;
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		private void CheckUnknownScrolls(ref LootObject IOScroll)
 		{
 			try
 			{
+				if(!GISettings.CheckForL7Scrolls) {IOScroll.IOR = IOResult.nomatch; return;}
+				spellinfo scrollspell = SpellIndex[IOScroll.Spell(0)];
 				
-//				    			try
-//    			{
-//    				Decal.Interop.Filters.SkillInfo lockpickinfo = Core.CharacterFilter.Underlying.get_Skill((Decal.Interop.Filters.eSkillID)0x17);
-//    			
-//	    			if(lockpickinfo.Training.ToString() == "eTrainSpecialized" || lockpickinfo.Training.ToString() == "eTrainTrained")
-//	    			{
-//	    				ButlerHudPickCurrentSelection = new HudButton();
-//	    				ButlerHudPickCurrentSelection.Text = "Pick";
-//	    				ButlerHudTabLayout.AddControl(ButlerHudPickCurrentSelection, new Rectangle(5,30,50,20));
-//	    			}
-//    			}catch(Exception ex){LogError(ex);}
-
-				//Decal.Interop.Filters.SkillInfo warinfo = Core.CharacterFilter.Underlying.get_Skill(Decal.Interop.Filters.eSkillID)
+				if(scrollspell.spelllevel != 7) {IOScroll.IOR = IOResult.nomatch; return;}
 				
-				if(GISettings.CheckForL7Scrolls && SpellIndex[IOScroll.Spell(0)].spelllevel == 7)
-				{	
-					if(!Core.CharacterFilter.IsSpellKnown(IOScroll.Spell(0)))
-					{
-						IOScroll.IOR = IOResult.spell;
-					}
-					else
-					{
-						IOScroll.IOR = IOResult.nomatch;
-						return;
-					}
-				}
-				else
+				switch(scrollspell.spellschool)
 				{
-					IOScroll.IOR = IOResult.nomatch;
-					return;
+					case "item enchantment":
+						if(ScrollCheck.Item)
+						{
+							if(!Core.CharacterFilter.IsSpellKnown(scrollspell.spellid))
+							{
+								IOScroll.IOR = IOResult.spell;
+								return;
+							}
+							else
+							{
+								IOScroll.IOR = IOResult.nomatch;
+								return;
+							}
+						}
+						return;
+					case "creature enchantment":
+						if(ScrollCheck.Creature)
+						{
+							if(!Core.CharacterFilter.IsSpellKnown(scrollspell.spellid))
+							{
+								IOScroll.IOR = IOResult.spell;
+								return;
+							}
+							else
+							{
+								IOScroll.IOR = IOResult.nomatch;
+								return;
+							}
+						}
+						return;
+					case "life magic":
+						if(ScrollCheck.Life)
+						{
+							if(!Core.CharacterFilter.IsSpellKnown(scrollspell.spellid))
+							{
+								IOScroll.IOR = IOResult.spell;
+								return;
+							}
+							else
+							{
+								IOScroll.IOR = IOResult.nomatch;
+								return;
+							}
+						}
+						return;
+					case "void magic":
+						if(ScrollCheck.Void)
+						{
+							if(!Core.CharacterFilter.IsSpellKnown(scrollspell.spellid))
+							{
+								IOScroll.IOR = IOResult.spell;
+								return;
+							}
+							else
+							{
+								IOScroll.IOR = IOResult.nomatch;
+								return;
+							}
+						}
+						return;
+					case "war magic":
+						if(ScrollCheck.War)
+						{
+							if(!Core.CharacterFilter.IsSpellKnown(scrollspell.spellid))
+							{
+								IOScroll.IOR = IOResult.spell;
+								return;
+							}
+							else
+							{
+								IOScroll.IOR = IOResult.nomatch;
+								return;
+							}
+						}
+						return;						
 				}	
-			} catch(Exception ex){LogError(ex);}
-			return;
+			} catch(Exception ex){LogError(ex); IOScroll.IOR = IOResult.nomatch; return;}
 		}
 				
 		private void TrophyListCheckItem(ref LootObject IOItem)
