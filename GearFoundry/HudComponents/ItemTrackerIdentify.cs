@@ -27,9 +27,7 @@ namespace GearFoundry
 		
 		private List<ItemRule> ItemRulesList = new List<ItemRule>();	 
 		private List<SalvageRule> SalvageRulesList = new List<SalvageRule>();
-		
-		//TODO:  set cast skills to false on logout
-		//TODO:  set on login.
+
 		internal CastSkills ScrollCheck = new CastSkills();
 		
 		internal class CastSkills

@@ -213,7 +213,7 @@ namespace GearFoundry
 								{
 									lo.ProcessAction = IAction.Reveal;
 								}
-								if(RingableKeysArray.Contains(lo.Name))
+								if(RingableKeysArray.Contains(lo.Name.ToLower()))
 								{
 									lo.ProcessAction = IAction.Ring;
 								}
@@ -281,7 +281,7 @@ namespace GearFoundry
 							{
 								lo.ProcessAction = IAction.Reveal;
 							}
-							if(RingableKeysArray.Contains(lo.Name))
+							if(RingableKeysArray.Contains(lo.Name.ToLower()))
 							{
 								lo.ProcessAction = IAction.Ring;
 							}
@@ -543,7 +543,7 @@ namespace GearFoundry
 					{
 						lo.ProcessAction = IAction.Reveal;
 					}
-					if(RingableKeysArray.Contains(lo.Name))
+					if(RingableKeysArray.Contains(lo.Name.ToLower()))
 					{
 						lo.ProcessAction = IAction.Ring;
 					}

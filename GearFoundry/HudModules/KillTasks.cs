@@ -474,6 +474,7 @@ namespace GearFoundry
 						{
 							mKTSet.MyCollectTasks[CollectTaskIndex].active = true;
 							mKTSet.MyCollectTasks[CollectTaskIndex].complete = false;
+							UpdateTaskPanel();
 							return;
 						}
 						if(complete)
@@ -503,7 +504,7 @@ namespace GearFoundry
 									}	
 								}
 							}catch(Exception ex){LogError(ex);}
-							
+							UpdateTaskPanel();
 							return;
 						}
 					}
