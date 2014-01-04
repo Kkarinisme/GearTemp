@@ -192,7 +192,7 @@ namespace GearFoundry
 			internal const int GearInventoryIcon = 0x600127E;
 			internal const int GearTaskerIcon = 0x60067EC;
 			internal const int GearPortalIcon = 0x60022BE;
-			internal const int GearArmorIcon = 0x6001EE2;
+			internal const int GearArmorIcon = 0x60062F9;
 			internal const int HoriSwitchGearIcon = 0;
 			internal const int VertSwitchGearIcon = 0;
 			
