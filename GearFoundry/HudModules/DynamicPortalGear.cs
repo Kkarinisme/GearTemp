@@ -494,12 +494,12 @@ namespace GearFoundry
           		//Not holding a caster
         		if(Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) == 0x1000000).Count() == 0)
         		{
-        			FoundryActionList.Find(x => x.Action == FoundryActionTypes.Peace).FireAction = true;
-        			FoundryActionList.Find(x => x.Action == FoundryActionTypes.EquipWand).FireAction = true;	
+        			ToggleFoundryAction(FoundryActionTypes.Peace);
+        			ToggleFoundryAction(FoundryActionTypes.EquipWand);
         		}
         		
-        		FoundryActionList.Find(x => x.Action == FoundryActionTypes.Magic).FireAction = true;
-        		FoundryActionList.Find(x => x.Action == FoundryActionTypes.Portal).FireAction = true;
+        		ToggleFoundryAction(FoundryActionTypes.Magic);
+        		ToggleFoundryAction(FoundryActionTypes.Portal);
         		         		
         		switch(recall)
 				{

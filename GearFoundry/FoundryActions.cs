@@ -265,6 +265,11 @@ namespace GearFoundry
 			FoundryActionList[i].ActionStartTime = DateTime.Now;
 		}
 		
+		private void ToggleFoundryAction(FoundryActionTypes action)
+		{
+			FoundryActionList.Find(x => x.Action == action).FireAction = true;
+		}
+		
 		
 		
 
