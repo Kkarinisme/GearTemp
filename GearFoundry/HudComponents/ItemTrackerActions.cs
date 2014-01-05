@@ -23,8 +23,11 @@ namespace GearFoundry
 		private List<WorldObject> InventorySalvage = new List<WorldObject>();
 		private List<PendingActions> InspectorActionList = new List<PendingActions>();
 		
-		private string[] RingableKeysArray = {"legendary key", "black marrow key", "directive key", "granite key", "mana forge key", "master key", "marble key", 
-					"singularity key",	"skeletal falatacot key", "sturdy iron key", "sturdy steel key"};
+		//TODO:  Cut Keys
+		//TODO:  Combine Pyreal
+		//TODO:  Transition to a Master Action Queue for all GearFoundry Actions (MAQ)
+		
+		
 		
 		private System.Windows.Forms.Timer InspectorActionTimer = new System.Windows.Forms.Timer();
 	
@@ -213,7 +216,7 @@ namespace GearFoundry
 								{
 									lo.ProcessAction = IAction.Reveal;
 								}
-								if(RingableKeysArray.Contains(lo.Name.ToLower()))
+								if(GameData.RingableKeysArray.Contains(lo.Name.ToLower()))
 								{
 									lo.ProcessAction = IAction.Ring;
 								}
@@ -281,7 +284,7 @@ namespace GearFoundry
 							{
 								lo.ProcessAction = IAction.Reveal;
 							}
-							if(RingableKeysArray.Contains(lo.Name.ToLower()))
+							if(GameData.RingableKeysArray.Contains(lo.Name.ToLower()))
 							{
 								lo.ProcessAction = IAction.Ring;
 							}
@@ -543,7 +546,7 @@ namespace GearFoundry
 					{
 						lo.ProcessAction = IAction.Reveal;
 					}
-					if(RingableKeysArray.Contains(lo.Name.ToLower()))
+					if(GameData.RingableKeysArray.Contains(lo.Name.ToLower()))
 					{
 						lo.ProcessAction = IAction.Ring;
 					}

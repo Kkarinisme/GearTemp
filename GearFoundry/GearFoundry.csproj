@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FoundryActions.cs" />
     <Compile Include="HudComponents\CombatHudMechanics.cs" />
     <Compile Include="HudComponents\Fellowship.cs" />
     <Compile Include="HudModules\DynamicPortalGear.cs" />

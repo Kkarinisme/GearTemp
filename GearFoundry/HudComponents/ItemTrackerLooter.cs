@@ -647,7 +647,8 @@ namespace GearFoundry
 					case IOResult.manatank:
 					case IOResult.rare:
 					case IOResult.spell:
-					case IOResult.trophy:								
+					case IOResult.trophy:
+					case IOResult.dessicate:
 						return 1;						
 					case IOResult.salvage:
 						return 2;

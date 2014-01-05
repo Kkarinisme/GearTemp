@@ -23,7 +23,7 @@ namespace GearFoundry
 	{		
 		private GearInspectorSettings GISettings = new GearInspectorSettings();
 		
-		public List<LootObject> LOList = new List<LootObject>();
+		internal List<LootObject> LOList = new List<LootObject>();
 			
 		public class GearInspectorSettings
 		{
@@ -40,8 +40,7 @@ namespace GearFoundry
             public int ItemHudWidth = 300;
             public int ItemHudHeight = 220;
 			public int LootByValue = 0;
-			public int LootByMana = 0;
-			
+			public int LootByMana = 0;	
     	}
 		
 		
