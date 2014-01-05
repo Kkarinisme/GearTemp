@@ -1080,7 +1080,7 @@ namespace GearFoundry
 				if(Core.CharacterFilter.IsSpellKnown(2941))
         		{
         			picon = new PortalIcons();
-        			picon.PortalIcon.Image = new ACImage(Color.Gold);
+                    picon.PortalIcon.Image = CreateIconFromResource("Ulgrim.gif");
         			picon.Identifier = "ulgrim";
         			picon.PortalIcon.Hit += Ulgrim_Hit;
         			RecallSpellList.Add(picon);
@@ -1089,7 +1089,7 @@ namespace GearFoundry
 				if(Core.CharacterFilter.IsSpellKnown(4214))
         		{
         			picon = new PortalIcons();
-        			picon.PortalIcon.Image = new ACImage(Color.PeachPuff);
+                    picon.PortalIcon.Image = CreateIconFromResource("candeth.gif");
         			picon.Identifier = "candeth";
         			picon.PortalIcon.Hit += Candeth_Hit;
         			RecallSpellList.Add(picon);

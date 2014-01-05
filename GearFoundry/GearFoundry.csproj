@@ -292,6 +292,10 @@
     <EmbeddedResource Include="Graphics\tieP1.gif" />
     <EmbeddedResource Include="Graphics\tieP2.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\candeth.gif" />
+    <EmbeddedResource Include="Graphics\Ulgrim.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

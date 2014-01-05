@@ -505,6 +505,15 @@ namespace GearFoundry
                 }
                 if (armorSettingsFilename == "" || armorSettingsFilename == null) { armorSettingsFilename = GearDir + @"\ArmorSettings.xml"; }
                 if (genArmorFilename == "" || genArmorFilename == null) { genArmorFilename = currDir + @"\allToonsArmor.xml"; }
+                if (!File.Exists(genArmorFilename))
+                {
+
+                    XDocument tempgenArmorDoc = new XDocument(new XElement("Objs"));
+                    tempgenArmorDoc.Save(genArmorFilename);
+                    tempgenArmorDoc = null;
+
+
+                }
 
 
                 if (ArmorHudWidth == 0)
