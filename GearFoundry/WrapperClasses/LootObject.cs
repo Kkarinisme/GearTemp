@@ -81,10 +81,7 @@ namespace GearFoundry
 			}
 			
 			internal IOResult IOR = IOResult.unknown;
-			public bool addtoloot;
-			public bool notify;
 			public string rulename;
-			public double DistanceAway;
 			
 //			public string model
 //			{
@@ -931,14 +928,6 @@ namespace GearFoundry
 						return String.Empty;
 				}  
 			}
-			
-			
-			public string DistanceString()
-			{
-				return " <" + (DistanceAway * 100).ToString("0") + ">";
-			}
-			
-		
 			
 			public string SkillString()
 			{

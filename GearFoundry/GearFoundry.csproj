@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FoundryActions.cs" />
+    <Compile Include="FoundrySubActions.cs" />
     <Compile Include="HudComponents\CombatHudMechanics.cs" />
     <Compile Include="HudComponents\Fellowship.cs" />
     <Compile Include="HudModules\DynamicPortalGear.cs" />
@@ -104,7 +105,6 @@
     <Compile Include="HudModules\GearValet.cs" />
     <Compile Include="HudModules\KillTasks.cs" />
     <Compile Include="Initializers\Enums.cs" />
-    <None Include="HudModules\PortalGear.cs" />
     <Compile Include="Initializers\XMLBuilders.cs" />
     <Compile Include="SoundPlayer.cs" />
     <Compile Include="WrapperClasses\LandscapeObject.cs" />
@@ -135,7 +135,6 @@
     <Compile Include="Initializers\Build.cs" />
     <Compile Include="Inventory\armor.cs" />
     <Compile Include="PluginCore.cs" />
-    <None Include="HudModules\RemoteGear.cs" />
     <Compile Include="Views\MainView.cs" />
     <Compile Include="HudModules\QuickSlotsHud.cs" />
     <Compile Include="Initializers\Definitions.cs" />

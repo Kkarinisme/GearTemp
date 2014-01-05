@@ -102,7 +102,6 @@ namespace GearFoundry
 						
 				}
 			}catch(Exception ex){LogError(ex);}
-
 		}
 				
 		private bool ActionsPending = false;
