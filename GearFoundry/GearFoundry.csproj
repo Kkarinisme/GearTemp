@@ -303,8 +303,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\candeth.gif" />
-    <EmbeddedResource Include="Graphics\Ulgrim.gif" />
+    <EmbeddedResource Include="Graphics\candeth.gif">
+      <LogicalName>candeth.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\Ulgrim.gif">
+      <LogicalName>Ulgrim.gif</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

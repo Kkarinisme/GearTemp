@@ -167,6 +167,7 @@ namespace GearFoundry
 						InspectorActionList[1].pending = true;
 						InspectorActionList[1].StartAction = DateTime.Now;
 						
+						WriteToChat("Inspector Opened");
 						
 						lo.ActionTarget = true;
 						lo.LastActionTime = DateTime.Now;

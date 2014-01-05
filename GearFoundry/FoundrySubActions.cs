@@ -84,5 +84,37 @@ namespace GearFoundry
 				
 			}catch(Exception ex){LogError(ex);}
 		}
+		
+		private void FoundryUseLandscape(int Id)
+		{
+			try
+			{
+				Core.Actions.UseItem(Id,0);
+				return;
+			}catch(Exception ex){LogError(ex);}
+		}
+			
+		private void FoundryLoadUseAction(FoundryActionTypes action, int Id)
+		{
+			try
+			{
+				int index =  FoundryActionList.FindIndex(x => x.Action == action);
+				FoundryActionList[index].FireAction = true;
+				FoundryActionList[index].ToDoList.Add(Id);
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void FoundryLoadOpenContainerAction(int ContId)
+		{
+			try
+			{
+				int index =  FoundryActionList.FindIndex(x => x.Action == FoundryActionTypes.OpenContainer);
+				FoundryActionList[index].FireAction = true;
+				FoundryActionList[index].ToDoList.Add(ContId);
+				
+			}catch(Exception ex){LogError(ex);}
+		}
+				
+
 	}
 }

@@ -249,6 +249,8 @@ namespace GearFoundry
 						goto default;
 						
 					case ObjectClass.Npc:
+					case ObjectClass.Vendor:
+					case ObjectClass.Services:
 						if(gsSettings.bShowTrophies)
 						{
 							TrophyListCheckLandscape(ref IOLandscape);
@@ -772,7 +774,9 @@ namespace GearFoundry
     			
     			if(col == 0)
     			{
-    				Host.Actions.UseItem(woId, 0);
+    				if(lo.ObjectClass != ObjectClass.Container) {FoundryLoadUseAction(FoundryActionTypes.UseLandscape, lo.Id);}
+    				else{}
+    				InitiateFoundryActions();
     			}
     			if(col == 1)
     			{

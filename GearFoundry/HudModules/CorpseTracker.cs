@@ -65,8 +65,8 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject += OnWorldFilterDeleteCorpse;
                 Core.ItemDestroyed += OnCorpseDestroyed;
                 Core.CharacterFilter.ChangePortalMode += ChangePortalModeCorpses;
-                Core.ContainerOpened += OnCorpseOpened;
                 Core.CharacterFilter.Logoff += Corpse_Logoff;
+                Core.ContainerOpened += CorpseTrackerContainerOpened;
                 
                 foreach(WorldObject wo in Core.WorldFilter.GetByObjectClass(ObjectClass.Corpse))
                 {
@@ -96,8 +96,8 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteCorpse;
                 Core.ItemDestroyed -= OnCorpseDestroyed;
                 Core.CharacterFilter.ChangePortalMode -= ChangePortalModeCorpses;
-                Core.ContainerOpened -= OnCorpseOpened;
-				Core.CharacterFilter.Logoff -= Corpse_Logoff;   
+				Core.CharacterFilter.Logoff -= Corpse_Logoff; 
+ 				Core.ContainerOpened -= CorpseTrackerContainerOpened;				
 
 				CorpseTrackingList.Clear();
 				PermittedCorpsesList.Clear();
@@ -105,6 +105,19 @@ namespace GearFoundry
                 GearVisectionReadWriteSettings(false);
 			}
 			catch(Exception ex){LogError(ex);}
+		}
+		
+		private void CorpseTrackerContainerOpened(object sender, ContainerOpenedEventArgs e)
+		{
+			try
+			{
+				int ctIndex = CorpseTrackingList.FindIndex(x => x.Id == e.ItemGuid);
+				if(ctIndex >= 0)
+				{
+					CorpseTrackingList[ctIndex].notify = false;
+					UpdateCorpseHud();
+				}				
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		private void GearVisectionReadWriteSettings(bool read)
@@ -337,15 +350,6 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 
 		}
-        
-        private void OnCorpseOpened(object sender, Decal.Adapter.ContainerOpenedEventArgs e)
-        {
-        	try
-        	{
-        		CorpseTrackingList.RemoveAll(x => x.Id == e.ItemGuid);
-		        UpdateCorpseHud();   
-        	}catch(Exception ex){LogError(ex);}
-        }
 		
         private int CorpseTimer = 0;
         private void CorpseCheckerTick(object sender, EventArgs e)
@@ -594,8 +598,6 @@ namespace GearFoundry
     		}catch(Exception ex){LogError(ex);}
     	}
     	
-    	private bool openingcorpse = false;
-    	private int opentarget = 0;
     	private HudList.HudListRowAccessor CorpseRow = new HudList.HudListRowAccessor();
     	private void CorpseHudList_Click(object sender, int row, int col)
     	{
@@ -608,14 +610,8 @@ namespace GearFoundry
     			
     			if(col == 0)
     			{
-    				Core.Actions.CurrentSelection = co.Id;
-    				Host.Actions.UseItem(co.Id, 0);
-    				if(!openingcorpse)
-    				{
-    					openingcorpse = true;
-    					opentarget = co.Id;
-    					Core.ContainerOpened += ContainerOpened_Corpse;
-    				}				
+    				FoundryLoadOpenContainerAction(co.Id);
+    				InitiateFoundryActions();
     			}
     			if(col == 1)
     			{
@@ -633,26 +629,7 @@ namespace GearFoundry
 			catch (Exception ex) { LogError(ex); }	
     	}
     	
-    	private void ContainerOpened_Corpse(object sender, System.EventArgs e)
-    	{
-    		try
-    		{
-    			Core.ContainerOpened -= ContainerOpened_Corpse;
-    			if(Core.Actions.OpenedContainer == opentarget)
-    			{
-	    			CorpseTrackingList.Find(x => x.Id == opentarget).notify = false;
-	    			opentarget = 0;
-	    			UpdateCorpseHud();
-	    			openingcorpse = false;
-    			}
-    			else
-    			{
-    				opentarget = 0;
-	    			UpdateCorpseHud();
-	    			openingcorpse = false;
-    			}
-    		}catch(Exception ex){LogError(ex); Core.ContainerOpened -= ContainerOpened_Corpse;}
-    	}
+
     	
     	private void AllCorpses_Change(object sender, System.EventArgs e)
     	{

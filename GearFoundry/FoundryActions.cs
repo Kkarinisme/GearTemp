@@ -42,7 +42,8 @@ namespace GearFoundry
 			EquipWand,
 			Magic,
 			Portal,
-			Open,
+			UseLandscape,
+			OpenContainer,
 			Move,
 			Pick,
 			Desiccate,
@@ -87,6 +88,12 @@ namespace GearFoundry
 						case FoundryActionTypes.Portal:
 							fa.ActionDelay = 1000;
 							break;
+						case FoundryActionTypes.UseLandscape:
+							fa.ActionDelay = 1000;
+							break;
+						case FoundryActionTypes.OpenContainer:
+							fa.ActionDelay = 1000;
+							break;
 					}
 					FoundryActionList.Add(fa);
 				}
@@ -94,8 +101,7 @@ namespace GearFoundry
 				Core.CharacterFilter.SpellCast += FoundryActionsSpellCastComplete;
 				Core.CharacterFilter.Logoff += FoundryActionsLogOff;
 				FoundryActionTimer.Interval = 150;
-				FoundryActionTimer.Tick += FoundryActionInitiator;
-				
+				FoundryActionTimer.Tick += FoundryActionInitiator;				
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -106,8 +112,7 @@ namespace GearFoundry
 				FoundryActionList.Clear();
 				Core.CharacterFilter.SpellCast -= FoundryActionsSpellCastComplete;
 				Core.CharacterFilter.Logoff -= FoundryActionsLogOff;
-				FoundryActionTimer.Tick -= FoundryActionInitiator;
-				
+				FoundryActionTimer.Tick -= FoundryActionInitiator;				
 			}catch(Exception ex){LogError(ex);}	
 		}
 		
@@ -176,6 +181,7 @@ namespace GearFoundry
 									FoundryChangeCombatState(CombatState.Peace);
 									return;
 								}
+								
 							case FoundryActionTypes.ClearShield:
 								//You don't have to clear a shield you don't have
 								if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).Count() == 0)
@@ -190,6 +196,7 @@ namespace GearFoundry
 									FoundryUnEquipItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).First().Id);
 									return;
 								}
+								
 							case FoundryActionTypes.EquipWand:
 								//You can't equip a wand if you're wearing a shield.  Clear the shield, then try again.
 								if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).Count() != 0)
@@ -215,6 +222,7 @@ namespace GearFoundry
 									FoundryEquipItem(mDynamicPortalGearSettings.nOrbGuid);
 									return;
 								}
+								
 							case FoundryActionTypes.Magic:
 								//If in magic mode, clear the action
 								if(Core.Actions.CombatMode == CombatState.Magic)
@@ -242,6 +250,70 @@ namespace GearFoundry
 									FoundryCastSpell(FoundryActionList[i].ToDoList.First());
 									return;
 								}
+								
+							case FoundryActionTypes.UseLandscape:
+								//If nothing to use, disable
+								if(FoundryActionList[i].ToDoList.Count == 0)
+								{
+									ClearFoundryAction(i);
+									return;
+								}
+								//Attempt one use, then dump the item from the list
+								else
+								{
+									if(FoundryActionList[i].ToDoList.Count == 0)
+									{
+										ClearFoundryAction(i);
+										return;
+									}
+									if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+									{
+										FoundryActionList[i].ToDoList.RemoveAt(0);
+										return;
+									}
+									if(Core.WorldFilter.Distance(FoundryActionList[i].ToDoList.First(), Core.CharacterFilter.Id) > 0.3)
+									{
+										WriteToChat("Use disabled due to distance, move closer and try again.");
+										FoundryActionList[i].ToDoList.RemoveAt(0);
+										return;	
+									}
+									
+									SetFoundryAction(i);
+									FoundryUseLandscape(FoundryActionList[i].ToDoList.First());
+									if(FoundryActionList[i].ToDoList.Count > 0)
+									{
+										FoundryActionList[i].ToDoList.RemoveAt(0);
+									}
+									return;
+								}
+							
+							case FoundryActionTypes.OpenContainer:
+								if(FoundryActionList[i].ToDoList.Count == 0)
+								{
+									ClearFoundryAction(i);
+									return;
+								}
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
+								}
+								if(Core.WorldFilter.Distance(FoundryActionList[i].ToDoList.First(), Core.CharacterFilter.Id) > 0.3)
+								{
+										WriteToChat("Open Container disabled due to distance, move closer and try again.");
+										FoundryActionList[i].ToDoList.RemoveAt(0);
+										return;	
+								}
+								if(FoundryActionList[i].ToDoList.Any(x => x == Core.Actions.OpenedContainer))
+								{
+									FoundryActionList[i].ToDoList.RemoveAll(x => x == Core.Actions.OpenedContainer);
+									ClearFoundryAction(i);
+									return;
+								}
+								WriteToChat(DateTime.Now.ToShortTimeString() + " Foundry Opened");
+								SetFoundryAction(i);
+								FoundryUseLandscape(FoundryActionList[i].ToDoList.First());
+								return;
 
 						}
 					}
@@ -254,14 +326,12 @@ namespace GearFoundry
 		
 		private void ClearFoundryAction(int i)
 		{
-			FoundryActionList[i].Pending = false;
 			FoundryActionList[i].FireAction = false;
 			FoundryActionList[i].ActionStartTime = DateTime.MinValue;
 		}
 		
 		private void SetFoundryAction(int i)
 		{
-			FoundryActionList[i].Pending = true;
 			FoundryActionList[i].ActionStartTime = DateTime.Now;
 		}
 		
