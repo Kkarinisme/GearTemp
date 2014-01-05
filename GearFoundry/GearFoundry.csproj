@@ -285,13 +285,23 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\GlendonWoods.gif" />
+    <EmbeddedResource Include="Graphics\GlendonWoods.gif">
+      <LogicalName>GlendonWoods.gif</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\lstie.gif" />
-    <EmbeddedResource Include="Graphics\MtLetheRecall.gif" />
-    <EmbeddedResource Include="Graphics\tieP1.gif" />
-    <EmbeddedResource Include="Graphics\tieP2.gif" />
+    <EmbeddedResource Include="Graphics\lstie.gif">
+      <LogicalName>lstie.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\MtLetheRecall.gif">
+      <LogicalName>MtLetheRecall.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\tieP1.gif">
+      <LogicalName>tieP1.gif</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\tieP2.gif">
+      <LogicalName>tieP2.gif</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
