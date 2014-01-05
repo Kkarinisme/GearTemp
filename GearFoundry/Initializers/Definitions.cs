@@ -79,6 +79,14 @@ namespace GearFoundry
 			public const int GE_CREATE_FELLOWSHIP = 0x02BE;
 			public const int GE_DISBAND_FELLOWSHIP = 0x02BF;
 		}
+		
+		internal class GameData
+		{
+			internal static string[] RingableKeysArray = {"legendary key", "black marrow key", "directive key", "granite key", "mana forge key", "master key", "marble key", 
+					"singularity key",	"skeletal falatacot key", "sturdy iron key", "sturdy steel key"};
+//			internal static string[] KeyringMatchingArray = {"burning sands", "black marrow", "directive", "granite", "black coral", "master", "marble", "singularity", 
+//					"skeletal falatacot", "sturdy iron", "sturdy steel"};
+		}
 		        
       //  XDocument xdoc = null;
         XDocument xdocGenSettings = null;

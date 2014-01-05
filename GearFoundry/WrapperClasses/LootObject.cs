@@ -23,26 +23,26 @@ namespace GearFoundry
 		private static int CloakSlot = 0x8000000;
 		private static int UnderwearSlots = 0x6;
 
-		public class LootObject
+		internal class LootObject
 		{
 			
-			public bool InspectList = false;
-			public bool ProcessList = false;
+			internal bool InspectList = false;
+			internal bool ProcessList = false;
 			
-			public bool Exclude = false;
-			public bool Listen = false;
-			public bool ActionTarget = false;
-			public bool Move = false;
-			public bool Process = false;
-			public bool Open = false;
-			public bool NewObject = true;
-			public bool IsContainer = false;
-			public bool StorageChange = false;
+			internal bool Exclude = false;
+			internal bool Listen = false;
+			internal bool ActionTarget = false;
+			internal bool Move = false;
+			internal bool Process = false;
+			internal bool Open = false;
+			internal bool NewObject = true;
+			internal bool IsContainer = false;
+			internal bool StorageChange = false;
 			
-			public IAction ProcessAction = IAction.None;
+			internal IAction ProcessAction = IAction.None;
 			
-			public DateTime LastActionTime = DateTime.MinValue;
-			public DateTime StorageChangeTime = DateTime.MinValue;
+			internal DateTime LastActionTime = DateTime.MinValue;
+			internal DateTime StorageChangeTime = DateTime.MinValue;
 			
 //			public List<pale> Palettes = new List<pale>();
 			
@@ -81,10 +81,7 @@ namespace GearFoundry
 			}
 			
 			internal IOResult IOR = IOResult.unknown;
-			public bool addtoloot;
-			public bool notify;
 			public string rulename;
-			public double DistanceAway;
 			
 //			public string model
 //			{
@@ -931,14 +928,6 @@ namespace GearFoundry
 						return String.Empty;
 				}  
 			}
-			
-			
-			public string DistanceString()
-			{
-				return " <" + (DistanceAway * 100).ToString("0") + ">";
-			}
-			
-		
 			
 			public string SkillString()
 			{

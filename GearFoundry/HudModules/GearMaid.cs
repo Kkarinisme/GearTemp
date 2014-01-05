@@ -253,16 +253,14 @@ namespace GearFoundry
 		private void MaidRingKeys_Hit(object sender, System.EventArgs e)
 		{
 			try
-			{
-				string[] KeyringMatchingArray = {"burning sands", "black marrow", "directive", "granite", "black coral", "master", "marble", "singularity", "skeletal falatacot", "sturdy iron", "sturdy steel"};
-							
+			{			
 				MaidKeyRings = (from keyrings in Core.WorldFilter.GetInventory()
 					where keyrings.Name.ToLower().Contains("keyring") && keyrings.Values(LongValueKey.UsesRemaining) > 0 && keyrings.Values(LongValueKey.KeysHeld) < 24
 					orderby keyrings.Values(LongValueKey.KeysHeld) descending
 					select keyrings).ToList();
 				
 				MaidKeyList = (from items in Core.WorldFilter.GetInventory()
-				    where items.ObjectClass == ObjectClass.Key && RingableKeysArray.Contains(items.Name.ToLower())
+				    where items.ObjectClass == ObjectClass.Key && GameData.RingableKeysArray.Contains(items.Name.ToLower())
 					select items).ToList();
 				
 				MaidProcessRingKeys();

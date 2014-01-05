@@ -69,7 +69,7 @@ namespace GearFoundry
 
 			try 
 			{	
-				fileservice = (FileService)Core.FileService;				
+				fileservice = (FileService)Core.FileService;					
 				Core.CharacterFilter.LoginComplete += OnCharacterFilterLoginCompleted;	
 				
 		        
@@ -90,6 +90,7 @@ namespace GearFoundry
                 _UpdateSalvagePanel();
                 
                 SubscribeFellowshipEvents();
+                SubscribeFoundryActions();
 
                 //TODO:  This could be moved to be subscribed situationally.
                 Decal.Adapter.CoreManager.Current.ItemSelected += new EventHandler<ItemSelectedEventArgs>(Current_ItemSelected);

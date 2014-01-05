@@ -45,18 +45,8 @@ namespace GearFoundry
         	public int nFacilityHubGemID = 0;
         }
        
-        private List<PortalActions> PortalActionList = new List<PortalActions>();
-        private System.Windows.Forms.Timer PortalActionTimer = new System.Windows.Forms.Timer();
-        
-     	private class PortalActions
-     	{
-     		public bool fireaction = false;
-			public bool pending = false;
-			public DateTime StartAction = DateTime.MinValue;
-			public int ItemId = 0;	
-			public RecallTypes RecallSpell = RecallTypes.none;	
-			public int Retries = 0;			
-     	}	
+      
+
      	
      	public enum RecallTypes
 		{
@@ -117,14 +107,12 @@ namespace GearFoundry
 	             		savePortalSettings();
 	             	}
 	             }
+    	        
+    	        if(mDynamicPortalGearSettings.nOrbGuid == 0)
+    	        {
+    	        	SelectDefaultCaster();
+    	        }
 				
-				for(int i = 0; i < 4; i++)
-				{
-					PortalActionList.Add(new PortalActions());
-				}
-				
-				Core.CharacterFilter.ActionComplete += PortalCast_ListenComplete;
-				Core.CharacterFilter.ChangePortalMode += PortalCast_Listen;
 				Core.CharacterFilter.Logoff += PortalGear_Logoff;
 				
 			}catch(Exception ex){LogError(ex);}
@@ -144,6 +132,22 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
         }
 		
+		private void SelectDefaultCaster()
+		{
+			try
+			{
+				if(mDynamicPortalGearSettings.nOrbGuid == 0)
+        		{
+        			mDynamicPortalGearSettings.nOrbGuid = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb && 
+        			           (x.Values(LongValueKey.WieldReqValue) == 0 || (x.Values(LongValueKey.WieldReqValue) == 150 && Core.CharacterFilter.Level >= 150) ||
+        			           (x.Values(LongValueKey.WieldReqValue) == 180 && Core.CharacterFilter.Level >= 180))).ToList().OrderByDescending(x => x.Values(DoubleValueKey.MeleeDefenseBonus)).First().Id;
+        			
+        			mDynamicPortalGearSettings.nOrbIcon = Core.WorldFilter[mDynamicPortalGearSettings.nOrbGuid].Icon;
+                }
+				savePortalSettings();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 		private void PortalGear_Logoff(object sender, EventArgs e)
 		{
 			DisposePortalGearHud();
@@ -154,10 +158,7 @@ namespace GearFoundry
 		{
 			try
 			{
-				PortalActionList.Clear();
 				savePortalSettings();
-				Core.CharacterFilter.ActionComplete -= PortalCast_ListenComplete;
-				Core.CharacterFilter.ChangePortalMode -= PortalCast_Listen;
 				Core.CharacterFilter.Logoff -= PortalGear_Logoff;
 			}catch(Exception ex){LogError(ex);}
 		}
@@ -489,327 +490,131 @@ namespace GearFoundry
         {
         	
         	try
-        	{
-        		if(PortalActionsPending) 
-        		{
-        			WriteToChat("Portal action pending.  Please wait for completion.");
-        			return;
-        		}
-        		
-        		if(mDynamicPortalGearSettings.nOrbGuid == 0)
-        		{
-        			mDynamicPortalGearSettings.nOrbGuid = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.WandStaffOrb && 
-        			           (x.Values(LongValueKey.WieldReqValue) == 0 || (x.Values(LongValueKey.WieldReqValue) == 150 && Core.CharacterFilter.Level >= 150) ||
-        			           (x.Values(LongValueKey.WieldReqValue) == 180 && Core.CharacterFilter.Level >= 180))).ToList().OrderByDescending(x => x.Values(DoubleValueKey.MeleeDefenseBonus)).First().Id;
-        			
-        			mDynamicPortalGearSettings.nOrbIcon = Core.WorldFilter[mDynamicPortalGearSettings.nOrbGuid].Icon;
-                }
-        		
-        		//Not holding a caster
+        	{        		
+          		//Not holding a caster
         		if(Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) == 0x1000000).Count() == 0)
         		{
-        			if(Core.Actions.CombatMode != CombatState.Peace)
-        			{
-        				PortalActionList[0].fireaction = true;
-        			}
-        			PortalActionList[1].fireaction = true;
-        			PortalActionList[2].fireaction = true;
+        			ToggleFoundryAction(FoundryActionTypes.Peace);
+        			ToggleFoundryAction(FoundryActionTypes.EquipWand);
         		}
-        		else if(Core.Actions.CombatMode != CombatState.Magic)
-        		{
-        			PortalActionList[2].fireaction = true;
-          		}
-        		PortalActionList[3].fireaction = true;
-        		PortalActionList[3].RecallSpell = recall; 
-				PortalCastSuccess = false;        		
-
-        		InitiatePortalActions();
-		
-        	}catch(Exception ex){LogError(ex);}
-        }
-        
-        private bool PortalActionsPending = false;
-        private void InitiatePortalActions()
-        {
-        	try
-        	{
-        		if(!PortalActionsPending) 
-        		{
-        			PortalActionsPending = true;
-					PortalActionTimer.Interval = 250;
-					PortalActionTimer.Start();
-					
-					PortalActionTimer.Tick += PortalActionInitiator;
-					return;
-        		}
-        	}catch(Exception ex){LogError(ex);}
-        }
-
-        private void PortalActionInitiator(object sender, EventArgs e)
-		{
-			try
-			{
-				FirePortalActions();
-			}catch(Exception ex){LogError(ex);}
-		}
-        
-        
-        private void FirePortalActions()
-		{
-			try
-			{				
-				if(PortalActionList[0].fireaction)
-				{
-					if(PortalActionList[0].pending && (DateTime.Now - PortalActionList[0].StartAction).TotalMilliseconds < 600)
-					{
-						return;
-					}
-					else if(Core.Actions.CombatMode != CombatState.Peace)
-					{
-						PortalActionList[0].pending = true;
-						PortalActionList[0].StartAction = DateTime.Now;
-						Core.Actions.SetCombatMode(CombatState.Peace);
-						return;
-					}
-					else
-					{
-						PortalActionList[0].pending = false;
-						PortalActionList[0].StartAction = DateTime.MinValue;
-						PortalActionList[0].fireaction = false;
-					}
-				}
-				else if(PortalActionList[1].fireaction)
-				{
-					if(PortalActionList[1].pending && (DateTime.Now - PortalActionList[1].StartAction).TotalMilliseconds < 300)
-					{
-						return;
-					}
-					else if(Core.WorldFilter.GetInventory().Where(x => x.Values(LongValueKey.EquippedSlots) == 0x1000000).Count() == 0)
-					{	
-						PortalActionList[1].pending = true;
-						PortalActionList[1].StartAction = DateTime.Now;
-						PortalActionEquip();
-						return;
-					}
-					else
-					{
-						PortalActionList[1].pending = false;
-						PortalActionList[1].StartAction = DateTime.MinValue;
-						PortalActionList[1].fireaction = false;
-					}
-				}
-				else if(PortalActionList[2].fireaction)
-				{
-					if(PortalActionList[2].pending && (DateTime.Now - PortalActionList[2].StartAction).TotalMilliseconds < 600)
-					{
-						return;
-					}
-					else if(Core.Actions.CombatMode != CombatState.Magic)
-					{
-						PortalActionList[2].pending = true;
-						PortalActionList[2].StartAction = DateTime.Now;
-						Core.Actions.SetCombatMode(CombatState.Magic);
-						return;
-					}
-					else
-					{
-						PortalActionList[2].pending = false;
-						PortalActionList[2].StartAction = DateTime.MinValue;
-						PortalActionList[2].fireaction = false;
-					}
-				}
-				else if(PortalActionList[3].fireaction)
-				{
-					if(PortalCastSuccess)
-					{
-						PortalActionsPending = false;
-						PortalActionList[3].pending = false;
-						PortalActionTimer.Tick -= PortalActionInitiator;	
-						PortalActionTimer.Stop();
-						return;	
-					}
-					else if(PortalActionList[3].pending && (DateTime.Now - PortalActionList[3].StartAction).TotalSeconds < 5)
-					{
-						return;
-					}
-					else if(!PortalCastSuccess && PortalActionList[3].Retries < 3)
-					{
-						PortalActionList[3].pending = true;
-						PortalActionList[3].StartAction = DateTime.Now;
-						PortalActionList[3].Retries++;
-						PortalActionsCastSpell();
-						return;
-					}	
-					else if(!PortalCastSuccess && PortalActionList[3].Retries >= 3)
-					{
-						if(PortalActionList[3].Retries >= 3) {WriteToChat("Recall/Summon Failed. Check ties and other recall requirements.");}
-						PortalActionList[3].pending = false;
-						PortalActionList[3].StartAction = DateTime.MinValue;
-						PortalActionList[3].fireaction = false;
-						PortalActionList[3].Retries = 0;	
-					}
-
-				}
-				else
-				{
-					PortalActionsPending = false;
-					PortalActionList[3].pending = false;
-					PortalActionTimer.Tick -= PortalActionInitiator;	
-					PortalActionTimer.Stop();
-					return;
-				}
-			}catch(Exception ex){LogError(ex);}
-		}     
-     
-            
-        private void PortalActionEquip()
-        {
-        	try
-			{	
-
-				if(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).Count() > 0 &&
-				   Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.MeleeWeapon && x.LongKeys.Contains((int)LongValueKey.EquippedSlots)).Count() == 0)
-				{
-					Core.Actions.UseItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).First().Id,0);
-					return;
-				}
-				else
-				{
-					Core.Actions.UseItem(mDynamicPortalGearSettings.nOrbGuid, 0);
-					return;
-				}
-					
-			}catch(Exception ex){LogError(ex);}
-		}
-        
-        private void PortalActionsCastSpell()
-        {
-        	try
-        	{
-        		//Clean up listens in cast
-
-					
-				switch(PortalActionList[3].RecallSpell)
+        		
+        		ToggleFoundryAction(FoundryActionTypes.Magic);
+        		ToggleFoundryAction(FoundryActionTypes.Portal);
+        		         		
+        		switch(recall)
 				{
 					case RecallTypes.lifestone:
-						Core.Actions.CastSpell(1635, Core.CharacterFilter.Id);
-						return;
+        				LoadPortalActionToFoundry(1635);
+						break;
 						
 					case RecallTypes.portal:
-						Core.Actions.CastSpell(2645, Core.CharacterFilter.Id);
-						return;
+						LoadPortalActionToFoundry(2645);
+						break;
 						
 					case RecallTypes.primaryporal:
-						Core.Actions.CastSpell(48, Core.CharacterFilter.Id);
-						return;
+						LoadPortalActionToFoundry(48);
+						break;
 						
 					case RecallTypes.summonprimary:
-						Core.Actions.CastSpell(157, Core.CharacterFilter.Id);
-						return;
+						LoadPortalActionToFoundry(157);
+						break;
 						
 					case RecallTypes.secondaryportal:
-						Core.Actions.CastSpell(2647, Core.CharacterFilter.Id);
-						return;
+						LoadPortalActionToFoundry(2647);
+						break;
 						
 					case RecallTypes.summonsecondary:
-						Core.Actions.CastSpell(2648, Core.CharacterFilter.Id);
-						return;
+						LoadPortalActionToFoundry(2648);
+						break;
 						
                     case RecallTypes.sanctuary:
-                        Core.Actions.CastSpell(2023, Core.CharacterFilter.Id);
-                        return;
+                       LoadPortalActionToFoundry(2023);
+                        break;
                         
                     case RecallTypes.bananaland:
-                        Core.Actions.CastSpell(2931, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(2931);
+                        break;
                         
                     case RecallTypes.col:
-                        Core.Actions.CastSpell(4213, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(4213);
+                        break;
                         
                     case RecallTypes.aerlinthe:
-                        Core.Actions.CastSpell(2041, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(2041);
+                        break;
                         
                     case RecallTypes.caul:
-                        Core.Actions.CastSpell(2943, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(2943);
+                        break;
                         
                     case RecallTypes.bur:
-                        Core.Actions.CastSpell(4084, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(4084);
+                        break;
                         
                     case RecallTypes.olthoi_north:
-                        Core.Actions.CastSpell(4198, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(4198);
+                        break;
                         
                     case RecallTypes.facilityhub:
-                        Core.Actions.CastSpell(5175, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(5175);
+                        break;
                     case RecallTypes.gearknight:
-                        Core.Actions.CastSpell(5330, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(5330);
+                        break;
                         
                     case RecallTypes.neftet:
-                        Core.Actions.CastSpell(5541, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(5541);
+                        break;
                         
                     case RecallTypes.rynthid:
-                        Core.Actions.CastSpell(6150, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(6150);
+                        break;
                         
                     case RecallTypes.mhoire: 
-                        Core.Actions.CastSpell(4128, Core.CharacterFilter.Id);
-                        return;
+                        LoadPortalActionToFoundry(4128);
+                        break;
                         
                     case RecallTypes.lifestonetie:
-                        Core.Actions.CastSpell(2644, Core.Actions.CurrentSelection);
-                        return;
+                        LoadPortalActionToFoundry(2644);
+                        break;
                         
                     case RecallTypes.tieprimary:
-                        Core.Actions.CastSpell(47, Core.Actions.CurrentSelection);
-                        return;
+                        LoadPortalActionToFoundry(47);
+                        break;
                         
                     case RecallTypes.tiesecondary:
-                        Core.Actions.CastSpell(2646, Core.Actions.CurrentSelection);
-                        return;
+                        LoadPortalActionToFoundry(2646);
+                        break;
                     
                     case RecallTypes.glendenwood:
-                        Core.Actions.CastSpell(3865, Core.Actions.CurrentSelection);
-                        return;
+                       LoadPortalActionToFoundry(3865);
+                        break;
                         
                     case RecallTypes.lethe:
-                        Core.Actions.CastSpell(2813, Core.Actions.CurrentSelection);
-                        return;
+                        LoadPortalActionToFoundry(2813);
+                        break;
                         
                     case RecallTypes.ulgrim:
-                        Core.Actions.CastSpell(2941, Core.Actions.CurrentSelection);
-                        return;
+                        LoadPortalActionToFoundry(2941);
+                        break;
                     
                     case RecallTypes.candeth:
-                        Core.Actions.CastSpell(4214, Core.Actions.CurrentSelection);
-                        return;													
+                        LoadPortalActionToFoundry(4214);
+                        break;													
 				}	
-        	}catch(Exception ex){LogError(ex);}
-        }
-        
-        private bool PortalCastSuccess = false;
-        private void PortalCast_Listen(object sender, EventArgs e)
-        {
-        	try
-        	{
-        		if(!PortalActionsPending) {return;}
-        		PortalCastSuccess = true;
-        	}catch(Exception ex){LogError(ex);}
-        }
-        
-        private void PortalCast_ListenComplete(object sender, EventArgs e)
-        {
-        	try
-        	{
-        		if(!PortalActionsPending) {return;}
-        		PortalCastSuccess = true;
+			
+        		InitiateFoundryActions();
         		
+        	}catch(Exception ex){LogError(ex);}
+        }
+        
+        private void LoadPortalActionToFoundry(int SpellId)
+        {
+        	try
+        	{
+        		int index = FoundryActionList.FindIndex(x => x.Action == FoundryActionTypes.Portal);
+        		FoundryActionList[index].ToDoList.Clear();
+        		FoundryActionList[index].ToDoList.Add(SpellId);
         	}catch(Exception ex){LogError(ex);}
         }
         

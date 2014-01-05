@@ -45,12 +45,9 @@ namespace GearFoundry
 			internal bool healkits = false;
 			internal bool lockpicks = false;
 			internal bool manastones = false;
-			internal bool potion = false;
-			
+			internal bool potion = false;	
 		}
-		
-		
-		
+			
 		public class ButlerSettings
 		{
 			public List<ValetSuit> SuitList = new List<ValetSuit>();
