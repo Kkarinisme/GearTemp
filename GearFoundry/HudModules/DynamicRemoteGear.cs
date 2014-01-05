@@ -358,7 +358,7 @@ namespace GearFoundry
         		if(mMainSettings.bArmorHudEnabled)
         		{
         			dgrc = new DGRControls();
-        			dgrc.ControlPictureBox.Image = new ACImage(Color.Black);
+                    dgrc.ControlPictureBox.Image = GearGraphics.GearArmorIcon;
         			dgrc.ControlPictureBox.Hit += DGRArmor_Hit;
         			dgrc.ControlName = "Armor";
         			dgrc.ToolTipName = "GearArmor";

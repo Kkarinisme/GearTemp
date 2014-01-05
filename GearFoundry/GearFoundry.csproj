@@ -284,6 +284,15 @@
       <LogicalName>CollectTasks.xml</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\GlendonWoods.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\lstie.gif" />
+    <EmbeddedResource Include="Graphics\MtLetheRecall.gif" />
+    <EmbeddedResource Include="Graphics\tieP1.gif" />
+    <EmbeddedResource Include="Graphics\tieP2.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

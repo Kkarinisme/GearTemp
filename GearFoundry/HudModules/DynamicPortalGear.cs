@@ -881,7 +881,7 @@ namespace GearFoundry
         		if(Core.CharacterFilter.IsSpellKnown(2644))
         		{
         			picon = new PortalIcons();
-        			picon.PortalIcon.Image = new ACImage(Color.Blue);
+                    picon.PortalIcon.Image = CreateIconFromResource("lstie.gif");
         			picon.PortalIcon.Hit += LifestoneTie_Hit;
         			picon.Identifier = "lifestonetie";
         			PortalSpellList.Add(picon);	
@@ -899,7 +899,7 @@ namespace GearFoundry
         		if(Core.CharacterFilter.IsSpellKnown(47))
         		{
         			picon = new PortalIcons();
-        			picon.PortalIcon.Image = new ACImage(Color.MediumPurple);
+        			picon.PortalIcon.Image = CreateIconFromResource("tieP1.gif");
         			picon.PortalIcon.Hit += TiePortalOne_Hit;
         			picon.Identifier = "tieportalone";
         			PortalSpellList.Add(picon);
@@ -926,7 +926,7 @@ namespace GearFoundry
         		if(Core.CharacterFilter.IsSpellKnown(2646))
         		{
         			picon = new PortalIcons();
-        			picon.PortalIcon.Image = new ACImage(Color.MediumPurple);
+        			picon.PortalIcon.Image = CreateIconFromResource("tieP2.gif");
         			picon.PortalIcon.Hit += TiePortalTwo_Hit;
         			picon.Identifier = "tieportaltwo";		
         			PortalSpellList.Add(picon);
@@ -1062,7 +1062,7 @@ namespace GearFoundry
 				if(Core.CharacterFilter.IsSpellKnown(3865))
         		{
         			picon = new PortalIcons();
-        			picon.PortalIcon.Image = new ACImage(Color.Red);
+        			picon.PortalIcon.Image = CreateIconFromResource("GlendonWoods.gif");
         			picon.Identifier = "glendenwood";
         			picon.PortalIcon.Hit += Glendenwood_Hit;
         			RecallSpellList.Add(picon);
@@ -1071,7 +1071,7 @@ namespace GearFoundry
 				if(Core.CharacterFilter.IsSpellKnown(2813))
         		{
         			picon = new PortalIcons();
-        			picon.PortalIcon.Image = new ACImage(Color.Blue);
+        			picon.PortalIcon.Image = CreateIconFromResource("MtLetheRecall.gif");
         			picon.Identifier = "mtlethe";
         			picon.PortalIcon.Hit += MtLethe_Hit;
         			RecallSpellList.Add(picon);
