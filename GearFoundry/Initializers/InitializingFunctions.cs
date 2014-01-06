@@ -86,6 +86,23 @@ namespace GearFoundry
 
                 }
 
+                //if (!File.Exists(remoteGearFilename))
+                //{
+                //    try
+                //    {
+
+                //        string filedefaults = GetResourceTextFile("RemoteGear.xml");
+                //        using (StreamWriter writedefaults = new StreamWriter(remoteGearFilename, true))
+                //        {
+                //            writedefaults.Write(filedefaults);
+                //            writedefaults.Close();
+                //        }
+
+                //    }
+                //    catch (Exception ex) { LogError(ex); }
+
+                //}
+
 
                 if (!File.Exists(mobsFilename))
                 {
@@ -199,7 +216,6 @@ namespace GearFoundry
             xdocRules = XDocument.Load(rulesFilename);
             xdocGenSettings = XDocument.Load(genSettingsFilename);
             xdocSwitchGearSettings = XDocument.Load(switchGearSettingsFilename);
-            
             try
             {  
             	setUpLists(xdocMobs, mSortedMobsList);
@@ -637,34 +653,36 @@ namespace GearFoundry
 
         private void startRoutines()
         {
+            if(!File.Exists(remoteGearFilename)){saveRemoteGearSettings();}
+            LoadRemoteGearSettings();
             if (mMainSettings.bGearSenseHudEnabled)
             {
             	SubscribeLandscapeEvents();
-                RenderLandscapeHud();
+         //       RenderLandscapeHud();
             }
 
             if (mMainSettings.bGearVisection)
             {
             	SubscribeCorpseEvents();
-                RenderCorpseHud();
+          //      RenderCorpseHud();
             }
 
             if (mMainSettings.bGearInspectorEnabled)
             {
             	SubscribeItemEvents();
-            	RenderItemHud();
+           // 	RenderItemHud();
             }
 
             if (mMainSettings.bGearButlerEnabled)
             {
             	SubscribeButlerEvents();
-                RenderButlerHud();
+           //     RenderButlerHud();
             }
 
             if (mMainSettings.bGearTacticianEnabled)
             {
             	SubscribeCombatEvents();
-            	RenderTacticianHud();
+           // 	RenderTacticianHud();
             }
 
             if (mMainSettings.bRemoteGearEnabled)
@@ -676,13 +694,13 @@ namespace GearFoundry
             if (mMainSettings.bPortalGearEnabled)
             {
             	SubscribePortalEvents();
-                RenderPortalGearHud();
+            //    RenderPortalGearHud();
                 //RenderPortal2GearHud();
             }
             if (mMainSettings.bGearTaskerEnabled)
             {
             	SubscribeKillTasks();
-                RenderKillTaskPanel();
+          //      RenderKillTaskPanel();
             }
 
             if (mMainSettings.binventoryCompleteEnabled)
@@ -697,11 +715,11 @@ namespace GearFoundry
             if (mMainSettings.bArmorHudEnabled)
             {
                 WriteToChat("bArmorHudEnabled; I am going to renderarmorhud");
-                RenderArmorHud(); 
+            //    RenderArmorHud(); 
             }
 
             if (mMainSettings.binventoryHudEnabled)
-            { RenderInventoryHud(); }
+          //  { RenderInventoryHud(); }
 
 
 
