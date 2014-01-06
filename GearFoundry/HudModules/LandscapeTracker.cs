@@ -774,8 +774,8 @@ namespace GearFoundry
     			
     			if(col == 0)
     			{
-    				if(lo.ObjectClass != ObjectClass.Container) {FoundryLoadUseAction(FoundryActionTypes.UseLandscape, lo.Id);}
-    				else{}
+    				if(lo.ObjectClass != ObjectClass.Container) {FoundryLoadAction(FoundryActionTypes.UseLandscape, lo.Id);}
+    				else{FoundryLoadAction(FoundryActionTypes.OpenContainer, lo.Id);}
     				InitiateFoundryActions();
     			}
     			if(col == 1)

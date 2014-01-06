@@ -39,6 +39,7 @@ namespace GearFoundry
 				BuildTextCollections();
 				Core.ChatBoxMessage += new EventHandler<ChatTextInterceptEventArgs>(ChatBoxTextMessage);
 				Host.Underlying.Hooks.StatusTextIntercept += new Decal.Interop.Core.IACHooksEvents_StatusTextInterceptEventHandler(StatusTextMessage);	
+				Core.CommandLineText += new EventHandler<ChatParserInterceptEventArgs>(TextCommandReceived);
 				Core.CharacterFilter.Logoff += ChatChannels_LogOff;				
 			
 			}catch(Exception ex){LogError(ex);}
@@ -126,7 +127,7 @@ namespace GearFoundry
 		private void ChatBoxTextMessage(object sender, ChatTextInterceptEventArgs e)
 		{
 			try
-			{
+			{	
 				if(ChatChannelPass.Contains(e.Color)) {return;}
 				else if(bEnableTextFiltering)
 				{
@@ -147,8 +148,24 @@ namespace GearFoundry
 					bEat = true;
 					return;
 				}
-			}catch(Exception ex){LogError(ex);}
-			
+			}catch(Exception ex){LogError(ex);}	
+		}
+		
+		private void TextCommandReceived(object sender, ChatParserInterceptEventArgs e)
+		{
+			try
+			{
+				if(e.Text.Trim().ToLower().Contains("@gf"))
+				{
+					if(e.Text.Trim().ToLower().Contains("window"))
+					{
+						WriteToChat("Current Open Container = " + Core.Actions.OpenedContainer);
+						WriteToChat("Busy State Id = " +Core.Actions.BusyStateId);
+						//WriteToChat("Current Something = " + Core.Decal.Underlying.Hooks.
+					}
+					 
+				}
+			}catch{}
 		}
 			
 	}

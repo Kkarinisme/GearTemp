@@ -566,9 +566,13 @@ namespace GearFoundry
     			LootObject lo = LOList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)InspectorListRow[3]).Text));  //(HudStaticText)CombatHudRow[11]).Text
     			if(col == 0)
     			{  
-    				lo.Move = true; 
-    				ToggleInspectorActions(1);
-	    			InitiateInspectorActionSequence();
+    				lo.MoveToInventory = true;
+					FoundryLoadAction(FoundryActionTypes.MoveToPack, lo.Id);
+					InitiateFoundryActions();
+					
+//    				lo.Move = true; 
+//    				ToggleInspectorActions(1);
+//	    			InitiateInspectorActionSequence();
     			}
     			if(col == 1)
     			{

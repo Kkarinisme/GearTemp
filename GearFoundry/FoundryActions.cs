@@ -44,12 +44,17 @@ namespace GearFoundry
 			Portal,
 			UseLandscape,
 			OpenContainer,
+			MoveToPack,
+			OpenUst,
+			Salvage,
+			
+			
 			Move,
 			Pick,
 			Desiccate,
 			Ring,
 			Cut,
-			Salvage,
+			
 			SalvageCombine,
 			Read,
 			ManaStone,
@@ -80,7 +85,7 @@ namespace GearFoundry
 							fa.ActionDelay = 300;
 							break;
 						case FoundryActionTypes.EquipWand:
-							fa.ActionDelay = 300;
+							fa.ActionDelay = 600;
 							break;
 						case FoundryActionTypes.Magic:
 							fa.ActionDelay = 600;
@@ -93,6 +98,15 @@ namespace GearFoundry
 							break;
 						case FoundryActionTypes.OpenContainer:
 							fa.ActionDelay = 1000;
+							break;
+						case FoundryActionTypes.MoveToPack:
+							fa.ActionDelay = 450;
+							break;
+						case FoundryActionTypes.OpenUst:
+							fa.ActionDelay = 100;
+							break;
+						case FoundryActionTypes.Salvage:
+							fa.ActionDelay = 300;
 							break;
 					}
 					FoundryActionList.Add(fa);
@@ -177,6 +191,7 @@ namespace GearFoundry
 								//Peace out baby
 								else
 								{
+									WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 									SetFoundryAction(i);
 									FoundryChangeCombatState(CombatState.Peace);
 									return;
@@ -192,6 +207,7 @@ namespace GearFoundry
 								//Remove the shield you're wearing
 								else
 								{
+									WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 									SetFoundryAction(i);
 									FoundryUnEquipItem(Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Armor && x.Values(LongValueKey.EquippedSlots) == 0x200000).First().Id);
 									return;
@@ -218,6 +234,7 @@ namespace GearFoundry
 										SelectDefaultCaster();
 									}
 									//Equip that caster
+									WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 									SetFoundryAction(i);
 									FoundryEquipItem(mDynamicPortalGearSettings.nOrbGuid);
 									return;
@@ -233,6 +250,7 @@ namespace GearFoundry
 								//Set magic mode
 								else
 								{
+									WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 									SetFoundryAction(i);
 									FoundryChangeCombatState(CombatState.Magic);
 									return;
@@ -246,6 +264,7 @@ namespace GearFoundry
 								}
 								else
 								{
+									WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 									SetFoundryAction(i);
 									FoundryCastSpell(FoundryActionList[i].ToDoList.First());
 									return;
@@ -277,9 +296,9 @@ namespace GearFoundry
 										FoundryActionList[i].ToDoList.RemoveAt(0);
 										return;	
 									}
-									
+									WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 									SetFoundryAction(i);
-									FoundryUseLandscape(FoundryActionList[i].ToDoList.First());
+									FoundryUseItem(FoundryActionList[i].ToDoList.First());
 									if(FoundryActionList[i].ToDoList.Count > 0)
 									{
 										FoundryActionList[i].ToDoList.RemoveAt(0);
@@ -310,10 +329,106 @@ namespace GearFoundry
 									ClearFoundryAction(i);
 									return;
 								}
-								WriteToChat(DateTime.Now.ToShortTimeString() + " Foundry Opened");
+		
 								SetFoundryAction(i);
-								FoundryUseLandscape(FoundryActionList[i].ToDoList.First());
+								FoundryUseItem(FoundryActionList[i].ToDoList.First());
 								return;
+							case FoundryActionTypes.MoveToPack:
+								//If nothing to do, clear action
+								if(FoundryActionList[i].ToDoList.Count == 0)
+								{
+									ClearFoundryAction(i);
+									return;
+								}
+								//If it's not a valid object, clear it
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
+								}
+								//If it's in your pack, clear it.  Flag for processing if needed.
+								if(FoundryInventoryCheck(FoundryActionList[i].ToDoList.First()))
+								{			
+																	
+									//check to see if it's coming from the looter
+									int loIndex = LOList.FindIndex(x => x.Id == FoundryActionList[i].ToDoList.First());
+									if(loIndex >= 0)
+									{
+										//If it has some process action, load it.
+										if(LOList[loIndex].FoundryProcess != FoundryActionTypes.None)
+										{
+											FoundryLoadAction(LOList[loIndex].FoundryProcess, LOList[loIndex].Id);
+											if(LOList[loIndex].FoundryProcess == FoundryActionTypes.Salvage || LOList[loIndex].FoundryProcess == FoundryActionTypes.SalvageCombine)
+											{
+												FoundryToggleAction(FoundryActionTypes.OpenUst);
+											}
+										}
+									}
+									                              		
+									FoundryActionList[i].ToDoList.RemoveAll(x => Core.WorldFilter.GetInventory().Where(y => y.Id == x).Count() > 0);
+									return;
+								}
+								//If it's not in the current container, pop that puppy open.
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()].Container != Core.Actions.OpenedContainer)
+								{
+									FoundryLoadAction(FoundryActionTypes.OpenContainer, Core.WorldFilter[FoundryActionList[i].ToDoList.First()].Container);
+									return;
+								}
+								if(Core.Actions.CombatMode != CombatState.Peace)
+								{
+									FoundryToggleAction(FoundryActionTypes.Peace);
+									return;
+								}
+								
+								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
+								SetFoundryAction(i);
+								FoundryUseItem(FoundryActionList[i].ToDoList.First());
+								return;
+								
+							case FoundryActionTypes.OpenUst:
+								//Wait for IDs to come back before opening ust.
+								if(FoundryChestCheck(Core.Actions.OpenedContainer))
+								{
+									if(LOList.Any(x => x.Container == Core.Actions.OpenedContainer && x.IOR == IOResult.unknown))
+									{
+										return;
+									}
+								}
+								if(Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "ust").Count() == 0)
+								{
+									WriteToChat("Character has no Ust!  All ust actions disabled.");
+									ClearFoundryAction(i);
+									ClearFoundryAction(FoundryActionList.FindIndex(x => x.Action == FoundryActionTypes.Salvage));
+									ClearFoundryAction(FoundryActionList.FindIndex(x => x.Action == FoundryActionTypes.SalvageCombine));
+									return;
+								}
+								
+								//if(Core.Actions.Underlying.
+								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
+								FoundryUseItem(Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "ust").First().Id);
+								//TODO:  Remove this after you figure out how to see where the salvage panel is.  It's weaksauce.
+								ClearFoundryAction(i);
+								return;
+								
+							case FoundryActionTypes.Salvage:
+								if(FoundryActionList[i].ToDoList.Count == 0)
+								{
+									ClearFoundryAction(i);
+									return;
+								}
+								//Remove the item if it's not in invenotry
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList.First()))
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+								}
+								
+								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
+								SetFoundryAction(i);
+								List<int> salv = new List<int>();
+								salv.Add(FoundryActionList[i].ToDoList.First());
+								FoundrySalvgeAdd(salv);
+								return;
+								
 
 						}
 					}
@@ -335,10 +450,20 @@ namespace GearFoundry
 			FoundryActionList[i].ActionStartTime = DateTime.Now;
 		}
 		
-		private void ToggleFoundryAction(FoundryActionTypes action)
+		private void FoundryToggleAction(FoundryActionTypes action)
 		{
 			FoundryActionList.Find(x => x.Action == action).FireAction = true;
 		}
+		
+		private bool FoundryInventoryCheck(int id)
+		{
+			try
+			{
+				if(Core.WorldFilter.GetInventory().Any(x => x.Id == id)) {return true;}
+				else {return false;}
+			}catch(Exception ex){LogError(ex); return false;}
+		}
+		
 		
 		
 		

@@ -33,11 +33,20 @@ namespace GearFoundry
 			internal bool Listen = false;
 			internal bool ActionTarget = false;
 			internal bool Move = false;
-			internal bool Process = false;
+			
 			internal bool Open = false;
 			internal bool NewObject = true;
 			internal bool IsContainer = false;
 			internal bool StorageChange = false;
+			
+			
+			
+			internal bool MoveToInventory = false;
+			internal bool Process = false;
+			internal FoundryActionTypes FoundryProcess = FoundryActionTypes.None;
+			
+			
+			
 			
 			internal IAction ProcessAction = IAction.None;
 			

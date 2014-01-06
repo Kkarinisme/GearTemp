@@ -85,7 +85,7 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void FoundryUseLandscape(int Id)
+		private void FoundryUseItem(int Id)
 		{
 			try
 			{
@@ -93,8 +93,22 @@ namespace GearFoundry
 				return;
 			}catch(Exception ex){LogError(ex);}
 		}
+		
+		private void FoundrySalvgeAdd(List<int> salvlist)
+		{
+			try
+			{
+				foreach(int item in salvlist)
+				{
+					Core.Actions.SalvagePanelAdd(item);
+				}
+								
+				Core.Actions.SalvagePanelSalvage();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
 			
-		private void FoundryLoadUseAction(FoundryActionTypes action, int Id)
+		private void FoundryLoadAction(FoundryActionTypes action, int Id)
 		{
 			try
 			{
@@ -104,15 +118,19 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void FoundryLoadOpenContainerAction(int ContId)
+		
+		private bool FoundryChestCheck(int ChestID)
 		{
 			try
 			{
-				int index =  FoundryActionList.FindIndex(x => x.Action == FoundryActionTypes.OpenContainer);
-				FoundryActionList[index].FireAction = true;
-				FoundryActionList[index].ToDoList.Add(ContId);
+				if(ChestID == 0) {return false;}
 				
-			}catch(Exception ex){LogError(ex);}
+				string containername = Core.WorldFilter[ChestID].Name;
+				
+				if(containername.Contains("Chest") || containername.Contains("Vault") ||  containername.Contains("Reliquary")) {return true;}
+				else{return false;}
+				
+			}catch(Exception ex){LogError(ex);return false;}
 		}
 				
 

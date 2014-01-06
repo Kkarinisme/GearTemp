@@ -541,37 +541,61 @@ namespace GearFoundry
 				switch(IOItem.IOR)
 				{
 					case IOResult.trophy:
-					case IOResult.rule:
 					case IOResult.rare:
+					case IOResult.rule:
+						if(IOItem.Aetheriacheck) {IOItem.FoundryProcess = FoundryActionTypes.Reveal;}
 						IOItem.InspectList = true;
 						break;
 					case IOResult.salvage:
 						IOItem.InspectList = true;
-						IOItem.ProcessAction = IAction.Salvage;
+						IOItem.FoundryProcess = FoundryActionTypes.Salvage;
+						//IOItem.ProcessAction = IAction.Salvage;
 						break;
 					case IOResult.dessicate:
 						IOItem.InspectList = true;
-						IOItem.ProcessAction = IAction.Desiccate;
+						IOItem.FoundryProcess = FoundryActionTypes.Desiccate;
+						//IOItem.ProcessAction = IAction.Desiccate;
 						break;
 					case IOResult.manatank:
 						IOItem.InspectList = true;
-						IOItem.ProcessAction = IAction.ManaStone;
+						IOItem.FoundryProcess = FoundryActionTypes.ManaStone;
+						//IOItem.ProcessAction = IAction.ManaStone;
 						break;
 					case IOResult.spell:
 						IOItem.InspectList = true;
-						IOItem.ProcessAction = IAction.Read;
+						IOItem.FoundryProcess = FoundryActionTypes.Read;
+						//IOItem.ProcessAction = IAction.Read;
 						break;
 					case IOResult.val:
 						IOItem.InspectList = true;
-						if(GISettings.SalvageHighValue) {IOItem.ProcessAction = IAction.Salvage;}
+						if(GISettings.SalvageHighValue) 
+						{
+							IOItem.FoundryProcess = FoundryActionTypes.Salvage;
+							//IOItem.ProcessAction = IAction.Salvage;
+						}
 						break;
 				}
+				
+				if(IOItem.ObjectClass == ObjectClass.Key)
+				{
+					IOItem.FoundryProcess = FoundryActionTypes.Ring;
+				}
+				if(IOItem.Name.ToLower() == "pyreal mote" || IOItem.Name.ToLower() == "pyreal sliver" || IOItem.Name.ToLower() == "pyreal nugget")
+				{
+					IOItem.FoundryProcess = FoundryActionTypes.MoteCombine;
+				}
+				
 				if(GISettings.AutoLoot)
 				{
-					IOItem.Move = true;
-					ToggleInspectorActions(1);
-					InitiateInspectorActionSequence();
+					IOItem.MoveToInventory = true;
+					FoundryLoadAction(FoundryActionTypes.MoveToPack, IOItem.Id);
+					InitiateFoundryActions();
+										
+//					IOItem.Move = true;
+//					ToggleInspectorActions(1);
+//					InitiateInspectorActionSequence();
 				}
+				
 				IOItem.Exclude = true;
 				UpdateItemHud();
 				return;

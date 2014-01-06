@@ -610,7 +610,7 @@ namespace GearFoundry
     			
     			if(col == 0)
     			{
-    				FoundryLoadOpenContainerAction(co.Id);
+    				FoundryLoadAction(FoundryActionTypes.OpenContainer, co.Id);
     				InitiateFoundryActions();
     			}
     			if(col == 1)
