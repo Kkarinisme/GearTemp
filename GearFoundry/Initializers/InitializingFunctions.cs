@@ -223,8 +223,11 @@ namespace GearFoundry
                 InitSalvageList();
                 InitRules();
                 setUpSettingsList();
+                LoadRemoteGearSettings();
                                 
             }
+            
+            
             catch (Exception ex) { LogError(ex); }
         }
 
@@ -653,54 +656,43 @@ namespace GearFoundry
 
         private void startRoutines()
         {
-            if(!File.Exists(remoteGearFilename)){saveRemoteGearSettings();}
-            LoadRemoteGearSettings();
             if (mMainSettings.bGearSenseHudEnabled)
             {
             	SubscribeLandscapeEvents();
-         //       RenderLandscapeHud();
             }
 
             if (mMainSettings.bGearVisection)
             {
             	SubscribeCorpseEvents();
-          //      RenderCorpseHud();
             }
 
             if (mMainSettings.bGearInspectorEnabled)
             {
             	SubscribeItemEvents();
-           // 	RenderItemHud();
             }
 
             if (mMainSettings.bGearButlerEnabled)
             {
             	SubscribeButlerEvents();
-           //     RenderButlerHud();
             }
 
             if (mMainSettings.bGearTacticianEnabled)
             {
             	SubscribeCombatEvents();
-           // 	RenderTacticianHud();
             }
 
             if (mMainSettings.bRemoteGearEnabled)
             {
             	RenderDynamicRemoteGear();
-                //RenderRemoteGearHud();
             }
 
             if (mMainSettings.bPortalGearEnabled)
             {
             	SubscribePortalEvents();
-            //    RenderPortalGearHud();
-                //RenderPortal2GearHud();
             }
             if (mMainSettings.bGearTaskerEnabled)
             {
             	SubscribeKillTasks();
-          //      RenderKillTaskPanel();
             }
 
             if (mMainSettings.binventoryCompleteEnabled)
@@ -715,12 +707,9 @@ namespace GearFoundry
             if (mMainSettings.bArmorHudEnabled)
             {
                 WriteToChat("bArmorHudEnabled; I am going to renderarmorhud");
-            //    RenderArmorHud(); 
             }
 
             if (mMainSettings.binventoryHudEnabled)
-          //  { RenderInventoryHud(); }
-
 
 
             if (mMainSettings.binventoryBurdenEnabled)
@@ -749,6 +738,8 @@ namespace GearFoundry
             {
                 SubscribeChatEvents(); 
             }
+            
+            SetRenderState();
         }
 
 

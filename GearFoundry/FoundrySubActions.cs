@@ -132,6 +132,11 @@ namespace GearFoundry
 				
 			}catch(Exception ex){LogError(ex);return false;}
 		}
+		
+		private void FoundryCraftItem(int ToolId, int TargetId)
+		{
+			
+		}
 				
 
 	}

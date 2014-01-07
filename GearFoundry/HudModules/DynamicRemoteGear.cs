@@ -36,78 +36,70 @@ namespace GearFoundry
         private HudFixedLayout DynamicGearRemoteLayout = null;
         private HudStaticText DynamicGearRemoteClock = null;
 
-        XDocument xdocRemoteGear = null;
-
         GearRemoteSettings mGearRemoteSettings = new GearRemoteSettings();
 
-            internal class GearRemoteSettings
+        public class GearRemoteSettings
+        {
+            public bool GearTacticianRendered = false;
+            public bool GearSenseRendered = false;
+            public bool GearVisectionRendered = false;
+            public bool GearTaskerRendered = false;
+            public bool GearButlerRendered = false;
+            public bool GearInspectorRendered = false;
+            public bool GearPortalRendered = false;
+            public bool GearSwitchHRendered = false;
+            public bool GearSwitchVRendered = false;
+            public bool GearInventoryRendered = false;
+            public bool GearArmorRendered = false;
+        }
+
+        private void LoadRemoteGearSettings()
+        {
+            try
             {
-                internal bool GearTacticianRendered = false;
-                internal bool GearSenseRendered = false;
-                internal bool GearVisectionRendered = false;
-                internal bool GearTaskerRendered = false;
-                internal bool GearButlerRendered = false;
-                internal bool GearInspectorRendered = false;
-                internal bool GearPortalRendered = false;
-                internal bool GearSwitchHRendered = false;
-                internal bool GearSwitchVRendered = false;
-                internal bool GearInventoryRendered = false;
-                internal bool GearArmorRendered = false;
+        
+	         	if(!File.Exists(remoteGearFilename))
+            	{
+            		saveRemoteGearSettings();
+            	}
+            	
+            	using (XmlReader reader = XmlReader.Create(remoteGearFilename))
+				{	
+						XmlSerializer serializer = new XmlSerializer(typeof(GearRemoteSettings));
+						mGearRemoteSettings = (GearRemoteSettings)serializer.Deserialize(reader);
+						reader.Close();
+				}
             }
-
-            private void LoadRemoteGearSettings()
-            {
-                try{
-                xdocRemoteGear = new XDocument();
-                xdocRemoteGear = XDocument.Load(remoteGearFilename);
-                XElement el = xdocRemoteGear.Root.Element("Setting");
-
-                mGearRemoteSettings.GearTacticianRendered = Convert.ToBoolean(el.Element("CombatHudVisible").Value);
-                mGearRemoteSettings.GearSenseRendered = Convert.ToBoolean(el.Element("LandscapeHudVisible").Value);
-                mGearRemoteSettings.GearVisectionRendered = Convert.ToBoolean(el.Element("CorpseHudVisible").Value);
-                mGearRemoteSettings.GearTaskerRendered = Convert.ToBoolean(el.Element("KillTaskGearVisible").Value);
-                mGearRemoteSettings.GearButlerRendered = Convert.ToBoolean(el.Element("ButlerHudVisible").Value);
-                mGearRemoteSettings.GearInspectorRendered = Convert.ToBoolean(el.Element("InspectorHudVisible").Value);
-                mGearRemoteSettings.GearPortalRendered = Convert.ToBoolean(el.Element("PortalGearVisible").Value);
-                mGearRemoteSettings.GearSwitchVRendered = Convert.ToBoolean(el.Element("QuickSlotsvVisible").Value);
-                mGearRemoteSettings.GearSwitchHRendered = Convert.ToBoolean(el.Element("QuickSlotshVisible").Value);
-                mGearRemoteSettings.GearInventoryRendered = Convert.ToBoolean(el.Element("InventoryHudVisible").Value);
-                mGearRemoteSettings.GearArmorRendered = Convert.ToBoolean(el.Element("ArmorHudVisible").Value);
-                }
-                catch (Exception ex) { LogError(ex); }
- 
-
-            }
+            catch (Exception ex) { LogError(ex); }
+        }
 
 
-            private void SetRenderState()
-            {
-                //Called from GearFoundry Start Routines to determine huds to make visible
-                //Load saved Xdoc into mGearRemoteSettings values
-               try{
-                if (mGearRemoteSettings.GearTacticianRendered) { RenderTacticianHud(); }
-                if (mGearRemoteSettings.GearSenseRendered) { RenderLandscapeHud(); }
-                if (mGearRemoteSettings.GearVisectionRendered) { RenderCorpseHud(); }
-                if (mGearRemoteSettings.GearTaskerRendered) { RenderKillTaskPanel(); }
-                if (mGearRemoteSettings.GearButlerRendered) { RenderButlerHud(); }
-                if (mGearRemoteSettings.GearInspectorRendered) { RenderItemHud(); }
-                if (mGearRemoteSettings.GearPortalRendered) { RenderPortalGearHud(); }
-                if (mGearRemoteSettings.GearSwitchHRendered) { RenderHorizontalQuickSlots(); }
-                if (mGearRemoteSettings.GearSwitchVRendered) { RenderVerticalQuickSlots(); }
-                if (mGearRemoteSettings.GearInventoryRendered) { RenderInventoryHud(); }
-               if (mGearRemoteSettings.GearArmorRendered) { RenderArmorHud(); }
-               }
-               catch (Exception ex) { LogError(ex); }
- 
-
-            }
-
-
-            //Call on CharacterLogoff from GearRemote
-            private void SaveGearViewSettings()
-            {
-                try{
-                if (TacticianHudView != null) mGearRemoteSettings.GearTacticianRendered = true;
+        private void SetRenderState()
+        {
+            //Called from GearFoundry Start Routines to determine huds to make visible
+            //Load saved Xdoc into mGearRemoteSettings values
+           	try
+           	{
+	            if (mGearRemoteSettings.GearTacticianRendered) { RenderTacticianHud(); }
+	            if (mGearRemoteSettings.GearSenseRendered) { RenderLandscapeHud(); }
+	            if (mGearRemoteSettings.GearVisectionRendered) { RenderCorpseHud(); }
+	            if (mGearRemoteSettings.GearTaskerRendered) { RenderKillTaskPanel(); }
+	            if (mGearRemoteSettings.GearButlerRendered) { RenderButlerHud(); }
+	            if (mGearRemoteSettings.GearInspectorRendered) { RenderItemHud(); }
+	            if (mGearRemoteSettings.GearPortalRendered) { RenderPortalGearHud(); }
+	            if (mGearRemoteSettings.GearSwitchHRendered) { RenderHorizontalQuickSlots(); }
+	            if (mGearRemoteSettings.GearSwitchVRendered) { RenderVerticalQuickSlots(); }
+	            if (mGearRemoteSettings.GearInventoryRendered) { RenderInventoryHud(); }
+	           	if (mGearRemoteSettings.GearArmorRendered) { RenderArmorHud(); }
+           }
+           catch (Exception ex) { LogError(ex); }
+        }
+        
+        private void UpdateRemoteGearSettings()
+        {
+        	try
+        	{
+        		if (TacticianHudView != null) mGearRemoteSettings.GearTacticianRendered = true;
                 if (LandscapeHudView != null) mGearRemoteSettings.GearSenseRendered = true;
                 if (CorpseHudView != null) mGearRemoteSettings.GearVisectionRendered = true;
                 if (TaskHudView != null) mGearRemoteSettings.GearTaskerRendered = true;
@@ -118,38 +110,28 @@ namespace GearFoundry
                 if (quickieshHud != null) mGearRemoteSettings.GearSwitchHRendered = true;
                 if (InventoryHudView != null) mGearRemoteSettings.GearInventoryRendered = true;
                 if (ArmorHudView != null) mGearRemoteSettings.GearArmorRendered = true;
-                saveRemoteGearSettings();
-                }
-                catch (Exception ex) { LogError(ex); }
- 
-              }
+                
+                saveRemoteGearSettings();   
+        	}catch(Exception ex){LogError(ex);}
+        }
 
-
-            private void saveRemoteGearSettings()
+        private void saveRemoteGearSettings()
+        {
+            try
             {
-                try
-                {
-                    xdocRemoteGear = new XDocument(new XElement("Settings"));
-                    xdocRemoteGear.Element("Settings").Add(new XElement("Setting",
-                            new XElement("CorpseHudVisible", mGearRemoteSettings.GearVisectionRendered),
-                             new XElement("LandscapeHudVisible", mGearRemoteSettings.GearSenseRendered),
-                             new XElement("InspectorHudVisible", mGearRemoteSettings.GearInspectorRendered),
-                             new XElement("ButlerHudVisible", mGearRemoteSettings.GearButlerRendered),
-                             new XElement("CombatHudVisible", mGearRemoteSettings.GearTacticianRendered),
-                             new XElement("PortalGearVisible", mGearRemoteSettings.GearPortalRendered),
-                             new XElement("KillTaskGearVisible", mMainSettings.bGearTaskerEnabled),
-                             new XElement("QuickSlotsvVisible", mGearRemoteSettings.GearSwitchVRendered),
-                             new XElement("QuickSlotshVisible", mGearRemoteSettings.GearSwitchHRendered),
-                             new XElement("InventoryHudVisible", mGearRemoteSettings.GearInventoryRendered),
-                            new XElement("ArmorHudVisible", mGearRemoteSettings.GearArmorRendered)));
-                }
-                catch (Exception ex) { LogError(ex); }
-
+                if(File.Exists(remoteGearFilename))
+				{
+                	File.Delete(remoteGearFilename);
+				}	
+				using (XmlWriter writer = XmlWriter.Create(remoteGearFilename))
+				{
+					XmlSerializer serializer2 = new XmlSerializer(typeof(GearRemoteSettings));
+		   			serializer2.Serialize(writer, mGearRemoteSettings);
+		   			writer.Close();
+				}
             }
-        
-
-      
-
+            catch (Exception ex) { LogError(ex); }
+        }
 
         private void RenderDynamicRemoteGear()
         {
@@ -219,8 +201,8 @@ namespace GearFoundry
         	try
         	{
         		MasterTimer.Tick -= DynamicGearClock;
-                SaveGearViewSettings();
         		DestroyDGRControls();
+        		
            
 	            DynamicGearRemoteClock.Dispose();
 	            DynamicGearRemoteLayout.Dispose();
@@ -243,7 +225,8 @@ namespace GearFoundry
                 else
                 {
                 	RenderButlerHud();
-                }          		
+                }    
+				UpdateRemoteGearSettings();                
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -259,7 +242,7 @@ namespace GearFoundry
                 {
                 	DisposeCorpseHud();
                 }
-       		
+       			UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -275,7 +258,7 @@ namespace GearFoundry
                 {
                 	RenderItemHud();
                 }
-       		
+       			UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -291,7 +274,7 @@ namespace GearFoundry
                 {
                     RenderLandscapeHud();
                 }
-       		
+       			UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -307,7 +290,7 @@ namespace GearFoundry
                 {
                     RenderTacticianHud();
                 }
-       		
+       			UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -323,7 +306,7 @@ namespace GearFoundry
                 {
                     RenderInventoryHud();		
                 }
-       		
+       			UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -339,6 +322,7 @@ namespace GearFoundry
         		{
         			DisposeArmorHud();
         		}
+        		UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
         
@@ -354,7 +338,7 @@ namespace GearFoundry
                 {
                 	DisposeVerticalQuickSlots();
                 }
-       		
+       			UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
              
@@ -370,7 +354,7 @@ namespace GearFoundry
                 {
                 	DisposeHorizontalQuickSlots();
                 }
-       		
+       			UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
 
@@ -386,7 +370,7 @@ namespace GearFoundry
                 {
                 	DisposePortalGearHud();
                 }
-       		
+                UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
 
@@ -402,7 +386,7 @@ namespace GearFoundry
             	{
             		RenderKillTaskPanel();
             	}
-       		
+            	UpdateRemoteGearSettings();
         	}catch(Exception ex){LogError(ex);}
         }
         

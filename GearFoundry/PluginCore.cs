@@ -70,8 +70,7 @@ namespace GearFoundry
 			try 
 			{	
 				fileservice = (FileService)Core.FileService;					
-				Core.CharacterFilter.LoginComplete += OnCharacterFilterLoginCompleted;	
-				
+				Core.CharacterFilter.LoginComplete += OnCharacterFilterLoginCompleted;				
 		        
 			} catch (Exception ex) {LogError(ex);}
 		}
@@ -128,11 +127,7 @@ namespace GearFoundry
             if (ArmorHudView != null) { DisposeArmorHud(); }
 
         }
-        
-        
-
-
-
+             
 		public void EndEvents()
 		{
 			try {

@@ -22,6 +22,7 @@ namespace GearFoundry
 		private List<FoundryAction> FoundryActionList = new List<FoundryAction>();
 		private System.Windows.Forms.Timer FoundryActionTimer = new System.Windows.Forms.Timer();
 		private bool FoundryActionsPending = false;
+		private FoundryCraftTools mFoundryToolSet = new FoundryCraftTools();
 		
 		internal class FoundryAction
 		{
@@ -45,8 +46,17 @@ namespace GearFoundry
 			UseLandscape,
 			OpenContainer,
 			MoveToPack,
+			Read,
+			Reveal,
+			
+			ManaStone,
+			Dessicate,
+			
+			MoteCombine,
+			
 			OpenUst,
 			Salvage,
+			SalvageCombine,
 			
 			
 			Move,
@@ -55,14 +65,18 @@ namespace GearFoundry
 			Ring,
 			Cut,
 			
-			SalvageCombine,
-			Read,
-			ManaStone,
-			Reveal,
-			MoteCombine,
+
 			Stack,
 			Trade,
 			Sell
+		}
+		
+		internal class FoundryCraftTools
+		{
+			internal int UstId = 0;
+			internal int CarvingToolId = 0; 
+		
+			
 		}
 
 		private void SubscribeFoundryActions()
@@ -102,6 +116,9 @@ namespace GearFoundry
 						case FoundryActionTypes.MoveToPack:
 							fa.ActionDelay = 450;
 							break;
+						case FoundryActionTypes.Read:
+							fa.ActionDelay = 850;
+							break;	
 						case FoundryActionTypes.OpenUst:
 							fa.ActionDelay = 100;
 							break;
@@ -115,7 +132,19 @@ namespace GearFoundry
 				Core.CharacterFilter.SpellCast += FoundryActionsSpellCastComplete;
 				Core.CharacterFilter.Logoff += FoundryActionsLogOff;
 				FoundryActionTimer.Interval = 150;
-				FoundryActionTimer.Tick += FoundryActionInitiator;				
+				FoundryActionTimer.Tick += FoundryActionInitiator;	
+				
+				try
+				{
+					mFoundryToolSet.UstId = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "ust").First().Id;
+				}catch(Exception ex){LogError(ex);}
+				try
+				{
+					
+				}catch(Exception ex){LogError(ex);}
+
+
+								
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -333,6 +362,7 @@ namespace GearFoundry
 								SetFoundryAction(i);
 								FoundryUseItem(FoundryActionList[i].ToDoList.First());
 								return;
+								
 							case FoundryActionTypes.MoveToPack:
 								//If nothing to do, clear action
 								if(FoundryActionList[i].ToDoList.Count == 0)
@@ -377,6 +407,53 @@ namespace GearFoundry
 								if(Core.Actions.CombatMode != CombatState.Peace)
 								{
 									FoundryToggleAction(FoundryActionTypes.Peace);
+									return;
+								}
+								
+								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
+								SetFoundryAction(i);
+								FoundryUseItem(FoundryActionList[i].ToDoList.First());
+								return;
+								
+							case FoundryActionTypes.Read:
+								if(FoundryActionList[i].ToDoList.Count == 0)
+								{
+									ClearFoundryAction(i);
+									return;
+								}
+								//If it's not a valid object, clear it
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
+								}
+								//If it's not in your inventory, clear it.
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList.First()))
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
+								}
+								
+								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
+								SetFoundryAction(i);
+								FoundryUseItem(FoundryActionList[i].ToDoList.First());
+								return;
+								
+							case FoundryActionTypes.Reveal:
+								if(FoundryActionList[i].ToDoList.Count == 0)
+								{
+									ClearFoundryAction(i);
+									return;
+								}
+								//If it's not a valid object, clear it
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
+								}
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList.First()))
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
 									return;
 								}
 								
