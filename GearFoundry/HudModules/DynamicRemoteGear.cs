@@ -89,8 +89,8 @@ namespace GearFoundry
 	            if (mGearRemoteSettings.GearPortalRendered) { RenderPortalGearHud(); }
 	            if (mGearRemoteSettings.GearSwitchHRendered) { RenderHorizontalQuickSlots(); }
 	            if (mGearRemoteSettings.GearSwitchVRendered) { RenderVerticalQuickSlots(); }
-	            if (mGearRemoteSettings.GearInventoryRendered) { RenderInventoryHud(); }
-	         	if (mGearRemoteSettings.GearArmorRendered) { RenderArmorHud(); }
+	        //    if (mGearRemoteSettings.GearInventoryRendered) { RenderInventoryHud(); }
+	        // 	if (mGearRemoteSettings.GearArmorRendered) { RenderArmorHud(); }
            }
            catch (Exception ex) { LogError(ex); }
         }
