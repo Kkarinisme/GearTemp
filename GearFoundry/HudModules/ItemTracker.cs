@@ -389,21 +389,14 @@ namespace GearFoundry
     	private void ItemHudUstButton_Hit(object sender, EventArgs e)
     	{
     		try
-    		{
-    			if(ActionsPending)
-    			{
-    				WriteToChat("Wait for it!");
-    				return;
-    			}
-    			
+    		{    			
     			foreach(LootObject lo in  LOList.FindAll(x => x.ProcessList).ToList())
     			{
-    				lo.Process = true;
+    				FoundryLoadAction(lo.FoundryProcess, lo.Id);
     			}
-    			ToggleInspectorActions(2);
-    			InitiateInspectorActionSequence();
+
+    			InitiateFoundryActions();
     			WriteToChat("Prosessing List.");
-    			
     		}catch(Exception ex){LogError(ex);}
     	}    
     	
@@ -416,9 +409,8 @@ namespace GearFoundry
     			LootObject lo = LOList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)UstListAcessor[3]).Text));
     			if(col == 0)
     			{  
-    				lo.Process = true;
-    				ToggleInspectorActions(2);
-	    			InitiateInspectorActionSequence();
+    				FoundryLoadAction(lo.FoundryProcess, lo.Id);
+    				InitiateFoundryActions();
     			}
     			if(col == 1)
     			{
@@ -429,7 +421,6 @@ namespace GearFoundry
     			{    				
     				lo.ProcessList = false;
     			}
-    			
     			UpdateItemHud();
     			
     		}catch(Exception ex){LogError(ex);}
@@ -566,13 +557,8 @@ namespace GearFoundry
     			LootObject lo = LOList.Find(x => x.Id == Convert.ToInt32(((HudStaticText)InspectorListRow[3]).Text));  //(HudStaticText)CombatHudRow[11]).Text
     			if(col == 0)
     			{  
-    				lo.MoveToInventory = true;
 					FoundryLoadAction(FoundryActionTypes.MoveToPack, lo.Id);
 					InitiateFoundryActions();
-					
-//    				lo.Move = true; 
-//    				ToggleInspectorActions(1);
-//	    			InitiateInspectorActionSequence();
     			}
     			if(col == 1)
     			{
@@ -582,7 +568,6 @@ namespace GearFoundry
     			if(col == 2)
     			{    				
     				lo.InspectList = false;
-    				lo.Move = false;
     			}
 				UpdateItemHud();
 			}
@@ -624,9 +609,9 @@ namespace GearFoundry
 	    			if(LOListAcessor.ProcessList)
 		    		{
 	    				ItemHudListRow = ItemHudUstList.AddRow();
-	    				if(LOListAcessor.ProcessAction == IAction.Salvage) {((HudPictureBox)ItemHudListRow[0]).Image = GearGraphics.ItemUstIcon;}
-	    				else if(LOListAcessor.ProcessAction == IAction.Desiccate) {((HudPictureBox)ItemHudListRow[0]).Image = GearGraphics.ItemDesiccantIcon;}
-	    				else if(LOListAcessor.ProcessAction == IAction.ManaStone) {((HudPictureBox)ItemHudListRow[0]).Image = GearGraphics.ItemManaStoneIcon;}
+	    				if(LOListAcessor.FoundryProcess == FoundryActionTypes.Salvage) {((HudPictureBox)ItemHudListRow[0]).Image = GearGraphics.ItemUstIcon;}
+	    				else if(LOListAcessor.FoundryProcess == FoundryActionTypes.Desiccate) {((HudPictureBox)ItemHudListRow[0]).Image = GearGraphics.ItemDesiccantIcon;}
+	    				else if(LOListAcessor.FoundryProcess == FoundryActionTypes.ManaStone) {((HudPictureBox)ItemHudListRow[0]).Image = GearGraphics.ItemManaStoneIcon;}
 	    				else {((HudPictureBox)ItemHudListRow[0]).Image = LOListAcessor.Icon;}
 	    				if(GISettings.RenderMini) {((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.MiniIORString();}
 	    				else{((HudStaticText)ItemHudListRow[1]).Text = LOListAcessor.IORString() + LOListAcessor.Name;}
@@ -634,13 +619,34 @@ namespace GearFoundry
                         ((HudPictureBox)ItemHudListRow[2]).Image = GearGraphics.RemoveCircle;	
                         ((HudStaticText)ItemHudListRow[3]).Text = LOListAcessor.Id.ToString();
 		    		}
-	    			
-	    			
 	    	    }
 	   
 	
 	    	}catch(Exception ex){LogError(ex);}
 	    	
 	    }
+	    
+	    private void SynchWithLOList(FoundryActionTypes action, int ItemId)
+	    {
+	    	try
+	    	{
+	    		int loIndex = LOList.FindIndex(x => x.Id == ItemId);
+	    		if(loIndex < 0) {return;}
+	    		if(LOList[loIndex].InspectList)
+	    		{
+	    			if(Core.WorldFilter.GetInventory().Where(x => x.Id == ItemId).Count() > 0)
+	    			{
+	    				LOList[loIndex].InspectList = false;
+	    			}
+	    		}
+	    		if(LOList[loIndex].FoundryProcess != FoundryActionTypes.None)
+	    		{
+	    			LOList[loIndex].ProcessList = true;
+	    			if(GISettings.AutoProcess){FoundryLoadAction(LOList[loIndex].FoundryProcess, LOList[loIndex].Id);}
+	    		}
+	    		UpdateItemHud();
+	    	}catch(Exception ex){LogError(ex);}
+	    }
+
 	}
 }

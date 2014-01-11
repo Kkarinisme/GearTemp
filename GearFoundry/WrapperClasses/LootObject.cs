@@ -31,28 +31,12 @@ namespace GearFoundry
 			
 			internal bool Exclude = false;
 			internal bool Listen = false;
-			internal bool ActionTarget = false;
-			internal bool Move = false;
-			
-			internal bool Open = false;
-			internal bool NewObject = true;
-			internal bool IsContainer = false;
-			internal bool StorageChange = false;
-			
-			
-			
-			internal bool MoveToInventory = false;
-			internal bool Process = false;
+					
+//			internal FoundryActionTypes FoundryMove = FoundryActionTypes.None;
 			internal FoundryActionTypes FoundryProcess = FoundryActionTypes.None;
-			
-			
-			
-			
-			internal IAction ProcessAction = IAction.None;
-			
-			internal DateTime LastActionTime = DateTime.MinValue;
-			internal DateTime StorageChangeTime = DateTime.MinValue;
-			
+			internal IOResult IOR = IOResult.unknown;
+			public string rulename;
+						
 //			public List<pale> Palettes = new List<pale>();
 			
 //			public class pale
@@ -88,9 +72,6 @@ namespace GearFoundry
 			public bool BValue(Decal.Adapter.Wrappers.BoolValueKey eval) {
 				return wo.Values(eval); 
 			}
-			
-			internal IOResult IOR = IOResult.unknown;
-			public string rulename;
 			
 //			public string model
 //			{

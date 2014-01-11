@@ -465,21 +465,22 @@ namespace GearFoundry
 			try
 			{				
 				LootObject IOItem = LOList.Find(x => x.Id == id);
+				//TODO:  Repair  cannibalize
 				
-				if(IOItem.IOR != IOResult.rule && !IOItem.BValue(BoolValueKey.Retained))
-				{
-					IOItem.IOR = IOResult.salvage;
-					IOItem.ProcessList = true;
-					IOItem.ProcessAction = IAction.Salvage;
-					
-					if(GISettings.AutoProcess)
-					{
-						IOItem.Process = true;
-						ToggleInspectorActions(2);
-						InitiateInspectorActionSequence();
-					}
-					UpdateItemHud();
-				}	
+//				if(IOItem.IOR != IOResult.rule && !IOItem.BValue(BoolValueKey.Retained))
+//				{
+//					IOItem.IOR = IOResult.salvage;
+//					IOItem.ProcessList = true;
+//					IOItem.ProcessAction = IAction.Salvage;
+//					
+//					if(GISettings.AutoProcess)
+//					{
+//						IOItem.Process = true;
+//						ToggleInspectorActions(2);
+//						InitiateInspectorActionSequence();
+//					}
+//					UpdateItemHud();
+//				}	
 				return;
 
 			}catch(Exception ex){LogError(ex);}
@@ -497,7 +498,6 @@ namespace GearFoundry
 				{
 					maidworking = true;
 					WriteToChat("Maid salvage combining started.");
-					MaidUseUst();
 					MaidTimer.Interval = 333;
 					MaidTimer.Start();
 					MaidTimer.Tick += MaidTimerCombine;
@@ -515,7 +515,8 @@ namespace GearFoundry
 			{
 				if(MaidCombineQueue.Count > 0) 
 				{
-					MaidCombineAction();
+					//TODO:  Make made use Foundry.
+					//MaidCombineAction();
 					return;
 				}
 				else
@@ -527,186 +528,158 @@ namespace GearFoundry
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
-		
-		private class PartialBags
-		{
-			public int SalvBagID;
-			public int SalvBagUses;
-			public int SalvBagMat;
-			public double SalvBagWork;
-			public string ruleid;
-		}
-		
+				
 		//Irq:  Confirmed Functional...
 		
-		private void CombineSalvageBags()
-		{
-			try
-			{
-				//No sense trying to salvage if you can't....
-				List<WorldObject> UstSearch = Core.WorldFilter.GetInventory().ToList();				
-				WorldObject MyUst = UstSearch[UstSearch.FindIndex(x => x.Name == "Ust")];
-				
-				if (MyUst == null)
-				{
-					WriteToChat("No Ust Found.");
-					return;
-				} 
-
-				//refresh the list of salvagebags in inventory
-				ScanInventoryForSalvageBags();
-
-				//Create a list of partial bags of salvage from inventory
-				var partbagslinq = from bags in InventorySalvage
-								  where bags.Values(LongValueKey.UsesRemaining) < 100
-								  select new PartialBags{ SalvBagID = bags.Id, SalvBagUses = bags.Values(LongValueKey.UsesRemaining), 
-					              SalvBagWork = bags.Values(DoubleValueKey.SalvageWorkmanship), SalvBagMat = bags.Values(LongValueKey.Material)};
-				
-				PartialBags[] partbags = partbagslinq.ToArray();
-				
-				
-				//Build combine rules for all partial bags in inventory
-				foreach(PartialBags pb in partbags)
-				{
-					var materialrules = from allrules in SalvageRulesList
-						where (allrules.material == pb.SalvBagMat) && (pb.SalvBagWork >= allrules.minwork) && (pb.SalvBagWork <= (allrules.maxwork +0.99))
-								select allrules;					
-					
-					if(materialrules.Count() > 0)
-					{
-						SalvageRule sr = materialrules.First();
-						pb.ruleid = sr.ruleid;
-					}
-				}
-				
-
-//				//cycle through rules and combine salvage accordingly
-//				foreach(SalvageRule sr in SalvageRulesList)
+//		private void CombineSalvageBags()
+//		{
+//			try
+//			{
+//				//No sense trying to salvage if you can't....
+//				List<WorldObject> UstSearch = Core.WorldFilter.GetInventory().ToList();				
+//				WorldObject MyUst = UstSearch[UstSearch.FindIndex(x => x.Name == "Ust")];
+//				
+//				if (MyUst == null)
 //				{
-//					var partbaggroups = from bags in partbags
-//										where bags.ruleid == sr.ruleid
-//										select bags;
+//					WriteToChat("No Ust Found.");
+//					return;
+//				} 
+//
+//				//refresh the list of salvagebags in inventory
+//				//ScanInventoryForSalvageBags();
+//
+//				//Create a list of partial bags of salvage from inventory
+//				var partbagslinq = from bags in InventorySalvage
+//								  where bags.Values(LongValueKey.UsesRemaining) < 100
+//								  select new PartialBags{ SalvBagID = bags.Id, SalvBagUses = bags.Values(LongValueKey.UsesRemaining), 
+//					              SalvBagWork = bags.Values(DoubleValueKey.SalvageWorkmanship), SalvBagMat = bags.Values(LongValueKey.Material)};
+//				
+//				PartialBags[] partbags = partbagslinq.ToArray();
+//				
+//				
+//				//Build combine rules for all partial bags in inventory
+//				foreach(PartialBags pb in partbags)
+//				{
+//					var materialrules = from allrules in SalvageRulesList
+//						where (allrules.material == pb.SalvBagMat) && (pb.SalvBagWork >= allrules.minwork) && (pb.SalvBagWork <= (allrules.maxwork +0.99))
+//								select allrules;					
 //					
-//					int salvagesum = 0;
-//					foreach(PartialBags pb in partbaggroups)
+//					if(materialrules.Count() > 0)
 //					{
-//						if(salvagesum < 100)
-//						{
-//							if(salvagesum + pb.SalvBagUses < 110)
-//							{
-//								salvagesum += pb.SalvBagUses;
-//								CombineSalvageBagsList.Add(pb);
-//							}
-//						}			
-//						if(salvagesum > 100)
-//						{
-//							Host.Actions.UseItem(MyUst.Id, 0);
-//							foreach(PartialBags cb in CombineSalvageBagsList)
-//							{
-//								host.Actions.SalvagePanelAdd(cb.SalvBagID);
-//							}
-//							host.Actions.SalvagePanelSalvage();
-//							CombineSalvageBagsList.Clear();
-//							salvagesum = 0;
-//						}
-//								
+//						SalvageRule sr = materialrules.First();
+//						pb.ruleid = sr.ruleid;
 //					}
-//					CombineSalvageBagsList.Clear();
-//				}		
-			}
-			catch{}
-			
-		}	
+//				}
+//				
+//
+////				//cycle through rules and combine salvage accordingly
+////				foreach(SalvageRule sr in SalvageRulesList)
+////				{
+////					var partbaggroups = from bags in partbags
+////										where bags.ruleid == sr.ruleid
+////										select bags;
+////					
+////					int salvagesum = 0;
+////					foreach(PartialBags pb in partbaggroups)
+////					{
+////						if(salvagesum < 100)
+////						{
+////							if(salvagesum + pb.SalvBagUses < 110)
+////							{
+////								salvagesum += pb.SalvBagUses;
+////								CombineSalvageBagsList.Add(pb);
+////							}
+////						}			
+////						if(salvagesum > 100)
+////						{
+////							Host.Actions.UseItem(MyUst.Id, 0);
+////							foreach(PartialBags cb in CombineSalvageBagsList)
+////							{
+////								host.Actions.SalvagePanelAdd(cb.SalvBagID);
+////							}
+////							host.Actions.SalvagePanelSalvage();
+////							CombineSalvageBagsList.Clear();
+////							salvagesum = 0;
+////						}
+////								
+////					}
+////					CombineSalvageBagsList.Clear();
+////				}		
+//			}
+//			catch{}
+//			
+//		}	
 
-		private void MaidCombineAction()
-		{
-			try
-			{
-				
-				List<WorldObject> PartialSalvageList = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Salvage && x.Values(LongValueKey.UsesRemaining) < 100).ToList();
-				for(int i = 0; i < PartialSalvageList.Count; i++)
-				{								
-					ScanInventoryForSalvageBags();
-					
-					//Find an applicable material rule.
-					var materialrules = from allrules in SalvageRulesList
-						where (allrules.material == PartialSalvageList[i].Values(LongValueKey.Material)) &&
-							  (PartialSalvageList[i].Values(DoubleValueKey.SalvageWorkmanship) >= allrules.minwork) &&
-							  (PartialSalvageList[i].Values(DoubleValueKey.SalvageWorkmanship) <= (allrules.maxwork +0.99))
-							  select allrules;		
-						
-					if(materialrules.Count() > 0)
-					{
-						var sr = materialrules.First();
-						
-						PartialBags[] partbags = (from bags in InventorySalvage
-									  where bags.Values(LongValueKey.UsesRemaining) < 100  &&
-								      	bags.Values(LongValueKey.Material) == sr.material  &&
-									  	bags.Values(DoubleValueKey.SalvageWorkmanship) >= sr.minwork &&
-									 	 bags.Values(DoubleValueKey.SalvageWorkmanship) <= (sr.maxwork + 0.99)
-									  select new PartialBags{ SalvBagID = bags.Id, SalvBagUses = bags.Values(LongValueKey.UsesRemaining), 
-									 	 	SalvBagWork = bags.Values(DoubleValueKey.SalvageWorkmanship), SalvBagMat = bags.Values(LongValueKey.Material)}).ToArray();
-						
-						CombineSalvageWOList.Clear();
-						
-						int salvagesum = 0;
-						salvagesum += PartialSalvageList[i].Values(LongValueKey.UsesRemaining);
-						CombineSalvageWOList.Add(PartialSalvageList[i].Id);
-					
-						for(int j = 0; j < partbags.Count(); j++)
-						{
-							if(salvagesum < 100)
-							{
-								if(salvagesum + partbags[j].SalvBagUses < 125)
-								{
-									if(!CombineSalvageWOList.Contains(partbags[j].SalvBagID))
-								    {
-										salvagesum += partbags[j].SalvBagUses;
-										CombineSalvageWOList.Add(partbags[j].SalvBagID);
-									}
-								}
-							}		
-						}
-						if(CombineSalvageWOList.Count() > 1)
-						{	
-							
-							foreach(int salvageid in CombineSalvageWOList)
-							{
-								Core.Actions.SalvagePanelAdd(salvageid);
-							}
-							Core.Actions.SalvagePanelSalvage();
-							CombineSalvageWOList.Clear();
-							return;
-						}
-					}
-				}
-				
-				WriteToChat("Combine Actions Completed.");
-				MaidTimer.Stop();
-				MaidTimer.Tick -= MaidTimerCombine;
-				maidworking = false;
-				
-				
-			}catch(Exception ex){LogError(ex);}
-		}		
-	
-		
-		private void MaidUseUst()
-		{
-			try
-			{				
-				WorldObject ust = Core.WorldFilter.GetInventory().Where(x => x.Name == "Ust").First();
-				
-				if(ust == null)
-				{
-					ToggleInspectorActions(0);
-					WriteToChat("Character Has no Ust. Actions disabled.");
-				}
-				
-				Core.Actions.UseItem(ust.Id,0);					
-				
-			}catch(Exception ex){LogError(ex);}		
-		}
-	
+//		private void MaidCombineAction()
+//		{
+//			try
+//			{
+//				
+//				List<WorldObject> PartialSalvageList = Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.Salvage && x.Values(LongValueKey.UsesRemaining) < 100).ToList();
+//				for(int i = 0; i < PartialSalvageList.Count; i++)
+//				{								
+//					//ScanInventoryForSalvageBags();
+//					
+//					//Find an applicable material rule.
+//					var materialrules = from allrules in SalvageRulesList
+//						where (allrules.material == PartialSalvageList[i].Values(LongValueKey.Material)) &&
+//							  (PartialSalvageList[i].Values(DoubleValueKey.SalvageWorkmanship) >= allrules.minwork) &&
+//							  (PartialSalvageList[i].Values(DoubleValueKey.SalvageWorkmanship) <= (allrules.maxwork +0.99))
+//							  select allrules;		
+//						
+//					if(materialrules.Count() > 0)
+//					{
+//						var sr = materialrules.First();
+//						
+//						PartialBags[] partbags = (from bags in InventorySalvage
+//									  where bags.Values(LongValueKey.UsesRemaining) < 100  &&
+//								      	bags.Values(LongValueKey.Material) == sr.material  &&
+//									  	bags.Values(DoubleValueKey.SalvageWorkmanship) >= sr.minwork &&
+//									 	 bags.Values(DoubleValueKey.SalvageWorkmanship) <= (sr.maxwork + 0.99)
+//									  select new PartialBags{ SalvBagID = bags.Id, SalvBagUses = bags.Values(LongValueKey.UsesRemaining), 
+//									 	 	SalvBagWork = bags.Values(DoubleValueKey.SalvageWorkmanship), SalvBagMat = bags.Values(LongValueKey.Material)}).ToArray();
+//						
+//						CombineSalvageWOList.Clear();
+//						
+//						int salvagesum = 0;
+//						salvagesum += PartialSalvageList[i].Values(LongValueKey.UsesRemaining);
+//						CombineSalvageWOList.Add(PartialSalvageList[i].Id);
+//					
+//						for(int j = 0; j < partbags.Count(); j++)
+//						{
+//							if(salvagesum < 100)
+//							{
+//								if(salvagesum + partbags[j].SalvBagUses < 125)
+//								{
+//									if(!CombineSalvageWOList.Contains(partbags[j].SalvBagID))
+//								    {
+//										salvagesum += partbags[j].SalvBagUses;
+//										CombineSalvageWOList.Add(partbags[j].SalvBagID);
+//									}
+//								}
+//							}		
+//						}
+//						if(CombineSalvageWOList.Count() > 1)
+//						{	
+//							
+//							foreach(int salvageid in CombineSalvageWOList)
+//							{
+//								Core.Actions.SalvagePanelAdd(salvageid);
+//							}
+//							Core.Actions.SalvagePanelSalvage();
+//							CombineSalvageWOList.Clear();
+//							return;
+//						}
+//					}
+//				}
+//				
+//				WriteToChat("Combine Actions Completed.");
+//				MaidTimer.Stop();
+//				MaidTimer.Tick -= MaidTimerCombine;
+//				maidworking = false;
+//				
+//				
+//			}catch(Exception ex){LogError(ex);}
+//		}			
 	}
 }

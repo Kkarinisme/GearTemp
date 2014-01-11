@@ -34,6 +34,7 @@ namespace GearFoundry
 			internal int ActionDelay = 0;
 			internal int ActionTarget = 0; 
 			internal List<int> ToDoList = new List<int>();
+			internal List<List<int>> ToDoStack = new List<List<int>>();
 		}
 				
 		internal enum FoundryActionTypes
@@ -49,9 +50,9 @@ namespace GearFoundry
 			MoveToPack,
 			Read,
 			Reveal,
+			Desiccate,
 			
 			ManaStone,
-			Dessicate,
 			
 			MoteCombine,
 			
@@ -60,9 +61,8 @@ namespace GearFoundry
 			SalvageCombine,
 			
 			
-			Move,
 			Pick,
-			Desiccate,
+
 			Ring,
 			Cut,
 			
@@ -76,8 +76,9 @@ namespace GearFoundry
 		{
 			internal int UstId = 0;
 			internal int CarvingToolId = 0; 
-		
-			
+			internal int AetheriaManaStoneId = 0;
+			internal int AetheriaDesiccantId = 0;
+			internal List<int> EmptyManaStoneIds = new List<int>();		
 		}
 
 		private void SubscribeFoundryActions()
@@ -115,13 +116,22 @@ namespace GearFoundry
 							fa.ActionDelay = 1000;
 							break;
 						case FoundryActionTypes.MoveToPack:
-							fa.ActionDelay = 450;
+							fa.ActionDelay = 600;
 							break;
 						case FoundryActionTypes.Read:
 							fa.ActionDelay = 850;
 							break;	
+						case FoundryActionTypes.Reveal:
+							fa.ActionDelay = 750;
+							break;
+						case FoundryActionTypes.Desiccate:
+							fa.ActionDelay = 750;
+							break;
+						case FoundryActionTypes.ManaStone:
+							fa.ActionDelay = 750;
+							break;
 						case FoundryActionTypes.OpenUst:
-							fa.ActionDelay = 100;
+							fa.ActionDelay = 300;
 							break;
 						case FoundryActionTypes.Salvage:
 							fa.ActionDelay = 300;
@@ -137,15 +147,33 @@ namespace GearFoundry
 				
 				try
 				{
-					mFoundryToolSet.UstId = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "ust").First().Id;
-				}catch(Exception ex){LogError(ex);}
-				try
-				{
-					
-				}catch(Exception ex){LogError(ex);}
+					if(Core.WorldFilter.GetInventory().Any(x => x.Name.ToLower() == "ust"))
+					{
+						mFoundryToolSet.UstId = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "ust").First().Id;
+					}
+					if(Core.WorldFilter.GetInventory().Any(x => x.Name.ToLower() == "intricate carving tool"))
+					{
+						mFoundryToolSet.CarvingToolId = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "intricate carving tool").First().Id;
+					}
+					if(Core.WorldFilter.GetInventory().Any(x => x.Name.ToLower() == "aetheria mana stone"))
+					{
+						mFoundryToolSet.AetheriaManaStoneId = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "aetheria mana stone").First().Id;
+					}
+					//Refresh on use below....
+					if(Core.WorldFilter.GetInventory().Any(x => x.Name.ToLower() == "aetheria desiccant"))
+					{
+						mFoundryToolSet.AetheriaDesiccantId = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "aetheria desiccant").First().Id;
+					}
+					if(Core.WorldFilter.GetInventory().Any(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0))
+					{
+						foreach(WorldObject wo in Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0))
+						{
+							mFoundryToolSet.EmptyManaStoneIds.Add(wo.Id);
+						}
+					}
 
-
-								
+				}catch(Exception ex){LogError(ex);}
+										
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -296,7 +324,7 @@ namespace GearFoundry
 								{
 									WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 									SetFoundryAction(i);
-									FoundryCastSpell(FoundryActionList[i].ToDoList.First());
+									FoundryCastSpell(FoundryActionList[i].ToDoList[0]);
 									return;
 								}
 								
@@ -315,12 +343,12 @@ namespace GearFoundry
 										ClearFoundryAction(i);
 										return;
 									}
-									if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+									if(Core.WorldFilter[FoundryActionList[i].ToDoList[0]] == null)
 									{
 										FoundryActionList[i].ToDoList.RemoveAt(0);
 										return;
 									}
-									if(Core.WorldFilter.Distance(FoundryActionList[i].ToDoList.First(), Core.CharacterFilter.Id) > 0.3)
+									if(Core.WorldFilter.Distance(FoundryActionList[i].ToDoList[0], Core.CharacterFilter.Id) > 0.3)
 									{
 										WriteToChat("Use disabled due to distance, move closer and try again.");
 										FoundryActionList[i].ToDoList.RemoveAt(0);
@@ -328,7 +356,7 @@ namespace GearFoundry
 									}
 									WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 									SetFoundryAction(i);
-									FoundryUseItem(FoundryActionList[i].ToDoList.First());
+									FoundryUseItem(FoundryActionList[i].ToDoList[0]);
 									if(FoundryActionList[i].ToDoList.Count > 0)
 									{
 										FoundryActionList[i].ToDoList.RemoveAt(0);
@@ -339,15 +367,18 @@ namespace GearFoundry
 							case FoundryActionTypes.OpenContainer:
 								if(FoundryActionList[i].ToDoList.Count == 0)
 								{
+									//This *should* make the container stay open until all the Ids are back.
+									if(LOList.Any(x => x.IOR == IOResult.unknown && x.Container == Core.Actions.OpenedContainer)) {return;}
+									
 									ClearFoundryAction(i);
 									return;
 								}
-								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList[0]] == null)
 								{
 									FoundryActionList[i].ToDoList.RemoveAt(0);
 									return;
 								}
-								if(Core.WorldFilter.Distance(FoundryActionList[i].ToDoList.First(), Core.CharacterFilter.Id) > 0.3)
+								if(Core.WorldFilter.Distance(FoundryActionList[i].ToDoList[0], Core.CharacterFilter.Id) > 0.3)
 								{
 										WriteToChat("Open Container disabled due to distance, move closer and try again.");
 										FoundryActionList[i].ToDoList.RemoveAt(0);
@@ -361,7 +392,7 @@ namespace GearFoundry
 								}
 		
 								SetFoundryAction(i);
-								FoundryUseItem(FoundryActionList[i].ToDoList.First());
+								FoundryUseItem(FoundryActionList[i].ToDoList[0]);
 								return;
 								
 							case FoundryActionTypes.MoveToPack:
@@ -372,37 +403,33 @@ namespace GearFoundry
 									return;
 								}
 								//If it's not a valid object, clear it
-								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList[0]] == null)
 								{
-									FoundryActionList[i].ToDoList.RemoveAt(0);
+									FoundryActionList[i].ToDoList.RemoveAt(0);																							  
 									return;
 								}
 								//If it's in your pack, clear it.  Flag for processing if needed.
-								if(FoundryInventoryCheck(FoundryActionList[i].ToDoList.First()))
-								{			
-																	
+								if(FoundryInventoryCheck(FoundryActionList[i].ToDoList[0]))
+								{	
+									SynchWithLOList(FoundryActionList[i].Action, FoundryActionList[i].ToDoList[0]);
 									//check to see if it's coming from the looter
-									int loIndex = LOList.FindIndex(x => x.Id == FoundryActionList[i].ToDoList.First());
-									if(loIndex >= 0)
-									{
-										//If it has some process action, load it.
-										if(LOList[loIndex].FoundryProcess != FoundryActionTypes.None)
-										{
-											FoundryLoadAction(LOList[loIndex].FoundryProcess, LOList[loIndex].Id);
-											if(LOList[loIndex].FoundryProcess == FoundryActionTypes.Salvage || LOList[loIndex].FoundryProcess == FoundryActionTypes.SalvageCombine)
-											{
-												FoundryToggleAction(FoundryActionTypes.OpenUst);
-											}
-										}
-									}
+//									int loIndex = LOList.FindIndex(x => x.Id == FoundryActionList[i].ToDoList[0]);
+//									if(loIndex >= 0)
+//									{
+//										//If it has some process action, load it.
+//										if(LOList[loIndex].FoundryProcess != FoundryActionTypes.None)
+//										{
+//											FoundryLoadAction(LOList[loIndex].FoundryProcess, LOList[loIndex].Id);
+//										}
+//									}
 									                              		
 									FoundryActionList[i].ToDoList.RemoveAll(x => Core.WorldFilter.GetInventory().Where(y => y.Id == x).Count() > 0);
 									return;
 								}
 								//If it's not in the current container, pop that puppy open.
-								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()].Container != Core.Actions.OpenedContainer)
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList[0]].Container != Core.Actions.OpenedContainer)
 								{
-									FoundryLoadAction(FoundryActionTypes.OpenContainer, Core.WorldFilter[FoundryActionList[i].ToDoList.First()].Container);
+									FoundryLoadAction(FoundryActionTypes.OpenContainer, Core.WorldFilter[FoundryActionList[i].ToDoList[0]].Container);
 									return;
 								}
 								if(Core.Actions.CombatMode != CombatState.Peace)
@@ -413,7 +440,7 @@ namespace GearFoundry
 								
 								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 								SetFoundryAction(i);
-								FoundryUseItem(FoundryActionList[i].ToDoList.First());
+								FoundryUseItem(FoundryActionList[i].ToDoList[0]);
 								return;
 								
 							case FoundryActionTypes.Read:
@@ -423,13 +450,13 @@ namespace GearFoundry
 									return;
 								}
 								//If it's not a valid object, clear it
-								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList[0]] == null)
 								{
 									FoundryActionList[i].ToDoList.RemoveAt(0);
 									return;
 								}
 								//If it's not in your inventory, clear it.
-								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList.First()))
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList[0]))
 								{
 									FoundryActionList[i].ToDoList.RemoveAt(0);
 									return;
@@ -437,54 +464,166 @@ namespace GearFoundry
 								
 								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 								SetFoundryAction(i);
-								FoundryUseItem(FoundryActionList[i].ToDoList.First());
+								FoundryUseItem(FoundryActionList[i].ToDoList[0]);
 								return;
 								
 							case FoundryActionTypes.Reveal:
+							case FoundryActionTypes.Desiccate:
 								if(FoundryActionList[i].ToDoList.Count == 0)
 								{
 									ClearFoundryAction(i);
 									return;
 								}
 								//If it's not a valid object, clear it
-								if(Core.WorldFilter[FoundryActionList[i].ToDoList.First()] == null)
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList[0]] == null)
 								{
 									FoundryActionList[i].ToDoList.RemoveAt(0);
 									return;
 								}
-								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList.First()))
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList[0]))
 								{
 									FoundryActionList[i].ToDoList.RemoveAt(0);
 									return;
+								}
+								
+								
+								if(FoundryActionList[i].Action == FoundryActionTypes.Reveal)
+								{
+									if(mFoundryToolSet.AetheriaManaStoneId == 0)
+									{
+										if(Core.WorldFilter.GetInventory().Any(x => x.Name.ToLower() == "aetheria mana stone"))
+										{
+											mFoundryToolSet.AetheriaManaStoneId = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "aetheria mana stone").First().Id;
+										}
+										else
+										{
+											WriteToChat("Character has no Aetheria Mana Stone!  Reveal Action Disabled.");
+											ClearFoundryAction(i);
+											return;
+										}
+									}
+									
+									WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
+									SetFoundryAction(i);
+									FoundryApplyItem(mFoundryToolSet.AetheriaManaStoneId, FoundryActionList[i].ToDoList[0]);
+									return;
+								}
+								
+								if(FoundryActionList[i].Action == FoundryActionTypes.Desiccate)
+								{
+									if(mFoundryToolSet.AetheriaDesiccantId == 0)
+									{
+										if(Core.WorldFilter.GetInventory().Any(x => x.Name.ToLower() == "aetheria desiccant"))
+										{
+											mFoundryToolSet.AetheriaDesiccantId = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "aetheria desiccant").First().Id;
+										}
+										else
+										{
+											WriteToChat("Character has no Aetheria Desiccant!  Desiccate Action Disabled.");
+											ClearFoundryAction(i);
+											return;
+										}
+									}
+									SetFoundryAction(i);
+									FoundryApplyItem(mFoundryToolSet.AetheriaDesiccantId, FoundryActionList[i].ToDoList[0]);
+									if(Core.WorldFilter.GetInventory().Any(x => x.Name.ToLower() == "aetheria desiccant"))
+									{
+										mFoundryToolSet.AetheriaDesiccantId = Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "aetheria desiccant").First().Id;
+									}
+									else 
+									{
+										mFoundryToolSet.AetheriaDesiccantId = 0;
+									}
+									return;									
+								}
+								return;
+								
+							case FoundryActionTypes.ManaStone:
+								if(FoundryActionList[i].ToDoList.Count == 0)
+								{
+									ClearFoundryAction(i);
+									return;
+								}
+								//If it's not a valid object, clear it
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList[0]] == null)
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
+								}
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList[0]))
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
+								}
+								//No mana stones, no problem.
+								if(mFoundryToolSet.EmptyManaStoneIds.Count == 0)
+								{
+									if(Core.WorldFilter.GetInventory().Any(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0))
+									{
+										foreach(WorldObject wo in Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == ObjectClass.ManaStone && x.Values(LongValueKey.IconOutline) == 0))
+										{
+											mFoundryToolSet.EmptyManaStoneIds.Add(wo.Id);
+										}
+									}
+									else
+									{
+										WriteToChat("Character has no Empty Mana Stones!  Drain Action Disabled.");
+										ClearFoundryAction(i);
+										return;
+									}	
 								}
 								
 								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 								SetFoundryAction(i);
-								FoundryUseItem(FoundryActionList[i].ToDoList.First());
+								FoundryApplyItem(mFoundryToolSet.EmptyManaStoneIds[0], FoundryActionList[i].ToDoList[0]);
 								return;
 								
-							case FoundryActionTypes.OpenUst:
-								//Wait for IDs to come back before opening ust.
-								if(FoundryChestCheck(Core.Actions.OpenedContainer))
+							case FoundryActionTypes.MoteCombine:
+								if(FoundryActionList[i].ToDoList.Count == 0)
 								{
-									if(LOList.Any(x => x.Container == Core.Actions.OpenedContainer && x.IOR == IOResult.unknown))
-									{
-										return;
-									}
-								}
-								if(Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "ust").Count() == 0)
-								{
-									WriteToChat("Character has no Ust!  All ust actions disabled.");
 									ClearFoundryAction(i);
-									ClearFoundryAction(FoundryActionList.FindIndex(x => x.Action == FoundryActionTypes.Salvage));
-									ClearFoundryAction(FoundryActionList.FindIndex(x => x.Action == FoundryActionTypes.SalvageCombine));
+									return;
+								}
+								if(Core.WorldFilter[FoundryActionList[i].ToDoList[0]] == null)
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
+								}
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList[0]))
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
+								}
+								if(!FoundryInventoryCheckHas2(FoundryActionList[i].ToDoList[0]))
+								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
 									return;
 								}
 								
-								//if(Core.Actions.Underlying.
 								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
-								FoundryUseItem(Core.WorldFilter.GetInventory().Where(x => x.Name.ToLower() == "ust").First().Id);
-								//TODO:  Remove this after you figure out how to see where the salvage panel is.  It's weaksauce.
+								FoundryApplyItem(Core.WorldFilter.GetInventory().Where(x => x.Name == Core.WorldFilter[FoundryActionList[0].ToDoList[0]].Name &&
+								                  x.Id != FoundryActionList[0].ToDoList[0]).First().Id, FoundryActionList[i].ToDoList[0]);
+								                                                          
+								return;
+								
+								
+							case FoundryActionTypes.OpenUst:
+								if(!FoundryActionList.Find(x => x.Action == FoundryActionTypes.Salvage).FireAction &&
+								   !FoundryActionList.Find(x => x.Action == FoundryActionTypes.SalvageCombine).FireAction)
+								{
+									ClearFoundryAction(i);
+									return;
+								}
+								if(mFoundryToolSet.UstId == 0)
+								{
+									ClearFoundryAction(i);
+									ClearFoundryAction(FoundryActionList.FindIndex(x => x.Action == FoundryActionTypes.Salvage));
+									ClearFoundryAction(FoundryActionList.FindIndex(x => x.Action == FoundryActionTypes.SalvageCombine));
+									WriteToChat("Character has no ust!  Salvaging disabled.");
+								}
+								   
+								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
+								FoundryUseItem(mFoundryToolSet.UstId);
 								ClearFoundryAction(i);
 								return;
 								
@@ -495,19 +634,39 @@ namespace GearFoundry
 									return;
 								}
 								//Remove the item if it's not in invenotry
-								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList.First()))
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList[0]))
 								{
 									FoundryActionList[i].ToDoList.RemoveAt(0);
 								}
 								
 								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 								SetFoundryAction(i);
-								List<int> salv = new List<int>();
-								salv.Add(FoundryActionList[i].ToDoList.First());
-								FoundrySalvgeAdd(salv);
+								FoundrySalvage(FoundryActionList[i].ToDoList[0]);
 								return;
 								
-
+							case FoundryActionTypes.SalvageCombine:
+								//Exit if nothing to combine
+								if(FoundryActionList[i].ToDoStack.Count == 0)
+								{
+									ClearFoundryAction(i);
+									return;
+								}
+								//Remove bags not found in inventory.  If it reduces the list count to 0 remove the empty list and return
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoStack[0], i))
+								{
+									return;
+								}
+								//If there's one bag, we can't combine it with anything.  Clear and return.
+								if(FoundryActionList[i].ToDoStack[0].Count == 1)
+								{
+									FoundryActionList[i].ToDoStack.RemoveAt(0);
+									return;
+								}
+								
+								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
+								SetFoundryAction(i);
+								FoundrySalvage(FoundryActionList[i].ToDoStack[0]);
+								return;
 						}
 					}
 					if(!FoundryActionList.Any(x => x.FireAction)) {TerminateFoundryActions();}
@@ -530,6 +689,7 @@ namespace GearFoundry
 		
 		private void FoundryToggleAction(FoundryActionTypes action)
 		{
+			WriteToChat("Toggled " + action.ToString());
 			FoundryActionList.Find(x => x.Action == action).FireAction = true;
 		}
 		
@@ -537,9 +697,70 @@ namespace GearFoundry
 		{
 			try
 			{
+				//This doesn't work because Worldfilter.GetInventory() is dynamic.  Check container Ids instead?
 				if(Core.WorldFilter.GetInventory().Any(x => x.Id == id)) {return true;}
 				else {return false;}
 			}catch(Exception ex){LogError(ex); return false;}
+		}
+		
+		private bool FoundryInventoryCheck(List<int> Ids, int i)
+		{
+			try
+			{	
+				foreach(int id in Ids)
+				{
+					if(!Core.WorldFilter.GetInventory().Any(x => x.Id == id)) {FoundryActionList[i].ToDoStack[0].Remove(id);}
+				}
+				
+				if(FoundryActionList[i].ToDoStack[0].Count > 0) {return true;}
+				else 
+				{
+					FoundryActionList[i].ToDoStack[0].RemoveAt(0);
+					return false;
+				}
+			}catch(Exception ex){LogError(ex); return false;}
+		}
+		
+		private bool FoundryInventoryCheckHas2(int id)
+		{
+			try
+			{
+				if(Core.WorldFilter.GetInventory().Where(x => x.Name == Core.WorldFilter[id].Name).Count() > 1) {return true;}
+				else {return false;}
+			}catch(Exception ex){LogError(ex); return false;}
+		}
+		
+		private void FoundryLoadAction(FoundryActionTypes action, int Id)
+		{
+			try
+			{
+				if(action == FoundryActionTypes.Salvage || action == FoundryActionTypes.SalvageCombine)
+				{
+					if(!FoundryActionList.Find(x => x.Action == FoundryActionTypes.OpenUst).FireAction)
+					{
+						FoundryToggleAction(FoundryActionTypes.OpenUst);
+					}
+				}
+				
+				int index =  FoundryActionList.FindIndex(x => x.Action == action);
+				FoundryActionList[index].FireAction = true;
+				FoundryActionList[index].ToDoList.Add(Id);
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void FoundryLoadAction(FoundryActionTypes action, List<int> Ids)
+		{
+			try
+			{
+				if(action == FoundryActionTypes.Salvage || action == FoundryActionTypes.SalvageCombine)
+				{
+					FoundryToggleAction(FoundryActionTypes.OpenUst);
+				}
+				
+				int index =  FoundryActionList.FindIndex(x => x.Action == action);
+				FoundryActionList[index].FireAction = true;
+				FoundryActionList[index].ToDoStack.Add(Ids);
+			}catch(Exception ex){LogError(ex);}
 		}
 		
 		
