@@ -56,7 +56,7 @@ namespace GearFoundry
                 Core.ItemDestroyed += OnLandscapeDestroyed;     
 				Core.CharacterFilter.Logoff += LandscapeLogoff;
 				
-				foreach(WorldObject wo in Core.WorldFilter.GetByContainer(0))
+				foreach(WorldObject wo in Core.WorldFilter.GetLandscape().ToArray())
 				{
 					if(wo.ObjectClass != ObjectClass.Unknown)
 					{
@@ -92,11 +92,29 @@ namespace GearFoundry
 				LandscapeTimer.Tick -= LandscapeTimerTick;
 				Core.WorldFilter.CreateObject -= OnWorldFilterCreateLandscape;
                 Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteLandscape;
-                Core.ItemDestroyed -= OnLandscapeDestroyed;	
+                Core.ItemDestroyed -= OnLandscapeDestroyed;
+                Core.CharacterFilter.ChangePortalMode += GearSense_PortalChange;
 				Core.CharacterFilter.Logoff -= LandscapeLogoff;	
 
 				
 			}catch(Exception ex) {LogError(ex);}
+		}
+		
+		private void GearSense_PortalChange(object sender, EventArgs e)
+		{
+			try
+			{
+				LandscapeTrackingList.Clear();
+				foreach(WorldObject wo in Core.WorldFilter.GetLandscape().ToArray())
+				{
+					if(!LandscapeTrackingList.Any(x => x.Id == wo.Id))
+					{
+						LandscapeObject lo = new LandscapeObject(wo);
+						LandscapeTrackingList.Add(lo);
+						CheckLandscape(wo.Id);
+					}
+				}
+			}catch(Exception ex){LogError(ex);}
 		}
 				
 		private void GearSenseReadWriteSettings(bool read)
