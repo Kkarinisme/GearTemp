@@ -639,8 +639,10 @@ namespace GearFoundry
                    //Inventory Section
                    chkInventory.Checked = mMainSettings.binventoryEnabled;
                     chkInventoryComplete.Checked = mMainSettings.binventoryCompleteEnabled;
+                    chkInventoryBurden.Checked = mMainSettings.binventoryBurdenEnabled;
                    chkToonStats.Checked = mMainSettings.btoonStatsEnabled;
                    chkArmorHud.Checked = mMainSettings.bArmorHudEnabled;
+                   chkInventoryHudEnabled.Checked = mMainSettings.binventoryHudEnabled;
 
  
 
@@ -706,10 +708,13 @@ namespace GearFoundry
 
             if (mMainSettings.bArmorHudEnabled)
             {
-                WriteToChat("bArmorHudEnabled; I am going to renderarmorhud");
+                SubscribeArmorEvents();
             }
 
             if (mMainSettings.binventoryHudEnabled)
+            {
+                SubscribeInventoryEvents();
+            }
 
 
             if (mMainSettings.binventoryBurdenEnabled)

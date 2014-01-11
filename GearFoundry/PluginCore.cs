@@ -123,8 +123,8 @@ namespace GearFoundry
         {
             if (quickieshHud != null) { DisposeHorizontalQuickSlots(); }
             if (quickiesvHud != null) { DisposeVerticalQuickSlots(); }
-            if(InventoryHudView != null){DisposeInventoryHud();}
-            if (ArmorHudView != null) { DisposeArmorHud(); }
+            //if(InventoryHudView != null){DisposeInventoryHud();}
+            //if (ArmorHudView != null) { DisposeArmorHud(); }
 
         }
              

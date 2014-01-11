@@ -1123,11 +1123,11 @@ namespace GearFoundry
                 catch { }
                 try { DisposeArmorUpdateTabLayout(); }
                 catch { }
-                ArmorHudSettings.Dispose();
-                ArmorHudTabLayout.Dispose();
-                ArmorUpdateHudTabLayout.Dispose();
-                ArmorHudTabView.Dispose();
-                ArmorHudView.Dispose();
+                if (ArmorHudSettings != null) { ArmorHudSettings.Dispose(); }
+                if (ArmorHudTabLayout != null) { ArmorHudTabLayout.Dispose(); }
+                if (ArmorUpdateHudTabLayout != null) { ArmorUpdateHudTabLayout.Dispose(); }
+                if (ArmorHudTabView != null){ArmorHudTabView.Dispose();}
+                if (ArmorHudView != null) { ArmorHudView.Dispose(); }
                 toonArmorName = "";
                // lblToonArmorUpdateLevel.Dispose();
                // lblToonArmorUpdateMaster.Dispose();
@@ -1171,13 +1171,29 @@ namespace GearFoundry
 
         }
 
+        private void SubscribeArmorEvents()
+        {
+            Core.CharacterFilter.Logoff += ArmorLogoff;
 
-        
+        }
+
+        private void ArmorLogoff(object sender, EventArgs e)
+        {
+            try
+            {
+                UnsubscribeArmorEvents();
+                DisposeArmorHud();
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
         private void UnsubscribeArmorEvents()
         {
-            ArmorHudTabView.OpenTabChange -= ArmorHudTabView_OpenTabChange;
-            ArmorHudView.Resize -= ArmorHudView_Resize;
-            MasterTimer.Tick -= ArmorResizeTimerTick;
+            if (ArmorHudTabView != null) { ArmorHudTabView.OpenTabChange -= ArmorHudTabView_OpenTabChange; }
+            if (ArmorHudView != null) { ArmorHudView.Resize -= ArmorHudView_Resize; }
+            if (MasterTimer != null) { MasterTimer.Tick -= ArmorResizeTimerTick; }
+            Core.CharacterFilter.Logoff -= ArmorLogoff;
+
         }
 
         private void ArmorHudList_Click(object sender, int row, int col)

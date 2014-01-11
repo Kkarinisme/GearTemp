@@ -627,10 +627,10 @@ namespace GearFoundry
                 try { DisposeInventorySettingsLayout(); }
                 catch { }
 
-                InventoryHudSettings.Dispose();
-                InventoryHudTabLayout.Dispose();
-                InventoryHudTabView.Dispose();
-                InventoryHudView.Dispose();
+                if (InventoryHudSettings != null) { InventoryHudSettings.Dispose(); }
+                if (InventoryHudTabLayout != null) { InventoryHudTabLayout.Dispose(); }
+                if (InventoryHudTabView != null) { InventoryHudTabView.Dispose(); }
+                if (InventoryHudTabView != null) { InventoryHudView.Dispose(); }
                 
                 InventoryHudView = null;
             }
@@ -638,12 +638,30 @@ namespace GearFoundry
             return;
         }
 
+        private void SubscribeInventoryEvents()
+        {
+            Core.CharacterFilter.Logoff += InventoryLogoff;
+
+        }
+
+        private void InventoryLogoff(object sender, EventArgs e)
+        {
+            try
+            {
+                UnsubscribeInventoryEvents();
+                DisposeInventoryHud();
+            }
+            catch (Exception ex) { LogError(ex); }
+        }
+
+
+
         private void UnsubscribeInventoryEvents()
         {
-            InventoryHudTabView.OpenTabChange -= InventoryHudTabView_OpenTabChange;
-            InventoryHudView.Resize -= InventoryHudView_Resize;
-            MasterTimer.Tick -= InventoryResizeTimerTick;
-
+            if (InventoryHudTabView != null) { InventoryHudTabView.OpenTabChange -= InventoryHudTabView_OpenTabChange; }
+            if (InventoryHudView != null) { InventoryHudView.Resize -= InventoryHudView_Resize; }
+            if (MasterTimer != null) { MasterTimer.Tick -= InventoryResizeTimerTick; }
+            Core.CharacterFilter.Logoff -= InventoryLogoff;
 
         }
 
