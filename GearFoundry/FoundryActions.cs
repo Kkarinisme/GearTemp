@@ -763,10 +763,86 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		
-		
-		
+		//Bag in a slot
+//		[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 1/10/2014 9:33 PM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 1/10/2014 9:33 PM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] [Meta] Client valid: True
+//[VTank] ID: 805FF583
+//[VTank] ObjectClass: Container
+//[VTank] (S) Name: Pack
+//[VTank] (S) UsageInstructions: Use this item to close it.
+//[VTank] (B) Open: True
+//[VTank] (I) CreateFlags1: 2113594
+//[VTank] (I) Type: 136
+//[VTank] (I) Icon: 7096
+//[VTank] (I) Category: 512
+//[VTank] (I) Behavior: 19
+//[VTank] (I) ItemSlots: 24
+//[VTank] (I) Value: 65
+//[VTank] (I) ItemUsabilityFlags: 56
+//[VTank] (I) Container: 1342600506
+//[VTank] (I) Burden: 2395
+//[VTank] (I) PhysicsDataFlags: 137345
+//[VTank] (D) ApproachDistance: 0.5
+//[VTank] Palette Entry 0: ID 0x000BF6, Ex Color: 000000, 0/0
+//		
+//
+//Pack 2
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 1/10/2014 9:36 PM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 1/10/2014 9:36 PM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] [Meta] Client valid: True
+//[VTank] ID: 805FF5C9
+//[VTank] ObjectClass: Container
+//[VTank] (S) Name: Pack
+//[VTank] (S) UsageInstructions: Use this item to close it.
+//[VTank] (B) Open: True
+//[VTank] (I) CreateFlags1: 2113594
+//[VTank] (I) Type: 136
+//[VTank] (I) Icon: 7092
+//[VTank] (I) Category: 512
+//[VTank] (I) Behavior: 19
+//[VTank] (I) ItemSlots: 24
+//[VTank] (I) Value: 65
+//[VTank] (I) ItemUsabilityFlags: 56
+//[VTank] (I) Container: 1342600506
+//[VTank] (I) Burden: 1417
+//[VTank] (I) PhysicsDataFlags: 137345
+//[VTank] (D) ApproachDistance: 0.5
+//[VTank] Palette Entry 0: ID 0x000BF7, Ex Color: 000000, 0/0
 
+//Item in Pack 2
+//[VTank] --------------Object dump--------------
+//[VTank] [Meta] Create count: 1
+//[VTank] [Meta] Create time: 1/10/2014 9:36 PM
+//[VTank] [Meta] Has identify data: True
+//[VTank] [Meta] Last ID time: 1/10/2014 9:36 PM
+//[VTank] [Meta] Worldfilter valid: True
+//[VTank] [Meta] Client valid: True
+//[VTank] ID: 805FF5C8
+//[VTank] ObjectClass: Ust
+//[VTank] (S) Name: Ust
+//[VTank] (S) UsageInstructions: Use to salvage materials from treasure items.
+//[VTank] (S) SimpleDescription: A tool used to extract materials from treasure items.
+//[VTank] (I) CreateFlags1: 270561304
+//[VTank] (I) Type: 20646
+//[VTank] (I) Icon: 9914
+//[VTank] (I) Category: 536870912
+//[VTank] (I) Behavior: 18
+//[VTank] (I) Value: 10
+//[VTank] (I) ItemUsabilityFlags: 8
+//[VTank] (I) StackCount: 1
+//[VTank] (I) StackMax: 1
+//[VTank] (I) Container: -2141194807
+//[VTank] (I) Burden: 10
+//[VTank] (I) HookMask: 2
+//[VTank] (I) PhysicsDataFlags: 137217
 		
 	}
 }

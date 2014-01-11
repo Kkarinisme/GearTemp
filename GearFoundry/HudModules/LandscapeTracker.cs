@@ -55,12 +55,14 @@ namespace GearFoundry
                 Core.WorldFilter.ReleaseObject += OnWorldFilterDeleteLandscape;
                 Core.ItemDestroyed += OnLandscapeDestroyed;     
 				Core.CharacterFilter.Logoff += LandscapeLogoff;
+				Core.CharacterFilter.ChangePortalMode += GearSense_PortalChange;
 				
-				foreach(WorldObject wo in Core.WorldFilter.GetLandscape().ToArray())
+				foreach(WorldObject wo in Core.WorldFilter.GetLandscape())
 				{
 					if(wo.ObjectClass != ObjectClass.Unknown)
 					{
-						if(!LandscapeTrackingList.Any(x => x.Id == wo.Id))
+						int index = LandscapeTrackingList.FindIndex(x => x.Id == wo.Id);
+						if(index < 0)
 						{
 							LandscapeObject lo = new LandscapeObject(wo);
 							LandscapeTrackingList.Add(lo);
@@ -93,7 +95,7 @@ namespace GearFoundry
 				Core.WorldFilter.CreateObject -= OnWorldFilterCreateLandscape;
                 Core.WorldFilter.ReleaseObject -= OnWorldFilterDeleteLandscape;
                 Core.ItemDestroyed -= OnLandscapeDestroyed;
-                Core.CharacterFilter.ChangePortalMode += GearSense_PortalChange;
+                Core.CharacterFilter.ChangePortalMode -= GearSense_PortalChange;
 				Core.CharacterFilter.Logoff -= LandscapeLogoff;	
 
 				
@@ -105,15 +107,19 @@ namespace GearFoundry
 			try
 			{
 				LandscapeTrackingList.Clear();
-				foreach(WorldObject wo in Core.WorldFilter.GetLandscape().ToArray())
+				foreach(WorldObject wo in Core.WorldFilter.GetLandscape())
 				{
-					if(!LandscapeTrackingList.Any(x => x.Id == wo.Id))
+					if(wo.ObjectClass != ObjectClass.Unknown)
 					{
-						LandscapeObject lo = new LandscapeObject(wo);
-						LandscapeTrackingList.Add(lo);
-						CheckLandscape(wo.Id);
+						int index = LandscapeTrackingList.FindIndex(x => x.Id == wo.Id);
+						if(index < 0)
+						{
+							LandscapeObject lo = new LandscapeObject(wo);
+							LandscapeTrackingList.Add(lo);
+							CheckLandscape(wo.Id);
+						}
 					}
-				}
+				}		
 			}catch(Exception ex){LogError(ex);}
 		}
 				
@@ -167,8 +173,7 @@ namespace GearFoundry
 			try 
 			{   
 				if(e.New.ObjectClass == ObjectClass.Unknown || e.New.Container != 0) {return;}	
-				int index = LandscapeTrackingList.FindIndex(x => x.Id == e.New.Id);
-				
+				int index = LandscapeTrackingList.FindIndex(x => x.Id == e.New.Id);	
 				if(index < 0)
 				{
 					LandscapeObject lo = new LandscapeObject(e.New);
@@ -412,12 +417,8 @@ namespace GearFoundry
 	   		{	
      			for(int i = LandscapeTrackingList.Count - 1; i >= 0 ; i--)
 		    	{
-     				if(!LandscapeTrackingList[i].isvalid) {LandscapeTrackingList.RemoveAt(i);}
-     				else
-     				{
-	     				LandscapeTrackingList[i].DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, LandscapeTrackingList[i].Id);
-	     				if(LandscapeTrackingList[i].DistanceAway > ((double)gsSettings.LandscapeForgetDistance/(double)100)) {LandscapeTrackingList[i].notify = false;}
-     				}
+     				LandscapeTrackingList[i].DistanceAway = Core.WorldFilter.Distance(Core.CharacterFilter.Id, LandscapeTrackingList[i].Id);
+     				if(LandscapeTrackingList[i].DistanceAway > ((double)gsSettings.LandscapeForgetDistance/(double)100)) {LandscapeTrackingList[i].notify = false;}
 		    	}
 	     		UpdateLandscapeHud();
 	     	}catch(Exception ex){LogError(ex);}
