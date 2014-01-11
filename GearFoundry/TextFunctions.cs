@@ -157,11 +157,14 @@ namespace GearFoundry
 			{
 				if(e.Text.Trim().ToLower().Contains("@gf"))
 				{
-					if(e.Text.Trim().ToLower().Contains("window"))
+					WriteToChat("Command Received.");
+					if(e.Text.Trim().ToLower().Contains("cont"))
 					{
-						WriteToChat("Current Open Container = " + Core.Actions.OpenedContainer);
-						WriteToChat("Busy State Id = " +Core.Actions.BusyStateId);
-						//WriteToChat("Current Something = " + Core.Decal.Underlying.Hooks.
+						WriteToChat("Command:  cont");
+						foreach(WorldObject wo in Core.WorldFilter.GetInventory().Where(x => x.Container == Core.CharacterFilter.Id))
+						{
+							WriteToChat(wo.Id + " " + wo.Name + " " + wo.Container);
+						}
 					}
 					 
 				}
