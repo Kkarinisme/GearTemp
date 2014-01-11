@@ -308,7 +308,7 @@ namespace GearFoundry
 
                         }
                         }
-                        catch (Exception ex) { }
+                        catch { }
                     }
                 }
                 

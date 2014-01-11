@@ -94,29 +94,45 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		private void FoundrySalvgeAdd(List<int> salvlist)
+		private void FoundryUseItem(int tool, int target)
 		{
 			try
 			{
-				foreach(int item in salvlist)
+				Core.Actions.UseItem(tool, 1, target);
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void FoundryApplyItem(int tool, int target)
+		{
+			try
+			{
+				Core.Actions.ApplyItem(tool, target);
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void FoundrySalvage(int item)
+		{
+			try
+			{
+				Core.Actions.SalvagePanelAdd(item);				
+				Core.Actions.SalvagePanelSalvage();
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void FoundrySalvage(List<int> bags)
+		{
+			try
+			{
+				foreach(int bag in bags)
 				{
-					Core.Actions.SalvagePanelAdd(item);
+					Core.Actions.SalvagePanelAdd(bag);
 				}
-								
 				Core.Actions.SalvagePanelSalvage();
 			}catch(Exception ex){LogError(ex);}
 		}
 		
 			
-		private void FoundryLoadAction(FoundryActionTypes action, int Id)
-		{
-			try
-			{
-				int index =  FoundryActionList.FindIndex(x => x.Action == action);
-				FoundryActionList[index].FireAction = true;
-				FoundryActionList[index].ToDoList.Add(Id);
-			}catch(Exception ex){LogError(ex);}
-		}
+
 		
 		
 		private bool FoundryChestCheck(int ChestID)
@@ -136,6 +152,89 @@ namespace GearFoundry
 		private void FoundryCraftItem(int ToolId, int TargetId)
 		{
 			
+		}
+		
+		private int FoundryMatchInventory(int MatchId)
+		{
+			try
+			{
+				//TODO  Finish
+				return Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == Core.WorldFilter[MatchId].ObjectClass &&
+				                                             x.Name.ToLower() == Core.WorldFilter[MatchId].Name.ToLower()).First().Id;
+			}catch(Exception ex){LogError(ex); return 0;}
+			
+		}
+		
+		private int FoundryMatchKey(string keyname)
+		{
+			try
+			{
+					WorldObject matchedkeyring = null;
+					switch(keyname.ToLower())
+					{
+						case "legendary key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("burning sands") && 
+							                x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "black marrow key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black marrow") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "directive key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("directive") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "granite key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("granite") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "mana forge key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("black coral") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "master key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("master") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "marble key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("marble") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "singularity key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("singularity") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "skeletal falatacot key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("skeletal falatacot") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "sturdy iron key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy iron") &&
+							                 x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						case "sturdy steel key":
+							matchedkeyring = MaidKeyRings.FirstOrDefault(x => x.Name.ToLower().Contains("sturdy steel") &&
+							                x.Values(LongValueKey.UsesRemaining) < 0 && x.Values(LongValueKey.KeysHeld) < 24);
+							if(matchedkeyring != null) {return matchedkeyring.Id;}
+							else{goto default;}
+						default:
+							return 0;
+					}		
+			}catch(Exception ex)
+			{
+				LogError(ex);
+				return 0;
+			}
 		}
 				
 

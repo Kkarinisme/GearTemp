@@ -24,12 +24,7 @@ namespace GearFoundry
 			try
 			{	
 				GearInspectorReadWriteSettings(true);
-				
-				for(int i = 0; i < 11; i++)
-				{
-					InspectorActionList.Add(new PendingActions());
-				}
-				
+								
 				Core.ContainerOpened += LootContainerOpened;
 				Core.ItemDestroyed += ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased; 
@@ -72,9 +67,6 @@ namespace GearFoundry
 				Core.WorldFilter.CreateObject -= SalvageCreated;
 				Core.CharacterFilter.Logoff -= ItemHudLogOff;			
 
-				CombineSalvageWOList.Clear();
-				InventorySalvage.Clear();
-				InspectorActionList.Clear();
 				LOList.Clear();
 				
 				GearInspectorReadWriteSettings(false);
@@ -329,36 +321,20 @@ namespace GearFoundry
 		{
 			try
 			{	
-				if(e.Change == WorldChangeType.IdentReceived)
-				{						
-					if(e.Changed.Id == Host.Actions.CurrentSelection)
-	        		{
-	        			ManualCheckItemForMatches(new LootObject(e.Changed));
-	        			return;
-	        		}  		
-					else if(LOList.Any(x => x.Id == e.Changed.Id && x.Listen))
-	        		{
-						LootObject lo = LOList.Find(x => x.Id == e.Changed.Id);
-						lo.Listen = false;
-	        			CheckItemForMatches(lo.Id);
-	        			return;
-	        		}							
-				}
-				else if(e.Change == WorldChangeType.StorageChange)
-				{
-					if(LOList.Any(x => x.Id == e.Changed.Id && !x.IsContainer))
-					{
-						LOList.Find(x => x.Id == e.Changed.Id && !x.IsContainer).StorageChangeTime = DateTime.Now;
-						LOList.Find(x => x.Id == e.Changed.Id && !x.IsContainer).StorageChange = true;
-						Core.RenderFrame += InspectorMoveCheckBack;
-						return;
-					}
-				}
-				else
-				{
-					return;
-				}
-
+				if(e.Change != WorldChangeType.IdentReceived) {return;}
+						
+				if(e.Changed.Id == Host.Actions.CurrentSelection)
+        		{
+        			ManualCheckItemForMatches(new LootObject(e.Changed));
+        			return;
+        		}  		
+				else if(LOList.Any(x => x.Id == e.Changed.Id && x.Listen))
+        		{
+					LootObject lo = LOList.Find(x => x.Id == e.Changed.Id);
+					lo.Listen = false;
+        			CheckItemForMatches(lo.Id);
+        			return;
+        		}							
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -402,67 +378,28 @@ namespace GearFoundry
 				}
 			}catch(Exception ex){LogError(ex);}
 		}
+
 		
+		private DateTime LootContainerTime = DateTime.MinValue;
 		private void LootContainerOpened(object sender, ContainerOpenedEventArgs e)
 		{
 			try
 			{					
 				if(Core.WorldFilter[e.ItemGuid] == null){return;}
+				
+				//TODO:  Revisit this
+				if(Core.WorldFilter.GetByContainer(e.ItemGuid).Count == 0)
+				LootContainerTime = DateTime.Now;
+				Core.RenderFrame += LootContainerDelay;	
 								
-				if(LOList.Any(x => x.Open && x.IsContainer))
-				{
-					Core.RenderFrame += OpenContainerCheckback;
-					return;
-				}
-
-				LootObject lo;
-				if(!LOList.Any(x => x.Id == e.ItemGuid))
-				{
-					lo = new LootObject(Core.WorldFilter[e.ItemGuid]);
-					lo.IsContainer = true;
-					LOList.Add(lo);
-				}
-				else
-				{
-					lo = LOList.Find(x => x.Id == e.ItemGuid);
-				}
+				LootObject container = new LootObject(Core.WorldFilter[e.ItemGuid]);
 				
-				lo.ActionTarget = true;
-				lo.LastActionTime = DateTime.Now;
-				
-				Core.RenderFrame += RenderFrame_LootContainerOpened;
-				return;
-								
-
-			}
-			catch(Exception ex){LogError(ex);}
-		}
-		
-		private void RenderFrame_LootContainerOpened(object sender, EventArgs e)
-		{
-			try
-			{	
-				LootObject container = LOList.Find(x => x.ActionTarget && x.IsContainer);
-				if(container == null) 
-				{
-					Core.RenderFrame -= RenderFrame_LootContainerOpened;
-					return;
-				}
-				else if((DateTime.Now - container.LastActionTime).TotalMilliseconds < 200){return;}
-				else
-				{
-					Core.RenderFrame -= RenderFrame_LootContainerOpened;
-				}
-				
-				container.ActionTarget = false;				
-				
-				if(container.Name.Contains(Core.CharacterFilter.Name)){container.Exclude = true; return;}
+				if(container.Name.Contains(Core.CharacterFilter.Name)){return;}
+				//TODO:  Protect permitted corpses.
 
 				if(container.Name.Contains("Chest") || container.Name.Contains("Vault") || 
 				   container.Name.Contains("Reliquary") || container.ObjectClass == ObjectClass.Corpse)
 				{
-					if(container.ObjectClass == ObjectClass.Corpse){container.Exclude = true;}
-
 					foreach(WorldObject wo in Core.WorldFilter.GetByContainer(container.Id))
 					{
 						if(!LOList.Any(x => x.Id == wo.Id))
@@ -472,9 +409,22 @@ namespace GearFoundry
 							SeparateItemsToID(lo.Id);
 						}
 					}	
-				}
+				}				
+				return;
 			}
-			catch(Exception ex){LogError(ex);}	
+			catch(Exception ex){LogError(ex);}
+		}
+		
+		private void LootContainerDelay(object sender, EventArgs e)
+		{
+			try
+			{
+				if((DateTime.Now - LootContainerTime).TotalMilliseconds > 350)
+				{
+					Core.RenderFrame -= LootContainerDelay;	
+					return;
+				}	
+			}catch(Exception ex){LogError(ex);}
 		}
 			
 		private void SeparateItemsToID(int loId)
@@ -541,6 +491,12 @@ namespace GearFoundry
 				switch(IOItem.IOR)
 				{
 					case IOResult.trophy:
+						if(IOItem.Name.ToLower() == "pyreal mote" ||  IOItem.Name.ToLower() == "pyreal sliver" || IOItem.Name.ToLower() == "pyreal nugget")
+						{
+							IOItem.InspectList = true;
+							IOItem.FoundryProcess = FoundryActionTypes.MoteCombine;
+						}
+						break;
 					case IOResult.rare:
 					case IOResult.rule:
 						if(IOItem.Aetheriacheck) {IOItem.FoundryProcess = FoundryActionTypes.Reveal;}
@@ -549,29 +505,24 @@ namespace GearFoundry
 					case IOResult.salvage:
 						IOItem.InspectList = true;
 						IOItem.FoundryProcess = FoundryActionTypes.Salvage;
-						//IOItem.ProcessAction = IAction.Salvage;
 						break;
 					case IOResult.dessicate:
 						IOItem.InspectList = true;
 						IOItem.FoundryProcess = FoundryActionTypes.Desiccate;
-						//IOItem.ProcessAction = IAction.Desiccate;
 						break;
 					case IOResult.manatank:
 						IOItem.InspectList = true;
 						IOItem.FoundryProcess = FoundryActionTypes.ManaStone;
-						//IOItem.ProcessAction = IAction.ManaStone;
 						break;
 					case IOResult.spell:
 						IOItem.InspectList = true;
 						IOItem.FoundryProcess = FoundryActionTypes.Read;
-						//IOItem.ProcessAction = IAction.Read;
 						break;
 					case IOResult.val:
 						IOItem.InspectList = true;
 						if(GISettings.SalvageHighValue) 
 						{
 							IOItem.FoundryProcess = FoundryActionTypes.Salvage;
-							//IOItem.ProcessAction = IAction.Salvage;
 						}
 						break;
 				}
@@ -587,13 +538,8 @@ namespace GearFoundry
 				
 				if(GISettings.AutoLoot)
 				{
-					IOItem.MoveToInventory = true;
 					FoundryLoadAction(FoundryActionTypes.MoveToPack, IOItem.Id);
 					InitiateFoundryActions();
-										
-//					IOItem.Move = true;
-//					ToggleInspectorActions(1);
-//					InitiateInspectorActionSequence();
 				}
 				
 				IOItem.Exclude = true;
@@ -631,7 +577,8 @@ namespace GearFoundry
 							case IOResult.manatank:
 							case IOResult.rare:
 							case IOResult.spell:
-							case IOResult.trophy:								
+							case IOResult.trophy:	
+							case IOResult.dessicate:
 								return 1;						
 							case IOResult.salvage:
 								return 2;
