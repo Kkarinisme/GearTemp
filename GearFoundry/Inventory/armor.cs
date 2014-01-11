@@ -1189,10 +1189,14 @@ namespace GearFoundry
 
         private void UnsubscribeArmorEvents()
         {
+            try{
             if (ArmorHudTabView != null) { ArmorHudTabView.OpenTabChange -= ArmorHudTabView_OpenTabChange; }
             if (ArmorHudView != null) { ArmorHudView.Resize -= ArmorHudView_Resize; }
             if (MasterTimer != null) { MasterTimer.Tick -= ArmorResizeTimerTick; }
             Core.CharacterFilter.Logoff -= ArmorLogoff;
+            }
+            catch (Exception ex) { LogError(ex); }
+
 
         }
 

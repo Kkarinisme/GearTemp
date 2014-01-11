@@ -658,10 +658,14 @@ namespace GearFoundry
 
         private void UnsubscribeInventoryEvents()
         {
+            try{
             if (InventoryHudTabView != null) { InventoryHudTabView.OpenTabChange -= InventoryHudTabView_OpenTabChange; }
             if (InventoryHudView != null) { InventoryHudView.Resize -= InventoryHudView_Resize; }
             if (MasterTimer != null) { MasterTimer.Tick -= InventoryResizeTimerTick; }
             Core.CharacterFilter.Logoff -= InventoryLogoff;
+            }
+            catch (Exception ex) { LogError(ex); }
+
 
         }
 
