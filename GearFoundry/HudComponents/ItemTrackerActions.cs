@@ -23,9 +23,10 @@ namespace GearFoundry
 		{
 			try
 			{
+				if(!FoundryInventoryCheck(e.New.Id)) {return;}
 				if(e.New.ObjectClass == ObjectClass.Salvage && e.New.Values(LongValueKey.UsesRemaining) <  100)
 				{				
-					FoundryLoadAction(FoundryActionTypes.SalvageCombine, InspectorPickSalvage(e.New));	
+					FoundryLoadAction(FoundryActionTypes.SalvageCombine, e.New.Id);
 				}
 				if(e.New.Name.ToLower() == "pyreal sliver" || e.New.Name.ToLower() == "pyreal nugget")
 				{

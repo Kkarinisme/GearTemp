@@ -160,7 +160,8 @@ namespace GearFoundry
 			{
 				//TODO  Finish
 				return Core.WorldFilter.GetInventory().Where(x => x.ObjectClass == Core.WorldFilter[MatchId].ObjectClass &&
-				                                             x.Name.ToLower() == Core.WorldFilter[MatchId].Name.ToLower()).First().Id;
+				                                             x.Name.ToLower() == Core.WorldFilter[MatchId].Name.ToLower() &&
+				                                             x.Id != MatchId).First().Id;
 			}catch(Exception ex){LogError(ex); return 0;}
 			
 		}

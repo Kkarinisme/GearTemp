@@ -160,11 +160,8 @@ namespace GearFoundry
 					WriteToChat("Command Received.");
 					if(e.Text.Trim().ToLower().Contains("cont"))
 					{
-						WriteToChat("Command:  cont");
-						foreach(WorldObject wo in Core.WorldFilter.GetInventory().Where(x => x.Container == Core.CharacterFilter.Id))
-						{
-							WriteToChat(wo.Id + " " + wo.Name + " " + wo.Container);
-						}
+						WriteToChat(Core.WorldFilter[Core.Actions.CurrentSelection].Name + " inventory = " + FoundryInventoryCheck(Core.Actions.CurrentSelection));
+						
 					}
 					 
 				}

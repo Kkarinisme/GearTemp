@@ -79,6 +79,8 @@ namespace GearFoundry
 			internal int AetheriaDesiccantId = 0;
 			internal List<int> EmptyManaStoneIds = new List<int>();		
 		}
+		
+		private List<int> FoundryPackIds = new List<int>();
 
 		private void SubscribeFoundryActions()
 		{
@@ -142,7 +144,8 @@ namespace GearFoundry
 				Core.CharacterFilter.SpellCast += FoundryActionsSpellCastComplete;
 				Core.CharacterFilter.Logoff += FoundryActionsLogOff;
 				FoundryActionTimer.Interval = 150;
-				FoundryActionTimer.Tick += FoundryActionInitiator;	
+				FoundryActionTimer.Tick += FoundryActionInitiator;
+				Core.WorldFilter.ChangeObject += FoundryChangeObject;				
 				
 				try
 				{
@@ -170,9 +173,22 @@ namespace GearFoundry
 							mFoundryToolSet.EmptyManaStoneIds.Add(wo.Id);
 						}
 					}
-
+					FoundryFillPackIDs();
 				}catch(Exception ex){LogError(ex);}
 										
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void FoundryFillPackIDs()
+		{
+			try
+			{
+				FoundryPackIds.Clear();
+				FoundryPackIds.Add(Core.CharacterFilter.Id);
+				foreach(WorldObject pack in Core.WorldFilter.GetByContainer(Core.CharacterFilter.Id).Where(x => x.Values(LongValueKey.Unknown10) == 56))
+				{
+					FoundryPackIds.Add(pack.Id);	
+				}
 			}catch(Exception ex){LogError(ex);}
 		}
 		
@@ -181,9 +197,11 @@ namespace GearFoundry
 			try
 			{
 				FoundryActionList.Clear();
+				FoundryPackIds.Clear();
 				Core.CharacterFilter.SpellCast -= FoundryActionsSpellCastComplete;
 				Core.CharacterFilter.Logoff -= FoundryActionsLogOff;
-				FoundryActionTimer.Tick -= FoundryActionInitiator;				
+				FoundryActionTimer.Tick -= FoundryActionInitiator;	
+				Core.WorldFilter.ChangeObject -= FoundryChangeObject;				
 			}catch(Exception ex){LogError(ex);}	
 		}
 		
@@ -195,7 +213,22 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		
+		private void FoundryChangeObject(object sender, ChangeObjectEventArgs e)
+		{
+			try
+			{
+				if(e.Change == WorldChangeType.StorageChange && e.Changed.Values(LongValueKey.Unknown10) == 56)
+				{
+					FoundryFillPackIDs();
+					WriteToChat("Changed Packs.  New Pack List follows:");
+					foreach(int id in FoundryPackIds)
+					{
+						WriteToChat(Core.WorldFilter[id].Name + " " + id.ToString());
+					}
+					      
+				}
+			}catch(Exception ex){LogError(ex);}
+		}
 		
 		private void InitiateFoundryActions()
 		{
@@ -636,6 +669,7 @@ namespace GearFoundry
 								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList[0]))
 								{
 									FoundryActionList[i].ToDoList.RemoveAt(0);
+									return;
 								}
 								
 								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
@@ -645,16 +679,24 @@ namespace GearFoundry
 								
 							case FoundryActionTypes.SalvageCombine:
 								//Exit if nothing to combine
-								if(FoundryActionList[i].ToDoStack.Count == 0)
+								//Move created salvages to ToDoList
+								//Pick savlage types at time of combining, not prior as multiple salvage bags can get scopped into the lists and not cleared.
+								WriteToChat("Salvage Combine");
+								if(FoundryActionList[i].ToDoList.Count == 0)
 								{
 									ClearFoundryAction(i);
 									return;
 								}
-								//Remove bags not found in inventory.  If it reduces the list count to 0 remove the empty list and return
-								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoStack[0], i))
+								if(!FoundryInventoryCheck(FoundryActionList[i].ToDoList[0]))
 								{
+									FoundryActionList[i].ToDoList.RemoveAt(0);
 									return;
 								}
+								
+								//Take the first item from the todo list and make a combine list of ints out of it.  Clear it from the todo list.
+								FoundryActionList[i].ToDoStack.Add(InspectorPickSalvage(Core.WorldFilter[FoundryActionList[i].ToDoList[0]]));
+								FoundryActionList[i].ToDoList.RemoveAt(0);
+								
 								//If there's one bag, we can't combine it with anything.  Clear and return.
 								if(FoundryActionList[i].ToDoStack[0].Count == 1)
 								{
@@ -665,6 +707,7 @@ namespace GearFoundry
 								WriteToChat(DateTime.Now.ToShortTimeString() + " " + FoundryActionList[i].Action.ToString());
 								SetFoundryAction(i);
 								FoundrySalvage(FoundryActionList[i].ToDoStack[0]);
+								FoundryActionList[i].ToDoStack.RemoveAt(0);
 								return;
 						}
 					}
@@ -696,9 +739,9 @@ namespace GearFoundry
 		{
 			try
 			{
-				//This doesn't work because Worldfilter.GetInventory() is dynamic.  Check container Ids instead?
-				if(Core.WorldFilter.GetInventory().Any(x => x.Id == id)) {return true;}
-				else {return false;}
+				if(Core.WorldFilter[id] == null) {return false;}
+				if(FoundryPackIds.Contains(Core.WorldFilter[id].Container)){return true;}
+				return false;
 			}catch(Exception ex){LogError(ex); return false;}
 		}
 		
@@ -708,7 +751,7 @@ namespace GearFoundry
 			{	
 				foreach(int id in Ids)
 				{
-					if(!Core.WorldFilter.GetInventory().Any(x => x.Id == id)) {FoundryActionList[i].ToDoStack[0].Remove(id);}
+					if(!FoundryInventoryCheck(id)) {FoundryActionList[i].ToDoStack[0].Remove(id);}
 				}
 				
 				if(FoundryActionList[i].ToDoStack[0].Count > 0) {return true;}
@@ -762,86 +805,6 @@ namespace GearFoundry
 			}catch(Exception ex){LogError(ex);}
 		}
 		
-		//Bag in a slot
-//		[VTank] [Meta] Create count: 1
-//[VTank] [Meta] Create time: 1/10/2014 9:33 PM
-//[VTank] [Meta] Has identify data: True
-//[VTank] [Meta] Last ID time: 1/10/2014 9:33 PM
-//[VTank] [Meta] Worldfilter valid: True
-//[VTank] [Meta] Client valid: True
-//[VTank] ID: 805FF583
-//[VTank] ObjectClass: Container
-//[VTank] (S) Name: Pack
-//[VTank] (S) UsageInstructions: Use this item to close it.
-//[VTank] (B) Open: True
-//[VTank] (I) CreateFlags1: 2113594
-//[VTank] (I) Type: 136
-//[VTank] (I) Icon: 7096
-//[VTank] (I) Category: 512
-//[VTank] (I) Behavior: 19
-//[VTank] (I) ItemSlots: 24
-//[VTank] (I) Value: 65
-//[VTank] (I) ItemUsabilityFlags: 56
-//[VTank] (I) Container: 1342600506
-//[VTank] (I) Burden: 2395
-//[VTank] (I) PhysicsDataFlags: 137345
-//[VTank] (D) ApproachDistance: 0.5
-//[VTank] Palette Entry 0: ID 0x000BF6, Ex Color: 000000, 0/0
-//		
-//
-//Pack 2
-//[VTank] --------------Object dump--------------
-//[VTank] [Meta] Create count: 1
-//[VTank] [Meta] Create time: 1/10/2014 9:36 PM
-//[VTank] [Meta] Has identify data: True
-//[VTank] [Meta] Last ID time: 1/10/2014 9:36 PM
-//[VTank] [Meta] Worldfilter valid: True
-//[VTank] [Meta] Client valid: True
-//[VTank] ID: 805FF5C9
-//[VTank] ObjectClass: Container
-//[VTank] (S) Name: Pack
-//[VTank] (S) UsageInstructions: Use this item to close it.
-//[VTank] (B) Open: True
-//[VTank] (I) CreateFlags1: 2113594
-//[VTank] (I) Type: 136
-//[VTank] (I) Icon: 7092
-//[VTank] (I) Category: 512
-//[VTank] (I) Behavior: 19
-//[VTank] (I) ItemSlots: 24
-//[VTank] (I) Value: 65
-//[VTank] (I) ItemUsabilityFlags: 56
-//[VTank] (I) Container: 1342600506
-//[VTank] (I) Burden: 1417
-//[VTank] (I) PhysicsDataFlags: 137345
-//[VTank] (D) ApproachDistance: 0.5
-//[VTank] Palette Entry 0: ID 0x000BF7, Ex Color: 000000, 0/0
 
-//Item in Pack 2
-//[VTank] --------------Object dump--------------
-//[VTank] [Meta] Create count: 1
-//[VTank] [Meta] Create time: 1/10/2014 9:36 PM
-//[VTank] [Meta] Has identify data: True
-//[VTank] [Meta] Last ID time: 1/10/2014 9:36 PM
-//[VTank] [Meta] Worldfilter valid: True
-//[VTank] [Meta] Client valid: True
-//[VTank] ID: 805FF5C8
-//[VTank] ObjectClass: Ust
-//[VTank] (S) Name: Ust
-//[VTank] (S) UsageInstructions: Use to salvage materials from treasure items.
-//[VTank] (S) SimpleDescription: A tool used to extract materials from treasure items.
-//[VTank] (I) CreateFlags1: 270561304
-//[VTank] (I) Type: 20646
-//[VTank] (I) Icon: 9914
-//[VTank] (I) Category: 536870912
-//[VTank] (I) Behavior: 18
-//[VTank] (I) Value: 10
-//[VTank] (I) ItemUsabilityFlags: 8
-//[VTank] (I) StackCount: 1
-//[VTank] (I) StackMax: 1
-//[VTank] (I) Container: -2141194807
-//[VTank] (I) Burden: 10
-//[VTank] (I) HookMask: 2
-//[VTank] (I) PhysicsDataFlags: 137217
-		
 	}
 }

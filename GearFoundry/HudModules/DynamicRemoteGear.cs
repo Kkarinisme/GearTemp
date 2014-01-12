@@ -100,16 +100,38 @@ namespace GearFoundry
         	try
         	{
         		if (TacticianHudView != null) mGearRemoteSettings.GearTacticianRendered = true;
+        		else mGearRemoteSettings.GearTacticianRendered = false;
+        		
                 if (LandscapeHudView != null) mGearRemoteSettings.GearSenseRendered = true;
+                else mGearRemoteSettings.GearSenseRendered = false;
+                
                 if (CorpseHudView != null) mGearRemoteSettings.GearVisectionRendered = true;
+                else mGearRemoteSettings.GearVisectionRendered = false;
+                
                 if (TaskHudView != null) mGearRemoteSettings.GearTaskerRendered = true;
+                else mGearRemoteSettings.GearTaskerRendered = false;
+                
                 if (ButlerHudView != null) mGearRemoteSettings.GearButlerRendered = true;
+                else mGearRemoteSettings.GearButlerRendered = false;
+                
                 if (ItemHudView != null) mGearRemoteSettings.GearInspectorRendered = true;
+                else mGearRemoteSettings.GearInspectorRendered = false;
+                
                 if (DynamicPortalGearView != null) mGearRemoteSettings.GearPortalRendered = true;
+                else mGearRemoteSettings.GearPortalRendered = false;
+                
                 if (quickiesvHud != null) mGearRemoteSettings.GearSwitchVRendered = true;
+                else mGearRemoteSettings.GearSwitchVRendered = false;
+                
                 if (quickieshHud != null) mGearRemoteSettings.GearSwitchHRendered = true;
+                else mGearRemoteSettings.GearSwitchHRendered = false;
+                
                 if (InventoryHudView != null) mGearRemoteSettings.GearInventoryRendered = true;
+                else mGearRemoteSettings.GearInventoryRendered = false;
+                
                 if (ArmorHudView != null) mGearRemoteSettings.GearArmorRendered = true;
+               	else mGearRemoteSettings.GearArmorRendered = false;
+        		
                 
                 saveRemoteGearSettings();   
         	}catch(Exception ex){LogError(ex);}
@@ -119,6 +141,8 @@ namespace GearFoundry
         {
             try
             {
+            	WriteToChat("Saved Settings");
+            	
                 if(File.Exists(remoteGearFilename))
 				{
                 	File.Delete(remoteGearFilename);
