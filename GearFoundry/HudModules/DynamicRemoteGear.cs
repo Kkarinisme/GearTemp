@@ -146,7 +146,7 @@ namespace GearFoundry
         		
         		int DGRViewHeight = 35 + 35 * DGRControlsList.Count;
         		
-        		DynamicGearRemoteView = new HudView("", 30, DGRViewHeight, GearGraphics.RemoteGearIcon, false, "RemoteGear");
+        		DynamicGearRemoteView = new HudView("", 35, DGRViewHeight, GearGraphics.RemoteGearIcon, false, "RemoteGear");
 	            DynamicGearRemoteView.ShowInBar = false;
 	            DynamicGearRemoteView.UserAlphaChangeable = false;
 	            DynamicGearRemoteView.Visible = true;
@@ -163,7 +163,7 @@ namespace GearFoundry
 	            DynamicGearRemoteTabView.AddTab(DynamicGearRemoteLayout, ""); 
 
 	            DynamicGearRemoteClock = new HudStaticText();
-	            DynamicGearRemoteLayout.AddControl(DynamicGearRemoteClock, new Rectangle(0,4,25,16));
+	            DynamicGearRemoteLayout.AddControl(DynamicGearRemoteClock, new Rectangle(0,4,30,16));
 	            DynamicGearRemoteClock.FontHeight = 8;
 	            
 				MasterTimer.Tick += DynamicGearClock;	            
