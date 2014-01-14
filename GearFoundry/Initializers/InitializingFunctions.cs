@@ -729,15 +729,16 @@ namespace GearFoundry
             if (mMainSettings.btoonStatsEnabled)
             { getStats(); }
 
-            if (mMainSettings.bquickSlotsvEnabled)
-            {
-                RenderVerticalQuickSlots(); 
-            }
-
-            if (mMainSettings.bquickSlotshEnabled)
-            {
-                RenderHorizontalQuickSlots();
-            }
+            //ToMish:  these aren't needed here, they get rendered again in the remote start up.
+//            if (mMainSettings.bquickSlotsvEnabled)
+//            {
+//                RenderVerticalQuickSlots(); 
+//            }
+//
+//            if (mMainSettings.bquickSlotshEnabled)
+//            {
+//                RenderHorizontalQuickSlots();
+//            }
 
             if (bEnableTextFiltering || bTextFilterAllStatus)
             {

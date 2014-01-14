@@ -19,17 +19,19 @@ namespace GearFoundry
 {
 	public partial class PluginCore
 	{ 				
-		private void SalvageCreated(object sender, CreateObjectEventArgs e)
+		private void InventoryCreated(object sender, CreateObjectEventArgs e)
 		{
 			try
-			{
+			{				
+				if(!FoundryInventoryCheck(e.New.Id)) {return;}
 				if(e.New.ObjectClass == ObjectClass.Salvage && e.New.Values(LongValueKey.UsesRemaining) <  100)
 				{				
-					FoundryLoadAction(FoundryActionTypes.SalvageCombine, InspectorPickSalvage(e.New));	
+					FoundryLoadAction(FoundryActionTypes.SalvageCombine, e.New.Id);
 				}
 				if(e.New.Name.ToLower() == "pyreal sliver" || e.New.Name.ToLower() == "pyreal nugget")
 				{
 					if(GISettings.AutoProcess)  FoundryLoadAction(FoundryActionTypes.MoteCombine, e.New.Id);
+					InitiateFoundryActions();
 				}
 				
 			}catch(Exception ex){LogError(ex);}

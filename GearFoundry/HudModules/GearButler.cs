@@ -763,6 +763,7 @@ namespace GearFoundry
 		{
 			try
     		{	
+				if(ButlerHudView == null) {return;}
 				if(Core.WorldFilter[Core.Actions.CurrentSelection] != null)
 				{		
 					ButlerHudCurrentSelectionIcon.Clear();
