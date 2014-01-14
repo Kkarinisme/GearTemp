@@ -610,6 +610,7 @@ namespace GearFoundry
     			
     			if(col == 0)
     			{
+    				WriteToChat("loaded open container");
     				FoundryLoadAction(FoundryActionTypes.OpenContainer, co.Id);
     				InitiateFoundryActions();
     			}

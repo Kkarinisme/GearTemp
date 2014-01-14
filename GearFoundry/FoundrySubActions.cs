@@ -237,6 +237,15 @@ namespace GearFoundry
 				return 0;
 			}
 		}
+		
+		private void FoundryMoteCombine(int SelectedMote)
+		{
+			try
+			{
+				int SecondMoteId = Core.WorldFilter.GetInventory().Where(x => x.Name == Core.WorldFilter[SelectedMote].Name && x.Id != SelectedMote).First().Id;
+				Core.Actions.ApplyItem(SecondMoteId, SelectedMote);
+			}catch(Exception ex){LogError(ex);}
+		}
 				
 
 	}

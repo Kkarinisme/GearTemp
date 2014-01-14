@@ -29,7 +29,7 @@ namespace GearFoundry
 				Core.ItemDestroyed += ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject += ItemTracker_ObjectReleased; 
 				Core.WorldFilter.ChangeObject += ItemTrackerActions_ObjectChanged;
-				Core.WorldFilter.CreateObject += SalvageCreated;
+				Core.WorldFilter.CreateObject += InventoryCreated;
 				Core.CharacterFilter.Logoff += ItemHudLogOff;  
 
 				SetKnownSpellSchools();
@@ -64,7 +64,7 @@ namespace GearFoundry
 				Core.ItemDestroyed -= ItemTracker_ItemDestroyed;
 				Core.WorldFilter.ReleaseObject -= ItemTracker_ObjectReleased;
 				Core.WorldFilter.ChangeObject -= ItemTrackerActions_ObjectChanged;
-				Core.WorldFilter.CreateObject -= SalvageCreated;
+				Core.WorldFilter.CreateObject -= InventoryCreated;
 				Core.CharacterFilter.Logoff -= ItemHudLogOff;			
 
 				LOList.Clear();
@@ -380,19 +380,48 @@ namespace GearFoundry
 		}
 
 		
-		private DateTime LootContainerTime = DateTime.MinValue;
+		private int LastLootContainer = 0;
 		private void LootContainerOpened(object sender, ContainerOpenedEventArgs e)
 		{
 			try
 			{					
 				if(Core.WorldFilter[e.ItemGuid] == null){return;}
 				
-				//TODO:  Revisit this
+				if(Core.WorldFilter[e.ItemGuid].Values(LongValueKey.Burden) == 0) {return;}
+				
 				if(Core.WorldFilter.GetByContainer(e.ItemGuid).Count == 0)
-				LootContainerTime = DateTime.Now;
-				Core.RenderFrame += LootContainerDelay;	
-								
-				LootObject container = new LootObject(Core.WorldFilter[e.ItemGuid]);
+				{
+					WriteToChat("Loot Tapback hit");
+					LastLootContainer = e.ItemGuid;
+					Core.RenderFrame += LootContainerDelay;	
+				}
+				
+				WriteToChat("Passed into Loot Container");
+				LootByContainer(e.ItemGuid);												
+			}
+			catch(Exception ex){LogError(ex);}
+		}
+		
+		private void LootContainerDelay(object sender, EventArgs e)
+		{
+			try
+			{
+				if(Core.WorldFilter.GetByContainer(LastLootContainer).Count() != 0)
+				{
+					WriteToChat("Loot Container Tapback cleared.");
+					Core.RenderFrame -= LootContainerDelay;	
+					
+					LootByContainer(LastLootContainer);
+					LastLootContainer = 0;
+				}	
+			}catch(Exception ex){LogError(ex);}
+		}
+		
+		private void LootByContainer(int ContainerId)
+		{
+			try
+			{
+				LootObject container = new LootObject(Core.WorldFilter[ContainerId]);
 				
 				if(container.Name.Contains(Core.CharacterFilter.Name)){return;}
 				//TODO:  Protect permitted corpses.
@@ -409,21 +438,8 @@ namespace GearFoundry
 							SeparateItemsToID(lo.Id);
 						}
 					}	
-				}				
-				return;
-			}
-			catch(Exception ex){LogError(ex);}
-		}
-		
-		private void LootContainerDelay(object sender, EventArgs e)
-		{
-			try
-			{
-				if((DateTime.Now - LootContainerTime).TotalMilliseconds > 350)
-				{
-					Core.RenderFrame -= LootContainerDelay;	
-					return;
-				}	
+				}
+				
 			}catch(Exception ex){LogError(ex);}
 		}
 			

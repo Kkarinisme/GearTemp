@@ -1114,6 +1114,7 @@ namespace GearFoundry
 
             try
             {
+            	if(ArmorHudView == null) {return;}
                 SaveArmorSettings();
                 ClearArmorHudVariables();
                 UnsubscribeArmorEvents();
