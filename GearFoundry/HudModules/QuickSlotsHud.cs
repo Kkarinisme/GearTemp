@@ -65,6 +65,7 @@ namespace GearFoundry
         int nQuickieIDv12 = 0;
         int nQuickieIDv13 = 0;
         int nQuickieIDv14 = 0;
+        int nCountV = 0;
 
 
 
@@ -108,6 +109,7 @@ namespace GearFoundry
         int nQuickieIDh12 = 0;
         int nQuickieIDh13 = 0;
         int nQuickieIDh14 = 0;
+        int nCountH = 0;
 
         private static VirindiViewService.HudView quickiesHud = null;
 
@@ -156,7 +158,10 @@ namespace GearFoundry
 
             xdocQuickSlotsv = XDocument.Load(quickSlotsvFilename);
 
-            quickiesvHud = new VirindiViewService.HudView("", 30, 385, new ACImage(Color.Transparent),false,"quickiesvhud");
+            nCountV = xdocQuickSlotsv.Root.Descendants().Count();
+            nCountV = nCountV / 5;
+
+            quickiesvHud = new VirindiViewService.HudView("", 30,30+ 25*nCountV, new ACImage(Color.Transparent),false,"quickiesvhud");
             quickiesvHud.ShowInBar = false;
             quickiesvHud.UserAlphaChangeable = false;
             quickiesvHud.Visible = true;
@@ -310,10 +315,12 @@ namespace GearFoundry
                 }
 
                 xdocQuickSlotsh = XDocument.Load(quickSlotshFilename);
-
+                nCountH = xdocQuickSlotsh.Root.Descendants().Count();
+                nCountH = nCountH / 5;
+ 
  
 
-                quickieshHud = new VirindiViewService.HudView("", 405, 40, new ACImage(Color.Transparent),false,"quickieshhud");
+                quickieshHud = new VirindiViewService.HudView("", 30 + 25*nCountH, 40, new ACImage(Color.Transparent),false,"quickieshhud");
                 quickieshHud.ShowInBar = false;
                 quickieshHud.UserAlphaChangeable = false;
                 quickieshHud.Visible = true;
@@ -583,16 +590,32 @@ namespace GearFoundry
                     thisQuickie.Icon = quickie.Icon;
                     thisQuickie.IconOverlay = quickie.Values(LongValueKey.IconOverlay);
                     thisQuickie.IconUnderlay = quickie.Values(LongValueKey.IconUnderlay);
+                 
                     if (quickiesHud == quickiesvHud)
                     {
+                        nCountV++;
+ 
                         fillHud(xdocQuickSlotsv, quickSlotsvFilename, thisQuickie);
                         writeToQuickSlots(xdocQuickSlotsv, quickSlotsvFilename, thisQuickie);
                     }
                     else if (quickiesHud == quickieshHud)
                     {
+                        nCountH++;
+ 
                         fillHud(xdocQuickSlotsh, quickSlotshFilename, thisQuickie);
                         writeToQuickSlots(xdocQuickSlotsh, quickSlotshFilename, thisQuickie);
                     }
+                    if (quickiesHud == quickiesvHud)
+                    {
+                        DisposeVerticalQuickSlots();
+                        RenderVerticalQuickSlots();
+                    }
+                    else if (quickiesHud == quickieshHud)
+                    {
+                        DisposeHorizontalQuickSlots();
+                        RenderHorizontalQuickSlots();
+                    }
+
 
                 }
                 catch (Exception ex) { LogError(ex); }
@@ -952,8 +975,9 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
 
 
-            if (xdocQuickF == xdocQuickSlotsv)
+            if (xdocQuickF == xdocQuickSlotsv && nquickiev < nCountV)
             {
+                try{
                 switch (nquickiev)
                 {
                     case 0:
@@ -1068,8 +1092,11 @@ namespace GearFoundry
                         break;
 
                 }
+                }
+                catch (Exception ex) { LogError(ex); }
+
             }
-            else if (xdocQuickF == xdocQuickSlotsh)
+            else if (xdocQuickF == xdocQuickSlotsh && nquickieh < nCountH)
             {
                 try
                 {
