@@ -120,8 +120,8 @@ namespace GearFoundry
         private string portalGearFilename = null;
         private string programinv = String.Empty;
 
-        private int nitemFontHeight = 0;
-        private int nmenuFontHeight = 0;
+        private int nitemFontHeight = 12;
+        private int nmenuFontHeight = 12;
 
 
 

@@ -20,6 +20,8 @@ using System.Xml;
 using System.Xml.Linq;
 using VirindiViewService;
 using MyClasses.MetaViewWrappers;
+using VirindiViewService.Controls;
+
 
 
 namespace GearFoundry
@@ -88,7 +90,7 @@ namespace GearFoundry
         private void ClearRuleRelatedComponents()
         {
             ClearRuleLists();
-            ClearRuleListVues();
+       //     ClearRuleListVues();
         }
 
         private void ClearRuleLists()
@@ -133,19 +135,19 @@ namespace GearFoundry
 
         private void ClearRuleListVues()
         {
-            if (lstRuleApplies != null) { lstRuleApplies.Clear(); }
-            if (lstDamageTypes != null) { lstDamageTypes.Clear(); }
-            if (lstRuleSlots != null) {lstRuleSlots.Clear();}
-            if (lstRuleArmorTypes != null) { lstRuleArmorTypes.Clear(); }
-            if (lstRuleSets != null) { lstRuleSets.Clear(); }
-            if (lstRuleSpellsEnabled != null) { lstRuleSpellsEnabled.Clear(); }
-            if (lstRuleSpells != null) { lstRuleSpells.Clear(); }
-            if (lstRules != null) { lstRules.Clear(); }
+            if (lstRuleApplies != null) { lstRuleApplies.ClearRows();}
+            if (lstDamageTypes != null) { lstDamageTypes.ClearRows(); }
+            if (lstRuleSlots != null) { lstRuleSlots.ClearRows(); }
+            if (lstRuleArmorTypes != null) { lstRuleArmorTypes.ClearRows(); }
+            if (lstRuleSets != null) { lstRuleSets.ClearRows(); }
+            if (lstRuleSpellsEnabled != null) { lstRuleSpellsEnabled.ClearRows(); }
+            if (lstRuleSpells != null) { lstRuleSpells.ClearRows(); }
+            if (lstRules != null) { lstRules.ClearRows(); }
             if (cboWeaponAppliesTo != null) { cboWeaponAppliesTo.Clear(); }
             if (cboMasteryType != null) { cboMasteryType.Clear(); }
-            if (lstmyTrophies != null) { lstmyTrophies.Clear(); }
-            if (lstmyMobs != null) { lstmyMobs.Clear(); }
-            if (lstNotifySalvage != null) { lstNotifySalvage.Clear(); }
+            if (lstmyTrophies != null) { lstmyTrophies.ClearRows(); }
+            if (lstmyMobs != null) { lstmyMobs.ClearRows(); }
+            if (lstNotifySalvage != null) { lstNotifySalvage.ClearRows(); }
 
         }
 
@@ -208,7 +210,7 @@ namespace GearFoundry
             CreateElementalList();
             CreateSpellIndex();
 			CreateHeritageIndex();
-			CreateMasteryIndex();
+		//	CreateMasteryIndex();
 			CreateSkillIndex();
 			CreateAttribIndex();
 			CreateMaterialIndex();
@@ -231,7 +233,7 @@ namespace GearFoundry
             CreateCoverageInvList();
             CreateEmbueInvList();
             CreateKeyLists();
-            InitSoundsFunctions();
+         //   InitSoundsFunctions();
 		}
 		
 		private void CreateKeyLists()
@@ -494,26 +496,26 @@ namespace GearFoundry
         {
             try
             {
-                IDNameLoadable info;
-                WeaponTypeList.Clear();
-                info = new IDNameLoadable(0, "None");
-                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
-                info = new IDNameLoadable(47, "Missile");
-                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
-                info = new IDNameLoadable(41, "TwoHanded");
-                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
-                info = new IDNameLoadable(44, "Heavy");
-                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
-                info = new IDNameLoadable(45, "Light");
-                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
-                info = new IDNameLoadable(46, "Finesse");
-                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
-                info = new IDNameLoadable(34, "War Magic");
-                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
-                info = new IDNameLoadable(43, "Void Magic");
-                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
-                info = new IDNameLoadable(54, "Summoning");
-                addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                //IDNameLoadable info;
+                //WeaponTypeList.Clear();
+                //info = new IDNameLoadable(0, "None");
+                //addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                //info = new IDNameLoadable(47, "Missile");
+                //addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                //info = new IDNameLoadable(41, "TwoHanded");
+                //addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                //info = new IDNameLoadable(44, "Heavy");
+                //addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                //info = new IDNameLoadable(45, "Light");
+                //addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                //info = new IDNameLoadable(46, "Finesse");
+                //addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                //info = new IDNameLoadable(34, "War Magic");
+                //addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                //info = new IDNameLoadable(43, "Void Magic");
+                //addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
+                //info = new IDNameLoadable(54, "Summoning");
+                //addInfo(info, WeaponTypeList, cboWeaponAppliesTo);
                 
             }
             catch (Exception ex) { LogError(ex); }
@@ -822,36 +824,36 @@ namespace GearFoundry
 			
 		}	
 		
-		private void CreateMasteryIndex()
-		{
-			string[] loadme = {"None", "Unarmed", "Sword", "Axe", "Mace", "Spear", "Dagger", "Staff", "Bow", "Crossbow", "Thrown", "TwoHanded", "Naturalist", "Primalist", "Necromancer"};
-			//Nat 11, Prim 12, Necro 13
-			int i = 0;
-			foreach(string load in loadme)
-			{
-				IDNameLoadable info = new IDNameLoadable(i++, load);
-				MasteryIndex.Add(info);
-                cboMasteryType.Add(info.name);
-			}	
+        //private void CreateMasteryIndex()
+        //{
+        //    string[] loadme = {"None", "Unarmed", "Sword", "Axe", "Mace", "Spear", "Dagger", "Staff", "Bow", "Crossbow", "Thrown", "TwoHanded", "Naturalist", "Primalist", "Necromancer"};
+        //    //Nat 11, Prim 12, Necro 13
+        //    int i = 0;
+        //    foreach(string load in loadme)
+        //    {
+        //        IDNameLoadable info = new IDNameLoadable(i++, load);
+        //        MasteryIndex.Add(info);
+        //        cboMasteryType.AddItem(info.name,i);
+        //    }	
 			
-			if(writelists){
-                FileInfo logFile = new FileInfo(GearDir + @"\MasteryIndex.csv");	
-							if(logFile.Exists)
-				{
-					logFile.Delete();
-				}
-			StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
-			StringBuilder output = new StringBuilder();
-			output.Append("Indexed to Mast.ID\n\nMasteryID, Name\n");
-			foreach(var info in MasteryIndex)
-			{
-				output.Append(info.ID.ToString() + "," + info.name.ToString() + "\n");
-			}
-			writer0.WriteLine(output);
-			writer0.Close();
-			}
+        //    if(writelists){
+        //        FileInfo logFile = new FileInfo(GearDir + @"\MasteryIndex.csv");	
+        //                    if(logFile.Exists)
+        //        {
+        //            logFile.Delete();
+        //        }
+        //    StreamWriter writer0 = new StreamWriter(logFile.FullName, true);
+        //    StringBuilder output = new StringBuilder();
+        //    output.Append("Indexed to Mast.ID\n\nMasteryID, Name\n");
+        //    foreach(var info in MasteryIndex)
+        //    {
+        //        output.Append(info.ID.ToString() + "," + info.name.ToString() + "\n");
+        //    }
+        //    writer0.WriteLine(output);
+        //    writer0.Close();
+        //    }
 			
-		}
+        //}
 
 		
 		private void CreateElementalList()
@@ -1386,11 +1388,12 @@ namespace GearFoundry
 
         }
 
-
-        private void addInfo(IDNameLoadable info, List<IDNameLoadable> lst, MyClasses.MetaViewWrappers.ICombo cmb)
+        //may have guessed wrong here ? if should be info.name
+ 
+        private void addInfo(IDNameLoadable info, List<IDNameLoadable> lst, HudCombo cmb)
         {
             lst.Add(info);
-            cmb.Add(info.name);
+            cmb.AddItem(cmb, info.name );
         }
 
         private void doWriteLists(List<IDNameLoadable> lst)

@@ -275,6 +275,8 @@ namespace GearFoundry
 
         private void InventoryHudTabView_OpenTabChange(object sender, System.EventArgs e)
         {
+            WriteToChat("Current tab value is " + InventoryHudTabView.CurrentTab.ToString());
+
             try
             {
                 switch (InventoryHudTabView.CurrentTab)
@@ -887,9 +889,7 @@ namespace GearFoundry
                 {
                     programinv = "inventory";
                     doCheckFiles();
-                    //Need a timer for processing inventory
-            //        mWaitingForIDTimer = new WindowsTimer();
-                    //Need a list to hold the inventory
+                   //Need a list to hold the inventory
                     mWaitingForID = new List<WorldObject>();
 
                     // If already have an inventory file for a toon, do not need to duplicate already id'd inventory
@@ -977,7 +977,8 @@ namespace GearFoundry
                         {
                             OnInventoryStart(); // This one in the doupdate
                         }
-                        else { programinv = ""; }
+                        //   else { programinv = ""; }
+                        else { mIsFinished(); }
                         //Now need to start routines that will continue to get data as becomes available or will end the search and save the files
                       //  mIsFinished();
 

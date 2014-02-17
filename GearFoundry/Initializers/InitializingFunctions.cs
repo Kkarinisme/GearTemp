@@ -19,6 +19,7 @@ using System.Xml.Linq;
 using System.ComponentModel;
 using VirindiViewService;
 using MyClasses.MetaViewWrappers;
+using VirindiViewService.Controls;
 using System.Windows.Forms;
 
 // I am using this file -- Karin 4/16/13
@@ -86,22 +87,22 @@ namespace GearFoundry
 
                 }
 
-                //if (!File.Exists(remoteGearFilename))
-                //{
-                //    try
-                //    {
+                if (!File.Exists(remoteGearFilename))
+                {
+                    try
+                    {
 
-                //        string filedefaults = GetResourceTextFile("RemoteGear.xml");
-                //        using (StreamWriter writedefaults = new StreamWriter(remoteGearFilename, true))
-                //        {
-                //            writedefaults.Write(filedefaults);
-                //            writedefaults.Close();
-                //        }
+                        string filedefaults = GetResourceTextFile("RemoteGear.xml");
+                        using (StreamWriter writedefaults = new StreamWriter(remoteGearFilename, true))
+                        {
+                            writedefaults.Write(filedefaults);
+                            writedefaults.Close();
+                        }
 
-                //    }
-                //    catch (Exception ex) { LogError(ex); }
+                    }
+                    catch (Exception ex) { LogError(ex); }
 
-                //}
+                }
 
 
                 if (!File.Exists(mobsFilename))
@@ -186,7 +187,7 @@ namespace GearFoundry
 
         public void setPathsForDirs()
         {
-            //Directory for the alinco Document files
+            //Directory for the GearFoundry Document files
             GearDir = String.Concat(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"\Decal Plugins\" + Globals.PluginName);
             //Directory for the current world in Gear Directory
             currDir = String.Concat(GearDir + @"\" + world);
@@ -217,17 +218,17 @@ namespace GearFoundry
             xdocGenSettings = XDocument.Load(genSettingsFilename);
             xdocSwitchGearSettings = XDocument.Load(switchGearSettingsFilename);
             try
-            {  
-            	setUpLists(xdocMobs, mSortedMobsList);
-                setUpLists(xdocTrophies, mSortedTrophiesList);              
+            {
+                setUpLists(xdocMobs, mSortedMobsList);
+                setUpLists(xdocTrophies, mSortedTrophiesList);
                 InitSalvageList();
                 InitRules();
                 setUpSettingsList();
                 LoadRemoteGearSettings();
-                                
+
             }
-            
-            
+
+
             catch (Exception ex) { LogError(ex); }
         }
 
@@ -291,214 +292,227 @@ namespace GearFoundry
         {
         	try
         	{
-        		string[] SplitString;
-        		int HoldRulesPosition = lstRules.ScrollPosition;
-        		
-        		if(mPrioritizedRulesList.Count == 0) {mPrioritizedRulesList.Add(CreateRulesXElement());}
-        		if(mSelectedRule == null){mSelectedRule = mPrioritizedRulesList.First();}
-        		
-        		List<XElement> SortedRulesList = mPrioritizedRulesList.OrderByDescending(x => x.Element("Enabled").Value).ThenBy(y => y.Element("Name").Value).ToList();
-        		
-        		lstRules.Clear();  		
-        		
-				foreach (XElement element in SortedRulesList)
+                WriteToChat("I just enered updaterulestabs");
+                string[] SplitString;
+                //int HoldRulesPosition = lstRules.ScrollPosition;
+                //WriteToChat("lstrulesscrollposition = " + HoldRulesPosition.ToString());
+                if (mPrioritizedRulesList.Count == 0) { mPrioritizedRulesList.Add(CreateRulesXElement()); }
+                if (mSelectedRule == null) { mSelectedRule = mPrioritizedRulesList.First(); }
+
+                List<XElement> SortedRulesList = mPrioritizedRulesList.OrderByDescending(x => x.Element("Enabled").Value).ThenBy(y => y.Element("Name").Value).ToList();
+                if (lstRules != null)
+               
                 {
-					MyClasses.MetaViewWrappers.IListRow newRow = lstRules.AddRow();
-					newRow[0][0] = Convert.ToBoolean(element.Element("Enabled").Value);
-					newRow[1][0] = element.Element("Priority").Value;
-					newRow[2][0] = element.Element("Name").Value;
-                    newRow[3][1] = 0x6005e6a;
-                    newRow[4][0] = element.Element("RuleNum").Value;
-				}
-        		        		
-        		//Not Visible:  "RuleNum"
-        		txtRuleName.Text = mSelectedRule.Element("Name").Value;
-        		txtRulePriority.Text = mSelectedRule.Element("Priority").Value;
-        		chkRuleEnabled.Checked = Convert.ToBoolean(mSelectedRule.Element("Enabled").Value);
-        		txtGearScore.Text = mSelectedRule.Element("GearScore").Value;
-        		txtRuleMaxCraft.Text = mSelectedRule.Element("Work").Value;
-        		txtRuleArcaneLore.Text = mSelectedRule.Element("ArcaneLore").Value;
-        		txtRuleWieldLevel.Text = mSelectedRule.Element("WieldLevel").Value;
-        		txtRuleNumSpells.Text = mSelectedRule.Element("NumSpells").Value;
-        		
-        		SplitString = mSelectedRule.Element("WieldEnabled").Value.Split(',');
-        		chkRuleWeaponsa.Checked = Convert.ToBoolean(SplitString[0]);
-        		chkRuleWeaponsb.Checked = Convert.ToBoolean(SplitString[1]);
-        		chkRuleWeaponsc.Checked = Convert.ToBoolean(SplitString[2]);
-        		chkRuleWeaponsd.Checked = Convert.ToBoolean(SplitString[3]);
-        		
-        		SplitString = mSelectedRule.Element("ReqSkill").Value.Split(',');
-        		txtRuleReqSkilla.Text = SplitString[0];
-        		txtRuleReqSkillb.Text = SplitString[1];
-        		txtRuleReqSkillc.Text = SplitString[2];
-        		txtRuleReqSkilld.Text = SplitString[3];
-        		   
-        		int HoldAppliesPosition = lstRuleApplies.ScrollPosition;
-        		_PopulateList(lstRuleApplies, AppliesToList, _ConvertCommaStringToIntList(mSelectedRule.Element("AppliesToFlag").Value)); 
-        		int HoldSlotsPosition = lstRuleSlots.ScrollPosition;
-				_PopulateList(lstRuleSlots, SlotList, _ConvertCommaStringToIntList(mSelectedRule.Element("Slots").Value));
-				int HoldDamagePosition = lstDamageTypes.ScrollPosition;
-				_PopulateList(lstDamageTypes, ElementalList, _ConvertCommaStringToIntList(mSelectedRule.Element("DamageType").Value));
-				int HoldArmorPosition = lstRuleArmorTypes.ScrollPosition;
-				_PopulateList(lstRuleArmorTypes, ArmorIndex, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorType").Value));
-				int HoldSetPosition = lstRuleSets.ScrollPosition;
-				_PopulateList(lstRuleSets, ArmorSetsList, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorSet").Value));
-        		
-				cboWeaponAppliesTo.Selected = WeaponTypeList.FindIndex(x => x.ID == Convert.ToInt32(mSelectedRule.Element("WieldSkill").Value));
-        		cboMasteryType.Selected = Convert.ToInt32(mSelectedRule.Element("MasteryType").Value);
-        		
-        		int HoldEnabledSpellsPostion = lstRuleSpellsEnabled.ScrollPosition;
-        		_UpdateSpellEnabledListBox();
-        		int HoldSpellListPosition = lstRuleSpells.ScrollPosition;
-        		_UpdateSpellListBox();
-        		
-        		lstRules.ScrollPosition = HoldRulesPosition;
-        		lstRuleApplies.ScrollPosition = HoldAppliesPosition;
-        		lstRuleSlots.ScrollPosition = HoldSlotsPosition;
-        		lstDamageTypes.ScrollPosition = HoldDamagePosition;
-        		lstRuleArmorTypes.ScrollPosition = HoldArmorPosition;
-        		lstRuleSets.ScrollPosition = HoldSetPosition;
-        		lstRuleSpellsEnabled.ScrollPosition = HoldEnabledSpellsPostion;
-        		lstRuleSpells.ScrollPosition = HoldSpellListPosition;
-        		
-        		_UpdateAdvancedRulesTab();
-        		
-        		
-        		//UNDONE:  Palettes
-        		
-        		
-        	}catch(Exception ex){LogError(ex);}
+                    WriteToChat("I am in update lstrules in updaterulestab");
+                    lstRules.ClearRows(); 
+                      WriteToChat("Number of items in SortedRulesList: " + SortedRulesList.Count.ToString());
+                    foreach (XElement element in SortedRulesList)
+                    {
+                        try{
+                        LstRulesHudListRow = lstRules.AddRow();
+
+                        ((HudCheckBox)LstRulesHudListRow[0]).Checked = Convert.ToBoolean(element.Element("Enabled").Value);
+                        ((HudStaticText)LstRulesHudListRow[1]).Text = element.Element("Priority").Value;
+                        ((HudStaticText)LstRulesHudListRow[2]).Text = element.Element("Name").Value;
+                        ((HudPictureBox)LstRulesHudListRow[3]).Image = 0x6005e6a;
+                        ((HudStaticText)LstRulesHudListRow[2]).Text = element.Element("RuleNum").Value;
+                        }
+                        catch (Exception ex) { LogError(ex); }
+
+                    }
+
+                //Not Visible:  "RuleNum"
+                //    txtRuleName.Text = mSelectedRule.Element("Name").Value;
+                //txtRulePriority.Text = mSelectedRule.Element("Priority").Value;
+                //chkRuleEnabled.Checked = Convert.ToBoolean(mSelectedRule.Element("Enabled").Value);
+                //txtGearScore.Text = mSelectedRule.Element("GearScore").Value;
+                //txtRuleMaxCraft.Text = mSelectedRule.Element("Work").Value;
+                //txtRuleArcaneLore.Text = mSelectedRule.Element("ArcaneLore").Value;
+                //txtRuleWieldLevel.Text = mSelectedRule.Element("WieldLevel").Value;
+                //txtRuleNumSpells.Text = mSelectedRule.Element("NumSpells").Value;
+
+                //SplitString = mSelectedRule.Element("WieldEnabled").Value.Split(',');
+                //chkRuleWeaponsa.Checked = Convert.ToBoolean(SplitString[0]);
+                //chkRuleWeaponsb.Checked = Convert.ToBoolean(SplitString[1]);
+                //chkRuleWeaponsc.Checked = Convert.ToBoolean(SplitString[2]);
+                //chkRuleWeaponsd.Checked = Convert.ToBoolean(SplitString[3]);
+
+                //SplitString = mSelectedRule.Element("ReqSkill").Value.Split(',');
+                //txtRuleReqSkilla.Text = SplitString[0];
+                //txtRuleReqSkillb.Text = SplitString[1];
+                //txtRuleReqSkillc.Text = SplitString[2];
+                //txtRuleReqSkilld.Text = SplitString[3];
+
+                //int HoldAppliesPosition = lstRuleApplies.ScrollPosition;
+                //_PopulateList(lstRuleApplies, AppliesToList, _ConvertCommaStringToIntList(mSelectedRule.Element("AppliesToFlag").Value));
+                //int HoldSlotsPosition = lstRuleSlots.ScrollPosition;
+                //_PopulateList(lstRuleSlots, SlotList, _ConvertCommaStringToIntList(mSelectedRule.Element("Slots").Value));
+                //int HoldDamagePosition = lstDamageTypes.ScrollPosition;
+                //_PopulateList(lstDamageTypes, ElementalList, _ConvertCommaStringToIntList(mSelectedRule.Element("DamageType").Value));
+                //int HoldArmorPosition = lstRuleArmorTypes.ScrollPosition;
+                //_PopulateList(lstRuleArmorTypes, ArmorIndex, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorType").Value));
+                //int HoldSetPosition = lstRuleSets.ScrollPosition;
+                //_PopulateList(lstRuleSets, ArmorSetsList, _ConvertCommaStringToIntList(mSelectedRule.Element("ArmorSet").Value));
+
+                //cboWeaponAppliesTo.Current = WeaponTypeList.FindIndex(x => x.ID == Convert.ToInt32(mSelectedRule.Element("WieldSkill").Value));
+                //cboMasteryType.Current = Convert.ToInt32(mSelectedRule.Element("MasteryType").Value);
+
+                //int HoldEnabledSpellsPostion = lstRuleSpellsEnabled.ScrollPosition;
+                //_UpdateSpellEnabledListBox();
+                //int HoldSpellListPosition = lstRuleSpells.ScrollPosition;
+                //_UpdateSpellListBox();
+
+                //lstRules.ScrollPosition = HoldRulesPosition;
+                //lstRuleApplies.ScrollPosition = HoldAppliesPosition;
+                //lstRuleSlots.ScrollPosition = HoldSlotsPosition;
+                //lstDamageTypes.ScrollPosition = HoldDamagePosition;
+                //lstRuleArmorTypes.ScrollPosition = HoldArmorPosition;
+                //lstRuleSets.ScrollPosition = HoldSetPosition;
+                //lstRuleSpellsEnabled.ScrollPosition = HoldEnabledSpellsPostion;
+                //lstRuleSpells.ScrollPosition = HoldSpellListPosition;
+
+                //_UpdateAdvancedRulesTab();
+
+
+               // UNDONE:  Palettes
+
+                }
+            }
+            catch (Exception ex) { LogError(ex); }
         }
         
         private void _UpdateAdvancedRulesTab()
         {
-        	try
-        	{
-        		chkAdvEnabled.Checked = false;
-        		cboAdv1KeyType.Clear();
-        		cboAdv1Key.Clear();
-        		cboAdv1KeyCompare.Clear();
-        		cboAdv1Link.Clear();
-        		txtAdv1KeyValue.Text = String.Empty;
+            try
+            {
+                //chkAdvEnabled.Checked = false;
+                //cboAdv1KeyType.Clear();
+                //cboAdv1Key.Clear();
+                //cboAdv1KeyCompare.Clear();
+                //cboAdv1Link.Clear();
+                //txtAdv1KeyValue.Text = String.Empty;
         		
-        		cboAdv2KeyType.Clear();
-        		cboAdv2Key.Clear();
-        		cboAdv2KeyCompare.Clear();
-        		cboAdv2Link.Clear();
-        		txtAdv2KeyValue.Text = String.Empty;
+                //cboAdv2KeyType.Clear();
+                //cboAdv2Key.Clear();
+                //cboAdv2KeyCompare.Clear();
+                //cboAdv2Link.Clear();
+                //txtAdv2KeyValue.Text = String.Empty;
         		
-        		cboAdv3KeyType.Clear();
-        		cboAdv3Key.Clear();
-        		cboAdv3KeyCompare.Clear();
-        		cboAdv3Link.Clear();
-        		txtAdv3KeyValue.Text = String.Empty;
+                //cboAdv3KeyType.Clear();
+                //cboAdv3Key.Clear();
+                //cboAdv3KeyCompare.Clear();
+                //cboAdv3Link.Clear();
+                //txtAdv3KeyValue.Text = String.Empty;
         		
-        		cboAdv4KeyType.Clear();
-        		cboAdv4Key.Clear();
-        		cboAdv4KeyCompare.Clear();
-        		cboAdv4Link.Clear();
-        		txtAdv4KeyValue.Text = String.Empty;
+                //cboAdv4KeyType.Clear();
+                //cboAdv4Key.Clear();
+                //cboAdv4KeyCompare.Clear();
+                //cboAdv4Link.Clear();
+                //txtAdv4KeyValue.Text = String.Empty;
         		
-        		cboAdv5KeyType.Clear();
-        		cboAdv5Key.Clear();
-        		cboAdv5KeyCompare.Clear();
-        		txtAdv5KeyValue.Text = String.Empty;
+                //cboAdv5KeyType.Clear();
+                //cboAdv5Key.Clear();
+                //cboAdv5KeyCompare.Clear();
+                //txtAdv5KeyValue.Text = String.Empty;
         		
-        		if((string)mSelectedRule.Element("Advanced").Value == "false")
-        		{
-					chkAdvEnabled.Checked = false;
-					return;					
-        		}
-        		else
-        		{
-        			chkAdvEnabled.Checked = true;
-        			List<ItemRule.advsettings> advsettings = _ConvertAdvStringToAdvanced((string)mSelectedRule.Element("Advanced").Value);
+                //if((string)mSelectedRule.Element("Advanced").Value == "false")
+                //{
+                //    chkAdvEnabled.Checked = false;
+                //    return;					
+                //}
+                //else
+                //{
+                //    chkAdvEnabled.Checked = true;
+                //    List<ItemRule.advsettings> advsettings = _ConvertAdvStringToAdvanced((string)mSelectedRule.Element("Advanced").Value);
         			
-        			WriteToChat("Advanced Settings Count " + advsettings.Count);
+                //    WriteToChat("Advanced Settings Count " + advsettings.Count);
         			
-        			if(advsettings.Count > 0)
-        			{
-        				foreach(string item in KeyTypes) {cboAdv1KeyType.Add(item);}
-        				cboAdv1KeyType.Selected = advsettings[0].keytype;
-        				FillAdvancedKeyList(cboAdv1KeyType.Selected, cboAdv1Key);	
-        				if(cboAdv1KeyType.Selected == 0) {cboAdv1Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[0].key);}
-        				else{cboAdv1Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[0].key);}		
-          				foreach(string item in KeyCompare) {cboAdv1KeyCompare.Add(item);}
-        				cboAdv1KeyCompare.Selected = advsettings[0].keycompare;
-        				foreach(string item in KeyLink) {cboAdv1Link.Add(item);}	
-        				cboAdv1Link.Selected = advsettings[0].keylink;
-        				txtAdv1KeyValue.Text = advsettings[0].keyvalue.ToString();
-        			}
+            //        if(advsettings.Count > 0)
+            //        {
+            //            //foreach (string item in KeyTypes) { cboAdv1KeyType.Add(item); }
+            //            //cboAdv1KeyType.Current = advsettings[0].keytype;
+            //            //FillAdvancedKeyList(cboAdv1KeyType.Current, cboAdv1Key);
+            //            //if (cboAdv1KeyType.Current == 0) { cboAdv1Key.Current = DoubleKeyList.FindIndex(x => x.ID == advsettings[0].key); }
+            //            //else { cboAdv1Key.Current = LongKeyList.FindIndex(x => x.ID == advsettings[0].key); }
+            //            //foreach (string item in KeyCompare) { cboAdv1KeyCompare.Add(item); }
+            //            //cboAdv1KeyCompare.Current = advsettings[0].keycompare;
+            //            //foreach (string item in KeyLink) { cboAdv1Link.Add(item); }
+            //            //cboAdv1Link.Current = advsettings[0].keylink;
+            //            //txtAdv1KeyValue.Text = advsettings[0].keyvalue.ToString();
+            //        }
         			
-        			if(advsettings.Count > 1)
-        			{
-        				foreach(string item in KeyTypes) {cboAdv2KeyType.Add(item);}
-		        		cboAdv2KeyType.Selected = advsettings[1].keytype;
-		        		FillAdvancedKeyList(cboAdv2KeyType.Selected, cboAdv2Key);	
-		        		if(cboAdv2KeyType.Selected == 0) {cboAdv2Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[1].key);}
-        				else{cboAdv2Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[1].key);}		
-		        		foreach(string item in KeyCompare) {cboAdv2KeyCompare.Add(item);}
-		        		cboAdv2KeyCompare.Selected = advsettings[1].keycompare;
-		        		foreach(string item in KeyLink) {cboAdv2Link.Add(item);}	
-		        		cboAdv2Link.Selected = advsettings[1].keylink;
-		        		txtAdv2KeyValue.Text = advsettings[1].keyvalue.ToString();
-        			}
-	        		
-        			if(advsettings.Count > 2)
-        			{
-        				foreach(string item in KeyTypes) {cboAdv3KeyType.Add(item);}
-        				cboAdv3KeyType.Selected = advsettings[2].keytype;
-        				FillAdvancedKeyList(cboAdv3KeyType.Selected, cboAdv3Key);	
-		        		if(cboAdv3KeyType.Selected == 0) {cboAdv3Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[2].key);}
-        				else{cboAdv3Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[2].key);}		
-		        		foreach(string item in KeyCompare) {cboAdv3KeyCompare.Add(item);}
-		        		cboAdv3KeyCompare.Selected = advsettings[2].keycompare;
-		        		foreach(string item in KeyLink) {cboAdv3Link.Add(item);}	
-		        		cboAdv3Link.Selected = advsettings[2].keylink;
-		        		txtAdv3KeyValue.Text = advsettings[2].keyvalue.ToString();
-        			}
-        			
-        			if(advsettings.Count > 3)
-        			{
-						foreach(string item in KeyTypes) {cboAdv4KeyType.Add(item);}        				
-		        		cboAdv4KeyType.Selected = advsettings[3].keytype;
-		        		FillAdvancedKeyList(cboAdv4KeyType.Selected, cboAdv4Key);	
-		        		if(cboAdv4KeyType.Selected == 0) {cboAdv4Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[3].key);}
-        				else{cboAdv4Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[3].key);}		
-		        		foreach(string item in KeyCompare) {cboAdv4KeyCompare.Add(item);}
-		        		cboAdv4KeyCompare.Selected = advsettings[3].keycompare;
-		        		foreach(string item in KeyLink) {cboAdv4Link.Add(item);}	
-		        		cboAdv4Link.Selected = advsettings[3].keylink;
-		        		txtAdv4KeyValue.Text = advsettings[3].keyvalue.ToString();
-        			}
-        			
-        			if(advsettings.Count > 4)
-        			{		        		
-        				foreach(string item in KeyTypes) {cboAdv5KeyType.Add(item);}
-		        		cboAdv5KeyType.Selected = advsettings[4].keytype;
-		        		FillAdvancedKeyList(cboAdv5KeyType.Selected, cboAdv5Key);	
-		        		if(cboAdv5KeyType.Selected == 0) {cboAdv5Key.Selected = DoubleKeyList.FindIndex(x => x.ID == advsettings[4].key);}
-        				else{cboAdv5Key.Selected = LongKeyList.FindIndex(x => x.ID == advsettings[4].key);}		
-		        		foreach(string item in KeyCompare) {cboAdv5KeyCompare.Add(item);}
-		        		cboAdv5KeyCompare.Selected = advsettings[4].keycompare;	
-		        		txtAdv5KeyValue.Text = advsettings[4].keyvalue.ToString();
-        			}	
-        		}
-        	}catch(Exception ex){LogError(ex);}
+            //        if(advsettings.Count > 1)
+            //        {
+            //            //foreach (string item in KeyTypes) { cboAdv2KeyType.Add(item); }
+            //            //cboAdv2KeyType.Current = advsettings[1].keytype;
+            //            //FillAdvancedKeyList(cboAdv2KeyType.Current, cboAdv2Key);
+            //            //if (cboAdv2KeyType.Current == 0) { cboAdv2Key.Current = DoubleKeyList.FindIndex(x => x.ID == advsettings[1].key); }
+            //            //else { cboAdv2Key.Current = LongKeyList.FindIndex(x => x.ID == advsettings[1].key); }
+            //            //foreach (string item in KeyCompare) { cboAdv2KeyCompare.Add(item); }
+            //            //cboAdv2KeyCompare.Current = advsettings[1].keycompare;
+            //            //foreach (string item in KeyLink) { cboAdv2Link.Add(item); }
+            //            //cboAdv2Link.Current = advsettings[1].keylink;
+            //            //txtAdv2KeyValue.Text = advsettings[1].keyvalue.ToString();
+            //        }
+
+            //        if (advsettings.Count > 2)
+            //        {
+            //            //foreach (string item in KeyTypes) { cboAdv3KeyType.Add(item); }
+            //            //cboAdv3KeyType.Current = advsettings[2].keytype;
+            //            //FillAdvancedKeyList(cboAdv3KeyType.Current, cboAdv3Key);
+            //            //if (cboAdv3KeyType.Current == 0) { cboAdv3Key.Current = DoubleKeyList.FindIndex(x => x.ID == advsettings[2].key); }
+            //            //else { cboAdv3Key.Current = LongKeyList.FindIndex(x => x.ID == advsettings[2].key); }
+            //            //foreach (string item in KeyCompare) { cboAdv3KeyCompare.Add(item); }
+            //            //cboAdv3KeyCompare.Current = advsettings[2].keycompare;
+            //            //foreach (string item in KeyLink) { cboAdv3Link.Add(item); }
+            //            //cboAdv3Link.Current = advsettings[2].keylink;
+            //            //txtAdv3KeyValue.Text = advsettings[2].keyvalue.ToString();
+            //        }
+
+            //        if (advsettings.Count > 3)
+            //        {
+            //            //foreach (string item in KeyTypes) { cboAdv4KeyType.Add(item); }
+            //            //cboAdv4KeyType.Current = advsettings[3].keytype;
+            //            //FillAdvancedKeyList(cboAdv4KeyType.Current, cboAdv4Key);
+            //            //if (cboAdv4KeyType.Current == 0) { cboAdv4Key.Current = DoubleKeyList.FindIndex(x => x.ID == advsettings[3].key); }
+            //            //else { cboAdv4Key.Current = LongKeyList.FindIndex(x => x.ID == advsettings[3].key); }
+            //            //foreach (string item in KeyCompare) { cboAdv4KeyCompare.Add(item); }
+            //            //cboAdv4KeyCompare.Current = advsettings[3].keycompare;
+            //            //foreach (string item in KeyLink) { cboAdv4Link.Add(item); }
+            //            //cboAdv4Link.Current = advsettings[3].keylink;
+            //            //txtAdv4KeyValue.Text = advsettings[3].keyvalue.ToString();
+            //        }
+
+            //        if (advsettings.Count > 4)
+            //        {
+            //            //foreach (string item in KeyTypes) { cboAdv5KeyType.Add(item); }
+            //            //cboAdv5KeyType.Current = advsettings[4].keytype;
+            //            //FillAdvancedKeyList(cboAdv5KeyType.Current, cboAdv5Key);
+            //            //if (cboAdv5KeyType.Current == 0) { cboAdv5Key.Current = DoubleKeyList.FindIndex(x => x.ID == advsettings[4].key); }
+            //            //else { cboAdv5Key.Current = LongKeyList.FindIndex(x => x.ID == advsettings[4].key); }
+            //            //foreach (string item in KeyCompare) { cboAdv5KeyCompare.Add(item); }
+            //            //cboAdv5KeyCompare.Current = advsettings[4].keycompare;
+            //            //txtAdv5KeyValue.Text = advsettings[4].keyvalue.ToString();
+            //        }	
+            ////    }
+            }catch(Exception ex){LogError(ex);}
         }
         
-        private void _PopulateList(MyClasses.MetaViewWrappers.IList target, List<IDNameLoadable> source, List<int> selected)
+        private void _PopulateList(HudList target, List<IDNameLoadable> source, List<int> selected)
         {
         	try
         	{
-        		IListRow row;
-        		target.Clear();
+                HudList.HudListRowAccessor row = new HudList.HudListRowAccessor();
+         		target.ClearRows();
         		foreach(IDNameLoadable entry in source)
         		{
         			row = target.AddRow();
-        			if(selected.Contains(entry.ID)) {row[0][0] = true;}
-        			row[1][0] = entry.name;
-        			row[2][0] = entry.ID.ToString();
+                    if (selected.Contains(entry.ID))
+                    {
+                        ((HudCheckBox)row[0]).Checked = true;
+                        ((HudTextBox)row[1]).Text = entry.name;
+                        ((HudTextBox)row[2]).Text = entry.ID.ToString();
+                    }
         		}
         		
         	}catch(Exception ex){LogError(ex);}
@@ -509,7 +523,7 @@ namespace GearFoundry
             try
             {
             	MyClasses.MetaViewWrappers.IListRow newRow;
-            	lstRuleSpellsEnabled.Clear();
+           // 	lstRuleSpellsEnabled.Clear();
             	
             	List<int> SpellIds = _ConvertCommaStringToIntList(mSelectedRule.Element("Spells").Value);
             	
@@ -524,9 +538,9 @@ namespace GearFoundry
 	            	
 	            	foreach(var spel in enabledspells)
 	            	{
-	            		newRow = lstRuleSpellsEnabled.AddRow();
-	            		newRow[0][0] = spel.spellname;
-	            		newRow[1][0] = spel.spellid.ToString();
+                        //newRow = lstRuleSpellsEnabled.AddRow();
+                        //newRow[0][0] = spel.spellname;
+                        //newRow[1][0] = spel.spellid.ToString();
 	            	}
             	}
             }
@@ -538,7 +552,7 @@ namespace GearFoundry
         {
         	try
         	{
-        		lstRuleSpells.Clear();
+        //		lstRuleSpells.Clear();
         		
         		List<int> exclude = _ConvertCommaStringToIntList(mSelectedRule.Element("Spells").Value);
         		
@@ -551,9 +565,9 @@ namespace GearFoundry
         		          
 	            foreach (spellinfo element in spelllist)
 	            {	             
-	                    MyClasses.MetaViewWrappers.IListRow newRow = lstRuleSpells.AddRow();
-	                    newRow[0][0] = element.spellname;
-	                    newRow[1][0] = element.spellid.ToString();
+	        //            MyClasses.MetaViewWrappers.IListRow newRow = lstRuleSpells.AddRow();
+                        //newRow[0][0] = element.spellname;
+                        //newRow[1][0] = element.spellid.ToString();
 	             }
                 
             }catch (Exception ex) { LogError(ex); }
@@ -586,69 +600,67 @@ namespace GearFoundry
       
                 bEnableTextFiltering = Convert.ToBoolean(el.Element("EnableTextFiltering").Value);
                 bTextFilterAllStatus = Convert.ToBoolean(el.Element("TextFilterAllStatus").Value);
-                nitemFontHeight = Convert.ToInt32(el.Element("ItemFontHeight").Value);
-                nmenuFontHeight = Convert.ToInt32(el.Element("MenuFontHeight").Value);
+                //nitemFontHeight = Convert.ToInt32(el.Element("ItemFontHeight").Value);
+                //nmenuFontHeight = Convert.ToInt32(el.Element("MenuFontHeight").Value);
 
 
-                if (nitemFontHeight == 0) { nitemFontHeight = 10; }
-                txtItemFontHeight.Text = nitemFontHeight.ToString();
-                if (nmenuFontHeight == 0) { nmenuFontHeight = 10; }
-                txtMenuFontHeight.Text = nmenuFontHeight.ToString();
+                ////if (nitemFontHeight == 0) { nitemFontHeight = 10; }
+                ////txtItemFontHeight.Text = nitemFontHeight.ToString();
+                ////if (nmenuFontHeight == 0) { nmenuFontHeight = 10; }
+                ////txtMenuFontHeight.Text = nmenuFontHeight.ToString();
 
- 
-                    chkQuickSlotsv.Checked = mMainSettings.bquickSlotsvEnabled;
-                    chkQuickSlotsh.Checked = mMainSettings.bquickSlotshEnabled;
- 
+                if (chkQuickSlotsv != null) { chkQuickSlotsv.Checked = mMainSettings.bquickSlotsvEnabled; }
+                if (chkQuickSlotsh != null) { chkQuickSlotsh.Checked = mMainSettings.bquickSlotshEnabled; }
                    // GearVisection Section                   
-                    chkGearVisectionEnabled.Checked = mMainSettings.bGearVisection;
+                if (chkGearVisectionEnabled != null) { chkGearVisectionEnabled.Checked = mMainSettings.bGearVisection; }
                     
                     //GearSense Section
-                    chkGearSenseEnabled.Checked = mMainSettings.bGearSenseHudEnabled;
+                if (chkGearSenseEnabled != null) { chkGearSenseEnabled.Checked = mMainSettings.bGearSenseHudEnabled; }
                     //GearInspector Section
-                    chkGearInspectorEnabled.Checked = mMainSettings.bGearInspectorEnabled;
+                   if (chkGearInspectorEnabled != null) { chkGearInspectorEnabled.Checked = mMainSettings.bGearInspectorEnabled;}
                     
                    //GearButler Section
-                   chkGearButlerEnabled.Checked = mMainSettings.bGearButlerEnabled;
+                   if (chkGearButlerEnabled != null) {chkGearButlerEnabled.Checked = mMainSettings.bGearButlerEnabled;}
 
                    //Gear Tactician Section
-                   chkCombatHudEnabled.Checked = mMainSettings.bGearTacticianEnabled;
+                   if (chkCombatHudEnabled != null) {chkCombatHudEnabled.Checked = mMainSettings.bGearTacticianEnabled;}
 
                    //RemoteGear 
-                   chkRemoteGearEnabled.Checked = mMainSettings.bRemoteGearEnabled;
+                   if (chkRemoteGearEnabled != null) {chkRemoteGearEnabled.Checked = mMainSettings.bRemoteGearEnabled;}
                    
                    //PortalGear 
-                   chkPortalGearEnabled.Checked = mMainSettings.bPortalGearEnabled;
+                  if (chkPortalGearEnabled != null) { chkPortalGearEnabled.Checked = mMainSettings.bPortalGearEnabled;}
 
                    //KillTaskGear
-                   chkKillTaskGearEnabled.Checked = mMainSettings.bGearTaskerEnabled;
+                  if (chkKillTaskGearEnabled != null) { chkKillTaskGearEnabled.Checked = mMainSettings.bGearTaskerEnabled;}
   
                    //Misc Gears Section
-                   	chkMuteSounds.Checked = mSoundsSettings.MuteSounds;
-                   	cboTrophyLandscape.Selected = mSoundsSettings.LandscapeTrophies;
-		     		cboMobLandscape.Selected = mSoundsSettings.LandscapeMobs;
-		        	cboPlayerLandscape.Selected = mSoundsSettings.LandscapePlayers;
-		        	cboCorpseRare.Selected = mSoundsSettings.CorpseRare;
-		        	cboCorpseSelfKill.Selected = mSoundsSettings.CorpseSelfKill;
-		        	cboCorpseFellowKill.Selected = mSoundsSettings.CorpseFellowKill;
-		        	cboDeadMe.Selected = mSoundsSettings.DeadMe;
-		        	cboDeadPermitted.Selected = mSoundsSettings.DeadPermitted;
-		        	cboTrophyCorpse.Selected = mSoundsSettings.CorpseTrophy;
-		        	cboRuleCorpse.Selected = mSoundsSettings.CorpseRule;
-			        cboSalvageCorpse.Selected = mSoundsSettings.CorpseSalvage;
+                   if (chkMuteSounds != null) {chkMuteSounds.Checked = mSoundsSettings.MuteSounds;}
+                   if (cboTrophyLandscape != null) {cboTrophyLandscape.Current = mSoundsSettings.LandscapeTrophies;}
+                   if (cboMobLandscape != null) {   cboMobLandscape.Current = mSoundsSettings.LandscapeMobs;}
+                   if (cboPlayerLandscape != null) {cboPlayerLandscape.Current = mSoundsSettings.LandscapePlayers;}
+                   if (cboCorpseRare != null) {cboCorpseRare.Current = mSoundsSettings.CorpseRare;}
+                   if (cboCorpseSelfKill != null) { cboCorpseSelfKill.Current = mSoundsSettings.CorpseSelfKill;}
+                   if (cboCorpseFellowKill != null) {cboCorpseFellowKill.Current = mSoundsSettings.CorpseFellowKill;}
+                   if (cboDeadMe != null) {cboDeadMe.Current = mSoundsSettings.DeadMe;}
+                   if (cboDeadPermitted != null) {cboDeadPermitted.Current = mSoundsSettings.DeadPermitted;}
+                  if (cboTrophyCorpse != null) { cboTrophyCorpse.Current = mSoundsSettings.CorpseTrophy;}
+                  if (cboRuleCorpse != null) { cboRuleCorpse.Current = mSoundsSettings.CorpseRule;}
+                  if (cboSalvageCorpse != null) { cboSalvageCorpse.Current = mSoundsSettings.CorpseSalvage; }
 
-                   //Inventory Section
-                   chkInventory.Checked = mMainSettings.binventoryEnabled;
-                    chkInventoryComplete.Checked = mMainSettings.binventoryCompleteEnabled;
-                    chkInventoryBurden.Checked = mMainSettings.binventoryBurdenEnabled;
-                   chkToonStats.Checked = mMainSettings.btoonStatsEnabled;
-                   chkArmorHud.Checked = mMainSettings.bArmorHudEnabled;
-                   chkInventoryHudEnabled.Checked = mMainSettings.binventoryHudEnabled;
+                   ////Inventory Section
+                   if (chkInventoryHudEnabled != null) {chkInventoryHudEnabled.Checked = mMainSettings.binventoryHudEnabled;}
+                   if (chkInventory != null) {chkInventory.Checked = mMainSettings.binventoryEnabled;}
+                   if (chkInventoryComplete != null) {chkInventoryComplete.Checked = mMainSettings.binventoryCompleteEnabled;}
+                   if (chkInventoryBurden != null) {chkInventoryBurden.Checked = mMainSettings.binventoryBurdenEnabled;}
+                   if (chkToonStats != null) {chkToonStats.Checked = mMainSettings.btoonStatsEnabled;}
+                   if (chkArmorHud != null) {chkArmorHud.Checked = mMainSettings.bArmorHudEnabled;}
 
  
 
-                   //Filter Section
-                   chkEnableTextFiltering.Checked = bEnableTextFiltering;
-                   chkTextFilterAllStatus.Checked = bTextFilterAllStatus;
+                   ////Filter Section
+                   if (chkEnableTextFiltering != null) {chkEnableTextFiltering.Checked = bEnableTextFiltering;}
+                   if (chkTextFilterAllStatus != null) { chkTextFilterAllStatus.Checked = bTextFilterAllStatus; }
 
 
                 }
@@ -750,11 +762,11 @@ namespace GearFoundry
 
 
 
-        void chkInventory_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkInventory_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.binventoryEnabled = e.Checked;
+                mMainSettings.binventoryEnabled = chkInventory.Checked;
 
                 SaveSettings();
             }
@@ -762,11 +774,11 @@ namespace GearFoundry
 
         }
 
-        void chkInventoryBurden_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkInventoryBurden_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.binventoryBurdenEnabled = e.Checked;
+                mMainSettings.binventoryBurdenEnabled = chkInventoryBurden.Checked;
 
                 SaveSettings();
             }
@@ -774,11 +786,11 @@ namespace GearFoundry
 
         }
 
-        void chkInventoryComplete_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkInventoryComplete_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.binventoryCompleteEnabled = e.Checked;
+                mMainSettings.binventoryCompleteEnabled = chkInventoryComplete.Checked;
 
                 SaveSettings();
             }
@@ -788,11 +800,11 @@ namespace GearFoundry
 
 
 
-        void chkQuickSlotsv_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkQuickSlotsv_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.bquickSlotsvEnabled = e.Checked;
+                mMainSettings.bquickSlotsvEnabled = chkQuickSlotsv.Checked;
                 SaveSettings();
 
                 if (mMainSettings.bquickSlotsvEnabled)
@@ -810,11 +822,11 @@ namespace GearFoundry
 
         }
 
-        void chkQuickSlotsh_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkQuickSlotsh_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.bquickSlotshEnabled = e.Checked;
+                mMainSettings.bquickSlotshEnabled = chkQuickSlotsh.Checked;
                 SaveSettings();
 
                 if (mMainSettings.bquickSlotshEnabled)
@@ -830,90 +842,92 @@ namespace GearFoundry
             catch (Exception ex) { LogError(ex); }
         }
 
-		void chkGearVisectionEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkGearVisectionEnabled_Change(object sender, System.EventArgs e)
 		{
 			try
 			{
-				mMainSettings.bGearVisection = e.Checked;
-				SaveSettings();
-				if(e.Checked)
-				{
-					SubscribeCorpseEvents();
-					RenderCorpseHud();
-					WriteToChat("GearVisection Enabled.");
-				}
-				else
-				{
-					UnsubscribeCorpseEvents();
-					DisposeCorpseHud();
-					WriteToChat("GearVisection Disabled.");
-				}
-				RenderDynamicRemoteGear();
+                mMainSettings.bGearVisection = chkGearVisectionEnabled.Checked;
+                WriteToChat("At the change function for visection");
+                SaveSettings();
+                if (chkGearVisectionEnabled.Checked)
+                {
+                    SubscribeCorpseEvents();
+                    RenderCorpseHud();
+                    WriteToChat("GearVisection Enabled.");
+                }
+                else
+                {
+                    UnsubscribeCorpseEvents();
+                    DisposeCorpseHud();
+                    WriteToChat("GearVisection Disabled.");
+                }
+                RenderDynamicRemoteGear();
 			}
 			catch(Exception ex){LogError(ex);}
 			
 		}
 
-        
-        void chkGearSenseEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+
+        void chkGearSenseEnabled_Change(object sender, System.EventArgs e)
         {
         	try
         	{
-        		mMainSettings.bGearSenseHudEnabled = e.Checked;
-				SaveSettings();
-				if(e.Checked)
-				{
-					SubscribeLandscapeEvents();
-					RenderLandscapeHud();
-					WriteToChat("GearSense Enabled.");
-				}
-				else
-				{
-					UnsubscribeLandscapeEvents();
-					DisposeLandscapeHud();
-					WriteToChat("GearSense Disabled.");
-				}
-				RenderDynamicRemoteGear();				
-        	}catch{}
-        }
-        
-        void chkGearButlerEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-        	try
-        	{
-        		mMainSettings.bGearButlerEnabled = e.Checked;
-        		SaveSettings();
-        		if(mMainSettings.bGearButlerEnabled)
-        		{
-        			SubscribeButlerEvents();
-        			RenderButlerHud();
-        			WriteToChat("GearButler Enabled.");
-        		}
-        		else
-        		{
-        			UnsubscribeButlerEvents();
-        			DisposeButlerHud();
-        			WriteToChat("GearButler Disabled.");
-        		}
-        		RenderDynamicRemoteGear();
-        	}catch{}
-        }
-     
-        void chkGearInspectorEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
-        {
-            try
-            {
-                mMainSettings.bGearInspectorEnabled = e.Checked;
+                mMainSettings.bGearSenseHudEnabled = chkGearSenseEnabled.Checked;
                 SaveSettings();
-                if (mMainSettings.bGearInspectorEnabled)
+                if (chkGearSenseEnabled.Checked)
                 {
-                	SubscribeItemEvents();
-                	RenderItemHud();
-                	WriteToChat("GearInspector Enabled.");
+                    SubscribeLandscapeEvents();
+                    RenderLandscapeHud();
+                    WriteToChat("GearSense Enabled.");
                 }
                 else
                 {
-                	UnsubscribeItemEvents();
+                    UnsubscribeLandscapeEvents();
+                    DisposeLandscapeHud();
+                    WriteToChat("GearSense Disabled.");
+                }
+                RenderDynamicRemoteGear();				
+        	}catch{}
+        }
+
+        void chkGearButlerEnabled_Change(object sender, System.EventArgs e)
+        {
+        	try
+        	{
+                mMainSettings.bGearButlerEnabled = chkGearButlerEnabled.Checked;
+                SaveSettings();
+                if (mMainSettings.bGearButlerEnabled)
+                {
+                    SubscribeButlerEvents();
+                    RenderButlerHud();
+                    WriteToChat("GearButler Enabled.");
+                }
+                else
+                {
+                    UnsubscribeButlerEvents();
+                    DisposeButlerHud();
+                    WriteToChat("GearButler Disabled.");
+                }
+                RenderDynamicRemoteGear();
+            }
+            catch { }
+        }
+
+        void chkGearInspectorEnabled_Change(object sender, System.EventArgs e)
+        {
+            try
+            {
+                mMainSettings.bGearInspectorEnabled = chkGearInspectorEnabled.Checked;
+                SaveSettings();
+                if (mMainSettings.bGearInspectorEnabled)
+                {
+                    SubscribeItemEvents();
+                    RenderItemHud();
+                    WriteToChat("GearInspector Enabled.");
+                }
+                else
+                {
+                    UnsubscribeItemEvents();
                     DisposeItemHud();
                     WriteToChat("GearInspector Disabled.");
                 }
@@ -922,65 +936,63 @@ namespace GearFoundry
             catch { }
         }
 
-        void chkCombatHudEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkCombatHudEnabled_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.bGearTacticianEnabled = e.Checked;
+                mMainSettings.bGearTacticianEnabled = chkCombatHudEnabled.Checked;
                 SaveSettings();
                 if (mMainSettings.bGearTacticianEnabled)
                 {
-                	SubscribeCombatEvents();
-                	RenderTacticianHud();
-                	WriteToChat("GearTactician Enabled.");
+                    SubscribeCombatEvents();
+                    RenderTacticianHud();
+                    WriteToChat("GearTactician Enabled.");
                 }
                 else
                 {
-                	UnsubscribeCombatEvents();
-                	DisposeTacticianHud();
-                	WriteToChat("GearTactician Disabled.");
+                    UnsubscribeCombatEvents();
+                    DisposeTacticianHud();
+                    WriteToChat("GearTactician Disabled.");
                 }
                 RenderDynamicRemoteGear();
             }
             catch { }
         }
 
-        void chkRemoteGearEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkRemoteGearEnabled_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.bRemoteGearEnabled = e.Checked;
+                mMainSettings.bRemoteGearEnabled = chkRemoteGearEnabled.Checked;
                 SaveSettings();
                 if (mMainSettings.bRemoteGearEnabled)
                 {
-                	RenderDynamicRemoteGear();
-                	//RenderRemoteGearHud();
+                    RenderDynamicRemoteGear();
                 }
                 else
                 {
-                	DisposeDynamicRemote();
-                    //DisposeRemoteGearHud();
+                    DisposeDynamicRemote();
                 }
             }
             catch { }
         }
 
-        void chkPortalGearEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkPortalGearEnabled_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.bPortalGearEnabled = e.Checked;
+                mMainSettings.bPortalGearEnabled = chkPortalGearEnabled.Checked;
                 SaveSettings();
                 if (mMainSettings.bPortalGearEnabled)
                 {
-                	SubscribePortalEvents();
+                    SubscribePortalEvents();
                     RenderPortalGearHud();
                     //RenderPortal2GearHud();
                     WriteToChat("PortalGear Enabled.");
                 }
                 else
                 {
-                	UnsubscribePortalEvents();
+                    UnsubscribePortalEvents();
                     DisposePortalGearHud();
                     //DisposePortalRecallGearHud();
                     WriteToChat("PortalGear Disabled.");
@@ -990,21 +1002,21 @@ namespace GearFoundry
             catch { }
         }
 
-        void chkKillTaskGearEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkKillTaskGearEnabled_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.bGearTaskerEnabled = e.Checked;
+                mMainSettings.bGearTaskerEnabled = chkKillTaskGearEnabled.Checked;
                 SaveSettings();
                 if (mMainSettings.bGearTaskerEnabled)
                 {
-                	SubscribeKillTasks();
-                	RenderKillTaskPanel();
-                	WriteToChat("GearTasker Enabled");
+                    SubscribeKillTasks();
+                    RenderKillTaskPanel();
+                    WriteToChat("GearTasker Enabled");
                 }
                 else
                 {
-                	UnsubscribeKillTasks();
+                    UnsubscribeKillTasks();
                     DisposeKillTaskPanel();
                     WriteToChat("GearTasker Disabled");
                 }
@@ -1012,11 +1024,11 @@ namespace GearFoundry
             }
             catch { }
         }
-        void chkToonStats_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkToonStats_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.btoonStatsEnabled = e.Checked;
+                mMainSettings.btoonStatsEnabled = chkToonStats.Checked;
 
                 SaveSettings();
             }
@@ -1025,14 +1037,14 @@ namespace GearFoundry
         }
  
 		//Misc Gear Settings
-        void chkArmorHud_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkArmorHud_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.bArmorHudEnabled = e.Checked;
-                
+                mMainSettings.bArmorHudEnabled = chkArmorHud.Checked;
+
                 SaveSettings();
-                if (mMainSettings.bArmorHudEnabled) 
+                if (mMainSettings.bArmorHudEnabled)
                 {
                     RenderArmorHud();
 
@@ -1061,11 +1073,11 @@ namespace GearFoundry
 
         }
 
-        void chkInventoryHudEnabled_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkInventoryHudEnabled_Change(object sender, System.EventArgs e)
         {
             try
             {
-                mMainSettings.binventoryHudEnabled = e.Checked;
+                mMainSettings.binventoryHudEnabled = chkInventoryHudEnabled.Checked;
 
                 SaveSettings();
                 if (mMainSettings.binventoryHudEnabled)
@@ -1120,12 +1132,12 @@ namespace GearFoundry
         }
 
         //Gear Filter Settings
-        
-        void chkEnableTextFiltering_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+
+        void chkEnableTextFiltering_Change(object sender, System.EventArgs e)
         {
             try
             {
-                bEnableTextFiltering = e.Checked;
+                bEnableTextFiltering = chkEnableTextFiltering.Checked;
                 SaveSettings();
                 if (bEnableTextFiltering)
                 {
@@ -1140,11 +1152,11 @@ namespace GearFoundry
             catch { }
         }
 
-        void chkTextFilterAllStatus_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkTextFilterAllStatus_Change(object sender, System.EventArgs e)
         {
             try
             {
-                bTextFilterAllStatus = e.Checked;
+                bTextFilterAllStatus = chkTextFilterAllStatus.Checked;
                 SaveSettings();
                 if (bTextFilterAllStatus)
                 {
@@ -1160,7 +1172,7 @@ namespace GearFoundry
         }
 
 
-        void txtItemFontHeight_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        void txtItemFontHeight_LostFocus(object sender, System.EventArgs e)
         {
             nitemFontHeight = Convert.ToInt32(txtItemFontHeight.Text);
             if (mMainSettings.binventoryHudEnabled)
@@ -1180,7 +1192,7 @@ namespace GearFoundry
             SaveSettings();
         }
 
-        void txtMenuFontHeight_End(object sender, MyClasses.MetaViewWrappers.MVTextBoxEndEventArgs e)
+        void txtMenuFontHeight_LostFocus(object sender, System.EventArgs e)
         {
             nmenuFontHeight = Convert.ToInt32(txtMenuFontHeight.Text);
             if (mMainSettings.binventoryHudEnabled)
@@ -1221,14 +1233,14 @@ namespace GearFoundry
                          new XElement("InventoryEnabled", mMainSettings.binventoryEnabled),
                          new XElement("InventoryCompleteEnabled", mMainSettings.binventoryCompleteEnabled),
                          new XElement("ToonStatsEnabled", mMainSettings.btoonStatsEnabled),
-                        new XElement("ArmorHudEnabled", mMainSettings.bArmorHudEnabled),
+                         new XElement("ArmorHudEnabled", mMainSettings.bArmorHudEnabled),
                          new XElement("EnableTextFiltering", bEnableTextFiltering),
                          new XElement("TextFilterAllStatus", bTextFilterAllStatus),
                          new XElement("ItemFontHeight", nitemFontHeight),
                          new XElement("MenuFontHeight", nmenuFontHeight)));
 
-               xdocGeneralSet.Save(genSettingsFilename);
-               xdocGeneralSet = null;
+                xdocGeneralSet.Save(genSettingsFilename);
+                xdocGeneralSet = null;
 
             }
             catch (Exception ex) { LogError(ex); }

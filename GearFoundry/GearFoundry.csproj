@@ -107,6 +107,8 @@
     <Compile Include="Initializers\Enums.cs" />
     <Compile Include="Initializers\XMLBuilders.cs" />
     <Compile Include="SoundPlayer.cs" />
+    <Compile Include="Views\ChiefGear.cs" />
+    <Compile Include="Views\ChiefGearInspect.cs" />
     <Compile Include="WrapperClasses\LandscapeObject.cs" />
     <Compile Include="WrapperClasses\LootObject.cs" />
     <Compile Include="WrapperClasses\MonsterObject.cs" />
@@ -153,10 +155,6 @@
     <Compile Include="VVSWrappers\Wrapper_Decal.cs" />
     <Compile Include="VVSWrappers\Wrapper_MyHuds.cs" />
     <Compile Include="VVSWrappers\Wrapper_WireupHelper.cs" />
-    <EmbeddedResource Include="Views\MainView.xml">
-      <LogicalName>MainView.xml</LogicalName>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Sounds\blip.wav">
       <LogicalName>blip.wav</LogicalName>
     </EmbeddedResource>
@@ -309,6 +307,12 @@
     <EmbeddedResource Include="Graphics\Ulgrim.gif">
       <LogicalName>Ulgrim.gif</LogicalName>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\MainView.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PaulNeedtoCheck_Fix.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

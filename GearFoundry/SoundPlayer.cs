@@ -178,43 +178,44 @@ namespace GearFoundry
         	tsound.SoundId = 10;
         	tsound.SoundStream = a.GetManifestResourceStream("womp2.wav");
         	SoundList.Add(tsound);
-        	
-        	foreach(Sounds s in SoundList)
-        	{
-        		cboTrophyLandscape.Add(s.name);
-	     		cboMobLandscape.Add(s.name);
-	        	cboPlayerLandscape.Add(s.name);
-	        	cboCorpseRare.Add(s.name);
-	        	cboCorpseSelfKill.Add(s.name);
-	        	cboCorpseFellowKill.Add(s.name);
-	        	cboDeadMe.Add(s.name);
-	        	cboDeadPermitted.Add(s.name);
-	        	cboTrophyCorpse.Add(s.name);
-	        	cboRuleCorpse.Add(s.name);
-		        cboSalvageCorpse.Add(s.name);    		
-        	}
-        	
-        	SoundsReadWriteSettings(true);
-        	UpdateSoundPanel();
+
+            foreach (Sounds s in SoundList)
+            {
+                cboTrophyLandscape.AddItem(s.name,0);
+                cboMobLandscape.AddItem(s.name, 0);
+                cboPlayerLandscape.AddItem(s.name, 0);
+                cboCorpseRare.AddItem(s.name, 0);
+                cboCorpseSelfKill.AddItem(s.name, 0);
+                cboCorpseFellowKill.AddItem(s.name, 0);
+                cboDeadMe.AddItem(s.name, 0);
+                cboDeadPermitted.AddItem(s.name, 0);
+                cboTrophyCorpse.AddItem(s.name, 0);
+                cboRuleCorpse.AddItem(s.name, 0);
+                cboSalvageCorpse.AddItem(s.name, 0);
+            }
+
+            SoundsReadWriteSettings(true);
+            UpdateSoundPanel();
         }
-        
+
         private void UpdateSoundPanel()
         {
-        	try
-        	{
-		        chkMuteSounds.Checked = mSoundsSettings.MuteSounds;
-	           	cboTrophyLandscape.Selected = mSoundsSettings.LandscapeTrophies;
-	     		cboMobLandscape.Selected = mSoundsSettings.LandscapeMobs;
-	        	cboPlayerLandscape.Selected = mSoundsSettings.LandscapePlayers;
-	        	cboCorpseRare.Selected = mSoundsSettings.CorpseRare;
-	        	cboCorpseSelfKill.Selected = mSoundsSettings.CorpseSelfKill;
-	        	cboCorpseFellowKill.Selected = mSoundsSettings.CorpseFellowKill;
-	        	cboDeadMe.Selected = mSoundsSettings.DeadMe;
-	        	cboDeadPermitted.Selected = mSoundsSettings.DeadPermitted;
-	        	cboTrophyCorpse.Selected = mSoundsSettings.CorpseTrophy;
-	        	cboRuleCorpse.Selected = mSoundsSettings.CorpseRule;
-		        cboSalvageCorpse.Selected = mSoundsSettings.CorpseSalvage;
-        	}catch(Exception ex){LogError(ex);}
+            try
+            {
+                chkMuteSounds.Checked = mSoundsSettings.MuteSounds;
+                cboTrophyLandscape.Current = mSoundsSettings.LandscapeTrophies;
+                cboMobLandscape.Current = mSoundsSettings.LandscapeMobs;
+                cboPlayerLandscape.Current = mSoundsSettings.LandscapePlayers;
+                cboCorpseRare.Current = mSoundsSettings.CorpseRare;
+                cboCorpseSelfKill.Current = mSoundsSettings.CorpseSelfKill;
+                cboCorpseFellowKill.Current = mSoundsSettings.CorpseFellowKill;
+                cboDeadMe.Current = mSoundsSettings.DeadMe;
+                cboDeadPermitted.Current = mSoundsSettings.DeadPermitted;
+                cboTrophyCorpse.Current = mSoundsSettings.CorpseTrophy;
+                cboRuleCorpse.Current = mSoundsSettings.CorpseRule;
+                cboSalvageCorpse.Current = mSoundsSettings.CorpseSalvage;
+            }
+            catch (Exception ex) { LogError(ex); }
         }
         
         private void playSoundFromResource(int SoundFileId)
@@ -234,11 +235,11 @@ namespace GearFoundry
 		}
         
         //Sound Settings
-        void chkMuteSounds_Change(object sender, MyClasses.MetaViewWrappers.MVCheckBoxChangeEventArgs e)
+        void chkMuteSounds_Change()
         {
             try
             {
-                mSoundsSettings.MuteSounds = e.Checked;
+                mSoundsSettings.MuteSounds = chkMuteSounds.Checked;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
             }
@@ -248,135 +249,135 @@ namespace GearFoundry
         {
             try
             {
-                mSoundsSettings.LandscapeTrophies = cboTrophyLandscape.Selected;
+                mSoundsSettings.LandscapeTrophies = cboTrophyLandscape.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
-                 playSoundFromResource(mSoundsSettings.LandscapeTrophies);
+                playSoundFromResource(mSoundsSettings.LandscapeTrophies);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
+
         void cboMobLandscape_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.LandscapeMobs = cboMobLandscape.Selected;
+                mSoundsSettings.LandscapeMobs = cboMobLandscape.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
                 playSoundFromResource(mSoundsSettings.LandscapeMobs);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
+
         void cboPlayerLandscape_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.LandscapePlayers = cboPlayerLandscape.Selected;
+                mSoundsSettings.LandscapePlayers = cboPlayerLandscape.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
                 playSoundFromResource(mSoundsSettings.LandscapePlayers);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
+
         void cboCorpseRare_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.CorpseRare = cboCorpseRare.Selected;
+                mSoundsSettings.CorpseRare = cboCorpseRare.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
                 playSoundFromResource(mSoundsSettings.CorpseRare);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
+
         void cboCorpseSelfKill_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.CorpseSelfKill = cboCorpseSelfKill.Selected;
+                mSoundsSettings.CorpseSelfKill = cboCorpseSelfKill.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
                 playSoundFromResource(mSoundsSettings.CorpseSelfKill);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
+
         void cboCorpseFellowKill_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.CorpseFellowKill = cboCorpseFellowKill.Selected;
+                mSoundsSettings.CorpseFellowKill = cboCorpseFellowKill.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
-                 playSoundFromResource(mSoundsSettings.CorpseFellowKill);
+                playSoundFromResource(mSoundsSettings.CorpseFellowKill);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
+
         void cboDeadMe_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.DeadMe = cboDeadMe.Selected;
+                mSoundsSettings.DeadMe = cboDeadMe.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
-                 playSoundFromResource(mSoundsSettings.DeadMe);
+                playSoundFromResource(mSoundsSettings.DeadMe);
             }
             catch (Exception ex) { LogError(ex); }
         }
-		 
+
         void cboDeadPermitted_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.DeadPermitted = cboDeadPermitted.Selected;
+                mSoundsSettings.DeadPermitted = cboDeadPermitted.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
-                 playSoundFromResource(mSoundsSettings.DeadPermitted);
+                playSoundFromResource(mSoundsSettings.DeadPermitted);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
+
         void cboTrophyCorpse_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.CorpseTrophy = cboTrophyCorpse.Selected;
+                mSoundsSettings.CorpseTrophy = cboTrophyCorpse.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
-                 playSoundFromResource(mSoundsSettings.CorpseTrophy);
+                playSoundFromResource(mSoundsSettings.CorpseTrophy);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
+
         void cboRuleCorpse_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.CorpseRule = cboRuleCorpse.Selected;
+                mSoundsSettings.CorpseRule = cboRuleCorpse.Current;
                 SoundsReadWriteSettings(false);
-                UpdateSoundPanel(); 
+                UpdateSoundPanel();
                 playSoundFromResource(mSoundsSettings.CorpseRule);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
+
         void cboSalvageCorpse_Change(object sender, EventArgs e)
         {
             try
             {
-                mSoundsSettings.CorpseSalvage = cboSalvageCorpse.Selected;
+                mSoundsSettings.CorpseSalvage = cboSalvageCorpse.Current;
                 SoundsReadWriteSettings(false);
                 UpdateSoundPanel();
                 playSoundFromResource(mSoundsSettings.CorpseSalvage);
             }
             catch (Exception ex) { LogError(ex); }
         }
-        
-        
-        
-	}
+
+
+
+    }
 }

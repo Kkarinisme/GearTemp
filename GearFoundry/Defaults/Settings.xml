@@ -8,6 +8,7 @@
     <CombatHudEnabled>false</CombatHudEnabled>
 	  <RemoteGearEnabled>true</RemoteGearEnabled>
 	  <PortalGearEnabled>true</PortalGearEnabled>
+    <KillTaskGearEnabled>true</KillTaskGearEnabled>
 	  <QuickSlotsvEnabled>true</QuickSlotsvEnabled>
     <QuickSlotshEnabled>true</QuickSlotshEnabled>
     <InventoryHudEnabled>false</InventoryHudEnabled>
